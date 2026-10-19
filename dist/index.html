@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#111b18">
+  <meta name="description" content="在浏览器中排兵布阵、发展伐木、发木进攻，与队友一起守住国王。军团战争9倍怪物模式Web复刻。">
+  <title>军团战争 · 9倍怪物</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%23131f1b' d='M0 0h64v64H0z'/%3E%3Cpath fill='%23d7b975' d='M32 4 57 18v26L32 60 7 44V18zm0 7L14 22v18l18 12 18-12V22zM21 25h7v15h15v6H21z'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <svg class="svg-defs" aria-hidden="true"><defs>
+    <symbol id="i-swords" viewBox="0 0 24 24"><path d="m4 3 5 2 10 13-2 2L6 7Zm16 0-5 2L5 18l2 2L18 7M3 16l5 5m8-5 5 5"/></symbol>
+    <symbol id="i-gold" viewBox="0 0 24 24"><path d="m4 9 4-5h8l4 5-3 10H7Z"/><path d="M4 9h16M8 4l2 5-1 10m7-15-2 5 1 10"/></symbol>
+    <symbol id="i-wood" viewBox="0 0 24 24"><path d="m12 2 5 7h-3l5 7h-6v6h-2v-6H5l5-7H7Z"/></symbol>
+    <symbol id="i-income" viewBox="0 0 24 24"><path d="M4 19V9m6 10V5m6 14v-7m5 7H2m2-13 6-4 6 7 5-4"/></symbol>
+    <symbol id="i-worker" viewBox="0 0 24 24"><path d="M6 21v-5l6-4 5 4v5M9 7a3 3 0 1 0 6 0 3 3 0 0 0-6 0Zm9-3 3 2-4 7M5 3v8m-3-6 6-2"/></symbol>
+    <symbol id="i-crown" viewBox="0 0 24 24"><path d="m3 6 5 4 4-7 4 7 5-4-3 12H6Zm3 15h12"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="m12 2 9 4v6c0 5-9 10-9 10S3 17 3 12V6Z"/><path d="M12 6v12M7 10h10"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 21 3 12C-2 5 7-1 12 6c5-7 14-1 9 6Z"/><path d="M7 12h3l2-3 2 6 2-3h3"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="m13 2-9 12h7l-1 8 10-13h-7Z"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-expand" viewBox="0 0 24 24"><path d="M9 3H3v6m12-6h6v6M3 15v6h6m12-6v6h-6"/></symbol>
+    <symbol id="i-sound" viewBox="0 0 24 24"><path d="M3 9h5l6-5v16l-6-5H3Zm15-1q5 4 0 8m3-11q8 7 0 14"/></symbol>
+    <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 8c0-4 8-4 7 1-1 2-4 2-4 5m0 2v2"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 7a9 9 0 1 0 1 10m-1-15v6h-6"/></symbol>
+  </defs></svg>
+  <div class="game-shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="军团战争首页"><span class="brand-seal">L</span><span><b>军团战争</b><small>LEGION WARFARE</small></span><em>9×</em></a>
+      <div class="resource-strip" aria-label="我的资源">
+        <div class="resource gold" title="金币用于建造、升级和发展科技"><svg><use href="#i-gold"/></svg><span><b id="gold">350</b><small>金币</small></span></div>
+        <div class="resource wood" title="小精灵持续伐木，可发木进攻或强化国王"><svg><use href="#i-wood"/></svg><span><b id="wood">0</b><small>木材</small></span></div>
+        <div class="resource" title="每回合结算时额外获得的金币"><svg><use href="#i-income"/></svg><span><b id="income">+0</b><small>回合收入</small></span></div>
+        <div class="resource tech" title="小精灵数量 / 伐木等级"><svg><use href="#i-worker"/></svg><span><b id="tech">1 / 0</b><small>伐木科技</small></span></div>
+      </div>
+      <div class="top-actions"><button id="sound" class="icon-button" title="开启音效" aria-label="开启音效"><svg><use href="#i-sound"/></svg></button><button id="help" class="icon-button" title="玩法与操作" aria-label="玩法与操作"><svg><use href="#i-help"/></svg></button><button id="fullscreen" class="icon-button" title="全屏" aria-label="全屏"><svg><use href="#i-expand"/></svg></button></div>
+    </header>
+    <div class="battle-ribbon">
+      <div class="king-status allied"><svg><use href="#i-crown"/></svg><span>联盟军团</span><div class="king-bar"><i id="ally-hp"></i><b id="ally-hp-text">100%</b></div></div>
+      <div class="wave-status"><span id="phase-label">布阵准备</span><b id="wave-label">第 01 波</b><button id="ribbon-wave-name" class="text-button ribbon-wave-name" title="查看波次图鉴">螃蟹 · 108只</button><span id="wave-time">00:30</span></div>
+      <div class="king-status hostile"><div class="king-bar"><i id="enemy-hp"></i><b id="enemy-hp-text">100%</b></div><span>部落军团</span><svg><use href="#i-crown"/></svg></div>
+    </div>
+    <main class="workspace">
+      <aside class="left-sidebar">
+        <div class="section-heading"><span>军团战况</span><small>4 VS 4</small></div>
+        <div id="team-list" class="team-list"></div>
+        <div class="wave-preview">
+          <div class="section-heading"><span id="wave-card-label">本波情报</span><button id="wavebook" class="text-button">图鉴 ↗</button></div>
+          <div class="wave-creature"><canvas id="wave-portrait" width="128" height="100"></canvas><span><b id="wave-name">豺狼人</b><small id="wave-kind">普通攻击 · 中甲</small></span></div>
+          <div class="wave-facts"><span>每路数量<b id="wave-count">108</b></span><span>击杀金币<b id="wave-bounty">2</b></span></div>
+          <p id="wave-advice">合理布置前排与输出，守住自己的防线。</p>
+        </div>
+        <div class="event-log"><div class="section-heading"><span>战场消息</span><i class="live-dot"></i></div><div id="logs" aria-live="polite"></div></div>
+        <div class="local-save"><i></i><span id="save-label">本地自动存档</span><button id="new-game" title="重新开局" aria-label="重新开局"><svg><use href="#i-refresh"/></svg></button></div>
+      </aside>
+      <section class="arena" aria-label="军团战争战场">
+        <div class="arena-top"><div><span class="location-dot"></span><b id="arena-location">我的战区</b><small id="entity-count">等待出怪</small></div><div class="view-buttons"><button id="view-home" class="active" title="聚焦我的防线">我的战区</button><button id="view-all" title="查看八路战场">战场全景</button><button id="view-king" title="查看团队公共防线">国王防线</button><button id="view-routes" aria-pressed="false" title="显示出怪与汇流路线">路线</button></div></div>
+        <canvas id="battlefield" tabindex="0" aria-label="可交互战场，选择指令区的兵种后点击自己的格子建造"></canvas>
+        <div class="arena-legend"><span><i class="blue"></i>联盟军团</span><span><i class="red"></i>部落军团</span><span><i class="gold-dot"></i>系统怪与木怪</span></div>
+        <div id="build-hint" class="build-hint" hidden>选择兵种后，点击自己的建造格布阵</div>
+        <div class="arena-controls"><div class="combat-actions"><button id="interfere"><svg><use href="#i-spark"/></svg><span>干扰</span><kbd>T</kbd></button><button id="heal"><svg><use href="#i-heart"/></svg><span>国王治疗</span><small id="heal-count">4/4</small><kbd>H</kbd></button></div><div class="time-controls"><button id="pause" aria-label="暂停">Ⅱ</button><div class="speed-buttons"><button data-speed="1" class="active">1×</button><button data-speed="2">2×</button><button data-speed="4">4×</button></div></div></div>
+        <div class="camera-hint">拖动平移 · 滚轮缩放 · 点击单位查看</div>
+        <div id="toast-container" class="toast-container" aria-live="polite"></div>
+      </section>
+      <aside class="right-sidebar">
+        <div class="panel-tabs" role="tablist"><button data-tab="build" class="active" role="tab" aria-selected="true"><svg><use href="#i-shield"/></svg>建造</button><button data-tab="attack" role="tab" aria-selected="false"><svg><use href="#i-swords"/></svg>进攻</button><button data-tab="king" role="tab" aria-selected="false"><svg><use href="#i-crown"/></svg>国王</button></div>
+        <div id="panel-content" class="panel-content"></div>
+        <div class="economy-panel"><div class="section-heading"><span>经济发展</span><small id="wood-rate">+0.2 木/秒</small></div><div class="economy-actions"><button id="worker"><svg><use href="#i-worker"/></svg><span>招募小精灵<small id="worker-price">50 金币</small></span><b>+</b></button><button id="lumber"><svg><use href="#i-wood"/></svg><span>升级伐木<small id="lumber-price">80 金币</small></span><b>↑</b></button></div></div>
+        <div class="round-action"><span id="ready-subtext">兵力还未部署</span><button id="ready" class="primary-button"><svg><use href="#i-swords"/></svg><b>开始第 1 波</b><kbd>空格</kbd></button></div>
+      </aside>
+    </main>
+    <footer class="bottom-panel">
+      <div class="minimap-wrap"><canvas id="minimap" width="170" height="170" title="点击切换战区" aria-label="战场小地图"></canvas><span>战场地图</span></div>
+      <div id="selection" class="selection-panel"><div class="selection-portrait"><canvas id="unit-portrait" width="100" height="100"></canvas></div><div class="selection-copy"><small>先知 · 建造者</small><h2>部署你的军团</h2><p>从右侧选择兵种，再点击防线上的格子。<br>先布置前排，再搭配远程和辅助。</p></div></div>
+      <div id="selection-actions" class="selection-actions"></div>
+      <div class="army-summary"><span>军团兵力<b id="army-power">0</b></span><span>人口<b id="army-pop">0 / 80</b></span><span>击杀<b id="kill-count">0</b></span></div>
+    </footer>
+  </div>
+
+  <div id="welcome" class="modal-backdrop welcome-backdrop">
+    <section class="welcome-dialog" aria-label="开始军团战争">
+      <div class="welcome-emblem"><svg><use href="#i-crown"/></svg></div><div class="eyebrow">BROWSER EDITION · 4 vs 4</div>
+      <h1>军团战争</h1><div class="welcome-subtitle"><span></span>9 倍怪物模式<span></span></div>
+      <p class="welcome-intro">建造军团，守住怪潮。<br>发展经济，向敌方国王发起进攻。</p>
+      <div class="difficulty-select" aria-label="选择难度"><button data-difficulty="easy">练习<small>熟悉阵容</small></button><button data-difficulty="normal" class="active">标准<small>攻守博弈</small></button><button data-difficulty="hard">挑战<small>更强敌军</small></button></div>
+      <button id="start-game" class="primary-button">进入战场 <span>→</span></button><button id="continue-game" class="secondary-button" hidden>继续上次对局</button>
+      <div class="welcome-foot">你与 3 名 AI 队友，对抗部落军团 · 对局自动保存在此浏览器</div>
+      <button id="welcome-about" class="text-button">玩法与复刻说明</button>
+    </section>
+  </div>
+  <dialog id="help-dialog" class="help-dialog"><div class="dialog-header"><span><small>FIELD MANUAL</small><h2>军团手册</h2></span><button class="close-dialog" aria-label="关闭">×</button></div><div class="help-tabs"><button data-help="play" class="active">玩法与操作</button><button data-help="waves">波次图鉴</button><button data-help="about">关于复刻</button></div><div id="help-content" class="help-content"></div></dialog>
+  <dialog id="end-dialog" class="end-dialog"><div class="end-emblem"><svg><use href="#i-crown"/></svg></div><div id="end-eyebrow" class="eyebrow">战斗结束</div><h2 id="end-title">联盟军团获胜</h2><p id="end-description"></p><div id="end-stats" class="end-stats"></div><button id="restart-game" class="primary-button">再来一局</button><button class="close-dialog secondary-button">回看战场</button></dialog>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

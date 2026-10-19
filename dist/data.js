@@ -185,7 +185,7 @@ export const RULES = {
   initialWorkers: 1,
   initialIncome: 0,
   buildSeconds: 30,
-  maxWorkers: 7,
+  maxWorkers: 10,
   maxLumberLevel: 30,
   maxLumberEfficiency: 30,
   monsterMultiplier: 9,

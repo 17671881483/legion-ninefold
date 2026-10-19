@@ -186,11 +186,11 @@ export class Game {
       }
       case 'worker': {
         if (this._population(p) + rule('workerPopulation', 1) > p.populationCap) return this._result(false, '人口不足，请扩建营地');
-        if (p.workers >= rule('maxWorkers', 7)) return this._result(false, '小精灵已达上限');
+        if (p.workers >= rule('maxWorkers', 10)) return this._result(false, '小精灵已达上限');
         const cost = rule('workerCostBase', 50) + Math.max(0, p.workers - 1) * rule('workerCostStep', 25);
         if (p.gold < cost) return this._result(false, `招募需要 ${cost} 金币`);
         p.gold -= cost; p.workers++;
-        return this._result(true, `小精灵 ${p.workers}/${rule('maxWorkers', 7)}`);
+        return this._result(true, `小精灵 ${p.workers}/${rule('maxWorkers', 10)}`);
       }
       case 'lumber': {
         if (p.lumberLevel >= rule('maxLumberLevel', 30)) return this._result(false, '伐木科技已达上限');
@@ -848,7 +848,7 @@ export class Game {
   }
   _aiAct(p) {
     if (this.state.phase === 'build') {
-      if (p.workers < Math.min(rule('maxWorkers', 7), 2 + Math.floor(this.state.wave / 2)) && p.gold > rule('workerCost', 50) + 80 && this._random() < .34) this.command('worker', { playerId: p.id });
+      if (p.workers < Math.min(rule('maxWorkers', 10), 2 + Math.floor(this.state.wave / 2)) && p.gold > rule('workerCost', 50) + 80 && this._random() < .34) this.command('worker', { playerId: p.id });
       if (p.lumberLevel < this.state.wave && p.wood > 180 && p.gold > 180 && this._random() < .24) this.command('lumber', { playerId: p.id });
       if (!p.heroId && this.state.wave >= 5 && p.gold > 400) {
         const preferred = p.buildings.filter(b=>this._isFront(units[b.unitId])).length >= p.buildings.length/2 ? 'aura_damage' : 'aura_armor';

@@ -121,6 +121,63 @@ test('worker pricing, lumber formula, reroll limits and roster validity', () => 
   assert(p.roster.every(id => unit(id).randomPool)); assert.deepEqual(p.buildings, buildings);
 });
 
+test('economy caps allow workers 9 to 10 and lumber 29 to 30, then reject without charging', () => {
+  assert.equal(RULES.maxWorkers, 10); assert.equal(RULES.maxLumberLevel, 30);
+  for (const combat of [false, true]) {
+    const g = combat ? combatFixture() : game(), p = g.state.players[0];
+    p.gold = 10000; p.workers = 9; p.lumberLevel = 29;
+    const wood = p.wood, income = p.income, gold = p.gold;
+    assert(g.command('worker').ok); assert.equal(p.workers, 10);
+    assert.equal(gold - p.gold, RULES.workerCostBase + 8 * RULES.workerCostStep);
+    assert.equal(p.popUsed, 10 * RULES.workerPopulation);
+    const beforeLumber = p.gold;
+    assert(g.command('lumber').ok); assert.equal(p.lumberLevel, 30);
+    assert.equal(beforeLumber - p.gold, RULES.lumberUpgradeCostBase + 29 * RULES.lumberUpgradeCostStep);
+    assert.equal(p.wood, wood); assert.equal(p.income, income);
+    const capped = g.snapshot();
+    assert(!g.command('worker').ok); assert.deepEqual(g.snapshot(), capped);
+    assert(!g.command('lumber').ok); assert.deepEqual(g.snapshot(), capped);
+    assert.equal(g.state.phase, combat ? 'combat' : 'build');
+  }
+});
+
+test('combat permits worker and lumber upgrades, with each change applied to the next production tick', () => {
+  const g = combatFixture(), p = g.state.players[0];
+  monster(g, 0, { hp: 1e9, maxHp: 1e9, damage: 0 }); // Keep this real combat alive throughout the checks.
+  p.gold = 10000; p.workers = 9; p.lumberLevel = 29;
+  let wood = p.wood;
+  g.tick(.1); assert.equal(g.state.phase, 'combat');
+  near(p.wood - wood, 9 * RULES.workerBaseWoodPerSecond * (1 + 29 * RULES.lumberRateStep) * .1);
+  assert(g.command('worker').ok); assert.equal(p.workers, 10); wood = p.wood;
+  g.tick(.1); assert.equal(g.state.phase, 'combat');
+  near(p.wood - wood, 10 * RULES.workerBaseWoodPerSecond * (1 + 29 * RULES.lumberRateStep) * .1);
+  assert(g.command('lumber').ok); assert.equal(p.lumberLevel, 30); wood = p.wood;
+  g.tick(.1); assert.equal(g.state.phase, 'combat');
+  near(p.wood - wood, 10 * RULES.workerBaseWoodPerSecond * (1 + 30 * RULES.lumberRateStep) * .1);
+});
+
+test('new and legacy saves retain economy progress and continue upgrades without resetting workers or lumber', () => {
+  for (const [workers, level] of [[10, 30], [7, 29]]) for (const combat of [false, true]) {
+    const g = game(71), p = g.state.players[0];
+    p.workers = workers; p.lumberLevel = level; p.gold = 10000; p.wood = 321;
+    if (combat) g.command('ready'); else p.popUsed = workers * RULES.workerPopulation;
+    const serialized = g.snapshot();
+    for (const version of [1, 2]) {
+      const saved = JSON.parse(JSON.stringify(serialized)); saved.version = version;
+      if (version === 1) { delete saved.mapId; delete saved.mapVersion; delete saved.state.map; }
+      const restored = Game.fromSnapshot(saved), rp = restored.state.players[0];
+      assert.equal(rp.workers, workers); assert.equal(rp.lumberLevel, level);
+      assert.equal(rp.gold, p.gold); assert.equal(rp.wood, p.wood); assert.equal(rp.popUsed, p.popUsed);
+      assert.equal(restored.state.phase, combat ? 'combat' : 'build');
+      if (version === 2) assert.deepEqual(restored.snapshot(), serialized);
+      const wood = rp.wood; restored.tick(.2);
+      near(rp.wood - wood, workers * RULES.workerBaseWoodPerSecond * (1 + level * RULES.lumberRateStep) * .2);
+      if (workers < 10) { assert(restored.command('worker').ok); assert.equal(rp.workers, workers + 1); }
+      if (level < 30) { assert(restored.command('lumber').ok); assert.equal(rp.lumberLevel, level + 1); }
+    }
+  }
+});
+
 test('population gates build/upgrade/worker/hero; farms clamp cap and never overcharge', () => {
   const g = game(), p = g.state.players[0]; p.gold = 10000;
   p.populationCap = p.workers;

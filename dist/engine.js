@@ -167,9 +167,22 @@ export class Game {
       woodPerSecond: this._woodRate(p), populationReserved: queue.length * rule('workerPopulation', 1),
     };
   }
+  _completeConstruction(p, b) {
+    if (!b.construction) return;
+    b.unitId = b.construction.targetId; b.construction = null;
+    if (p.id === 0) this._event('build', { laneId: p.id, x: b.col + .5, y: b.row + 4.5 }, `${units[b.unitId]?.name ?? ''}施工完成`);
+  }
+  _completeMilitaryConstruction() {
+    // Opening combat finishes the paid army orders only. Economy jobs retain
+    // their real completion times, and the simulation clock does not advance.
+    for (const p of this.state.players) {
+      for (const b of p.buildings) this._completeConstruction(p, b);
+      p.popUsed = this._population(p);
+    }
+  }
   _advanceEconomy(p, from, to) {
     const tasks = this._economyTasks(p);
-    for(const b of p.buildings)if(b.construction?.finishAt<=to+1e-8){b.unitId=b.construction.targetId;b.construction=null;if(p.id===0)this._event('build',{laneId:p.id,x:b.col+.5,y:b.row+4.5},`${units[b.unitId]?.name??''}施工完成`);}
+    for (const b of p.buildings) if (b.construction?.finishAt <= to + 1e-8) this._completeConstruction(p, b);
     let cursor = from;
     // Integrate at each completion instant: a task finishing at the end of a
     // step must not earn its new production rate for the preceding interval.
@@ -438,20 +451,31 @@ export class Game {
         return this._result(true, '国王获得治疗');
       }
       case 'interfere': {
-        if(RULES.interfereEnabled!==true)return this._result(false,'来源文档没有全局干扰技能，本模式已关闭');
-        if (this.state.phase !== 'combat') return this._result(false, '战斗时才可干扰');
-        if ((p.interfereUntil ?? 0) > this.state.time) return this._result(false, '干扰技能冷却中');
-        const lane = Number(payload.laneId ?? p.id);
-        if (!Number.isInteger(lane) || lane < 0 || lane > 9) return this._result(false, '路线不存在');
-        const defendingTeam = lane >= 8 ? lane - 8 : lane < 4 ? 0 : 1;
-        if (defendingTeam !== p.team) return this._result(false, '只能干扰进攻己方的怪物');
-        p.interfereUntil = this.state.time + rule('interfereCooldown', 12); p.interfereCooldown = rule('interfereCooldown', 12);
+        if (!RULES.interfereEnabled) return this._result(false, '本模式未开启T怪');
+        if (this.state.phase !== 'combat' || this.state.roundMode === 'arena') return this._result(false, '普通波战斗时才可T怪');
+        if (this.state.paused) return this._result(false, '请先继续战斗');
+        if ((p.interfereUntil ?? 0) > this.state.time) return this._result(false, 'T怪冷却中');
+        const { worldX, worldY } = payload, bounds = MAP.bounds;
+        if (!Number.isFinite(worldX) || !Number.isFinite(worldY) || worldX < bounds.minX || worldX > bounds.maxX || worldY < bounds.minY || worldY > bounds.maxY)
+          return this._result(false, '请选择地图内的T怪位置');
+        const now = this.state.time, radius = rule('interfereRadius', 2 / 3);
         let count = 0;
-        for (const e of this.state.entities) if (e.laneId === lane && e.side === 'monster' && e.hp > 0) {
-          e.attackCd = Math.max(e.attackCd, .8); e.status.stunUntil = this.state.time + .28; e.targetId = null; count++;
+        // A050 / Antistuck: reissue attack-move to the monster's king-region goal.
+        // Both ax monster teams are eligible; this is neither a stun nor a CD reset.
+        for (const e of this.state.entities) {
+          if (e.side !== 'monster' || e.hp <= 0) continue;
+          const point = Number.isFinite(e.worldX) && Number.isFinite(e.worldY) ? worldPoint(e) : laneToWorld(e.laneId, e.x, e.y);
+          if (!point || Math.hypot(point.x - worldX, point.y - worldY) > radius + 1e-8) continue;
+          this._ensureWorld(e);
+          const goal = kingWorld(e.battleTeam);
+          e.targetId = null; e.chase = null; e.pendingAttack = null; e.status.nextSenseAt = now; e.routeMode = 'march';
+          e.nav = { mode: 'monster', routeId: e.sourceLaneId, path: navigationPath(worldPoint(e), goal, e.battleTeam, e.radius), index: 1, distance: e.nav?.distance ?? 0, interrupted: false, goal };
+          count++;
         }
-        this._event('interfere', { laneId: lane, x: 3, y: 6 }, `干扰 ${count}`);
-        return this._result(true, `已重置 ${count} 只怪物的攻击`);
+        p.interfereUntil = now + rule('interfereCooldown', 5); p.interfereCooldown = rule('interfereCooldown', 5);
+        const lane = worldToLane(worldX, worldY)?.laneId ?? (worldX < 30 ? 8 : 9);
+        this._event('interfere', { laneId: lane, worldX, worldY }, `T怪 ${count}`, { radius });
+        return this._result(true, count ? `T怪：${count}只怪物重新进攻` : 'T怪：范围内没有可重置的怪物');
       }
       case 'hero':return this._result(false,'新局英雄通过建造者的英雄建筑入口与升级链获得');
       case 'ready':
@@ -507,6 +531,7 @@ export class Game {
     const s = this.state;
     if(s.roundMode==='arena-prep'){this._startArena();return;}
     if(s.roundMode==='arena-transition'){s.wave++;s.roundMode='normal';s.timer=30;s.entities=[];return;}
+    this._completeMilitaryConstruction();
     const w = this._waveData();
     const reference=[250,350,500,650,800,1000,1200,1450,1600,1850,2050,2400,2700,3100,3500,4000,4500,5000,5500,6000,6500,7100,7700,8500,9500,10600,11800,13000,14000,15000,16000,17000,18000,19000,20000][s.wave-1]??1;
     for(const p of s.players){const factor=this._military(p)/reference-(p.sourceLeaks??0)/150;p.leakBountyFactor=this.options.ggEnabled?factor>=1?1:factor>=.1?factor:0:0;}
@@ -658,8 +683,8 @@ export class Game {
     this._spatial = [new Map(), new Map()]; this._worldEntities = new Map();
     for (const battle of battles) battle.auras = [];
     for (const e of entities) {
-      if (e.hp <= 0) continue;
-      if (e.expiresAt && e.expiresAt <= now) { e.hp = 0; continue; }
+      if (e.hp <= 0) { e.pendingAttack = null; continue; }
+      if (e.expiresAt && e.expiresAt <= now) { e.hp = 0; e.pendingAttack = null; continue; }
       this._ensureWorld(e); const team = e.battleTeam, battle = battles[team];
       battle.push(e); this._worldEntities.set(e.id, e);
       const key = `${Math.floor(e.worldX)},${Math.floor(e.worldY)}`, grid = this._spatial[team];
@@ -671,16 +696,17 @@ export class Game {
     this._monsterPressure = monsterCounts.map(count => RULES.webCongestionEnabled ? clamp(1 + Math.max(0, count - rule('webCongestionThreshold', 130)) / rule('webCongestionStep', 50), 1, rule('webCongestionMax', 7)) : 1);
     this.state.congestion = monsterCounts.map((count, team) => ({ attackingTeam: team, count, attackIntervalFactor: this._monsterPressure[team] }));
     for (const e of entities) {
-      if (e.hp <= 0) continue;
+      if (e.hp <= 0) { e.pendingAttack = null; continue; }
       this._ensureWorld(e);
       const battle = battles[e.battleTeam], st = e.status;
       if (st.poisonUntil > now) this._hurt(e, number(st.poisonDps, 0) * dt, st.poisonOwner, true);
-      if (e.hp <= 0) continue;
+      if (e.hp <= 0) { e.pendingAttack = null; continue; }
       e.attackCd -= dt; e.abilityCd -= dt;
       this._applyHealingAura(e, battle.auras, dt);
       this._passiveAbility(e, battle, dt);
       tickSourceSkills(this,e,battle,dt);
-      if (e.hp <= 0 || (st.stunUntil ?? 0) > now) continue;
+      if (e.hp <= 0 || (st.stunUntil ?? 0) > now) { e.pendingAttack = null; continue; }
+      if (e.side === 'monster' && e.pendingAttack && this._advanceMonsterAttack(e, battle)) continue;
       const aggro = Math.max(e.range, number(e.acquisitionRange, Math.max(4.5, e.range + 1)));
       let target = this._worldEntities.get(e.targetId);
       if (target && (target.hp <= 0 || target.battleTeam !== e.battleTeam || target.side === e.side || !canWeaponTarget(e,target) || distance(e, target) > aggro * 1.25 || (e.nav?.mode === 'support' && distance(target, e.nav.anchor) > aggro * 1.25))) target = null;
@@ -700,14 +726,13 @@ export class Game {
         if (e.nav) e.nav.interrupted = true;
         const reach = (sourceWeapon(e,target)?.range??e.range) + e.radius + target.radius;
         if (distance(e, target) <= reach && this._canSegment(worldPoint(e), worldPoint(target), e.battleTeam, 0)) {
-          if (e.attackCd <= 0) this._attack(e, target, battle);
+          if (e.side === 'monster') { if (e.attackCd <= 1e-8) this._beginMonsterAttack(e, target, battle); }
+          else if (e.attackCd <= 0) this._attack(e, target, battle);
         } else this._chase(e, target, battle, dt);
       } else if (e.side === 'monster') {
         const king = this.state.kings[e.battleTeam], position = this._kingPosition(e.battleTeam);
         if (distance(e, position) <= e.range + e.radius + (king.radius ?? .8) && this._canSegment(worldPoint(e), position, e.battleTeam, 0)) {
-          if (e.attackCd <= 0) {
-            this._attack(e,king,battle);
-          }
+          if (e.attackCd <= 1e-8) this._beginMonsterAttack(e, king, battle);
         } else {if(this.state.wave>=31&&e.nav?.path?.length&&distance(e.nav.path.at(-1),position)>.4)this._planMonsterRoute(e);this._followNav(e, battle, dt);}
       } else if (e.side === 'defender') {
         if (e.nav?.mode === 'return') {
@@ -796,6 +821,34 @@ export class Game {
     e.facingX = next.x - from.x; e.facingY = next.y - from.y;
     if (e.nav) e.nav.distance += distance(from, next);
     this._syncLocal(e);
+  }
+  _beginMonsterAttack(e, target, battle) {
+    if (e.pendingAttack || e.hp <= 0 || target.hp <= 0 || target.team === e.team || target.battleTeam !== e.battleTeam ||
+      e.buffs?.some(b => b.expiresAt > this.state.time && b.disarm)) return;
+    const weapon = sourceWeapon(e, target); if (!weapon) return;
+    const sourceWindup = Math.max(0, number(weapon.raw[`dmgpt${weapon.slot}`], 0));
+    if (!sourceWindup) { this._attack(e, target, battle); return; }
+    let haste = this._auraEffects(e, battle.auras).attackSpeedMultiplier;
+    if (e.status.frenzy) haste *= 1.6;
+    const duration = sourceWindup / haste * (this._monsterPressure?.[e.team] ?? 1);
+    e.pendingAttack = { targetId: target.id, targetIsKing: this.state.kings.includes(target), startedAt: this.state.time, finishAt: this.state.time + duration };
+  }
+  _advanceMonsterAttack(e, battle) {
+    const pending = e.pendingAttack, now = this.state.time;
+    const target = pending.targetIsKing ? this.state.kings.find(king => king.id === pending.targetId) : this._worldEntities.get(pending.targetId);
+    const weapon = target && sourceWeapon(e, target);
+    const valid = target && target.hp > 0 && target.battleTeam === e.battleTeam && target.team !== e.team && target.side !== e.side && weapon &&
+      !e.buffs?.some(b => b.expiresAt > now && b.disarm) &&
+      distance(e, target) <= weapon.range + e.radius + (target.radius ?? .8) + 1e-8 && this._canSegment(worldPoint(e), worldPoint(target), e.battleTeam, 0);
+    if (!valid) { e.pendingAttack = null; return false; }
+    // Hold position and target through the source attack point. T can cancel
+    // this order without a hit or an artificial attack-cooldown penalty.
+    if (now + 1e-8 < pending.finishAt) return true;
+    e.pendingAttack = null;
+    this._attack(e, target, battle);
+    // _attack starts a full source cycle; its windup has already elapsed.
+    e.attackCd = Math.max(0, e.attackCd - Math.max(0, now - pending.startedAt));
+    return true;
   }
   _attack(e, target, lane) {
     const ability = e.ability, type = ability?.type;
@@ -1003,6 +1056,7 @@ export class Game {
   }
 
   _startArena(){
+    this._completeMilitaryConstruction();
     const s=this.state;s.phase='combat';s.roundMode='arena';s.entities=[];s.timer=0;s.arenaRemaining=120;this._spawnQueue=[];this._roundTime=0;
     for(const p of s.players)for(const b of p.buildings.filter(b=>!b.construction)){
       const def=units[b.unitId];if(!def)continue;const point=laneToWorld(0,1.2+(p.id%4)*1.1+(b.col-2.5)*.12,p.team===0?5+(b.row/8):9-(b.row/8));
@@ -1115,7 +1169,10 @@ export class Game {
       const available = MERCENARIES.filter(m => value(m, ['unlock', 'unlockWave', 'wave', 'minWave'], 1) <= this.state.wave && this._woodCost(m) <= p.wood-defenseReserve && this.mercenaryStatus(m.id, p.id).stock > 0);
       const m = this._pick(available); if (m) this.command('merc', { playerId: p.id, mercId: m.id });
     }
-    if (RULES.interfereEnabled===true && this.state.phase === 'combat' && this._random() < .06) this.command('interfere', { playerId: p.id, laneId: this.state.entities.some(e => e.side === 'monster' && e.laneId === 8 + p.team) ? 8 + p.team : p.id });
+    if (RULES.interfereEnabled && this.state.phase === 'combat' && this.state.roundMode !== 'arena' && !this.state.paused && (p.interfereUntil ?? 0) <= this.state.time && this._random() < .06) {
+      const winding = this.state.entities.find(e => e.side === 'monster' && e.hp > 0 && e.battleTeam === p.team && e.pendingAttack);
+      if (winding) this.command('interfere', { playerId: p.id, worldX: winding.worldX, worldY: winding.worldY });
+    }
   }
 
   snapshot() {

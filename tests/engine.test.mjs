@@ -108,6 +108,70 @@ test('exact-price construction reserves its cell, completes on time, then upgrad
   const before=p.gold;assert(g.command('sell',{buildingId:b.id}).ok);assert.equal(p.gold,before+target.sourcePoints);assert.equal(p.buildings.length,0);
 });
 
+test('manual ready finishes all paid army construction before military scoring without advancing economy jobs', () => {
+  const g = game(), p = g.state.players[0], economyPlayer = g.state.players[1];
+  p.gold = p.wood = 10000; p.roster = ['b_h00M'];
+  assert(g.command('build', { unitId: 'b_h00M', col: 0, row: 0 }).ok);
+  const b = p.buildings[0]; assert(b.construction); assert.equal(g._military(p), 0);
+  economyPlayer.gold = economyPlayer.wood = 10000;
+  economyPlayer.buildings = [{ id: 'economy-army', unitId: 'ghoul', col: 5, row: 7, spent: 5000, totalSpent: 5000 }];
+  for (const command of ['worker', 'lumber', 'farm']) assert(g.command(command, { playerId: 1 }).ok);
+  const tasks = JSON.parse(JSON.stringify(economyPlayer.economyTasks)), workers = economyPlayer.workers, level = economyPlayer.lumberLevel, cap = economyPlayer.populationCap;
+  const resources = g.state.players.map(player => [player.gold, player.wood]), time = g.state.time;
+  const army = g.state.players.flatMap(player => player.buildings.map(building => ({ playerId: player.id, id: building.id, targetId: building.construction?.targetId ?? building.unitId, spent: building.totalSpent })));
+  assert(army.some(entry => entry.playerId > 1)); // Constructor-created AI armies are included.
+  assert(g.command('ready').ok); assert.equal(g.state.phase, 'combat'); assert.equal(g.state.time, time);
+  assert.deepEqual(g.state.players.map(player => [player.gold, player.wood]), resources);
+  assert.deepEqual(economyPlayer.economyTasks, tasks); assert.equal(economyPlayer.workers, workers); assert.equal(economyPlayer.lumberLevel, level); assert.equal(economyPlayer.populationCap, cap);
+  for (const entry of army) {
+    const building = g.state.players[entry.playerId].buildings.find(item => item.id === entry.id);
+    assert(!building.construction); assert.equal(building.unitId, entry.targetId); assert.equal(building.totalSpent, entry.spent);
+    assert(g.state.entities.some(entity => entity.buildingId === entry.id && entity.ownerId === entry.playerId && entity.unitId === entry.targetId));
+  }
+  assert.equal(g._military(p), unit('b_h00M').sourcePoints); near(p.leakBountyFactor, .1);
+  const before = g.snapshot(); assert(!g.command('ready').ok); assert.deepEqual(g.snapshot(), before);
+});
+
+test('automatic wave start completes upgrades and chosen morph/form targets after JSON restore', () => {
+  const g = game(), p = g.state.players[0]; g.state.timer = 10000; p.gold = p.wood = 10000; p.roster = ['b_h00O'];
+  assert(g.command('build', { unitId: 'b_h00O', col: 0, row: 0 }).ok); const upgraded = p.buildings[0]; g.tick(upgraded.construction.duration);
+  assert(g.command('upgrade', { buildingId: upgraded.id, unitId: 'b_h00X' }).ok);
+  const morphPlayer = g.state.players[1]; morphPlayer.buildings = []; morphPlayer.gold = morphPlayer.wood = 10000; morphPlayer.builderId = 'builder_u00I'; morphPlayer.roster = [...BUILDERS.find(builder => builder.id === morphPlayer.builderId).rosterIds];
+  const proxy = unit(morphPlayer.roster[0]); assert(proxy.morphProxy);
+  assert(g.command('build', { playerId: 1, unitId: proxy.id, col: 0, row: 0 }).ok); const morphed = morphPlayer.buildings[0], chosenMorph = morphed.construction.targetId;
+  assert(PROPHET_POOLS[0].includes(chosenMorph));
+  const formPlayer = g.state.players[2]; formPlayer.buildings = [{ id: 'switch-form', unitId: 'b_h062', col: 0, row: 0, spent: 100, totalSpent: 100 }];
+  assert(g.command('form', { playerId: 2, buildingId: 'switch-form' }).ok);
+  const expected = [{ playerId: 0, id: upgraded.id, targetId: 'b_h00X' }, { playerId: 1, id: morphed.id, targetId: chosenMorph }, { playerId: 2, id: 'switch-form', targetId: 'b_h05Q' }];
+  for (const entry of expected) assert(g.state.players[entry.playerId].buildings.find(building => building.id === entry.id).construction.finishAt > g.state.time + .05);
+  g.state.timer = .05; const time = g.state.time, resources = g.state.players.map(player => [player.gold, player.wood]), rates = g.state.players.map(player => g._woodRate(player));
+  const restored = Game.fromSnapshot(JSON.parse(JSON.stringify(g.snapshot()))); g.tick(.05); restored.tick(.05); assert.deepEqual(restored.snapshot(), g.snapshot());
+  assert.equal(g.state.phase, 'combat'); near(g.state.time, time + .05);
+  for (const entry of expected) {
+    const building = g.state.players[entry.playerId].buildings.find(item => item.id === entry.id);
+    assert.equal(building.construction, null); assert.equal(building.unitId, entry.targetId);
+    assert(g.state.entities.some(entity => entity.buildingId === entry.id && entity.unitId === entry.targetId));
+  }
+  for (const player of g.state.players) { assert.equal(player.gold, resources[player.id][0]); near(player.wood, resources[player.id][1] + rates[player.id] * .05); }
+});
+
+test('manual and automatic arena start field unfinished armies on both teams immediately', () => {
+  for (const manual of [true, false]) {
+    const g = game(); for (const p of g.state.players) p.buildings = [];
+    for (const id of [0, 4]) {
+      const p = g.state.players[id]; p.gold = p.wood = 10000; p.roster = ['b_h00M'];
+      assert(g.command('build', { playerId: id, unitId: 'b_h00M', col: 0, row: 0 }).ok); assert(p.buildings[0].construction);
+    }
+    g.state.wave = 10; g.state.roundMode = 'arena-prep'; g.state.timer = .05;
+    if (manual) assert(g.command('ready').ok); else g.tick(.05);
+    assert.equal(g.state.phase, 'combat'); assert.equal(g.state.roundMode, 'arena'); near(g.state.time, manual ? 0 : .05);
+    for (const id of [0, 4]) {
+      const b = g.state.players[id].buildings[0]; assert.equal(b.construction, null);
+      assert(g.state.entities.some(entity => entity.isArena && entity.buildingId === b.id && entity.ownerId === id && entity.unitId === b.unitId));
+    }
+  }
+});
+
 test('lumber production uses source payloads and prophet rerolls consume five escalating wood prices', () => {
   const g=game(),p=g.state.players[0];p.gold=10000;p.wood=10000;g.state.timer=10000;
   for(const level of [0,1,8,9,15]){p.lumberLevel=level;const wood=p.wood;g.tick(2);near(p.wood-wood,woodRate(p.workers,level)*2);}
@@ -688,12 +752,13 @@ test('common-road soldiers intercept another source lane and receive owner kill 
   assert(g.state.events.some(event => Number.isFinite(event.worldX) && Number.isFinite(event.worldY)));
 });
 
-test('T resets monster attacks, checks own-team lane and respects configured cooldown', () => {
-  const g = combatFixture(), e = monster(g, 0, { attackCd: 0 });
-  assert(!g.command('interfere', { laneId: 4 }).ok);
-  assert(g.command('interfere', { laneId: 0 }).ok); assert(e.attackCd >= .8);
-  assert.equal(g.state.players[0].interfereCooldown, RULES.interfereCooldown);
+test('T point command reissues monster orders without inventing stun or attack cooldown', () => {
+  const g = combatFixture(), e = monster(g, 0, { attackCd: .3 }); e.targetId='old';
   assert(!g.command('interfere', { laneId: 0 }).ok);
+  assert(g.command('interfere', { worldX: e.worldX, worldY: e.worldY }).ok);
+  assert.equal(e.targetId,null);assert.equal(e.attackCd,.3);assert.equal(e.status.stunUntil,undefined);
+  assert.equal(g.state.players[0].interfereCooldown, RULES.interfereCooldown);
+  assert(!g.command('interfere', { worldX: e.worldX, worldY: e.worldY }).ok);
 });
 
 test('dead lifesteal attackers cannot resurrect after lethal thorns retaliation', () => {

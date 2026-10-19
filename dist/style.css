@@ -304,3 +304,10 @@
 .builder-offer{padding:7px;background:#343e27;border:1px solid #8d8353;display:flex;gap:5px;align-items:center}.builder-offer small{font-size:9px;color:#c9c09c;flex:1}.builder-offer button{padding:5px 10px;font-size:11px;border-color:#a39254}.roster-toolbar{flex-wrap:wrap}.roster-toolbar .reroll-button{min-width:0}.economy-actions button:disabled:not(.economy-busy){opacity:.65}
 
 .live-skill-cds{display:flex;gap:8px;margin-top:7px;flex-wrap:wrap}.live-skill-cds>span{min-width:65px;max-width:110px;flex:1}.live-skill-cds small{display:block;color:#a0b59b!important;font-size:9px!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.live-skill-cds i{display:block;height:3px;background:#0b1a10;margin-top:3px}.live-skill-cds em{display:block;height:100%;background:#719fbe}.king-move{display:block;padding:7px;width:100%;margin-top:10px;color:#d5c68c}.king-move small{display:block;font-size:9px;color:#94a384}
+
+/* A050 point-targeting and the five-second simulation cooldown. */
+#battlefield.targeting{cursor:crosshair}
+#interfere{position:relative;overflow:hidden;padding-bottom:4px}
+#interfere[aria-pressed="true"]{border-color:#e3c983;background:#485332;color:#f3dfa0}
+#interfere .action-cooldown{position:absolute;left:0;right:0;bottom:0;height:3px;background:#17271b;display:block}
+#interfere .action-cooldown i{display:block;height:100%;background:#e3c983;width:100%}

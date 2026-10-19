@@ -30,8 +30,8 @@
     <header class="topbar">
       <a class="brand" href="#" aria-label="军团战争首页"><span class="brand-seal">L</span><span><b>军团战争</b><small>LEGION WARFARE</small></span><em>9×</em></a>
       <div class="resource-strip" aria-label="我的资源">
-        <div class="resource gold" title="金币用于建造、升级和发展科技"><svg><use href="#i-gold"/></svg><span><b id="gold">350</b><small>金币</small></span></div>
-        <div class="resource wood" title="小精灵持续伐木，可发木进攻或强化国王"><svg><use href="#i-wood"/></svg><span><b id="wood">0</b><small>木材</small></span></div>
+        <div class="resource gold" title="金币用于建造、升级和发展科技"><svg><use href="#i-gold"/></svg><span><b id="gold">300</b><small>金币</small></span></div>
+        <div class="resource wood" title="小精灵持续伐木，可发木进攻或强化国王"><svg><use href="#i-wood"/></svg><span><b id="wood">97</b><small>木材</small></span></div>
         <div class="resource" title="每回合结算时额外获得的金币"><svg><use href="#i-income"/></svg><span><b id="income">+0</b><small>回合收入</small></span></div>
         <div class="resource tech" title="小精灵数量 / 伐木等级"><svg><use href="#i-worker"/></svg><span><b id="tech">1 / 0</b><small>伐木科技</small></span></div>
       </div>
@@ -39,7 +39,7 @@
     </header>
     <div class="battle-ribbon">
       <div class="king-status allied"><svg><use href="#i-crown"/></svg><span>联盟军团</span><div class="king-bar"><i id="ally-hp"></i><b id="ally-hp-text">100%</b></div></div>
-      <div class="wave-status"><span id="phase-label">布阵准备</span><b id="wave-label">第 01 波</b><button id="ribbon-wave-name" class="text-button ribbon-wave-name" title="查看波次图鉴">螃蟹 · 108只</button><span id="wave-time">00:30</span></div>
+      <div class="wave-status"><span id="phase-label">布阵准备</span><b id="wave-label">第 01 波</b><button id="ribbon-wave-name" class="text-button ribbon-wave-name" title="查看波次图鉴">螃蟹 · 108只</button><span id="wave-time">01:20</span></div>
       <div class="king-status hostile"><div class="king-bar"><i id="enemy-hp"></i><b id="enemy-hp-text">100%</b></div><span>部落军团</span><svg><use href="#i-crown"/></svg></div>
     </div>
     <main class="workspace">
@@ -67,7 +67,7 @@
       <aside class="right-sidebar">
         <div class="panel-tabs" role="tablist"><button data-tab="build" class="active" role="tab" aria-selected="true"><svg><use href="#i-shield"/></svg>建造</button><button data-tab="attack" role="tab" aria-selected="false"><svg><use href="#i-swords"/></svg>进攻</button><button data-tab="king" role="tab" aria-selected="false"><svg><use href="#i-crown"/></svg>国王</button></div>
         <div id="panel-content" class="panel-content"></div>
-        <div class="economy-panel"><div class="section-heading"><span>经济发展</span><small id="wood-rate">+0.2 木/秒</small></div><div class="economy-actions"><button id="worker"><svg><use href="#i-worker"/></svg><span>招募小精灵<small id="worker-price">50 金币</small></span><b>+</b></button><button id="lumber"><svg><use href="#i-wood"/></svg><span>升级伐木<small id="lumber-price">80 金币</small></span><b>↑</b></button></div></div>
+        <div class="economy-panel"><div class="section-heading"><span>经济发展</span><small id="wood-rate">+0.2 木/秒</small></div><div class="economy-actions"><button id="worker"><svg><use href="#i-worker"/></svg><span>招募小精灵<small id="worker-price">50 金币</small></span><b>+</b></button><button id="lumber"><svg><use href="#i-wood"/></svg><span>升级伐木<small id="lumber-price">70 金币</small></span><b>↑</b></button></div></div>
         <div class="round-action"><span id="ready-subtext">兵力还未部署</span><button id="ready" class="primary-button"><svg><use href="#i-swords"/></svg><b>开始第 1 波</b><kbd>空格</kbd></button></div>
       </aside>
     </main>
@@ -75,7 +75,7 @@
       <div class="minimap-wrap"><canvas id="minimap" width="170" height="170" title="点击切换战区" aria-label="战场小地图"></canvas><span>战场地图</span></div>
       <div id="selection" class="selection-panel"><div class="selection-portrait"><canvas id="unit-portrait" width="100" height="100"></canvas></div><div class="selection-copy"><small>先知 · 建造者</small><h2>部署你的军团</h2><p>从右侧选择兵种，再点击防线上的格子。<br>先布置前排，再搭配远程和辅助。</p></div></div>
       <div id="selection-actions" class="selection-actions"></div>
-      <div class="army-summary"><span>军团兵力<b id="army-power">0</b></span><span>人口<b id="army-pop">0 / 80</b></span><span>击杀<b id="kill-count">0</b></span></div>
+      <div class="army-summary"><span>军团兵力<b id="army-power">0</b></span><span>人口<b id="army-pop">1 / 40</b></span><span>击杀<b id="kill-count">0</b></span></div>
     </footer>
   </div>
 

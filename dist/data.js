@@ -1,10 +1,8 @@
-/*
- * Legion Ninefold — standalone Web tuning data, 2026-10-19.
- * Names and strategic roles evoke classic Legion TD. All numerical values,
- * upgrade paths, abilities and wave arrangements below are authored for this
- * Web prototype. They are NOT extracted or verified values from 11 平台 15A2.
- * In particular baseCount is OUR Web wave baseline; it is not an HP/X6 baseline.
+/* 5.0dJF static-reference subset with explicit Web ninefold adaptations.
+ * Legacy Web units remain for existing saves. See REFERENCE and reference/map-source.json.
  */
+import { MAP_REFERENCE, MAP_UNITS, MAP_WAVES, MAP_MERCENARIES } from './map-reference.js';
+export { MAP_REFERENCE as REFERENCE } from './map-reference.js';
 
 const A = (type, value, name, description, extra = {}) => ({ type, value, name, description, ...extra });
 const unit = (id, name, race, tier, cost, hp, damage, interval, range, armor, attackType, armorType, role, ability, color, shape, upgrades, description, population = 1, randomPool = false) => ({
@@ -13,7 +11,7 @@ const unit = (id, name, race, tier, cost, hp, damage, interval, range, armor, at
   population, randomPool, isBase: randomPool,
 });
 
-export const UNITS = [
+const LEGACY_UNITS = [
   // Four base candidates per tier; roll exactly one base unit from each tier.
   unit('ghoul', '食尸鬼', '亡灵', 1, 45, 310, 27, .92, 35, 1, 'normal', 'light', 'frontline', A('lifesteal', .12, '吞噬', '攻击恢复造成伤害的一部分。'), '#94ba6b', 'triangle', ['zombie'], '便宜的近战前排，以数量分担伤害。', 1, true),
   unit('archer', '弓箭手', '人类', 1, 50, 165, 37, 1.05, 240, 0, 'pierce', 'light', 'ranged', null, '#d6b86c', 'triangle', ['divine_archer'], '廉价穿刺输出，需要前排保护。', 1, true),
@@ -83,12 +81,14 @@ export const UNITS = [
   unit('infernal', '地狱火', '元素', 6, 460, 4650, 290, 1.55, 60, 13, 'chaos', 'heavy', 'tank', A('stomp', 145, '毁灭践踏', '周期造成范围伤害并击晕。', { radius: 110, cooldown: 4.8, duration: .9 }), '#a5b58b', 'square', [], '岩石傀儡升级，坚固的范围控制单位。', 5),
 ];
 
+export const UNITS = [...MAP_UNITS, ...LEGACY_UNITS.map(u => ({...u,legacy:true,randomPool:false,isBase:false,provenance:'legacy-web'}))];
+
 const merc = (id, name, wood, income, unlock, hp, damage, interval, range, armor, attackType, armorType, role, ability, color, shape, description) => ({
   ...unit(id, name, '佣兵', 1, 0, hp, damage, interval, range, armor, attackType, armorType, role, ability, color, shape, [], description),
   wood, income, unlock,
 });
 
-export const MERCENARIES = [
+export const LEGACY_MERCENARIES = [
   merc('merc_militia', '民兵', 20, 2, 1, 145, 13, 1.1, 30, 0, 'normal', 'medium', 'frontline', null, '#b7a27d', 'circle', '低价佣兵，用数量分散对手火力。'),
   merc('merc_archer', '雇佣弓手', 40, 4, 1, 125, 23, 1.15, 210, 0, 'pierce', 'light', 'ranged', null, '#cbb48b', 'triangle', '在系统怪后排输出。'),
   merc('merc_orc', '兽人战士', 60, 5, 1, 420, 31, 1.25, 35, 2, 'normal', 'heavy', 'tank', null, '#9fb27d', 'square', '增加敌方前线承伤压力。'),
@@ -100,68 +100,8 @@ export const MERCENARIES = [
   merc('merc_infernal', '深渊地狱火', 400, 22, 11, 2420, 135, 1.45, 52, 9, 'chaos', 'heavy', 'tank', A('stomp', 55, '陨火震击', '周期对周围守军造成范围伤害。', { radius: 80, cooldown: 5, duration: .5 }), '#b4ae90', 'square', '中后期高生命进攻佣兵。'),
 ];
 
-// baseline counts are per lane and belong only to this Web implementation.
-// Boss waves use bossCount directly and do not multiply bosses by nine.
-// Historical wave names: HighestIncome's Legion TD Mega 3.41 community guide,
-// 2013-07-16 (edited 2013-08-16), "Thirteenth Sector, Creeps/Levels":
-// https://legiontd.forumotion.com/t429-legion-td-mega-book-overall-strategical-guide-3-41
-// Chinese names 1/4/7/10/14/17/20 also appear in the 2018 Chinese X6 guide:
-// https://jingyan.baidu.com/article/c35dbcb0a2b2758916fcbcc8.html
-// The actual 15A2 wave list remains unverified. Combat stats below stay Web tuning.
-// Waves 32-35 extend the classic wave-31 Legion Lord theme for this Web prototype.
-const waveSpecs = [
-  ['螃蟹', 4, 105, 12, 0, 48, 30, 'normal', 'medium', 2, '#b4a27c', 'circle'],
-  ['鱼人', 4, 145, 15, 0, 51, 35, 'normal', 'light', 2, '#bba583', 'triangle'],
-  ['蝎子', 5, 165, 19, 1, 54, 165, 'pierce', 'light', 2, '#99ad85', 'diamond'],
-  ['豪猪', 4, 260, 25, 2, 42, 38, 'normal', 'heavy', 3, '#b3a08a', 'square'],
-  ['鹰', 5, 235, 27, 1, 61, 180, 'magic', 'unarmored', 3, '#ac9ac0', 'triangle'],
-  ['岩石傀儡', 5, 310, 33, 2, 47, 205, 'pierce', 'medium', 3, '#9bbbc9', 'diamond'],
-  ['赛特斯', 6, 320, 38, 2, 73, 32, 'normal', 'light', 3, '#bcc4c5', 'triangle'],
-  ['侍僧', 4, 540, 47, 5, 36, 40, 'normal', 'fortified', 4, '#abaea8', 'square'],
-  ['僵尸', 6, 425, 43, 3, 55, 185, 'pierce', 'medium', 4, '#8db8bd', 'diamond'],
-  ['达拉内尔酋长', 0, 4200, 94, 7, 35, 65, 'chaos', 'heavy', 70, '#d1b788', 'hex'],
-  ['发条地精', 5, 620, 56, 3, 49, 230, 'magic', 'unarmored', 4, '#c7a58e', 'diamond'],
-  ['海妖', 6, 700, 62, 4, 61, 40, 'normal', 'heavy', 4, '#b5a38c', 'square'],
-  ['羽蛇', 5, 740, 67, 3, 54, 210, 'magic', 'light', 5, '#afa6c7', 'circle'],
-  ['图斯卡尔战士', 6, 790, 74, 4, 58, 240, 'pierce', 'medium', 5, '#9fb58b', 'triangle'],
-  ['半人马', 5, 1120, 88, 7, 37, 45, 'normal', 'heavy', 5, '#a6a18f', 'hex'],
-  ['火蜥蜴', 6, 1020, 86, 5, 51, 40, 'normal', 'medium', 5, '#a2b187', 'circle'],
-  ['血肉傀儡', 6, 1060, 91, 5, 57, 220, 'magic', 'light', 5, '#a8ccd7', 'diamond'],
-  ['淤泥投掷者', 7, 1100, 97, 5, 53, 250, 'pierce', 'light', 6, '#aa9fbc', 'triangle'],
-  ['巨型蜘蛛', 5, 1540, 111, 10, 39, 48, 'normal', 'fortified', 6, '#b4b5ad', 'square'],
-  ['玄武龙龟', 0, 10300, 185, 12, 35, 68, 'chaos', 'heavy', 130, '#b49dba', 'hex'],
-  ['角鹰兽', 7, 1360, 111, 6, 71, 180, 'pierce', 'light', 6, '#c1c3cd', 'triangle'],
-  ['猛犸', 6, 1710, 124, 9, 45, 45, 'normal', 'heavy', 6, '#cfab8f', 'square'],
-  ['枭兽', 6, 1630, 128, 6, 51, 245, 'magic', 'unarmored', 6, '#b9acc9', 'diamond'],
-  ['亡魂', 7, 1690, 134, 7, 59, 170, 'pierce', 'medium', 7, '#bdb58c', 'circle'],
-  ['魅魔', 6, 2090, 149, 9, 54, 45, 'normal', 'heavy', 7, '#c2d4d8', 'hex'],
-  ['娜迦战士', 7, 1980, 146, 7, 65, 40, 'chaos', 'medium', 7, '#aa9dbf', 'diamond'],
-  ['末日守卫', 7, 2110, 153, 8, 48, 220, 'magic', 'unarmored', 7, '#b2ba8d', 'circle'],
-  ['主宰', 6, 2590, 174, 13, 35, 55, 'normal', 'fortified', 8, '#b9c1c0', 'square'],
-  ['冰霜巨龙', 8, 2160, 166, 8, 61, 265, 'pierce', 'light', 8, '#a8a3bb', 'triangle'],
-  ['玛格纳托', 0, 18900, 280, 17, 34, 75, 'chaos', 'heavy', 210, '#c6aba1', 'star'],
-  ['军团领主', 7, 2810, 187, 11, 49, 220, 'magic', 'heavy', 8, '#abcbd9', 'diamond'],
-  ['军团领主', 8, 2690, 185, 10, 60, 195, 'pierce', 'medium', 8, '#96bcc1', 'hex'],
-  ['军团领主', 8, 3060, 205, 11, 58, 48, 'chaos', 'medium', 9, '#b7a5c4', 'square'],
-  ['军团领主', 8, 3360, 218, 12, 56, 240, 'magic', 'heavy', 9, '#c8c0ab', 'diamond'],
-  ['军团领主', 0, 28500, 375, 21, 32, 85, 'chaos', 'fortified', 320, '#e0c69d', 'star'],
-];
-
-export const WAVES = waveSpecs.map((s, i) => {
-  const [name, countClass, hp, damage, armor, speed, range, attackType, armorType, bounty, color, shape] = s;
-  // Web first-wave baseline is deliberately 12 (108 in ninefold), an unverified
-  // reconstruction assumption. This is not a derived or verified 15A2/X6 rule.
-  const baseCount = countClass === 0 ? 0 : Math.max(12, countClass * 2);
-  const id = i + 1;
-  const boss = baseCount === 0;
-  let ability = null;
-  if ([3, 16, 27].includes(id)) ability = A('poison', 3 + Math.floor(id / 4), '毒素', '命中造成持续伤害。', { duration: 3 });
-  if ([5, 11, 23, 34].includes(id)) ability = A('splash', .22, '范围冲击', '攻击附带小范围伤害。', { radius: 48 });
-  if ([7, 12, 25].includes(id)) ability = A('crit', 1.6, '狂暴', '攻击有概率造成额外伤害。', { chance: .15 });
-  if ([17, 31].includes(id)) ability = A('slow', .18, '寒霜', '命中后减速。', { duration: 2 });
-  if (boss) ability = A('stomp', 40 + id * 3, '王者震击', '周期震击周围守军。', { radius: 90, cooldown: 6, duration: .5 });
-  return { id, name, baseCount, hp, damage, armor, speed, range, attackType, armorType, bounty, boss, bossCount: boss ? (id === 35 ? 3 : 2) : 0, color, shape, ability, interval: boss ? 1.45 : 1.25, count: boss ? (id === 35 ? 3 : 2) : baseCount * 9 };
-});
+export const MERCENARIES = MAP_MERCENARIES;
+export const WAVES = MAP_WAVES;
 
 export const HEROES = [
   { id: 'hero_paladin', name: '圣骑士', faction: '人类', race: '人类', cost: 280, population: 3, hp: 1500, damage: 88, interval: 1.1, range: 50, speed: 50, armor: 6, attackType: 'normal', armorType: 'heavy', role: 'support', color: '#e0c99a', shape: 'star', aura: { type: 'armor', value: 3, radius: 200 }, ability: A('aura_armor', 3, '虔诚光环', '提高附近友军护甲。', { radius: 200 }), description: '用护甲光环增强前排生存。', upgrades: [] },
@@ -171,20 +111,25 @@ export const HEROES = [
 ];
 
 export const RULES = {
+  kingAttackSpeedPerFourWaves: .1,
+  kingArmorPerFourWaves: 2,
+  kingUpgradeCaps: {hp:20,attack:30,regen:20},
+  kingHealLockSeconds: 2,
+  kingHealAmount: 10000,
+  waveRewards: [11,12,13,14,16,18,20,23,26,30,35,40,45,50,55,60,70,80,90,100,110,120,130,140,150,160,170,180,190,200,0,0,0,0,0],
+  buildTimeFormula: '首波80秒；后续准备40+floor(即将开始波次/2)秒。',
+  spawnInterval: .1,
+  firstBuildSeconds: 80,
   title: '军团战争 · 九倍怪潮',
-  version: 'web-1.0',
-  provenance: '独立 Web 玩法复刻调校配置。兵种名称与战略角色参考经典军团玩法；全部价格、属性、升级关系、技能、经济、波次及九倍基数为本项目设计值，未经11平台15A2地图数据验证，不声称等同原版。首波Web基数12、九倍108只属于复刻假设，不能据此认定原版X9等于X6的1.5倍。历史攻略飞龙160/180木互有冲突，本Web版本选择180。波名参考2013年Legion TD Mega 3.41社区攻略，部分中文名参考2016/2018年中文攻略；攻击护甲仍为Web调校类型，历史版本资料相互有差异。31—35波沿用历史军团领主形象并进行Web延长。历史来源见交付研究文档。',
-  sourceVersion: '15A2（用户记忆版本，未核验）',
-  waveNameSources: [
-    { url: 'https://legiontd.forumotion.com/t429-legion-td-mega-book-overall-strategical-guide-3-41', date: '2013-07-16', version: 'Legion TD Mega 3.41', scope: '1—31波英文名；中文名称部分为本项目译名，不作为15A2原文名称' },
-    { url: 'https://jingyan.baidu.com/article/c35dbcb0a2b2758916fcbcc8.html', date: '2018-03-19', version: '军团战争5 X6', scope: '1、4、7、10、14、17、20波中文名' },
-    { url: 'https://jingyan.baidu.com/article/22a299b5cd8fa59e19376aa2.html', date: '2016-06-28', version: '草木皆兵4.2等历史版本', scope: '提及11平台；前几波护甲及20波龙龟重甲，仅历史参考' },
-  ],
-  initialGold: 350,
-  initialWood: 0,
+  version: 'web-2.0-mapref',
+  provenance: '以5.0dJF默认x3静态物编与JASS配置为参考，选取24基础+25升级兵、24木怪和35波；Web九倍数量、坐标及密集战斗缩放为明确适配，不声称15A2原版。旧54兵只兼容旧存档，4英雄保留Web配置。详见REFERENCE。',
+  sourceVersion: 'Legion TD 5.0dJF（默认x3；15A2未核验）',
+  waveNameSources: [{url:'https://wc3maps.com/map/175858',version:'Legion TD 5.0dJF',scope:'静态地图SLK与JASS；非15A2九倍验证'}],
+  initialGold: 300,
+  initialWood: 97,
   initialWorkers: 1,
   initialIncome: 0,
-  buildSeconds: 30,
+  buildSeconds: 40,
   maxWorkers: 10,
   maxLumberLevel: 30,
   maxLumberEfficiency: 30,
@@ -194,10 +139,10 @@ export const RULES = {
   webMonsterHpScale: .25,
   webMonsterDamageScale: .20,
   webCongestionEnabled: false,
-  webBalanceNotes: '仅普通系统怪实际生命=波表hp×0.25、伤害=波表damage×0.20；Boss与木怪不缩放，怪物数量不变。默认不模拟人造130拥挤增益。',
+  webBalanceNotes: '普通系统怪运行生命=sourceHP×0.25、伤害=sourceDamage×0.20；特殊波/Boss与木怪不缩放。原始射程与速度×1/3进入Web数据，再由Web引擎换算。',
   waveCount: 35,
   bossMultiplier: 1,
-  countFormula: '普通波每路怪数 = 本项目 Web baseCount × 9；Boss 波怪数 = bossCount，Boss 不乘9。',
+  countFormula: '普通波每路count=历史x3参考数量×3；10/20/30和31—35特殊波直接采用referenceCount，不再倍增。',
   workerCostBase: 50,
   workerCostStep: 25,
   workerCostFormula: '购买下一名工人费用 = workerCostBase + (当前工人数 - 1) × workerCostStep。',
@@ -209,7 +154,7 @@ export const RULES = {
   woodFormula: '每秒木材 = 工人数 × 1.5 × (1 + 伐木等级 × 0.12)；按模拟时间累计，倍速同时加速战斗、准备与伐木。',
   incomeBase: 22,
   incomePerWave: 8,
-  incomeFormula: '每轮结束金币 = 22 + 当前波次 × 8 + 玩家永久收入；另加实际击杀赏金。雇佣佣兵立即消耗wood并增加该佣兵income；每次强化国王再永久增加kingIncome=3。',
+  incomeFormula: '每波结束金币=waveRewards[当前波-1]+永久收入；10/20/30波基础奖励翻倍，另计击杀赏金。',
   mercenaryIncomeTiming: '雇佣时增加永久income；当轮结算开始发放。',
   income: { initial: 0, base: 22, perWave: 8, cumulativeMercenaryIncome: true, cumulativeKingIncome: true, payout: 'round_end', killBounty: true },
   economyTicksDuringCombat: true,
@@ -224,7 +169,7 @@ export const RULES = {
   upgradeFormula: '升级价格是额外费用；累计投入 = 之前累计投入 + 目标单位cost；出售返还累计投入 × sellRatio。',
   rerollCost: 25,
   rerollCount: 6,
-  rerollPool: 'UNITS中randomPool=true的基础单位；从tier 1至6各随机抽取1种，升级单位不可直接抽取。',
+  rerollPool: '新49个物编子集中的24个基础单位；6档各抽1种，每档4选1。旧54Web兵不再进入随机池。',
   buildGrid: { columns: 6, rows: 8, cellSize: 40 },
   laneCount: 4,
   teamSize: 4,
@@ -234,23 +179,24 @@ export const RULES = {
   kingInterval: .85,
   kingRange: 250,
   kingArmor: 8,
-  kingUpgradeCost: 180,
+  kingUpgradeCost: 80,
   kingHpPerUpgrade: 1200,
-  kingDamagePerUpgrade: 18,
-  kingRegenPerUpgrade: 3,
-  kingUpgradeMax: 15,
+  kingDamagePerUpgrade: 10,
+  kingRegenPerUpgrade: 5,
+  kingUpgradeMax: 30,
   kingHealCharges: 4,
   kingIncome: 3,
   interfereCooldown: 5,
-  kingHealFraction: .3,
   kingLeakDamageFormula: '漏怪进入王区继续战斗，由国王与幸存守军阻击；国王生命归零判负。',
   armorReductionConstant: .06,
   armorFormula: '正护甲伤害倍率 = 1 / (1 + 0.06 × 护甲)；类型克制倍率另乘。',
   attackMultipliers: {
-    normal: { light: 1, medium: 1.25, heavy: .85, fortified: .7, unarmored: 1 },
-    pierce: { light: 1.35, medium: .9, heavy: .8, fortified: .65, unarmored: 1.1 },
-    magic: { light: 1, medium: .85, heavy: 1.35, fortified: .75, unarmored: 1.1 },
-    chaos: { light: 1, medium: 1, heavy: 1, fortified: 1, unarmored: 1 },
+    normal: { light: .90, medium: 1.20, heavy: .90, fortified: .80, unarmored: 1, hero: .90 },
+    pierce: { light: 1.30, medium: .90, heavy: .80, fortified: .70, unarmored: 1, hero: .90 },
+    magic: { light: 1.10, medium: .80, heavy: 1.20, fortified: .70, unarmored: 1, hero: .90 },
+    siege: { light: .90, medium: .90, heavy: .90, fortified: 1.25, unarmored: 1, hero: .90 },
+    chaos: { light: 1, medium: 1, heavy: 1, fortified: 1, unarmored: 1, hero: 1 },
+    hero: { light: 1, medium: 1, heavy: 1, fortified: 1, unarmored: 1, hero: 1 },
   },
   abilityStacking: '同名同类型光环取最高值；不同类型光环并存。持续伤害同源刷新持续时间。',
   victory: '对方国王生命归零获胜；第35波后双方国王存活则比较国王剩余生命比例，相同则比较总兵力，再相同判平局。',

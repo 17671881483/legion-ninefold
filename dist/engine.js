@@ -1,8 +1,8 @@
-import { UNITS, MERCENARIES, WAVES, RULES, HEROES } from './data.js';
+import { UNITS, MERCENARIES, LEGACY_MERCENARIES, WAVES, RULES, HEROES } from './data.js';
 import { MAP, laneToWorld, worldToLane, kingWorld, spawnWarpWorld, supportWorld, routePoints, isWalkable, isSegmentWalkable, constrainPoint, closestWalkable, navigationPath } from './layout.js';
 
 const units = Object.fromEntries(UNITS.map(u => [u.id, u]));
-const mercs = Object.fromEntries(MERCENARIES.map(u => [u.id, u]));
+const mercs = Object.fromEntries([...LEGACY_MERCENARIES, ...MERCENARIES].map(u => [u.id, u]));
 const MERCENARY_MAX_STOCK = 3;
 const heroes = Object.fromEntries(HEROES.map(u => [u.id, u]));
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -13,7 +13,7 @@ const distance = (a, b) => Math.hypot((a.worldX ?? a.x) - (b.worldX ?? b.x), (a.
 const regionsByTeam = [0, 1].map(team => MAP.regions.filter(r => r.team === team));
 const copy = o => JSON.parse(JSON.stringify(o));
 const abilityOf = u => typeof u?.ability === 'string' ? { type: u.ability, value: .35 } : u?.ability;
-const baseUnits = UNITS.filter(u => u.randomPool || u.isBase);
+const baseUnits = UNITS.filter(u => !u.legacy && (u.randomPool || u.isBase));
 const rule = (key, fallback) => value(RULES, [key], fallback);
 
 /** Deterministic, DOM-free simulation. tick receives real elapsed seconds; speed is applied here. */
@@ -27,23 +27,24 @@ export class Game {
     this._roundTime = 0;
     this._settledLanes = [];
     this._overtime = false; this._monsterPressure = [1, 1];
-    this._spatial = null; this._worldEntities = null; this._warpTimer = 0;
+    this._spatial = null; this._worldEntities = null; this._battleAuras = [[], []]; this._warpTimer = 0;
     const initialGold = rule('initialGold', 300);
     const names = ['你', '青岚 · 队友', '铁壁 · 队友', '星火 · 队友', '赤锋 · 对手', '暗潮 · 对手', '霜刃 · 对手', '影木 · 对手'];
     this.state = {
       map: { id: MAP.id, version: MAP.version, topology: '2x2-crossbar-stem' },
-      phase: 'build', wave: 1, timer: rule('buildSeconds', 30), time: 0,
+      phase: 'build', wave: 1, timer: this.buildDuration(1), time: 0, dataRevision: RULES.dataRevision ?? '5.0dJF-web9',
       speed: 1, paused: false, winner: null, difficulty: this.options.difficulty, seed: this.options.seed,
       players: names.map((name, id) => ({ id, name, team: id < 4 ? 0 : 1,
         gold: initialGold, wood: rule('initialWood', 40), income: rule('initialIncome', 5),
         workers: rule('initialWorkers', 1), lumberLevel: 0, buildings: [], roster: this._roster(),
-        mercStocks: Object.fromEntries(MERCENARIES.map(m => [m.id, { stock: MERCENARY_MAX_STOCK, nextReadyAt: null }])),
+        mercStocks: Object.fromEntries(MERCENARIES.map(m => [m.id, { stock: this._mercenaryMaxStock(m), nextReadyAt: null }])),
         populationCap: rule('initialPopulation', 40), popUsed: rule('initialWorkers', 1), heroId: null, healUsed: false, rerolls: 0, stats: { kills: 0, leaks: 0, warps: 0, sent: 0, damage: 0, goldEarned: 0, wavesHeld: 0 }
       })),
       kings: [0, 1].map(team => ({ team, hp: rule('kingInitialHp', 12000), maxHp: rule('kingInitialHp', 12000),
-        attack: rule('kingDamage', 135), regen: rule('kingRegen', 4), healCharges: 4,
+        attack: rule('kingDamage', 135), regen: rule('kingRegen', 4), healCharges: rule('kingHealCharges', 4),
+        armor: rule('kingArmor', 8), armorType: 'hero', attackType: 'hero', autoUpgradeCount: 0, healBlockedUntil: 0,
         hpLevel: 0, attackLevel: 0, regenLevel: 0, attackCd: 0, worldX: kingWorld(team).x, worldY: kingWorld(team).y, radius: .8 })),
-      entities: [], events: [], logs: [], pendingSends: [],
+      entities: [], events: [], logs: [], pendingSends: [], kingBountyPools: [0, 0],
       metrics: { spawned: 0, killed: 0, leaked: 0 },
     };
     this._log('九倍军团战：建造军团，发展木材，与队友共同守护国王。');
@@ -60,7 +61,7 @@ export class Game {
   _uid(prefix = 'e') { return `${prefix}${++this._id}`; }
   _pick(items) { return items.length ? items[Math.floor(this._random() * items.length)] : undefined; }
   _roster() {
-    const pool = baseUnits.length >= 6 ? baseUnits : UNITS.filter(u => !u.upgradeFrom);
+    const pool = baseUnits.length >= 6 ? baseUnits : UNITS.filter(u => !u.legacy && !u.upgradeFrom);
     const result = [];
     for (let tier = 1; tier <= 6; tier++) {
       const group = pool.filter(u => value(u, ['tier', 'level'], 1) === tier);
@@ -98,26 +99,38 @@ export class Game {
     return [...new Set([...ids, ...UNITS.filter(v => [v.upgradeFrom, v.parentId, v.baseId].includes(u.id)).map(v => v.id)])].filter(id => units[id]);
   }
 
-  _mercenaryCooldown(m) { return Math.max(.001, value(m, ['cooldown', 'cd'], 4)); }
+  /** Preparation time for the wave about to start. Arena/overtime remain Web rounds. */
+  buildDuration(wave = this.state?.wave ?? 1) {
+    if (wave === 1) return rule('firstBuildSeconds', 80);
+    if (wave === 31) return 60;
+    if (wave >= 32) return 50;
+    return 40 + Math.floor(wave / 2);
+  }
+  _mercenaryLocked(m) {
+    const unlock = value(m, ['unlock', 'unlockWave', 'wave', 'minWave'], 1);
+    return this.state.wave < unlock || (this.state.wave === unlock && m.unlockPhase === 'combat' && this.state.phase === 'build');
+  }
+  _mercenaryMaxStock(m) { return Math.max(1, Math.floor(value(m, ['stockMax', 'maxStock'], MERCENARY_MAX_STOCK))); }
+  _mercenaryCooldown(m) { return Math.max(.001, value(m, ['cooldown', 'stockRegen', 'cd'], 4)); }
   _mercenarySlot(p, m) {
     p.mercStocks ??= {};
     let slot = p.mercStocks[m.id];
-    const now = this.state.time, cooldown = this._mercenaryCooldown(m);
+    const now = this.state.time, cooldown = this._mercenaryCooldown(m), maxStock = this._mercenaryMaxStock(m);
     if (!slot) {
-      // Old saves held one absolute ready time per type. Preserve its remaining
-      // wait instead of granting a fresh three-charge burst on loading.
+      // Old saves held one absolute ready time per type. Keep the remaining wait.
+      // Empty source stockStart means initial full stock is a documented Web choice.
       const legacyReadyAt = number(p.mercCooldowns?.[m.id], 0);
       slot = p.mercStocks[m.id] = legacyReadyAt > now
         ? { stock: 0, nextReadyAt: legacyReadyAt }
-        : { stock: MERCENARY_MAX_STOCK, nextReadyAt: null };
+        : { stock: maxStock, nextReadyAt: null };
     }
-    slot.stock = clamp(Math.floor(number(slot.stock, MERCENARY_MAX_STOCK)), 0, MERCENARY_MAX_STOCK);
-    if (slot.stock >= MERCENARY_MAX_STOCK) { slot.nextReadyAt = null; return slot; }
+    slot.stock = clamp(Math.floor(number(slot.stock, maxStock)), 0, maxStock);
+    if (slot.stock >= maxStock) { slot.nextReadyAt = null; return slot; }
     if (!Number.isFinite(slot.nextReadyAt)) slot.nextReadyAt = now + cooldown;
     if (now + 1e-8 >= slot.nextReadyAt) {
-      const replenished = Math.min(MERCENARY_MAX_STOCK - slot.stock, Math.floor((now - slot.nextReadyAt + 1e-8) / cooldown) + 1);
+      const replenished = Math.min(maxStock - slot.stock, Math.floor((now - slot.nextReadyAt + 1e-8) / cooldown) + 1);
       slot.stock += replenished;
-      slot.nextReadyAt = slot.stock >= MERCENARY_MAX_STOCK ? null : slot.nextReadyAt + replenished * cooldown;
+      slot.nextReadyAt = slot.stock >= maxStock ? null : slot.nextReadyAt + replenished * cooldown;
     }
     return slot;
   }
@@ -125,11 +138,39 @@ export class Game {
   mercenaryStatus(mercId, playerId = 0) {
     const m = mercs[mercId], p = this.state.players[playerId];
     if (!m || !p) return { stock: 0, maxStock: MERCENARY_MAX_STOCK, cooldown: 0, remaining: 0, progress: 0, locked: true };
-    const slot = this._mercenarySlot(p, m), cooldown = this._mercenaryCooldown(m);
-    const remaining = slot.stock >= MERCENARY_MAX_STOCK ? 0 : Math.max(0, slot.nextReadyAt - this.state.time);
-    const locked = this.state.wave < value(m, ['unlock', 'unlockWave', 'wave', 'minWave'], 1);
-    return { stock: locked ? 0 : slot.stock, maxStock: MERCENARY_MAX_STOCK, cooldown, remaining,
-      progress: slot.stock >= MERCENARY_MAX_STOCK ? 1 : clamp(1 - remaining / cooldown, 0, 1), locked };
+    const slot = this._mercenarySlot(p, m), cooldown = this._mercenaryCooldown(m), maxStock = this._mercenaryMaxStock(m);
+    const remaining = slot.stock >= maxStock ? 0 : Math.max(0, slot.nextReadyAt - this.state.time);
+    const locked = this._mercenaryLocked(m);
+    return { stock: locked ? 0 : slot.stock, maxStock, cooldown, remaining,
+      progress: slot.stock >= maxStock ? 1 : clamp(1 - remaining / cooldown, 0, 1), locked };
+  }
+  _armorFactor(armor) {
+    return armor >= 0 ? 1 / (1 + .06 * armor) : 1 + (.06 * Math.abs(armor)) / (1 + .06 * Math.abs(armor));
+  }
+  _typeMultiplier(attackType, armorType) { return number(RULES.attackMultipliers?.[attackType]?.[armorType], 1); }
+  /** Per-target strongest effects, shared by lane combat and king combat. */
+  _auraEffects(target, auras = []) {
+    let damage = 0, speed = 0, slow = 0, armor = 0, healRate = 0;
+    for (const a of auras) {
+      if (a.hp <= 0 || !a.ability || distance(a, target) > number(a.ability.radius, 3)) continue;
+      const type = a.ability.type, amount = number(a.ability.value, 0);
+      if (a.side === target.side) {
+        if (type === 'aura_damage') damage = Math.max(damage, amount);
+        if (type === 'aura_speed') speed = Math.max(speed, amount);
+        if (type === 'aura_armor') armor = Math.max(armor, amount);
+        if (type === 'aura_heal') healRate = Math.max(healRate, amount);
+      } else if (type === 'aura_slow') slow = Math.max(slow, amount);
+    }
+    return { damageMultiplier: 1 + damage, attackSpeedMultiplier: (1 + speed) * Math.max(.05, 1 - slow), armor, healRate, slow };
+  }
+  _applyHealingAura(target, auras, dt) {
+    if (target.hp <= 0 || target.hp >= target.maxHp) return;
+    const rate = this._auraEffects(target, auras).healRate;
+    if (rate > 0) target.hp = Math.min(target.maxHp, target.hp + rate * dt);
+  }
+  _effectiveArmor(target, auraArmor = 0) {
+    const broken = (target.status?.armorBreakUntil ?? 0) > this.state.time ? number(target.status.armorBreak, 0) : 0;
+    return number(target.armor, 0) + auraArmor - broken;
   }
 
   command(type, payload = {}) {
@@ -210,27 +251,26 @@ export class Game {
       case 'merc': {
         const m = mercs[payload.mercId]; if (!m) return this._result(false, '木怪不存在');
         const unlock = value(m, ['unlock', 'unlockWave', 'wave', 'minWave'], 1);
-        if (this.state.wave < unlock) return this._result(false, `第 ${unlock} 波解锁`);
+        if (this._mercenaryLocked(m)) return this._result(false, `第 ${unlock} 波${m.unlockPhase === 'combat' ? '开战时' : ''}解锁`);
         const cost = this._woodCost(m);
         if (p.wood < cost) return this._result(false, `需要 ${cost} 木材`);
         const status = this.mercenaryStatus(m.id, p.id);
         if (status.stock <= 0) return this._result(false, `库存用尽，${status.remaining.toFixed(1)} 秒后补充 1 只`);
         const slot = p.mercStocks[m.id];
         // Spending another stocked charge must not restart a recharge in flight.
-        if (slot.stock === MERCENARY_MAX_STOCK) slot.nextReadyAt = this.state.time + status.cooldown;
+        if (slot.stock === status.maxStock) slot.nextReadyAt = this.state.time + status.cooldown;
         slot.stock--;
         p.wood -= cost; p.income += value(m, ['income', 'incomeGain'], Math.max(1, Math.floor(cost / 25)));
-        const targetLane = p.id < 4 ? p.id + 4 : p.id - 4;
-        const send = { id: this._uid('send'), mercId: m.id, senderId: p.id, laneId: targetLane, wave: this.state.wave + (this.state.phase === 'combat' ? 1 : 0), count: 1 };
+        const send = { id: this._uid('send'), mercId: m.id, senderId: p.id, laneId: null, dispatch: true, wave: this.state.wave + (this.state.phase === 'combat' ? 1 : 0), count: 1 };
         this.state.pendingSends.push(send); p.stats.sent++;
-        if (p.id === 0) this._log(`${p.name} 派出 ${m.name}，将于第 ${send.wave} 波抵达敌方 ${targetLane % 4 + 1} 路。`);
+        if (p.id === 0) this._log(`${p.name} 派出 ${m.name}，将于第 ${send.wave} 波开战时平均分配至敌军各路。`);
         return this._result(true, `${m.name} 已排队，收入增加`);
       }
       case 'king': {
         const king = this.state.kings[p.team], stat = payload.stat;
         if (!['hp', 'attack', 'regen'].includes(stat)) return this._result(false, '请选择生命、攻击或恢复');
         const cost = rule('kingUpgradeCost', 80), key = `${stat}Level`;
-        const cap = rule('kingUpgradeMax', 15);
+        const cap = number(RULES.kingUpgradeCaps?.[stat], rule('kingUpgradeMax', 15));
         if (king[key] >= cap) return this._result(false, '当前阶段已达上限');
         if (p.wood < cost) return this._result(false, `国王强化需要 ${cost} 木材`);
         p.wood -= cost; p.income += rule('kingIncome', 3); king[key]++;
@@ -244,8 +284,10 @@ export class Game {
         const king = this.state.kings[p.team];
         if (p.healUsed || king.healCharges <= 0) return this._result(false, '你的治疗次数已用尽');
         if (king.hp >= king.maxHp) return this._result(false, '国王生命已满');
+        if ((king.healBlockedUntil ?? 0) > this.state.time) return this._result(false, '队伍治疗间隔中，请稍后再用');
         p.healUsed = true; king.healCharges--;
-        const amount = Math.round(king.maxHp * rule('kingHealFraction', .3)); king.hp = Math.min(king.maxHp, king.hp + amount);
+        const amount = Math.min(king.maxHp - king.hp, rule('kingHealAmount', 10000)); king.hp += amount;
+        king.healBlockedUntil = this.state.time + rule('kingHealLockSeconds', 2);
         this._event('heal', { laneId: 8 + p.team, x: 3, y: 11.5 }, `+${amount}`);
         this._log(`${p.name} 治疗国王，队伍剩余 ${king.healCharges} 次。`);
         return this._result(true, '国王获得治疗');
@@ -326,21 +368,37 @@ export class Game {
   _startCombat() {
     if (this.state.phase !== 'build') return;
     const s = this.state, w = this._waveData();
-    s.phase = 'combat'; s.timer = 0; s.entities = []; this._spawnQueue = []; this._roundTime = 0; this._settledLanes = []; this._overtime = false; this._warpTimer = 0;
+    s.phase = 'combat'; s.timer = 0; s.entities = []; this._spawnQueue = []; this._roundTime = 0; this._settledLanes = []; this._overtime = false; this._warpTimer = 0; this._battleAuras = [[], []];
     const boss = !!(w.boss ?? w.isBoss ?? this.state.wave % 10 === 0);
-    const baseCount = value(w, ['baseCount', 'count', 'quantity'], boss ? 1 : 5);
-    const monsterCount = boss ? value(w, ['bossCount'], baseCount) : baseCount * rule('monsterMultiplier', 9);
+    const baseCount = value(w, ['baseCount', 'quantity'], boss ? 1 : 5);
+    // New reference waves carry an explicit adapted count. Old data still works.
+    const monsterCount = Math.max(0, Math.floor(value(w, ['count'], boss ? value(w, ['bossCount'], baseCount) : baseCount * rule('monsterMultiplier', 9))));
     s.waveInfo = { ...w, baseHp: w.hp, baseDamage: w.damage, hp: w.hp * (boss ? 1 : rule('webMonsterHpScale', .25)), damage: w.damage * (boss ? 1 : rule('webMonsterDamageScale', .20)), isBoss: boss, actualCount: monsterCount };
     for (const p of s.players) {
       p.roundLeaks = 0; p.supportAnnounced = false;
       for (const b of p.buildings) this._spawnDefender(units[b.unitId], p, b.col + .5, b.row + 4.5, b.id);
       if (p.heroId && heroes[p.heroId]) this._spawnDefender(heroes[p.heroId], p, 3, 8.7, `hero-${p.id}`, true);
-      for (let i = 0; i < monsterCount; i++) this._spawnQueue.push({ at: Math.floor(i / 6) * .32, laneId: p.id, wave: w, boss,
+      for (let i = 0; i < monsterCount; i++) this._spawnQueue.push({ at: (i + 1) * rule('spawnInterval', .1), laneId: p.id, wave: w, boss,
         x: clamp(3 + (i % 6 - 2.5) * (rule('spawnSpreadWidth', 1.8) / 5) + (this._random() - .5) * .04, 3 - rule('spawnSpreadWidth',1.8)/2, 3 + rule('spawnSpreadWidth',1.8)/2), y: .3 });
     }
     const sends = s.pendingSends.filter(v => v.wave <= s.wave);
     s.pendingSends = s.pendingSends.filter(v => v.wave > s.wave);
-    for (const send of sends) for (let i = 0; i < send.count; i++) this._spawnQueue.push({ at: .5 + i * .2, laneId: send.laneId, merc: mercs[send.mercId], senderId: send.senderId, x: 3 + (this._random() - .5) * rule('spawnSpreadWidth', 1.8), y: .3 });
+    // Each attacking team's shared rally stock is dealt across enemy lanes from
+    // one seeded random starting position, rather than locking buyers to a lane.
+    for (const team of [0, 1]) {
+      const enemyLanes = s.players.filter(p => p.team !== team).map(p => p.id);
+      let nextLane = Math.floor(this._random() * enemyLanes.length);
+      for (const send of sends.filter(v => s.players[v.senderId]?.team === team)) {
+        const m = mercs[send.mercId]; if (!m) continue;
+        for (let i = 0; i < send.count; i++) {
+          const laneId = send.dispatch ? enemyLanes[nextLane] : send.laneId;
+          if (send.dispatch) nextLane = (nextLane + 1) % enemyLanes.length;
+          if (!enemyLanes.includes(laneId)) continue;
+          this._spawnQueue.push({ at: .1 + i * .1, laneId, merc: m, senderId: send.senderId,
+            x: 3 + (this._random() - .5) * rule('spawnSpreadWidth', 1.8), y: .3 });
+        }
+      }
+    }
     this._spawnQueue.sort((a, b) => a.at - b.at);
     this._log(`第 ${s.wave} 波 ${w.name ?? ''}：每路 ${monsterCount} ${boss ? '只 Boss' : '只系统怪'}，木怪额外计算。`);
     this._event('wave', { laneId: -1, x: 3, y: 4 }, `第 ${s.wave} 波`);
@@ -354,7 +412,7 @@ export class Game {
       x: 3, y: 6, hp, maxHp: hp, damage: value(def, ['damage', 'attack', 'attackDamage'], 18),
       range: value(def, ['range', 'attackRange'], 65) / (value(def, ['range', 'attackRange'], 65) > 12 ? 100 : 1), attackCd: this._random() * .35,
       attackInterval: value(def, ['interval', 'attackInterval', 'attackSpeed', 'cooldown'], 1),
-      moveSpeed: value(def, ['moveSpeed', 'speed'], 75) / (value(def, ['moveSpeed', 'speed'], 75) > 12 ? 75 : 1), armor: value(def, ['armor'], 0),
+      moveSpeed: value(def, ['moveSpeed', 'speed'], 75) / (value(def, ['moveSpeed', 'speed'], 75) > 12 ? (Number.isFinite(def.sourceSpeed) ? 100 : 75) : 1), armor: value(def, ['armor'], 0),
       attackType: def.attackType ?? 'normal', armorType: def.armorType ?? 'medium',
       race: def.race, shape: def.shape ?? 'circle', color: def.color ?? '#a9cce5', radius: value(def, ['radius'], .23),
       acquisitionRange: value(def, ['acquisitionRange', 'aggroRange'], Math.max(4.5, value(def, ['range'], 65) / 100 + 1)),
@@ -385,7 +443,7 @@ export class Game {
     if (!entry.merc) {
       const hp = value(def, ['hp', 'health', 'monsterHp'], 45 + s.wave * 18) * extraScale * (boss ? 1 : rule('webMonsterHpScale', .25));
       e.hp = hp; e.maxHp = hp; e.damage = value(def, ['damage', 'attack'], 4 + s.wave * 2.2) * extraScale * (boss ? 1 : rule('webMonsterDamageScale', .20));
-      e.moveSpeed = value(def, ['moveSpeed', 'speed'], 55) / 75; e.range = value(def, ['range', 'attackRange'], 55) / 100;
+      e.moveSpeed = value(def, ['moveSpeed', 'speed'], 55) / (Number.isFinite(def.sourceSpeed) ? 100 : 75); e.range = value(def, ['range', 'attackRange'], 55) / 100;
     }
     e.y = clamp(e.y, .45, 1); this._ensureWorld(e); this._planMonsterRoute(e);
     s.entities.push(e); s.metrics.spawned++;
@@ -465,6 +523,7 @@ export class Game {
       if (e.ability?.type?.startsWith('aura_')) battle.auras.push(e);
       if (e.side === 'monster') monsterCounts[e.team]++;
     }
+    this._battleAuras = battles.map(battle => battle.auras);
     this._monsterPressure = monsterCounts.map(count => RULES.webCongestionEnabled ? clamp(1 + Math.max(0, count - rule('webCongestionThreshold', 130)) / rule('webCongestionStep', 50), 1, rule('webCongestionMax', 7)) : 1);
     this.state.congestion = monsterCounts.map((count, team) => ({ attackingTeam: team, count, attackIntervalFactor: this._monsterPressure[team] }));
     for (const e of entities) {
@@ -474,6 +533,7 @@ export class Game {
       if (st.poisonUntil > now) this._hurt(e, number(st.poisonDps, 0) * dt, st.poisonOwner, true);
       if (e.hp <= 0) continue;
       e.attackCd -= dt; e.abilityCd -= dt;
+      this._applyHealingAura(e, battle.auras, dt);
       this._passiveAbility(e, battle, dt);
       if (e.hp <= 0 || (st.stunUntil ?? 0) > now) continue;
       const aggro = Math.max(e.range, number(e.acquisitionRange, Math.max(4.5, e.range + 1)));
@@ -501,8 +561,10 @@ export class Game {
         const king = this.state.kings[e.battleTeam], position = kingWorld(e.battleTeam);
         if (distance(e, position) <= e.range + e.radius + (king.radius ?? .8) && this._canSegment(worldPoint(e), position, e.battleTeam, 0)) {
           if (e.attackCd <= 0) {
-            const dmg = e.damage * .85; king.hp -= dmg;
-            e.attackCd = e.attackInterval * (this._monsterPressure?.[e.team] ?? 1);
+            const kingTarget = { ...king, side: 'defender' }, attackAuras = this._auraEffects(e, battle.auras), kingAuras = this._auraEffects(kingTarget, battle.auras);
+            const dmg = e.damage * attackAuras.damageMultiplier * this._typeMultiplier(e.attackType, king.armorType ?? 'hero') * this._armorFactor(this._effectiveArmor(king, kingAuras.armor)); king.hp -= dmg;
+            const haste = attackAuras.attackSpeedMultiplier * (e.status.frenzy ? 1.6 : 1);
+            e.attackCd = Math.max(.15, e.attackInterval / haste) * (this._monsterPressure?.[e.team] ?? 1);
             this._event('hit', { laneId: 8 + e.battleTeam, worldX: position.x, worldY: position.y }, `−${Math.round(dmg)}`, { king: true, fromWorldX: e.worldX, fromWorldY: e.worldY });
           }
         } else this._followNav(e, battle, dt);
@@ -596,25 +658,15 @@ export class Game {
   }
   _attack(e, target, lane) {
     const ability = e.ability, type = ability?.type;
-    let damage = e.damage, haste = 1, damageAura = 0, speedAura = 0, attackSlow = 0, armorAura = 0;
-    for (const a of lane.auras ?? []) if (a.hp > 0) {
-      const radius = number(a.ability.radius, 3);
-      if (a.side === e.side && distance(a, e) <= radius) {
-        if (a.ability.type === 'aura_damage') damageAura = Math.max(damageAura, number(a.ability.value, .15));
-        if (a.ability.type === 'aura_speed') speedAura = Math.max(speedAura, number(a.ability.value, .15));
-      }
-      if (a.side !== e.side && distance(a, e) <= radius && a.ability.type === 'aura_slow') attackSlow = Math.max(attackSlow, number(a.ability.value, .15));
-      if (a.side === target.side && distance(a, target) <= radius && a.ability.type === 'aura_armor') armorAura = Math.max(armorAura, number(a.ability.value, 1));
-    }
-    damage *= 1 + damageAura; haste *= (1 + speedAura) * (1 - attackSlow);
+    const attackAuras = this._auraEffects(e, lane.auras), targetAuras = this._auraEffects(target, lane.auras);
+    let damage = e.damage * attackAuras.damageMultiplier, haste = attackAuras.attackSpeedMultiplier;
     if (type === 'crit' && this._random() < number(ability.chance, .2)) damage *= number(ability.value, 2);
     if (type === 'swarm') damage *= 1 + Math.min(4, lane.filter(a => a.side === e.side && a.race === e.race && a.id !== e.id && a.hp > 0 && distance(a, e) <= number(ability.radius, 1.5)).length) * number(ability.value, .08);
     if (e.status.frenzy) haste *= 1.6;
     e.attackCd = Math.max(.15, e.attackInterval / haste) * (e.side === 'monster' ? (this._monsterPressure?.[e.team] ?? 1) : 1);
-    const multipliers = RULES.attackMultipliers ?? {};
-    const multiplier = number(multipliers[e.attackType]?.[target.armorType], 1);
-    const armor = target.armor + armorAura - ((target.status.armorBreakUntil ?? 0) > this.state.time ? number(target.status.armorBreak, 0) : 0);
-    const armorFactor = armor >= 0 ? 1 / (1 + .06 * armor) : 1 + (.06 * Math.abs(armor)) / (1 + .06 * Math.abs(armor));
+    const multiplier = this._typeMultiplier(e.attackType, target.armorType);
+    const armor = this._effectiveArmor(target, targetAuras.armor);
+    const armorFactor = this._armorFactor(armor);
     const dealt = damage * multiplier * armorFactor;
     this._hurt(target, dealt, e);
     this._event(e.range > 1 ? 'projectile' : 'hit', target, `${Math.round(dealt)}`, { fromX: e.x, fromY: e.y, fromWorldX: e.worldX, fromWorldY: e.worldY, color: e.color });
@@ -655,7 +707,11 @@ export class Game {
       if (target.side === 'monster') {
         const ownerId = attacker?.ownerId ?? target.sourceLaneId;
         const p = this.state.players[ownerId];
-        if (p && p.team !== target.team) { p.gold += target.reward; p.stats.kills++; p.stats.goldEarned += target.reward; }
+        if (attacker?.isKing) {
+          // Both king treasuries receive a kill bounty; each is divided at payout.
+          this.state.kingBountyPools ??= [0, 0];
+          for (const team of [0, 1]) this.state.kingBountyPools[team] += target.reward;
+        } else if (p && p.team !== target.team) { p.gold += target.reward; p.stats.kills++; p.stats.goldEarned += target.reward; }
         this.state.metrics.killed++;
       }
       this._event('death', target, target.side === 'monster' ? `+${target.reward}` : '阵亡', { color: target.color });
@@ -673,11 +729,13 @@ export class Game {
       if (type === 'stomp') this._event('splash', e, a.name ?? '践踏', { radius });
       e.abilityCd = type === 'poison_aura' ? 1 : number(a.cooldown, 5); return;
     }
-    if (['heal', 'aura_heal'].includes(type)) {
+    // Healing auras are applied once per recipient each simulation step, so
+    // duplicate sources cannot stack or multiply their output by frame count.
+    if (type === 'aura_heal') return;
+    if (type === 'heal') {
       const friends = lane.filter(f => f.side === e.side && f.hp > 0 && f.hp < f.maxHp && distance(f, e) <= radius).sort((x, y) => x.hp / x.maxHp - y.hp / y.maxHp);
-      const recipients = type === 'aura_heal' ? friends : friends.slice(0, 1);
-      for (const f of recipients) { const heal = v <= 1 ? f.maxHp * v : v; f.hp = Math.min(f.maxHp, f.hp + heal); this._event('heal', f, `+${Math.round(heal)}`); }
-      e.abilityCd = type === 'aura_heal' ? 1 : number(a.cooldown, 2.5);
+      for (const f of friends.slice(0, 1)) { const heal = v <= 1 ? f.maxHp * v : v; f.hp = Math.min(f.maxHp, f.hp + heal); this._event('heal', f, `+${Math.round(heal)}`); }
+      e.abilityCd = number(a.cooldown, 2.5);
     } else if (type === 'summon') {
       const count = clamp(Math.round(v), 1, 3);
       const def = { id: `${e.unitId}-summon`, name: `${e.name}·召唤物`, hp: e.maxHp * .24, damage: e.damage * .38,
@@ -732,18 +790,21 @@ export class Game {
   _updateKings(dt) {
     for (const k of this.state.kings) {
       if (k.hp <= 0) continue;
-      const position = kingWorld(k.team);
-      k.hp = Math.min(k.maxHp, k.hp + k.regen * dt); k.attackCd -= dt;
+      const position = kingWorld(k.team), auras = this._battleAuras?.[k.team] ?? [];
+      const kingTarget = { ...k, ...position, side: 'defender' }, kingAuras = this._auraEffects(kingTarget, auras);
+      k.hp = Math.min(k.maxHp, k.hp + (k.regen + kingAuras.healRate) * dt); k.attackCd -= dt;
       if (k.attackCd <= 0) {
         const reach = rule('kingRange', 250) / 100 + (k.radius ?? .8);
         const enemies = this._nearby({ ...position, battleTeam: k.team }, reach + .5)
           .filter(e => e.side === 'monster' && e.hp > 0 && distance(e, position) <= reach + e.radius && this._canSegment(position, worldPoint(e), k.team, 0))
           .sort((a, b) => distance(a, position) - distance(b, position));
         if (enemies.length) {
-          k.attackCd = rule('kingInterval', .85);
-          const target = enemies[0]; this._hurt(target, k.attack, { side: 'defender', team: k.team, ownerId: target.sourceLaneId });
+          k.attackCd = rule('kingInterval', .85) / ((1 + (k.autoUpgradeCount ?? 0) * rule('kingAttackSpeedPerFourWaves', .1)) * kingAuras.attackSpeedMultiplier);
+          const target = enemies[0], targetAuras = this._auraEffects(target, auras);
+          const dealt = k.attack * kingAuras.damageMultiplier * this._typeMultiplier(k.attackType ?? 'hero', target.armorType) * this._armorFactor(this._effectiveArmor(target, targetAuras.armor));
+          this._hurt(target, dealt, { side: 'defender', team: k.team, isKing: true });
           this._event('kingAttack', target, `${Math.round(k.attack)}`, { fromWorldX: position.x, fromWorldY: position.y, color: k.team ? '#fb7185' : '#60a5fa' });
-          if (this.state.wave >= 7) for (const e of enemies.slice(1, 5)) if (distance(e, target) < 1.4) this._hurt(e, k.attack * .35, { side: 'defender', team: k.team, ownerId: e.sourceLaneId });
+          if (this.state.wave >= 7) for (const e of enemies.slice(1, 5)) if (distance(e, target) < 1.4) this._hurt(e, k.attack * kingAuras.damageMultiplier * .35 * this._typeMultiplier(k.attackType ?? 'hero', e.armorType) * this._armorFactor(this._effectiveArmor(e, this._auraEffects(e, auras).armor)), { side: 'defender', team: k.team, isKing: true });
         }
       }
       if (k.hp < k.maxHp * .16 && k.healCharges > 0) {
@@ -763,16 +824,27 @@ export class Game {
     this.state.entities = this.state.entities.filter(e => e.hp > 0);
   }
   _endCombat() {
-    const s = this.state, bonus = rule('incomeBase', 22) + s.wave * rule('incomePerWave', 8);
-    for (const p of s.players) { const gold = p.income + bonus; p.gold += gold; p.stats.goldEarned += gold; }
-    this._log(`第 ${s.wave} 波结束：发放收入与 ${bonus} 金币守护奖励，阵亡军团将在下波复归。`);
+    const s = this.state;
+    const listedReward = RULES.waveRewards?.[s.wave - 1];
+    const bonus = Number.isFinite(listedReward) ? listedReward * ([10, 20, 30].includes(s.wave) ? 2 : 1) : rule('incomeBase', 22) + s.wave * rule('incomePerWave', 8);
+    for (const p of s.players) {
+      const teamSize = s.players.filter(v => v.team === p.team).length;
+      const kingShare = Math.floor((s.kingBountyPools?.[p.team] ?? 0) / Math.max(1, teamSize));
+      const gold = p.income + bonus + kingShare; p.gold += gold; p.stats.goldEarned += gold;
+    }
+    s.kingBountyPools = [0, 0];
+    if (s.wave % 4 === 0) {
+      for (const k of s.kings) { k.armor = (k.armor ?? rule('kingArmor', 8)) + rule('kingArmorPerFourWaves', 2); k.autoUpgradeCount = (k.autoUpgradeCount ?? 0) + 1; }
+      this._log('国王获得周期强化：护甲 +2，累计攻击速度 +10%。');
+    }
+    this._log(`第 ${s.wave} 波结束：发放永久收入、${bonus} 金币守护奖励与国王杀敌分红，阵亡军团将在下波复归。`);
     if (s.wave >= WAVES.length) {
       const ratios = s.kings.map(k => k.hp / k.maxHp);
       const power = [0, 1].map(team => s.players.filter(p => p.team === team).reduce((sum, p) => sum + p.buildings.reduce((v, b) => v + (b.spent ?? this._cost(units[b.unitId])), 0) + (p.heroId ? this._cost(heroes[p.heroId]) : 0), 0));
       s.winner = Math.abs(ratios[0] - ratios[1]) > 1e-7 ? (ratios[0] > ratios[1] ? 0 : 1) : power[0] === power[1] ? -1 : power[0] > power[1] ? 0 : 1;
       s.phase = 'ended'; this._log('终焉波完成，按国王生命比例与总兵力判定胜负。'); return;
     }
-    s.wave++; s.phase = 'build'; s.timer = rule('buildSeconds', 30); s.entities = [];
+    s.wave++; s.phase = 'build'; s.timer = this.buildDuration(s.wave); s.entities = [];
     for (let i = 1; i < 8; i++) this._aiAct(s.players[i]);
   }
 
@@ -864,7 +936,7 @@ export class Game {
     const ownKing=this.state.kings[p.team];
     const defenseReserve=(this.state.wave<=2||ownKing.hp<ownKing.maxHp*.8)?rule('kingUpgradeCost',180):0;
     if (p.wood > 60+defenseReserve && this._random() < .3) {
-      const available = MERCENARIES.filter(m => value(m, ['unlock', 'unlockWave', 'wave', 'minWave'], 1) <= this.state.wave && this._woodCost(m) <= p.wood-defenseReserve);
+      const available = MERCENARIES.filter(m => value(m, ['unlock', 'unlockWave', 'wave', 'minWave'], 1) <= this.state.wave && this._woodCost(m) <= p.wood-defenseReserve && this.mercenaryStatus(m.id, p.id).stock > 0);
       const m = this._pick(available); if (m) this.command('merc', { playerId: p.id, mercId: m.id });
     }
     if (this.state.phase === 'combat' && this._random() < .06) this.command('interfere', { playerId: p.id, laneId: this.state.entities.some(e => e.side === 'monster' && e.laneId === 8 + p.team) ? 8 + p.team : p.id });
@@ -880,7 +952,11 @@ export class Game {
     const data = copy(saved); this.options = data.options ?? this.options; this.state = data.state;
     this._rng = data.rng >>> 0; this._id = data.id ?? 0; this._spawnQueue = data.spawnQueue ?? [];
     this._aiTimer = data.aiTimer ?? 0; this._roundTime = data.roundTime ?? 0; this._settledLanes = data.settledLanes ?? []; this._overtime = data.overtime ?? false; this._warpTimer = data.warpTimer ?? 0; this._monsterPressure = data.monsterPressure;
-    this._spatial = null; this._worldEntities = null;
+    this._spatial = null; this._worldEntities = null; this._battleAuras = [[], []];
+    for (const k of this.state.kings) {
+      k.armor ??= rule('kingArmor', 8); k.armorType ??= 'hero'; k.attackType ??= 'hero'; k.autoUpgradeCount ??= 0; k.healBlockedUntil ??= 0;
+    }
+    this.state.kingBountyPools ??= [0, 0];
     for (const p of this.state.players) for (const m of MERCENARIES) this._mercenarySlot(p, m);
     if (saved.version === 1) {
       this.state.map = { id: MAP.id, version: MAP.version, topology: '2x2-crossbar-stem' };

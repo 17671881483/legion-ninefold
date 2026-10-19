@@ -3,6 +3,7 @@ import { MAP, laneToWorld, worldToLane, kingWorld, spawnWarpWorld, supportWorld,
 
 const units = Object.fromEntries(UNITS.map(u => [u.id, u]));
 const mercs = Object.fromEntries(MERCENARIES.map(u => [u.id, u]));
+const MERCENARY_MAX_STOCK = 3;
 const heroes = Object.fromEntries(HEROES.map(u => [u.id, u]));
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const number = (v, fallback) => Number.isFinite(Number(v)) ? Number(v) : fallback;
@@ -36,6 +37,7 @@ export class Game {
       players: names.map((name, id) => ({ id, name, team: id < 4 ? 0 : 1,
         gold: initialGold, wood: rule('initialWood', 40), income: rule('initialIncome', 5),
         workers: rule('initialWorkers', 1), lumberLevel: 0, buildings: [], roster: this._roster(),
+        mercStocks: Object.fromEntries(MERCENARIES.map(m => [m.id, { stock: MERCENARY_MAX_STOCK, nextReadyAt: null }])),
         populationCap: rule('initialPopulation', 40), popUsed: rule('initialWorkers', 1), heroId: null, healUsed: false, rerolls: 0, stats: { kills: 0, leaks: 0, warps: 0, sent: 0, damage: 0, goldEarned: 0, wavesHeld: 0 }
       })),
       kings: [0, 1].map(team => ({ team, hp: rule('kingInitialHp', 12000), maxHp: rule('kingInitialHp', 12000),
@@ -94,6 +96,40 @@ export class Game {
     const explicit = u.upgrades ?? u.upgradeTo ?? [];
     const ids = (Array.isArray(explicit) ? explicit : [explicit]).map(v => typeof v === 'object' ? v.id : v);
     return [...new Set([...ids, ...UNITS.filter(v => [v.upgradeFrom, v.parentId, v.baseId].includes(u.id)).map(v => v.id)])].filter(id => units[id]);
+  }
+
+  _mercenaryCooldown(m) { return Math.max(.001, value(m, ['cooldown', 'cd'], 4)); }
+  _mercenarySlot(p, m) {
+    p.mercStocks ??= {};
+    let slot = p.mercStocks[m.id];
+    const now = this.state.time, cooldown = this._mercenaryCooldown(m);
+    if (!slot) {
+      // Old saves held one absolute ready time per type. Preserve its remaining
+      // wait instead of granting a fresh three-charge burst on loading.
+      const legacyReadyAt = number(p.mercCooldowns?.[m.id], 0);
+      slot = p.mercStocks[m.id] = legacyReadyAt > now
+        ? { stock: 0, nextReadyAt: legacyReadyAt }
+        : { stock: MERCENARY_MAX_STOCK, nextReadyAt: null };
+    }
+    slot.stock = clamp(Math.floor(number(slot.stock, MERCENARY_MAX_STOCK)), 0, MERCENARY_MAX_STOCK);
+    if (slot.stock >= MERCENARY_MAX_STOCK) { slot.nextReadyAt = null; return slot; }
+    if (!Number.isFinite(slot.nextReadyAt)) slot.nextReadyAt = now + cooldown;
+    if (now + 1e-8 >= slot.nextReadyAt) {
+      const replenished = Math.min(MERCENARY_MAX_STOCK - slot.stock, Math.floor((now - slot.nextReadyAt + 1e-8) / cooldown) + 1);
+      slot.stock += replenished;
+      slot.nextReadyAt = slot.stock >= MERCENARY_MAX_STOCK ? null : slot.nextReadyAt + replenished * cooldown;
+    }
+    return slot;
+  }
+  /** Current stock and progress toward the next charge, measured in simulation time. */
+  mercenaryStatus(mercId, playerId = 0) {
+    const m = mercs[mercId], p = this.state.players[playerId];
+    if (!m || !p) return { stock: 0, maxStock: MERCENARY_MAX_STOCK, cooldown: 0, remaining: 0, progress: 0, locked: true };
+    const slot = this._mercenarySlot(p, m), cooldown = this._mercenaryCooldown(m);
+    const remaining = slot.stock >= MERCENARY_MAX_STOCK ? 0 : Math.max(0, slot.nextReadyAt - this.state.time);
+    const locked = this.state.wave < value(m, ['unlock', 'unlockWave', 'wave', 'minWave'], 1);
+    return { stock: locked ? 0 : slot.stock, maxStock: MERCENARY_MAX_STOCK, cooldown, remaining,
+      progress: slot.stock >= MERCENARY_MAX_STOCK ? 1 : clamp(1 - remaining / cooldown, 0, 1), locked };
   }
 
   command(type, payload = {}) {
@@ -177,10 +213,13 @@ export class Game {
         if (this.state.wave < unlock) return this._result(false, `第 ${unlock} 波解锁`);
         const cost = this._woodCost(m);
         if (p.wood < cost) return this._result(false, `需要 ${cost} 木材`);
-        const cooldown = p.mercCooldowns?.[m.id] ?? 0;
-        if (cooldown > this.state.time) return this._result(false, `木怪冷却 ${(cooldown - this.state.time).toFixed(1)} 秒`);
+        const status = this.mercenaryStatus(m.id, p.id);
+        if (status.stock <= 0) return this._result(false, `库存用尽，${status.remaining.toFixed(1)} 秒后补充 1 只`);
+        const slot = p.mercStocks[m.id];
+        // Spending another stocked charge must not restart a recharge in flight.
+        if (slot.stock === MERCENARY_MAX_STOCK) slot.nextReadyAt = this.state.time + status.cooldown;
+        slot.stock--;
         p.wood -= cost; p.income += value(m, ['income', 'incomeGain'], Math.max(1, Math.floor(cost / 25)));
-        p.mercCooldowns ??= {}; p.mercCooldowns[m.id] = this.state.time + value(m, ['cooldown', 'cd'], 4);
         const targetLane = p.id < 4 ? p.id + 4 : p.id - 4;
         const send = { id: this._uid('send'), mercId: m.id, senderId: p.id, laneId: targetLane, wave: this.state.wave + (this.state.phase === 'combat' ? 1 : 0), count: 1 };
         this.state.pendingSends.push(send); p.stats.sent++;
@@ -252,6 +291,7 @@ export class Game {
     const s = this.state; s.time += dt;
     s.events = s.events.filter(e => s.time - e.time < 2.5);
     for (const p of s.players) {
+      for (const m of MERCENARIES) this._mercenarySlot(p, m);
       p.interfereCooldown = Math.max(0, (p.interfereUntil ?? 0) - s.time);
       const rate = rule('workerBaseWoodPerSecond', 1.5) * (1 + p.lumberLevel * rule('lumberRateStep', .12));
       const difficulty = p.team === 1 ? ({ easy: .85, normal: 1, hard: 1.18 }[this.options.difficulty] ?? 1) : 1;
@@ -841,6 +881,7 @@ export class Game {
     this._rng = data.rng >>> 0; this._id = data.id ?? 0; this._spawnQueue = data.spawnQueue ?? [];
     this._aiTimer = data.aiTimer ?? 0; this._roundTime = data.roundTime ?? 0; this._settledLanes = data.settledLanes ?? []; this._overtime = data.overtime ?? false; this._warpTimer = data.warpTimer ?? 0; this._monsterPressure = data.monsterPressure;
     this._spatial = null; this._worldEntities = null;
+    for (const p of this.state.players) for (const m of MERCENARIES) this._mercenarySlot(p, m);
     if (saved.version === 1) {
       this.state.map = { id: MAP.id, version: MAP.version, topology: '2x2-crossbar-stem' };
       for (const e of this.state.entities) {

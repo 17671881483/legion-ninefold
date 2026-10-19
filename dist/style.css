@@ -229,3 +229,55 @@
   .king-large{display:none}.king-panel h3{font-size:12px;margin-bottom:3px}.king-panel>p{display:none}.king-health{height:5px;margin-bottom:3px}.king-hp-label{font-size:8px;margin-bottom:4px}.king-upgrade{padding:4px 6px;gap:5px;margin-bottom:3px;min-height:30px}.king-upgrade svg{width:16px;height:16px}.king-upgrade b{font-size:9px}.king-upgrade small{font-size:7px;margin-top:0}.king-upgrade em{font-size:9px}.team-heals{margin-top:5px;gap:3px}.heal-charge{width:17px;height:17px}
   .arena-controls{left:14px;right:auto;bottom:12px;gap:14px}.combat-actions button{height:30px;font-size:9px}.time-controls>button{height:28px;width:28px}.speed-buttons button{height:26px;min-width:28px;font-size:10px}.camera-hint{right:15px;bottom:13px}.toast-container{top:48px}.build-hint{bottom:58px}
 }
+
+/* Mercenary reserves and their serial recharge remain visible even when
+   the purchase itself is disabled by stock or wood. */
+.merc-button{display:block;min-width:0;opacity:1;text-align:left}
+.merc-button:disabled,.merc-button.locked{opacity:1;cursor:default}
+.merc-body{display:flex;align-items:center;gap:6px;min-width:0}
+.merc-button .merc-info{min-width:0}
+.merc-button .merc-info b{white-space:nowrap}
+.merc-button .merc-info small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+.merc-button .queue-count{display:inline-block;vertical-align:middle;white-space:nowrap;line-height:1.4}
+.merc-button .queue-count[hidden]{display:none}
+.merc-button.unaffordable .merc-body,.merc-button.empty .merc-body{opacity:.55}
+.merc-button.locked .merc-body{opacity:.4}
+.merc-stock-meta{display:flex;justify-content:space-between;align-items:center;gap:4px;margin-top:3px;font-size:9px;line-height:12px;white-space:nowrap;color:#d5d7b6;font-variant-numeric:tabular-nums}
+.merc-stock-meta b{font-weight:500;color:#b9d4aa}
+.merc-button.empty .merc-stock-meta b{color:#e9c68d}
+.merc-button.locked .merc-stock-meta{color:#939f8c}
+.merc-cooldown{display:block;height:5px;width:100%;margin-top:3px;background:#0e1911;border:1px solid #596548;overflow:hidden}
+.merc-cooldown i{display:block;height:100%;background:#8db879;width:100%}
+.merc-button.recharging .merc-cooldown{border-color:#a08b50}
+.merc-button.recharging .merc-cooldown i{background:#d7b86b}
+.merc-button.locked .merc-cooldown{border-color:#3d4a35}
+@media(min-width:961px){
+  .right-sidebar:has([data-tab="attack"].active){grid-template-rows:27px minmax(113px,1fr) 36px 32px}
+  .right-sidebar:has([data-tab="attack"].active) .panel-content{padding:4px 8px}
+  .right-sidebar:has([data-tab="attack"].active) .economy-panel{padding:3px 8px}
+  .right-sidebar:has([data-tab="attack"].active) .round-action{padding:1px 8px 2px}
+  .merc-button{padding:4px;min-height:50px}
+  .merc-body{gap:4px;line-height:1.2}
+  .merc-button svg{width:22px;height:22px;flex-shrink:0}
+  .merc-button .merc-info b{display:block;line-height:11px}
+  .merc-button .merc-info small{line-height:9px}
+  .merc-button .merc-price{line-height:11px}
+  .merc-button .merc-price small{line-height:9px}
+  .merc-stock-meta{font-size:8px;line-height:10px;margin-top:2px}
+  .merc-cooldown{height:4px;margin-top:2px}
+  .merc-button .queue-count{font-size:7px;margin-left:2px;padding:0 2px}
+}
+
+@media(max-width:700px){
+  .merc-stock-meta{font-size:8px}
+  .right-sidebar:has([data-tab="attack"].active) .panel-intro{display:none}
+  .merc-button{min-height:52px;padding:4px 6px}
+  .merc-body{line-height:1.2}
+  .merc-button svg{width:25px;height:24px}
+  .merc-button .merc-info b{line-height:12px}
+  .merc-button .merc-info small{line-height:9px}
+  .merc-button .merc-price{line-height:12px}
+  .merc-button .merc-price small{line-height:9px}
+  .merc-stock-meta{line-height:10px;margin-top:2px}
+  .merc-cooldown{height:4px;margin-top:2px}
+}

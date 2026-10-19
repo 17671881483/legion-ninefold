@@ -140,23 +140,82 @@ test('population gates build/upgrade/worker/hero; farms clamp cap and never over
   assert.equal(p.popUsed, p.workers * RULES.workerPopulation + unit(b.unitId).population + HEROES[0].population);
 });
 
-test('mercenary wave lock, cooldown, permanent income and opposite-lane queue', () => {
+test('mercenary wave lock, three-charge burst, permanent income and opposite-lane queue', () => {
   const g = game(), p = g.state.players[0]; p.wood = 10000;
   const locked = MERCENARIES.find(m => m.unlock > 1);
-  const wood = p.wood;
+  const wood = p.wood, income = p.income;
   assert(!g.command('merc', { mercId: locked.id }).ok); assert.equal(p.wood, wood);
+  assert.deepEqual(g.mercenaryStatus(locked.id), { stock: 0, maxStock: 3, cooldown: 4, remaining: 0, progress: 1, locked: true });
+  g.state.wave = locked.unlock; assert.equal(g.mercenaryStatus(locked.id).stock, 3); g.state.wave = 1;
   const m = MERCENARIES.find(m => m.unlock === 1);
-  assert(g.command('merc', { mercId: m.id }).ok);
-  assert.equal(p.wood, wood - m.wood); assert.equal(p.income, m.income);
-  assert.deepEqual(g.state.pendingSends.map(s => [s.senderId, s.laneId, s.wave, s.count]), [[0, 4, 1, 1]]);
-  assert(!g.command('merc', { mercId: m.id }).ok);
+  for (let i = 0; i < 3; i++) assert(g.command('merc', { mercId: m.id }).ok);
+  assert.equal(p.wood, wood - m.wood * 3); assert.equal(p.income, income + m.income * 3);
+  assert.equal(p.stats.sent, 3);
+  assert.deepEqual(g.state.pendingSends.map(s => [s.senderId, s.laneId, s.wave, s.count]), [[0, 4, 1, 1], [0, 4, 1, 1], [0, 4, 1, 1]]);
+  const empty = g.snapshot(); assert(!g.command('merc', { mercId: m.id }).ok); assert.deepEqual(g.snapshot(), empty);
   g.command('ready'); g.tick(.6);
-  assert.equal(g.state.entities.filter(e => e.isMerc).length, 1);
+  assert.equal(g.state.entities.filter(e => e.isMerc).length, 3);
   g.tick(5.4);
-  assert.equal(g.state.metrics.spawned, WAVES[0].baseCount * RULES.monsterMultiplier * 8 + 1);
-  const next = MERCENARIES.find(candidate => candidate.id !== m.id && candidate.unlock === 1) ?? MERCENARIES[1];
+  assert.equal(g.state.metrics.spawned, WAVES[0].baseCount * RULES.monsterMultiplier * 8 + 3);
+  const next = MERCENARIES.find(candidate => candidate.id !== m.id && candidate.unlock === 1);
   assert(g.command('merc', { mercId: next.id }).ok);
   assert.equal(g.state.pendingSends[0].wave, 2);
+});
+
+test('mercenary stock replenishes serially without reset, over-cap banking or query economy effects', () => {
+  const g = game(), p = g.state.players[0], m = MERCENARIES[0], other = MERCENARIES[1];
+  p.wood = 10000; g.state.timer = 1000;
+  const economy = [p.gold, p.wood, p.income, p.stats.sent, g.state.pendingSends.length];
+  for (let i = 0; i < 10; i++) assert.equal(g.mercenaryStatus(m.id).stock, 3);
+  assert.deepEqual([p.gold, p.wood, p.income, p.stats.sent, g.state.pendingSends.length], economy);
+  assert(g.command('merc', { mercId: m.id }).ok);
+  assert.equal(g.mercenaryStatus(m.id).stock, 2); near(g.mercenaryStatus(m.id).remaining, 4);
+  g.tick(1); assert(g.command('merc', { mercId: m.id }).ok);
+  assert.equal(g.mercenaryStatus(m.id).stock, 1); near(g.mercenaryStatus(m.id).remaining, 3); near(g.mercenaryStatus(m.id).progress, .25);
+  g.tick(1); assert(g.command('merc', { mercId: m.id }).ok);
+  assert.equal(g.mercenaryStatus(m.id).stock, 0); near(g.mercenaryStatus(m.id).remaining, 2);
+  assert(!g.command('merc', { mercId: m.id }).ok);
+  assert.equal(g.mercenaryStatus(other.id).stock, 3); assert.equal(g.mercenaryStatus(m.id, 1).stock, 3);
+  g.tick(2); assert.equal(g.mercenaryStatus(m.id).stock, 1); near(g.mercenaryStatus(m.id).remaining, 4);
+  g.tick(4); assert.equal(g.mercenaryStatus(m.id).stock, 2); near(g.mercenaryStatus(m.id).remaining, 4);
+  g.tick(4); assert.equal(g.mercenaryStatus(m.id).stock, 3); assert.equal(g.mercenaryStatus(m.id).remaining, 0); assert.equal(g.mercenaryStatus(m.id).progress, 1);
+  g.tick(30); assert.equal(g.mercenaryStatus(m.id).stock, 3);
+  assert(g.command('merc', { mercId: m.id }).ok); assert.equal(g.mercenaryStatus(m.id).stock, 2); near(g.mercenaryStatus(m.id).remaining, 4);
+  g.tick(.25); assert.equal(g.mercenaryStatus(m.id).stock, 2); near(g.mercenaryStatus(m.id).remaining, 3.75);
+  const insufficient = g.mercenaryStatus(other.id), queued = g.state.pendingSends.length; p.wood = 0;
+  assert(!g.command('merc', { mercId: other.id }).ok); assert.deepEqual(g.mercenaryStatus(other.id), insufficient); assert.equal(g.state.pendingSends.length, queued);
+});
+
+test('mercenary recharge follows pause and simulation speed', () => {
+  const g = game(), p = g.state.players[0], m = MERCENARIES[0]; p.wood = 10000; g.state.timer = 1000;
+  for (let i = 0; i < 3; i++) assert(g.command('merc', { mercId: m.id }).ok);
+  g.tick(1); near(g.mercenaryStatus(m.id).progress, .25);
+  g.command('pause'); const status = g.mercenaryStatus(m.id); g.tick(10); assert.deepEqual(g.mercenaryStatus(m.id), status);
+  g.command('pause'); g.command('speed', { value: 4 }); g.tick(.5);
+  assert.equal(g.mercenaryStatus(m.id).stock, 0); near(g.mercenaryStatus(m.id).remaining, 1); near(g.mercenaryStatus(m.id).progress, .75);
+  g.tick(.25); assert.equal(g.mercenaryStatus(m.id).stock, 1); near(g.mercenaryStatus(m.id).remaining, 4);
+});
+
+test('mercenary stock JSON saves preserve recharge and old absolute cooldowns migrate safely', () => {
+  const g = game(), p = g.state.players[0], m = MERCENARIES[0]; p.wood = 10000; g.state.timer = 1000;
+  g.command('merc', { mercId: m.id }); g.command('merc', { mercId: m.id }); g.tick(1.5);
+  const restored = Game.fromSnapshot(JSON.parse(JSON.stringify(g.snapshot())));
+  assert.deepEqual(restored.mercenaryStatus(m.id), g.mercenaryStatus(m.id)); assert.deepEqual(restored.snapshot(), g.snapshot());
+  g.tick(2.5); restored.tick(2.5); assert.deepEqual(restored.snapshot(), g.snapshot());
+  const legacy = g.snapshot();
+  for (const player of legacy.state.players) delete player.mercStocks;
+  const next = MERCENARIES[1], fresh = MERCENARIES[2];
+  legacy.state.players[0].mercCooldowns = { [m.id]: legacy.state.time + 2, [next.id]: legacy.state.time - .1 };
+  const old = Game.fromSnapshot(legacy), oldPlayer = old.state.players[0];
+  assert.equal(old.mercenaryStatus(m.id).stock, 0); near(old.mercenaryStatus(m.id).remaining, 2);
+  assert.equal(old.mercenaryStatus(next.id).stock, 3); assert.equal(old.mercenaryStatus(fresh.id).stock, 3);
+  assert.equal(old.mercenaryStatus(m.id, 1).stock, 3);
+  const untouched = [oldPlayer.wood, oldPlayer.income, oldPlayer.stats.sent, old.state.pendingSends.length];
+  for (let i = 0; i < 10; i++) old.mercenaryStatus(m.id);
+  assert.deepEqual([oldPlayer.wood, oldPlayer.income, oldPlayer.stats.sent, old.state.pendingSends.length], untouched);
+  old.tick(2); assert.equal(old.mercenaryStatus(m.id).stock, 1); near(old.mercenaryStatus(m.id).remaining, 4);
+  const migrated = Game.fromSnapshot(JSON.parse(JSON.stringify(old.snapshot())));
+  old.tick(8); migrated.tick(8); assert.deepEqual(old.snapshot(), migrated.snapshot()); assert.equal(old.mercenaryStatus(m.id).stock, 3);
 });
 
 test('spawn rectangle stays within the narrow Web portal while retaining ninefold batches',()=>{

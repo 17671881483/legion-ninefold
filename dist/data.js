@@ -1,8 +1,13 @@
-/* 5.0dJF static-reference subset with explicit Web ninefold adaptations.
+/* 5.0dJF workbook configuration. Historical Web definitions are save-compatibility only.
  * Legacy Web units remain for existing saves. See REFERENCE and reference/map-source.json.
  */
 import { MAP_REFERENCE, MAP_UNITS, MAP_WAVES, MAP_MERCENARIES, MAP_ECONOMY } from './map-reference.js';
-export { MAP_REFERENCE as REFERENCE, MAP_ECONOMY as ECONOMY } from './map-reference.js';
+import {WORKBOOK_REFERENCE,WORKBOOK_UNITS,WORKBOOK_BUILDERS,WORKBOOK_POOLS,WORKBOOK_ARCHIVE,WORKBOOK_HERO_ENTRIES,WORKBOOK_MERCENARIES,WORKBOOK_WAVES} from './workbook-reference.js';
+import {DOCUMENT_RULES,DOCUMENT_ECONOMY} from './document-rules.js';
+export const HISTORICAL_REFERENCE=MAP_REFERENCE;
+export const REFERENCE={...WORKBOOK_REFERENCE,economyPolicy:DOCUMENT_ECONOMY.sourcePolicy,targetMode:'5.0dJF x3文档配置',bountyPolicy:'GG默认开启，普通漏怪按开波军力与累计漏数的固定系数折扣；木怪和首领不套用，31波后无击杀赏金。'};
+export const ECONOMY=DOCUMENT_ECONOMY;
+export const BUILDERS=WORKBOOK_BUILDERS,PROPHET_POOLS=WORKBOOK_POOLS,HERO_ENTRIES=WORKBOOK_HERO_ENTRIES,ARCHIVE_UNITS=WORKBOOK_ARCHIVE;
 
 const A = (type, value, name, description, extra = {}) => ({ type, value, name, description, ...extra });
 const unit = (id, name, race, tier, cost, hp, damage, interval, range, armor, attackType, armorType, role, ability, color, shape, upgrades, description, population = 1, randomPool = false) => ({
@@ -81,7 +86,7 @@ const LEGACY_UNITS = [
   unit('infernal', '地狱火', '元素', 6, 460, 4650, 290, 1.55, 60, 13, 'chaos', 'heavy', 'tank', A('stomp', 145, '毁灭践踏', '周期造成范围伤害并击晕。', { radius: 110, cooldown: 4.8, duration: .9 }), '#a5b58b', 'square', [], '岩石傀儡升级，坚固的范围控制单位。', 5),
 ];
 
-export const UNITS = [...MAP_UNITS, ...LEGACY_UNITS.map(u => ({...u,legacy:true,randomPool:false,isBase:false,provenance:'legacy-web'}))];
+export const UNITS = [...WORKBOOK_UNITS, ...MAP_UNITS.map(u=>({...u,legacy:true,randomPool:false,isBase:false,provenance:'legacy-map-subset'})), ...LEGACY_UNITS.map(u => ({...u,legacy:true,randomPool:false,isBase:false,provenance:'legacy-web'}))];
 
 const merc = (id, name, wood, income, unlock, hp, damage, interval, range, armor, attackType, armorType, role, ability, color, shape, description) => ({
   ...unit(id, name, '佣兵', 1, 0, hp, damage, interval, range, armor, attackType, armorType, role, ability, color, shape, [], description),
@@ -100,15 +105,15 @@ export const LEGACY_MERCENARIES = [
   merc('merc_infernal', '深渊地狱火', 400, 22, 11, 2420, 135, 1.45, 52, 9, 'chaos', 'heavy', 'tank', A('stomp', 55, '陨火震击', '周期对周围守军造成范围伤害。', { radius: 80, cooldown: 5, duration: .5 }), '#b4ae90', 'square', '中后期高生命进攻佣兵。'),
 ];
 
-export const MERCENARIES = MAP_MERCENARIES;
-export const WAVES = MAP_WAVES;
+export const MERCENARIES = WORKBOOK_MERCENARIES;
+export const WAVES = WORKBOOK_WAVES;
 
 export const HEROES = [
   { id: 'hero_paladin', name: '圣骑士', faction: '人类', race: '人类', cost: 280, population: 3, hp: 1500, damage: 88, interval: 1.1, range: 50, speed: 50, armor: 6, attackType: 'normal', armorType: 'heavy', role: 'support', color: '#e0c99a', shape: 'star', aura: { type: 'armor', value: 3, radius: 200 }, ability: A('aura_armor', 3, '虔诚光环', '提高附近友军护甲。', { radius: 200 }), description: '用护甲光环增强前排生存。', upgrades: [] },
   { id: 'hero_archmage', name: '大法师', faction: '奥术', race: '人类', cost: 280, population: 3, hp: 950, damage: 110, interval: 1.25, range: 270, speed: 38, armor: 3, attackType: 'magic', armorType: 'unarmored', role: 'support', color: '#b4c9e8', shape: 'star', aura: { type: 'damage', value: .16, radius: 220 }, ability: A('aura_damage', .16, '辉煌光环', '提高附近友军伤害。', { radius: 220 }), description: '为阵地提供稳定的伤害增益。', upgrades: [] },
   { id: 'hero_treelord', name: '永恒树灵', faction: '森林', race: '森林', cost: 280, population: 3, hp: 1800, damage: 70, interval: 1.4, range: 70, speed: 38, armor: 7, attackType: 'normal', armorType: 'heavy', role: 'support', color: '#a6c796', shape: 'star', aura: { type: 'heal', value: 9, radius: 200 }, ability: A('aura_heal', 9, '自然之息', '持续治疗附近友军。', { radius: 200 }), description: '适合与高生命前排组成持久防线。', upgrades: [] },
   { id: 'hero_warchief', name: '战争酋长', faction: '兽族', race: '兽族', cost: 280, population: 3, hp: 1650, damage: 105, interval: 1.15, range: 50, speed: 50, armor: 5, attackType: 'normal', armorType: 'heavy', role: 'support', color: '#c8ab89', shape: 'star', aura: { type: 'speed', value: .15, radius: 200 }, ability: A('aura_speed', .15, '战歌光环', '提高附近友军攻击速度。', { radius: 200 }), description: '为集中布置的输出部队提供攻速。', upgrades: [] },
-];
+].map(h=>({...h,legacy:true,provenance:'legacy-web-hero'}));
 
 export const RULES = {
   workerWoodCost: 0,
@@ -204,4 +209,14 @@ export const RULES = {
   },
   abilityStacking: '同名同类型光环取最高值；不同类型光环并存。持续伤害同源刷新持续时间。',
   victory: '对方国王生命归零获胜；第35波后双方国王存活则比较国王剩余生命比例，相同则比较总兵力，再相同判平局。',
+  ...DOCUMENT_RULES,
+  dataRevision: WORKBOOK_REFERENCE.dataRevision,
+  ggEnabled: true,
+  webFrenzyEnabled: false,
+  interfereEnabled: false,
+  webKingSplashEnabled: false,
+  victory: '击倒敌方国王获胜；31—35连续进攻，35最终首领持续复活，不按生命比例提前判胜。',
+  ggDefaultSource: 'war3map.j:12930-12936默认TriggerExecute(AR)，16799-16801注册Xs，12546-12550将Wo=true。',
+  rerollPool: '先知六阶×15候选；其他建造者使用各自基础兵与完整升级链。',
+  heroSourcePolicy: '原图10种英雄通过祭坛及各自11阶段升级链；旧4名Web英雄仅兼容历史存档。',
 };

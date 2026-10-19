@@ -1,0 +1,40 @@
+import {UNITS,MERCENARIES,WAVES,BUILDERS,ARCHIVE_UNITS} from './data.js';
+import {describeSkills} from './skills.js';
+import {unitIcon} from './renderer.js';
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const attack={normal:'普通',pierce:'穿刺',magic:'魔法',chaos:'混乱',siege:'攻城',hero:'英雄'};
+const armor={heavy:'重甲',medium:'中甲',light:'轻甲',fortified:'城甲',unarmored:'无甲',hero:'英雄甲'};
+const all=[...UNITS.filter(u=>!u.legacy).map(u=>({...u,kind:'defense'})),...ARCHIVE_UNITS.map(u=>({...u,kind:'defense',unconfirmed:true})),...MERCENARIES.map(u=>({...u,kind:'attack'})),...WAVES.map(u=>({...u,id:'wave_'+u.id,kind:'wave',waveNumber:u.id}))];
+let dialog,kind='defense',builder='all',query='',selected=null,onDeploy=null;
+const n=v=>Number.isFinite(v)?Number(v.toFixed(2)).toLocaleString('zh-CN'):'待核定';
+export function skillMarkup(def){
+ const skills=describeSkills(def);
+ if(!skills.length)return '<p class="catalog-empty">没有静态技能挂载。武器与脚本机制另计。</p>';
+ return skills.map(a=>`<article class="skill-entry ${a.status==='unresolved'?'unresolved':''}"><div><b>${esc(a.name||a.id||a.rawcode)}</b><span>${a.status==='implemented'?'参与模拟':a.status==='marker'?'状态标记':'待核定'}</span></div><p>${esc(a.effectText||a.description||'缺少可解释的基础配置。')}</p><small>${esc(a.id||a.rawcode||'')}${a.cooldown?` · 冷却 ${n(a.cooldown)}秒`:''}${a.manaCost?` · 消耗 ${n(a.manaCost)}魔法`:''}</small></article>`).join('');
+}
+function init(){
+ if(dialog)return;dialog=document.createElement('dialog');dialog.id='catalog-dialog';dialog.className='catalog-dialog';
+ dialog.innerHTML=`<header class="dialog-header"><span><small>5.0dJF · UNIT COMPENDIUM</small><h2>兵种与技能</h2></span><button class="catalog-close" aria-label="关闭图鉴">×</button></header><div class="catalog-filters"><div class="catalog-kinds" role="tablist"><button data-kind="defense" role="tab">防守兵种</button><button data-kind="attack" role="tab">进攻木怪</button><button data-kind="wave" role="tab">35波怪物</button></div><div class="catalog-search"><select aria-label="按建造者筛选"><option value="all">全部建造者</option>${BUILDERS.map(b=>`<option value="${esc(b.id)}">${esc(b.name)}</option>`).join('')}</select><input type="search" placeholder="搜索名称、代码或技能" aria-label="搜索兵种或技能"></div></div><div class="catalog-body"><div class="catalog-list" aria-label="兵种列表"></div><section class="catalog-detail" aria-live="polite"></section></div><footer class="catalog-footer">按 Excel 配置与脚本解释模拟。待核定项保留记录，不按旧说明文案猜测效果。</footer>`;
+ document.body.append(dialog);dialog.querySelector('.catalog-close').onclick=()=>dialog.close();dialog.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dialog.close();}});
+ dialog.querySelector('.catalog-kinds').onclick=e=>{const b=e.target.closest('[data-kind]');if(!b)return;kind=b.dataset.kind;selected=null;renderList();};
+ dialog.querySelector('input').oninput=e=>{query=e.target.value.trim().toLowerCase();renderList();};
+ dialog.querySelector('select').onchange=e=>{builder=e.target.value;renderList();};
+ dialog.querySelector('.catalog-list').onclick=e=>{const b=e.target.closest('[data-record]');if(b){selected=b.dataset.record;renderList(false);}};
+}
+function renderList(resetScroll=true){
+ const race=BUILDERS.find(b=>b.id===builder);
+ const rows=all.filter(u=>u.kind===kind).filter(u=>!race||kind!=='defense'||u.hero||u.builderIds?.includes(builder)||u.race===race.name||race.rosterIds?.includes(u.id)||race.heroEntryIds?.includes(u.id)).filter(u=>!query||`${u.name} ${u.waveNumber??''} ${u.sourceRawcode} ${u.combatRawcode} ${(u.sourceAbilities||[]).map(a=>a.name).join(' ')} ${describeSkills(u).map(a=>a.name).join(' ')}`.toLowerCase().includes(query));
+ if(!rows.some(u=>u.id===selected))selected=rows[0]?.id??null;
+ dialog.querySelectorAll('[data-kind]').forEach(b=>{const active=b.dataset.kind===kind;b.classList.toggle('active',active);b.setAttribute('aria-selected',String(active));});dialog.querySelector('select').hidden=kind!=='defense';
+ const list=dialog.querySelector('.catalog-list'),oldScroll=list.scrollTop;
+ list.innerHTML=rows.length?rows.map(u=>`<button class="catalog-row ${u.id===selected?'active':''}" data-record="${esc(u.id)}">${unitIcon(u)}<span><b>${esc(u.waveNumber?`${u.waveNumber}. ${u.name}`:u.name)}</b><small>${esc(u.unconfirmed?'入口未确认':u.morphProxy?'随机变形代理':u.heroLevel?`英雄 · ${u.heroLevel}级`:u.sourceRawcode||u.id)}</small></span><em>${u.kind==='attack'?`${n(u.wood)}木`:u.kind==='wave'?`${n(u.count??u.referenceCount)}只`:u.cost==null?'—':`${n(u.cost)}金`}</em></button>`).join(''):'<p class="catalog-empty">没有匹配的兵种</p>';
+ if(!resetScroll)list.scrollTop=oldScroll;renderDetail(rows.find(u=>u.id===selected));
+}
+function renderDetail(u){
+ const detail=dialog.querySelector('.catalog-detail');if(!u){detail.innerHTML='';return;}
+ const parents=UNITS.filter(p=>!p.legacy&&p.upgrades?.includes(u.id));
+ const targets=(u.upgrades||[]).map(id=>UNITS.find(p=>p.id===id)).filter(Boolean);
+ const source=u.source||u.workbookSource||u.sourceWorkbook||u.workbook||{};
+ detail.innerHTML=`<div class="catalog-unit-heading">${unitIcon(u,64)}<span><small>${esc(u.race|| (u.kind==='wave'?'系统怪':'佣兵'))}</small><h3>${esc(u.name)}</h3><p>${esc(u.sourceRawcode||'')} ${u.combatRawcode?` → ${esc(u.combatRawcode)}`:''}</p></span></div>${u.unconfirmed?'<p class="catalog-notice">只找到注册记录，尚未确认玩家获取入口。</p>':''}${u.morphProxy?'<p class="catalog-notice">该建筑完成后从对应阶数候选池随机变形，不作为最终战斗单位。</p>':''}<div class="catalog-stats">${[['生命',u.hp],['攻击均值',u.damage],['护甲',u.armor],['间隔秒',u.interval],['原始射程',u.sourceRange],['人口',u.population],['魔法上限',u.maxMana??u.manaMax??u.mana],['魔法回复',u.manaRegen]].map(([k,v])=>`<span>${k}<b>${n(v)}</b></span>`).join('')}</div><p class="catalog-type">${attack[u.attackType]||esc(u.attackType||'待核定')}攻击 / ${armor[u.armorType]||esc(u.armorType||'待核定')}${u.woodCost?` · ${n(u.woodCost)}木`:''}</p>${u.kind==='attack'?`<p>库存 ${n(u.stockMax)}，补货间隔 ${n(u.cooldown)}秒，第${n(u.unlock)}波开放。</p>`:''}${parents.length||targets.length?`<div class="catalog-upgrades">${parents.length?`<p>前置：${parents.map(p=>esc(p.name)).join('、')}</p>`:''}${targets.length?`<p>可升级：${targets.map(t=>`${esc(t.name)}（${n(t.cost)}金${t.woodCost?`＋${n(t.woodCost)}木`:''}）`).join('、')}</p>`:''}</div>`:''}${u.omittedUpgradeRawcodes?.length?`<p class="catalog-notice">未解析升级目标：${u.omittedUpgradeRawcodes.map(esc).join('、')}。保留原始大小写，暂不开启此分支。</p>`:''}<h4>技能与机制</h4>${skillMarkup(u)}<p class="catalog-source">${source.sheet?`Excel：${esc(source.sheet)}，第${esc(source.row)}行。`:'原始物编、单位技能关联与脚本证据。'}${esc(u.availability||u.reachability||'')}</p>`;
+}
+export function openCatalog(id=null){init();if(id){const u=all.find(u=>u.id===id||u.sourceRawcode===id);if(u){kind=u.kind;selected=u.id;builder='all';query='';dialog.querySelector('input').value='';dialog.querySelector('select').value='all';}}renderList();if(!dialog.open)dialog.showModal();}

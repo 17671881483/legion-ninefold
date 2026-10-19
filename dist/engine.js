@@ -1,4 +1,6 @@
 import { UNITS, MERCENARIES, LEGACY_MERCENARIES, WAVES, RULES, HEROES } from './data.js';
+import { WORKBOOK_BUILDERS, WORKBOOK_POOLS, WORKBOOK_UNIT_TEMPLATES } from './workbook-reference.js';
+import { attachSkills, compileSkills, sourceAuraEffects, tickSourceSkills, sourceAttackStart, sourceOnHit, modifyIncoming, afterSourceDamage, sourceDeath, sourceMoveFactor, canWeaponTarget, sourceWeapon } from './skills.js';
 import { MAP, laneToWorld, worldToLane, kingWorld, spawnWarpWorld, supportWorld, routePoints, isWalkable, isSegmentWalkable, constrainPoint, closestWalkable, navigationPath } from './layout.js';
 
 const units = Object.fromEntries(UNITS.map(u => [u.id, u]));
@@ -19,7 +21,7 @@ const rule = (key, fallback) => value(RULES, [key], fallback);
 /** Deterministic, DOM-free simulation. tick receives real elapsed seconds; speed is applied here. */
 export class Game {
   constructor(options = {}) {
-    this.options = { seed: options.seed ?? 42, difficulty: options.difficulty ?? 'normal' };
+    this.options = { seed: options.seed ?? 42, difficulty: options.difficulty ?? 'normal', builderId: options.builderId ?? 'builder_u00T', ggEnabled: options.ggEnabled ?? RULES.ggEnabled ?? true };
     this._rng = (Number(this.options.seed) || 42) >>> 0;
     this._id = 0;
     this._spawnQueue = [];
@@ -36,19 +38,20 @@ export class Game {
       speed: 1, paused: false, winner: null, difficulty: this.options.difficulty, seed: this.options.seed,
       players: names.map((name, id) => ({ id, name, team: id < 4 ? 0 : 1,
         gold: initialGold, wood: rule('initialWood', 40), income: rule('initialIncome', 5),
-        workers: rule('initialWorkers', 1), lumberLevel: 0, economyTasks: { workerQueue: [], lumberTask: null }, buildings: [], roster: this._roster(),
+        workers: rule('initialWorkers', 1), lumberLevel: 0, economyTasks: { workerQueue: [], lumberTask: null }, buildings: [], builderId: id === 0 ? this.options.builderId : this._pick(WORKBOOK_BUILDERS.filter(b=>b.mode!=='morph'))?.id ?? 'builder_u00T', roster: [],
         mercStocks: Object.fromEntries(MERCENARIES.map(m => [m.id, { stock: this._mercenaryMaxStock(m), nextReadyAt: null }])),
         populationCap: rule('initialPopulation', 40), popUsed: rule('initialWorkers', 1), heroId: null, healUsed: false, rerolls: 0, stats: { kills: 0, leaks: 0, warps: 0, sent: 0, damage: 0, goldEarned: 0, wavesHeld: 0 }
       })),
       kings: [0, 1].map(team => ({ team, hp: rule('kingInitialHp', 12000), maxHp: rule('kingInitialHp', 12000),
         attack: rule('kingDamage', 135), regen: rule('kingRegen', 4), healCharges: rule('kingHealCharges', 4),
         armor: rule('kingArmor', 8), armorType: 'hero', attackType: 'hero', autoUpgradeCount: 0, healBlockedUntil: 0,
-        hpLevel: 0, attackLevel: 0, regenLevel: 0, attackCd: 0, worldX: kingWorld(team).x, worldY: kingWorld(team).y, radius: .8 })),
+        id:`king-${team}`,unitId:'king',side:'defender',battleTeam:team,laneId:8+team,status:{},targetType:'structure',traits:['mechanical'],isBuilding:true,hpLevel: 0, attackLevel: 0, regenLevel: 0, attackCd: 0, worldX: kingWorld(team).x, worldY: kingWorld(team).y, radius: .8 })),
       entities: [], events: [], logs: [], pendingSends: [], kingBountyPools: [0, 0],
       metrics: { spawned: 0, killed: 0, leaked: 0 },
     };
-    this._log('九倍军团战：建造军团，发展木材，与队友共同守护国王。');
-    this._log('每路普通怪物 = 基础数量 × 9；Boss 独立配置。此为可调参数的 Web 玩法原型。');
+    for (const p of this.state.players) p.roster = this._roster(p.builderId);
+    this._log('军团战争5.0dJF：按来源建造军团，发展木材，与队友共同守护国王。');
+    this._log('采用文档主配置怪量；技能与机制是静态字段的Web模拟，缺失项在图鉴明确标注。');
     for (let id = 1; id < 8; id++) this._aiBuild(this.state.players[id], true);
   }
 
@@ -60,16 +63,18 @@ export class Game {
   }
   _uid(prefix = 'e') { return `${prefix}${++this._id}`; }
   _pick(items) { return items.length ? items[Math.floor(this._random() * items.length)] : undefined; }
-  _roster() {
-    const pool = baseUnits.length >= 6 ? baseUnits : UNITS.filter(u => !u.legacy && !u.upgradeFrom);
-    const result = [];
-    for (let tier = 1; tier <= 6; tier++) {
-      const group = pool.filter(u => value(u, ['tier', 'level'], 1) === tier);
-      const picked = this._pick(group.length ? group : pool.filter(u => !result.includes(u.id)));
-      if (picked) result.push(picked.id);
-    }
-    return result;
+  _roster(builderId = this.options?.builderId ?? 'builder_u00T') {
+    const builder=WORKBOOK_BUILDERS.find(b=>b.id===builderId||b.rawcode===builderId)??WORKBOOK_BUILDERS.find(b=>b.mode==='prophet');
+    if(builder?.mode==='prophet')return WORKBOOK_POOLS.map(pool=>this._pick(pool.filter(id=>units[id]))).filter(Boolean);
+    if(builder)return builder.rosterIds.filter(id=>units[id]);
+    return baseUnits.slice(0,6).map(u=>u.id);
   }
+  _military(p) {return p.buildings.filter(b=>!b.construction).reduce((sum,b)=>sum+value(units[b.unitId],['sourcePoints'],b.totalSpent??b.spent??this._cost(units[b.unitId])),0);}
+  _requirement(p,u){const military={u00Q:350,u00N:600,u00R:1200,u012:1600,u00S:2000,u00Y:4800};for(const id of u.requires??[])if(military[id]&&this._military(p)<military[id])return `需要军力 ${military[id]}`;return ''; }
+  _kingPosition(team){const k=this.state.kings[team];return Number.isFinite(k?.worldX)?{x:k.worldX,y:k.worldY}:kingWorld(team);}
+  _sourceBuilder(p) {return WORKBOOK_BUILDERS.find(b=>b.id===p.builderId||b.rawcode===p.builderId);}
+  _resolveMorph(u) {if(!u?.morphProxy)return u;const choices=(u.morphTargets?.length?u.morphTargets:WORKBOOK_POOLS[Math.max(0,(u.tier??1)-1)]??[]).map(v=>typeof v==='string'?units[v]:units[v.id]).filter(Boolean);return this._pick(choices)??null;}
+
   _log(text) { this.state.logs.push({ time: this.state.time, text }); if (this.state.logs.length > 100) this.state.logs.shift(); }
   _event(type, entity, text, extra = {}) {
     const laneId = entity?.laneId ?? -1;
@@ -85,7 +90,7 @@ export class Game {
     if (this.state?.players) for (const p of this.state.players) p.popUsed = this._population(p);
     return { ok, message };
   }
-  _population(p) { return (p.workers + (p.economyTasks?.workerQueue?.length ?? 0)) * rule('workerPopulation', 1) + p.buildings.reduce((sum, b) => sum + value(units[b.unitId], ['population'], 1), 0) + (p.heroId ? value(heroes[p.heroId], ['population'], 3) : 0); }
+  _population(p) { return (p.workers + (p.economyTasks?.workerQueue?.length ?? 0)) * rule('workerPopulation', 1) + p.buildings.reduce((sum,b)=>sum+Math.max(value(units[b.unitId],['population'],1),value(units[b.construction?.targetId],['population'],0)),0) + (p.heroId ? value(heroes[p.heroId], ['population'], 3) : 0); }
   _getPlayer(payload) { return this.state.players[payload?.playerId ?? 0]; }
   _cost(u) { return value(u, ['cost', 'goldCost', 'gold'], 100); }
   _woodCost(u) { return value(u, ['woodCost', 'wood', 'cost'], 60); }
@@ -126,7 +131,8 @@ export class Game {
   }
   _woodRate(p) {
     const difficulty = p.team === 1 ? ({ easy: .85, normal: 1, hard: 1.18 }[this.options.difficulty] ?? 1) : 1;
-    return p.workers * rule('workerBaseWoodPerSecond', 1.5) * (1 + p.lumberLevel * rule('lumberRateStep', .12)) * difficulty;
+    const payload=rule('lumberBasePayload',2)+Math.min(8,p.lumberLevel)*rule('lumberBasicPayloadPerLevel',1)+Math.max(0,p.lumberLevel-8)*rule('lumberAdvancedPayloadPerLevel',2);
+    return p.workers * payload / rule('gatheringCycleSeconds',10);
   }
   _taskStatus(task) {
     if (!task) return null;
@@ -148,9 +154,11 @@ export class Game {
       if (p.workers + queue.length >= maxWorkers) workerReason = '小精灵已达上限（含招募中）';
       else if (queue.length >= queueLimit) workerReason = '招募队列已满';
       else if (this._population(p) + rule('workerPopulation', 1) > p.populationCap) workerReason = '人口不足，请扩建营地';
+      else if (this._military(p) < rule('workerMilitaryRequirement',0)) workerReason = `招募需要军力 ${rule('workerMilitaryRequirement',0)}`;
       else if (shortage(worker.cost)) workerReason = costMessage('招募', worker.cost);
       if (p.lumberLevel >= maxLumber) lumberReason = '伐木科技已达上限';
       else if (tasks.lumberTask) lumberReason = '伐木科技正在研究';
+      else if (this._military(p) < number(RULES.lumberLevels?.[p.lumberLevel]?.militaryRequirement,0)) lumberReason = `研究需要军力 ${RULES.lumberLevels[p.lumberLevel].militaryRequirement}`;
       else if (shortage(lumber.cost)) lumberReason = costMessage('研究', lumber.cost);
     }
     return {
@@ -160,11 +168,13 @@ export class Game {
     };
   }
   _advanceEconomy(p, from, to) {
-    const tasks = this._economyTasks(p); let cursor = from;
+    const tasks = this._economyTasks(p);
+    for(const b of p.buildings)if(b.construction?.finishAt<=to+1e-8){b.unitId=b.construction.targetId;b.construction=null;if(p.id===0)this._event('build',{laneId:p.id,x:b.col+.5,y:b.row+4.5},`${units[b.unitId]?.name??''}施工完成`);}
+    let cursor = from;
     // Integrate at each completion instant: a task finishing at the end of a
     // step must not earn its new production rate for the preceding interval.
     while (cursor < to - 1e-10) {
-      const nextFinish = Math.min(tasks.workerQueue[0]?.finishAt ?? Infinity, tasks.lumberTask?.finishAt ?? Infinity);
+      const nextFinish = Math.min(tasks.workerQueue[0]?.finishAt ?? Infinity, tasks.lumberTask?.finishAt ?? Infinity,tasks.farmTask?.finishAt??Infinity);
       const end = Math.max(cursor, Math.min(to, nextFinish));
       p.wood += this._woodRate(p) * (end - cursor); cursor = end;
       if (tasks.workerQueue[0]?.finishAt <= cursor + 1e-8) {
@@ -175,6 +185,7 @@ export class Game {
         p.lumberLevel = tasks.lumberTask.targetLevel; tasks.lumberTask = null;
         if (p.id === 0) this._log(`伐木科技 Lv.${p.lumberLevel} 研究完成。`);
       }
+      if(tasks.farmTask?.finishAt<=cursor+1e-8){tasks.farmTask=null;p.populationCap=Math.min(rule('maxPopulation',300),p.populationCap+rule('farmPopulation',8));if(p.id===0)this._log('农场建造完成，人口上限增加。');}
       if (cursor >= to - 1e-10) break;
     }
     p.popUsed = this._population(p);
@@ -242,7 +253,8 @@ export class Game {
         if (type === 'aura_heal') healRate = Math.max(healRate, amount);
       } else if (type === 'aura_slow') slow = Math.max(slow, amount);
     }
-    return { damageMultiplier: 1 + damage, attackSpeedMultiplier: (1 + speed) * Math.max(.05, 1 - slow), armor, healRate, slow };
+    const source=sourceAuraEffects(this,target,auras);
+    return { damageMultiplier: Math.max(.05,1+damage+source.damage), attackSpeedMultiplier: Math.max(.05,(1+speed+source.haste)*(1-slow)), armor:armor+source.armor, healRate:healRate+source.healRate,slow };
   }
   _applyHealingAura(target, auras, dt) {
     if (target.hp <= 0 || target.hp >= target.maxHp) return;
@@ -265,30 +277,37 @@ export class Game {
       case 'build': {
         if (this.state.phase !== 'build') return this._result(false, '战斗中无法建造');
         const u = units[payload.unitId];
-        if (!u || !p.roster.includes(u.id)) return this._result(false, '该兵种不在当前兵种池中');
+        if (!u || ![...p.roster,...(this._sourceBuilder(p)?.heroEntryIds??[])].includes(u.id)) return this._result(false, '该兵种不在当前兵种池中');
+        if(u.heroEntry&&p.heroAltarUsed)return this._result(false,'每局只能建造一次英雄祭坛');
+        const required=this._requirement(p,u);if(required)return this._result(false,required);
         const col = Number(payload.col), row = Number(payload.row);
         if (!Number.isInteger(col) || !Number.isInteger(row) || col < 0 || col >= 6 || row < 0 || row >= 8) return this._result(false, '请选择 6 × 8 建造区内的位置');
         if (p.buildings.some(b => b.col === col && b.row === row)) return this._result(false, '此位置已有单位');
         if (this._population(p) + value(u, ['population'], 1) > p.populationCap) return this._result(false, '人口不足，请扩建营地');
-        const cost = this._cost(u);
-        if (p.gold + 1e-8 < cost) return this._result(false, `需要 ${cost} 金币`);
-        p.gold -= cost;
-        const building = { id: this._uid('b'), unitId: u.id, col, row, spent: cost, totalSpent: cost };
+        const cost = this._cost(u),woodCost=number(u.woodCost,0);
+        if (p.gold + 1e-8 < cost || p.wood+1e-8<woodCost) return this._result(false, `需要 ${cost} 金币、${woodCost} 木材`);
+        const resultUnit=this._resolveMorph(u);if(!resultUnit)return this._result(false,'变形候选池为空，源数据待核定');
+        p.gold -= cost;p.wood-=woodCost;
+        const building = { id: this._uid('b'), unitId: resultUnit.id, col, row, spent: cost, totalSpent: cost, sourceProxy: u.morphProxy?u.id:null };
+        if(u.provenance==='5.0dJF-workbook'){const duration=number(u.buildingRawFields?.bldtm,0);if(duration>0)building.construction={startAt:this.state.time,finishAt:this.state.time+duration,duration,targetId:resultUnit.id};building.unitId=u.id;building.builtWave=this.state.wave;if(u.heroEntry)p.heroAltarUsed=true;}
         p.buildings.push(building);
         this._event('build', { laneId: p.id, x: col + .5, y: row + 4.5 }, u.name);
-        return this._result(true, `已建造 ${u.name}`);
+        return this._result(true, `已建造 ${resultUnit.name}${u.morphProxy?'（变形）':''}`);
       }
       case 'upgrade': {
         if (this.state.phase !== 'build') return this._result(false, '战斗中无法升级兵种');
         const found = this._building(payload.buildingId);
         if (!found || found.p.id !== p.id) return this._result(false, '请选择自己的建筑');
+        if(found.b.construction)return this._result(false,'建筑尚在施工');
         const { b } = found, old = units[b.unitId], allowed = this._upgradeIds(old);
         const u = units[payload.unitId ?? allowed[0]];
         if (!u || !allowed.includes(u.id)) return this._result(false, '该升级分支不可用');
+        const required=this._requirement(p,u);if(required)return this._result(false,required);
         if (this._population(p) - value(old, ['population'], 1) + value(u, ['population'], 1) > p.populationCap) return this._result(false, '人口不足，请扩建营地');
         const cost = value(u, ['upgradeCost', 'upgradeGold'], this._cost(u));
-        if (p.gold + 1e-8 < cost) return this._result(false, `升级需要 ${cost} 金币`);
-        p.gold -= cost; b.unitId = u.id; b.spent = (b.spent ?? this._cost(old)) + cost; b.totalSpent = b.spent;
+        const woodCost=number(u.woodCost,0);
+        if (p.gold + 1e-8 < cost || p.wood+1e-8<woodCost) return this._result(false, `升级需要 ${cost} 金币、${woodCost} 木材`);
+        p.gold -= cost;p.wood-=woodCost; const duration=number(u.buildingRawFields?.bldtm,0);if(u.provenance==='5.0dJF-workbook'&&duration>0)b.construction={startAt:this.state.time,finishAt:this.state.time+duration,duration,targetId:u.id};else b.unitId=u.id; b.spent = (b.spent ?? this._cost(old)) + cost; b.totalSpent = b.spent;
         this._event('upgrade', { laneId: p.id, x: b.col + .5, y: b.row + 4.5 }, u.name);
         return this._result(true, `已升级为 ${u.name}`);
       }
@@ -296,15 +315,48 @@ export class Game {
         if (this.state.phase !== 'build') return this._result(false, '战斗中无法出售');
         const found = this._building(payload.buildingId);
         if (!found || found.p.id !== p.id) return this._result(false, '请选择自己的建筑');
-        const refund = Math.floor((found.b.spent ?? this._cost(units[found.b.unitId])) * rule('sellRatio', .8));
+        const def=units[found.b.unitId];if(def.provenance==='5.0dJF-workbook'&&!def.buildingAbilityIds?.includes('A008'))return this._result(false,'该源建筑没有出售指令');
+        const raw=def.sourceRawcode,ratio=found.b.builtWave===this.state.wave?1:['h06K','h06L'].includes(raw)?.75:['h07Q','h07R'].includes(raw)?.9:rule('sellRatio',.5);
+        const refund = Math.floor(value(def,['sourcePoints'],found.b.spent??this._cost(def))*ratio);
         p.gold += refund; p.buildings = p.buildings.filter(b => b.id !== found.b.id);
         return this._result(true, `出售获得 ${refund} 金币`);
       }
+      case 'race': {
+        if(this.state.phase!=='build')return this._result(false,'请在备战期更换种族');
+        if(p.builderChoices?.length)return this._result(false,'请先选择本次候选建造者');
+        const index=p.raceChanges??0,costs=RULES.raceChangeCosts??Array.from({length:5},(_,i)=>({gold:RULES.builderChangeGoldCosts?.[i]??50*i,wood:RULES.builderChangeWoodCosts?.[i]??100*(i+1)})),cost=costs[index];if(!cost)return this._result(false,'种族更换次数已用尽');
+        if(p.gold<cost.gold||p.wood<cost.wood)return this._result(false,`更换需要 ${cost.gold} 金币、${cost.wood} 木材`);
+        p.gold-=cost.gold;p.wood-=cost.wood;p.raceChanges=index+1;const candidates=[...WORKBOOK_BUILDERS];const first=this._pick(candidates),second=this._pick(candidates.filter(b=>b.id!==first.id));p.builderChoices=[first.id,second.id];return this._result(true,'请选择本次随机的两种建造者之一');
+      }
+      case 'builder': {
+        if(this.state.phase!=='build')return this._result(false,'请在备战期选择建造者');
+        if(!p.builderChoices?.includes(payload.builderId))return this._result(false,'请先支付种族更换费用，仅可选择本次两种候选');
+        const builder=WORKBOOK_BUILDERS.find(b=>b.id===payload.builderId||b.rawcode===payload.builderId);if(!builder)return this._result(false,'建造者不存在');
+        p.builderId=builder.id;p.roster=this._roster(builder.id);p.builderChoices=[];return this._result(true,`已选择${builder.name}`);
+      }
+      case 'stim':
+      case 'form': {
+        if(this.state.phase!=='build')return this._result(false,'形态指令仅限备战期');
+        const found=this._building(payload.buildingId);if(!found||found.p.id!==p.id)return this._result(false,'请选择自己的建筑');
+        const b=found.b,u=units[b.unitId];if(b.construction)return this._result(false,'施工完成后才可切换形态');
+        if(u.sourceRawcode==='h06I'){if(p.gold<75)return this._result(false,'兴奋剂需要75金币');p.gold-=75;b.unitId='b_h076';b.temporaryForm='b_h06I';b.stimulatedWave=this.state.wave;return this._result(true,'兴奋剂已激活，本波结束后复原');}
+        const next=u.sourceRawcode==='h062'?'b_h05Q':u.sourceRawcode==='h05Q'?'b_h062':null;if(!next||!units[next])return this._result(false,'该建筑没有原生转换形态');
+        b.construction={startAt:this.state.time,finishAt:this.state.time+1,duration:1,targetId:next};return this._result(true,'攻防转换中，1秒后完成');
+      }
+      case 'morph': {
+        const found=this._building(payload.buildingId);if(!found||found.p.id!==p.id)return this._result(false,'请选择自己的变形建筑');
+        if(this.state.phase!=='build')return this._result(false,'变形在备战期完成');
+        if(found.b.construction)return this._result(false,'变形代理尚在施工');
+        const u=units[found.b.unitId],next=this._resolveMorph(u);if(!u.morphProxy||!next)return this._result(false,'该建筑不属于变形代理');
+        found.b.unitId=next.id;return this._result(true,`变形为${next.name}`);
+      }
       case 'farm': {
-        if (p.populationCap >= rule('maxPopulation', 160)) return this._result(false, '营地人口已达上限');
-        const cost = rule('farmCost', 75); if (p.gold < cost) return this._result(false, `扩建营地需要 ${cost} 金币`);
-        p.gold -= cost; p.populationCap = Math.min(rule('maxPopulation', 160), p.populationCap + rule('farmPopulation', 20));
-        return this._result(true, `人口上限提升至 ${p.populationCap}`);
+        if(p.populationCap>=rule('maxPopulation',300))return this._result(false,'人口已达上限');
+        const cost=rule('farmCost',24),wood=rule('farmWoodCost',80),tasks=this._economyTasks(p);
+        if(tasks.farmTask)return this._result(false,'农场正在建造');
+        if(p.gold<cost||p.wood<wood)return this._result(false,`农场需要 ${cost} 金币、${wood} 木材`);
+        p.gold-=cost;p.wood-=wood;const duration=rule('farmTrainingSeconds',5);tasks.farmTask={id:this._uid('eco'),type:'farm',duration,startAt:this.state.time,finishAt:this.state.time+duration,cost:{gold:cost,wood}};
+        return this._result(true,`农场施工中，${duration}秒后人口+${rule('farmPopulation',8)}`);
       }
       case 'worker': {
         const status = this.economyStatus(p.id).worker;
@@ -327,10 +379,11 @@ export class Game {
       case 'reroll': {
         if (this.state.phase !== 'build') return this._result(false, '请在备战期切兵');
         if (p.rerolls >= rule('rerollCount', 6)) return this._result(false, '本局切兵次数已用尽');
-        const cost = rule('rerollCost', 25);
+        const cost = RULES.rerollCosts?.[p.rerolls]??p.rerolls*rule('rerollCostStep',100)+rule('rerollCostBase',0);
         if (p.wood < cost) return this._result(false, `切兵需要 ${cost} 木材`);
-        p.wood -= cost; p.rerolls++; p.roster = this._roster();
-        return this._result(true, `新兵种已就绪，下次切兵 ${rule('rerollCost', 25)} 木材`);
+        if(this._sourceBuilder(p)?.mode!=='prophet')return this._result(false,'仅先知可切换六阶随机兵种池');
+        p.wood -= cost; p.rerolls++; p.roster = this._roster(p.builderId);
+        return this._result(true, `新兵种已就绪，本次预言消耗 ${cost} 木材`);
       }
       case 'merc': {
         const m = mercs[payload.mercId]; if (!m) return this._result(false, '木怪不存在');
@@ -350,6 +403,14 @@ export class Game {
         if (p.id === 0) this._log(`${p.name} 派出 ${m.name}，将于第 ${send.wave} 波开战时平均分配至敌军各路。`);
         return this._result(true, `${m.name} 已排队，收入增加`);
       }
+      case 'kingMove': {
+        if(this.state.wave<31)return this._result(false,'第31波解除扎根后才可移动国王');
+        const king=this.state.kings[p.team],point={x:Number(payload.worldX),y:Number(payload.worldY)};
+        if(!Number.isFinite(point.x)||!Number.isFinite(point.y)||!isWalkable(point.x,point.y,p.team,king.radius??.8))return this._result(false,'请选择本方可通行区域');
+        if((king.commandLockedUntil??0)>this.state.time&&king.moveCommanderId!==p.id)return this._result(false,'队友正在控制国王，请等待5秒交接锁');
+        const path=navigationPath(this._kingPosition(p.team),point,p.team,king.radius??.8);if(path.length<2)return this._result(false,'目标无法抵达');
+        king.moveCommanderId=p.id;king.commandLockedUntil=this.state.time+5;king.movePath={path,index:1};return this._result(true,'国王已接受移动指令');
+      }
       case 'king': {
         const king = this.state.kings[p.team], stat = payload.stat;
         if (!['hp', 'attack', 'regen'].includes(stat)) return this._result(false, '请选择生命、攻击或恢复');
@@ -358,7 +419,7 @@ export class Game {
         if (king[key] >= cap) return this._result(false, '当前阶段已达上限');
         if (p.wood < cost) return this._result(false, `国王强化需要 ${cost} 木材`);
         p.wood -= cost; p.income += rule('kingIncome', 3); king[key]++;
-        if (stat === 'hp') { king.maxHp += rule('kingHpPerUpgrade', 1200); king.hp += rule('kingHpPerUpgrade', 1200); }
+        if (stat === 'hp') { const gain=RULES.kingHpUpgradeIncrements?.[king.hpLevel-1]??rule('kingHpPerUpgrade',450);king.maxHp+=gain;king.hp+=gain; }
         if (stat === 'attack') king.attack += rule('kingDamagePerUpgrade', 18);
         if (stat === 'regen') king.regen += rule('kingRegenPerUpgrade', 3);
         this._event('king', { laneId: 8 + p.team, x: 3, y: 11.5 }, stat === 'hp' ? '生命强化' : stat === 'attack' ? '攻击强化' : '恢复强化');
@@ -377,6 +438,7 @@ export class Game {
         return this._result(true, '国王获得治疗');
       }
       case 'interfere': {
+        if(RULES.interfereEnabled!==true)return this._result(false,'来源文档没有全局干扰技能，本模式已关闭');
         if (this.state.phase !== 'combat') return this._result(false, '战斗时才可干扰');
         if ((p.interfereUntil ?? 0) > this.state.time) return this._result(false, '干扰技能冷却中');
         const lane = Number(payload.laneId ?? p.id);
@@ -391,16 +453,7 @@ export class Game {
         this._event('interfere', { laneId: lane, x: 3, y: 6 }, `干扰 ${count}`);
         return this._result(true, `已重置 ${count} 只怪物的攻击`);
       }
-      case 'hero': {
-        if (this.state.phase !== 'build') return this._result(false, '请在备战期招募英雄');
-        const hero = heroes[payload.heroId]; if (!hero) return this._result(false, '英雄不存在');
-        if (p.heroId) return this._result(false, '每位玩家只能招募一位英雄');
-        if (this._population(p) + value(hero, ['population'], 3) > p.populationCap) return this._result(false, '人口不足，请扩建营地');
-        const cost = this._cost(hero); if (p.gold < cost) return this._result(false, `英雄需要 ${cost} 金币`);
-        if (this.state.wave < value(hero, ['unlockWave'], 1)) return this._result(false, '英雄尚未解锁');
-        p.gold -= cost; p.heroId = hero.id;
-        return this._result(true, `英雄 ${hero.name} 已加入军团`);
-      }
+      case 'hero':return this._result(false,'新局英雄通过建造者的英雄建筑入口与升级链获得');
       case 'ready':
         if (this.state.phase !== 'build') return this._result(false, '当前不在备战期');
         this.state.timer = 0; this._startCombat(); return this._result(true, '出兵！');
@@ -431,15 +484,17 @@ export class Game {
       const next = this._spawnQueue.shift(); this._spawnMonster(next);
     }
     this._updateEntities(dt);
+    if(s.roundMode==='arena'){this._clearDead();s.arenaRemaining=Math.max(0,(s.arenaRemaining??120)-dt);const alive=[0,1].map(team=>s.entities.some(e=>e.team===team&&e.hp>0));if(!alive[0]||!alive[1]||s.arenaRemaining<=0)this._endArena(alive);return;}
     this._updateKings(dt);
     this._clearDead();
     if (s.phase === 'ended') return;
     this._transferDefenders();
     this._warpTimer += dt;
     if (this._warpTimer >= 1 - 1e-9) { this._warpTimer = Math.max(0, this._warpTimer - 1); this._warpDefenders(); }
-    if (!this._spawnQueue.length && !s.entities.some(e => e.side === 'monster' && e.hp > 0)) this._endCombat();
+    if(s.wave>=31){if(s.wave<35){s.continuousRemaining=Math.max(0,(s.continuousRemaining??50)-dt);if(s.continuousRemaining<=0)this._advanceContinuous();}}
+    else if (!this._spawnQueue.length && !s.entities.some(e => e.side === 'monster' && e.hp > 0)) this._endCombat();
     // A very long stalled wave receives visible reinforcements, preserving actual combat.
-    if (this._roundTime > 100 && !this._overtime) {
+    if (RULES.webFrenzyEnabled === true && this._roundTime > 100 && !this._overtime) {
       this._overtime = true; this._log('战斗持续过久：双方获得狂暴，攻击速度提升。');
       for (const e of s.entities) e.status.frenzy = true;
     }
@@ -449,8 +504,14 @@ export class Game {
   }
   _startCombat() {
     if (this.state.phase !== 'build') return;
-    const s = this.state, w = this._waveData();
+    const s = this.state;
+    if(s.roundMode==='arena-prep'){this._startArena();return;}
+    if(s.roundMode==='arena-transition'){s.wave++;s.roundMode='normal';s.timer=30;s.entities=[];return;}
+    const w = this._waveData();
+    const reference=[250,350,500,650,800,1000,1200,1450,1600,1850,2050,2400,2700,3100,3500,4000,4500,5000,5500,6000,6500,7100,7700,8500,9500,10600,11800,13000,14000,15000,16000,17000,18000,19000,20000][s.wave-1]??1;
+    for(const p of s.players){const factor=this._military(p)/reference-(p.sourceLeaks??0)/150;p.leakBountyFactor=this.options.ggEnabled?factor>=1?1:factor>=.1?factor:0:0;}
     s.phase = 'combat'; s.timer = 0; s.entities = []; this._spawnQueue = []; this._roundTime = 0; this._settledLanes = []; this._overtime = false; this._warpTimer = 0; this._battleAuras = [[], []];
+    if(s.wave>=31)s.continuousRemaining=s.wave<35?50:null;
     const boss = !!(w.boss ?? w.isBoss ?? this.state.wave % 10 === 0);
     const baseCount = value(w, ['baseCount', 'quantity'], boss ? 1 : 5);
     // New reference waves carry an explicit adapted count. Old data still works.
@@ -458,7 +519,7 @@ export class Game {
     s.waveInfo = { ...w, baseHp: w.hp, baseDamage: w.damage, hp: w.hp * (boss ? 1 : rule('webMonsterHpScale', .25)), damage: w.damage * (boss ? 1 : rule('webMonsterDamageScale', .20)), isBoss: boss, actualCount: monsterCount };
     for (const p of s.players) {
       p.roundLeaks = 0; p.supportAnnounced = false;
-      for (const b of p.buildings) this._spawnDefender(units[b.unitId], p, b.col + .5, b.row + 4.5, b.id);
+      for (const b of p.buildings.filter(b=>!b.construction)) this._spawnDefender(units[b.unitId], p, b.col + .5, b.row + 4.5, b.id);
       if (p.heroId && heroes[p.heroId]) this._spawnDefender(heroes[p.heroId], p, 3, 8.7, `hero-${p.id}`, true);
       for (let i = 0; i < monsterCount; i++) this._spawnQueue.push({ at: (i + 1) * rule('spawnInterval', .1), laneId: p.id, wave: w, boss,
         x: clamp(3 + (i % 6 - 2.5) * (rule('spawnSpreadWidth', 1.8) / 5) + (this._random() - .5) * .04, 3 - rule('spawnSpreadWidth',1.8)/2, 3 + rule('spawnSpreadWidth',1.8)/2), y: .3 });
@@ -502,10 +563,11 @@ export class Game {
     };
     if (e.acquisitionRange > 12) e.acquisitionRange /= 100;
     if (ability?.type === 'shield') e.status.shield = ability.value > 1 ? ability.value : hp * number(ability.value, .2);
+    attachSkills(e,def);
     return e;
   }
   _spawnDefender(def, player, x, y, buildingId, isHero = false) {
-    if (!def) return;
+    if (!def || (def.provenance==='5.0dJF-workbook'&&!def.combatRawcode)) return;
     const e = this._entity(def, { team: player.team, side: 'defender', laneId: player.id,
       ownerId: player.id, sourceLaneId: player.id, x, y, buildingId, isHero });
     this._ensureWorld(e); e.status.activated = false; e.routeMode = 'guard';
@@ -563,11 +625,11 @@ export class Game {
     return isSegmentWalkable(from, to, team, radius);
   }
   _planMonsterRoute(e) {
-    if (e.status.leaked || e.laneId >= 8) { e.nav = { mode: 'monster', routeId: e.sourceLaneId, path: navigationPath(worldPoint(e), kingWorld(e.battleTeam), e.battleTeam, e.radius), index: 1, distance: 0, interrupted: false }; return; }
+    if (e.status.leaked || e.laneId >= 8) { e.nav = { mode: 'monster', routeId: e.sourceLaneId, path: navigationPath(worldPoint(e), this._kingPosition(e.battleTeam), e.battleTeam, e.radius), index: 1, distance: 0, interrupted: false }; return; }
     const source = e.sourceLaneId;
     const exit = laneToWorld(source, e.x, 12);
     const trunk = routePoints(source).slice(2);
-    const path = [worldPoint(e), exit, { x: exit.x, y: 16 }, ...trunk.map(p => ({ ...p })), kingWorld(e.battleTeam)];
+    const path = [worldPoint(e), exit, { x: exit.x, y: 16 }, ...trunk.map(p => ({ ...p })), this._kingPosition(e.battleTeam)];
     e.nav = { mode: 'monster', routeId: source, path, index: 1, distance: 0, interrupted: false };
   }
   _planReturn(e) {
@@ -602,7 +664,7 @@ export class Game {
       battle.push(e); this._worldEntities.set(e.id, e);
       const key = `${Math.floor(e.worldX)},${Math.floor(e.worldY)}`, grid = this._spatial[team];
       if (!grid.has(key)) grid.set(key, []); grid.get(key).push(e);
-      if (e.ability?.type?.startsWith('aura_')) battle.auras.push(e);
+      if (e.ability?.type?.startsWith('aura_')||e.skillSpecs?.some(s=>s.status==='implemented'&&s.kind.startsWith('aura_'))) battle.auras.push(e);
       if (e.side === 'monster') monsterCounts[e.team]++;
     }
     this._battleAuras = battles.map(battle => battle.auras);
@@ -617,15 +679,16 @@ export class Game {
       e.attackCd -= dt; e.abilityCd -= dt;
       this._applyHealingAura(e, battle.auras, dt);
       this._passiveAbility(e, battle, dt);
+      tickSourceSkills(this,e,battle,dt);
       if (e.hp <= 0 || (st.stunUntil ?? 0) > now) continue;
       const aggro = Math.max(e.range, number(e.acquisitionRange, Math.max(4.5, e.range + 1)));
       let target = this._worldEntities.get(e.targetId);
-      if (target && (target.hp <= 0 || target.battleTeam !== e.battleTeam || target.side === e.side || distance(e, target) > aggro * 1.25 || (e.nav?.mode === 'support' && distance(target, e.nav.anchor) > aggro * 1.25))) target = null;
+      if (target && (target.hp <= 0 || target.battleTeam !== e.battleTeam || target.side === e.side || !canWeaponTarget(e,target) || distance(e, target) > aggro * 1.25 || (e.nav?.mode === 'support' && distance(target, e.nav.anchor) > aggro * 1.25))) target = null;
       if (!target && (st.nextSenseAt ?? 0) <= now) {
         st.nextSenseAt = now + .4;
         let best = Infinity;
         for (const other of this._nearby(e, aggro)) {
-          if (other.id === e.id || other.hp <= 0 || other.side === e.side) continue;
+          if (other.id === e.id || other.hp <= 0 || other.side === e.side || !canWeaponTarget(e,other)) continue;
           const delta = distance(e, other);
           if (delta < best && delta <= aggro && !(e.nav?.mode === 'support' && distance(other, e.nav.anchor) > aggro * 1.25) && this._canSegment(worldPoint(e), worldPoint(other), e.battleTeam, 0)) { target = other; best = delta; }
         }
@@ -635,21 +698,17 @@ export class Game {
         if (e.side === 'defender' && !e.status.activated) { e.status.activated = true; if (e.nav?.mode === 'guard') this._planReturn(e); }
         if (e.side === 'defender' && e.nav?.mode !== 'support') e.routeMode = 'guard';
         if (e.nav) e.nav.interrupted = true;
-        const reach = e.range + e.radius + target.radius;
+        const reach = (sourceWeapon(e,target)?.range??e.range) + e.radius + target.radius;
         if (distance(e, target) <= reach && this._canSegment(worldPoint(e), worldPoint(target), e.battleTeam, 0)) {
           if (e.attackCd <= 0) this._attack(e, target, battle);
         } else this._chase(e, target, battle, dt);
       } else if (e.side === 'monster') {
-        const king = this.state.kings[e.battleTeam], position = kingWorld(e.battleTeam);
+        const king = this.state.kings[e.battleTeam], position = this._kingPosition(e.battleTeam);
         if (distance(e, position) <= e.range + e.radius + (king.radius ?? .8) && this._canSegment(worldPoint(e), position, e.battleTeam, 0)) {
           if (e.attackCd <= 0) {
-            const kingTarget = { ...king, side: 'defender' }, attackAuras = this._auraEffects(e, battle.auras), kingAuras = this._auraEffects(kingTarget, battle.auras);
-            const dmg = e.damage * attackAuras.damageMultiplier * this._typeMultiplier(e.attackType, king.armorType ?? 'hero') * this._armorFactor(this._effectiveArmor(king, kingAuras.armor)); king.hp -= dmg;
-            const haste = attackAuras.attackSpeedMultiplier * (e.status.frenzy ? 1.6 : 1);
-            e.attackCd = Math.max(.15, e.attackInterval / haste) * (this._monsterPressure?.[e.team] ?? 1);
-            this._event('hit', { laneId: 8 + e.battleTeam, worldX: position.x, worldY: position.y }, `−${Math.round(dmg)}`, { king: true, fromWorldX: e.worldX, fromWorldY: e.worldY });
+            this._attack(e,king,battle);
           }
-        } else this._followNav(e, battle, dt);
+        } else {if(this.state.wave>=31&&e.nav?.path?.length&&distance(e.nav.path.at(-1),position)>.4)this._planMonsterRoute(e);this._followNav(e, battle, dt);}
       } else if (e.side === 'defender') {
         if (e.nav?.mode === 'return') {
           e.routeMode = 'return'; this._followNav(e, battle, dt);
@@ -707,8 +766,8 @@ export class Game {
     if (delta < .015) return;
     const slow = (e.status.slowUntil ?? 0) > this.state.time ? number(e.status.slowFactor, .6) : 1;
     let auraSlow = 0;
-    for (const a of battle.auras ?? []) if (a.side !== e.side && a.hp > 0 && a.ability.type === 'aura_slow' && distance(a, e) <= number(a.ability.radius, 2)) auraSlow = Math.max(auraSlow, number(a.ability.value, .15));
-    const step = Math.min(delta, e.moveSpeed * slow * (1 - auraSlow) * dt);
+    for (const a of battle.auras ?? []) if (a.side !== e.side && a.hp > 0 && a.ability?.type === 'aura_slow' && distance(a, e) <= number(a.ability.radius, 2)) auraSlow = Math.max(auraSlow, number(a.ability.value, .15));
+    const step = Math.min(delta, e.moveSpeed * slow * (1 - auraSlow) * sourceMoveFactor(this,e,battle) * dt);
     let repelX = 0, repelY = 0;
     for (const a of this._nearby(e, 1)) {
       if (a.id === e.id || a.hp <= 0) continue;
@@ -740,17 +799,22 @@ export class Game {
   }
   _attack(e, target, lane) {
     const ability = e.ability, type = ability?.type;
+    if(e.buffs?.some(b=>b.expiresAt>this.state.time&&b.disarm))return;
+    const weapon=sourceWeapon(e,target);if(!weapon)return;
+    const sourceAttack=sourceAttackStart(this,e,target);
     const attackAuras = this._auraEffects(e, lane.auras), targetAuras = this._auraEffects(target, lane.auras);
-    let damage = e.damage * attackAuras.damageMultiplier, haste = attackAuras.attackSpeedMultiplier;
+    let damage = weapon.damage * sourceAttack.multiplier+sourceAttack.bonus, haste = attackAuras.attackSpeedMultiplier;
     if (type === 'crit' && this._random() < number(ability.chance, .2)) damage *= number(ability.value, 2);
     if (type === 'swarm') damage *= 1 + Math.min(4, lane.filter(a => a.side === e.side && a.race === e.race && a.id !== e.id && a.hp > 0 && distance(a, e) <= number(ability.radius, 1.5)).length) * number(ability.value, .08);
     if (e.status.frenzy) haste *= 1.6;
-    e.attackCd = Math.max(.15, e.attackInterval / haste) * (e.side === 'monster' ? (this._monsterPressure?.[e.team] ?? 1) : 1);
-    const multiplier = this._typeMultiplier(e.attackType, target.armorType);
+    e.attackCd = Math.max(.15, weapon.interval / haste) * (e.side === 'monster' ? (this._monsterPressure?.[e.team] ?? 1) : 1);
+    if(sourceAttack.missed){this._event('miss',target,'未命中');return;}
+    const multiplier = this._typeMultiplier(weapon.attackType, target.armorType);
     const armor = this._effectiveArmor(target, targetAuras.armor);
     const armorFactor = this._armorFactor(armor);
     const dealt = damage * multiplier * armorFactor;
-    this._hurt(target, dealt, e);
+    const actual=this._hurt(target,dealt,e,{magic:weapon.attackType==='magic'});
+    if(actual>0&&e.hp>0)sourceOnHit(this,e,target,lane,actual,sourceAttack.procs,damage);
     this._event(e.range > 1 ? 'projectile' : 'hit', target, `${Math.round(dealt)}`, { fromX: e.x, fromY: e.y, fromWorldX: e.worldX, fromWorldY: e.worldY, color: e.color });
     if (e.hp <= 0) return;
     if (!ability || type === 'crit' || this._random() > number(ability.chance, 1)) return;
@@ -774,11 +838,14 @@ export class Game {
     }
   }
   _hurt(target, damage, attacker, pure = false) {
-    if (target.hp <= 0 || damage <= 0) return;
-    let actual = damage;
-    if ((target.status.shield ?? 0) > 0 && !pure) { const absorbed = Math.min(actual, target.status.shield); target.status.shield -= absorbed; actual -= absorbed; }
+    if (target.hp <= 0 || damage <= 0) return 0;
+    const options=typeof pure==='object'?pure:{spell:!!pure},legacyPure=typeof pure==='boolean'&&pure;
+    let actual = modifyIncoming(this,target,damage,attacker,options);
+    if(actual<=0)return 0;
+    if ((target.status.shield ?? 0) > 0 && !legacyPure) { const absorbed = Math.min(actual, target.status.shield); target.status.shield -= absorbed; actual -= absorbed; }
     target.hp -= actual;
-    if (!pure && target.ability?.type === 'thorns' && attacker?.hp > 0 && attacker.range < 1.3) this._hurt(attacker, actual * number(target.ability.value, .15), target, true);
+    afterSourceDamage(this,target,actual,attacker,options);
+    if (!options.spell && target.ability?.type === 'thorns' && attacker?.hp > 0 && attacker.range < 1.3) this._hurt(attacker, actual * number(target.ability.value, .15), target, true);
     if (attacker?.ownerId !== undefined && attacker.ownerId !== null) { const p = this.state.players[attacker.ownerId]; if (p) p.stats.damage += actual; }
     if (target.hp <= 0 && target.ability?.type === 'revive' && !target.status.revived) {
       target.status.revived = true; target.hp = target.maxHp * clamp(number(target.ability.value, .35), .1, 1);
@@ -786,7 +853,11 @@ export class Game {
     }
     if (target.hp <= 0 && !target.status.deathCounted) {
       target.status.deathCounted = true;
+      this._sourceDeath(target,attacker);
       if (target.side === 'monster') {
+        const bountyBase=this.state.wave>=31?0:target.isSummon?number(target.sourceRawFields?.level,0):value(this._waveData(),['reward'],target.reward);
+        const bounty=target.status.sourceLeakMarker?Math.floor(bountyBase*(this.state.players[target.sourceLaneId]?.leakBountyFactor??0)):bountyBase;
+        target.reward=bounty;
         const ownerId = attacker?.ownerId ?? target.sourceLaneId;
         const p = this.state.players[ownerId];
         if (attacker?.isKing) {
@@ -798,7 +869,9 @@ export class Game {
       }
       this._event('death', target, target.side === 'monster' ? `+${target.reward}` : '阵亡', { color: target.color });
     }
+    return actual;
   }
+  _sourceDeath(target,killer){sourceDeath(this,target,killer);}
   _passiveAbility(e, lane, dt) {
     const a = e.ability; if (!a || e.abilityCd > 0) return;
     const type = a.type, radius = number(a.radius, 2.6), v = number(a.value, 12);
@@ -831,6 +904,7 @@ export class Game {
   _leak(e) {
     const source = this.state.players[e.sourceLaneId];
     if (!source || e.hp <= 0 || e.side !== 'monster' || e.status.leaked) return;
+    if(!e.isMerc&&!e.isSummon&&e.combatRawcode===(this._waveData().combatRawcode??this._waveData().sourceRawcode)&&this.state.wave<30&&![10,20].includes(this.state.wave)&&!e.isBoss){source.sourceLeaks=(source.sourceLeaks??0)+1;e.status.sourceLeakMarker=true;}
     source.stats.leaks++; source.roundLeaks = (source.roundLeaks ?? 0) + 1;
     this.state.metrics.leaked++; e.status.leaked = true;
     // Crossing the exit records a leak; it never changes physical coordinates.
@@ -872,7 +946,8 @@ export class Game {
   _updateKings(dt) {
     for (const k of this.state.kings) {
       if (k.hp <= 0) continue;
-      const position = kingWorld(k.team), auras = this._battleAuras?.[k.team] ?? [];
+      if(this.state.wave>=31&&k.movePath){const nav=k.movePath;while(nav.index<nav.path.length&&distance(this._kingPosition(k.team),nav.path[nav.index])<.03)nav.index++;if(nav.index<nav.path.length){const destination=nav.path[nav.index],from=this._kingPosition(k.team),delta=distance(from,destination),step=Math.min(delta,rule('kingMoveSpeed',250/3)/100*dt),point={x:from.x+(destination.x-from.x)/delta*step,y:from.y+(destination.y-from.y)/delta*step},next=constrainPoint(from,point,k.team,k.radius??.8);k.worldX=next.x;k.worldY=next.y;}else k.movePath=null;}
+      const position = this._kingPosition(k.team), auras = this._battleAuras?.[k.team] ?? [];
       const kingTarget = { ...k, ...position, side: 'defender' }, kingAuras = this._auraEffects(kingTarget, auras);
       k.hp = Math.min(k.maxHp, k.hp + (k.regen + kingAuras.healRate) * dt); k.attackCd -= dt;
       if (k.attackCd <= 0) {
@@ -886,7 +961,7 @@ export class Game {
           const dealt = k.attack * kingAuras.damageMultiplier * this._typeMultiplier(k.attackType ?? 'hero', target.armorType) * this._armorFactor(this._effectiveArmor(target, targetAuras.armor));
           this._hurt(target, dealt, { side: 'defender', team: k.team, isKing: true });
           this._event('kingAttack', target, `${Math.round(k.attack)}`, { fromWorldX: position.x, fromWorldY: position.y, color: k.team ? '#fb7185' : '#60a5fa' });
-          if (this.state.wave >= 7) for (const e of enemies.slice(1, 5)) if (distance(e, target) < 1.4) this._hurt(e, k.attack * kingAuras.damageMultiplier * .35 * this._typeMultiplier(k.attackType ?? 'hero', e.armorType) * this._armorFactor(this._effectiveArmor(e, this._auraEffects(e, auras).armor)), { side: 'defender', team: k.team, isKing: true });
+          if (RULES.webKingSplashEnabled===true && this.state.wave >= 7) for (const e of enemies.slice(1, 5)) if (distance(e, target) < 1.4) this._hurt(e, k.attack * kingAuras.damageMultiplier * .35 * this._typeMultiplier(k.attackType ?? 'hero', e.armorType) * this._armorFactor(this._effectiveArmor(e, this._auraEffects(e, auras).armor)), { side: 'defender', team: k.team, isKing: true });
         }
       }
       if (k.hp < k.maxHp * .16 && k.healCharges > 0) {
@@ -902,7 +977,7 @@ export class Game {
     }
   }
   _clearDead() {
-    for (const e of this.state.entities) if (e.expiresAt && e.expiresAt <= this.state.time) e.hp = 0;
+    for (const e of this.state.entities) if (e.expiresAt && e.expiresAt <= this.state.time) {e.hp = 0;e.status.sourceDeathHandled=true;}
     this.state.entities = this.state.entities.filter(e => e.hp > 0);
   }
   _endCombat() {
@@ -910,6 +985,7 @@ export class Game {
     const listedReward = RULES.waveRewards?.[s.wave - 1];
     const bonus = Number.isFinite(listedReward) ? listedReward * ([10, 20, 30].includes(s.wave) ? 2 : 1) : rule('incomeBase', 22) + s.wave * rule('incomePerWave', 8);
     for (const p of s.players) {
+      for(const b of p.buildings)if(b.temporaryForm){b.unitId=b.temporaryForm;b.temporaryForm=null;b.stimulatedWave=null;}
       const teamSize = s.players.filter(v => v.team === p.team).length;
       const kingShare = Math.floor((s.kingBountyPools?.[p.team] ?? 0) / Math.max(1, teamSize));
       const gold = p.income + bonus + kingShare; p.gold += gold; p.stats.goldEarned += gold;
@@ -920,18 +996,35 @@ export class Game {
       this._log('国王获得周期强化：护甲 +2，累计攻击速度 +10%。');
     }
     this._log(`第 ${s.wave} 波结束：发放永久收入、${bonus} 金币守护奖励与国王杀敌分红，阵亡军团将在下波复归。`);
-    if (s.wave >= WAVES.length) {
-      const ratios = s.kings.map(k => k.hp / k.maxHp);
-      const power = [0, 1].map(team => s.players.filter(p => p.team === team).reduce((sum, p) => sum + p.buildings.reduce((v, b) => v + (b.spent ?? this._cost(units[b.unitId])), 0) + (p.heroId ? this._cost(heroes[p.heroId]) : 0), 0));
-      s.winner = Math.abs(ratios[0] - ratios[1]) > 1e-7 ? (ratios[0] > ratios[1] ? 0 : 1) : power[0] === power[1] ? -1 : power[0] > power[1] ? 0 : 1;
-      s.phase = 'ended'; this._log('终焉波完成，按国王生命比例与总兵力判定胜负。'); return;
-    }
-    s.wave++; s.phase = 'build'; s.timer = this.buildDuration(s.wave); s.entities = [];
+    if(s.wave>=WAVES.length){this._log('末波继续战斗，胜负以国王倒下为准。');return;}
+    if([10,20].includes(s.wave)){s.phase='build';s.roundMode='arena-prep';s.timer=30;s.entities=[];this._log('竞技场准备30秒，随后双方军团交战。');return;}
+    s.wave++; s.roundMode='normal';s.phase = 'build'; s.timer = this.buildDuration(s.wave); s.entities = [];
     for (let i = 1; i < 8; i++) this._aiAct(s.players[i]);
   }
 
+  _startArena(){
+    const s=this.state;s.phase='combat';s.roundMode='arena';s.entities=[];s.timer=0;s.arenaRemaining=120;this._spawnQueue=[];this._roundTime=0;
+    for(const p of s.players)for(const b of p.buildings.filter(b=>!b.construction)){
+      const def=units[b.unitId];if(!def)continue;const point=laneToWorld(0,1.2+(p.id%4)*1.1+(b.col-2.5)*.12,p.team===0?5+(b.row/8):9-(b.row/8));
+      const e=this._entity(def,{team:p.team,side:`arena${p.team}`,battleTeam:0,laneId:0,sourceLaneId:p.id,ownerId:p.id,buildingId:b.id,isArena:true,worldX:point.x,worldY:point.y});
+      e.status.activated=true;e.acquisitionRange=12;e.nav={mode:'arena',path:[],index:0,distance:0};s.entities.push(e);
+    }
+    this._log(`第${s.wave}波竞技场开始，限时120秒；Web在同一场地模拟双方军团交战。`);
+  }
+  _endArena(alive){
+    const s=this.state,winner=alive[0]&&!alive[1]?0:alive[1]&&!alive[0]?1:-1,reward=s.wave*(winner===-1?5:10);
+    for(const p of s.players)if(winner===-1||p.team===winner){p.gold+=reward;p.stats.goldEarned+=reward;}
+    s.arenaResult={winner,reward,wave:s.wave};s.entities=[];s.phase='build';s.roundMode='arena-transition';s.timer=20;
+    this._log(`竞技场${winner===-1?'平局':winner===0?'蓝方获胜':'红方获胜'}，${winner===-1?'双方':'胜方'}每人奖励${reward}金币；20秒过渡后进入30秒准备。`);
+  }
+  _advanceContinuous(){
+    const s=this.state;if(s.wave>=35)return;const survivors=s.entities.filter(e=>e.hp>0),oldTime=this._roundTime,queue=this._spawnQueue.map(e=>({...e,at:Math.max(0,e.at-oldTime)}));
+    s.wave++;s.phase='build';this._startCombat();s.entities=[...survivors,...s.entities.filter(e=>e.side==='monster')];this._spawnQueue=[...queue,...this._spawnQueue].sort((a,b)=>a.at-b.at);
+    s.continuousRemaining=s.wave<35?50:null;this._log(`连续进攻：第${s.wave}波已加入战场，存活守军与残怪保留。`);
+  }
+
   _isFront(u) { return u && (['tank', 'frontline'].includes(u.role) || value(u, ['range'], 100) < 100); }
-  _hasArea(u) { return ['aoe','splash','cleave','chain','multishot','burn','stomp','poison_aura'].includes(u?.ability?.type); }
+  _hasArea(u) { return ['aoe','splash','cleave','chain','multishot','burn','stomp','poison_aura'].includes(u?.ability?.type)||compileSkills(u??{}).some(s=>['stomp','wave','knives','nova','breath','cluster','immolation','barrage','pulverize','phoenix_fire'].includes(s.kind))||['msplash','mbounce','artillery','aline','mline'].includes(u?.weapon1?.weapTp1); }
   _combatPower(u) {
     if (!u) return 0;
     const a = abilityOf(u), type = a?.type;
@@ -1005,7 +1098,7 @@ export class Game {
       const economy = this.economyStatus(p.id);
       if (p.workers + economy.worker.queued < Math.min(rule('maxWorkers', 10), 2 + Math.floor(this.state.wave / 2)) && economy.worker.canStart && p.gold > economy.worker.cost.gold + 80 && this._random() < .34) this.command('worker', { playerId: p.id });
       if (p.lumberLevel < this.state.wave && economy.lumber.canStart && p.wood > economy.lumber.cost.wood + 80 && p.gold > economy.lumber.cost.gold + 80 && this._random() < .24) this.command('lumber', { playerId: p.id });
-      if (!p.heroId && this.state.wave >= 5 && p.gold > 400) {
+      if (false && !p.heroId && this.state.wave >= 5 && p.gold > 400) {
         const preferred = p.buildings.filter(b=>this._isFront(units[b.unitId])).length >= p.buildings.length/2 ? 'aura_damage' : 'aura_armor';
         const h = HEROES.find(h=>h.ability?.type===preferred) ?? HEROES[0];
         if(h)this.command('hero',{playerId:p.id,heroId:h.id});
@@ -1022,7 +1115,7 @@ export class Game {
       const available = MERCENARIES.filter(m => value(m, ['unlock', 'unlockWave', 'wave', 'minWave'], 1) <= this.state.wave && this._woodCost(m) <= p.wood-defenseReserve && this.mercenaryStatus(m.id, p.id).stock > 0);
       const m = this._pick(available); if (m) this.command('merc', { playerId: p.id, mercId: m.id });
     }
-    if (this.state.phase === 'combat' && this._random() < .06) this.command('interfere', { playerId: p.id, laneId: this.state.entities.some(e => e.side === 'monster' && e.laneId === 8 + p.team) ? 8 + p.team : p.id });
+    if (RULES.interfereEnabled===true && this.state.phase === 'combat' && this._random() < .06) this.command('interfere', { playerId: p.id, laneId: this.state.entities.some(e => e.side === 'monster' && e.laneId === 8 + p.team) ? 8 + p.team : p.id });
   }
 
   snapshot() {
@@ -1032,24 +1125,36 @@ export class Game {
   restore(saved) {
     if (!saved || ![1, 2].includes(saved.version) || !saved.state?.players || saved.state.players.length !== 8 || saved.state.kings?.length !== 2) throw new Error('存档格式不匹配');
     if (saved.version === 2 && (saved.mapId !== MAP.id || saved.mapVersion !== MAP.version)) throw new Error('存档地图版本不匹配');
-    const data = copy(saved); this.options = data.options ?? this.options; this.state = data.state;
+    const revisionChanged=saved.state.dataRevision!==RULES.dataRevision;
+    const data = copy(saved); this.options = data.options ?? this.options; this.options.ggEnabled??=RULES.ggEnabled??true; this.state = data.state;
     this._rng = data.rng >>> 0; this._id = data.id ?? 0; this._spawnQueue = data.spawnQueue ?? [];
     this._aiTimer = data.aiTimer ?? 0; this._roundTime = data.roundTime ?? 0; this._settledLanes = data.settledLanes ?? []; this._overtime = data.overtime ?? false; this._warpTimer = data.warpTimer ?? 0; this._monsterPressure = data.monsterPressure;
     this._spatial = null; this._worldEntities = null; this._battleAuras = [[], []];
     for (const k of this.state.kings) {
-      k.armor ??= rule('kingArmor', 8); k.armorType ??= 'hero'; k.attackType ??= 'hero'; k.autoUpgradeCount ??= 0; k.healBlockedUntil ??= 0;
+      k.armor ??= rule('kingArmor', 8); k.armorType ??= 'hero'; k.attackType ??= 'hero'; k.autoUpgradeCount ??= 0; k.healBlockedUntil ??= 0;k.status??={};k.id??=`king-${k.team}`;k.side='defender';k.battleTeam=k.team;k.laneId=8+k.team;k.targetType='structure';k.traits=['mechanical'];k.isBuilding=true;
+    }
+    if(revisionChanged){
+      for(const k of this.state.kings){const ratio=k.maxHp>0?clamp(k.hp/k.maxHp,0,1):0;const hpUpgrades=Array.from({length:k.hpLevel??0},(_,i)=>RULES.kingHpUpgradeIncrements?.[i]??rule('kingHpPerUpgrade',450)).reduce((a,b)=>a+b,0);k.maxHp=rule('kingInitialHp',5000)+hpUpgrades;k.hp=k.maxHp*ratio;k.attack=rule('kingDamage',60)+(k.attackLevel??0)*rule('kingDamagePerUpgrade',10);k.regen=rule('kingRegen',3)+(k.regenLevel??0)*rule('kingRegenPerUpgrade',5);k.armor=rule('kingArmor',5)+(k.autoUpgradeCount??0)*rule('kingArmorPerFourWaves',2);}
+      const aliases=new Map(UNITS.filter(u=>!u.legacy&&u.sourceRawcode).map(u=>[u.sourceRawcode,u.id]));const alias=id=>{const def=units[id];return def?.legacy&&def.sourceRawcode&&aliases.has(def.sourceRawcode)?aliases.get(def.sourceRawcode):id;};
+      for(const p of this.state.players){p.roster=p.roster.map(alias);for(const b of p.buildings)b.unitId=alias(b.unitId);if(p.heroId||p.buildings.some(b=>units[b.unitId]?.legacy))this.state.legacyMatch=true;}
+      for(const e of this.state.entities){const id=alias(e.unitId),def=units[id];if(id!==e.unitId&&def){const ratio=e.maxHp>0?clamp(e.hp/e.maxHp,0,1):0;e.unitId=id;e.name=def.name;e.maxHp=def.hp;e.hp=def.hp*ratio;e.damage=def.damage;e.attackInterval=def.interval;e.range=def.range/100;e.moveSpeed=def.speed/100;e.armor=def.armor;e.attackType=def.attackType;e.armorType=def.armorType;e.ability=abilityOf(def)??null;attachSkills(e,def);}}
+      this.state.dataRevision=RULES.dataRevision;this.state.migrationNotice='旧存档已按文档迁移，原始存档已备份；无法映射的历史Web单位继续标记为兼容单位。';
     }
     this.state.kingBountyPools ??= [0, 0];
     for (const p of this.state.players) {
-      this._economyTasks(p); p.popUsed = this._population(p);
+      p.builderId??='builder_u00T';
+      if(p.workers>rule('maxWorkers',7)||p.lumberLevel>rule('maxLumberLevel',15)){p.workers=Math.min(p.workers,rule('maxWorkers',7));p.lumberLevel=Math.min(p.lumberLevel,rule('maxLumberLevel',15));this.state.migrationNotice='旧存档已按文档改为7小精灵、15级科技；原进度已保留备份。';}
+      const tasks=this._economyTasks(p);tasks.workerQueue=tasks.workerQueue.slice(0,Math.max(0,rule('maxWorkers',7)-p.workers));if(tasks.lumberTask?.targetLevel>rule('maxLumberLevel',15))tasks.lumberTask=null;
+      p.popUsed = this._population(p);
       for (const m of MERCENARIES) this._mercenarySlot(p, m);
     }
+    for(const e of this.state.entities){if(!e.skillSpecs){const def=units[e.unitId]??mercs[e.unitId]??WORKBOOK_UNIT_TEMPLATES[e.combatRawcode];if(def)attachSkills(e,def);}e.skillStates??={};e.buffs??=[];}
     if (saved.version === 1) {
       this.state.map = { id: MAP.id, version: MAP.version, topology: '2x2-crossbar-stem' };
       for (const e of this.state.entities) {
         this._ensureWorld(e);
         if (e.side === 'monster') {
-          if (e.status.leaked) { e.status.enteredStem = Math.abs(e.worldX - kingWorld(e.battleTeam).x) <= 2 && e.worldY >= 16; e.nav = { mode: 'monster', routeId: e.sourceLaneId, path: navigationPath(worldPoint(e), kingWorld(e.battleTeam), e.battleTeam, e.radius), index: 1, distance: 0 }; }
+          if (e.status.leaked) { e.status.enteredStem = Math.abs(e.worldX - kingWorld(e.battleTeam).x) <= 2 && e.worldY >= 16; e.nav = { mode: 'monster', routeId: e.sourceLaneId, path: navigationPath(worldPoint(e), this._kingPosition(e.battleTeam), e.battleTeam, e.radius), index: 1, distance: 0 }; }
           else this._planMonsterRoute(e);
         } else if (e.laneId >= 8) this._planSupport(e);
         else this._planReturn(e);

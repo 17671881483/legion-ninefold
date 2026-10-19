@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "军团战争九倍怪物模式的独立浏览器复刻",
+  "description": "军团战争5.0dJF工作簿驱动的独立浏览器模拟",
   "scripts": {
-    "test": "node tests/reference.test.mjs && node tests/layout.test.mjs && node tests/engine.test.mjs"
+    "test": "node tests/reference.test.mjs && node tests/workbook.test.mjs && node tests/layout.test.mjs && node tests/engine.test.mjs && node tests/skills.test.mjs && node tests/skills-review.test.mjs"
   },
   "engines": {
     "node": ">=18"

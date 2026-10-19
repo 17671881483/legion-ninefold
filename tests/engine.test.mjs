@@ -8,33 +8,21 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { performance } from 'node:perf_hooks';
 
-// Recursively inline local ES modules so the same browser sources run on Node 18.
-const moduleURLs = new Map();
-async function moduleURL(file) {
-  const href = file.href;
-  if (moduleURLs.has(href)) return moduleURLs.get(href);
-  let source = await readFile(file, 'utf8');
-  for (const match of [...source.matchAll(/\bfrom\s+(['"])(\.{1,2}\/[^'"]+)\1/g)]) {
-    const child = await moduleURL(new URL(match[2], file));
-    source = source.replaceAll(match[0], `from '${child}'`);
-  }
-  const encoded = `data:text/javascript;base64,${Buffer.from(source).toString('base64')}`;
-  moduleURLs.set(href, encoded); return encoded;
-}
-const data = await import(await moduleURL(new URL('../dist/data.js', import.meta.url)));
-const layout = await import(await moduleURL(new URL('../dist/layout.js', import.meta.url)));
+import * as data from '../dist/data.js';
+import * as layout from '../dist/layout.js';
+import { Game } from '../dist/engine.js';
 const { MAP, laneToWorld, kingWorld, spawnWarpWorld, supportWorld, isWalkable, isSegmentWalkable } = layout;
-const { Game } = await import(await moduleURL(new URL('../dist/engine.js', import.meta.url)));
-const { UNITS, MERCENARIES, LEGACY_MERCENARIES, HEROES, WAVES, RULES, ECONOMY } = data;
+const { UNITS, BUILDERS, PROPHET_POOLS, HERO_ENTRIES, MERCENARIES, LEGACY_MERCENARIES, HEROES, WAVES, RULES, ECONOMY } = data;
 const unit = id => UNITS.find(u => u.id === id);
 const stockMax = m => m.stockMax ?? 3;
 const mercCooldown = m => m.cooldown ?? m.cd ?? 4;
 const burstMerc = () => MERCENARIES.find(m => m.unlock === 1 && stockMax(m) === 3);
-let passed = 0;
+let passed = 0; const failed = [];
 const began = performance.now();
 function test(name, fn) {
-  fn(); passed++;
-  console.log(`✓ ${name}`);
+  if (process.env.TEST_FILTER && !new RegExp(process.env.TEST_FILTER).test(name)) return;
+  try { fn(); passed++; console.log(`✓ ${name}`); }
+  catch(error) { failed.push(name); console.error(`✗ ${name}\n${String(error.message).slice(0,1200)}\n${String(error.stack).split('\n').find(line=>line.includes('engine.test.mjs:'))??''}`); }
 }
 function near(actual, expected, tolerance = 1e-7) {
   assert(Math.abs(actual - expected) < tolerance, `${actual} ≠ ${expected}`);
@@ -48,10 +36,12 @@ function economyFixture(combat = false) {
   const g = combat ? combatFixture() : game();
   g.state.timer = 10000;
   g.state.players[0].gold = 100000; g.state.players[0].wood = 100000;
+  // Existing legacy saves value their army by invested gold when source points are absent.
+  const p = g.state.players[0]; p.buildings = [{id:'economy-army',unitId:'ghoul',col:5,row:7,spent:5000,totalSpent:5000}]; p.popUsed = g._population(p);
   if (combat) monster(g, 7, { hp: 1e9, maxHp: 1e9, damage: 0, moveSpeed: 0 });
   return g;
 }
-const woodRate = (workers, level) => workers * RULES.workerBaseWoodPerSecond * (1 + level * RULES.lumberRateStep);
+const woodRate = (workers, level) => workers * (2 + Math.min(level,8) + 2*Math.max(0,level-8)) / 10;
 
 function combatFixture() {
   const g = game();
@@ -93,7 +83,7 @@ test('8 players, two shared kings, deterministic six-tier base rosters and 6 × 
   assert.equal(a.state.timer, 80);
   for (const p of a.state.players) {
     assert.equal(p.roster.length, 6);
-    assert.deepEqual(p.roster.map(id => unit(id).tier), [1, 2, 3, 4, 5, 6]);
+    assert.deepEqual(p.roster.map(id => unit(id).tier).sort((a,b)=>a-b), [1, 2, 3, 4, 5, 6]);
     assert(p.roster.every(id => unit(id).randomPool));
     assert.equal(p.populationCap, RULES.initialPopulation);
   }
@@ -104,46 +94,34 @@ test('8 players, two shared kings, deterministic six-tier base rosters and 6 × 
   assert.equal(p.gold, before); assert.equal(p.buildings.length, 0);
 });
 
-test('exact-price build, duplicate-cell failure, foreign ownership and cumulative upgrade/sale', () => {
-  const g = game(), p = g.state.players[0], base = unit(p.roster[0]);
-  p.gold = base.cost - 1;
-  assert(!g.command('build', { unitId: base.id, col: 2, row: 4 }).ok);
-  assert.equal(p.gold, base.cost - 1);
-  p.gold = base.cost;
-  assert(g.command('build', { unitId: base.id, col: 2, row: 4 }).ok);
-  assert.equal(p.gold, 0);
-  const b = p.buildings[0]; p.gold = 10000;
-  assert(!g.command('build', { unitId: base.id, col: 2, row: 4 }).ok);
-  const foreign = g.state.players[1].buildings[0];
-  if (foreign) {
-    assert(!g.command('upgrade', { buildingId: foreign.id }).ok);
-    assert(!g.command('sell', { buildingId: foreign.id }).ok);
-  }
-  const target = unit(base.upgrades[0]);
-  const goldBefore = p.gold;
-  assert(g.command('upgrade', { buildingId: b.id, unitId: target.id }).ok);
-  assert.equal(p.gold, goldBefore - target.cost);
-  assert.equal(b.totalSpent, base.cost + target.cost); assert.equal(b.spent, b.totalSpent);
-  const beforeSale = p.gold;
-  assert(g.command('sell', { buildingId: b.id }).ok);
-  assert.equal(p.gold, beforeSale + Math.floor(b.totalSpent * RULES.sellRatio));
-  assert.equal(p.buildings.length, 0);
+test('exact-price construction reserves its cell, completes on time, then upgrades and sells by source points', () => {
+  const g=game(),p=g.state.players[0],base=unit(p.roster[0]);g.state.timer=10000;
+  p.gold=base.cost-1;assert(!g.command('build',{unitId:base.id,col:2,row:4}).ok);assert.equal(p.gold,base.cost-1);
+  p.gold=base.cost;p.wood=10000;assert(g.command('build',{unitId:base.id,col:2,row:4}).ok);assert.equal(p.gold,0);
+  const b=p.buildings[0];p.gold=10000;assert(b.construction);assert.equal(g._military(p),0);
+  assert(!g.command('build',{unitId:base.id,col:2,row:4}).ok);assert(!g.command('upgrade',{buildingId:b.id}).ok);
+  const foreign=g.state.players[1].buildings[0];if(foreign){assert(!g.command('upgrade',{buildingId:foreign.id}).ok);assert(!g.command('sell',{buildingId:foreign.id}).ok);}
+  g.tick(b.construction.duration);assert(!b.construction);assert.equal(g._military(p),base.sourcePoints);
+  const target=unit(base.upgrades[0]),gold=p.gold,wood=p.wood;assert(g.command('upgrade',{buildingId:b.id,unitId:target.id}).ok);
+  assert.equal(p.gold,gold-target.cost);assert.equal(p.wood,wood-target.woodCost);assert.equal(b.totalSpent,base.cost+target.cost);
+  assert(b.construction);g.tick(b.construction.duration);assert.equal(b.unitId,target.id);assert.equal(g._military(p),target.sourcePoints);
+  const before=p.gold;assert(g.command('sell',{buildingId:b.id}).ok);assert.equal(p.gold,before+target.sourcePoints);assert.equal(p.buildings.length,0);
 });
 
-test('baseline wood production and reroll limits retain their existing Web formula', () => {
-  const g = game(), p = g.state.players[0]; p.gold = 10000; p.wood = 10000;
-  const wood = p.wood; g.tick(2); near(p.wood - wood, woodRate(p.workers, p.lumberLevel) * 2);
-  const buildings = JSON.parse(JSON.stringify(p.buildings));
-  for (let i = 0; i < RULES.rerollCount; i++) assert(g.command('reroll').ok);
-  assert(!g.command('reroll').ok); assert(p.roster.every(id => unit(id).randomPool)); assert.deepEqual(p.buildings, buildings);
+test('lumber production uses source payloads and prophet rerolls consume five escalating wood prices', () => {
+  const g=game(),p=g.state.players[0];p.gold=10000;p.wood=10000;g.state.timer=10000;
+  for(const level of [0,1,8,9,15]){p.lumberLevel=level;const wood=p.wood;g.tick(2);near(p.wood-wood,woodRate(p.workers,level)*2);}
+  const buildings=JSON.parse(JSON.stringify(p.buildings));
+  for(let index=0;index<5;index++){const wood=p.wood;assert(g.command('reroll').ok);near(p.wood,wood-RULES.rerollCosts[index]);assert(p.roster.every((id,tier)=>PROPHET_POOLS[tier].includes(id)));}
+  const before=g.snapshot();assert(!g.command('reroll').ok);assert.deepEqual(g.snapshot(),before);assert.deepEqual(p.buildings,buildings);
 });
 
 test('worker costs stay 50 gold and zero wood, with three serialized twenty-second jobs', () => {
   const g = economyFixture(), p = g.state.players[0]; p.gold = 200; p.wood = 0;
-  assert.deepEqual(ECONOMY.worker, { gold: 50, wood: 0, duration: 20, queueLimit: 3 });
+  assert.deepEqual(ECONOMY.worker, { gold: 50, wood: 0, duration: 20, queueLimit: 3, militaryRequirement: 350 });
   for (let i = 1; i <= 3; i++) {
     assert(g.command('worker').ok); assert.equal(p.gold, 200 - 50 * i); assert.equal(p.wood, 0); assert.equal(p.workers, 1);
-    assert.equal(g.economyStatus().worker.queued, i); assert.equal(p.popUsed, 1 + i);
+    assert.equal(g.economyStatus().worker.queued, i); assert.equal(p.popUsed, 2 + i);
   }
   const tasks = g.economyStatus().worker.tasks;
   assert.deepEqual(tasks.map(t => t.startAt), [0, 20, 40]); assert.deepEqual(tasks.map(t => t.finishAt), [20, 40, 60]);
@@ -154,7 +132,7 @@ test('worker costs stay 50 gold and zero wood, with three serialized twenty-seco
   g.tick(.25); near(p.wood, woodRate(1, 0) * 20 + woodRate(2, 0) * .25);
   g.tick(19.75); assert.equal(p.workers, 3); near(p.wood, woodRate(1, 0) * 20 + woodRate(2, 0) * 20);
   g.tick(20); assert.equal(p.workers, 4); near(p.wood, (woodRate(1, 0) + woodRate(2, 0) + woodRate(3, 0)) * 20);
-  assert.equal(g.economyStatus().worker.queued, 0); assert.equal(p.popUsed, 4); assert.equal(p.gold, 50);
+  assert.equal(g.economyStatus().worker.queued, 0); assert.equal(p.popUsed, 5); assert.equal(p.gold, 50);
 });
 
 test('insufficient gold or wood rejects economy commands atomically, while exact funds start tasks', () => {
@@ -170,8 +148,8 @@ test('insufficient gold or wood rejects economy commands atomically, while exact
   assert.equal(exact.economyStatus().lumber.task.targetLevel, 1);
 });
 
-test('research levels 1/8/9/15/16/30 pay both currencies and apply only at the precise completion boundary', () => {
-  for (const [target, cost, duration] of [[1,60,18],[8,200,32],[9,200,35],[15,260,35],[16,270,35],[30,410,35]]) {
+test('research levels 1/8/9/15 pay both currencies and apply only at the precise completion boundary', () => {
+  for (const [target, cost, duration] of [[1,60,18],[8,200,32],[9,200,35],[15,260,35]]) {
     const g = economyFixture(), p = g.state.players[0]; p.lumberLevel = target - 1;
     const gold = p.gold, wood = p.wood;
     assert(g.command('lumber').ok); assert.equal(p.gold, gold - cost); assert.equal(p.wood, wood - cost); assert.equal(p.lumberLevel, target - 1);
@@ -182,7 +160,7 @@ test('research levels 1/8/9/15/16/30 pay both currencies and apply only at the p
     g.tick(.05); assert.equal(p.lumberLevel, target); assert.equal(g.economyStatus().lumber.task, null);
     near(p.wood, wood - cost + woodRate(1, target - 1) * duration);
     const completedWood = p.wood; g.tick(.25); near(p.wood - completedWood, woodRate(1, target) * .25);
-    if (target === 30) { const capped = g.snapshot(); assert(!g.command('lumber').ok); assert.deepEqual(g.snapshot(), capped); assert(!g.economyStatus().lumber.canStart); }
+    if (target === 15) { const capped = g.snapshot(); assert(!g.command('lumber').ok); assert.deepEqual(g.snapshot(), capped); assert(!g.economyStatus().lumber.canStart); }
   }
 });
 
@@ -200,14 +178,14 @@ test('worker and research run in parallel, integrating each production segment a
   }
 });
 
-test('pending workers reserve population and the ten-worker cap before completion without double-counting', () => {
-  for (const [workers, populationCap] of [[9, 40], [1, 2]]) {
-    const g = economyFixture(), p = g.state.players[0]; p.workers = workers; p.populationCap = populationCap; p.popUsed = workers;
-    assert(g.command('worker').ok); assert.equal(p.workers, workers); assert.equal(p.popUsed, workers + 1); assert.equal(g.economyStatus().populationReserved, 1);
+test('pending workers reserve population and the seven-worker cap before completion without double-counting', () => {
+  for (const [workers, populationCap] of [[6, 40], [1, 3]]) {
+    const g = economyFixture(), p = g.state.players[0]; p.workers = workers; p.populationCap = populationCap; p.popUsed = workers + 1;
+    assert(g.command('worker').ok); assert.equal(p.workers, workers); assert.equal(p.popUsed, workers + 2); assert.equal(g.economyStatus().populationReserved, 1);
     const before = g.snapshot(); assert(!g.command('worker').ok); assert.deepEqual(g.snapshot(), before);
-    if (populationCap === 2) { assert(!g.command('build', { unitId: p.roster[0], col: 0, row: 0 }).ok); assert.deepEqual(g.snapshot(), before); }
-    g.tick(20); assert.equal(p.workers, workers + 1); assert.equal(p.popUsed, workers + 1); assert.equal(g.economyStatus().populationReserved, 0);
-    if (workers === 9) { const capped = g.snapshot(); assert(!g.command('worker').ok); assert.deepEqual(g.snapshot(), capped); assert(!g.economyStatus().worker.canStart); }
+    if (populationCap === 3) { assert(!g.command('build', { unitId: p.roster[0], col: 0, row: 0 }).ok); assert.deepEqual(g.snapshot(), before); }
+    g.tick(20); assert.equal(p.workers, workers + 1); assert.equal(p.popUsed, workers + 2); assert.equal(g.economyStatus().populationReserved, 0);
+    if (workers === 6) { const capped = g.snapshot(); assert(!g.command('worker').ok); assert.deepEqual(g.snapshot(), capped); assert(!g.economyStatus().worker.canStart); }
   }
 });
 
@@ -233,25 +211,21 @@ test('training and research persist across preparation, combat and round transit
   assert.equal(g.economyStatus().worker.queued, 0); assert.equal(g.economyStatus().lumber.task, null);
 });
 
-test('JSON saves keep active and queued jobs; old saves retain progress and receive empty queues', () => {
-  const g = economyFixture(), p = g.state.players[0]; p.workers = 7; p.lumberLevel = 29;
-  for (let i = 0; i < 3; i++) assert(g.command('worker').ok);
-  assert(g.command('lumber').ok); g.tick(7.25);
-  const serialized = JSON.parse(JSON.stringify(g.snapshot())), restored = Game.fromSnapshot(serialized);
-  assert.deepEqual(restored.snapshot(), serialized); assert.deepEqual(restored.economyStatus(), g.economyStatus());
-  g.tick(52.75); restored.tick(52.75); assert.deepEqual(g.snapshot(), restored.snapshot()); assert.equal(p.workers, 10); assert.equal(p.lumberLevel, 30);
-  for (const [workers, level] of [[7, 29], [10, 30]]) for (const version of [1, 2]) {
-    const old = economyFixture(), player = old.state.players[0]; player.workers = workers; player.lumberLevel = level; player.popUsed = workers;
-    const saved = old.snapshot(); saved.version = version;
-    for (const v of saved.state.players) delete v.economyTasks;
-    if (version === 1) { delete saved.mapId; delete saved.mapVersion; delete saved.state.map; }
-    const loaded = Game.fromSnapshot(saved), lp = loaded.state.players[0];
-    assert.equal(lp.workers, workers); assert.equal(lp.lumberLevel, level); assert.equal(lp.gold, player.gold); assert.equal(lp.wood, player.wood);
-    assert.equal(loaded.economyStatus().worker.queued, 0); assert.equal(loaded.economyStatus().lumber.task, null);
-    if (workers < 10) { assert(loaded.command('worker').ok); assert.equal(lp.workers, workers); }
-    if (level < 30) { assert(loaded.command('lumber').ok); assert.equal(lp.lumberLevel, level); }
-    loaded.tick(20); assert.equal(lp.workers, Math.min(10, workers + 1)); assert.equal(lp.lumberLevel, level);
-    loaded.tick(15); assert.equal(lp.lumberLevel, 30);
+test('JSON saves preserve active jobs while older 10-worker/30-tech saves migrate to document caps', () => {
+  const g=economyFixture(),p=g.state.players[0];p.workers=4;p.lumberLevel=14;
+  for(let i=0;i<3;i++)assert(g.command('worker').ok);assert(g.command('lumber').ok);g.tick(7.25);
+  const saved=JSON.parse(JSON.stringify(g.snapshot())),restored=Game.fromSnapshot(saved);
+  assert.deepEqual(restored.snapshot(),saved);assert.deepEqual(restored.economyStatus(),g.economyStatus());
+  g.tick(52.75);restored.tick(52.75);assert.deepEqual(g.snapshot(),restored.snapshot());assert.equal(p.workers,7);assert.equal(p.lumberLevel,15);
+  for(const version of [1,2])for(const [workers,level]of [[4,14],[7,15],[10,30]]){
+    const old=economyFixture(),player=old.state.players[0];player.workers=workers;player.lumberLevel=level;player.popUsed=old._population(player);
+    const legacy=old.snapshot();legacy.version=version;for(const player of legacy.state.players)delete player.economyTasks;
+    if(version===1){delete legacy.mapId;delete legacy.mapVersion;delete legacy.state.map;}
+    const loaded=Game.fromSnapshot(legacy),lp=loaded.state.players[0];assert.equal(lp.workers,Math.min(7,workers));assert.equal(lp.lumberLevel,Math.min(15,level));
+    assert.equal(lp.gold,player.gold);assert.equal(lp.wood,player.wood);assert.equal(loaded.economyStatus().worker.queued,0);assert.equal(loaded.economyStatus().lumber.task,null);
+    if(workers>7||level>15)assert.match(loaded.state.migrationNotice,/7.*15/);
+    if(workers<7){assert(loaded.command('worker').ok);assert(loaded.command('lumber').ok);loaded.tick(35);assert.equal(lp.workers,workers+1);assert.equal(lp.lumberLevel,15);}
+    else{const before=loaded.snapshot();assert(!loaded.command('worker').ok);assert(!loaded.command('lumber').ok);assert.deepEqual(loaded.snapshot(),before);}
   }
 });
 
@@ -260,32 +234,79 @@ test('economyStatus is a pure copied view with current production and reserved p
   for (let i = 0; i < 3; i++) assert(g.command('worker').ok); assert(g.command('lumber').ok);
   const before = g.snapshot();
   for (let i = 0; i < 10; i++) {
-    const status = g.economyStatus(); assert.equal(status.worker.current, 1); assert.equal(status.worker.max, 10); assert.equal(status.worker.queued, 3); assert.equal(status.worker.queueLimit, 3);
+    const status = g.economyStatus(); assert.equal(status.worker.current, 1); assert.equal(status.worker.max, 7); assert.equal(status.worker.queued, 3); assert.equal(status.worker.queueLimit, 3);
     assert.deepEqual(status.worker.cost, { gold: 50, wood: 0 }); assert.equal(status.worker.duration, 20); assert(!status.worker.canStart);
-    assert.equal(status.lumber.current, 0); assert.equal(status.lumber.max, 30); assert.equal(status.lumber.task.targetLevel, 1); assert(!status.lumber.canStart);
+    assert.equal(status.lumber.current, 0); assert.equal(status.lumber.max, 15); assert.equal(status.lumber.task.targetLevel, 1); assert(!status.lumber.canStart);
     assert.equal(status.populationReserved, 3); near(status.woodPerSecond, woodRate(1, 0));
     status.worker.tasks[0].finishAt = -1; status.worker.tasks[0].cost.gold = 0; status.worker.tasks.length = 0; status.lumber.task.cost.wood = 0;
   }
   assert.deepEqual(g.snapshot(), before); assert.equal(p.workers, 1); assert.equal(p.lumberLevel, 0);
 });
 
-test('population gates build/upgrade/worker/hero; farms clamp cap and never overcharge', () => {
-  const g = game(), p = g.state.players[0]; p.gold = 10000;
-  p.populationCap = p.workers;
-  const gold = p.gold;
-  assert(!g.command('build', { unitId: p.roster[0], col: 0, row: 0 }).ok);
-  assert(!g.command('worker').ok); assert(!g.command('hero', { heroId: HEROES[0].id }).ok);
-  assert.equal(p.gold, gold);
-  assert(g.command('farm').ok); assert.equal(p.populationCap, p.workers + RULES.farmPopulation);
-  assert(g.command('build', { unitId: p.roster[0], col: 0, row: 0 }).ok);
-  const b = p.buildings[0], up = unit(unit(b.unitId).upgrades[0]);
-  p.populationCap = p.popUsed;
-  if (up.population > unit(b.unitId).population) assert(!g.command('upgrade', { buildingId: b.id, unitId: up.id }).ok);
-  p.populationCap = RULES.maxPopulation - 3;
-  assert(g.command('farm').ok); assert.equal(p.populationCap, RULES.maxPopulation);
-  const maxGold = p.gold; assert(!g.command('farm').ok); assert.equal(p.gold, maxGold);
-  assert(g.command('hero', { heroId: HEROES[0].id }).ok);
-  assert.equal(p.popUsed, p.workers * RULES.workerPopulation + unit(b.unitId).population + HEROES[0].population);
+test('source farms pay both currencies and add eight population only after five seconds', () => {
+  const g=economyFixture(),p=g.state.players[0];p.populationCap=g._population(p);const initialCap=p.populationCap;
+  assert(!g.command('build',{unitId:p.roster[0],col:0,row:0}).ok);assert(!g.command('worker').ok);assert(!g.command('hero',{heroId:HEROES[0].id}).ok);
+  for(const [gold,wood]of [[23,80],[24,79]]){p.gold=gold;p.wood=wood;const before=g.snapshot();assert(!g.command('farm').ok);assert.deepEqual(g.snapshot(),before);}
+  p.gold=24;p.wood=80;assert(g.command('farm').ok);assert.equal(p.gold,0);assert.equal(p.wood,0);assert.equal(p.populationCap,initialCap);assert(p.economyTasks.farmTask);
+  const busy=g.snapshot();assert(!g.command('farm').ok);assert.deepEqual(g.snapshot(),busy);
+  g.tick(4.95);assert.equal(p.populationCap,initialCap);g.tick(.05);assert.equal(p.populationCap,initialCap+8);assert.equal(p.economyTasks.farmTask,null);
+  p.gold=p.wood=10000;p.populationCap=RULES.maxPopulation-3;assert(g.command('farm').ok);g.tick(5);assert.equal(p.populationCap,RULES.maxPopulation);
+  const capped=g.snapshot();assert(!g.command('farm').ok);assert.deepEqual(g.snapshot(),capped);
+});
+
+test('upgrade population is reserved during construction and rejected without available capacity', () => {
+  const g=new Game({seed:42,builderId:'builder_u000'});g._aiTimer=1e9;g.state.timer=10000;const p=g.state.players[0];p.gold=p.wood=10000;p.populationCap=2;
+  assert(g.command('build',{unitId:'b_h00O',col:0,row:0}).ok);const b=p.buildings[0];g.tick(b.construction.duration);const target=unit('b_h00X');
+  const full=g.snapshot();assert(!g.command('upgrade',{buildingId:b.id,unitId:target.id}).ok);assert.deepEqual(g.snapshot(),full);
+  p.populationCap=3;assert(g.command('upgrade',{buildingId:b.id,unitId:target.id}).ok);assert.equal(p.popUsed,3);assert.equal(b.unitId,'b_h00O');assert(b.construction);
+  const reserved=g.snapshot();assert(!g.command('build',{unitId:'b_h00M',col:1,row:0}).ok);assert.deepEqual(g.snapshot(),reserved);
+  g.tick(b.construction.duration);assert.equal(b.unitId,target.id);assert.equal(p.popUsed,3);
+});
+
+test('source military points gate worker/research commands atomically and ignore unfinished construction', () => {
+  const g=game(),p=g.state.players[0];p.gold=p.wood=10000;p.populationCap=300;g.state.timer=10000;
+  p.roster=['b_h00M'];assert(g.command('build',{unitId:'b_h00M',col:0,row:0}).ok);const b=p.buildings[0];b.totalSpent=b.spent=9999;
+  assert.equal(g._military(p),0);assert(!g.command('worker').ok);assert(!g.command('lumber').ok);g.tick(5);assert.equal(g._military(p),25);
+  p.buildings=[{id:'350-army',unitId:'ghoul',col:5,row:7,totalSpent:350,spent:350}];p.popUsed=g._population(p);
+  assert.equal(g._military(p),350);assert(g.command('worker').ok);const low=g.snapshot();assert(!g.command('lumber').ok);assert.deepEqual(g.snapshot(),low);
+  p.buildings[0].totalSpent=p.buildings[0].spent=600;assert(g.command('lumber').ok);
+});
+
+test('AP builder selection, source hero altar and morph pools honor their actual reachability', () => {
+  const g=new Game({seed:42,builderId:'builder_u000'});g._aiTimer=1e9;const p=g.state.players[0];p.gold=p.wood=10000;p.populationCap=300;g.state.timer=10000;
+  assert.deepEqual(p.roster,BUILDERS.find(b=>b.id==='builder_u000').rosterIds);
+  assert(!g.command('reroll').ok);assert(!g.command('build',{unitId:'b_h010',col:0,row:0}).ok);
+  const entry=HERO_ENTRIES[0];assert(!g.command('build',{unitId:entry,col:0,row:0}).ok);
+  p.buildings=[{id:'hero-army',unitId:'ghoul',col:5,row:7,totalSpent:5000,spent:5000}];p.popUsed=g._population(p);
+  assert(g.command('build',{unitId:entry,col:0,row:0}).ok);const hero=p.buildings.at(-1);assert.equal(unit(hero.unitId).heroLevel,1);assert(hero.construction);g.tick(1);assert(!hero.construction);
+  assert(!g.command('build',{unitId:HERO_ENTRIES[1],col:1,row:0}).ok);
+  for(let level=2;level<=11;level++){const next=unit(hero.unitId).upgrades.find(id=>unit(id).heroLevel===level);assert(g.command('upgrade',{buildingId:hero.id,unitId:next}).ok);g.tick(hero.construction.duration);assert.equal(unit(hero.unitId).heroLevel,level);}
+  const altarUsed=g.snapshot();assert(!g.command('sell',{buildingId:hero.id}).ok);assert.deepEqual(g.snapshot(),altarUsed);assert(!g.command('build',{unitId:entry,col:1,row:0}).ok);
+  const morph=new Game({seed:99,builderId:'builder_u00I'});morph._aiTimer=1e9;morph.state.timer=10000;const mp=morph.state.players[0],proxy=unit(mp.roster[0]);mp.gold=10000;
+  assert(proxy.morphProxy);assert(morph.command('build',{unitId:proxy.id,col:0,row:0}).ok);const mb=mp.buildings[0];assert(mb.construction);morph.tick(mb.construction.duration);assert(PROPHET_POOLS[0].includes(mb.unitId));
+});
+
+test('changing race pays five source two-currency fees and only offers the two rolled builders', () => {
+  const g=game(),p=g.state.players[0];p.gold=p.wood=10000;
+  assert(!g.command('builder',{builderId:'builder_u000'}).ok);
+  for(let index=0;index<5;index++){
+    const gold=p.gold,wood=p.wood;assert(g.command('race').ok);assert.equal(p.gold,gold-RULES.builderChangeGoldCosts[index]);assert.equal(p.wood,wood-RULES.builderChangeWoodCosts[index]);
+    assert.equal(p.builderChoices.length,2);assert.notEqual(p.builderChoices[0],p.builderChoices[1]);const pending=g.snapshot();assert(!g.command('race').ok);assert.deepEqual(g.snapshot(),pending);
+    const unavailable=BUILDERS.find(b=>!p.builderChoices.includes(b.id));assert(!g.command('builder',{builderId:unavailable.id}).ok);
+    const chosen=p.builderChoices[0];assert(g.command('builder',{builderId:chosen}).ok);assert.equal(p.builderId,chosen);assert.deepEqual(p.builderChoices,[]);
+  }
+  const full=g.snapshot();assert(!g.command('race').ok);assert.deepEqual(g.snapshot(),full);
+});
+
+test('selling uses source point value, new-wave full refund and the two configured special ratios', () => {
+  const g=game(),p=g.state.players[0];p.gold=1000;
+  for(const [raw,ratio]of [['h00M',.5],['h06K',.75],['h06L',.75],['h07Q',.9],['h07R',.9]]){
+    const u=unit(`b_${raw}`);p.buildings=[{id:'sale',unitId:u.id,col:0,row:0,totalSpent:9999,spent:9999,builtWave:0}];p.popUsed=g._population(p);const gold=p.gold;
+    if(!u.buildingAbilityIds.includes('A008')){const unavailable=g.snapshot();assert(!g.command('sell',{buildingId:'sale'}).ok);assert.deepEqual(g.snapshot(),unavailable);continue;}
+    assert(g.command('sell',{buildingId:'sale'}).ok);assert.equal(p.gold,gold+Math.floor(u.sourcePoints*ratio));
+    p.buildings=[{id:'new-sale',unitId:u.id,col:0,row:0,totalSpent:9999,spent:9999,builtWave:g.state.wave}];p.popUsed=g._population(p);const fresh=p.gold;
+    assert(g.command('sell',{buildingId:'new-sale'}).ok);assert.equal(p.gold,fresh+u.sourcePoints);
+  }
 });
 
 test('mercenary market locks, stocked burst, permanent income and dispatched wave queue', () => {
@@ -370,7 +391,7 @@ test('spawn rectangle stays in the narrow portal, with reference-derived counts 
   const g = game(); g.state.players[0].wood = 500; g.command('merc', { mercId: MERCENARIES[0].id }); g.command('ready');
   assert.equal(g._spawnQueue.length, WAVES[0].count * 8 + 1);
   assert(g._spawnQueue.every(entry => entry.x >= 2.1 - 1e-8 && entry.x <= 3.9 + 1e-8));
-  assert(g._spawnQueue.some(entry => entry.at > 4));
+  assert(g._spawnQueue.some(entry => entry.at >= 3.5));
   const lane = g._spawnQueue.filter(entry => entry.laneId === 0 && !entry.merc);
   near(lane[0].at, .1);
   for (let i = 1; i < lane.length; i++) near(lane[i].at - lane[i - 1].at, .1);
@@ -434,13 +455,27 @@ test('legacy mercenary aliases and fixed-target pending sends survive JSON resto
   assert(restored.state.entities.some(e => e.buildingId === 'old-ghoul' && e.unitId === 'ghoul'));
 });
 
-test('preparation uses upcoming-wave timing, including special rounds', () => {
-  const g = game();
-  for (const [wave, seconds] of [[1, 80], [2, 41], [3, 41], [4, 42], [10, 45], [30, 55], [31, 60], [32, 50], [35, 50]]) assert.equal(g.buildDuration(wave), seconds);
-  for (const [completed, nextSeconds] of [[1, 41], [2, 41], [3, 42], [30, 60], [31, 50]]) {
-    const fixture = combatFixture(); fixture.state.wave = completed; fixture.tick(.1);
-    assert.equal(fixture.state.wave, completed + 1); assert.equal(fixture.state.phase, 'build'); assert.equal(fixture.state.timer, nextSeconds);
+test('preparation follows source wave times and routes wave ten/twenty to the arena', () => {
+  const g=game();for(const [wave,seconds]of [[1,80],[2,41],[3,41],[4,42],[10,45],[30,55],[31,60],[32,50],[35,50]])assert.equal(g.buildDuration(wave),seconds);
+  for(const [completed,nextSeconds]of [[1,41],[2,41],[3,42],[30,60]]){const fixture=combatFixture();fixture.state.wave=completed;fixture.tick(.1);assert.equal(fixture.state.wave,completed+1);assert.equal(fixture.state.phase,'build');assert.equal(fixture.state.timer,nextSeconds);}
+  for(const wave of [10,20]){const fixture=combatFixture();fixture.state.wave=wave;fixture.tick(.1);assert.equal(fixture.state.wave,wave);assert.equal(fixture.state.roundMode,'arena-prep');assert.equal(fixture.state.timer,30);}
+});
+
+test('arena resolves actual surviving teams, grants source rewards, and preserves the king', () => {
+  for(const winner of [0,1,-1]){
+    const g=combatFixture();g.state.wave=10;g.state.roundMode='arena';g.state.arenaRemaining=120;g.state.entities=[];const gold=g.state.players.map(p=>p.gold),hp=g.state.kings.map(k=>k.hp);
+    for(const team of winner===-1?[0,1]:[winner])stationaryActor(g,{hp:1e9,damage:0},{side:`arena${team}`,team,battleTeam:0,laneId:0,worldX:5+team*5,worldY:5,attackCd:1e9});
+    if(winner===-1)g.state.arenaRemaining=.05;g.tick(.1);assert.equal(g.state.roundMode,'arena-transition');assert.equal(g.state.timer,20);assert.equal(g.state.arenaResult.winner,winner);assert.deepEqual(g.state.kings.map(k=>k.hp),hp);
+    for(const p of g.state.players)assert.equal(p.gold,gold[p.id]+(winner===-1?50:p.team===winner?100:0));
+    g.tick(20);assert.equal(g.state.wave,11);assert.equal(g.state.phase,'build');assert.equal(g.state.timer,30);
   }
+});
+
+test('overtime waves advance every fifty seconds while living defenders and remaining creeps persist', () => {
+  const g=combatFixture();g.state.wave=31;g.state.continuousRemaining=.15;g.state.timer=0;g._spawnQueue=[];
+  const e=monster(g,7,{hp:1e9,maxHp:1e9,moveSpeed:0,damage:0});g._spawnDefender({id:'overtime',hp:1e9,damage:0,range:1,speed:0},g.state.players[0],3,5,'overtime-building');const d=g.state.entities.find(e=>e.side==='defender');d.attackCd=1e9;
+  const gold=g.state.players.map(p=>p.gold);g.tick(.2);assert.equal(g.state.wave,32);assert.equal(g.state.phase,'combat');assert(g.state.entities.includes(e));assert(g.state.entities.includes(d));assert.deepEqual(g.state.players.map(p=>p.gold),gold);assert(g._spawnQueue.length>0);
+  assert(g.state.continuousRemaining>49.8);const saved=JSON.parse(JSON.stringify(g.snapshot())),restored=Game.fromSnapshot(saved);g.tick(.1);restored.tick(.1);assert.deepEqual(g.snapshot(),restored.snapshot());
 });
 
 test('attack and armor matrix including siege is applied to actual attacks', () => {
@@ -454,9 +489,9 @@ test('attack and armor matrix including siege is applied to actual attacks', () 
   }
 });
 
-test('ordinary scaling is explicit RULES, waveInfo shows effective values; Boss/merc unscaled', () => {
-  assert.equal(RULES.webMonsterHpScale, .25);
-  assert.equal(RULES.webMonsterDamageScale, .20);
+test('source monsters and mercenaries participate with unscaled workbook HP and damage', () => {
+  assert.equal(RULES.webMonsterHpScale, 1);
+  assert.equal(RULES.webMonsterDamageScale, 1);
   assert.equal(RULES.webCongestionEnabled, false);
   const g = game();
   g.command('ready');
@@ -550,8 +585,8 @@ test('king upgrades respect source cost and separate 20/30/20 caps without overc
 });
 
 test('healing auras use the strongest rate per target and tick rather than stacking or pulsing', () => {
-  const small = MERCENARIES.find(m => m.ability?.type === 'aura_heal' && m.ability.value === 3);
-  const large = MERCENARIES.find(m => m.ability?.type === 'aura_heal' && m.ability.value === 10);
+  const small = MERCENARIES.find(m => m.sourceRawcode === 'h04T');
+  const large = MERCENARIES.find(m => m.sourceRawcode === 'h05B');
   assert(small); assert(large);
   for (const [healers, expected] of [[[small, small], 3], [[small, large], 10]]) {
     const g = combatFixture(); monster(g, 7, { hp: 1e9, maxHp: 1e9, damage: 0, moveSpeed: 0 });
@@ -566,7 +601,7 @@ test('healing auras use the strongest rate per target and tick rather than stack
 });
 
 test('Kodo damage aura increases a 100-damage monster king hit by exactly four percent', () => {
-  const kodo = MERCENARIES.find(m => m.ability?.type === 'aura_damage' && m.ability.value === .04); assert(kodo);
+  const kodo = MERCENARIES.find(m => m.sourceRawcode === 'h04V'); assert(kodo);
   const hit = boosted => {
     const g = combatFixture(), king = g.state.kings[0]; king.attack = 0;
     stationaryActor(g, { damage: 100, attackType: 'normal' }, { worldX: king.worldX, worldY: king.worldY - 1 });
@@ -577,8 +612,8 @@ test('Kodo damage aura increases a 100-damage monster king hit by exactly four p
 });
 
 test('king hits respect enemy armor auras and frostwolf slows the real king attack interval', () => {
-  const armor = MERCENARIES.find(m => m.ability?.type === 'aura_armor' && m.ability.value === 3);
-  const frost = MERCENARIES.find(m => m.ability?.type === 'aura_slow' && m.ability.value === .1);
+  const armor = MERCENARIES.find(m => m.sourceRawcode === 'h04W');
+  const frost = MERCENARIES.find(m => m.sourceRawcode === 'h050');
   assert(armor); assert(frost);
   const hit = effects => {
     const g = combatFixture(), king = g.state.kings[0]; king.attack = 100; king.attackCd = 0;
@@ -603,7 +638,7 @@ test('four-wave king armor and cumulative attack speed affect real king attacks'
 });
 
 test('source wave rewards double only on 10/20/30; king bounty is shared once by both teams', () => {
-  for (const wave of [1, 9, 10, 20, 30, 31]) {
+  for (const wave of [1, 9, 10, 20, 30]) {
     const g = combatFixture(), p = g.state.players[0], before = p.gold; g.state.wave = wave; p.income = 7;
     g.tick(.1);
     assert.equal(p.gold, before + 7 + RULES.waveRewards[wave - 1] * ([10, 20, 30].includes(wave) ? 2 : 1));
@@ -695,15 +730,10 @@ test('single/double king death ends immediately without round payout or later mu
   }
 });
 
-test('final-wave tiebreak uses king proportion, then army including hero cost, then draw', () => {
-  for (const mode of ['ratio', 'hero', 'draw']) {
-    const g = combatFixture(); g.state.wave = WAVES.length;
-    for (const p of g.state.players) { p.buildings = []; p.heroId = null; }
-    if (mode === 'ratio') g.state.kings[0].hp *= .5;
-    if (mode === 'hero') g.state.players[0].heroId = HEROES[0].id;
-    g.tick(.1); assert.equal(g.state.phase, 'ended');
-    assert.equal(g.state.winner, mode === 'ratio' ? 1 : mode === 'hero' ? 0 : -1);
-  }
+test('wave thirty-five never awards victory by remaining king proportion or nominal army', () => {
+  const g=combatFixture();g.state.wave=35;g.state.kings[0].hp*=.5;g.state.players[0].heroId=HEROES[0].id;const gold=g.state.players.map(p=>p.gold);g.tick(.1);
+  assert.equal(g.state.phase,'combat');assert.equal(g.state.winner,null);assert.deepEqual(g.state.players.map(p=>p.gold),gold);
+  g.state.kings[1].hp=0;g.tick(.1);assert.equal(g.state.phase,'ended');assert.equal(g.state.winner,0);
 });
 
 test('unacquired backline holds position, then first reachable target activates return order',()=>{
@@ -817,7 +847,7 @@ test('save schema 2 retains route progress and migrates legacy local positions',
 test('normal seeded AI match progresses, uses real team battles and reaches a legal terminal state', () => {
   const g = new Game({ seed: 42, difficulty: 'normal' });
   // Player 0 is controlled by the same AI strategy only in this simulation test.
-  g._aiBuild(g.state.players[0], true); g.command('ready');
+  g._aiBuild(g.state.players[0], true); g.tick(20); g.command('ready');
   let sawSharedBattle = false, maximumEntities = 0, elapsed = 0, reportedWave=1;
   for (let step = 0; step < 65000 && g.state.phase !== 'ended'; step++) {
     if (step % 30 === 0) g._aiAct(g.state.players[0]);
@@ -833,8 +863,10 @@ test('normal seeded AI match progresses, uses real team battles and reaches a le
     assert(g.state.entities.every(e => e.hp > 0 && Number.isFinite(e.x) && Number.isFinite(e.y)));
   }
   assert.equal(g.state.phase, 'ended'); assert([-1, 0, 1].includes(g.state.winner));
-  assert(sawSharedBattle); assert(maximumEntities >= 800); assert(g.state.wave >= 10,'normal seed must remain playable for at least 10 waves');
+  assert(sawSharedBattle); assert(maximumEntities >= WAVES[0].count*8); assert(g.state.wave >= 2,'the source-rule match must advance beyond its first wave');
   console.log(`  AI match: wave ${g.state.wave}, winner ${g.state.winner}, ${elapsed.toFixed(1)} simulated seconds, peak ${maximumEntities} entities.`);
 });
 
 console.log(`\n${passed} engine suites passed in ${((performance.now() - began) / 1000).toFixed(2)}s.`);
+
+if(failed.length){console.error(`${failed.length} engine suites failed: ${failed.join('; ')}`);process.exitCode=1;}

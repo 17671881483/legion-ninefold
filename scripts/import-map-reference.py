@@ -68,10 +68,13 @@ def refresh(analysis, dest):
     ability_ids={ac for c in ids for ac in split(u[c]['fields'].get('abilList'))}
     abilities={c:a[c] for c in sorted(ability_ids) if c in a}
     summary=json.loads((analysis/'analysis-summary.json').read_text())
-    sources=['data/units-raw.json','data/abilities-raw.json','waves-with-object-fields.csv','data/send-unit-shops.csv','extracted/war3map.j','extracted/war3mapMisc.txt']
+    sources=['data/units-raw.json','data/abilities-raw.json','waves-with-object-fields.csv','data/send-unit-shops.csv','extracted/war3map.j','extracted/war3mapMisc.txt','data/upgradedata.json','data/neutralupgradestrings.json','extracted/units/unitbalance.slk','extracted/units/upgradedata.slk','extracted/units/campaignunitfunc.txt','extracted/units/neutralupgradestrings.txt']
+    upgrades={r['upgradeid']:r for r in json.loads((analysis/'data/upgradedata.json').read_text())['rows']}
+    upgrade_strings=json.loads((analysis/'data/neutralupgradestrings.json').read_text())
+    economy_sources={'worker':u['e003'],'townHall':u['h023'],'upgrades':{c:upgrades[c] for c in ['R003','R00H']},'upgradeStrings':{c:upgrade_strings[c] for c in ['R003','R00H']},'harvestAbility':a['A09C'],'evidence':{'training':'h023 Trains=e003; war3map.j Pt/qt and EVENT_PLAYER_UNIT_TRAIN_FINISH, lines13612-13620/16881-16883','research':'h023 Researches=R003,R00H; war3map.j St/ut, lines13621-13635; R003 level8 opens R00H level7','workerPrice':'e003 goldcost50, bldtm20; Qu budget dr=(workers-1)*50 is cumulative spent gold, not escalating next-worker price','harvestBoundary':'A09C retained as evidence only. This change preserves the existing Web production formula; the 8-second Ku loop is anti-cheat, not a harvest timer.'}}
     snapshot={'schema':1,'sourceVersion':'Legion TD 5.0dJF','sourceMode':'x3','sourceUrl':'https://wc3maps.com/map/175858','mapSha256':summary['target']['sha256'],
       'sourceFiles':{f:hashlib.sha256((analysis/f).read_bytes()).hexdigest() for f in sources},
-      'waveBounties':WAVE_BOUNTIES,'waveBountySource':'war3map.j Jv / D[L] / qC; Web发放基础赏金，不模拟GG动态折扣','baseTiers':BASE_TIERS,'combatPairs':{c:pairs[c] for c in selected},'units':units,'abilities':abilities,'waves':waves,'mercenaries':mercs,
+      'waveBounties':WAVE_BOUNTIES,'waveBountySource':'war3map.j Jv / D[L] / qC; Web发放基础赏金，不模拟GG动态折扣','economySources':economy_sources,'baseTiers':BASE_TIERS,'combatPairs':{c:pairs[c] for c in selected},'units':units,'abilities':abilities,'waves':waves,'mercenaries':mercs,
       'misc':(analysis/'extracted/war3mapMisc.txt').read_text()}
     dest.write_text(json.dumps(snapshot,ensure_ascii=False,separators=(',',':'))+'\n')
 
@@ -125,6 +128,15 @@ def stats(snap, code):
     if raw_range<=180 and armor in ['heavy','fortified']:result['role']='tank'
     return result
 
+def generate_economy(snap):
+    src=snap['economySources'];worker=src['worker']['fields'];levels=[]
+    for target in range(1,31):
+        code='R003' if target<=8 else 'R00H';row=src['upgrades'][code];local_level=target if target<=8 else target-8
+        entry={'level':target,'gold':compact(number(row,'goldbase')+(local_level-1)*number(row,'goldmod')),'wood':compact(number(row,'lumberbase')+(local_level-1)*number(row,'lumbermod')),'duration':compact(number(row,'timebase')+(local_level-1)*number(row,'timemod')),'sourceUpgrade':code,'extended':target>15}
+        if target<=15:entry['sourceLevel']=local_level
+        levels.append(entry)
+    return {'worker':{'gold':compact(number(worker,'goldcost')),'wood':compact(number(worker,'lumbercost')),'duration':compact(number(worker,'bldtm')),'queueLimit':3},'lumberLevels':levels,'sourceWorkerRawcode':'e003','sourceTownHallRawcode':'h023','sourceMaxLumberLevel':15,'targetMaxLumberLevel':30,'sourcePolicy':'小精灵固定50金、20秒，科技1—15级金木与时间读取R003/R00H物编；16—30级沿R00H每级+10金木、35秒作Web延伸。','queuePolicy':'三格招募队列为Web交互适配，不作为原图训练队列证据。','availabilityPolicy':'保留用户要求的最多10工人、30级科技和随时操作，不加入原图军力门槛。','productionPolicy':'本轮只修价格和耗时，产木仍采用工人数×1.5×(1+0.12×科技等级)的既有Web公式。'}
+
 def generate(snap):
     included={c for bases in snap['baseTiers'] for base in bases for c in [base]+split(snap['units'][base]['fields'].get('Upgrade'))}
     units=[]
@@ -158,14 +170,14 @@ def generate(snap):
           description=f'{name}，{ATTACK_LABEL.get(st["attackType"],st["attackType"])}攻击/{ARMOR_LABEL[st["armorType"]]}。'+(st['ability']['description'] if st['ability'] else '')))
     for m in mercs:
         if m['unlock']==1: m.pop('unlockPhase',None)
-    meta={'title':'军团战争 · 地图数据参考','sourceVersion':snap['sourceVersion'],'dataRevision':'5.0dJF-static-web9-v1','activeUnitCount':len(units),'activeBaseUnitCount':24,'activeMercenaryCount':len(mercs),'activeWaveCount':35,'version':snap['sourceVersion'],'sourceMode':'x3','targetMode':'Web九倍适配','sourceUrl':snap['sourceUrl'],'mapSha256':snap['mapSha256'],
+    meta={'title':'军团战争 · 地图数据参考','sourceVersion':snap['sourceVersion'],'dataRevision':'5.0dJF-static-web9-economy-v2','activeUnitCount':len(units),'activeBaseUnitCount':24,'activeMercenaryCount':len(mercs),'activeWaveCount':35,'version':snap['sourceVersion'],'sourceMode':'x3','targetMode':'Web九倍适配','sourceUrl':snap['sourceUrl'],'mapSha256':snap['mapSha256'],
       'units':len(units),'baseUnits':24,'upgradeUnits':len(units)-24,'mercenaries':len(mercs),'waves':35,'distanceScale':SCALE,
       'counts':{'units':len(units),'baseUnits':24,'upgradeUnits':len(units)-24,'mercenaries':len(mercs),'waves':35},
       'waveCountPolicy':'普通波使用历史x3配置的每路数×3；10/20/30及31—35波保留历史特殊波数。该适配不是15A2九倍数据。',
       'statPolicy':'采用战斗形态原始SLK HP、def、dmgplus1+dice1×(sides1+1)/2；不使用并列realHP、realdef、mindmg/maxdmg代替；普通系统怪运行时仍乘Web生命0.25/伤害0.20。',
       'unitPolicy':'从JASS确认的6档随机池各选4个基础兵，收录基础兵的直接Upgrade，未收录的后续分支只保留原始rawcode、不可点击；不是全部可玩兵种，1115注册对象不作为可玩数。建筑形态取价格、人口、升级，战斗形态取战斗属性。',
       'abilityPolicy':'只适配可由源字段解释的吸血、通用暴击、回复/伤害/护甲/减速光环及武器外圈溅射；未适配技能和主动施法保留原始元数据，未声称完整复现。',
-      'economyPolicy':'300金/97木开局，首波80秒、常规40+floor(即将开始波次/2)秒，逐波金币奖励；10工人/30科技保留用户要求。生产效率和国王基础为Web配置。',
+      'economyPolicy':'300金/97木开局，首波80秒、常规40+floor(即将开始波次/2)秒，逐波金币奖励。小精灵固定50金、20秒；科技1—15级金木及时间读物编，16—30级沿高级曲线延伸（每级+10金木、35秒）。三格招募队列、10工人/30科技及无军力门槛为Web交互/用户覆盖；产木和国王基础保持既有Web配置。',
       'bountyPolicy':'系统怪取JASS D[L]基础赏金，木怪取GetUnitLevel对应物编level；Web直接发放基础值，尚未实现GG军力/漏怪折扣。',
       'legacyPolicy':'54个旧Web单位只服务旧存档，退出新随机池；4名英雄仍为Web配置。',
       'limitations':['静态解析，未运行魔兽验证JASS最终状态。','来源为5.0dJF默认x3，未确认用户记忆的15A2或原生9倍配置。','同一兵种多技能、主动法术、蓝量和武器内圈溅射尚未完整实现。'],
@@ -179,8 +191,8 @@ def integrate_data():
         s='''/* 5.0dJF static-reference subset with explicit Web ninefold adaptations.
  * Legacy Web units remain for existing saves. See REFERENCE and reference/map-source.json.
  */
-import { MAP_REFERENCE, MAP_UNITS, MAP_WAVES, MAP_MERCENARIES } from './map-reference.js';
-export { MAP_REFERENCE as REFERENCE } from './map-reference.js';
+import { MAP_REFERENCE, MAP_UNITS, MAP_WAVES, MAP_MERCENARIES, MAP_ECONOMY } from './map-reference.js';
+export { MAP_REFERENCE as REFERENCE, MAP_ECONOMY as ECONOMY } from './map-reference.js';
 
 '''+s[start:]
         s=s.replace('export const UNITS = [','const LEGACY_UNITS = [',1)
@@ -190,6 +202,8 @@ export { MAP_REFERENCE as REFERENCE } from './map-reference.js';
         end=s.index('export const HEROES',begin)
         s=s[:begin]+"export const MERCENARIES = MAP_MERCENARIES;\nexport const WAVES = MAP_WAVES;\n\n"+s[end:]
     s=s.replace('\nconst LEGACY_MERCENARIES = [','\nexport const LEGACY_MERCENARIES = [')
+    s=s.replace("MAP_MERCENARIES } from './map-reference.js'","MAP_MERCENARIES, MAP_ECONOMY } from './map-reference.js'")
+    s=s.replace("MAP_REFERENCE as REFERENCE } from './map-reference.js'","MAP_REFERENCE as REFERENCE, MAP_ECONOMY as ECONOMY } from './map-reference.js'")
     replacements={
       'version':"'web-2.0-mapref'",'provenance':"'以5.0dJF默认x3静态物编与JASS配置为参考，选取24基础+25升级兵、24木怪和35波；Web九倍数量、坐标及密集战斗缩放为明确适配，不声称15A2原版。旧54兵只兼容旧存档，4英雄保留Web配置。详见REFERENCE。'",
       'sourceVersion':"'Legion TD 5.0dJF（默认x3；15A2未核验）'",'initialGold':'300','initialWood':'97','buildSeconds':'40',
@@ -197,6 +211,9 @@ export { MAP_REFERENCE as REFERENCE } from './map-reference.js';
       'webBalanceNotes':"'普通系统怪运行生命=sourceHP×0.25、伤害=sourceDamage×0.20；特殊波/Boss与木怪不缩放。原始射程与速度×1/3进入Web数据，再由Web引擎换算。'",
       'kingUpgradeCost':'80','kingDamagePerUpgrade':'10','kingRegenPerUpgrade':'5','kingUpgradeMax':'30',
       'incomeFormula':"'每波结束金币=waveRewards[当前波-1]+永久收入；10/20/30波基础奖励翻倍，另计击杀赏金。'",
+      'workerCostBase':'50','workerCostStep':'0','lumberUpgradeCostBase':'60','lumberUpgradeCostStep':'20',
+      'workerCostFormula':"'每名小精灵固定50金币、0木材，训练20秒；三格招募队列为Web交互适配。'",
+      'lumberUpgradeCostFormula':"'使用lumberLevels逐级表：1—8级金木60+20×(目标级-1)，9—30级金木200+10×(目标级-9)；16—30级为Web延伸。'",
       'rerollPool':"'新49个物编子集中的24个基础单位；6档各抽1种，每档4选1。旧54Web兵不再进入随机池。'",
     }
     # Restrict substitutions to RULES so similarly named unit fields cannot change.
@@ -215,7 +232,7 @@ export { MAP_REFERENCE as REFERENCE } from './map-reference.js';
     hero: { light: 1, medium: 1, heavy: 1, fortified: 1, unarmored: 1, hero: 1 },
   },''',rules,flags=re.S)
     additions={
-      'firstBuildSeconds':'80','spawnInterval':'.1',
+      'firstBuildSeconds':'80','spawnInterval':'.1','workerTrainingSeconds':'20','workerQueueLimit':'3','workerWoodCost':'0','lumberLevels':'MAP_ECONOMY.lumberLevels',
       'buildTimeFormula':"'首波80秒；后续准备40+floor(即将开始波次/2)秒。'",
       'waveRewards':'[11,12,13,14,16,18,20,23,26,30,35,40,45,50,55,60,70,80,90,100,110,120,130,140,150,160,170,180,190,200,0,0,0,0,0]',
       'kingHealAmount':'10000','kingHealLockSeconds':'2','kingUpgradeCaps':'{hp:20,attack:30,regen:20}',
@@ -231,11 +248,11 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--analysis',type=Path);parser.add_argument('--reference-only',action='store_true',help='只更新生成的map-reference.js，不重写data.js规则');args=parser.parse_args()
     dest=ROOT/'reference/map-source.json';dest.parent.mkdir(exist_ok=True)
     if args.analysis:refresh(args.analysis,dest)
-    snap=json.loads(dest.read_text());units,waves,mercs,meta=generate(snap)
+    snap=json.loads(dest.read_text());units,waves,mercs,meta=generate(snap);economy=generate_economy(snap)
     assert len(units)==49 and sum(u['randomPool'] for u in units)==24
     assert len(mercs)==24 and len(waves)==35
     out='/* Generated by scripts/import-map-reference.py; edit the snapshot/generator, not this file. */\n'
-    for name,value in [('MAP_REFERENCE',meta),('MAP_UNITS',units),('MAP_WAVES',waves),('MAP_MERCENARIES',mercs)]:
+    for name,value in [('MAP_REFERENCE',meta),('MAP_UNITS',units),('MAP_WAVES',waves),('MAP_MERCENARIES',mercs),('MAP_ECONOMY',economy)]:
         out+='export const '+name+' = '+json.dumps(value,ensure_ascii=False,separators=(',',':'))+';\n'
     (ROOT/'dist/map-reference.js').write_text(out)
     if not args.reference_only:integrate_data()

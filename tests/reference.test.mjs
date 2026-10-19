@@ -12,7 +12,7 @@ async function moduleURL(file) {
   const encoded = `data:text/javascript;base64,${Buffer.from(source).toString('base64')}`;
   moduleURLs.set(file.href, encoded); return encoded;
 }
-const { UNITS, MERCENARIES, LEGACY_MERCENARIES, WAVES, RULES, REFERENCE } = await import(await moduleURL(new URL('../dist/data.js', import.meta.url)));
+const { UNITS, MERCENARIES, LEGACY_MERCENARIES, WAVES, RULES, REFERENCE, ECONOMY } = await import(await moduleURL(new URL('../dist/data.js', import.meta.url)));
 const { MAP_REFERENCE, MAP_UNITS, MAP_MERCENARIES, MAP_WAVES } = await import(await moduleURL(new URL('../dist/map-reference.js', import.meta.url)));
 const snapshot = JSON.parse(await readFile(new URL('../reference/map-source.json', import.meta.url), 'utf8'));
 const n = (v, fallback = 0) => v === undefined || v === null || v === '' ? fallback : Number(v);
@@ -28,10 +28,39 @@ test('reference provenance retains the actual historical x3 map identity and has
   assert.equal(REFERENCE.mapSha256, snapshot.mapSha256);
   assert.match(REFERENCE.mapSha256, /^[a-f0-9]{64}$/);
   assert.deepEqual(REFERENCE.sourceFiles, snapshot.sourceFiles);
-  assert.equal(Object.keys(REFERENCE.sourceFiles).length, 6);
+  assert(Object.keys(REFERENCE.sourceFiles).length >= 6);
   for (const hash of Object.values(REFERENCE.sourceFiles)) assert.match(hash, /^[a-f0-9]{64}$/);
   assert.match(REFERENCE.waveCountPolicy, /15A2/);
   assert.equal(REFERENCE.distanceScale, 1 / 3);
+});
+
+test('worker training source is e003 at h023 with fixed 50 gold, zero wood and twenty seconds', () => {
+  assert.equal(ECONOMY.sourceWorkerRawcode, 'e003'); assert.equal(ECONOMY.sourceTownHallRawcode, 'h023');
+  const worker = snapshot.economySources.worker, hall = snapshot.economySources.townHall;
+  assert.equal(worker.rawcode, 'e003'); assert.equal(hall.rawcode, 'h023'); assert.equal(hall.fields.Trains, 'e003');
+  assert.deepEqual(ECONOMY.worker, { gold: 50, wood: 0, duration: 20, queueLimit: 3 });
+  assert.equal(ECONOMY.worker.gold, n(worker.fields.goldcost)); assert.equal(ECONOMY.worker.wood, n(worker.fields.lumbercost)); assert.equal(ECONOMY.worker.duration, n(worker.fields.bldtm));
+  assert.equal(RULES.workerCostBase, 50); assert.equal(RULES.workerCostStep, 0); assert.equal(RULES.workerWoodCost, 0);
+  assert.equal(RULES.workerTrainingSeconds, 20); assert.equal(RULES.workerQueueLimit, 3);
+});
+
+test('lumber cost and duration tables preserve source levels 1-15 and label 16-30 as Web extension', () => {
+  assert.equal(ECONOMY.lumberLevels.length, 30); assert.equal(RULES.lumberLevels, ECONOMY.lumberLevels);
+  assert.equal(ECONOMY.sourceMaxLumberLevel, 15); assert.equal(ECONOMY.targetMaxLumberLevel, 30);
+  assert.equal(snapshot.economySources.townHall.fields.Researches, 'R003,R00H');
+  for (const row of ECONOMY.lumberLevels) {
+    assert.equal(row.sourceUpgrade, row.level <= 8 ? 'R003' : 'R00H');
+    const source = snapshot.economySources.upgrades[row.sourceUpgrade], local = row.level <= 8 ? row.level : row.level - 8;
+    assert.equal(row.gold, n(source.goldbase) + n(source.goldmod) * (local - 1));
+    assert.equal(row.wood, n(source.lumberbase) + n(source.lumbermod) * (local - 1));
+    assert.equal(row.duration, n(source.timebase) + n(source.timemod) * (local - 1));
+    assert.equal(row.extended, row.level > 15);
+    if (row.level <= 15) { assert.equal(row.sourceLevel, local); assert(local <= source.maxlevel); }
+    else assert.equal(row.sourceLevel, undefined);
+  }
+  for (const [level, cost, duration] of [[1,60,18],[8,200,32],[9,200,35],[15,260,35],[16,270,35],[30,410,35]]) {
+    const row = ECONOMY.lumberLevels[level - 1]; assert.equal(row.level, level); assert.equal(row.gold, cost); assert.equal(row.wood, cost); assert.equal(row.duration, duration);
+  }
 });
 
 test('24 source base units across six tiers and 25 upgrades are isolated from 54 legacy units', () => {

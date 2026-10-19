@@ -25,7 +25,7 @@ const data = await import(await moduleURL(new URL('../dist/data.js', import.meta
 const layout = await import(await moduleURL(new URL('../dist/layout.js', import.meta.url)));
 const { MAP, laneToWorld, kingWorld, spawnWarpWorld, supportWorld, isWalkable, isSegmentWalkable } = layout;
 const { Game } = await import(await moduleURL(new URL('../dist/engine.js', import.meta.url)));
-const { UNITS, MERCENARIES, LEGACY_MERCENARIES, HEROES, WAVES, RULES } = data;
+const { UNITS, MERCENARIES, LEGACY_MERCENARIES, HEROES, WAVES, RULES, ECONOMY } = data;
 const unit = id => UNITS.find(u => u.id === id);
 const stockMax = m => m.stockMax ?? 3;
 const mercCooldown = m => m.cooldown ?? m.cd ?? 4;
@@ -44,6 +44,15 @@ function game(seed = 42) {
   g._aiTimer = 1e9; // isolate commands; full-match tests below keep all AI enabled
   return g;
 }
+function economyFixture(combat = false) {
+  const g = combat ? combatFixture() : game();
+  g.state.timer = 10000;
+  g.state.players[0].gold = 100000; g.state.players[0].wood = 100000;
+  if (combat) monster(g, 7, { hp: 1e9, maxHp: 1e9, damage: 0, moveSpeed: 0 });
+  return g;
+}
+const woodRate = (workers, level) => workers * RULES.workerBaseWoodPerSecond * (1 + level * RULES.lumberRateStep);
+
 function combatFixture() {
   const g = game();
   for (const p of g.state.players) { p.buildings = []; p.heroId = null; p.roundLeaks = 0; }
@@ -121,82 +130,143 @@ test('exact-price build, duplicate-cell failure, foreign ownership and cumulativ
   assert.equal(p.buildings.length, 0);
 });
 
-test('worker pricing, lumber formula, reroll limits and roster validity', () => {
+test('baseline wood production and reroll limits retain their existing Web formula', () => {
   const g = game(), p = g.state.players[0]; p.gold = 10000; p.wood = 10000;
-  const start = p.gold;
-  for (let workers = p.workers; workers < RULES.maxWorkers; workers++) {
-    const before = p.gold;
-    assert(g.command('worker').ok);
-    assert.equal(before - p.gold, RULES.workerCostBase + (workers - 1) * RULES.workerCostStep);
-  }
-  assert(p.gold < start); assert(!g.command('worker').ok);
-  const woodBeforeUpgrade = p.wood, goldBeforeUpgrade = p.gold;
-  assert(g.command('lumber').ok);
-  assert.equal(goldBeforeUpgrade - p.gold, RULES.lumberUpgradeCostBase);
-  assert.equal(p.wood, woodBeforeUpgrade);
-  const wood = p.wood; g.tick(2);
-  near(p.wood - wood, p.workers * RULES.workerBaseWoodPerSecond * (1 + RULES.lumberRateStep) * 2);
+  const wood = p.wood; g.tick(2); near(p.wood - wood, woodRate(p.workers, p.lumberLevel) * 2);
   const buildings = JSON.parse(JSON.stringify(p.buildings));
   for (let i = 0; i < RULES.rerollCount; i++) assert(g.command('reroll').ok);
-  assert(!g.command('reroll').ok);
-  assert(p.roster.every(id => unit(id).randomPool)); assert.deepEqual(p.buildings, buildings);
+  assert(!g.command('reroll').ok); assert(p.roster.every(id => unit(id).randomPool)); assert.deepEqual(p.buildings, buildings);
 });
 
-test('economy caps allow workers 9 to 10 and lumber 29 to 30, then reject without charging', () => {
-  assert.equal(RULES.maxWorkers, 10); assert.equal(RULES.maxLumberLevel, 30);
+test('worker costs stay 50 gold and zero wood, with three serialized twenty-second jobs', () => {
+  const g = economyFixture(), p = g.state.players[0]; p.gold = 200; p.wood = 0;
+  assert.deepEqual(ECONOMY.worker, { gold: 50, wood: 0, duration: 20, queueLimit: 3 });
+  for (let i = 1; i <= 3; i++) {
+    assert(g.command('worker').ok); assert.equal(p.gold, 200 - 50 * i); assert.equal(p.wood, 0); assert.equal(p.workers, 1);
+    assert.equal(g.economyStatus().worker.queued, i); assert.equal(p.popUsed, 1 + i);
+  }
+  const tasks = g.economyStatus().worker.tasks;
+  assert.deepEqual(tasks.map(t => t.startAt), [0, 20, 40]); assert.deepEqual(tasks.map(t => t.finishAt), [20, 40, 60]);
+  assert.deepEqual(tasks.map(t => t.state), ['running', 'queued', 'queued']); assert.deepEqual(tasks.map(t => t.progress), [0, 0, 0]);
+  const full = g.snapshot(); assert(!g.command('worker').ok); assert.deepEqual(g.snapshot(), full);
+  g.tick(19.95); assert.equal(p.workers, 1); near(p.wood, woodRate(1, 0) * 19.95);
+  g.tick(.05); assert.equal(p.workers, 2); near(p.wood, woodRate(1, 0) * 20); assert.equal(g.economyStatus().worker.queued, 2);
+  g.tick(.25); near(p.wood, woodRate(1, 0) * 20 + woodRate(2, 0) * .25);
+  g.tick(19.75); assert.equal(p.workers, 3); near(p.wood, woodRate(1, 0) * 20 + woodRate(2, 0) * 20);
+  g.tick(20); assert.equal(p.workers, 4); near(p.wood, (woodRate(1, 0) + woodRate(2, 0) + woodRate(3, 0)) * 20);
+  assert.equal(g.economyStatus().worker.queued, 0); assert.equal(p.popUsed, 4); assert.equal(p.gold, 50);
+});
+
+test('insufficient gold or wood rejects economy commands atomically, while exact funds start tasks', () => {
+  const g = economyFixture(), p = g.state.players[0]; p.gold = 49; p.wood = 0;
+  let before = g.snapshot(); assert(!g.command('worker').ok); assert.deepEqual(g.snapshot(), before);
+  p.gold = 50; assert(g.command('worker').ok); assert.equal(p.gold, 0); assert.equal(p.wood, 0); assert.equal(p.workers, 1);
+  for (const [gold, wood] of [[59, 60], [60, 59], [59, 59]]) {
+    const fixture = economyFixture(), player = fixture.state.players[0]; player.gold = gold; player.wood = wood;
+    before = fixture.snapshot(); assert(!fixture.command('lumber').ok); assert.deepEqual(fixture.snapshot(), before);
+  }
+  const exact = economyFixture(), player = exact.state.players[0]; player.gold = player.wood = 60;
+  assert(exact.command('lumber').ok); assert.equal(player.gold, 0); assert.equal(player.wood, 0); assert.equal(player.lumberLevel, 0);
+  assert.equal(exact.economyStatus().lumber.task.targetLevel, 1);
+});
+
+test('research levels 1/8/9/15/16/30 pay both currencies and apply only at the precise completion boundary', () => {
+  for (const [target, cost, duration] of [[1,60,18],[8,200,32],[9,200,35],[15,260,35],[16,270,35],[30,410,35]]) {
+    const g = economyFixture(), p = g.state.players[0]; p.lumberLevel = target - 1;
+    const gold = p.gold, wood = p.wood;
+    assert(g.command('lumber').ok); assert.equal(p.gold, gold - cost); assert.equal(p.wood, wood - cost); assert.equal(p.lumberLevel, target - 1);
+    const task = g.economyStatus().lumber.task;
+    assert.equal(task.targetLevel, target); assert.equal(task.duration, duration); assert.deepEqual(task.cost, { gold: cost, wood: cost });
+    const busy = g.snapshot(); assert(!g.command('lumber').ok); assert.deepEqual(g.snapshot(), busy);
+    g.tick(duration - .05); assert.equal(p.lumberLevel, target - 1); near(p.wood, wood - cost + woodRate(1, target - 1) * (duration - .05));
+    g.tick(.05); assert.equal(p.lumberLevel, target); assert.equal(g.economyStatus().lumber.task, null);
+    near(p.wood, wood - cost + woodRate(1, target - 1) * duration);
+    const completedWood = p.wood; g.tick(.25); near(p.wood - completedWood, woodRate(1, target) * .25);
+    if (target === 30) { const capped = g.snapshot(); assert(!g.command('lumber').ok); assert.deepEqual(g.snapshot(), capped); assert(!g.economyStatus().lumber.canStart); }
+  }
+});
+
+test('worker and research run in parallel, integrating each production segment across nonaligned finishes', () => {
   for (const combat of [false, true]) {
-    const g = combat ? combatFixture() : game(), p = g.state.players[0];
-    p.gold = 10000; p.workers = 9; p.lumberLevel = 29;
-    const wood = p.wood, income = p.income, gold = p.gold;
-    assert(g.command('worker').ok); assert.equal(p.workers, 10);
-    assert.equal(gold - p.gold, RULES.workerCostBase + 8 * RULES.workerCostStep);
-    assert.equal(p.popUsed, 10 * RULES.workerPopulation);
-    const beforeLumber = p.gold;
-    assert(g.command('lumber').ok); assert.equal(p.lumberLevel, 30);
-    assert.equal(beforeLumber - p.gold, RULES.lumberUpgradeCostBase + 29 * RULES.lumberUpgradeCostStep);
-    assert.equal(p.wood, wood); assert.equal(p.income, income);
-    const capped = g.snapshot();
-    assert(!g.command('worker').ok); assert.deepEqual(g.snapshot(), capped);
-    assert(!g.command('lumber').ok); assert.deepEqual(g.snapshot(), capped);
-    assert.equal(g.state.phase, combat ? 'combat' : 'build');
+    const g = economyFixture(combat), p = g.state.players[0];
+    g.tick(.037); assert(g.command('worker').ok); g.tick(.043); assert(g.command('lumber').ok);
+    assert.equal(p.workers, 1); assert.equal(p.lumberLevel, 0);
+    const start = g.state.time, workerFinish = g.economyStatus().worker.tasks[0].finishAt, researchFinish = g.economyStatus().lumber.task.finishAt;
+    near(start, .08); near(workerFinish, 20.037); near(researchFinish, 18.08);
+    const wood = p.wood; g.tick(20.2);
+    const expected = (researchFinish - start) * woodRate(1, 0) + (workerFinish - researchFinish) * woodRate(1, 1) + (g.state.time - workerFinish) * woodRate(2, 1);
+    near(p.wood - wood, expected); assert.equal(p.workers, 2); assert.equal(p.lumberLevel, 1);
+    assert.equal(g.economyStatus().worker.queued, 0); assert.equal(g.economyStatus().lumber.task, null); assert.equal(g.state.phase, combat ? 'combat' : 'build');
   }
 });
 
-test('combat permits worker and lumber upgrades, with each change applied to the next production tick', () => {
-  const g = combatFixture(), p = g.state.players[0];
-  monster(g, 0, { hp: 1e9, maxHp: 1e9, damage: 0 }); // Keep this real combat alive throughout the checks.
-  p.gold = 10000; p.workers = 9; p.lumberLevel = 29;
-  let wood = p.wood;
-  g.tick(.1); assert.equal(g.state.phase, 'combat');
-  near(p.wood - wood, 9 * RULES.workerBaseWoodPerSecond * (1 + 29 * RULES.lumberRateStep) * .1);
-  assert(g.command('worker').ok); assert.equal(p.workers, 10); wood = p.wood;
-  g.tick(.1); assert.equal(g.state.phase, 'combat');
-  near(p.wood - wood, 10 * RULES.workerBaseWoodPerSecond * (1 + 29 * RULES.lumberRateStep) * .1);
-  assert(g.command('lumber').ok); assert.equal(p.lumberLevel, 30); wood = p.wood;
-  g.tick(.1); assert.equal(g.state.phase, 'combat');
-  near(p.wood - wood, 10 * RULES.workerBaseWoodPerSecond * (1 + 30 * RULES.lumberRateStep) * .1);
+test('pending workers reserve population and the ten-worker cap before completion without double-counting', () => {
+  for (const [workers, populationCap] of [[9, 40], [1, 2]]) {
+    const g = economyFixture(), p = g.state.players[0]; p.workers = workers; p.populationCap = populationCap; p.popUsed = workers;
+    assert(g.command('worker').ok); assert.equal(p.workers, workers); assert.equal(p.popUsed, workers + 1); assert.equal(g.economyStatus().populationReserved, 1);
+    const before = g.snapshot(); assert(!g.command('worker').ok); assert.deepEqual(g.snapshot(), before);
+    if (populationCap === 2) { assert(!g.command('build', { unitId: p.roster[0], col: 0, row: 0 }).ok); assert.deepEqual(g.snapshot(), before); }
+    g.tick(20); assert.equal(p.workers, workers + 1); assert.equal(p.popUsed, workers + 1); assert.equal(g.economyStatus().populationReserved, 0);
+    if (workers === 9) { const capped = g.snapshot(); assert(!g.command('worker').ok); assert.deepEqual(g.snapshot(), capped); assert(!g.economyStatus().worker.canStart); }
+  }
 });
 
-test('new and legacy saves retain economy progress and continue upgrades without resetting workers or lumber', () => {
-  for (const [workers, level] of [[10, 30], [7, 29]]) for (const combat of [false, true]) {
-    const g = game(71), p = g.state.players[0];
-    p.workers = workers; p.lumberLevel = level; p.gold = 10000; p.wood = 321;
-    if (combat) g.command('ready'); else p.popUsed = workers * RULES.workerPopulation;
-    const serialized = g.snapshot();
-    for (const version of [1, 2]) {
-      const saved = JSON.parse(JSON.stringify(serialized)); saved.version = version;
-      if (version === 1) { delete saved.mapId; delete saved.mapVersion; delete saved.state.map; }
-      const restored = Game.fromSnapshot(saved), rp = restored.state.players[0];
-      assert.equal(rp.workers, workers); assert.equal(rp.lumberLevel, level);
-      assert.equal(rp.gold, p.gold); assert.equal(rp.wood, p.wood); assert.equal(rp.popUsed, p.popUsed);
-      assert.equal(restored.state.phase, combat ? 'combat' : 'build');
-      if (version === 2) assert.deepEqual(restored.snapshot(), serialized);
-      const wood = rp.wood; restored.tick(.2);
-      near(rp.wood - wood, workers * RULES.workerBaseWoodPerSecond * (1 + level * RULES.lumberRateStep) * .2);
-      if (workers < 10) { assert(restored.command('worker').ok); assert.equal(rp.workers, workers + 1); }
-      if (level < 30) { assert(restored.command('lumber').ok); assert.equal(rp.lumberLevel, level + 1); }
-    }
+test('pause freezes jobs and four-times speed advances both completions and production consistently', () => {
+  const g = economyFixture(), p = g.state.players[0]; assert(g.command('worker').ok); assert(g.command('lumber').ok);
+  const wood = p.wood; g.command('pause'); const paused = g.snapshot(); g.tick(50); assert.deepEqual(g.snapshot(), paused);
+  g.command('speed', { value: 4 }); g.command('pause'); g.tick(4.5);
+  near(g.state.time, 18); assert.equal(p.workers, 1); assert.equal(p.lumberLevel, 1); near(g.economyStatus().worker.tasks[0].remaining, 2);
+  near(p.wood - wood, woodRate(1, 0) * 18);
+  g.tick(.5); near(g.state.time, 20); assert.equal(p.workers, 2); assert.equal(g.economyStatus().worker.queued, 0);
+  near(p.wood - wood, woodRate(1, 0) * 18 + woodRate(1, 1) * 2);
+});
+
+test('training and research persist across preparation, combat and round transitions', () => {
+  const g = economyFixture(), p = g.state.players[0]; g.state.timer = .15;
+  assert(g.command('worker').ok); assert(g.command('lumber').ok);
+  const workerId = g.economyStatus().worker.tasks[0].id, researchId = g.economyStatus().lumber.task.id;
+  g.tick(.2); assert.equal(g.state.phase, 'combat'); assert.equal(p.workers, 1); assert.equal(p.lumberLevel, 0);
+  assert.equal(g.economyStatus().worker.tasks[0].id, workerId); assert.equal(g.economyStatus().lumber.task.id, researchId);
+  g._spawnQueue = []; g.state.entities = []; g.tick(.1); assert.equal(g.state.wave, 2); assert.equal(g.state.phase, 'build');
+  near(g.economyStatus().worker.tasks[0].finishAt, 20); near(g.economyStatus().lumber.task.finishAt, 18);
+  g.state.timer = 1000; g.tick(19.7); assert.equal(p.workers, 2); assert.equal(p.lumberLevel, 1);
+  assert.equal(g.economyStatus().worker.queued, 0); assert.equal(g.economyStatus().lumber.task, null);
+});
+
+test('JSON saves keep active and queued jobs; old saves retain progress and receive empty queues', () => {
+  const g = economyFixture(), p = g.state.players[0]; p.workers = 7; p.lumberLevel = 29;
+  for (let i = 0; i < 3; i++) assert(g.command('worker').ok);
+  assert(g.command('lumber').ok); g.tick(7.25);
+  const serialized = JSON.parse(JSON.stringify(g.snapshot())), restored = Game.fromSnapshot(serialized);
+  assert.deepEqual(restored.snapshot(), serialized); assert.deepEqual(restored.economyStatus(), g.economyStatus());
+  g.tick(52.75); restored.tick(52.75); assert.deepEqual(g.snapshot(), restored.snapshot()); assert.equal(p.workers, 10); assert.equal(p.lumberLevel, 30);
+  for (const [workers, level] of [[7, 29], [10, 30]]) for (const version of [1, 2]) {
+    const old = economyFixture(), player = old.state.players[0]; player.workers = workers; player.lumberLevel = level; player.popUsed = workers;
+    const saved = old.snapshot(); saved.version = version;
+    for (const v of saved.state.players) delete v.economyTasks;
+    if (version === 1) { delete saved.mapId; delete saved.mapVersion; delete saved.state.map; }
+    const loaded = Game.fromSnapshot(saved), lp = loaded.state.players[0];
+    assert.equal(lp.workers, workers); assert.equal(lp.lumberLevel, level); assert.equal(lp.gold, player.gold); assert.equal(lp.wood, player.wood);
+    assert.equal(loaded.economyStatus().worker.queued, 0); assert.equal(loaded.economyStatus().lumber.task, null);
+    if (workers < 10) { assert(loaded.command('worker').ok); assert.equal(lp.workers, workers); }
+    if (level < 30) { assert(loaded.command('lumber').ok); assert.equal(lp.lumberLevel, level); }
+    loaded.tick(20); assert.equal(lp.workers, Math.min(10, workers + 1)); assert.equal(lp.lumberLevel, level);
+    loaded.tick(15); assert.equal(lp.lumberLevel, 30);
   }
+});
+
+test('economyStatus is a pure copied view with current production and reserved population', () => {
+  const g = economyFixture(), p = g.state.players[0];
+  for (let i = 0; i < 3; i++) assert(g.command('worker').ok); assert(g.command('lumber').ok);
+  const before = g.snapshot();
+  for (let i = 0; i < 10; i++) {
+    const status = g.economyStatus(); assert.equal(status.worker.current, 1); assert.equal(status.worker.max, 10); assert.equal(status.worker.queued, 3); assert.equal(status.worker.queueLimit, 3);
+    assert.deepEqual(status.worker.cost, { gold: 50, wood: 0 }); assert.equal(status.worker.duration, 20); assert(!status.worker.canStart);
+    assert.equal(status.lumber.current, 0); assert.equal(status.lumber.max, 30); assert.equal(status.lumber.task.targetLevel, 1); assert(!status.lumber.canStart);
+    assert.equal(status.populationReserved, 3); near(status.woodPerSecond, woodRate(1, 0));
+    status.worker.tasks[0].finishAt = -1; status.worker.tasks[0].cost.gold = 0; status.worker.tasks.length = 0; status.lumber.task.cost.wood = 0;
+  }
+  assert.deepEqual(g.snapshot(), before); assert.equal(p.workers, 1); assert.equal(p.lumberLevel, 0);
 });
 
 test('population gates build/upgrade/worker/hero; farms clamp cap and never overcharge', () => {

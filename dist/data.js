@@ -1,8 +1,8 @@
 /* 5.0dJF static-reference subset with explicit Web ninefold adaptations.
  * Legacy Web units remain for existing saves. See REFERENCE and reference/map-source.json.
  */
-import { MAP_REFERENCE, MAP_UNITS, MAP_WAVES, MAP_MERCENARIES } from './map-reference.js';
-export { MAP_REFERENCE as REFERENCE } from './map-reference.js';
+import { MAP_REFERENCE, MAP_UNITS, MAP_WAVES, MAP_MERCENARIES, MAP_ECONOMY } from './map-reference.js';
+export { MAP_REFERENCE as REFERENCE, MAP_ECONOMY as ECONOMY } from './map-reference.js';
 
 const A = (type, value, name, description, extra = {}) => ({ type, value, name, description, ...extra });
 const unit = (id, name, race, tier, cost, hp, damage, interval, range, armor, attackType, armorType, role, ability, color, shape, upgrades, description, population = 1, randomPool = false) => ({
@@ -111,6 +111,10 @@ export const HEROES = [
 ];
 
 export const RULES = {
+  workerWoodCost: 0,
+  lumberLevels: MAP_ECONOMY.lumberLevels,
+  workerQueueLimit: 3,
+  workerTrainingSeconds: 20,
   kingAttackSpeedPerFourWaves: .1,
   kingArmorPerFourWaves: 2,
   kingUpgradeCaps: {hp:20,attack:30,regen:20},
@@ -144,13 +148,13 @@ export const RULES = {
   bossMultiplier: 1,
   countFormula: '普通波每路count=历史x3参考数量×3；10/20/30和31—35特殊波直接采用referenceCount，不再倍增。',
   workerCostBase: 50,
-  workerCostStep: 25,
-  workerCostFormula: '购买下一名工人费用 = workerCostBase + (当前工人数 - 1) × workerCostStep。',
+  workerCostStep: 0,
+  workerCostFormula: '每名小精灵固定50金币、0木材，训练20秒；三格招募队列为Web交互适配。',
   workerBaseWoodPerSecond: 1.5,
   lumberRateStep: .12,
-  lumberUpgradeCostBase: 70,
+  lumberUpgradeCostBase: 60,
   lumberUpgradeCostStep: 20,
-  lumberUpgradeCostFormula: '伐木升级费用 = lumberUpgradeCostBase + 当前伐木等级 × lumberUpgradeCostStep。',
+  lumberUpgradeCostFormula: '使用lumberLevels逐级表：1—8级金木60+20×(目标级-1)，9—30级金木200+10×(目标级-9)；16—30级为Web延伸。',
   woodFormula: '每秒木材 = 工人数 × 1.5 × (1 + 伐木等级 × 0.12)；按模拟时间累计，倍速同时加速战斗、准备与伐木。',
   incomeBase: 22,
   incomePerWave: 8,

@@ -12,6 +12,7 @@ const STORE='legion-ninefold-match-v1';
 let saved=null;try{saved=JSON.parse(localStorage.getItem(STORE)||'null');}catch{}
 let game=new Game({seed:42,difficulty:'normal'}),started=false,tab='build',difficulty='normal',selected=null,buildUnit=null,panelKey='',selectionKey='',uiTimer=0,saveTimer=0,lastFrame=0,endShown=false,soundOn=false,audio=null,lastWave=1,lastPhase='build';
 let autoFollowWave=0,autoFollowing=false;
+let economyDisplayGame=null,economyDisplayWorkers=0,economyDisplayLevel=0;
 const battlefield=new Battlefield($('battlefield'),handleBattlefieldClick);
 const initialState=game.state;
 if(saved?.state?.phase!=='ended'&&saved)$('continue-game').hidden=false;
@@ -46,7 +47,7 @@ function handleBattlefieldClick(hit,e){
 }
 function select(value){selected=value;battlefield.selected=value;selectionKey='';updateSelection();}
 function cancelBuild(){buildUnit=null;battlefield.buildUnit=null;$('battlefield').classList.remove('building');$('build-hint').hidden=true;selected=null;battlefield.selected=null;panelKey='';selectionKey='';updateUI();}
-function population(p){return p.workers+p.buildings.reduce((sum,b)=>sum+(defs[b.unitId]?.population||1),0)+(p.heroId?(defs[p.heroId]?.population||3):0);}
+function population(p){return p.workers+(p.economyTasks?.workerQueue?.length??0)*RULES.workerPopulation+p.buildings.reduce((sum,b)=>sum+(defs[b.unitId]?.population||1),0)+(p.heroId?(defs[p.heroId]?.population||3):0);}
 function power(p){return p.buildings.reduce((sum,b)=>sum+(b.spent??b.totalSpent??defs[b.unitId]?.cost??0),0)+(p.heroId?(defs[p.heroId]?.cost||280):0);}
 const activeUnits=UNITS.filter(u=>!u.legacy);
 const waveCount=w=>w.count??(w.boss?w.bossCount:w.baseCount*RULES.monsterMultiplier);
@@ -93,6 +94,31 @@ function updateKingPanel(){
   });
   document.querySelectorAll('.team-heals .heal-charge').forEach((e,i)=>e.classList.toggle('empty',i>=k.healCharges));
 }
+function updateEconomyPanel(){
+  const s=game.state,status=game.economyStatus(),w=status.worker,l=status.lumber,ended=s.phase==='ended';
+  const price=cost=>`${cost?.gold??0}金${cost?.wood?` ${cost.wood}木`:''}`;
+  const workerTask=w.tasks[0]??null,lumberTask=l.task;
+  $('worker-label').textContent=`精灵 ${w.current}${w.queued?`+${w.queued}`:''}/${w.max}`;
+  $('lumber-label').textContent=lumberTask?`伐木 ${l.current}→${lumberTask.targetLevel}`:`伐木 ${l.current}/${l.max}`;
+  $('worker-price').textContent=ended?'对局结束':workerTask?`${price(w.cost)} · ${Math.ceil(workerTask.remaining)}s`:w.current>=w.max?'已满员':`${price(w.cost)} · ${w.duration}s`;
+  $('lumber-price').textContent=ended?'对局结束':lumberTask?`${price(lumberTask.cost)} · ${Math.ceil(lumberTask.remaining)}s`:l.current>=l.max?'已满级':`${price(l.cost)} · ${l.duration}s`;
+  $('worker').disabled=!w.canStart;$('lumber').disabled=!l.canStart;
+  const workerHint=`已完成 ${w.current}/${w.max}，训练队列 ${w.queued}/${w.queueLimit}`;
+  $('worker').title=`招募小精灵：${price(w.cost)}，${w.duration}秒。${workerHint}。${workerTask?`当前剩余${workerTask.remaining.toFixed(1)}秒，`:'备战与战斗期间均可招募，'}${s.paused?'已暂停，':''}${w.canStart?'点击排入训练队列':w.reason}`;
+  $('lumber').title=`伐木科技：${l.current}/${l.max}。${price(lumberTask?.cost??l.cost)}，${lumberTask?.duration??l.duration}秒。${lumberTask?`正在研究${lumberTask.targetLevel}级，剩余${lumberTask.remaining.toFixed(1)}秒，`:''}${s.paused?'已暂停，':''}${l.canStart?'点击开始研究':l.reason}`;
+  $('worker').setAttribute('aria-label',$('worker').title);$('lumber').setAttribute('aria-label',$('lumber').title);
+  for(const [id,task]of[['worker',workerTask],['lumber',lumberTask]]){
+    const button=$(id),bar=button.querySelector('.economy-progress'),pct=task?Math.max(0,Math.min(100,task.progress*100)):0;
+    button.classList.toggle('economy-busy',!!task);button.classList.toggle('economy-paused',!!task&&s.paused);button.setAttribute('aria-busy',String(!!task));bar.hidden=!task;
+    bar.firstElementChild.style.width=`${pct}%`;bar.setAttribute('aria-valuenow',String(Math.round(pct)));bar.setAttribute('aria-valuetext',task?`剩余${task.remaining.toFixed(1)}秒${s.paused?'，已暂停':''}`:'空闲');
+  }
+  $('wood-rate').textContent=`+${status.woodPerSecond.toFixed(1)} 木/秒`;
+  if(economyDisplayGame===game&&started&&$('welcome').hidden){
+    if(w.current>economyDisplayWorkers){toast(`${w.current-economyDisplayWorkers} 个小精灵训练完成 · ${w.current}/${w.max}`);sound('build');}
+    if(l.current>economyDisplayLevel){toast(`伐木科技 Lv.${l.current} 研究完成`);sound('build');}
+  }
+  economyDisplayGame=game;economyDisplayWorkers=w.current;economyDisplayLevel=l.current;
+}
 function updateSelection(){
   const s=game.state;let u=null,b=null,p=null,e=null;
   if(selected?.type==='building'){for(const player of s.players){const found=player.buildings.find(v=>v.id===selected.buildingId);if(found){b=found;p=player;u=defs[b.unitId];break;}}if(!b)selected=null;}
@@ -120,10 +146,7 @@ function updateUI(){
   $('wave-advice').textContent=wave.boss?'首领数量少但实力强，注意前排与单体输出。':wave.range>100?'远程怪物波。保护脆弱后排，避免近战脱节。':'密集怪潮，范围输出与前排协同更有效。';
   if($('wave-portrait').dataset.wave!==String(s.wave)){drawPortrait($('wave-portrait'),{...wave,isMonster:true});$('wave-portrait').dataset.wave=String(s.wave);}
   $('entity-count').textContent=s.phase==='combat'?`${s.entities.filter(e=>e.side==='monster'&&e.hp>0).length} 只怪物在场`:'6 × 8 建造区';
-  const workerPrice=RULES.workerCostBase+(p.workers-1)*RULES.workerCostStep,lumberPrice=RULES.lumberUpgradeCostBase+p.lumberLevel*RULES.lumberUpgradeCostStep;
-  $('worker-price').textContent=p.workers>=RULES.maxWorkers?`已满员 ${p.workers}/${RULES.maxWorkers}`:`${workerPrice} 金 · ${p.workers}/${RULES.maxWorkers}`;$('lumber-price').textContent=p.lumberLevel>=RULES.maxLumberLevel?`已满级 ${p.lumberLevel}/${RULES.maxLumberLevel}`:`${lumberPrice} 金 · ${p.lumberLevel}/${RULES.maxLumberLevel}`;$('worker').disabled=s.phase==='ended'||p.workers>=RULES.maxWorkers||p.gold<workerPrice;$('lumber').disabled=s.phase==='ended'||p.lumberLevel>=RULES.maxLumberLevel||p.gold<lumberPrice;
-  $('worker').title=`小精灵 ${p.workers}/${RULES.maxWorkers} · 备战与战斗期间均可招募`;$('lumber').title=`伐木科技 ${p.lumberLevel}/${RULES.maxLumberLevel} · 备战与战斗期间均可升级`;
-  $('wood-rate').textContent=`+${(p.workers*RULES.workerBaseWoodPerSecond*(1+p.lumberLevel*RULES.lumberRateStep)).toFixed(1)} 木/秒`;
+  updateEconomyPanel();
   $('ready').disabled=s.phase!=='build';$('ready').innerHTML=`${icon('swords')}<b>${s.phase==='build'?`开始第 ${s.wave} 波`:s.phase==='combat'?'军团交战中':'对局已结束'}</b><kbd>空格</kbd>`;$('ready-subtext').textContent=s.phase==='build'?`${p.buildings.length} 个兵种已部署 · ${Math.ceil(s.timer)} 秒后自动开战`:`守住自己的防线，支援队友与国王`;
   $('pause').disabled=s.phase==='ended';$('pause').textContent=s.paused?'▶':'Ⅱ';$('pause').title=s.paused?'继续':'暂停';$('pause').setAttribute('aria-label',s.paused?'继续':'暂停');document.querySelectorAll('[data-speed]').forEach(b=>{b.disabled=s.phase==='ended';b.classList.toggle('active',Number(b.dataset.speed)===s.speed);});
   $('heal-count').textContent=`${s.kings[0].healCharges}/4`;const healWait=Math.max(0,(s.kings[0].healBlockedUntil??0)-s.time);$('heal').disabled=s.phase==='ended'||p.healUsed||s.kings[0].healCharges<=0||s.kings[0].hp>=s.kings[0].maxHp||healWait>0;$('heal').title=healWait>0?`团队治疗间隔 ${healWait.toFixed(1)}秒`:`国王回复 ${num(RULES.kingHealAmount)} 生命，每人一次`;$('interfere').disabled=s.phase!=='combat'||p.interfereCooldown>0;$('interfere').querySelector('span').textContent=p.interfereCooldown>0?`干扰 ${Math.ceil(p.interfereCooldown)}s`:'干扰';
@@ -141,9 +164,9 @@ function showEnd(){const s=game.state,p=s.players[0],win=s.winner===0,draw=s.win
 
 function help(which='play'){
   document.querySelectorAll('[data-help]').forEach(b=>b.classList.toggle('active',b.dataset.help===which));
-  if(which==='play')$('help-content').innerHTML=`<div class="help-stats"><div><small>阵营对抗</small><b>4 vs 4</b></div><div><small>首波每路系统怪</small><b>${waveCount(WAVES[0])}</b></div><div><small>普通波数量倍率</small><b>9×</b></div></div><h3>先知的第一场战斗</h3><ol><li>在右侧选择兵种，点击自己 1 路的格子建造。靠近出怪方向的格子放前排，远程和辅助放后方。</li><li>点击已建造单位，可在下方升级或出售。升级价格是额外费用，出售返还累计投入的 ${Math.round(RULES.sellRatio*100)}%。</li><li>小精灵最多 ${RULES.maxWorkers} 个，伐木科技最高 ${RULES.maxLumberLevel} 级；备战和战斗期间都可随时招募、升级，产木立即按新等级计算。木材持续产出；在“进攻”页派木怪，开战时分配到敌军四路，同时增加之后每轮的收入。初级木怪通常库存 3 只，冰魔 2 只；高级木怪库存 2 或 1 只。每种补货时间不同，高级木怪在第10／15波开战时开放，卡片下方显示当前库存和恢复进度。</li><li>开战后军团自动交战。自己守不住的怪会进入国王防线，队友的存活军团会支援。你可以使用干扰，或为受伤的国王回复 ${num(RULES.kingHealAmount)} 生命。国王每完成4波获得2护甲和累计10%攻速增益。</li><li>双方各自守住四路。先击败对方国王的一方获胜；完成第35波后依剩余国王生命比例、兵力比较战果。</li></ol><h3>地形与协防</h3><p>双方各有四个防区，按 2×2 排列。北排的怪向南推进，南排向北；漏怪穿过横向通道，在中轴汇合后沿长道走向国王。点击战场上方“路线”可显示方向。</p><p>守军在防区接敌，清路后返回出生侧区域，满足条件才传送到王前。后置、接敌距离和清线速度会改变协防到场时刻。通道长度、转弯与碰撞都计入模拟时间。</p><h3>操作与镜头</h3><p>点击格子：建造或选中。拖动：移动镜头。滚轮：缩放。点击战况中的玩家或小地图：查看对应防线。手机上可双指缩放。</p><p><kbd>Esc</kbd>取消部署 <kbd>空格</kbd>备战时开战／交战时暂停 <kbd>T</kbd>干扰当前己方战区 <kbd>H</kbd>治疗国王。方向键或 WASD 可移动镜头。</p><h3>别把全部金币都花在科技上</h3><p>兵力、伐木和发木需要相互配合。开局先安排前排和输出，再提高科技。远程波和首领波需要调整阵容，范围伤害对密集怪潮更有效。暂停时也可以慢慢布阵。</p>`;
+  if(which==='play')$('help-content').innerHTML=`<div class="help-stats"><div><small>阵营对抗</small><b>4 vs 4</b></div><div><small>首波每路系统怪</small><b>${waveCount(WAVES[0])}</b></div><div><small>普通波数量倍率</small><b>9×</b></div></div><h3>先知的第一场战斗</h3><ol><li>在右侧选择兵种，点击自己 1 路的格子建造。靠近出怪方向的格子放前排，远程和辅助放后方。</li><li>点击已建造单位，可在下方升级或出售。升级价格是额外费用，出售返还累计投入的 ${Math.round(RULES.sellRatio*100)}%。</li><li>小精灵最多 ${RULES.maxWorkers} 个，伐木科技最高 ${RULES.maxLumberLevel} 级；备战和战斗期间都可随时下达招募、研究指令。小精灵固定50金、20秒，训练队列最多3个；科技同时消耗金币和木材，研究完成后等级和产木效率才变化。两个队列可并行，暂停与倍速也作用于进度。木材持续产出；在“进攻”页派木怪，开战时分配到敌军四路，同时增加之后每轮的收入。初级木怪通常库存 3 只，冰魔 2 只；高级木怪库存 2 或 1 只。每种补货时间不同，高级木怪在第10／15波开战时开放，卡片下方显示当前库存和恢复进度。</li><li>开战后军团自动交战。自己守不住的怪会进入国王防线，队友的存活军团会支援。你可以使用干扰，或为受伤的国王回复 ${num(RULES.kingHealAmount)} 生命。国王每完成4波获得2护甲和累计10%攻速增益。</li><li>双方各自守住四路。先击败对方国王的一方获胜；完成第35波后依剩余国王生命比例、兵力比较战果。</li></ol><h3>地形与协防</h3><p>双方各有四个防区，按 2×2 排列。北排的怪向南推进，南排向北；漏怪穿过横向通道，在中轴汇合后沿长道走向国王。点击战场上方“路线”可显示方向。</p><p>守军在防区接敌，清路后返回出生侧区域，满足条件才传送到王前。后置、接敌距离和清线速度会改变协防到场时刻。通道长度、转弯与碰撞都计入模拟时间。</p><h3>操作与镜头</h3><p>点击格子：建造或选中。拖动：移动镜头。滚轮：缩放。点击战况中的玩家或小地图：查看对应防线。手机上可双指缩放。</p><p><kbd>Esc</kbd>取消部署 <kbd>空格</kbd>备战时开战／交战时暂停 <kbd>T</kbd>干扰当前己方战区 <kbd>H</kbd>治疗国王。方向键或 WASD 可移动镜头。</p><h3>别把全部金币都花在科技上</h3><p>兵力、伐木和发木需要相互配合。开局先安排前排和输出，再提高科技。远程波和首领波需要调整阵容，范围伤害对密集怪潮更有效。暂停时也可以慢慢布阵。</p>`;
   else if(which==='waves')$('help-content').innerHTML=`<p>波名、攻甲与基础属性取自历史 5.0dJF 静态数据。普通波数量按该图三倍配置 ×3 适配 Web 九倍；10／20／30 与31—35特殊波使用单独数量。生命与伤害另作密集怪适配。</p><table class="wave-table"><thead><tr><th>波</th><th>怪物</th><th>每路</th><th>攻击 / 护甲</th><th>实际生命</th><th>参考军力</th></tr></thead><tbody>${WAVES.map(w=>`<tr class="${w.boss?'boss-row':''} ${w.id===game.state.wave?'current-wave':''}"><td>${w.id}</td><td>${esc(w.name)}</td><td>${waveCount(w)}</td><td>${typeNames[w.attackType]} / ${armorNames[w.armorType]}</td><td>${num(w.hp*(w.boss?1:RULES.webMonsterHpScale))}</td><td>${num(w.recommendedValue??0)}</td></tr>`).join('')}</tbody></table>`;
-  else $('help-content').innerHTML=`<h3>历史地图数据驱动的 Web 九倍</h3><p>本次依据 5.0dJF 地图静态解析重新整理兵种、升级、35波与发木军营。样本内含11平台说明，默认三倍；这里保留你指定的九倍、10个小精灵和30级伐木科技。它们是本 Web 的组合规则。</p><h3>可以玩的内容</h3><p>新局使用 ${activeUnits.length} 种基础／升级兵种，其中24种基础兵按六档随机；${MERCENARIES.length} 种木怪分初级、10波开战、15波开战开放。你和3名AI队友对抗4名AI。4位军团英雄仍为本Web设计。</p><h3>本次校准</h3><p>兵种价格／人口取建造形态，生命／武器／护甲取对应战斗形态。伤害使用基础值加骰子平均值，未将遗留显示列当作实际属性；射程与移速等比映射到Web坐标。已适配的技能用于战斗，其余原始技能保留记录，仍需继续复现。</p><p>首波备战80秒；后续普通备战为40＋波次整除2秒，31波前60秒，之后50秒。出怪按每路每0.1秒一只排队。木怪各自使用解析出的价格、收入、库存和补货间隔，开战时分配敌军四路。</p><p>国王每次强化80木并增加3收入，生命／攻击／恢复分别上限20／30／20级；治疗固定回复10,000生命，每人一次，同队间隔2秒。每完成4波增加2护甲和累计10%攻速。</p><h3>适配范围</h3><p>普通系统怪仍采用生命×${RULES.webMonsterHpScale}、伤害×${RULES.webMonsterDamageScale}的密集适配；首领和木怪独立。国王基础生命／攻击、生命强化、伐木费用和产速、英雄、6×8格数、碰撞、100秒狂暴及最终胜负比较仍为Web参数。历史31波后的连续加时、10／20波竞技场和最终Boss复活尚未照搬，目前仍按35轮守王推进。</p><p>地图拓扑、漏怪路径和守军返门协防延续历史地图证据。保留旧存档的旧兵种和队列；开始新局即可使用新兵种池。存档保存在此浏览器，清理浏览器数据会删除它。</p><h3>来源与版本</h3><p>REA无法直接解析此原始MPQ格式；专用解析器提取JASS、SLK和物编后，REA登记了文件及哈希。数据来自静态文件，未经魔兽运行验证，仍未核定15A2或11平台原生九倍。</p><ul><li><a href="https://wc3maps.com/map/175858" target="_blank" rel="noopener">5.0dJF历史地图存档</a></li><li><a href="https://www.5211game.com/News/000/081/735.shtml" target="_blank" rel="noopener">11平台木材运用历史资料</a></li><li><a href="https://tieba.baidu.com/p/9978062000" target="_blank" rel="noopener">11军团战争吧九倍讨论</a></li></ul>`;
+  else $('help-content').innerHTML=`<h3>历史地图数据驱动的 Web 九倍</h3><p>本次依据 5.0dJF 地图静态解析重新整理兵种、升级、35波与发木军营。样本内含11平台说明，默认三倍；这里保留你指定的九倍、10个小精灵和30级伐木科技。它们是本 Web 的组合规则。</p><h3>可以玩的内容</h3><p>新局使用 ${activeUnits.length} 种基础／升级兵种，其中24种基础兵按六档随机；${MERCENARIES.length} 种木怪分初级、10波开战、15波开战开放。你和3名AI队友对抗4名AI。4位军团英雄仍为本Web设计。</p><h3>本次校准</h3><p>小精灵固定50金、20秒训练。科技1—8级按R003金木及时间曲线，9—15级按R00H；16—30级延伸高级价格曲线，每级再加10金和10木、耗时35秒。资源在开始时扣除，工人／等级在完成时生效。兵种价格／人口取建造形态，生命／武器／护甲取对应战斗形态。伤害使用基础值加骰子平均值，未将遗留显示列当作实际属性；射程与移速等比映射到Web坐标。已适配的技能用于战斗，其余原始技能保留记录，仍需继续复现。</p><p>首波备战80秒；后续普通备战为40＋波次整除2秒，31波前60秒，之后50秒。出怪按每路每0.1秒一只排队。木怪各自使用解析出的价格、收入、库存和补货间隔，开战时分配敌军四路。</p><p>国王每次强化80木并增加3收入，生命／攻击／恢复分别上限20／30／20级；治疗固定回复10,000生命，每人一次，同队间隔2秒。每完成4波增加2护甲和累计10%攻速。</p><h3>适配范围</h3><p>普通系统怪仍采用生命×${RULES.webMonsterHpScale}、伤害×${RULES.webMonsterDamageScale}的密集适配；首领和木怪独立。国王基础生命／攻击、生命强化、15级以上科技费用延伸与产木速率、英雄、6×8格数、碰撞、100秒狂暴及最终胜负比较仍为Web参数。历史31波后的连续加时、10／20波竞技场和最终Boss复活尚未照搬，目前仍按35轮守王推进。</p><p>地图拓扑、漏怪路径和守军返门协防延续历史地图证据。保留旧存档的旧兵种和队列；开始新局即可使用新兵种池。存档保存在此浏览器，清理浏览器数据会删除它。</p><h3>来源与版本</h3><p>REA无法直接解析此原始MPQ格式；专用解析器提取JASS、SLK和物编后，REA登记了文件及哈希。数据来自静态文件，未经魔兽运行验证，仍未核定15A2或11平台原生九倍。</p><ul><li><a href="https://wc3maps.com/map/175858" target="_blank" rel="noopener">5.0dJF历史地图存档</a></li><li><a href="https://www.5211game.com/News/000/081/735.shtml" target="_blank" rel="noopener">11平台木材运用历史资料</a></li><li><a href="https://tieba.baidu.com/p/9978062000" target="_blank" rel="noopener">11军团战争吧九倍讨论</a></li></ul>`;
   if(!$('help-dialog').open)$('help-dialog').showModal();
 }
 
@@ -166,7 +189,7 @@ $('sound').onclick=()=>{soundOn=!soundOn;$('sound').classList.toggle('on',soundO
 $('fullscreen').onclick=()=>{if(document.fullscreenElement)document.exitFullscreen?.();else document.documentElement.requestFullscreen?.().catch(()=>toast('当前浏览器暂不支持全屏'));};
 document.addEventListener('keydown',e=>{if(!started||$('help-dialog').open||$('end-dialog').open||!$('welcome').hidden||e.repeat)return;if(e.key==='Escape')cancelBuild();if(e.code==='Space'){e.preventDefault();command(game.state.phase==='build'?'ready':'pause');}if(e.key.toLowerCase()==='t')$('interfere').click();if(e.key.toLowerCase()==='h')$('heal').click();});
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&started){save();game.state.paused=true;}});window.addEventListener('beforeunload',save);
-function frame(now){const dt=Math.min((now-(lastFrame||now))/1000,.15);lastFrame=now;if(started&&$('welcome').hidden&&!$('help-dialog').open)game.tick(dt);if(tab==='attack')updateMercPanel();battlefield.draw(game.state,now/1000);battlefield.minimap($('minimap'),game.state);uiTimer+=dt;saveTimer+=dt;if(uiTimer>.18){uiTimer=0;updateUI();}if(saveTimer>8){saveTimer=0;save();}requestAnimationFrame(frame);}
+function frame(now){const dt=Math.min((now-(lastFrame||now))/1000,.15);lastFrame=now;if(started&&$('welcome').hidden&&!$('help-dialog').open)game.tick(dt);updateEconomyPanel();if(tab==='attack')updateMercPanel();battlefield.draw(game.state,now/1000);battlefield.minimap($('minimap'),game.state);uiTimer+=dt;saveTimer+=dt;if(uiTimer>.18){uiTimer=0;updateUI();}if(saveTimer>8){saveTimer=0;save();}requestAnimationFrame(frame);}
 updateUI();setTimeout(()=>battlefield.focus(0),50);requestAnimationFrame(frame);
 // Deterministic read-only state is available to local QA and replay inspection.
 window.legion={get game(){return game;},get renderer(){return battlefield;},get started(){return started;},get config(){return RULES;}};

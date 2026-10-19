@@ -36,7 +36,7 @@ export class Game {
       speed: 1, paused: false, winner: null, difficulty: this.options.difficulty, seed: this.options.seed,
       players: names.map((name, id) => ({ id, name, team: id < 4 ? 0 : 1,
         gold: initialGold, wood: rule('initialWood', 40), income: rule('initialIncome', 5),
-        workers: rule('initialWorkers', 1), lumberLevel: 0, buildings: [], roster: this._roster(),
+        workers: rule('initialWorkers', 1), lumberLevel: 0, economyTasks: { workerQueue: [], lumberTask: null }, buildings: [], roster: this._roster(),
         mercStocks: Object.fromEntries(MERCENARIES.map(m => [m.id, { stock: this._mercenaryMaxStock(m), nextReadyAt: null }])),
         populationCap: rule('initialPopulation', 40), popUsed: rule('initialWorkers', 1), heroId: null, healUsed: false, rerolls: 0, stats: { kills: 0, leaks: 0, warps: 0, sent: 0, damage: 0, goldEarned: 0, wavesHeld: 0 }
       })),
@@ -85,7 +85,7 @@ export class Game {
     if (this.state?.players) for (const p of this.state.players) p.popUsed = this._population(p);
     return { ok, message };
   }
-  _population(p) { return p.workers * rule('workerPopulation', 1) + p.buildings.reduce((sum, b) => sum + value(units[b.unitId], ['population'], 1), 0) + (p.heroId ? value(heroes[p.heroId], ['population'], 3) : 0); }
+  _population(p) { return (p.workers + (p.economyTasks?.workerQueue?.length ?? 0)) * rule('workerPopulation', 1) + p.buildings.reduce((sum, b) => sum + value(units[b.unitId], ['population'], 1), 0) + (p.heroId ? value(heroes[p.heroId], ['population'], 3) : 0); }
   _getPlayer(payload) { return this.state.players[payload?.playerId ?? 0]; }
   _cost(u) { return value(u, ['cost', 'goldCost', 'gold'], 100); }
   _woodCost(u) { return value(u, ['woodCost', 'wood', 'cost'], 60); }
@@ -97,6 +97,87 @@ export class Game {
     const explicit = u.upgrades ?? u.upgradeTo ?? [];
     const ids = (Array.isArray(explicit) ? explicit : [explicit]).map(v => typeof v === 'object' ? v.id : v);
     return [...new Set([...ids, ...UNITS.filter(v => [v.upgradeFrom, v.parentId, v.baseId].includes(u.id)).map(v => v.id)])].filter(id => units[id]);
+  }
+
+  _economyTasks(p) {
+    p.economyTasks ??= { workerQueue: [], lumberTask: null };
+    p.economyTasks.workerQueue ??= []; p.economyTasks.lumberTask ??= null;
+    return p.economyTasks;
+  }
+  _workerRecipe(p) {
+    const pending = p.economyTasks?.workerQueue?.length ?? 0;
+    return {
+      cost: { gold: rule('workerCostBase', 50) + Math.max(0, p.workers + pending - 1) * rule('workerCostStep', 0), wood: rule('workerWoodCost', 0) },
+      duration: Math.max(.001, rule('workerTrainingSeconds', 20)),
+    };
+  }
+  _lumberRecipe(p) {
+    const target = p.lumberLevel + 1;
+    const levels = RULES.lumberLevels ?? [];
+    const listed = levels.find(level => number(level.level ?? level.targetLevel, -1) === target) ?? levels[target - 1];
+    // The first 15 levels use the source upgrades. Higher levels follow the
+    // explicitly configured Web continuation, never the former gold-only curve.
+    const fallbackCost = target <= 8 ? 60 + 20 * (target - 1) : 200 + 10 * (target - 9);
+    return {
+      cost: { gold: value(listed, ['gold'], fallbackCost), wood: value(listed, ['wood'], fallbackCost) },
+      duration: Math.max(.001, value(listed, ['duration', 'seconds'], target <= 8 ? 18 + 2 * (target - 1) : 35)),
+      targetLevel: target,
+    };
+  }
+  _woodRate(p) {
+    const difficulty = p.team === 1 ? ({ easy: .85, normal: 1, hard: 1.18 }[this.options.difficulty] ?? 1) : 1;
+    return p.workers * rule('workerBaseWoodPerSecond', 1.5) * (1 + p.lumberLevel * rule('lumberRateStep', .12)) * difficulty;
+  }
+  _taskStatus(task) {
+    if (!task) return null;
+    const now = this.state.time;
+    return { ...task, cost: { ...task.cost }, remaining: Math.max(0, task.finishAt - now),
+      progress: clamp((now - task.startAt) / task.duration, 0, 1), state: now + 1e-8 < task.startAt ? 'queued' : 'running' };
+  }
+  /** Read-only economy view; all task completion happens during simulation steps. */
+  economyStatus(playerId = 0) {
+    const p = this.state.players[playerId]; if (!p) return null;
+    const tasks = p.economyTasks ?? { workerQueue: [], lumberTask: null }, queue = tasks.workerQueue ?? [];
+    const worker = this._workerRecipe(p), lumber = this._lumberRecipe(p);
+    const maxWorkers = rule('maxWorkers', 10), maxLumber = rule('maxLumberLevel', 30), queueLimit = rule('workerQueueLimit', 3);
+    const shortage = cost => p.gold + 1e-8 < cost.gold || p.wood + 1e-8 < cost.wood;
+    const costMessage = (label, cost) => `${label}需要 ${cost.gold} 金币、${cost.wood} 木材`;
+    let workerReason = '', lumberReason = '';
+    if (this.state.phase === 'ended') workerReason = lumberReason = '本局已结束';
+    else {
+      if (p.workers + queue.length >= maxWorkers) workerReason = '小精灵已达上限（含招募中）';
+      else if (queue.length >= queueLimit) workerReason = '招募队列已满';
+      else if (this._population(p) + rule('workerPopulation', 1) > p.populationCap) workerReason = '人口不足，请扩建营地';
+      else if (shortage(worker.cost)) workerReason = costMessage('招募', worker.cost);
+      if (p.lumberLevel >= maxLumber) lumberReason = '伐木科技已达上限';
+      else if (tasks.lumberTask) lumberReason = '伐木科技正在研究';
+      else if (shortage(lumber.cost)) lumberReason = costMessage('研究', lumber.cost);
+    }
+    return {
+      worker: { current: p.workers, max: maxWorkers, queued: queue.length, queueLimit, ...worker, canStart: !workerReason, reason: workerReason, tasks: queue.map(task => this._taskStatus(task)) },
+      lumber: { current: p.lumberLevel, max: maxLumber, cost: lumber.cost, duration: lumber.duration, canStart: !lumberReason, reason: lumberReason, task: this._taskStatus(tasks.lumberTask) },
+      woodPerSecond: this._woodRate(p), populationReserved: queue.length * rule('workerPopulation', 1),
+    };
+  }
+  _advanceEconomy(p, from, to) {
+    const tasks = this._economyTasks(p); let cursor = from;
+    // Integrate at each completion instant: a task finishing at the end of a
+    // step must not earn its new production rate for the preceding interval.
+    while (cursor < to - 1e-10) {
+      const nextFinish = Math.min(tasks.workerQueue[0]?.finishAt ?? Infinity, tasks.lumberTask?.finishAt ?? Infinity);
+      const end = Math.max(cursor, Math.min(to, nextFinish));
+      p.wood += this._woodRate(p) * (end - cursor); cursor = end;
+      if (tasks.workerQueue[0]?.finishAt <= cursor + 1e-8) {
+        tasks.workerQueue.shift(); p.workers++;
+        if (p.id === 0) this._log(`小精灵招募完成：${p.workers}/${rule('maxWorkers', 10)}。`);
+      }
+      if (tasks.lumberTask?.finishAt <= cursor + 1e-8) {
+        p.lumberLevel = tasks.lumberTask.targetLevel; tasks.lumberTask = null;
+        if (p.id === 0) this._log(`伐木科技 Lv.${p.lumberLevel} 研究完成。`);
+      }
+      if (cursor >= to - 1e-10) break;
+    }
+    p.popUsed = this._population(p);
   }
 
   /** Preparation time for the wave about to start. Arena/overtime remain Web rounds. */
@@ -226,19 +307,22 @@ export class Game {
         return this._result(true, `人口上限提升至 ${p.populationCap}`);
       }
       case 'worker': {
-        if (this._population(p) + rule('workerPopulation', 1) > p.populationCap) return this._result(false, '人口不足，请扩建营地');
-        if (p.workers >= rule('maxWorkers', 10)) return this._result(false, '小精灵已达上限');
-        const cost = rule('workerCostBase', 50) + Math.max(0, p.workers - 1) * rule('workerCostStep', 25);
-        if (p.gold < cost) return this._result(false, `招募需要 ${cost} 金币`);
-        p.gold -= cost; p.workers++;
-        return this._result(true, `小精灵 ${p.workers}/${rule('maxWorkers', 10)}`);
+        const status = this.economyStatus(p.id).worker;
+        if (!status.canStart) return this._result(false, status.reason);
+        const tasks = this._economyTasks(p), startAt = Math.max(this.state.time, tasks.workerQueue.at(-1)?.finishAt ?? this.state.time);
+        const task = { id: this._uid('eco'), type: 'worker', duration: status.duration, startAt, finishAt: startAt + status.duration,
+          cost: { ...status.cost }, targetLevel: p.workers + tasks.workerQueue.length + 1 };
+        p.gold -= status.cost.gold; p.wood -= status.cost.wood; tasks.workerQueue.push(task);
+        return this._result(true, `小精灵已加入招募队列，耗时 ${status.duration} 秒`);
       }
       case 'lumber': {
-        if (p.lumberLevel >= rule('maxLumberLevel', 30)) return this._result(false, '伐木科技已达上限');
-        const cost = rule('lumberUpgradeCostBase', 70) + p.lumberLevel * rule('lumberUpgradeCostStep', 20);
-        if (p.gold < cost) return this._result(false, `需要 ${cost} 金币`);
-        p.gold -= cost; p.lumberLevel++;
-        return this._result(true, `伐木科技 Lv.${p.lumberLevel}`);
+        const status = this.economyStatus(p.id).lumber;
+        if (!status.canStart) return this._result(false, status.reason);
+        const tasks = this._economyTasks(p), startAt = this.state.time;
+        tasks.lumberTask = { id: this._uid('eco'), type: 'lumber', duration: status.duration, startAt, finishAt: startAt + status.duration,
+          cost: { ...status.cost }, targetLevel: p.lumberLevel + 1 };
+        p.gold -= status.cost.gold; p.wood -= status.cost.wood;
+        return this._result(true, `开始研究伐木科技 Lv.${p.lumberLevel + 1}，耗时 ${status.duration} 秒`);
       }
       case 'reroll': {
         if (this.state.phase !== 'build') return this._result(false, '请在备战期切兵');
@@ -335,9 +419,7 @@ export class Game {
     for (const p of s.players) {
       for (const m of MERCENARIES) this._mercenarySlot(p, m);
       p.interfereCooldown = Math.max(0, (p.interfereUntil ?? 0) - s.time);
-      const rate = rule('workerBaseWoodPerSecond', 1.5) * (1 + p.lumberLevel * rule('lumberRateStep', .12));
-      const difficulty = p.team === 1 ? ({ easy: .85, normal: 1, hard: 1.18 }[this.options.difficulty] ?? 1) : 1;
-      p.wood += p.workers * rate * dt * difficulty;
+      this._advanceEconomy(p, s.time - dt, s.time);
     }
     this._aiTimer -= dt;
     if (this._aiTimer <= 0) { this._aiTimer = 1.4; for (let i = 1; i < 8; i++) this._aiAct(s.players[i]); }
@@ -920,8 +1002,9 @@ export class Game {
   }
   _aiAct(p) {
     if (this.state.phase === 'build') {
-      if (p.workers < Math.min(rule('maxWorkers', 10), 2 + Math.floor(this.state.wave / 2)) && p.gold > rule('workerCost', 50) + 80 && this._random() < .34) this.command('worker', { playerId: p.id });
-      if (p.lumberLevel < this.state.wave && p.wood > 180 && p.gold > 180 && this._random() < .24) this.command('lumber', { playerId: p.id });
+      const economy = this.economyStatus(p.id);
+      if (p.workers + economy.worker.queued < Math.min(rule('maxWorkers', 10), 2 + Math.floor(this.state.wave / 2)) && economy.worker.canStart && p.gold > economy.worker.cost.gold + 80 && this._random() < .34) this.command('worker', { playerId: p.id });
+      if (p.lumberLevel < this.state.wave && economy.lumber.canStart && p.wood > economy.lumber.cost.wood + 80 && p.gold > economy.lumber.cost.gold + 80 && this._random() < .24) this.command('lumber', { playerId: p.id });
       if (!p.heroId && this.state.wave >= 5 && p.gold > 400) {
         const preferred = p.buildings.filter(b=>this._isFront(units[b.unitId])).length >= p.buildings.length/2 ? 'aura_damage' : 'aura_armor';
         const h = HEROES.find(h=>h.ability?.type===preferred) ?? HEROES[0];
@@ -957,7 +1040,10 @@ export class Game {
       k.armor ??= rule('kingArmor', 8); k.armorType ??= 'hero'; k.attackType ??= 'hero'; k.autoUpgradeCount ??= 0; k.healBlockedUntil ??= 0;
     }
     this.state.kingBountyPools ??= [0, 0];
-    for (const p of this.state.players) for (const m of MERCENARIES) this._mercenarySlot(p, m);
+    for (const p of this.state.players) {
+      this._economyTasks(p); p.popUsed = this._population(p);
+      for (const m of MERCENARIES) this._mercenarySlot(p, m);
+    }
     if (saved.version === 1) {
       this.state.map = { id: MAP.id, version: MAP.version, topology: '2x2-crossbar-stem' };
       for (const e of this.state.entities) {

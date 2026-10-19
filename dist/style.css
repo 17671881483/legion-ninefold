@@ -281,3 +281,14 @@
   .merc-stock-meta{line-height:10px;margin-top:2px}
   .merc-cooldown{height:4px;margin-top:2px}
 }
+
+/* Paid training/research jobs stay readable while their buttons are busy. */
+.economy-actions>button{position:relative;padding-bottom:5px}
+.economy-actions strong{display:block;font:inherit;font-weight:500;line-height:1.2;white-space:nowrap}
+.economy-actions small{white-space:nowrap;font-variant-numeric:tabular-nums}
+.economy-actions>button.economy-busy:disabled{opacity:1}
+.economy-progress{position:absolute;display:block;left:4px;right:4px;bottom:2px;height:3px;background:#0c180f;overflow:hidden;pointer-events:none}
+.economy-progress em{display:block;height:100%;width:0;background:#d7b86b}
+.economy-paused .economy-progress em{background:#b6c491}
+@media(min-width:961px){.economy-actions>button{padding-bottom:5px}.economy-actions strong{font-size:9px;line-height:10px}.economy-actions small{font-size:8px;line-height:10px}}
+@media(max-width:700px){.economy-actions strong{font-size:9px}.economy-actions small{font-size:7px}}

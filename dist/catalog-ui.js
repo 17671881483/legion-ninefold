@@ -32,7 +32,7 @@ export function sourceCatalogDetailMarkup(u){
 export function skillMarkup(def){
  const skills=describeSkills(def);
  if(!skills.length)return '<p class="catalog-empty">没有静态技能挂载。武器与脚本机制另计。</p>';
- return skills.map(a=>`<article class="skill-entry ${a.status==='unresolved'?'unresolved':''}"><div><b>${esc(a.name||a.id||a.rawcode)}</b><span>${a.status==='implemented'?'参与模拟':a.status==='marker'?'状态标记':'待核定'}</span></div><p>${esc(a.effectText||a.description||'缺少可解释的基础配置。')}</p><small>${esc(a.id||a.rawcode||'')}${a.cooldown?` · 冷却 ${n(a.cooldown)}秒`:''}${a.manaCost?` · 消耗 ${n(a.manaCost)}魔法`:''}</small></article>`).join('');
+ return skills.map(a=>`<article class="skill-entry ${a.status==='unresolved'?'unresolved':''}"><div><b>${esc(a.name||a.id||a.rawcode)}</b><span>${a.status==='implemented'?'参与模拟':a.status==='marker'?'状态标记':a.status==='partial'?'部分实现':'待核定'}</span></div><p>${esc(a.effectText||a.description||'缺少可解释的基础配置。')}</p><small>${esc(a.id||a.rawcode||'')}${a.cooldown?` · 冷却 ${n(a.cooldown)}秒`:''}${a.manaCost?` · 消耗 ${n(a.manaCost)}魔法`:''}</small></article>`).join('');
 }
 function init(){
  if(dialog)return;dialog=document.createElement('dialog');dialog.id='catalog-dialog';dialog.className='catalog-dialog';

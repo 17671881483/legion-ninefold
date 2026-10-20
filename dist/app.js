@@ -3,8 +3,9 @@ import {MATCH_STORAGE_KEYS,matchMode,readMatch,writeMatch} from './match-storage
 import {UNITS,MERCENARIES,HEROES,WAVES,RULES,BUILDERS} from './data.js';
 import {describeSkills} from './skills.js';
 import {openCatalog} from './catalog-ui.js';
-import {Battlefield,unitIcon,drawPortrait} from './renderer.js';
+import {Battlefield,unitIcon,drawPortrait,isEntityVisible} from './renderer.js';
 import {isAppearanceVariant,appearanceBaseLabel,splitUnitCategories,unitBranchLabel,unitCategoryLabel,unitDisplayName,documentUnit} from './unit-categories.js';
+import {SANDBOX_QUALIFICATIONS,SANDBOX_QUALIFICATION_KEYS} from './sandbox-qualifications.js';
 
 const $=id=>document.getElementById(id),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const defs=Object.fromEntries([...UNITS,...MERCENARIES,...HEROES].map(u=>[u.id,u]));
@@ -15,7 +16,7 @@ const time=n=>`${Math.floor(Math.max(0,n)/60).toString().padStart(2,'0')}:${Math
 let mode='normal',saved=null;
 try{saved=readMatch(localStorage,mode);}catch{}
 let game=new Game({seed:42,difficulty:'normal'}),started=false,tab='build',difficulty='normal',builderId=RULES.defaultBuilderId,selected=null,buildUnit=null,panelKey='',selectionKey='',uiTimer=0,saveTimer=0,lastFrame=0,endShown=false,soundOn=false,audio=null,lastWave=1,lastPhase='build';
-let autoFollowWave=0,autoFollowing=false,kingMoveMode=false,tMonsterMode=false;
+let autoFollowWave=0,autoFollowing=false,kingMoveMode=false,tMonsterMode=false,spellTargetMode=null;
 let economyDisplayGame=null,economyDisplayWorkers=0,economyDisplayLevel=0;
 const battlefield=new Battlefield($('battlefield'),handleBattlefieldClick);
 const initialState=game.state;
@@ -29,6 +30,22 @@ function sound(kind='click'){
 function command(type,payload={}){
   const res=game.command(type,payload);if(res?.message)toast(res.message,!res.ok);if(res?.ok)sound(type==='build'||type==='upgrade'?'build':type==='ready'?'wave':'click');else sound('error');
   if(res?.ok&&['race','builder','reroll','sandboxBuilder','sandboxWave','sandboxReset','sandboxClear'].includes(type)){buildUnit=null;battlefield.buildUnit=null;selected=null;battlefield.selected=null;$('battlefield').classList.remove('building');$('build-hint').hidden=true;}if(type!=='merc')panelKey='';selectionKey='';updateUI();if(res?.ok)save();return res;
+}
+function clearSpellTarget(){
+  spellTargetMode=null;battlefield.spellTarget=null;selectionKey='';
+  if(!tMonsterMode&&!kingMoveMode){$('battlefield').classList.remove('targeting');if(!buildUnit)$('build-hint').hidden=true;}
+}
+function currentSpellTarget(){
+  if(!spellTargetMode)return null;
+  const e=game.state.entities.find(e=>e.id===spellTargetMode.entityId&&isEntityVisible(e)&&e.ownerId===0),skill=e?game.unitSkillStatus?.(e.id,0).find(s=>s.id===spellTargetMode.skillId):null;
+  return e&&skill?.canStart&&!game.state.paused&&game.state.phase===spellTargetMode.phase&&game.state.wave===spellTargetMode.wave?{entity:e,skill}:null;
+}
+function startSpellTarget(entityId,skill){
+  kingMoveMode=false;tMonsterMode=false;buildUnit=null;battlefield.buildUnit=null;battlefield.targetRadius=null;
+  $('battlefield').classList.remove('building');spellTargetMode={entityId,skillId:skill.id,targetKind:skill.targetKind,phase:game.state.phase,wave:game.state.wave};
+  battlefield.spellTarget={entityId,targetKind:skill.targetKind,range:skill.range,radius:skill.radius};$('battlefield').classList.add('targeting');
+  const r=$('battlefield').getBoundingClientRect();battlefield.pointerPoint??={x:r.width/2,y:r.height*.48};
+  $('build-hint').textContent=`${skill.name}：点击${skill.targetKind==='enemy'?'敌方单位':'地面位置'}施放 · Esc取消`;$('build-hint').hidden=false;selectionKey='';updateUI();
 }
 function save(){if(!started)return;try{const snapshot=game.snapshot();writeMatch(localStorage,snapshot);if(mode===matchMode(game.state))saved=snapshot;$('save-label').textContent=matchMode(game.state)==='sandbox'?'沙盒进度已保存':'进度已保存';}catch{$('save-label').textContent='此浏览器暂不能存档';}}
 function updateModeChoice(){
@@ -50,6 +67,10 @@ function updateSandbox(syncFields=false){
   $('sandbox-ai').disabled=!building;$('sandbox-ai').checked=!!s.sandbox?.aiEnabled;
   document.querySelectorAll('[data-build-only]').forEach(button=>button.disabled=!building);
   $('sandbox-switch-builder').title=building?'免费更换建造者，保留现有阵容':'请先返回布阵';
+  const entitlements=s.players[0].entitlements??{},qualification=SANDBOX_QUALIFICATIONS.find(q=>q.key===$('sandbox-qualification').value),enabled=qualification?[qualification.key,...qualification.aliases].some(key=>!!entitlements[key]):false;
+  $('sandbox-super-sponsor').checked=!!entitlements.h220;$('sandbox-super-sponsor').disabled=matchMode(s)!=='sandbox';
+  $('sandbox-qualification-status').textContent=qualification?`${qualification.label}（${qualification.key}）：${enabled?'已开启':'未开启'} · 本地测试资格，随沙盒存档保存`:'请选择来源资格';
+  $('sandbox-enable-qualification').disabled=!qualification||enabled;$('sandbox-disable-qualification').disabled=!qualification||!enabled;
 }
 function sandboxCommand(type,payload={}){
   const result=command(type,payload);
@@ -65,11 +86,18 @@ function startMatch(resume=false){
   if(resume&&saved){try{const key=MATCH_STORAGE_KEYS[mode];if(saved.state?.dataRevision!==RULES.dataRevision&&!localStorage.getItem(key+'-before-document'))localStorage.setItem(key+'-before-document',JSON.stringify(saved));game=Game.fromSnapshot(saved);}catch{game=new Game({seed:42,difficulty,builderId,mode});toast('存档无法载入，已创建新的'+(mode==='sandbox'?'测试沙盒':'对局'),true);}}
   else game=new Game({seed:Math.floor(Date.now()%2147483647),difficulty,builderId,mode});
   game.state.paused=false;started=true;lastWave=game.state.wave;lastPhase=game.state.phase;selected=null;buildUnit=null;endShown=false;panelKey='';selectionKey='';$('welcome').hidden=true;
-  autoFollowWave=0;autoFollowing=false;kingMoveMode=false;tMonsterMode=false;battlefield.targetRadius=null;$('battlefield').classList.remove('targeting');battlefield.selected=null;battlefield.buildUnit=null;focus(0);updateUI();save();sound('wave');
+  autoFollowWave=0;autoFollowing=false;kingMoveMode=false;tMonsterMode=false;clearSpellTarget();battlefield.targetRadius=null;$('battlefield').classList.remove('targeting');battlefield.selected=null;battlefield.buildUnit=null;focus(0);updateUI();save();sound('wave');
   toast(mode==='sandbox'?'测试沙盒已就绪，点击右上角“测试沙盒”调整波次与资源。':'先选择兵种，再点击自己的建造格。前排与远程搭配更稳。');
 }
 function handleBattlefieldClick(hit,e){
   if(!started)return;
+  if(spellTargetMode){
+    const pending=spellTargetMode,current=currentSpellTarget();if(!current){clearSpellTarget();updateUI();toast('单位或技能状态已变化，请重新选择技能',true);return;}
+    const payload={entityId:pending.entityId,skillId:pending.skillId,playerId:0};
+    if(pending.targetKind==='enemy'){const target=hit?.type==='entity'?game.state.entities.find(t=>t.id===hit.entityId&&isEntityVisible(t)):null;if(!target||target.side===current.entity.side||target.battleTeam!==current.entity.battleTeam){toast('请选择敌方单位',true);return;}payload.targetId=target.id;}
+    else{const r=$('battlefield').getBoundingClientRect(),point=battlefield.unproject(e.clientX-r.left,e.clientY-r.top);payload.worldX=point.x;payload.worldY=point.y;}
+    const result=command('cast',payload);if(result.ok){clearSpellTarget();updateUI();}return;
+  }
   if(tMonsterMode){const r=$('battlefield').getBoundingClientRect(),point=battlefield.unproject(e.clientX-r.left,e.clientY-r.top),res=command('interfere',{worldX:point.x,worldY:point.y});if(res.ok){cancelBuild();}return;}
   if(!hit)return;
   if(kingMoveMode){const r=$('battlefield').getBoundingClientRect(),point=battlefield.unproject(e.clientX-r.left,e.clientY-r.top),res=command('kingMove',{worldX:point.x,worldY:point.y});if(res.ok){kingMoveMode=false;$('build-hint').hidden=true;}return;}
@@ -82,8 +110,8 @@ function handleBattlefieldClick(hit,e){
   else if(hit.type==='entity'){select({...hit});}
   else if(!e.shiftKey){cancelBuild();}
 }
-function select(value){selected=value;battlefield.selected=value;selectionKey='';updateSelection();updateBuildPanel();}
-function cancelBuild(){kingMoveMode=false;tMonsterMode=false;battlefield.targetRadius=null;$('battlefield').classList.remove('targeting');buildUnit=null;battlefield.buildUnit=null;$('battlefield').classList.remove('building');$('build-hint').hidden=true;selected=null;battlefield.selected=null;panelKey='';selectionKey='';updateUI();}
+function select(value){if(spellTargetMode&&value?.entityId!==spellTargetMode.entityId)clearSpellTarget();selected=value;battlefield.selected=value;selectionKey='';updateSelection();updateBuildPanel();}
+function cancelBuild(){kingMoveMode=false;tMonsterMode=false;clearSpellTarget();battlefield.targetRadius=null;$('battlefield').classList.remove('targeting');buildUnit=null;battlefield.buildUnit=null;$('battlefield').classList.remove('building');$('build-hint').hidden=true;selected=null;battlefield.selected=null;panelKey='';selectionKey='';updateUI();}
 const unitPopulation=u=>Number(u?.population??1),unitLevel=u=>u?.heroEntry?'':u?.heroLevel>0?`Lv.${u.heroLevel}`:u?.heroStage?`阶段 ${u.heroStage}`:'';
 function population(p){return (p.workers+(p.economyTasks?.workerQueue?.length??0))*(RULES.workerPopulation??1)+p.buildings.reduce((sum,b)=>sum+Math.max(unitPopulation(defs[b.unitId]),b.construction?unitPopulation(defs[b.construction.targetId]):0),0)+(p.heroId?(defs[p.heroId]?.population??3):0);}
 function reservedPopulation(p){return (p.economyTasks?.workerQueue?.length??0)*(RULES.workerPopulation??1)+p.buildings.reduce((sum,b)=>{if(!b.construction)return sum;const current=unitPopulation(defs[b.unitId]),target=unitPopulation(defs[b.construction.targetId]);return sum+(b.unitId===b.construction.targetId?Math.max(current,target):Math.max(0,target-current));},0);}
@@ -210,14 +238,15 @@ function updateSelection(){
   const s=game.state;let u=null,b=null,p=null,e=null;
   if(selected?.type==='building'){for(const player of s.players){const found=player.buildings.find(v=>v.id===selected.buildingId);if(found){b=found;p=player;u=defs[b.unitId];break;}}if(!b)selected=null;}
   else if(selected?.type==='unit')u=defs[selected.unitId];
-  else if(selected?.type==='entity'){e=s.entities.find(v=>v.id===selected.entityId&&v.hp>0);if(e){u={...(defs[e.unitId]||waveInfo()),...e};p=s.players[e.ownerId];}else{selected=null;}}
-  const key=[selected?.type,selected?.buildingId,selected?.entityId,u?.id,u?.unitId,s.phase,b?.unitId,b?.construction?Math.ceil(b.construction.finishAt-s.time):'',Math.floor(s.players[0].gold),e?Math.ceil(e.hp):'',e?Math.floor(e.mana??0):'',e?Math.floor(s.time*4):'',e?.routeMode,buildUnit].join('|');if(key===selectionKey)return;selectionKey=key;
+  else if(selected?.type==='entity'){e=s.entities.find(v=>v.id===selected.entityId&&isEntityVisible(v));if(e){u={...(defs[e.unitId]||waveInfo()),...e,...(e.skillSpecs?{abilityIds:e.skillSpecs.map(a=>a.id)}:{})};p=s.players[e.ownerId];}else{selected=null;battlefield.selected=null;}}
+  const key=[selected?.type,selected?.buildingId,selected?.entityId,u?.id,u?.unitId,s.phase,s.paused,b?.unitId,b?.construction?Math.ceil(b.construction.finishAt-s.time):'',Math.floor(s.players[0].gold),e?Math.ceil(e.hp):'',e?Math.floor(e.mana??0):'',e?Math.floor(s.time*4):'',e?.routeMode,buildUnit,spellTargetMode?.skillId].join('|');if(key===selectionKey)return;selectionKey=key;
+  const manualSkills=e?.ownerId===0?(game.unitSkillStatus?.(e.id,0)??[]):[],manualById=new Map(manualSkills.map(a=>[a.id,a]));
   if(!u){$('selection').innerHTML=`<div class="selection-portrait"><canvas id="unit-portrait" width="100" height="100"></canvas></div><div class="selection-copy"><small>${esc(BUILDERS.find(b=>b.id===game.state.players[0].builderId)?.name||'军团')} · 建造者</small><h2>部署你的军团</h2><p>选择兵种后点击自己的格子布阵。<br>前排承伤，远程输出；多余金币发展经济。</p></div>`;drawPortrait($('unit-portrait'),null);$('selection-actions').innerHTML='';return;}
   const hp=e?`${num(e.hp)} / ${num(e.maxHp)}`:num(u.hp),damage=e?num(e.damage):num(u.damage),range=e?(e.range*100).toFixed(0):u.range;
   $('selection').innerHTML=`<div class="selection-portrait"><canvas id="unit-portrait" width="100" height="100"></canvas></div><div class="selection-copy"><small>${p?esc(p.name)+' · ':''}${u.race||'怪物'} · ${u.heroEntry?'英雄入口':u.hero?'英雄':isAppearanceVariant(u)?`${esc(unitBranchLabel(u))}（本体：${esc(appearanceBaseLabel(u,activeUnits))}）`:esc(documentUnit(u)?unitCategoryLabel(u):roleNames[u.role]||'系统怪')}${u.heroEntry?'':` · ${typeNames[u.attackType]||'普通'} / ${armorNames[u.armorType]||'中甲'}`}</small><h2>${esc(unitDisplayName(u))}${unitLevel(u)?` <span class="hero-level">${unitLevel(u)}</span>`:''}</h2>${u.heroEntry?'<p>先在自己的空格建造祭坛，完成后从下方选定英雄。</p>':`<div class="stat-chips"><span>生命<b>${hp}</b></span><span>攻击<b>${damage}</b></span><span>护甲<b>${u.armor??0}</b></span><span>射程<b>${range}</b></span></div><p>${esc(describeSkills(u).map(a=>a.name).join(' · ')||u.description||'自动作战的军团单位。')}</p>`}</div>`;
   const doc=documentUnit(u);if(doc?.acquisitionText){const note=document.createElement('p');note.className='document-acquisition';note.textContent=`获得方式：${doc.acquisitionText}`;note.title=doc.conditionText||'';$('selection').querySelector('.selection-copy').append(note);}
   drawPortrait($('unit-portrait'),u);
-  if(e?.skillSpecs){const casts=e.skillSpecs.filter(a=>a.status==='implemented'&&a.cooldown>0).sort((a,b)=>(e.skillStates?.[b.id]?.readyAt??0)-(e.skillStates?.[a.id]?.readyAt??0)).slice(0,3);if(casts.length){const node=document.createElement('div');node.className='live-skill-cds';node.innerHTML=casts.map(a=>{const left=Math.max(0,(e.skillStates?.[a.id]?.readyAt??0)-s.time),pct=100*(1-Math.min(1,left/a.cooldown));return `<span title="${esc(a.name)}：${left>0?`冷却剩余${left.toFixed(1)}秒`:'已就绪'}"><small>${esc(a.name)} ${left>0?`${left.toFixed(1)}s`:'就绪'}</small><i><em style="width:${pct}%"></em></i></span>`;}).join('');$('selection').querySelector('.selection-copy').append(node);}}
+  if(e?.skillSpecs){const casts=e.skillSpecs.filter(a=>['implemented','partial'].includes(a.status)&&a.cooldown>0).sort((a,b)=>Math.max(e.skillStates?.[b.id]?.readyAt??0,e.skillStates?.[b.id]?.yseraAutoReadyAt??0)-Math.max(e.skillStates?.[a.id]?.readyAt??0,e.skillStates?.[a.id]?.yseraAutoReadyAt??0)).slice(0,3);if(casts.length){const node=document.createElement('div');node.className='live-skill-cds';node.innerHTML=casts.map(a=>{const manual=manualById.get(a.id),left=manual?.remaining??Math.max(0,(e.skillStates?.[a.id]?.readyAt??0)-s.time),autoLeft=manual?.autoRemaining??Math.max(0,(e.skillStates?.[a.id]?.yseraAutoReadyAt??0)-s.time),label=manual?`手动${left>0?`${left.toFixed(1)}s`:'就绪'} · 自动${autoLeft>0?`${autoLeft.toFixed(1)}s`:'就绪'}`:left>0?`${left.toFixed(1)}s`:'就绪',pct=100*(1-Math.min(1,Math.max(left,autoLeft)/a.cooldown));return `<span title="${esc(a.name)}${a.status==='partial'?' · 部分核定':''}：${esc(label)}"><small>${esc(a.name)}${a.status==='partial'?' · 部分核定':''}</small><small>${esc(label)}</small><i><em style="width:${pct}%"></em></i></span>`;}).join('');$('selection').querySelector('.selection-copy').append(node);}}
   if(b?.construction){const node=document.createElement('p'),target=defs[b.construction.targetId],upgrading=target&&target.id!==b.unitId,reserved=upgrading?Math.max(0,unitPopulation(target)-unitPopulation(u)):unitPopulation(u);node.className='unit-order';node.textContent=`${upgrading?`升级为 ${target.name}${unitLevel(target)?` ${unitLevel(target)}`:''}`:'建造中'} · 剩余 ${Math.max(0,b.construction.finishAt-s.time).toFixed(1)}秒${reserved?` · 已预留 ${reserved} 人口`:''}${s.paused?' · 已暂停':''}`;$('selection').querySelector('.selection-copy').append(node);}
   else if(b&&(u.heroEntry||u.hero)){const node=document.createElement('p');node.className='unit-order';node.textContent=u.heroEntry?'祭坛已完成 · 从右侧选择英雄':`${unitLevel(u)||'英雄'} · 已完成${u.upgrades?.length?' · 可继续升级':' · 已到当前升级链末端'}`;$('selection').querySelector('.selection-copy').append(node);}
   if(selected?.type==='unit'&&u.heroEntry){const node=document.createElement('p');node.className='unit-order';node.dataset.deploymentStatus='';node.textContent=`${unitPrice(u)} · ${buildOptionStatus(u).reason||'已选择，点击自己的空格建造'}`;$('selection').querySelector('.selection-copy').append(node);}
@@ -232,11 +261,13 @@ function updateSelection(){
   if(b&&(u.hero||u.heroEntry||!u.legacy&&u.buildingAbilityIds&&!u.buildingAbilityIds.includes('A008')))$('selection-actions').querySelector('[data-sell]')?.remove();
   if(b&&p?.id===0&&['h062','h05Q'].includes(u.sourceRawcode))$('selection-actions').innerHTML+=`<button data-form="${b.id}" ${s.phase!=='build'||b.construction?'disabled':''}>切换形态<small>免费 · 1秒</small></button>`;
   if(b&&p?.id===0&&u.sourceRawcode==='h06I')$('selection-actions').innerHTML+=`<button data-stim="${b.id}" ${s.phase!=='build'||b.construction||p.gold<75?'disabled':''}>兴奋剂<small>75金 · 本波有效</small></button>`;
+  if(manualSkills.length)$('selection-actions').innerHTML+=`<span class="unit-order upgrade-group-label">手动技能</span>`+manualSkills.map(a=>{const partial=a.status==='partial',active=spellTargetMode?.entityId===e.id&&spellTargetMode.skillId===a.id,manual=a.remaining>0?`${a.remaining.toFixed(1)}s`:'就绪',automatic=a.autoRemaining>0?`${a.autoRemaining.toFixed(1)}s`:'就绪',help=a.reason||(a.targetKind==='none'?'点击立即施放':`点击后选择${a.targetKind==='enemy'?'敌方单位':'地面位置'}`);return `<button data-cast-skill="${esc(a.id)}" data-cast-entity="${esc(e.id)}" aria-pressed="${active}" aria-label="${esc(a.name)}${partial?'，部分核定':''}，${a.manaCost}魔法，手动${manual}，自动${automatic}" title="${esc(help)}${partial?'；主效果可用，部分原生行为仍待核定':''}" ${a.canStart?'':'disabled'}>${esc(a.name)}${partial?' · 部分核定':''}<small>${a.manaCost}魔法 · 手动 ${manual}</small><small>自动 ${automatic}</small></button>`;}).join('');
   if(u&&(e?.unitId||u.id))$('selection-actions').innerHTML+=`<button data-inspect="${esc(e?.unitId||u.id)}">兵种详情<small>${e?`魔法 ${num(e.mana)} / ${num(e.maxMana)}`:'获得条件与技能'}</small></button>`;
 }
 
 function updateUI(){
   const s=game.state,p=s.players[0],wave=waveInfo();
+  if(spellTargetMode&&!currentSpellTarget())clearSpellTarget();
   $('gold').textContent=num(p.gold);$('wood').textContent=num(p.wood);$('income').textContent=`+${num(p.income)}`;$('tech').textContent=`${p.workers} / ${p.lumberLevel}`;
   const sandbox=matchMode(s)==='sandbox';$('sandbox-tools').hidden=!sandbox;
   $('phase-label').textContent=s.phase==='build'?(s.roundMode==='arena-prep'?'竞技准备':s.roundMode==='arena-transition'?'竞技结束过渡':'布阵准备'):s.phase==='combat'?(s.roundMode==='arena'?'军团竞技':s.wave>=31?'最终攻防':'怪物来袭'):'对局结束';$('phase-label').style.color=s.phase==='combat'?'#d5aa7b':'#83ad80';$('wave-label').textContent=`第 ${String(s.wave).padStart(2,'0')} 波`;$('wave-time').textContent=sandbox&&s.phase==='build'?'手动开波':time(s.roundMode==='arena'?s.arenaRemaining:s.wave>=31&&s.continuousRemaining!=null?s.continuousRemaining:s.timer);
@@ -263,10 +294,10 @@ function updateUI(){
   const raceButton=document.querySelector('[data-action="race"]'),rerollButton=document.querySelector('[data-action="reroll"]');if(raceButton){raceButton.disabled=s.phase!=='build'||!!p.builderChoices?.length||(p.raceChanges||0)>=RULES.rerollCount||game.heroStatus().used;if(game.heroStatus().used)raceButton.title='英雄祭坛名额已用完，不能再更换种族';}if(rerollButton)rerollButton.disabled=s.phase!=='build'||p.rerolls>=RULES.rerollCount;
   const farmButton=document.querySelector('[data-action="farm"]'),farm=p.economyTasks?.farmTask;if(farmButton){farmButton.textContent=farm?`农场 ${Math.max(0,farm.finishAt-s.time).toFixed(1)}s`:'建造农场';farmButton.disabled=!!farm||s.phase==='ended'||p.gold<RULES.farmCost||p.wood<RULES.farmWoodCost||p.populationCap>=RULES.maxPopulation;}
   if(s.wave!==lastWave){lastWave=s.wave;panelKey='';sound('wave');toast(`第 ${s.wave} 波${s.wave>=31&&!sandbox?'追加':'准备'}：${wave.name}`);save();}
-  if(s.phase!==lastPhase){if(s.phase==='combat'||s.phase==='arena'){if(s.roundMode==='arena'){focus('all');toast('军团竞技开始 · 最长120秒');}buildUnit=null;battlefield.buildUnit=null;$('battlefield').classList.remove('building');$('build-hint').hidden=true;if(selected?.type==='building'){const unit=s.entities.find(e=>e.buildingId===selected.buildingId&&e.hp>0);selected=unit?{type:'entity',entityId:unit.id,laneId:unit.laneId}:null;battlefield.selected=selected;selectionKey='';updateSelection();}sound('wave');}else if(s.phase==='build')save();lastPhase=s.phase;panelKey='';}
+  if(s.phase!==lastPhase){clearSpellTarget();if(s.phase==='combat'||s.phase==='arena'){if(s.roundMode==='arena'){focus('all');toast('军团竞技开始 · 最长120秒');}buildUnit=null;battlefield.buildUnit=null;$('battlefield').classList.remove('building');$('build-hint').hidden=true;if(selected?.type==='building'){const unit=s.entities.find(e=>e.buildingId===selected.buildingId&&isEntityVisible(e));selected=unit?{type:'entity',entityId:unit.id,laneId:unit.laneId}:null;battlefield.selected=selected;selectionKey='';updateSelection();}sound('wave');}else if(s.phase==='build')save();lastPhase=s.phase;panelKey='';}
   if(s.legacyMatch&&!$('save-label').dataset.legacy){$('save-label').dataset.legacy='true';toast('当前存档包含历史单位；v14.1A5请使用新开局。');}
   if(s.phase==='ended'&&!endShown){endShown=true;showEnd();save();}
-  if(!tMonsterMode&&!kingMoveMode&&s.phase==='combat'&&s.timer>5&&battlefield.focusLane===0&&autoFollowWave!==s.wave&&!s.entities.some(e=>e.hp>0&&e.laneId===0)&&s.entities.some(e=>e.hp>0&&e.side==='monster'&&e.laneId===8)){autoFollowWave=s.wave;focus(8);autoFollowing=true;toast('战斗转入国王防线，镜头已跟随。');}
+  if(!spellTargetMode&&!tMonsterMode&&!kingMoveMode&&s.phase==='combat'&&s.timer>5&&battlefield.focusLane===0&&autoFollowWave!==s.wave&&!s.entities.some(e=>isEntityVisible(e)&&e.laneId===0)&&s.entities.some(e=>isEntityVisible(e)&&e.side==='monster'&&e.laneId===8)){autoFollowWave=s.wave;focus(8);autoFollowing=true;toast('战斗转入国王防线，镜头已跟随。');}
   if(s.phase==='build'&&autoFollowing){focus(0);autoFollowing=false;}
 }
 function showEnd(){$('sandbox-end-reset').hidden=matchMode(game.state)!=='sandbox';const s=game.state,p=s.players[0],win=s.winner===0,draw=s.winner===-1||s.winner===null||s.winner==='draw';$('end-title').textContent=draw?'战局平分秋色':win?'联盟军团获胜':'部落军团获胜';$('end-eyebrow').textContent=draw?'势均力敌':win?'VICTORY':'DEFEAT';$('end-description').textContent=draw?'双方军团战至最后，国王生命与兵力未能分出胜负。':win?'你的军团守住了国王。攻守与经济，共同决定这一局的胜负。':'国王的防线已经失守。尝试调整造位、升级前排，并及时强化国王。';$('end-stats').innerHTML=`<span><b>${s.wave}</b>抵达波次</span><span><b>${num(p.stats.kills)}</b>击杀</span><span><b>${num(p.stats.sent)}</b>派出木怪</span>`;$('end-dialog').showModal();sound(win?'win':'error');}
@@ -280,7 +311,7 @@ function help(which='play'){
 }
 
 $('panel-content').addEventListener('click',e=>{const target=e.target.closest('button');if(!target||target.disabled)return;if(target.dataset.treasure){command('treasure',{treasureId:target.dataset.treasure,reward:target.dataset.reward,buildingId:target.closest('[data-treasure-id]')?.querySelector('[data-treasure-target]')?.value});return;}if(target.dataset.unit){cancelBuild();buildUnit=target.dataset.unit;battlefield.buildUnit=buildUnit;selected={type:'unit',unitId:buildUnit};battlefield.selected=null;$('battlefield').classList.add('building');$('build-hint').textContent=`${defs[buildUnit].heroEntry?'建造':'部署'} ${defs[buildUnit].name} · ${unitPrice(defs[buildUnit])} · 点击自己的空格`; $('build-hint').hidden=false;panelKey='';selectionKey='';renderPanel();updateSelection();updateBuildPanel();sound();}if(target.dataset.heroBuilding){const building=game.state.players[0].buildings.find(b=>b.id===target.dataset.heroBuilding);if(building){cancelBuild();focus(0);select({type:'building',buildingId:building.id,playerId:0});}}if(target.dataset.builder)command('builder',{builderId:target.dataset.builder});if(target.dataset.merc)command('merc',{mercId:target.dataset.merc});if(target.dataset.hero)command('hero',{heroId:target.dataset.hero});if(target.dataset.king)command('king',{stat:target.dataset.king});if(target.dataset.action==='heroes'){const panel=$('panel-content'),section=panel.querySelector('.hero-section');if(section){panel.scrollTop=section.offsetTop-panel.offsetTop;section.querySelector('[data-unit]:not(:disabled)')?.focus({preventScroll:true});}}else if(target.dataset.action==='kingmove'){cancelBuild();kingMoveMode=true;buildUnit=null;battlefield.buildUnit=null;focus(8);$('build-hint').hidden=false;$('build-hint').textContent='点击可行走地面，移动联盟国王 · Esc取消';}else if(target.dataset.action==='catalog')openCatalog();else if(target.dataset.action)command(target.dataset.action);});
-$('selection-actions').addEventListener('click',e=>{const t=e.target.closest('button');if(!t)return;if(t.dataset.upgrade)command('upgrade',{buildingId:selected?.buildingId,unitId:t.dataset.upgrade});if(t.dataset.sell){command('sell',{buildingId:t.dataset.sell});select(null);}if(t.dataset.cancel)cancelBuild();if(t.dataset.inspect)openCatalog(t.dataset.inspect);if(t.dataset.form)command('form',{buildingId:t.dataset.form});if(t.dataset.stim)command('stim',{buildingId:t.dataset.stim});});
+$('selection-actions').addEventListener('click',e=>{const t=e.target.closest('button');if(!t||t.disabled)return;if(t.dataset.castSkill){const entity=game.state.entities.find(v=>String(v.id)===t.dataset.castEntity&&isEntityVisible(v)),skill=entity?game.unitSkillStatus?.(entity.id,0).find(a=>a.id===t.dataset.castSkill):null;if(!skill?.canStart){toast(skill?.reason||'当前技能不可用',true);return;}if(spellTargetMode?.entityId===entity.id&&spellTargetMode.skillId===skill.id){clearSpellTarget();updateUI();return;}if(skill.targetKind==='none'){clearSpellTarget();command('cast',{entityId:entity.id,skillId:skill.id,playerId:0});}else startSpellTarget(entity.id,skill);return;}if(t.dataset.upgrade)command('upgrade',{buildingId:selected?.buildingId,unitId:t.dataset.upgrade});if(t.dataset.sell){command('sell',{buildingId:t.dataset.sell});select(null);}if(t.dataset.cancel)cancelBuild();if(t.dataset.inspect)openCatalog(t.dataset.inspect);if(t.dataset.form)command('form',{buildingId:t.dataset.form});if(t.dataset.stim)command('stim',{buildingId:t.dataset.stim});});
 document.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click',()=>{tab=b.dataset.tab;document.querySelectorAll('[data-tab]').forEach(x=>{const active=x===b;x.classList.toggle('active',active);x.setAttribute('aria-selected',String(active));});panelKey='';renderPanel();updateBuildPanel();}));
 $('worker').onclick=()=>command('worker');$('lumber').onclick=()=>command('lumber');$('ready').onclick=()=>command('ready');$('pause').onclick=()=>command('pause');$('interfere').onclick=()=>{if(tMonsterMode){cancelBuild();return;}cancelBuild();tMonsterMode=true;battlefield.targetRadius=RULES.interfereRadius;const r=$('battlefield').getBoundingClientRect();battlefield.pointerPoint={x:r.width/2,y:r.height*.48};$('battlefield').classList.add('targeting');$('build-hint').hidden=false;$('build-hint').textContent='T怪：点击圆内怪物位置 · 双方怪物均可 · Esc取消';updateUI();};$('heal').onclick=()=>{const r=command('heal');if(r.ok)focus(8);};
 document.querySelectorAll('[data-speed]').forEach(b=>b.onclick=()=>command('speed',{value:Number(b.dataset.speed)}));
@@ -295,6 +326,7 @@ $('catalog').onclick=()=>openCatalog();$('help').onclick=()=>help();$('wavebook'
 $('ribbon-wave-name').onclick=()=>help('waves');
 $('sandbox-wave').innerHTML=WAVES.map(w=>`<option value="${w.id}">第 ${w.id} 波 · ${esc(w.name)} · ${waveCount(w)}只</option>`).join('');
 $('sandbox-builder').innerHTML=BUILDERS.map(b=>`<option value="${esc(b.id)}">${esc(b.name)}</option>`).join('');
+$('sandbox-qualification').innerHTML=SANDBOX_QUALIFICATIONS.map(q=>`<option value="${esc(q.key)}">${esc(q.label)} · ${esc(q.key)}</option>`).join('');
 document.querySelectorAll('[name="match-mode"]').forEach(input=>input.onchange=()=>{mode=input.value;updateModeChoice();});
 $('sandbox-tools').onclick=()=>{if(matchMode(game.state)!=='sandbox')return;$('sandbox-feedback').textContent='';updateSandbox(true);$('sandbox-dialog').showModal();};
 function showWelcome(){if(started){game.state.paused=true;save();mode=matchMode(game.state);}updateModeChoice();$('welcome').hidden=false;}
@@ -303,6 +335,12 @@ $('sandbox-return').onclick=()=>{$('sandbox-dialog').close();$('battlefield').fo
 $('sandbox-load-wave').onclick=()=>sandboxCommand('sandboxWave',{wave:Number($('sandbox-wave').value)});
 $('sandbox-switch-builder').onclick=()=>sandboxCommand('sandboxBuilder',{builderId:$('sandbox-builder').value});
 $('sandbox-ai').onchange=e=>{sandboxCommand('sandboxAI',{value:e.target.checked});updateSandbox();};
+$('sandbox-super-sponsor').onchange=e=>sandboxCommand('sandboxQualification',{key:'h220',enabled:e.target.checked});
+$('sandbox-qualification').onchange=()=>updateSandbox();
+$('sandbox-enable-qualification').onclick=()=>sandboxCommand('sandboxQualification',{key:$('sandbox-qualification').value,enabled:true});
+$('sandbox-disable-qualification').onclick=()=>sandboxCommand('sandboxQualification',{key:$('sandbox-qualification').value,enabled:false});
+$('sandbox-enable-all').onclick=()=>sandboxCommand('sandboxQualification',{keys:[...SANDBOX_QUALIFICATION_KEYS],enabled:true});
+$('sandbox-disable-all').onclick=()=>sandboxCommand('sandboxQualification',{keys:[...SANDBOX_QUALIFICATION_KEYS],enabled:false});
 document.querySelectorAll('[data-sandbox]').forEach(button=>button.onclick=()=>sandboxCommand(button.dataset.sandbox));
 $('sandbox-end-reset').onclick=()=>sandboxCommand('sandboxReset');
 document.querySelectorAll('.close-dialog').forEach(b=>b.onclick=()=>b.closest('dialog').close());document.querySelectorAll('dialog').forEach(d=>d.addEventListener('click',e=>{if(e.target===d){const r=d.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)d.close();}}));

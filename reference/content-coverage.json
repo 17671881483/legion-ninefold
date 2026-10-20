@@ -1,6 +1,6 @@
 {
   "sourceVersion": "v14.1A5",
-  "skillImplementationRevision": "v14-content-20261020-1",
+  "skillImplementationRevision": "v14-content-20261020-2",
   "units": 529,
   "mercenaryRecords": 60,
   "mainWaves": 35,
@@ -9,11 +9,15 @@
     "items": 114,
     "technologies": 815
   },
+  "playerRuntimeForms": [
+    "h0YO"
+  ],
   "playerSkills": {
     "counts": {
-      "implemented": 343,
+      "implemented": 355,
+      "partial": 2,
       "marker": 30,
-      "unresolved": 170
+      "unresolved": 160
     },
     "abilities": [
       {
@@ -4085,8 +4089,8 @@
       {
         "rawcode": "A1A5",
         "name": "铁甲加身",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "implemented",
+        "kind": "garrosh_armor",
         "unitRawcodes": [
           "n06K"
         ]
@@ -4094,8 +4098,8 @@
       {
         "rawcode": "A1A6",
         "name": "流血",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "implemented",
+        "kind": "garrosh_bleed",
         "unitRawcodes": [
           "n06K"
         ]
@@ -4822,6 +4826,7 @@
         "kind": "pending",
         "unitRawcodes": [
           "h0YM",
+          "h0YO",
           "n064"
         ]
       },
@@ -4915,8 +4920,8 @@
       {
         "rawcode": "A2YA",
         "name": "梦境缠绕",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "implemented",
+        "kind": "ysera_active",
         "unitRawcodes": [
           "h0YM"
         ]
@@ -4924,8 +4929,8 @@
       {
         "rawcode": "A2YB",
         "name": "沉眠之咒",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "implemented",
+        "kind": "ysera_active",
         "unitRawcodes": [
           "h0YM"
         ]
@@ -4933,8 +4938,8 @@
       {
         "rawcode": "A2YC",
         "name": "伊瑟拉苏醒",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "ysera_active",
         "unitRawcodes": [
           "h0YM"
         ]
@@ -4942,10 +4947,46 @@
       {
         "rawcode": "A2YD",
         "name": "心智扰乱",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "implemented",
+        "kind": "ysera_active",
         "unitRawcodes": [
           "h0YM"
+        ]
+      },
+      {
+        "rawcode": "A2YE",
+        "name": "心智摧毁",
+        "status": "partial",
+        "kind": "ysera_active",
+        "unitRawcodes": [
+          "h0YO"
+        ]
+      },
+      {
+        "rawcode": "A2YF",
+        "name": "翠绿吐息",
+        "status": "implemented",
+        "kind": "ysera_active",
+        "unitRawcodes": [
+          "h0YO"
+        ]
+      },
+      {
+        "rawcode": "A2YG",
+        "name": "梦魇射击",
+        "status": "implemented",
+        "kind": "ysera_active",
+        "unitRawcodes": [
+          "h0YO"
+        ]
+      },
+      {
+        "rawcode": "A2YH",
+        "name": "梦境腐蚀",
+        "status": "implemented",
+        "kind": "ysera_corrosion",
+        "unitRawcodes": [
+          "h0YO"
         ]
       },
       {
@@ -4954,7 +4995,8 @@
         "status": "implemented",
         "kind": "ysera_revival",
         "unitRawcodes": [
-          "h0YM"
+          "h0YM",
+          "h0YO"
         ]
       },
       {
@@ -4969,8 +5011,8 @@
       {
         "rawcode": "A2Z0",
         "name": "医疗气雾",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "implemented",
+        "kind": "alchemist_active",
         "unitRawcodes": [
           "n091",
           "n092",
@@ -4980,8 +5022,8 @@
       {
         "rawcode": "A2Z1",
         "name": "酸性炸弹",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "implemented",
+        "kind": "alchemist_active",
         "unitRawcodes": [
           "n091",
           "n092",
@@ -4991,8 +5033,8 @@
       {
         "rawcode": "A2Z2",
         "name": "药剂狂暴",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "implemented",
+        "kind": "alchemist_rage",
         "unitRawcodes": [
           "n091",
           "n092",
@@ -5002,8 +5044,8 @@
       {
         "rawcode": "A2Z3",
         "name": "点金",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "implemented",
+        "kind": "economic_marker",
         "unitRawcodes": [
           "n091",
           "n092",
@@ -5328,9 +5370,10 @@
   },
   "battleSkills": {
     "counts": {
-      "implemented": 394,
+      "implemented": 406,
+      "partial": 2,
       "marker": 43,
-      "unresolved": 191
+      "unresolved": 181
     },
     "abilities": [
       {
@@ -10113,8 +10156,8 @@
       {
         "rawcode": "A1A5",
         "name": "铁甲加身",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "implemented",
+        "kind": "garrosh_armor",
         "unitRawcodes": [
           "n06K"
         ]
@@ -10122,8 +10165,8 @@
       {
         "rawcode": "A1A6",
         "name": "流血",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "implemented",
+        "kind": "garrosh_bleed",
         "unitRawcodes": [
           "n06K"
         ]
@@ -10965,6 +11008,7 @@
         "kind": "pending",
         "unitRawcodes": [
           "h0YM",
+          "h0YO",
           "n064"
         ]
       },
@@ -11078,8 +11122,8 @@
       {
         "rawcode": "A2YA",
         "name": "梦境缠绕",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "implemented",
+        "kind": "ysera_active",
         "unitRawcodes": [
           "h0YM"
         ]
@@ -11087,8 +11131,8 @@
       {
         "rawcode": "A2YB",
         "name": "沉眠之咒",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "implemented",
+        "kind": "ysera_active",
         "unitRawcodes": [
           "h0YM"
         ]
@@ -11096,8 +11140,8 @@
       {
         "rawcode": "A2YC",
         "name": "伊瑟拉苏醒",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "ysera_active",
         "unitRawcodes": [
           "h0YM"
         ]
@@ -11105,10 +11149,46 @@
       {
         "rawcode": "A2YD",
         "name": "心智扰乱",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "implemented",
+        "kind": "ysera_active",
         "unitRawcodes": [
           "h0YM"
+        ]
+      },
+      {
+        "rawcode": "A2YE",
+        "name": "心智摧毁",
+        "status": "partial",
+        "kind": "ysera_active",
+        "unitRawcodes": [
+          "h0YO"
+        ]
+      },
+      {
+        "rawcode": "A2YF",
+        "name": "翠绿吐息",
+        "status": "implemented",
+        "kind": "ysera_active",
+        "unitRawcodes": [
+          "h0YO"
+        ]
+      },
+      {
+        "rawcode": "A2YG",
+        "name": "梦魇射击",
+        "status": "implemented",
+        "kind": "ysera_active",
+        "unitRawcodes": [
+          "h0YO"
+        ]
+      },
+      {
+        "rawcode": "A2YH",
+        "name": "梦境腐蚀",
+        "status": "implemented",
+        "kind": "ysera_corrosion",
+        "unitRawcodes": [
+          "h0YO"
         ]
       },
       {
@@ -11117,7 +11197,8 @@
         "status": "implemented",
         "kind": "ysera_revival",
         "unitRawcodes": [
-          "h0YM"
+          "h0YM",
+          "h0YO"
         ]
       },
       {
@@ -11132,8 +11213,8 @@
       {
         "rawcode": "A2Z0",
         "name": "医疗气雾",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "implemented",
+        "kind": "alchemist_active",
         "unitRawcodes": [
           "n091",
           "n092",
@@ -11143,8 +11224,8 @@
       {
         "rawcode": "A2Z1",
         "name": "酸性炸弹",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "implemented",
+        "kind": "alchemist_active",
         "unitRawcodes": [
           "n091",
           "n092",
@@ -11154,8 +11235,8 @@
       {
         "rawcode": "A2Z2",
         "name": "药剂狂暴",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "implemented",
+        "kind": "alchemist_rage",
         "unitRawcodes": [
           "n091",
           "n092",
@@ -11165,8 +11246,8 @@
       {
         "rawcode": "A2Z3",
         "name": "点金",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "implemented",
+        "kind": "economic_marker",
         "unitRawcodes": [
           "n091",
           "n092",

@@ -89,7 +89,8 @@ test('blood boil uses current self health, strict ten-percent threshold, and max
 test('source mana restores on actual enemy damage events rather than attack starts, capped at maximum',()=>{
  const g=fixture(),phoenix=g.add(def(['A0JO'])),target=g.add(def(),'monster',.1),ally=g.add(def());phoenix.mana=50;
  sourceAttackStart(g,phoenix,target);near(phoenix.mana,50);g._hurt(target,10,phoenix,{spell:true});near(phoenix.mana,52);
- g._hurt(target,0,phoenix,{});g._hurt(ally,10,phoenix,{});g._hurt(target,10,phoenix,{spell:true,scripted:true});near(phoenix.mana,52);
+ g._hurt(target,0,phoenix,{});g._hurt(ally,10,phoenix,{});g._sourceDamageTriggerDepth=1;g._hurt(target,10,phoenix,{spell:true,scripted:true});g._sourceDamageTriggerDepth=0;near(phoenix.mana,52);
+ g._hurt(target,10,phoenix,{spell:true,scripted:true});near(phoenix.mana,54,'a standalone timer damage is a fresh source event');
  phoenix.mana=99;g.hit(phoenix,target);near(phoenix.mana,100);
 });
 

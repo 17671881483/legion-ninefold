@@ -1,8 +1,11 @@
 import { RULES } from './data.js';
 import { WORKBOOK_ABILITIES, WORKBOOK_UNIT_TEMPLATES } from './workbook-reference.js';
 import { V14_ABILITIES, V14_UNIT_TEMPLATES } from './v14-reference.js';
+import { ALCHEMIST_ACTIVE_RULES, alchemistAfterDamage, tryAlchemistAutoCast, castAlchemistAbility, tickAlchemistJob, sourceAlchemistDeath } from './alchemist-rules.js';
+import { garroshAfterDamage, garroshOnHit, tickGarroshJobs } from './garrosh-rules.js';
+import { YSERA_ACTIVE_RULES, canYseraCastAbility, tryYseraAutoCast, castYseraAbility, tickYseraJob, sourceYseraDeath } from './ysera-rules.js';
 
-export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261020-1';
+export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261020-2';
 
 // Values come from resolved object fields. Empty fields remain empty: a missing
 // native default is reported, rather than replacing it with tooltip numbers.
@@ -126,6 +129,10 @@ function compile(id,version='5.0dJF') {
     if(id==='A0TA'){s.kind='stacking_bite';s.status='implemented';s.damage=5;s.effectText='实际普攻命中时，对该攻击者/受害者组合累计5点额外混乱攻击/通用伤害：5、10、15…；换目标不清除先前目标累计值';}
     if(id==='A0JO'){s.kind='damage_mana';s.status='implemented';s.manaGain=2;s.effectText='造成敌对实际伤害事件时回复2点魔法，最高不超过最大魔法；JASS并不限于攻击启动';}
     if(id==='A0LM'){s.kind='economic_marker';s.status='implemented';s.effectText='原图qC普通怪物击杀结算：技能等级1时35%概率获得1木材；飞行怪h0OU走专属奖励分支，31波及以后不触发。本效果由经济结算统一执行';}
+    if(id==='A2Z2'){s.kind='alchemist_rage';s.status='implemented';s.effectText='本次伤害后生命不高于25%时触发药剂狂暴：1/2/3级分别获得50%/100%/150%攻速与2/3/5护甲，持续5秒；期间不刷新，结束后可再次触发，不免死';}
+    if(id==='A2Z3'){s.kind='economic_marker';s.status='implemented';s.effectText='击杀敌人时单次1—100整数抽奖：1级2%得5金/5%得2金/10%得1金，2级2%/8%/12%，3级4%/10%/15%；互斥结算，31波后仍生效';}
+    if(id==='A1A5'){s.kind='garrosh_armor';s.status='implemented';s.effectText='首次受伤登记1级护甲；伤害事件前生命比例比上次记录下降至少2个百分点时，本事件最多再升1级。护甲不因治疗撤销，并同步保留在建筑，下次出战恢复；最多100级';}
+    if(id==='A1A6'){s.kind='garrosh_bleed';s.status='implemented';s.effectText='实际普攻命中10%概率流血：立即造成10点混乱攻击/通用伤害，此后每秒10点；同一双方组合不叠加，不同攻击者独立，任一方死亡结束';}
     if(id==='A0IC'){s.kind='blood_boil';s.status='implemented';s.effectText='实际普攻命中且自身生命高于10%时，直接扣除当前生命6%，对目标追加自身最大生命4%的混乱攻击/神圣伤害';}
     if(id==='A1Q0'){s.kind='azure_fire';s.status='implemented';s.damage=20;s.effectText='实际普攻命中追加20点混乱攻击/通用伤害，可伤害魔免单位；不采用文案的魔法伤害类型';}
     if(id==='A0TH'){s.kind='anchor_smash';s.status='implemented';s.damage=10;s.radius=1.5;s.chance=.33;s.effectText='实际普攻命中时按JASS GetRandomReal(1,101)≥68判定（33%）；自身暂停1秒，对自身150范围目标阵营单位造成10点混乱攻击/通用伤害';}
@@ -136,6 +143,8 @@ function compile(id,version='5.0dJF') {
   if(['crit','evasion','hardened','demolish','orb','barrage','pulverize'].includes(s.kind)&&!has('DataA')&&!has('DataB')){s.status='unresolved';s.effectText='缺少原生效果数据，不应用空值默认';}
   if(s.kind==='spell_orb'&&compile(s.spellId,version).status!=='implemented'){s.status='unresolved';s.effectText=`触发子技能${s.spellId}未核定，未计入已实现`; }
   s.effectText??=effectSummary(s);
+  if(version==='v14.1A5'&&YSERA_ACTIVE_RULES[id]){const r=YSERA_ACTIVE_RULES[id];Object.assign(s,{kind:'ysera_active',status:r.status,effectText:r.description,manaCost:r.manaCost,cooldown:r.cooldown});}
+  if(version==='v14.1A5'&&ALCHEMIST_ACTIVE_RULES[id]){const r=ALCHEMIST_ACTIVE_RULES[id];Object.assign(s,{kind:'alchemist_active',status:'implemented',manaCost:r.manaCost,cooldown:r.cooldown,effectText:id==='A2Z0'?'医疗气雾自动选择范围内生命比例最低的友军，跟随中心每秒治疗10/10/20，共5/15/15跳；中心死亡变为固定8秒云雾，每0.2秒治疗与通用伤害2/2/3。原生手动冷却与受伤自动冷却独立。':'随机选择1000范围最多两名不同敌人，每秒10/20/30通用伤害共5跳；目标死亡或第5跳后形成固定325范围酸池，立即及随后每秒15/25/35伤害共7跳，减甲2/3/3持续2秒且期间不刷新。'});}
   cache.set(key,s);return s;
 }
 function effectSummary(s){
@@ -176,7 +185,7 @@ const V14_ECONOMY_DESCRIPTIONS={
 };
 export function compileSkills(def) {const scale=def.distanceScale??1,version=versionOf(def);return [...new Set(def.abilityIds??def.sourceAbilityIds??(def.sourceAbilities??[]).map(a=>a.rawcode??a.id))].filter(Boolean).map(id=>compile(id,version)).map(s=>({...s,...Object.fromEntries(['range','radius','length','width','inner','outer','outerRadius','deathRadius','pull'].filter(k=>s[k]!==undefined).map(k=>[k,s[k]*scale]))}));}
 export function describeSkills(def) {const list=compileSkills(def).map(s=>({id:s.id,name:s.name,description:s.description,status:s.status,effectText:s.effectText,cooldown:s.cooldown,manaCost:s.manaCost,duration:s.duration,range:s.range,radius:s.radius}));const r=raw(def),descriptions=isV14(def)?V14_TRIGGER_DESCRIPTIONS:TRIGGER_DESCRIPTIONS;if(descriptions[r])list.push({id:'trigger:'+r,name:'脚本机制',description:descriptions[r],effectText:descriptions[r],status:'implemented',cooldown:0,manaCost:0});if(isV14(def))for(const [key,rule] of Object.entries(V14_ECONOMY_DESCRIPTIONS))if(rule.rawcodes.includes(r))list.push({id:'economy:'+key,name:rule.name,description:rule.text,effectText:rule.text,status:'implemented',cooldown:0,manaCost:0});return list;}
-export function skillCoverage(def) {const list=describeSkills(def);return {implemented:list.filter(s=>s.status==='implemented').length,markers:list.filter(s=>s.status==='marker').length,unresolved:list.filter(s=>s.status==='unresolved').length};}
+export function skillCoverage(def) {const list=describeSkills(def);return {implemented:list.filter(s=>s.status==='implemented').length,partial:list.filter(s=>s.status==='partial').length,markers:list.filter(s=>s.status==='marker').length,unresolved:list.filter(s=>s.status==='unresolved').length};}
 export function attachSkills(e,def) {
   e.skillVersion=versionOf(def);e.skillImplementationRevision=SKILL_IMPLEMENTATION_REVISION;e.sourceVersion=def.sourceVersion??e.sourceVersion;e.combatRawcode=raw(def);e.skillSpecs=compileSkills(def);e.skillStates={};e.buffs=[];e.skillSource=!!def.abilityIds;e.weapon1=def.weapon1??{};e.weapon2=def.weapon2??{};e.sourceRawFields=def.sourceRawFields??{};e.sourceArmorTypeRaw=def.sourceArmorTypeRaw??e.sourceRawFields.defType??e.sourceArmorTypeRaw;e.distanceScale=def.distanceScale??1;
   const f=e.sourceRawFields;e.isHero=!!(e.isHero||def.hero||def.isHero||['STR','AGI','INT'].includes(f.Primary));e.maxMana=num(def.maxMana??def.mana??f.manaN);e.mana=clamp(num(def.initialMana??def.manaStart??f.mana0,e.maxMana),0,e.maxMana);e.manaRegen=num(def.manaRegen??f.regenMana);e.hpRegen=num(def.hpRegen??f.regenHP);e.targetType=def.targetType??f.targType??(f.movetp==='fly'?'air':'ground');e.traits=String(def.traits??def.unitType??f.type??'').split(',');e.isBuilding=!!(e.isBuilding||def.isBuilding||num(f.isbldg));e.nativeInvulnerable=e.skillSpecs.some(s=>s.status==='implemented'&&s.kind==='invulnerability');e.invulnerable=e.nativeInvulnerable;e.isStaticObstacle=!!(isV14(def)&&e.isBuilding&&f.pathTex&&!num(f.spd));if(e.isStaticObstacle)e.moveSpeed=0;
@@ -340,6 +349,7 @@ export function sourceAttackStart(game,e,target) {
 export function sourceOnHit(game,e,target,battle,dealt,procs=[],rawDamage=dealt) {
   const now=game.state.time,aura=sourceAuraEffects(game,e,battle.auras??[]);if(aura.lifesteal>0)e.hp=Math.min(e.maxHp,e.hp+dealt*aura.lifesteal);
   if(isV14(e)&&dealt>0&&e.side!==target.side){
+    garroshOnHit(game,e,target,{universalDamage});
     for(const s of active(e)){
       if(s.kind==='stacking_bite'){const st=state(e,s);st.targets??={};st.targets[target.id]=(st.targets[target.id]??0)+s.damage;universalDamage(game,target,st.targets[target.id],e);}
       if(s.kind==='blood_boil'&&e.hp>e.maxHp*.1){e.hp-=e.hp*.06;universalDamage(game,target,e.maxHp*.04,e);}
@@ -387,7 +397,7 @@ export function modifyIncoming(game,target,damage,attacker,options={}) {
   }
   for(const b of target.buffs??[])if(b.expiresAt>game.state.time)result*=1+(b.incoming??0);
   result*=target.status?.incomingMultiplier??1;
-  if(isV14(target)&&result>0&&target.hp>0&&active(target).some(s=>s.kind==='ysera_revival')){
+  if(isV14(target)&&!game._sourceDamageTriggerDepth&&result>0&&target.hp>0&&active(target).some(s=>s.kind==='ysera_revival')){
     const now=game.state.time,status=target.status??={};
     if((status.yseraSleepingUntil??0)>now)return result*.2;
     // Original JASS precedence is (count<2 && !cooldown && lethal) || lowHP.
@@ -399,11 +409,28 @@ export function modifyIncoming(game,target,damage,attacker,options={}) {
   }
   return result;
 }
+export function beforeSourceDamage(game,target,actual,attacker){
+  if(!attacker||target.id===attacker.id||target.side===attacker.side||game._sourceDamageTriggerDepth)return;
+  game._sourceDamageTriggerDepth=(game._sourceDamageTriggerDepth??0)+1;
+  try{
+    if(isV14(target))alchemistAfterDamage(game,target,actual,{preDamageHp:target.hp});
+    if(isV14(target))tryAlchemistAutoCast(game,target,{universalDamage});
+    if(isV14(attacker))tryAlchemistAutoCast(game,attacker,{universalDamage});
+    if(isV14(target))tryYseraAutoCast(game,target,heroScriptApi);
+    if(isV14(attacker))tryYseraAutoCast(game,attacker,heroScriptApi);
+  }finally{game._sourceDamageTriggerDepth--;}
+}
 export function afterSourceDamage(game,target,actual,attacker,options={}) {
+  if(isV14(target)){const armor=garroshAfterDamage(game,target,actual);if(armor)target.armor+=armor.addedLevel;}
   if(!attacker||actual<=0)return;
-  applyYseraCorrosion(game,attacker,target);
   if(!options.spell&&attacker.hp>0&&attacker.range<=1.28){const selfThorns=active(target).filter(s=>s.kind==='carapace').reduce((v,s)=>v+s.fraction,0);const aura=sourceAuraEffects(game,target,game._battleAuras?.[target.battleTeam]??[]);if(aura.thorns||aura.thornsFlat||selfThorns)game._hurt(attacker,actual*(aura.thorns+selfThorns)+aura.thornsFlat,target,{spell:true,reflected:true});}
-  if(options.scripted||options.reflected)return;
+  if(target.id===attacker.id||target.side===attacker.side)return;
+  // JASS disables only the main damage trigger during its own callback. A
+  // later timer's scripted damage is a fresh event and must still auto-cast.
+  if(game._sourceDamageTriggerDepth)return;
+  game._sourceDamageTriggerDepth=(game._sourceDamageTriggerDepth??0)+1;
+  try {
+  applyYseraCorrosion(game,attacker,target);
   if(target.side!==attacker.side){
     // The source script tests the damaged unit before the damage source. Only
     // one chieftain and one shaman may auto-cast for this damage event.
@@ -419,9 +446,12 @@ export function afterSourceDamage(game,target,actual,attacker,options={}) {
   }
   if(attacker.combatRawcode==='n0S4'&&target.hp>0)game._hurt(target,target.hp*.03,attacker,{spell:true,scripted:true});
   if(attacker.combatRawcode==='n0S6'&&target.hp>0&&!active(target).some(s=>s.kind==='immunity'))game._hurt(target,target.maxHp*.01*game._typeMultiplier('magic',target.armorType,target.sourceArmorTypeRaw??target.sourceRawFields?.defType),attacker,{magic:true,spell:true,scripted:true});
+  } finally {game._sourceDamageTriggerDepth--;}
 }
 export function sourceDeath(game,target,killer) {
   if(target.status?.sourceDeathHandled)return;target.status.sourceDeathHandled=true;
+  sourceAlchemistDeath(game,target,killer,{universalDamage});
+  if(isV14(target))sourceYseraDeath(game,target,heroScriptApi);
   if(killer?.combatRawcode==='h0CZ')killer.hp=Math.min(killer.maxHp,killer.hp+target.maxHp*(isV14(killer)?.5:.6));
   if(killer?.combatRawcode==='h03B'||isV14(killer)&&killer?.combatRawcode==='h0OC')buff(killer,{...compile('A02V',killer.skillVersion),buffKey:'skeleton-buff'},killer,game.state.time);
   if(isV14(target)){
@@ -456,10 +486,41 @@ function applyYseraCorrosion(game,source,target){
   if(!isV14(source)||!target||target.hp<=0||target.side===source.side||scriptInvulnerable(target))return;
   const s=active(source).find(s=>s.kind==='ysera_corrosion');if(s)buff(target,s,source,game.state.time,{key:'A2YH',damage:0,armor:-2});
 }
-function scriptInvulnerable(e){return e.invulnerable||active(e).some(s=>s.kind==='invulnerability');}
+function scriptInvulnerable(e){return e.invulnerable||e.status?.yseraHidden||active(e).some(s=>s.kind==='invulnerability');}
 function scriptSource(e){return {id:e.id,ownerId:e.ownerId,side:e.side,team:e.team,battleTeam:e.battleTeam,combatRawcode:e.combatRawcode,skillVersion:e.skillVersion,attackType:'chaos',hp:e.hp};}
 function scriptTargets(game,source,origin,radius,friendly){return game.state.entities.filter(t=>t.hp>0&&t.battleTeam===source.battleTeam&&(friendly?t.side===source.side:t.side!==source.side)&&!scriptInvulnerable(t)&&dist(origin,t)<=radius);}
 function universalDamage(game,target,amount,source){return game._hurt(target,amount,source,{spell:true,scripted:true,universal:true});}
+function pauseUnitEx(game,source,target,seconds){
+  // PauseUnitEx uses a thunderbolt dummy at R2I(seconds), rather than a
+  // universal PauseUnit. A0I7 has organic targets and half hero duration.
+  const level=Math.trunc(seconds),now=game.state.time;target.status??={};
+  target.status.sourceAnimationFrozenUntil=Math.max(target.status.sourceAnimationFrozenUntil??0,now+seconds);
+  if(level<1){target.status.sourceUnresolvedStunLevel=0;return;}
+  if(target.traits?.includes('mechanical')||active(target).some(s=>s.kind==='immunity')||scriptInvulnerable(target))return;
+  const duration=Number(V14_ABILITIES.A0I7.resolved_fields[(isNativeHero(target)?'HeroDur':'Dur')+Math.min(10,level)]??0);
+  if(duration>0)target.status.stunUntil=Math.max(target.status.stunUntil??0,now+duration);
+}
+const heroScriptApi={universalDamage,applyCorrosion:applyYseraCorrosion,scriptInvulnerable,pauseUnitEx,
+  spawnUnit:(game,source,code,extra)=>summon(game,source,V14_UNIT_TEMPLATES[code],0,extra),
+  removeUnit:(game,entity)=>{game.state.entities=game.state.entities.filter(e=>e.id!==entity.id);entity.hp=0;entity.status.sourceDeathHandled=true;entity.status.deathCounted=true;entity.pendingAttack=null;},
+  isLivingOwner:(game,source)=>!game.state.players[source.ownerId]?.eliminated,
+};
+export function manualSourceSkills(game,e){
+  if(!e||!isV14(e))return [];
+  return (e.skillSpecs??[]).filter(s=>ALCHEMIST_ACTIVE_RULES[s.id]||canYseraCastAbility(e,s.id)).map(s=>{
+    const alchemy=!!ALCHEMIST_ACTIVE_RULES[s.id],st=e.skillStates?.[s.id]??{},remaining=Math.max(0,(st[alchemy?'manualReadyAt':'readyAt']??0)-game.state.time),autoRemaining=Math.max(0,(st[alchemy?'readyAt':'yseraAutoReadyAt']??0)-game.state.time);
+    const reason=e.hp<=.405?'单位已阵亡':e.status?.yseraHidden||e.status?.yseraPaused||e.status?.stunUntil>game.state.time?'单位当前无法施法':remaining>1e-8?'技能冷却中':e.mana<s.manaCost?'魔法不足':'';
+    return {id:s.id,name:s.name,status:s.status,manaCost:s.manaCost,cooldown:s.cooldown,remaining,autoRemaining,targetKind:s.id==='A2YA'?'point':s.id==='A2YD'?'enemy':'none',range:s.range,radius:s.radius,canStart:!reason,reason};
+  });
+}
+export function castManualSourceSkill(game,e,id,params={}){
+  const s=manualSourceSkills(game,e).find(s=>s.id===id);if(!s)return {ok:false,message:'当前单位没有可手动释放的此技能'};
+  if(!s.canStart)return {ok:false,message:s.reason};
+  if(s.targetKind==='point'&&(!Number.isFinite(params.point?.x)||!Number.isFinite(params.point?.y)))return {ok:false,message:'请选择施法位置'};
+  if(s.targetKind==='enemy'&&(!params.target||params.target.hp<=0||params.target.side===e.side||params.target.battleTeam!==e.battleTeam||scriptInvulnerable(params.target)))return {ok:false,message:'请选择可攻击的敌人'};
+  if(params.point&&s.targetKind==='point'||params.target&&s.targetKind==='enemy'){const p=params.point??pos(params.target),v=pos(e);if(dist(v,p)>1e-8)e.facing=Math.atan2(p.y-v.y,p.x-v.x)*180/Math.PI;}
+  return ALCHEMIST_ACTIVE_RULES[id]?castAlchemistAbility(game,e,id,{mode:'manual',...params},{universalDamage}):castYseraAbility(game,e,id,{mode:'manual',...params},heroScriptApi);
+}
 function triggerNagaDamageSkills(game,damaged,attacker){
   const now=game.state.time;
   for(const kind of ['naga_hurricane','naga_ripple'])for(const [caster,other] of [[damaged,attacker],[attacker,damaged]]){
@@ -482,6 +543,9 @@ function triggerNagaBoon(game,target){
 export function tickSourceScriptJobs(game,dt=0){
   const now=game.state.time,remaining=[];
   for(const job of game.state.sourceSkillJobs??[]){
+    if(job.type.startsWith('alchemist_')){if(tickAlchemistJob(game,job,{universalDamage}))remaining.push(job);continue;}
+    if(job.type.startsWith('ysera_')&&job.type!=='ysera_wake'){if(tickYseraJob(game,job,heroScriptApi))remaining.push(job);continue;}
+    if(job.type==='garrosh_bleed'){if(tickGarroshJobs(game,job,now,{universalDamage}))remaining.push(job);continue;}
     const live=game.state.entities.find(e=>e.id===job.sourceId),source=live??job.source;
     if(job.type==='naga_hurricane'){
       while(job.remaining>0&&job.nextAt<=now+1e-8){

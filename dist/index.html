@@ -7,27 +7,31 @@
   <meta name="description" content="在浏览器中排兵布阵、发展伐木、发木进攻，与队友一起守住国王。依据v14.1A5九倍模式解析数据的浏览器模拟。">
   <title>军团战争 · v14.1A5 九倍</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%23131f1b' d='M0 0h64v64H0z'/%3E%3Cpath fill='%23d7b975' d='M32 4 57 18v26L32 60 7 44V18zm0 7L14 22v18l18 12 18-12V22zM21 25h7v15h15v6H21z'/%3E%3C/svg%3E">
-  <link rel="stylesheet" href="./style.css?v=51832fb778d5">
+  <link rel="stylesheet" href="./style.css?v=64fa6896a04e">
   <!-- asset-import-map:start -->
   <script type="importmap" id="asset-import-map">
 {
   "imports": {
-    "./app.js": "./app.js?v=a56018a6e3a8",
-    "./catalog-ui.js": "./catalog-ui.js?v=0eb66655caba",
+    "./alchemist-rules.js": "./alchemist-rules.js?v=f1ec5de9e8ee",
+    "./app.js": "./app.js?v=e5f9007224ce",
+    "./catalog-ui.js": "./catalog-ui.js?v=ecf6ebcdc973",
     "./data.js": "./data.js?v=cdcc190a214d",
     "./document-catalog.js": "./document-catalog.js?v=fe6bff950617",
     "./document-rules.js": "./document-rules.js?v=3b98aa6a2973",
     "./egg-rules.js": "./egg-rules.js?v=2b533ec05892",
-    "./engine.js": "./engine.js?v=8cff617235d2",
+    "./engine.js": "./engine.js?v=00426b63b7e1",
+    "./garrosh-rules.js": "./garrosh-rules.js?v=5c37b3549b3f",
     "./layout.js": "./layout.js?v=f4ece3ef19c5",
     "./map-reference.js": "./map-reference.js?v=88974449e603",
     "./match-storage.js": "./match-storage.js?v=4f3950ad13f9",
-    "./renderer.js": "./renderer.js?v=35021b552512",
-    "./skills.js": "./skills.js?v=0854b7582bb8",
+    "./renderer.js": "./renderer.js?v=1e3a661f1cd4",
+    "./sandbox-qualifications.js": "./sandbox-qualifications.js?v=739fc28f64c6",
+    "./skills.js": "./skills.js?v=696366c0bab9",
     "./special-rules.js": "./special-rules.js?v=05eb954febc8",
     "./unit-categories.js": "./unit-categories.js?v=3b585584b7a2",
     "./v14-reference.js": "./v14-reference.js?v=c08c4dd6ece1",
-    "./workbook-reference.js": "./workbook-reference.js?v=7e6b0b42e7ff"
+    "./workbook-reference.js": "./workbook-reference.js?v=7e6b0b42e7ff",
+    "./ysera-rules.js": "./ysera-rules.js?v=e9a10cf5c27e"
   }
 }
   </script>
@@ -125,6 +129,13 @@
       <p class="sandbox-intro">备战不限时，点击“开始”手动开波。每次测试只运行所选一波，结束后可调整阵容再次测试。</p>
       <div class="sandbox-field"><label for="sandbox-wave">测试波次</label><div><select id="sandbox-wave"></select><button id="sandbox-load-wave">切换波次</button></div><small>保留阵容和经济进度；中止当前战斗，恢复双方国王并返回布阵。</small></div>
       <div class="sandbox-field"><label for="sandbox-builder">建造者</label><div><select id="sandbox-builder"></select><button id="sandbox-switch-builder">免费切换</button></div><small>保留现有军团，可混合不同种族。兵种升级与来源条件仍然生效。</small></div>
+      <section class="sandbox-qualifications" aria-labelledby="sandbox-qualification-title">
+        <h3 id="sandbox-qualification-title">测试资格</h3>
+        <label class="sandbox-ai"><input id="sandbox-super-sponsor" type="checkbox"><span><b>超级赞助</b><small>模拟原图超级赞助资格，可测试对应彩蛋。配方、完成记录与数量限制仍然生效。</small></span></label>
+        <div class="sandbox-field"><label for="sandbox-qualification">其他来源资格</label><div><select id="sandbox-qualification"></select></div><small id="sandbox-qualification-status" aria-live="polite"></small></div>
+        <div class="sandbox-qualification-actions"><button id="sandbox-enable-qualification">开启所选</button><button id="sandbox-disable-qualification">关闭所选</button><button id="sandbox-enable-all">开启全部已核定资格</button><button id="sandbox-disable-all">关闭全部测试资格</button></div>
+        <p class="sandbox-foot">本地测试资格随沙盒存档保存，不关联平台账号。未核定的会员档位仍保留原限制。</p>
+      </section>
       <div class="sandbox-actions"><button data-sandbox="sandboxResources"><b>补充资源</b><small>至少10万金、10万木 · 300人口</small></button><button data-sandbox="sandboxComplete" data-build-only><b>完成施工与研究</b><small>立即完成已付款的军团和经济任务</small></button><button data-sandbox="sandboxReset"><b>返回布阵重测</b><small>中止本波，保留阵容，恢复国王</small></button><button data-sandbox="sandboxClear" data-build-only><b>清空我的阵容</b><small>移除自己的所有军团单位</small></button></div>
       <label class="sandbox-ai"><input id="sandbox-ai" type="checkbox"><span><b>启用 AI 玩家</b><small>默认只在你的防线刷怪；开启后恢复八路。关闭后保留 AI 军团，停止 AI 决策。</small></span></label>
       <p id="sandbox-feedback" class="sandbox-feedback" role="status"></p>
@@ -133,6 +144,6 @@
     </div>
   </dialog>
   <dialog id="end-dialog" class="end-dialog"><div class="end-emblem"><svg><use href="#i-crown"/></svg></div><div id="end-eyebrow" class="eyebrow">战斗结束</div><h2 id="end-title">联盟军团获胜</h2><p id="end-description"></p><div id="end-stats" class="end-stats"></div><button id="sandbox-end-reset" class="primary-button" hidden>返回布阵重测</button><button id="restart-game" class="primary-button">再来一局</button><button class="close-dialog secondary-button">回看战场</button></dialog>
-  <script type="module" src="./app.js?v=a56018a6e3a8"></script>
+  <script type="module" src="./app.js?v=e5f9007224ce"></script>
 </body>
 </html>

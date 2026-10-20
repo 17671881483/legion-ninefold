@@ -373,6 +373,14 @@
 .sandbox-foot{font-size:10px;color:#a2b092;line-height:1.7;margin:5px 0 17px}
 .sandbox-feedback{font-size:11px;color:#dfc98e;line-height:1.7;margin:0 0 10px;min-height:0}
 .sandbox-feedback:empty{display:none}.sandbox-feedback.error{color:#df9c86}
+.sandbox-qualifications{border:1px solid #56603b;padding:10px 12px;margin:14px 0;background:#22331e}
+.sandbox-qualifications h3{font-size:13px;font-weight:500;color:#e3cd8e;margin:0 0 4px}
+.sandbox-qualifications .sandbox-ai{border-top:0;padding:8px 0}
+.sandbox-qualifications .sandbox-field{margin-bottom:8px}
+.sandbox-qualification-actions{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:8px 0}
+.sandbox-qualification-actions button{font-size:11px;padding:8px 6px}
+.selection-actions{justify-content:flex-start;align-content:flex-start}
+.selection-actions>*{flex-shrink:0}
 #sandbox-modes{display:block;width:100%;margin-top:8px;padding:8px;font-size:11px}
 .treasure-section{border:1px solid #a48d58;padding:11px;margin:0 0 15px;background:#303a24;color:#ead098}
 .treasure-section h3{font:600 14px var(--serif);margin:0 0 6px}.treasure-section h3 small{font:10px var(--sans);float:right}

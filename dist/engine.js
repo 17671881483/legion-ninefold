@@ -1,8 +1,10 @@
 import { UNITS, MERCENARIES, LEGACY_MERCENARIES, WAVES, RULES, HEROES, BUILDERS, PROPHET_POOLS, UNIT_TEMPLATES } from './data.js';
-import { attachSkills, refreshSourceSkills, compileSkills, sourceAuraEffects, tickSourceSkills, sourceAttackStart, sourceOnHit, modifyIncoming, afterSourceDamage, sourceDeath, sourceMoveFactor, canWeaponTarget, sourceWeapon, tickSourceScriptJobs } from './skills.js';
+import { attachSkills, refreshSourceSkills, compileSkills, sourceAuraEffects, tickSourceSkills, sourceAttackStart, sourceOnHit, modifyIncoming, beforeSourceDamage, afterSourceDamage, sourceDeath, sourceMoveFactor, canWeaponTarget, sourceWeapon, tickSourceScriptJobs, manualSourceSkills, castManualSourceSkill } from './skills.js';
 import { MAP, laneToWorld, worldToLane, kingWorld, spawnWarpWorld, supportWorld, routePoints, isWalkable, isSegmentWalkable, constrainPoint, closestWalkable, navigationPath } from './layout.js';
 import { recordEggCompletion, restoreEggHistory, finishEggWave, recordBeastKingKill, eggRequirementStatus, appearanceQualificationStatus } from './egg-rules.js';
 import { queueSpecialMonsters, applySpecialMonsterSpawn, specialMonsterDeath, sourceEconomyBuildStart, sourceEconomyUpgradeFinish, farmerGoldRate, sourceEconomyDeath, applyFarmerRoundReward } from './special-rules.js';
+import { alchemistDeathReward } from './alchemist-rules.js';
+import { applySandboxQualification } from './sandbox-qualifications.js';
 
 const units = Object.fromEntries(UNITS.map(u => [u.id, u]));
 const mercs = Object.fromEntries([...LEGACY_MERCENARIES, ...MERCENARIES].map(u => [u.id, u]));
@@ -477,6 +479,7 @@ export class Game {
       this._resetSandboxWave(); this._log(`测试沙盒：第 ${this.state.wave} 波已重置，保留阵容与经济进度。`);
       return this._result(true, '本波已重置，可调整阵容后再次出兵');
     }
+    if(type==='sandboxQualification'){const result=applySandboxQualification(this,payload);return this._result(result.ok,result.message);}
     if (!['sandboxBuilder', 'sandboxClear', 'sandboxComplete', 'sandboxAI'].includes(type)) return this._result(false, '未知测试指令');
     if (this.state.phase !== 'build') return this._result(false, '请先重置本波，再使用备战期测试指令');
     switch (type) {
@@ -506,6 +509,10 @@ export class Game {
     }
   }
 
+  unitSkillStatus(entityId,playerId=0){
+    const e=this.state.entities.find(e=>e.id===entityId);
+    return manualSourceSkills(this,e).map(s=>{const reason=e?.ownerId!==playerId?'只能指挥自己的单位':!['combat','arena'].includes(this.state.phase)?'仅可在战斗中施法':this.state.paused?'请先继续战斗':s.reason;return {...s,canStart:!reason,reason};});
+  }
   command(type, payload = {}) {
     if (type === 'restart') { const fresh = new Game({ ...this.options, ...payload }); Object.assign(this, fresh); return this._result(true, '已重新开始'); }
     if (typeof type === 'string' && type.startsWith('sandbox')) return this._sandboxCommand(type, payload);
@@ -515,6 +522,12 @@ export class Game {
     const p = this._getPlayer(payload);
     if (!p) return this._result(false, '玩家不存在');
     switch (type) {
+      case 'cast':{
+        const e=this.state.entities.find(e=>e.id===payload.entityId),s=this.unitSkillStatus(payload.entityId,p.id).find(s=>s.id===payload.skillId);
+        if(!s||!s.canStart)return this._result(false,s?.reason??'当前单位不能释放此技能');
+        const target=this.state.entities.find(e=>e.id===payload.targetId),point=Number.isFinite(payload.worldX)&&Number.isFinite(payload.worldY)?{x:payload.worldX,y:payload.worldY}:undefined;
+        const result=castManualSourceSkill(this,e,payload.skillId,{target,point});return this._result(result.ok,result.message??result.reason??(result.ok?`已施放${s.name}`:'施法失败'));
+      }
       case 'treasure': {
         const reward=this.treasureStatus(p.id).find(t=>t.id===payload.treasureId);
         if(!reward)return this._result(false,'宝藏奖励不存在或已经领取');
@@ -870,6 +883,8 @@ export class Game {
       ownerId: player.id, sourceLaneId: player.id, x, y, buildingId, isHero });
     // PassiveSkill copies A1PE from the persistent building on every deployment.
     e.armor+=number(player.buildings.find(b=>b.id===buildingId)?.treasureArmor,0);
+    const garroshArmor=number(player.buildings.find(b=>b.id===buildingId)?.garroshArmorLevel,0);
+    if(garroshArmor){e.armor+=garroshArmor;e.status.garroshArmorLevel=garroshArmor;}
     this._ensureWorld(e); e.status.activated = false; e.routeMode = 'guard';
     e.nav = { mode: 'guard', routeId: player.id, path: [], index: 0, distance: 0, goal: spawnWarpWorld(player.id), interrupted: false };
     this.state.entities.push(e);
@@ -904,6 +919,7 @@ export class Game {
       const safe = closestWalkable(point, e.battleTeam, e.radius ?? .2) ?? point;
       e.worldX = safe.x; e.worldY = safe.y;
     }
+    if(!Number.isFinite(e.facing)){const goal=e.side==='monster'?this._kingPosition(e.battleTeam):laneToWorld(e.sourceLaneId??e.ownerId??0,3,0);e.facing=Math.atan2(goal.y-e.worldY,goal.x-e.worldX)*180/Math.PI;}
     if (e.acquisitionRange === undefined) e.acquisitionRange = Math.max(4.5, e.range + 1);
     this._syncLocal(e);
   }
@@ -961,6 +977,7 @@ export class Game {
     for (const e of entities) {
       if (e.hp <= 0) { e.pendingAttack = null; continue; }
       if (e.expiresAt && e.expiresAt <= now) { e.hp = 0; e.pendingAttack = null; continue; }
+      if(e.status.yseraHidden)continue;
       this._ensureWorld(e); const team = e.battleTeam, battle = battles[team];
       battle.push(e); this._worldEntities.set(e.id, e);
       const key = `${Math.floor(e.worldX)},${Math.floor(e.worldY)}`, grid = this._spatial[team];
@@ -973,6 +990,7 @@ export class Game {
     this.state.congestion = monsterCounts.map((count, team) => ({ attackingTeam: team, count, attackIntervalFactor: this._monsterPressure[team] }));
     for (const e of entities) {
       if (e.hp <= 0) { e.pendingAttack = null; continue; }
+      if(e.status.yseraHidden||e.status.yseraPaused){e.pendingAttack=null;continue;}
       this._ensureWorld(e);
       const battle = battles[e.battleTeam], st = e.status;
       if (st.poisonUntil > now) this._hurt(e, number(st.poisonDps, 0) * dt, st.poisonOwner, true);
@@ -1095,6 +1113,7 @@ export class Game {
     }
     e.worldX = next.x; e.worldY = next.y;
     e.facingX = next.x - from.x; e.facingY = next.y - from.y;
+    if(Math.hypot(e.facingX,e.facingY)>1e-8)e.facing=Math.atan2(e.facingY,e.facingX)*180/Math.PI;
     if (e.nav) e.nav.distance += distance(from, next);
     this._syncLocal(e);
   }
@@ -1127,6 +1146,7 @@ export class Game {
     return true;
   }
   _attack(e, target, lane) {
+    e.facing=Math.atan2(target.worldY-e.worldY,target.worldX-e.worldX)*180/Math.PI;
     const ability = e.ability, type = ability?.type;
     if(e.buffs?.some(b=>b.expiresAt>this.state.time&&b.disarm))return;
     const weapon=sourceWeapon(e,target);if(!weapon)return;
@@ -1169,9 +1189,11 @@ export class Game {
   _hurt(target, damage, attacker, pure = false) {
     if (target.hp <= 0 || damage <= 0) return 0;
     const options=typeof pure==='object'?pure:{spell:!!pure},legacyPure=typeof pure==='boolean'&&pure;
+    const revivalCount=target.status.yseraRevivalCount??0;
     let actual = modifyIncoming(this,target,damage,attacker,options);
-    if(actual<=0)return 0;
+    if(actual<=0){if((target.status.yseraRevivalCount??0)>revivalCount)beforeSourceDamage(this,target,0,attacker);return 0;}
     if ((target.status.shield ?? 0) > 0 && !legacyPure) { const absorbed = Math.min(actual, target.status.shield); target.status.shield -= absorbed; actual -= absorbed; }
+    beforeSourceDamage(this,target,actual,attacker);
     target.hp -= actual;
     afterSourceDamage(this,target,actual,attacker,options);
     if (!options.spell && target.ability?.type === 'thorns' && attacker?.hp > 0 && attacker.range < 1.3) this._hurt(attacker, actual * number(target.ability.value, .15), target, true);
@@ -1182,8 +1204,10 @@ export class Game {
     }
     if (target.hp <= 0 && !target.status.deathCounted) {
       target.status.deathCounted = true;
+      const alchemy=alchemistDeathReward(this,target,attacker),economicPlayer=this.state.players[attacker?.ownerId];
+      if(economicPlayer&&alchemy.bonusGold){economicPlayer.gold+=alchemy.bonusGold;economicPlayer.stats.goldEarned+=alchemy.bonusGold;this._event('gold',attacker,`点金+${alchemy.bonusGold}`);}
       this._sourceDeath(target,attacker);
-      const economic=sourceEconomyDeath(this,target,attacker,units),economicPlayer=this.state.players[attacker?.ownerId];
+      const economic=sourceEconomyDeath(this,target,attacker,units);
       if(economicPlayer){economicPlayer.gold+=economic.bonusGold;economicPlayer.wood+=economic.bonusWood;economicPlayer.stats.goldEarned+=economic.bonusGold;}
       if (target.side === 'monster') {
         const base = this.state.wave >= 31 ? 0 : target.isMerc || target.isSummon ? number(target.sourceRawFields?.level,target.reward) : number(RULES.waveKillGold?.[this.state.wave-1],target.reward);
@@ -1263,7 +1287,7 @@ export class Game {
   }
   _warpDefenders() {
     for (const e of this.state.entities) {
-      if (e.hp <= 0 || e.side !== 'defender' || e.status.warped || !this._settledLanes.includes(e.sourceLaneId)) continue;
+      if (e.hp <= 0 || e.status.yseraHidden || e.status.yseraPaused || e.side !== 'defender' || e.status.warped || !this._settledLanes.includes(e.sourceLaneId)) continue;
       if (e.nav?.mode !== 'return' || distance(e, spawnWarpWorld(e.sourceLaneId)) > .55 || e.targetId) continue;
       const team = e.battleTeam, source = worldPoint(e), base = supportWorld(team);
       const slot = Number(String(e.buildingId ?? e.id).replace(/\D/g, '')) || 0;
@@ -1359,6 +1383,7 @@ export class Game {
       const def=units[b.unitId];if(!def||(isSourceUnit(def)&&!def.combatRawcode))continue;const point=laneToWorld(0,1.2+(p.id%4)*1.1+(b.col-2.5)*.12,p.team===0?5+(b.row/8):9-(b.row/8));
       const e=this._entity(def,{team:p.team,side:`arena${p.team}`,battleTeam:0,laneId:0,sourceLaneId:p.id,ownerId:p.id,buildingId:b.id,isArena:true,worldX:point.x,worldY:point.y});
       e.armor+=number(b.treasureArmor,0);
+      if(b.garroshArmorLevel){e.armor+=b.garroshArmorLevel;e.status.garroshArmorLevel=b.garroshArmorLevel;}
       e.status.activated=true;e.acquisitionRange=12;e.nav={mode:'arena',path:[],index:0,distance:0};s.entities.push(e);
     }
     this._log(`第${s.wave}波竞技场开始，限时120秒；Web在同一场地模拟双方军团交战。`);

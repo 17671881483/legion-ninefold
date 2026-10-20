@@ -1,6 +1,7 @@
 import { UNITS, MERCENARIES, LEGACY_MERCENARIES, WAVES, RULES, HEROES, BUILDERS, PROPHET_POOLS, UNIT_TEMPLATES } from './data.js';
 import { attachSkills, compileSkills, sourceAuraEffects, tickSourceSkills, sourceAttackStart, sourceOnHit, modifyIncoming, afterSourceDamage, sourceDeath, sourceMoveFactor, canWeaponTarget, sourceWeapon, tickSourceScriptJobs } from './skills.js';
 import { MAP, laneToWorld, worldToLane, kingWorld, spawnWarpWorld, supportWorld, routePoints, isWalkable, isSegmentWalkable, constrainPoint, closestWalkable, navigationPath } from './layout.js';
+import { recordEggCompletion, restoreEggHistory, finishEggWave, recordBeastKingKill, eggRequirementStatus, appearanceQualificationStatus } from './egg-rules.js';
 
 const units = Object.fromEntries(UNITS.map(u => [u.id, u]));
 const mercs = Object.fromEntries([...LEGACY_MERCENARIES, ...MERCENARIES].map(u => [u.id, u]));
@@ -23,13 +24,19 @@ const sourceLimits = Object.fromEntries(UNITS.filter(u=>!u.legacy && u.buildLimi
   const details=u.buildLimitDetails??u.buildLimits??[], list=Array.isArray(details)?details:[details], detail=list.at(-1)??{};
   return [rawcode(u),{...detail,unitRawcode:rawcode(u),maxAllowed:Number(u.buildLimit),scope:u.buildLimitScope??detail.scope??'type'}];
 }));
+// EggWhiteEx opens the player's chosen holy-dragon appearance with one shared
+// allowance (war3map.j:28865–28866); it is absent from the static cap CSV.
+for (const code of ['h201', 'h204']) sourceLimits[code] = { unitRawcode: 'h201', unitRawcodes: ['h201', 'h204'], maxAllowed: 1, scope: 'type', source: { script: 'war3map.j', lines: [28865, 28866] } };
+const gameMode = mode => mode === 'sandbox' ? 'sandbox' : 'normal';
+const SANDBOX_RESOURCES = 100000;
+const SANDBOX_POPULATION = 300;
 
 
 
 /** Deterministic, DOM-free simulation. tick receives real elapsed seconds; speed is applied here. */
 export class Game {
   constructor(options = {}) {
-    this.options = { seed: options.seed ?? 42, difficulty: options.difficulty ?? 'normal', builderId: options.builderId ?? RULES.defaultBuilderId ?? BUILDERS[0]?.id, ggEnabled: options.ggEnabled ?? RULES.ggEnabled ?? true };
+    this.options = { seed: options.seed ?? 42, difficulty: options.difficulty ?? 'normal', builderId: options.builderId ?? RULES.defaultBuilderId ?? BUILDERS[0]?.id, ggEnabled: options.ggEnabled ?? RULES.ggEnabled ?? true, mode: gameMode(options.mode) };
     this._rng = (Number(this.options.seed) || 42) >>> 0;
     this._id = 0;
     this._spawnQueue = [];
@@ -42,13 +49,14 @@ export class Game {
     const names = ['你', '青岚 · 队友', '铁壁 · 队友', '星火 · 队友', '赤锋 · 对手', '暗潮 · 对手', '霜刃 · 对手', '影木 · 对手'];
     this.state = {
       map: { id: MAP.id, version: MAP.version, topology: '2x2-crossbar-stem' },
+      mode: this.options.mode,
       phase: 'build', wave: 1, timer: this.buildDuration(1), time: 0, sourceVersion: RULES.sourceVersion, dataRevision: RULES.dataRevision ?? '5.0dJF-web9',
       speed: 1, paused: false, winner: null, difficulty: this.options.difficulty, seed: this.options.seed,
       players: names.map((name, id) => ({ id, name, team: id < 4 ? 0 : 1,
         gold: initialGold, wood: rule('initialWood', 40), income: rule('initialIncome', 5),
         workers: rule('initialWorkers', 1), lumberLevel: 0, technologies: { R0GK: 1 }, entitlements: {}, economyTasks: { workerQueue: [], lumberTask: null }, buildings: [], builderId: id === 0 ? this.options.builderId : this._pick(BUILDERS.filter(b=>b.mode!=='morph'))?.id ?? RULES.defaultBuilderId ?? BUILDERS[0]?.id, roster: [],
         mercStocks: Object.fromEntries(MERCENARIES.map(m => [m.id, { stock: this._mercenaryMaxStock(m), nextReadyAt: null }])),
-        populationCap: rule('initialPopulation', 40), popUsed: rule('initialWorkers', 1), heroId: null, healUsed: false, rerolls: 0, stats: { kills: 0, leaks: 0, warps: 0, sent: 0, damage: 0, goldEarned: 0, wavesHeld: 0 }
+        populationCap: rule('initialPopulation', 40), popUsed: rule('initialWorkers', 1), heroId: null, heroAltarCount: 0, healUsed: false, rerolls: 0, stats: { kills: 0, leaks: 0, warps: 0, sent: 0, damage: 0, goldEarned: 0, wavesHeld: 0 }
       })),
       kings: [0, 1].map(team => ({ team, hp: rule('kingInitialHp', 12000), maxHp: rule('kingInitialHp', 12000),
         attack: rule('kingDamage', 135), regen: rule('kingRegen', 4), healCharges: rule('kingHealCharges', 4),
@@ -57,10 +65,19 @@ export class Game {
       entities: [], sourceSkillJobs: [], events: [], logs: [], pendingSends: [], kingBountyPools: [0, 0], teamLeakFlags: [false, false],
       metrics: { spawned: 0, killed: 0, leaked: 0 },
     };
-    for (const p of this.state.players) p.roster = this._roster(p.builderId);
+    for (const p of this.state.players) {
+      p.roster = this._roster(p.builderId);
+      // Initialize the same empty journal saved/restored for players who have
+      // not finished a troop yet; restoring must not add new progression data.
+      restoreEggHistory(p,{wave:this.state.wave,buildings:p.buildings,unitsById:units});
+    }
     this._log(`${RULES.title}：按来源建造军团，发展木材，与队友共同守护国王。`);
     this._log('采用v14.1A5九倍实怪数量和HP；静态数据与Web近似、原脚本冲突均保留来源说明。');
-    for (let id = 1; id < 8; id++) this._aiBuild(this.state.players[id], true);
+    if (this.state.mode === 'sandbox') {
+      this.state.sandbox = { aiEnabled: false };
+      this._sandboxResources();
+      this._log('测试沙盒：金币与木材各10万、人口300；备战不限时，手动出兵。AI默认关闭，仅本路刷新波次，木怪派遣仍按正常规则生效。');
+    } else for (let id = 1; id < 8; id++) this._aiBuild(this.state.players[id], true);
   }
 
   _random() {
@@ -80,7 +97,7 @@ export class Game {
   _military(p) {return p.buildings.filter(b=>!b.construction).reduce((sum,b)=>sum+value(units[b.unitId],['sourcePoints'],b.totalSpent??b.spent??this._cost(units[b.unitId])),0);}
   _buildLimitCount(p, limit, excludeBuildingId) {
     return p.buildings.filter(b=>b.id!==excludeBuildingId && (
-      rawcode(units[b.unitId])===limit.unitRawcode || rawcode(units[b.construction?.targetId])===limit.unitRawcode ||
+      (limit.unitRawcodes??[limit.unitRawcode]).includes(rawcode(units[b.unitId])) || (limit.unitRawcodes??[limit.unitRawcode]).includes(rawcode(units[b.construction?.targetId])) ||
       limit.scope==='lineage' && b.limitOrigins?.includes(limit.unitRawcode)
     )).length;
   }
@@ -97,6 +114,27 @@ export class Game {
     if(next)b.limitOrigins=b.limitOrigins.filter(id=>id===next.unitRawcode || sourceLimits[id]?.counterMarkerRawcode);
     if(next?.scope==='lineage'&&!b.limitOrigins.includes(next.unitRawcode))b.limitOrigins.push(next.unitRawcode);
   }
+  _heroBuildings(p) {
+    return p.buildings.filter(b=>[units[b.unitId],units[b.construction?.targetId]].some(u=>u?.heroEntry||u?.hero));
+  }
+  _heroAltarCount(p) {
+    return Math.max(number(p.heroAltarCount,0),p.heroAltarUsed?1:0,this._heroBuildings(p).length,p.heroId?1:0);
+  }
+  _heroFamily(u) { return u?.heroFamily ?? u?.heroTypeRawcode ?? rawcode(u); }
+  /** Read-only altar availability shared by the build panel and AI. */
+  heroStatus(playerId = 0) {
+    const p=this.state.players[playerId],limit=rule('heroLimit',2);
+    if(!p)return {entries:[],limit,count:0,remaining:0,used:false,buildingId:null,buildingIds:[],military:0,requiredMilitary:0,canStart:false,reason:'玩家不存在'};
+    const entries=(this._sourceBuilder(p)?.heroEntryIds??[]).filter(id=>units[id]);
+    const count=this._heroAltarCount(p),buildings=this._heroBuildings(p),remaining=Math.max(0,limit-count),military=this._military(p);
+    const requiredMilitary=Math.max(0,...entries.flatMap(id=>(units[id].requiresDetails??[]).map(r=>RULES.militaryRequirements?.[r.rawcode]??(/兵力要求/.test(r.name??'')?number((r.name??'').match(/\d+/)?.[0],0):0))));
+    let reason=remaining===0?`本局英雄祭坛名额已用完（${limit}座）`:this.state.phase==='ended'?'本局已结束':this.state.phase!=='build'?'请在备战期建造英雄祭坛':!entries.length?'当前建造者没有英雄祭坛入口':p.buildings.length>=48?'建造区已满':'';
+    if(!reason){
+      const statuses=entries.map(id=>{const u=units[id],gate=this.requirementStatus(u,p.id);return gate.reason||(this._population(p)+u.population>p.populationCap?'人口不足，请扩建营地':p.gold+1e-8<this._cost(u)||p.wood+1e-8<number(u.woodCost,0)?`需要 ${this._cost(u)} 金币、${number(u.woodCost,0)} 木材`:'');});
+      if(statuses.every(Boolean))reason=statuses[0];
+    }
+    return {entries,limit,count,remaining,used:remaining===0,buildingId:buildings[0]?.id??null,buildingIds:buildings.map(b=>b.id),military,requiredMilitary,canStart:!reason,reason};
+  }
   /** A missing external entitlement/technology is a locked source condition. */
   requirementStatus(unitId, playerId = 0) {
     const u = typeof unitId === 'object' ? unitId : units[unitId], p = this.state.players[playerId];
@@ -110,7 +148,9 @@ export class Game {
       let kind = r.kind ?? r.requirement_kind ?? 'unit_or_requirement_marker', current = 0, threshold = RULES.militaryRequirements?.[id];
       if (!threshold && /兵力要求/.test(name)) threshold = Number(name.match(/(\d+)/)?.[1]);
       const counter=Object.values(sourceLimits).find(limit=>limit.counterMarkerRawcode===id);
+      const egg=eggRequirementStatus(p,id);
       if(counter){kind='capacity_marker';current=this._buildLimitCount(p,counter)<counter.maxAllowed?1:0;}
+      else if (egg) return egg;
       else if (id === 'u004') { kind = 'battle_end'; current = this.state.phase === 'build' ? 1 : 0; }
       else if (threshold) { kind = 'military'; current = this._military(p); return { rawcode: id, name, kind, required: threshold, current, met: current >= threshold }; }
       else if (/赞助|会员|荣誉|道具|皮肤|尊享/.test(name) || ['h200','h210','h220','h230','h240'].includes(id)) { kind = 'entitlement'; current = number(p.entitlements?.[id],0); }
@@ -120,10 +160,17 @@ export class Game {
       } else { kind = 'owned_unit'; current = p.buildings.filter(b => !b.construction && rawcode(units[b.unitId]) === id).length; }
       return { rawcode: id, name, kind, required, current, met: current >= required };
     });
+    const appearanceGate=appearanceQualificationStatus(p,u);if(appearanceGate)requirements.push(appearanceGate);
     const limit=this.buildLimitStatus(u,playerId);
     if(limit.max!==null)requirements.push({rawcode:limit.rawcode,name:`限造${limit.max}个`,kind:'build_limit',required:limit.max,current:limit.current,met:limit.canStart});
+    if(u.heroEntry){const count=this._heroAltarCount(p),max=rule('heroLimit',2);requirements.push({rawcode:'hero-altars',name:`本局最多${max}座英雄祭坛`,kind:'hero_limit',required:max,current:count,met:count<max});}
+    if(u.heroChoice){
+      const family=this._heroFamily(u),owned=this._heroBuildings(p).some(b=>[units[b.unitId],units[b.construction?.targetId]].some(def=>def?.hero&&this._heroFamily(def)===family));
+      requirements.push({rawcode:family,name:'同种英雄只能选择一次',kind:'hero_unique',required:1,current:owned?1:0,met:!owned});
+      if(u.heroAllowedBuilderIds?.length){const builderId=this._sourceBuilder(p)?.id??p.builderId,allowed=u.heroAllowedBuilderIds.includes(builderId);requirements.push({rawcode:'hero-builder',name:'当前建造者不能选择此英雄',kind:'hero_builder',required:1,current:allowed?1:0,met:allowed});}
+    }
     const failed = requirements.find(r => !r.met);
-    return { canStart: !failed, reason: failed ? failed.kind === 'build_limit' ? limit.reason : failed.kind === 'capacity_marker' ? `数量限制：${failed.name}` : failed.kind === 'military' ? `需要军力 ${failed.required}` : failed.kind === 'battle_end' ? '等到战斗结束' : `${failed.kind === 'entitlement' ? '来源资格未具备' : '未满足来源条件'}：${failed.name}` : '', requirements };
+    return { canStart: !failed, reason: failed ? ['hero_limit','hero_unique','hero_builder'].includes(failed.kind)?failed.name:failed.kind === 'build_limit' ? limit.reason : failed.kind === 'capacity_marker' ? `数量限制：${failed.name}` : failed.kind === 'military' ? `需要军力 ${failed.required}` : failed.kind === 'battle_end' ? '等到战斗结束' : failed.kind === 'unconfirmed_recipe' ? `配方待核定：${failed.name}` : `${['entitlement','appearance_qualification'].includes(failed.kind) ? '来源资格未具备' : '未满足来源条件'}：${failed.name}` : '', requirements };
   }
   _requirement(p,u) { return this.requirementStatus(u,p.id).reason; }
   kingUpgradeCap(stat) {
@@ -239,8 +286,18 @@ export class Game {
   }
   _completeConstruction(p, b) {
     if (!b.construction) return;
-    b.unitId = b.construction.targetId; b.construction = null; this._recordLimitOrigins(b,units[b.unitId]);
+    b.unitId = b.construction.targetId; b.construction = null; this._recordLimitOrigins(b,units[b.unitId]);this._recordSourceCompletion(p,units[b.unitId]);this._recordEggCompletion(p,units[b.unitId],b);
     if (p.id === 0) this._event('build', { laneId: p.id, x: b.col + .5, y: b.row + 4.5 }, `${units[b.unitId]?.name ?? ''}施工完成`);
+  }
+  _recordEggCompletion(p, def, building) {
+    return recordEggCompletion(p,def,{buildingId:building?.id,wave:this.state.wave,buildings:p.buildings,unitsById:units});
+  }
+  _recordSourceCompletion(p, def) {
+    if(!isV14(def))return;
+    p.completedSourceUnits??={};p.completedSourceUnits[rawcode(def)]=true;
+    // EggWhiteEx, war3map.j:28796—28800: completing both units permanently
+    // unlocks the alchemist hero, even after upgrading or selling them.
+    if(p.completedSourceUnits.h0AF&&p.completedSourceUnits.h0AO){p.technologies??={};p.technologies.R2Z0=1;}
   }
   _completeMilitaryConstruction() {
     // Opening combat finishes the paid army orders only. Economy jobs retain
@@ -350,8 +407,82 @@ export class Game {
     return number(target.armor, 0) + auraArmor - broken;
   }
 
+  _aiEnabled() { return this.state.mode !== 'sandbox' || this.state.sandbox?.aiEnabled === true; }
+  _sandboxResources() {
+    const p = this.state.players[0];
+    p.gold = Math.max(p.gold, SANDBOX_RESOURCES); p.wood = Math.max(p.wood, SANDBOX_RESOURCES);
+    p.populationCap = Math.max(p.populationCap, SANDBOX_POPULATION);
+  }
+  /** Discard a trial without settling it or moving the economy clock. */
+  _resetSandboxWave(wave = this.state.wave) {
+    const s = this.state;
+    s.wave = wave; s.phase = 'build'; s.roundMode = 'normal'; s.timer = this.buildDuration(wave);
+    s.paused = false; s.winner = null; s.entities = []; s.sourceSkillJobs = []; s.events = []; s.pendingSends = [];
+    s.kingBountyPools = [0, 0]; s.teamLeakFlags = [false, false];
+    for (const key of ['waveInfo', 'arenaRemaining', 'arenaResult', 'continuousRemaining', 'congestion']) delete s[key];
+    this._spawnQueue = []; this._roundTime = 0; this._settledLanes = []; this._overtime = false; this._warpTimer = 0;
+    this._aiTimer = 0; this._monsterPressure = [1, 1]; this._spatial = null; this._worldEntities = null; this._battleAuras = [[], []];
+    for (const p of s.players) {
+      p.healUsed = false; p.interfereUntil = 0; p.interfereCooldown = 0;
+      p.roundLeaks = 0; p.sourceLeaks = 0; p.leakBountyFactor = 0; p.supportAnnounced = false;
+      for (const b of p.buildings) if (b.temporaryForm) { b.unitId = b.temporaryForm; b.temporaryForm = null; b.stimulatedWave = null; }
+      p.popUsed = this._population(p);
+    }
+    for (const k of s.kings) {
+      const point = kingWorld(k.team);
+      k.hp = k.maxHp; k.healCharges = rule('kingHealCharges', 4); k.healBlockedUntil = 0; k.attackCd = 0;
+      k.worldX = point.x; k.worldY = point.y; k.status = {}; k.buffs = []; k.skillStates = {};
+      k.targetId = null; k.pendingAttack = null; k.chase = null; k.nav = null; k.movePath = null;
+      k.moveCommanderId = null; k.commandLockedUntil = 0;
+    }
+  }
+  _sandboxCommand(type, payload) {
+    if (this.state.mode !== 'sandbox') return this._result(false, '测试指令仅限沙盒模式');
+    const p = this.state.players[0];
+    if (type === 'sandboxResources') {
+      this._sandboxResources(); return this._result(true, '金币、木材已补足10万，人口上限已补足300');
+    }
+    if (type === 'sandboxWave') {
+      if (!Number.isInteger(payload.wave) || payload.wave < 1 || payload.wave > WAVES.length) return this._result(false, `请选择1至${WAVES.length}的整数波次`);
+      this._resetSandboxWave(payload.wave); this._log(`测试沙盒：已切换至第 ${payload.wave} 波，手动出兵开始测试。`);
+      return this._result(true, `已选择第 ${payload.wave} 波`);
+    }
+    if (type === 'sandboxReset') {
+      this._resetSandboxWave(); this._log(`测试沙盒：第 ${this.state.wave} 波已重置，保留阵容与经济进度。`);
+      return this._result(true, '本波已重置，可调整阵容后再次出兵');
+    }
+    if (!['sandboxBuilder', 'sandboxClear', 'sandboxComplete', 'sandboxAI'].includes(type)) return this._result(false, '未知测试指令');
+    if (this.state.phase !== 'build') return this._result(false, '请先重置本波，再使用备战期测试指令');
+    switch (type) {
+      case 'sandboxBuilder': {
+        if (typeof payload.builderId !== 'string' || !payload.builderId) return this._result(false, '建造者不存在');
+        const builder = BUILDERS.find(b => b.id === payload.builderId || b.rawcode === payload.builderId);
+        if (!builder) return this._result(false, '建造者不存在');
+        p.builderId = builder.id; p.roster = this._roster(builder.id); p.builderChoices = [];
+        return this._result(true, `已切换至${builder.name}`);
+      }
+      case 'sandboxClear':
+        p.buildings = []; p.heroId = null; p.heroAltarUsed = false; p.heroAltarCount = 0;
+        return this._result(true, '已清空本路阵容，保留资源与经济进度');
+      case 'sandboxComplete': {
+        for (const b of p.buildings) this._completeConstruction(p, b);
+        const tasks = this._economyTasks(p);
+        p.workers += tasks.workerQueue.length; tasks.workerQueue = [];
+        if (tasks.lumberTask) { p.lumberLevel = tasks.lumberTask.targetLevel; tasks.lumberTask = null; }
+        if (tasks.farmTask) { p.populationCap = Math.min(rule('maxPopulation', 300), p.populationCap + rule('farmPopulation', 8)); tasks.farmTask = null; }
+        return this._result(true, '本路已支付的施工、招募和研究已全部完成');
+      }
+      case 'sandboxAI':
+        if (typeof payload.value !== 'boolean') return this._result(false, '请选择开启或关闭AI');
+        this.state.sandbox.aiEnabled = payload.value; this._aiTimer = 0;
+        this._log(`测试沙盒：AI已${payload.value ? '开启，恢复八路波次与自主操作' : '关闭，仅本路刷新波次并停止自主操作'}。`);
+        return this._result(true, `AI已${payload.value ? '开启' : '关闭'}`);
+    }
+  }
+
   command(type, payload = {}) {
     if (type === 'restart') { const fresh = new Game({ ...this.options, ...payload }); Object.assign(this, fresh); return this._result(true, '已重新开始'); }
+    if (typeof type === 'string' && type.startsWith('sandbox')) return this._sandboxCommand(type, payload);
     if (this.state.phase === 'ended') return this._result(false, '本局已结束，请重新开始');
     if (type === 'pause') { this.state.paused = payload.value === undefined ? !this.state.paused : !!payload.value; return this._result(true, this.state.paused ? '已暂停' : '继续战斗'); }
     if (type === 'speed') { this.state.speed = clamp(number(payload.value, 1), .5, 4); return this._result(true, `${this.state.speed} 倍速`); }
@@ -362,7 +493,6 @@ export class Game {
         if (this.state.phase !== 'build') return this._result(false, '战斗中无法建造');
         const u = units[payload.unitId];
         if (!u || ![...p.roster,...(this._sourceBuilder(p)?.heroEntryIds??[])].includes(u.id)) return this._result(false, '该兵种不在当前兵种池中');
-        if(u.heroEntry&&p.heroAltarUsed)return this._result(false,'每局只能建造一次英雄祭坛');
         const required=this._requirement(p,u);if(required)return this._result(false,required);
         const col = Number(payload.col), row = Number(payload.row);
         if (!Number.isInteger(col) || !Number.isInteger(row) || col < 0 || col >= 6 || row < 0 || row >= 8) return this._result(false, '请选择 6 × 8 建造区内的位置');
@@ -371,11 +501,13 @@ export class Game {
         const cost = this._cost(u),woodCost=number(u.woodCost,0);
         if (p.gold + 1e-8 < cost || p.wood+1e-8<woodCost) return this._result(false, `需要 ${cost} 金币、${woodCost} 木材`);
         const resultUnit=this._resolveMorph(u);if(!resultUnit)return this._result(false,'变形候选池为空，源数据待核定');
+        if(u.heroEntry)p.heroAltarCount=this._heroAltarCount(p)+1;
         p.gold -= cost;p.wood-=woodCost;
         const building = { id: this._uid('b'), unitId: resultUnit.id, col, row, spent: cost, totalSpent: cost, sourceProxy: u.morphProxy?u.id:null };
-        if(isSourceUnit(u)){const duration=number(u.buildTime??u.buildingRawFields?.bldtm,0);if(duration>0)building.construction={startAt:this.state.time,finishAt:this.state.time+duration,duration,targetId:resultUnit.id};building.unitId=u.id;building.builtWave=this.state.wave;if(u.heroEntry)p.heroAltarUsed=true;}
-        if(!building.construction)this._recordLimitOrigins(building,resultUnit);
+        if(isSourceUnit(u)){const duration=number(u.buildTime??u.buildingRawFields?.bldtm,0);if(duration>0)building.construction={startAt:this.state.time,finishAt:this.state.time+duration,duration,targetId:resultUnit.id};building.unitId=u.id;building.builtWave=this.state.wave;}
+        if(!building.construction){this._recordLimitOrigins(building,resultUnit);this._recordSourceCompletion(p,resultUnit);}
         p.buildings.push(building);
+        if(!building.construction)this._recordEggCompletion(p,resultUnit,building);
         this._event('build', { laneId: p.id, x: col + .5, y: row + 4.5 }, u.name);
         return this._result(true, `已建造 ${resultUnit.name}${u.morphProxy?'（变形）':''}`);
       }
@@ -393,7 +525,7 @@ export class Game {
         const woodCost=number(u.woodCost,0);
         if (p.gold + 1e-8 < cost || p.wood+1e-8<woodCost) return this._result(false, `升级需要 ${cost} 金币、${woodCost} 木材`);
         p.gold -= cost;p.wood-=woodCost; const duration=number(u.buildTime??u.buildingRawFields?.bldtm,0);if(isSourceUnit(u)&&duration>0)b.construction={startAt:this.state.time,finishAt:this.state.time+duration,duration,targetId:u.id};else b.unitId=u.id; b.spent = (b.spent ?? this._cost(old)) + cost; b.totalSpent = b.spent;
-        if(!b.construction)this._recordLimitOrigins(b,u);
+        if(!b.construction){this._recordLimitOrigins(b,u);this._recordSourceCompletion(p,u);this._recordEggCompletion(p,u,b);}
         this._event('upgrade', { laneId: p.id, x: b.col + .5, y: b.row + 4.5 }, u.name);
         return this._result(true, `已升级为 ${u.name}`);
       }
@@ -401,7 +533,7 @@ export class Game {
         if (this.state.phase !== 'build') return this._result(false, '战斗中无法出售');
         const found = this._building(payload.buildingId);
         if (!found || found.p.id !== p.id) return this._result(false, '请选择自己的建筑');
-        const def=units[found.b.unitId];if(isSourceUnit(def)&&!(def.buildingAbilityIds??def.abilityIds??[]).includes('A008'))return this._result(false,'该源建筑没有出售指令');
+        const def=units[found.b.unitId];if(def?.hero||def?.heroEntry)return this._result(false,'英雄和祭坛不能出售或更换');if(isSourceUnit(def)&&!(def.buildingAbilityIds??def.abilityIds??[]).includes('A008'))return this._result(false,'该源建筑没有出售指令');
         const raw=def.sourceRawcode,ratio=found.b.builtWave===this.state.wave?1:['h06K','h06L'].includes(raw)?.75:['h07Q','h07R'].includes(raw)?.9:rule('sellRatio',.5);
         const refund = Math.floor(value(def,['sourcePoints'],found.b.spent??this._cost(def))*ratio);
         p.gold += refund; p.buildings = p.buildings.filter(b => b.id !== found.b.id);
@@ -409,6 +541,7 @@ export class Game {
       }
       case 'race': {
         if(this.state.phase!=='build')return this._result(false,'请在备战期更换种族');
+        if(this._heroAltarCount(p)>=rule('heroLimit',2))return this._result(false,'英雄祭坛名额已用完，不能再更换种族');
         if(p.builderChoices?.length)return this._result(false,'请先选择本次候选建造者');
         const index=p.raceChanges??0,costs=RULES.raceChangeCosts??Array.from({length:5},(_,i)=>({gold:RULES.builderChangeGoldCosts?.[i]??50*i,wood:RULES.builderChangeWoodCosts?.[i]??100*(i+1)})),cost=costs[index];if(!cost)return this._result(false,'种族更换次数已用尽');
         if(p.gold<cost.gold||p.wood<cost.wood)return this._result(false,`更换需要 ${cost.gold} 金币、${cost.wood} 木材`);
@@ -434,7 +567,7 @@ export class Game {
         if(this.state.phase!=='build')return this._result(false,'变形在备战期完成');
         if(found.b.construction)return this._result(false,'变形代理尚在施工');
         const u=units[found.b.unitId],next=this._resolveMorph(u);if(!u.morphProxy||!next)return this._result(false,'该建筑不属于变形代理');
-        found.b.unitId=next.id;return this._result(true,`变形为${next.name}`);
+        found.b.unitId=next.id;this._recordLimitOrigins(found.b,next);this._recordSourceCompletion(p,next);this._recordEggCompletion(p,next,found.b);return this._result(true,`变形为${next.name}`);
       }
       case 'farm': {
         if(p.populationCap>=rule('maxPopulation',300))return this._result(false,'人口已达上限');
@@ -472,6 +605,7 @@ export class Game {
         return this._result(true, `新兵种已就绪，本次预言消耗 ${cost} 木材`);
       }
       case 'merc': {
+        if (this.state.mode === 'sandbox' && this.state.phase === 'combat') return this._result(false, '沙盒请在布阵期发兵，参与本次测试');
         const m = mercs[payload.mercId]; if (!m) return this._result(false, '木怪不存在');
         if(m.shopPreview || this._mercenaryMaxStock(m) === 0)return this._result(false,'此来源记录未确认可购买库存，仅供图鉴参考');
         const unlock = value(m, ['unlock', 'unlockWave', 'wave', 'minWave'], 1);
@@ -573,10 +707,13 @@ export class Game {
       p.interfereCooldown = Math.max(0, (p.interfereUntil ?? 0) - s.time);
       this._advanceEconomy(p, s.time - dt, s.time);
     }
-    this._aiTimer -= dt;
-    if (this._aiTimer <= 0) { this._aiTimer = 1.4; for (let i = 1; i < 8; i++) this._aiAct(s.players[i]); }
+    if (this._aiEnabled()) {
+      this._aiTimer -= dt;
+      if (this._aiTimer <= 0) { this._aiTimer = 1.4; for (let i = 1; i < 8; i++) this._aiAct(s.players[i]); }
+    }
     if (s.phase === 'build') {
       for (const king of s.kings) king.hp = Math.min(king.maxHp, king.hp + king.regen * dt);
+      if (s.mode === 'sandbox') return;
       s.timer = Math.max(0, s.timer - dt); if (s.timer <= 0) this._startCombat(); return; }
     this._roundTime += dt; s.timer = this._roundTime;
     while (this._spawnQueue.length && this._spawnQueue[0].at <= this._roundTime) {
@@ -591,7 +728,7 @@ export class Game {
     this._transferDefenders();
     this._warpTimer += dt;
     if (this._warpTimer >= 1 - 1e-9) { this._warpTimer = Math.max(0, this._warpTimer - 1); this._warpDefenders(); }
-    if(s.wave>=31){if(s.wave<35){s.continuousRemaining=Math.max(0,(s.continuousRemaining??50)-dt);if(s.continuousRemaining<=0)this._advanceContinuous();}}
+    if(s.mode !== 'sandbox' && s.wave>=31){if(s.wave<35){s.continuousRemaining=Math.max(0,(s.continuousRemaining??50)-dt);if(s.continuousRemaining<=0)this._advanceContinuous();}}
     else if (!this._spawnQueue.length && !s.entities.some(e => e.side === 'monster' && e.hp > 0)) this._endCombat();
     // A very long stalled wave receives visible reinforcements, preserving actual combat.
     if (RULES.webFrenzyEnabled === true && this._roundTime > 100 && !this._overtime) {
@@ -605,6 +742,7 @@ export class Game {
   _startCombat() {
     if (this.state.phase !== 'build') return;
     const s = this.state;
+    if (s.mode === 'sandbox') s.roundMode = 'normal';
     if(s.roundMode==='arena-prep'){this._startArena();return;}
     if(s.roundMode==='arena-transition'){s.wave++;s.roundMode='normal';s.timer=rule('arenaNextPreparationSeconds',30);s.entities=[];return;}
     this._completeMilitaryConstruction();
@@ -612,7 +750,7 @@ export class Game {
     const reference=value(w,['recommendedPower'],[250,350,500,650,800,1000,1200,1450,1600,1850,2050,2400,2700,3100,3500,4000,4500,5000,5500,6000,6500,7100,7700,8500,9500,10600,11800,13000,14000,15000,16000,17000,18000,19000,20000][s.wave-1]??1);
     for(const p of s.players){const factor=this._military(p)/reference-(p.sourceLeaks??0)/150;p.leakBountyFactor=this.options.ggEnabled?factor>=1?1:factor>=.1?factor:0:0;}
     s.phase = 'combat'; s.timer = 0; s.entities = []; s.sourceSkillJobs = []; s.teamLeakFlags = [false,false]; this._spawnQueue = []; this._roundTime = 0; this._settledLanes = []; this._overtime = false; this._warpTimer = 0; this._battleAuras = [[], []];
-    if(s.wave>=31)s.continuousRemaining=s.wave<35?50:null;
+    if(s.mode !== 'sandbox' && s.wave>=31)s.continuousRemaining=s.wave<35?50:null;
     const boss = !!(w.boss ?? w.isBoss ?? this.state.wave % 10 === 0);
     const baseCount = value(w, ['baseCount', 'quantity'], boss ? 1 : 5);
     // New reference waves carry an explicit adapted count. Old data still works.
@@ -623,7 +761,7 @@ export class Game {
       p.roundLeaks = 0; p.supportAnnounced = false;
       for (const b of p.buildings.filter(b=>!b.construction)) this._spawnDefender(units[b.unitId], p, b.col + .5, b.row + 4.5, b.id);
       if (p.heroId && heroes[p.heroId]) this._spawnDefender(heroes[p.heroId], p, 3, 8.7, `hero-${p.id}`, true);
-      for (let i = 0; i < monsterCount; i++) this._spawnQueue.push({ at: (i + 1) * rule('spawnInterval', .1), laneId: p.id, wave: waveBatches[i].wave, sourceWave:s.wave, substituted:waveBatches[i].substituted, boss: waveBatches[i].substituted ? !!waveBatches[i].wave.boss : boss,
+      for (let i = 0; i < monsterCount && (p.id === 0 || this._aiEnabled()); i++) this._spawnQueue.push({ at: (i + 1) * rule('spawnInterval', .1), laneId: p.id, wave: waveBatches[i].wave, sourceWave:s.wave, substituted:waveBatches[i].substituted, boss: waveBatches[i].substituted ? !!waveBatches[i].wave.boss : boss,
         x: clamp(3 + (i % 6 - 2.5) * (rule('spawnSpreadWidth', 1.8) / 5) + (this._random() - .5) * .04, 3 - rule('spawnSpreadWidth',1.8)/2, 3 + rule('spawnSpreadWidth',1.8)/2), y: .3 });
     }
     const sends = s.pendingSends.filter(v => v.wave <= s.wave);
@@ -1000,7 +1138,7 @@ export class Game {
           // Native qC adds the enemy treasury, then the king's user-data treasury.
           this.state.kingBountyPools??=[0,0];
           for(const team of [0,1])this.state.kingBountyPools[team]+=bounty;
-        } else if(p && p.team!==target.team){p.gold+=bounty;p.stats.kills++;p.stats.goldEarned+=bounty;}
+        } else if(p && p.team!==target.team){p.gold+=bounty;p.stats.kills++;p.stats.goldEarned+=bounty;recordBeastKingKill(p,attacker,units[attacker?.unitId]??UNIT_TEMPLATES[attacker?.combatRawcode]);}
         this.state.metrics.killed++;
       }
       this._event('death', target, target.side === 'monster' ? `+${target.reward}` : '阵亡', { color: target.color });
@@ -1101,7 +1239,7 @@ export class Game {
           if (RULES.webKingSplashEnabled===true && this.state.wave >= 7) for (const e of enemies.slice(1, 5)) if (distance(e, target) < 1.4) this._hurt(e, k.attack * kingAuras.damageMultiplier * .35 * this._typeMultiplier(k.attackType ?? 'hero', e.armorType, e.sourceArmorTypeRaw) * this._armorFactor(this._effectiveArmor(e, this._auraEffects(e, auras).armor)), { side: 'defender', team: k.team, isKing: true });
         }
       }
-      if (k.hp < k.maxHp * .16 && k.healCharges > 0) {
+      if (this._aiEnabled() && k.hp < k.maxHp * .16 && k.healCharges > 0) {
         const ai = this.state.players.find(p => p.id !== 0 && p.team === k.team && !p.healUsed);
         if (ai) this.command('heal', { playerId: ai.id });
       }
@@ -1119,11 +1257,16 @@ export class Game {
   }
   _endCombat() {
     const s = this.state;
+    if (s.mode === 'sandbox') {
+      this._resetSandboxWave(); this._log(`测试沙盒：第 ${s.wave} 波测试完成，回到备战；未结算过波奖励，可再次手动出兵。`);
+      return;
+    }
     // A cleared round discards its temporary dummies before preparation/arena.
     s.sourceSkillJobs = [];
     const listedReward = RULES.waveRewards?.[s.wave - 1];
     const bonus = Number.isFinite(listedReward) ? listedReward * ((RULES.bossRewardDoubleWaves??[10,20]).includes(s.wave) ? 2 : 1) : rule('incomeBase', 22) + s.wave * rule('incomePerWave', 8);
     for (const p of s.players) {
+      finishEggWave(p,s.wave);
       for(const b of p.buildings)if(b.temporaryForm){b.unitId=b.temporaryForm;b.temporaryForm=null;b.stimulatedWave=null;}
       const teamSize = s.players.filter(v => v.team === p.team).length;
       const kingShare = Math.floor((s.kingBountyPools?.[p.team] ?? 0) / Math.max(1, teamSize));
@@ -1150,19 +1293,21 @@ export class Game {
     this._completeMilitaryConstruction();
     const s=this.state;s.phase='combat';s.roundMode='arena';s.entities=[];s.sourceSkillJobs=[];s.timer=0;s.arenaRemaining=rule('arenaBattleLimitSeconds',120);this._spawnQueue=[];this._roundTime=0;
     for(const p of s.players)for(const b of p.buildings.filter(b=>!b.construction)){
-      const def=units[b.unitId];if(!def)continue;const point=laneToWorld(0,1.2+(p.id%4)*1.1+(b.col-2.5)*.12,p.team===0?5+(b.row/8):9-(b.row/8));
+      const def=units[b.unitId];if(!def||(isSourceUnit(def)&&!def.combatRawcode))continue;const point=laneToWorld(0,1.2+(p.id%4)*1.1+(b.col-2.5)*.12,p.team===0?5+(b.row/8):9-(b.row/8));
       const e=this._entity(def,{team:p.team,side:`arena${p.team}`,battleTeam:0,laneId:0,sourceLaneId:p.id,ownerId:p.id,buildingId:b.id,isArena:true,worldX:point.x,worldY:point.y});
       e.status.activated=true;e.acquisitionRange=12;e.nav={mode:'arena',path:[],index:0,distance:0};s.entities.push(e);
     }
     this._log(`第${s.wave}波竞技场开始，限时120秒；Web在同一场地模拟双方军团交战。`);
   }
   _endArena(alive){
+    if (this.state.mode === 'sandbox') { this._resetSandboxWave(); return; }
     const s=this.state,winner=alive[0]&&!alive[1]?0:alive[1]&&!alive[0]?1:-1,reward=s.wave*(winner===-1?rule('arenaDrawGoldPerWave',5):rule('arenaWinnerGoldPerWave',10));
     for(const p of s.players)if(winner===-1||p.team===winner){p.gold+=reward;p.stats.goldEarned+=reward;}
     s.arenaResult={winner,reward,wave:s.wave};s.entities=[];s.sourceSkillJobs=[];s.phase='build';s.roundMode='arena-transition';s.timer=rule('arenaAfterBattleSeconds',20);
     this._log(`竞技场${winner===-1?'平局':winner===0?'蓝方获胜':'红方获胜'}，${winner===-1?'双方':'胜方'}每人奖励${reward}金币；20秒过渡后进入30秒准备。`);
   }
   _advanceContinuous(){
+    if (this.state.mode === 'sandbox') return;
     const s=this.state;if(s.wave>=35)return;const survivors=s.entities.filter(e=>e.hp>0),jobs=s.sourceSkillJobs??[],oldTime=this._roundTime,queue=this._spawnQueue.map(e=>({...e,at:Math.max(0,e.at-oldTime)}));
     s.wave++;s.phase='build';this._startCombat();s.sourceSkillJobs=jobs;s.entities=[...survivors,...s.entities.filter(e=>e.side==='monster')];this._spawnQueue=[...queue,...this._spawnQueue].sort((a,b)=>a.at-b.at);
     s.continuousRemaining=s.wave<35?50:null;this._log(`连续进攻：第${s.wave}波已加入战场，存活守军与残怪保留。`);
@@ -1179,7 +1324,7 @@ export class Game {
   _isFront(u) { return u && !this._isWeaponlessObstacle(u) && (['tank', 'frontline'].includes(u.role) || value(u, ['range'], 100) < 100); }
   _hasArea(u) { return ['aoe','splash','cleave','chain','multishot','burn','stomp','poison_aura'].includes(u?.ability?.type)||compileSkills(u??{}).some(s=>['stomp','wave','knives','nova','breath','cluster','immolation','barrage','pulverize','phoenix_fire'].includes(s.kind))||['msplash','mbounce','artillery','aline','mline'].includes(u?.weapon1?.weapTp1); }
   _combatPower(u) {
-    if (!u || this._isWeaponlessObstacle(u)) return 0;
+    if (!u || (isSourceUnit(u)&&!u.combatRawcode) || this._isWeaponlessObstacle(u)) return 0;
     const a = abilityOf(u), type = a?.type;
     let dps = u.damage / Math.max(.2, value(u, ['interval'], 1));
     if (['aoe','splash','cleave'].includes(type)) dps *= 1 + number(a.value,.3) * 4;
@@ -1219,6 +1364,10 @@ export class Game {
   _aiBuild(p, opening = false) {
     if(p.populationCap-this._population(p)<5&&p.gold>=rule('farmCost',75)+100)this.command('farm',{playerId:p.id});
     if(opening)this._aiOpeningCore(p);
+    if(!opening&&p.buildings.some(b=>!b.construction&&!units[b.unitId]?.hero)&&!p.buildings.some(b=>units[b.unitId]?.heroEntry)){
+      const altar=this.heroStatus(p.id),def=units[altar.entries[0]],cell=def&&this._emptyCell(p,def);
+      if(altar.canStart&&cell)this.command('build',{playerId:p.id,unitId:def.id,...cell});
+    }
     let attempts=opening?8:2;
     while(attempts-->0){
       const built=p.buildings.map(b=>units[b.unitId]), frontCount=built.filter(u=>this._isFront(u)).length;
@@ -1247,15 +1396,11 @@ export class Game {
     }
   }
   _aiAct(p) {
+    if (!this._aiEnabled()) return;
     if (this.state.phase === 'build') {
       const economy = this.economyStatus(p.id);
       if (p.workers + economy.worker.queued < Math.min(rule('maxWorkers', 10), 2 + Math.floor(this.state.wave / 2)) && economy.worker.canStart && p.gold > economy.worker.cost.gold + 80 && this._random() < .34) this.command('worker', { playerId: p.id });
       if (p.lumberLevel < this.state.wave && economy.lumber.canStart && p.wood > economy.lumber.cost.wood + 80 && p.gold > economy.lumber.cost.gold + 80 && this._random() < .24) this.command('lumber', { playerId: p.id });
-      if (false && !p.heroId && this.state.wave >= 5 && p.gold > 400) {
-        const preferred = p.buildings.filter(b=>this._isFront(units[b.unitId])).length >= p.buildings.length/2 ? 'aura_damage' : 'aura_armor';
-        const h = HEROES.find(h=>h.ability?.type===preferred) ?? HEROES[0];
-        if(h)this.command('hero',{playerId:p.id,heroId:h.id});
-      }
       if (!p.buildings.some(b=>this._hasArea(units[b.unitId])) && p.wood>=rule('rerollCost',25) && p.gold>150 && p.rerolls<2 && this.state.wave<=4) this.command('reroll',{playerId:p.id});
       this._aiBuild(p);
     }
@@ -1284,6 +1429,9 @@ export class Game {
     if (saved.version === 2 && (saved.mapId !== MAP.id || saved.mapVersion !== MAP.version)) throw new Error('存档地图版本不匹配');
     const revisionChanged=saved.state.dataRevision!==RULES.dataRevision;
     const data = copy(saved); this.options = data.options ?? this.options; this.options.ggEnabled??=RULES.ggEnabled??true; this.state = data.state;
+    this.state.mode = gameMode(this.state.mode ?? data.options?.mode); this.options.mode = this.state.mode;
+    if (this.state.mode === 'sandbox') this.state.sandbox = { aiEnabled: this.state.sandbox?.aiEnabled === true };
+    else delete this.state.sandbox;
     this._rng = data.rng >>> 0; this._id = data.id ?? 0; this._spawnQueue = data.spawnQueue ?? [];
     this._aiTimer = data.aiTimer ?? 0; this._roundTime = data.roundTime ?? 0; this._settledLanes = data.settledLanes ?? []; this._overtime = data.overtime ?? false; this._warpTimer = data.warpTimer ?? 0; this._monsterPressure = data.monsterPressure;
     this._spatial = null; this._worldEntities = null; this._battleAuras = [[], []];
@@ -1300,12 +1448,21 @@ export class Game {
     this.state.kingBountyPools ??= [0, 0]; this.state.sourceSkillJobs??=[]; this.state.teamLeakFlags??=[false,false];
     for (const p of this.state.players) {
       p.builderId??=RULES.defaultBuilderId;
+      p.heroAltarCount=this._heroAltarCount(p);
+      for(const b of p.buildings.filter(b=>!b.construction))this._recordSourceCompletion(p,units[b.unitId]);
+      restoreEggHistory(p,{wave:this.state.wave,buildings:p.buildings,unitsById:units});
+      for(const b of p.buildings)if(!b.construction)this._recordLimitOrigins(b,units[b.unitId]);
       if(p.workers>rule('maxWorkers',7)||p.lumberLevel>rule('maxLumberLevel',15)){p.workers=Math.min(p.workers,rule('maxWorkers',7));p.lumberLevel=Math.min(p.lumberLevel,rule('maxLumberLevel',15));this.state.migrationNotice=`旧存档已限制为${RULES.maxWorkers}小精灵、${RULES.maxLumberLevel}级科技；原进度已保留备份。`;}
       const tasks=this._economyTasks(p);tasks.workerQueue=tasks.workerQueue.slice(0,Math.max(0,rule('maxWorkers',7)-p.workers));if(tasks.lumberTask?.targetLevel>rule('maxLumberLevel',15))tasks.lumberTask=null;
       p.popUsed = this._population(p);
       for (const m of MERCENARIES) this._mercenarySlot(p, m);
     }
-    for(const e of this.state.entities){if(!e.skillSpecs){const def=units[e.unitId]??mercs[e.unitId]??UNIT_TEMPLATES[e.combatRawcode];if(def)attachSkills(e,def);}e.skillStates??={};e.buffs??=[];}
+    for(const e of this.state.entities){
+      const def=units[e.unitId]??mercs[e.unitId]??UNIT_TEMPLATES[e.combatRawcode];
+      if(!e.skillSpecs&&def)attachSkills(e,def);
+      if(isV14(def)&&def.heroFamily)e.isNativeHero=['STR','AGI','INT'].includes(def.sourceRawFields?.Primary);
+      e.skillStates??={};e.buffs??=[];
+    }
     if (saved.version === 1) {
       this.state.map = { id: MAP.id, version: MAP.version, topology: '2x2-crossbar-stem' };
       for (const e of this.state.entities) {

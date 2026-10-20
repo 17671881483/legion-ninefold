@@ -5,11 +5,12 @@ import { MAP_REFERENCE, MAP_UNITS, MAP_WAVES, MAP_MERCENARIES, MAP_ECONOMY } fro
 import {WORKBOOK_REFERENCE,WORKBOOK_UNITS,WORKBOOK_BUILDERS,WORKBOOK_POOLS,WORKBOOK_ARCHIVE,WORKBOOK_HERO_ENTRIES,WORKBOOK_MERCENARIES,WORKBOOK_WAVES} from './workbook-reference.js';
 import {DOCUMENT_RULES,DOCUMENT_ECONOMY} from './document-rules.js';
 import {V14_REFERENCE,V14_UNITS,V14_BUILDERS,V14_POOLS,V14_ARCHIVE,V14_HERO_ENTRIES,V14_MERCENARIES,V14_WAVES,V14_UNIT_TEMPLATES} from './v14-reference.js';
+import {applyDocumentUnitOverlay} from './unit-categories.js';
 export const HISTORICAL_REFERENCE=MAP_REFERENCE;
 export const REFERENCE={...V14_REFERENCE,economyPolicy:DOCUMENT_ECONOMY.sourcePolicy,targetMode:'v14.1A5 九倍怪物模式',bountyPolicy:'系统怪使用v14脚本Ie[Dg]金币；10%替换额外+3；跨线与漏怪按脚本结算，31波起系统怪无赏金。'};
 export const ECONOMY=DOCUMENT_ECONOMY;
-export const BUILDERS=V14_BUILDERS,PROPHET_POOLS=V14_POOLS,HERO_ENTRIES=V14_HERO_ENTRIES,ARCHIVE_UNITS=V14_ARCHIVE;
-export const UNIT_TEMPLATES=V14_UNIT_TEMPLATES;
+export const BUILDERS=V14_BUILDERS,PROPHET_POOLS=V14_POOLS,HERO_ENTRIES=V14_HERO_ENTRIES,ARCHIVE_UNITS=V14_ARCHIVE.map(applyDocumentUnitOverlay);
+export const UNIT_TEMPLATES=Object.fromEntries(Object.entries(V14_UNIT_TEMPLATES).map(([code,unit])=>[code,applyDocumentUnitOverlay(unit)]));
 
 const A = (type, value, name, description, extra = {}) => ({ type, value, name, description, ...extra });
 const unit = (id, name, race, tier, cost, hp, damage, interval, range, armor, attackType, armorType, role, ability, color, shape, upgrades, description, population = 1, randomPool = false) => ({
@@ -88,7 +89,7 @@ const LEGACY_UNITS = [
   unit('infernal', '地狱火', '元素', 6, 460, 4650, 290, 1.55, 60, 13, 'chaos', 'heavy', 'tank', A('stomp', 145, '毁灭践踏', '周期造成范围伤害并击晕。', { radius: 110, cooldown: 4.8, duration: .9 }), '#a5b58b', 'square', [], '岩石傀儡升级，坚固的范围控制单位。', 5),
 ];
 
-export const UNITS = [...V14_UNITS,...WORKBOOK_UNITS.map(u=>({...u,legacy:true,randomPool:false,isBase:false,sourceVersion:'5.0dJF'})), ...MAP_UNITS.map(u=>({...u,legacy:true,randomPool:false,isBase:false,provenance:'legacy-map-subset'})), ...LEGACY_UNITS.map(u => ({...u,legacy:true,randomPool:false,isBase:false,provenance:'legacy-web'}))];
+export const UNITS = [...V14_UNITS.map(applyDocumentUnitOverlay),...WORKBOOK_UNITS.map(u=>({...u,legacy:true,randomPool:false,isBase:false,sourceVersion:'5.0dJF'})), ...MAP_UNITS.map(u=>({...u,legacy:true,randomPool:false,isBase:false,provenance:'legacy-map-subset'})), ...LEGACY_UNITS.map(u => ({...u,legacy:true,randomPool:false,isBase:false,provenance:'legacy-web'}))];
 
 const merc = (id, name, wood, income, unlock, hp, damage, interval, range, armor, attackType, armorType, role, ability, color, shape, description) => ({
   ...unit(id, name, '佣兵', 1, 0, hp, damage, interval, range, armor, attackType, armorType, role, ability, color, shape, [], description),

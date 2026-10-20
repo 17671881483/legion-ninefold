@@ -7,7 +7,30 @@
   <meta name="description" content="在浏览器中排兵布阵、发展伐木、发木进攻，与队友一起守住国王。依据v14.1A5九倍模式解析数据的浏览器模拟。">
   <title>军团战争 · v14.1A5 九倍</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%23131f1b' d='M0 0h64v64H0z'/%3E%3Cpath fill='%23d7b975' d='M32 4 57 18v26L32 60 7 44V18zm0 7L14 22v18l18 12 18-12V22zM21 25h7v15h15v6H21z'/%3E%3C/svg%3E">
-  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./style.css?v=e305645717c2">
+  <!-- asset-import-map:start -->
+  <script type="importmap" id="asset-import-map">
+{
+  "imports": {
+    "./app.js": "./app.js?v=dc5f2965c734",
+    "./catalog-ui.js": "./catalog-ui.js?v=9af911efedcd",
+    "./data.js": "./data.js?v=e089a3b21bfa",
+    "./document-catalog.js": "./document-catalog.js?v=fe6bff950617",
+    "./document-rules.js": "./document-rules.js?v=3b98aa6a2973",
+    "./egg-rules.js": "./egg-rules.js?v=2b533ec05892",
+    "./engine.js": "./engine.js?v=681ea2150dad",
+    "./layout.js": "./layout.js?v=f4ece3ef19c5",
+    "./map-reference.js": "./map-reference.js?v=88974449e603",
+    "./match-storage.js": "./match-storage.js?v=4f3950ad13f9",
+    "./renderer.js": "./renderer.js?v=35021b552512",
+    "./skills.js": "./skills.js?v=2e23167ce85a",
+    "./unit-categories.js": "./unit-categories.js?v=3b585584b7a2",
+    "./v14-reference.js": "./v14-reference.js?v=3cdecd2afa47",
+    "./workbook-reference.js": "./workbook-reference.js?v=7e6b0b42e7ff"
+  }
+}
+  </script>
+  <!-- asset-import-map:end -->
 </head>
 <body>
   <svg class="svg-defs" aria-hidden="true"><defs>
@@ -35,7 +58,7 @@
         <div class="resource" title="每回合结算时额外获得的金币"><svg><use href="#i-income"/></svg><span><b id="income">+0</b><small>回合收入</small></span></div>
         <div class="resource tech" title="小精灵数量 / 伐木等级"><svg><use href="#i-worker"/></svg><span><b id="tech">1 / 0</b><small>伐木科技</small></span></div>
       </div>
-      <div class="top-actions"><button id="sound" class="icon-button" title="开启音效" aria-label="开启音效"><svg><use href="#i-sound"/></svg></button><button id="catalog" class="icon-button" title="兵种与技能图鉴" aria-label="兵种与技能图鉴"><svg><use href="#i-eye"/></svg></button><button id="help" class="icon-button" title="玩法与操作" aria-label="玩法与操作"><svg><use href="#i-help"/></svg></button><button id="fullscreen" class="icon-button" title="全屏" aria-label="全屏"><svg><use href="#i-expand"/></svg></button></div>
+      <div class="top-actions"><button id="sandbox-tools" class="sandbox-tools" hidden title="打开测试沙盒控制台">测试沙盒</button><button id="sound" class="icon-button" title="开启音效" aria-label="开启音效"><svg><use href="#i-sound"/></svg></button><button id="catalog" class="icon-button" title="兵种与技能图鉴" aria-label="兵种与技能图鉴"><svg><use href="#i-eye"/></svg></button><button id="help" class="icon-button" title="玩法与操作" aria-label="玩法与操作"><svg><use href="#i-help"/></svg></button><button id="fullscreen" class="icon-button" title="全屏" aria-label="全屏"><svg><use href="#i-expand"/></svg></button></div>
     </header>
     <div class="battle-ribbon">
       <div class="king-status allied"><svg><use href="#i-crown"/></svg><span>联盟军团</span><div class="king-bar"><i id="ally-hp"></i><b id="ally-hp-text">100%</b></div></div>
@@ -84,15 +107,31 @@
       <div class="welcome-emblem"><svg><use href="#i-crown"/></svg></div><div class="eyebrow">BROWSER EDITION · 4 vs 4</div>
       <h1>军团战争</h1><div class="welcome-subtitle"><span></span>v14.1A5 · 九倍怪物<span></span></div>
       <p class="welcome-intro">建造军团，守住怪潮。<br>发展经济，向敌方国王发起进攻。</p>
+      <fieldset class="match-mode"><legend>对局模式</legend><label><input type="radio" name="match-mode" value="normal" checked><span><b>普通对局</b><small>发展经济，挑战35波</small></span></label><label><input type="radio" name="match-mode" value="sandbox"><span><b>测试沙盒</b><small>自由布阵，指定波次重测</small></span></label></fieldset>
+      <p id="mode-description" class="mode-description">普通对局按原有资源与时间规则进行。</p>
       <label class="builder-select-label" for="builder-select">选择建造者 <small>AP模式 · 各种族独立兵种</small></label><select id="builder-select" class="builder-select" aria-label="选择建造者"></select><p id="builder-description" class="builder-description"></p>
       <div class="mode-summary"><span>AP 自由选族</span><span>X9 九倍怪物</span><span>GG 击杀收益</span></div>
       <button id="start-game" class="primary-button">进入战场 <span>→</span></button><button id="continue-game" class="secondary-button" hidden>继续上次对局</button>
-      <div class="welcome-foot">你与 3 名 AI 队友，对抗部落军团 · 对局自动保存在此浏览器</div>
+      <div id="welcome-foot" class="welcome-foot">你与 3 名 AI 队友，对抗部落军团 · 对局自动保存在此浏览器</div>
       <button id="welcome-about" class="text-button">玩法与复刻说明</button>
     </section>
   </div>
   <dialog id="help-dialog" class="help-dialog"><div class="dialog-header"><span><small>FIELD MANUAL</small><h2>军团手册</h2></span><button class="close-dialog" aria-label="关闭">×</button></div><div class="help-tabs"><button data-help="play" class="active">玩法与操作</button><button data-help="waves">波次图鉴</button><button data-help="about">关于复刻</button></div><div id="help-content" class="help-content"></div></dialog>
-  <dialog id="end-dialog" class="end-dialog"><div class="end-emblem"><svg><use href="#i-crown"/></svg></div><div id="end-eyebrow" class="eyebrow">战斗结束</div><h2 id="end-title">联盟军团获胜</h2><p id="end-description"></p><div id="end-stats" class="end-stats"></div><button id="restart-game" class="primary-button">再来一局</button><button class="close-dialog secondary-button">回看战场</button></dialog>
-  <script type="module" src="./app.js"></script>
+  <dialog id="sandbox-dialog" class="sandbox-dialog" aria-labelledby="sandbox-title">
+    <div class="dialog-header"><span><small>TEST SANDBOX</small><h2 id="sandbox-title">测试沙盒</h2></span><button class="close-dialog" aria-label="关闭测试沙盒">×</button></div>
+    <div class="sandbox-content">
+      <p id="sandbox-status" class="sandbox-status" aria-live="polite"></p>
+      <p class="sandbox-intro">备战不限时，点击“开始”手动开波。每次测试只运行所选一波，结束后可调整阵容再次测试。</p>
+      <div class="sandbox-field"><label for="sandbox-wave">测试波次</label><div><select id="sandbox-wave"></select><button id="sandbox-load-wave">切换波次</button></div><small>保留阵容和经济进度；中止当前战斗，恢复双方国王并返回布阵。</small></div>
+      <div class="sandbox-field"><label for="sandbox-builder">建造者</label><div><select id="sandbox-builder"></select><button id="sandbox-switch-builder">免费切换</button></div><small>保留现有军团，可混合不同种族。兵种升级与来源条件仍然生效。</small></div>
+      <div class="sandbox-actions"><button data-sandbox="sandboxResources"><b>补充资源</b><small>至少10万金、10万木 · 300人口</small></button><button data-sandbox="sandboxComplete" data-build-only><b>完成施工与研究</b><small>立即完成已付款的军团和经济任务</small></button><button data-sandbox="sandboxReset"><b>返回布阵重测</b><small>中止本波，保留阵容，恢复国王</small></button><button data-sandbox="sandboxClear" data-build-only><b>清空我的阵容</b><small>移除自己的所有军团单位</small></button></div>
+      <label class="sandbox-ai"><input id="sandbox-ai" type="checkbox"><span><b>启用 AI 玩家</b><small>默认只在你的防线刷怪；开启后恢复八路。关闭后保留 AI 军团，停止 AI 决策。</small></span></label>
+      <p id="sandbox-feedback" class="sandbox-feedback" role="status"></p>
+      <p class="sandbox-foot">沙盒进度独立保存，可从模式选择页继续普通对局。</p>
+      <button id="sandbox-return" class="primary-button">返回战场</button><button id="sandbox-modes" class="secondary-button">模式选择与存档</button>
+    </div>
+  </dialog>
+  <dialog id="end-dialog" class="end-dialog"><div class="end-emblem"><svg><use href="#i-crown"/></svg></div><div id="end-eyebrow" class="eyebrow">战斗结束</div><h2 id="end-title">联盟军团获胜</h2><p id="end-description"></p><div id="end-stats" class="end-stats"></div><button id="sandbox-end-reset" class="primary-button" hidden>返回布阵重测</button><button id="restart-game" class="primary-button">再来一局</button><button class="close-dialog secondary-button">回看战场</button></dialog>
+  <script type="module" src="./app.js?v=dc5f2965c734"></script>
 </body>
 </html>

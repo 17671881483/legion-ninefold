@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {compileSkills,describeSkills,attachSkills,tickSourceSkills,tickSourceScriptJobs,sourceOnHit,sourceAttackStart,sourceMoveFactor,canWeaponTarget,sourceWeapon,matchesTargets,modifyIncoming,afterSourceDamage,sourceDeath} from '../dist/skills.js';
-import {V14_ABILITIES,V14_UNIT_TEMPLATES} from '../dist/v14-reference.js';
+import {V14_ABILITIES,V14_UNIT_TEMPLATES,V14_UNITS} from '../dist/v14-reference.js';
 import {Game} from '../dist/engine.js';
 import {WORKBOOK_UNIT_TEMPLATES} from '../dist/workbook-reference.js';
 const near=(a,b)=>assert.ok(Math.abs(a-b)<1e-6,`${a} != ${b}`);
@@ -53,6 +53,15 @@ test('v14 charged attack heals 80, preserving old-version 25',()=>{
 });
 test('v14 void strike uses >40 threshold and hero current HP',()=>{
  const g=fixture(),e=add(g,v14([],{rawcode:'n0S6'})),normal=add(g,v14(),'monster',.2),hero=add(g,v14([],{isHero:true}),'monster',.2);g._hurt(normal,40,e,{spell:true});near(normal.hp,960);g._hurt(normal,41,e,{spell:true});near(normal.hp,909);g._hurt(hero,100,e,{spell:true});near(hero.hp,891);
+});
+test('altar hero presentation preserves its native giant classification for damage and control duration',()=>{
+ const def=V14_UNITS.find(u=>u.sourceRawcode==='h0G5');assert.ok(def);assert.equal(def.sourceRawFields.type,'giant');
+ const g=fixture(),attacker=add(g,v14([],{rawcode:'n0S6'})),target=add(g,{...def,hp:1000,abilityIds:[]},'monster',.2);
+ assert.equal(target.isHero,true);assert.equal(target.isNativeHero,false);g._hurt(target,100,attacker,{spell:true});near(target.hp,890);
+ for(const [victim,duration]of [[{...def,hp:1000,abilityIds:[]},4],[v14([],{isHero:true}),2]]){
+  const h=fixture(),caster=add(h,v14(['A06B'])),enemy=add(h,victim,'monster',.2);tickSourceSkills(h,caster,battle(h),.01);
+  const root=enemy.buffs.find(b=>b.skillId==='A06B');assert.ok(root);near(root.expiresAt,duration);
+ }
 });
 test('v14 kill heal uses 50% of dead maximum HP and A0SB follows ability holders',()=>{
  const g=fixture(),killer=add(g,v14([],{rawcode:'h0CZ',hp:2000})),dead=add(g,v14(['A0SB'],{rawcode:'some'}),'monster',.2),other=add(g,v14(),'defender',.4);killer.hp=100;g._hurt(dead,2000,killer,{spell:true});near(killer.hp,574);near(other.hp,974);

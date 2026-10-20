@@ -12,6 +12,7 @@ const raw = u => u.combatRawcode ?? u.rawcode ?? u.sourceRawcode ?? u.unitId;
 const cache = new Map();
 const versionOf = def => def?.skillVersion==='v14.1A5'||def?.provenance==='v14.1A5-dataset'||/v?14\.1A5/i.test(String(def?.sourceVersion??''))||String(def?.id??def?.unitId??'').startsWith('v14_')?'v14.1A5':'5.0dJF';
 const isV14 = def => versionOf(def)==='v14.1A5';
+const isNativeHero = entity => entity.isNativeHero ?? entity.isHero;
 const templatesFor = def => isV14(def)?V14_UNIT_TEMPLATES:WORKBOOK_UNIT_TEMPLATES;
 const markers = new Set(['Asph','Asth','Amgl','Aloc','AInv']);
 const names = {crit:'概率暴击',bash:'概率附伤及眩晕',evasion:'闪避普攻',poison:'命中持续伤害与减速',corruption:'命中减甲',lifesteal:'命中吸血',aura_damage:'攻击光环',aura_armor:'护甲光环',aura_speed:'攻速与移速光环',aura_regen:'生命恢复光环',aura_mana:'魔法恢复光环',aura_thorns:'近战反伤光环',aura_lifesteal:'近战吸血光环',aura_slow:'攻速与移速削弱光环',shield:'魔法护盾',hardened:'概率格挡',immunity:'魔法免疫',demolish:'伤害倍增',orb:'消耗魔法强化普攻',heal:'自动治疗',heal_wave:'弹跳治疗',buff:'持续增益',debuff:'持续削弱',root:'缠绕',stomp:'范围伤害及控制',wave:'直线范围伤害',knives:'范围飞刀',nova:'目标及范围新星',breath:'锥形吐息与持续伤害',summon:'召唤源单位',mirror:'镜像',immolation:'周期范围伤害',barrage:'多目标额外攻击',pulverize:'概率范围粉碎',suicide:'自爆',burrow:'潜地与出土增益',guardian:'守护之魂',spell_orb:'概率触发法术',cold:'冰冻命中',pending:'缺少已核定运行参数'};
@@ -159,6 +160,8 @@ export function skillCoverage(def) {const list=describeSkills(def);return {imple
 export function attachSkills(e,def) {
   e.skillVersion=versionOf(def);e.sourceVersion=def.sourceVersion??e.sourceVersion;e.combatRawcode=raw(def);e.skillSpecs=compileSkills(def);e.skillStates={};e.buffs=[];e.skillSource=!!def.abilityIds;e.weapon1=def.weapon1??{};e.weapon2=def.weapon2??{};e.sourceRawFields=def.sourceRawFields??{};e.sourceArmorTypeRaw=def.sourceArmorTypeRaw??e.sourceRawFields.defType??e.sourceArmorTypeRaw;e.distanceScale=def.distanceScale??1;
   const f=e.sourceRawFields;e.isHero=!!(e.isHero||def.hero||def.isHero||['STR','AGI','INT'].includes(f.Primary));e.maxMana=num(def.maxMana??def.mana??f.manaN);e.mana=clamp(num(def.initialMana??def.manaStart??f.mana0,e.maxMana),0,e.maxMana);e.manaRegen=num(def.manaRegen??f.regenMana);e.hpRegen=num(def.hpRegen??f.regenHP);e.targetType=def.targetType??f.targType??(f.movetp==='fly'?'air':'ground');e.traits=String(def.traits??def.unitType??f.type??'').split(',');e.isBuilding=!!(e.isBuilding||def.isBuilding||num(f.isbldg));e.nativeInvulnerable=e.skillSpecs.some(s=>s.status==='implemented'&&s.kind==='invulnerability');e.invulnerable=e.nativeInvulnerable;e.isStaticObstacle=!!(isV14(def)&&e.isBuilding&&f.pathTex&&!num(f.spd));if(e.isStaticObstacle)e.moveSpeed=0;
+  // Altar heroes are giant units in the source, with a separate UI category.
+  if(isV14(def)&&def.heroFamily)e.isNativeHero=['STR','AGI','INT'].includes(f.Primary);
   for(const s of e.skillSpecs)e.skillStates[s.id]={readyAt:0,casts:0,...(s.kind==='x9_sapper'&&Number.isFinite(e.createdAt)?{nextPulseAt:e.createdAt+1}:{})};
 }
 export function matchesTargets(s,source,target) {
@@ -188,7 +191,7 @@ export function canWeaponTarget(source,target){return !!sourceWeapon(source,targ
 
 function active(e){return (e.skillSpecs??[]).filter(s=>s.status==='implemented');}
 function state(e,s){return e.skillStates[s.id]??=( {readyAt:0,casts:0});}
-function buff(e,s,source,now,extra={}){if(source.side!==e.side&&active(e).some(a=>a.kind==='immunity')&&(['Aslo','AEer','Acri','ANdh','Auhf','AUfn','ANcs','AHtb','AOcl'].includes(s.base)))return false;e.buffs??=[];const key=extra.key??s.buffKey??s.id;const b={key,skillId:s.id,ownerId:source.ownerId,sourceId:source.id,expiresAt:now+(e.isHero?s.heroDuration||s.duration:s.duration),damage:s.damage??0,armor:s.armor??0,move:s.move??0,haste:s.haste??0,regen:s.regen??0,dps:s.dps??0,miss:s.miss??0,incoming:s.incoming??0,disarm:s.base==='AEer',...extra};const old=e.buffs.findIndex(v=>v.key===key);if(old>=0)e.buffs[old]=b;else e.buffs.push(b);}
+function buff(e,s,source,now,extra={}){if(source.side!==e.side&&active(e).some(a=>a.kind==='immunity')&&(['Aslo','AEer','Acri','ANdh','Auhf','AUfn','ANcs','AHtb','AOcl'].includes(s.base)))return false;e.buffs??=[];const key=extra.key??s.buffKey??s.id;const b={key,skillId:s.id,ownerId:source.ownerId,sourceId:source.id,expiresAt:now+(isNativeHero(e)?s.heroDuration||s.duration:s.duration),damage:s.damage??0,armor:s.armor??0,move:s.move??0,haste:s.haste??0,regen:s.regen??0,dps:s.dps??0,miss:s.miss??0,incoming:s.incoming??0,disarm:s.base==='AEer',...extra};const old=e.buffs.findIndex(v=>v.key===key);if(old>=0)e.buffs[old]=b;else e.buffs.push(b);}
 export function sourceAuraEffects(game,target,auras) {
   const effects={damage:0,haste:0,move:0,armor:0,healRate:0,manaRate:0,lifesteal:0,thorns:0,thornsFlat:0};const groups=new Map();
   for(const source of auras??[]){if(source.hp<=0)continue;for(const s of active(source)){if(!s.kind.startsWith('aura_')||dist(source,target)>s.radius||!matchesTargets(s,source,target)||(s.rangedOnly&&target.range<=1.28))continue;
@@ -363,7 +366,7 @@ export function afterSourceDamage(game,target,actual,attacker,options={}) {
   if(isV14(attacker)){
     if(active(attacker).some(s=>s.id==='A01I')&&actual>=100&&target.hp>0)universalDamage(game,target,attacker.mana*3,attacker);
     if(attacker.combatRawcode==='n0S4'&&target.hp>0)universalDamage(game,target,target.hp*.03,attacker);
-    if(attacker.combatRawcode==='n0S6'&&actual>40&&target.hp>0){const amount=(target.isHero?target.hp:target.maxHp)*.01,a=game._auraEffects(target,game._battleAuras?.[target.battleTeam]??[]);game._hurt(target,amount*game._typeMultiplier('normal',target.armorType,target.sourceArmorTypeRaw??target.sourceRawFields?.defType)*game._armorFactor(game._effectiveArmor(target,a.armor)),attacker,{spell:true,scripted:true});}
+    if(attacker.combatRawcode==='n0S6'&&actual>40&&target.hp>0){const amount=(isNativeHero(target)?target.hp:target.maxHp)*.01,a=game._auraEffects(target,game._battleAuras?.[target.battleTeam]??[]);game._hurt(target,amount*game._typeMultiplier('normal',target.armorType,target.sourceArmorTypeRaw??target.sourceRawFields?.defType)*game._armorFactor(game._effectiveArmor(target,a.armor)),attacker,{spell:true,scripted:true});}
     return;
   }
   if(attacker.combatRawcode==='n0S4'&&target.hp>0)game._hurt(target,target.hp*.03,attacker,{spell:true,scripted:true});

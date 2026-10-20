@@ -5,8 +5,10 @@
   "type": "module",
   "description": "军团战争v14.1A5九倍模式解析数据驱动的浏览器4v4模拟",
   "scripts": {
-    "test": "node tests/v14-reference.test.mjs && node tests/v14-engine.test.mjs && node tests/v14-skills.test.mjs && node tests/layout.test.mjs && node tests/interfere.test.mjs && node tests/attack-windup.test.mjs && node tests/skills.test.mjs && node tests/skills-review.test.mjs",
-    "data:rebuild": "python3 scripts/import-v14.py"
+    "test": "node tests/v14-reference.test.mjs && node tests/v14-engine.test.mjs && node tests/v14-heroes.test.mjs && node tests/v14-skills.test.mjs && node tests/layout.test.mjs && node tests/interfere.test.mjs && node tests/attack-windup.test.mjs && node tests/skills.test.mjs && node tests/skills-review.test.mjs && node tests/sandbox.test.mjs && node tests/document-catalog.test.mjs && node tests/egg-rules.test.mjs",
+    "data:rebuild": "python3 scripts/import-v14.py && node scripts/stamp-assets.mjs",
+    "data:document": "node scripts/generate-document-catalog.mjs --input reference/document-catalog-reviewed.json && node scripts/stamp-assets.mjs",
+    "build": "node scripts/stamp-assets.mjs"
   },
   "engines": {
     "node": ">=18"

@@ -192,9 +192,79 @@ def generate(snapshot):
         elif b['mode']=='race':b['rosterIds']=[u['id'] for u in units if u['randomPool'] and u['race']==b['name']]
         # prophet deliberately leaves rosterIds empty: engine draws one each tier.
         b['rosterIds'].sort(key=lambda x:(next(u['tier'] for u in units if u['id']==x),x))
+    # Hero entries are absent from the packet's 374-row player view. The two
+    # pages nevertheless enumerate their exact rawcodes in the current JASS.
+    # Each family then has a contiguous Mk/Ml run with numbered building
+    # stages. Reconstruct the Web upgrade path from that run, explicitly
+    # distinguishing it from the packet's literal box_train upgrade edges.
+    # No older workbook, name-based cross-version join, or old hero price is
+    # used. Native Upgrade/Requires fields are not included in this packet.
+    hero_page=re.search(r'function Trig_heroPageActions\b.*?endfunction',jass,re.S)
+    hero_choices=[];hero_choice_sources={}
+    for m in re.finditer(r'call LimitHeroTypeCount\(h,\$([0-9A-F]{8}),true\)',hero_page[0]):
+        c=code(m[1])
+        if c in hero_choices:continue
+        hero_choices.append(c);hero_choice_sources[c]={'file':'war3map.j','line':jass.count('\n',0,hero_page.start()+m.start())+1,'rawcode':c}
+    assert len(hero_choices)==17
+    init_hero_page=re.search(r'function InitHeroPage\b.*?endfunction',jass,re.S)
+    second_page_choices={code(m[1]) for m in re.finditer(r'call LimitHeroTypeCount\(h,\$([0-9A-F]{8}),false\)',init_hero_page[0])}
+    assert len(second_page_choices)==7
+    hero_choices.sort(key=lambda c:c in second_page_choices)
+    short_hero_families={'hh01','n067','n03U','n08J','n091'}
+    hero_runs={}
+    for c in hero_choices:
+        start=next(i for i,p in enumerate(pairs) if p['building']==c)
+        run=pairs[start:start+(3 if c in short_hero_families else 11)]
+        assert len(run)==(3 if c in short_hero_families else 11)
+        # Numbered labels validate the registration sequence; they never
+        # create a join or find a target by a translated unit name.
+        for stage,p in enumerate(run,1):
+            name=clean(raw_units[p['building']]['name'])
+            label=re.search(r'等级\s*(\d+)',name)
+            expected=stage+9 if c=='hh01' else stage
+            if label:assert int(label[1])==expected,(c,p,name)
+            else:assert stage==len(run) or c=='hh01' and stage==2,(c,p,name)
+        hero_runs[c]=run
+    hero_codes={p['building'] for run in hero_runs.values() for p in run}
+    assert len(hero_codes)==147 and not hero_codes.intersection(all_catalog_codes)
+    all_catalog_codes.update(hero_codes|{'h0DB'})
+    # The alchemist tooltip names the same conjunction implemented by the
+    # current creation trigger: h0AF + h0AO permanently grants R2Z0.
+    upgrade_names={r['rawcode']:r['name'] for r in tables['all_upgrades.csv']}
+    alchemist_grant=jass.index('call SetPlayerTechResearchedSwap($52325A30,1,h)')
+    alchemist_requirement={'rawcode':'R2Z0','name':clean(upgrade_names['R2Z0']),'kind':'technology','source':source('all_units.csv',raw_rows['n091'],'n091'),'scriptLine':jass.count('\n',0,alchemist_grant)+1,'evidence':'n091 tooltip and h0AF+h0AO -> R2Z0 in EggWhiteEx'}
+    assert '需要发条地精和地精伐木机'==alchemist_requirement['name']
+    requirements['n091'].append(alchemist_requirement)
+    hero_edges=[];hero_entries=[uid('h0DB')]
+    hero_builder_ids=[b['id'] for b in builders]
+    for b in builders:b['heroEntryIds']=hero_entries.copy()
+    def hero_record(c,combat,family,stage,level,targets,choice=False,page=0,total=0):
+        r=raw_units[c];st=templates[combat or c];reqs=requirements.get(c,[])
+        return {**st,'id':uid(c),'name':clean(r['name']) or c,'race':'英雄','races':['英雄'],'builderIds':hero_builder_ids,'tier':0,'cost':compact(num(r['goldcost'])),'woodCost':compact(num(r['lumbercost'])),'population':int(num(r['fused'])),'sourceRawcode':c,'combatRawcode':combat,'upgrades':[uid(x) for x in targets],'sourceUpgradeRawcodes':targets,'omittedUpgradeRawcodes':[],'requires':[x['rawcode'] for x in reqs],'requirementDetails':reqs,'requiresDetails':reqs,'sourcePoints':compact(num(r['points'])),'buildingRawFields':fields(r),'buildingAbilityIds':split(r['abilList']),'randomPool':False,'isBase':False,'legacy':False,'morphProxy':False,'specialForm':False,'hero':True,'heroEntry':c=='h0DB','heroAltar':c=='h0DB','heroChoice':choice,'heroLevel':level,'heroStage':stage,'heroStageCount':total,'heroFamily':family,'heroTypeRawcode':family,'heroPage':page,'heroAllowedBuilderIds':[b['id'] for b in builders if b['mode']!='morph'] if family=='hh01' else hero_builder_ids,'color':'#d4b66f','shape':'star','source':source('all_units.csv',raw_rows[c],c),'sourceEvidence':{'combatMapping':combat_map.get(c),'heroPage':hero_choice_sources.get(family),'progressionPolicy':'Web reconstruction of numbered stages in the current contiguous Mk/Ml hero-family registration; native Upgrade/Requires fields are absent from the CSV packet.'},'acquisition':'建造英雄祭坛' if c=='h0DB' else '英雄祭坛选择' if choice else '英雄等级升级','sourceCategory':'JASS英雄祭坛与英雄分页补录','reachability':'JASS英雄分页入口及本版编号阶段重建','description':clean(r['ubertip']),'playable':True,'requiresUnlock':bool(reqs),'easterEgg':False,'buildLimits':[],'buildLimitDetails':[],'buildLimit':-1,'initialBuildLimit':-1,'buildLimitScope':'type','sourceRegistryMember':False}
+    altar=hero_record('h0DB',None,'h0DB',0,0,hero_choices)
+    altar_initial=jass.index('call SetPlayerTechMaxAllowedSwap($68304442,1,GetEnumPlayer())')
+    altar_completion=re.search(r'if x==\$68304442 then\s+call SaveBoolean.*?call DisplayTimedTextToPlayer\(',jass,re.S)
+    altar['sourceEvidence']['altarRules']={'file':'war3map.j','initialLimitLine':jass.count('\n',0,altar_initial)+1,'completionLines':[jass.count('\n',0,altar_completion.start())+1,jass.count('\n',0,altar_completion.end())+1],'pageLines':[jass.count('\n',0,hero_page.start())+1,jass.count('\n',0,hero_page.end())+1],'ninefoldMaximum':2,'uniqueType':True,'sellable':False,'replaceable':False}
+    altar['sourceEvidence']['missingNativeFields']=['goldcost','lumbercost','fused','points','Upgrade','Requires']
+    altar['sourceEvidence']['pricingPolicy']='The current CSV leaves altar gold/lumber fields blank; Web adaptation uses zero rather than importing an older-version price.'
+    units.append(altar)
+    for family,run in hero_runs.items():
+        page=2 if family in second_page_choices else 1
+        for index,p in enumerate(run):
+            c=p['building'];name=clean(raw_units[c]['name']);label=re.search(r'等级\s*(\d+)',name)
+            level=int(label[1]) if label else (11 if family=='hh01' else len(run)) if 'Max' in name else 0
+            targets=[run[index+1]['building']] if index+1<len(run) else []
+            record=hero_record(c,p['combat'],family,index+1,level,targets,index==0,page,len(run))
+            record['sourceEvidence']['progressionMappingLines']=[x['line'] for x in run]
+            units.append(record)
+        for a,b in zip(['h0DB']+[p['building'] for p in run], [p['building'] for p in run]):
+            target=raw_units[b];reqs=requirements.get(b,[])
+            hero_edges.append({'fromId':uid(a),'toId':uid(b),'fromRawcode':a,'toRawcode':b,'resolved':True,'cost':compact(num(target['goldcost'])),'woodCost':compact(num(target['lumbercost'])),'requires':[r['rawcode'] for r in reqs],'requirementNames':[r['name'] for r in reqs],'immediateSelect':True,'hidden':False,'source':{'file':'war3map.j','line':hero_choice_sources[family]['line'] if a=='h0DB' else combat_map[b]['line'],'rawcode':b,'kind':'hero-page-entry' if a=='h0DB' else 'hero-numbered-stage-reconstruction'},'supplemental':False,'heroProgression':True,'inferred':a!='h0DB','sourceLines':[combat_map[b]['line']],'scriptLine':combat_map[b]['line']})
+    assert len(hero_edges)==147
     edges=[]
     for rowno,r in enumerate(edge_rows,2):
         edges.append({'fromId':uid(r['source_rawcode']),'toId':uid(r['target_rawcode']),'fromRawcode':r['source_rawcode'],'toRawcode':r['target_rawcode'],'resolved':r['target_rawcode'] in all_catalog_codes,'cost':compact(num(r['target_gold_cost'])),'woodCost':compact(num(r['target_lumber_cost'])),'requires':split(r['requirement_rawcodes']),'requirementNames':split(r['requirement_names']),'immediateSelect':boolean(r['is_immediate_select_edge']),'hidden':boolean(r['not_in_immediate_select_table']),'source':{'file':'war3map.j','line':int(r['source_line']),'rawcode':r['target_rawcode'],'kind':'immediate-select-supplement'} if r.get('supplemental') else source('unit_upgrade_edges.csv',rowno,r['target_rawcode']),'supplemental':bool(r.get('supplemental')),'sourceLines':[int(num(r['source_line']))],'scriptLine':int(num(r['source_line']))})
+    edges.extend(hero_edges)
     rewards={int(r['wave']):r for r in tables['wave_kill_gold.csv']};waves=[]
     for rowno,r in enumerate(tables['waves_x9.csv'],2):
         w=int(r['wave']);c=r['rawcode'];st=templates[c];count=int(r['x9_count_per_lane']);boss=w in [10,20,30] or w>=31
@@ -210,8 +280,8 @@ def generate(snapshot):
         unlock_after=int(num(r['unlock_after_wave']));availability='stocked' if is_stocked else 'shop-preview'
         stock_capacity=int(num(raw_units[c]['stockMax']))
         mercs.append({**st,'id':'v14_merc_'+c,'name':clean(r['name']),'cost':0,'wood':int(num(r['lumber_cost'])),'income':int(num(r['x9_income_credit_wave_1_10'])),'incomeLate':int(num(r['x9_income_credit_wave_11_plus'])),'incomeRawPoints':int(num(r['unit_point_value'])),'unlock':unlock_after+1,'unlockAfterWave':unlock_after,'availableFromWave':unlock_after+1,'availableUntilWave':35,'recordClass':r['record_class'],'variantGroup':'v14_merc_'+base['rawcode'],'sameNameVariantRawcodes':split(r['same_name_variant_rawcodes']),'variantSuccessorId':None,'shopAvailability':availability,'shopPreview':not is_stocked,'stock':{'max':stock_capacity,'initial':stock_capacity,'regenSeconds':num(raw_units[c]['stockRegen']),'startDelaySeconds':num(raw_units[c]['stockStart'])},'stockMax':stock_capacity,'stockRegen':num(raw_units[c]['stockRegen']),'stockStart':num(raw_units[c]['stockStart']),'population':0,'description':clean(r['description']),'source':source('sent_units.csv',rowno,c),'x9EffectiveHp6to10':num(r['x9_effective_HP_wave_6_10']),'x9EffectiveHp11plus':num(r['x9_effective_HP_wave_11_plus']),'x9SapperHpScalingApplies':boolean(r['x9_sapper_hp_scaling_applies'])})
-    meta={'dataRevision':'v14.1A5-ninefold-dataset-v1','title':'军团战争 · v14.1A5 九倍怪物','sourceVersion':VERSION,'provenance':PROVENANCE,'distanceScale':SCALE,'defaultBuilderId':builder_map['先知'],'sourceRegistryCount':len(roster),'activeUnitCount':len(units),'activeBaseUnitCount':len(pool_codes),'activeMercenaryCount':len(mercs),'activeWaveCount':len(waves),'builderCount':len(builders),'heroEntryCount':0,'heroStageCount':0,'morphProxyCount':6,'archiveCount':len(archive),'upgradeEdgeCount':len(edges),'sourceUpgradeEdgeCount':len(source_edge_rows),'supplementalUpgradeEdgeCount':len(supplemental_edges),'resolvedUpgradeEdgeCount':sum(e['resolved'] for e in edges),'abilityCount':len(ability_table),'sourceAbilityCount':len(ability_table),'sourceUnitCount':len(templates),'templateCount':len(templates),'units':len(units),'baseUnits':len(pool_codes),'upgradeUnits':len(units)-len(pool_codes)-6,'mercenaries':len(mercs),'waves':len(waves),'unitPolicy':'374登记含工人。107随机候选含n085/n2YS两项JASS池补录；375建筑可达再加6变形代理（即时升级表补n2YS→n2YR与n085→n084两边），n07D/n07E仅图鉴。保留全部需求，不把资格彩蛋当直接建造入口。','statPolicy':'建筑体取价格/人口/建造时间/兵力；Mk/Ml映射的战斗体取HP/武器/能力。','waveCountPolicy':'直接采用九倍108等计数，20波10、30波6。','abilityPolicy':'保留2949完整能力与原生最终字段，脚本实际执行以skills.js支持状态为准。','legacyPolicy':'旧5.0dJF数据仅旧档兼容；新局只使用v14_前缀。','counts':{'sourceRegistry':374,'units':len(units),'baseUnits':107,'builders':20,'heroes':0,'heroStages':0,'morphProxies':6,'archived':len(archive),'mercenaries':60,'waves':35,'abilities':2949,'easterCatalog':248,'easterMenuNodes':372,'easterRecipes':88,'upgradeRequirements':461},'worker':{'rawcode':'e003','catalog':tables['wisp_data.csv'][0]},'limitations':['数据包374登记和302升级边未覆盖h0DB英雄入口及英雄升级分支；英雄仅原生模板保留，不开放旧5.0英雄。','平台账号、付费/皮肤/赞助资格无法由静态数据模拟；非战斗结束需求保留并按资格门槛限制。','n07E娜迦火蜥、n07D娜迦雷蜥登记存在，但未找到107随机池和302边闭包的基础入口，仅列图鉴。','发兵CSV同名变体有24个stockMax空白/零的预览对象；不把60对象都作为同时可购买商品，实际商店切换待静态原生商品表补全。','魔兽原生寻路、碰撞、动画和未实现脚本仍为浏览器适配。'],'sourceFiles':{'manifest':'reference/v14-source/import-manifest.json','datasetManifest':'reference/v14-source/data/source_manifest.json','jass':'reference/v14-source/raw_extracted/war3map.j'},'combatMappingCount':len(combat_map),'appliedUnitModifications':sum(map(len,unit_overrides.values())),'appliedAbilityModifications':applied_ability_modifications,'buildLimitRecordCount':len(build_limits),'banLimitRecordCount':len(ban_limits),'initialCappedUnitCount':sum(v>=0 for v in initial_caps.values()),'buildLimitPolicy':'47 calls in InitBudingLimit; second parameter is an automatically created capacity marker. RegisterBudingLimitEx releases count on upgrade; ordinary variant tracks lineage until explicit capped-target replacement. Initial call overrides prior BAN initialization; no interactive BAN flow enabled.','sourceValidation':json.loads((snapshot/'data/validation_report.json').read_text()),'sourceMetadata':json.loads((snapshot/'data/mode_rules_x9.json').read_text())}
-    return [('V14_REFERENCE',meta),('V14_ABILITIES',ability_table),('V14_UNIT_TEMPLATES',templates),('V14_UNITS',units),('V14_BUILDERS',builders),('V14_POOLS',pools),('V14_HERO_ENTRIES',[]),('V14_UPGRADE_EDGES',edges),('V14_SUPPLEMENTAL_UPGRADE_EDGES',[e for e in edges if e['supplemental']]),('V14_ARCHIVE',archive),('V14_WAVES',waves),('V14_MERCENARIES',mercs),('V14_REQUIREMENTS',dict(requirements)),('V14_BUILD_LIMITS',build_limits),('V14_BAN_LIMITS',ban_limits),('V14_EASTER_RECIPES',tables['easter_egg_recipes.csv']),('V14_EASTER_MENU',tables['easter_egg_menu_tree.csv']),('V14_EASTER_CATALOG',cat_rows),('V14_SCRIPTED_SKILLS',tables['x9_scripted_skills.csv'])]
+    meta={'dataRevision':'v14.1A5-ninefold-dataset-v1','heroDataRevision':'v14.1A5-hero-paths-v1','title':'军团战争 · v14.1A5 九倍怪物','sourceVersion':VERSION,'provenance':PROVENANCE,'distanceScale':SCALE,'defaultBuilderId':builder_map['先知'],'sourceRegistryCount':len(roster),'activeUnitCount':len(units),'activeBaseUnitCount':len(pool_codes),'activeMercenaryCount':len(mercs),'activeWaveCount':len(waves),'builderCount':len(builders),'heroEntryCount':len(hero_entries),'heroChoiceCount':len(hero_choices),'heroStageCount':len(hero_codes),'heroUpgradeEdgeCount':len(hero_edges),'morphProxyCount':6,'archiveCount':len(archive),'upgradeEdgeCount':len(edges),'sourceUpgradeEdgeCount':len(source_edge_rows),'supplementalUpgradeEdgeCount':len(supplemental_edges),'resolvedUpgradeEdgeCount':sum(e['resolved'] for e in edges),'abilityCount':len(ability_table),'sourceAbilityCount':len(ability_table),'sourceUnitCount':len(templates),'templateCount':len(templates),'units':len(units),'baseUnits':len(pool_codes),'upgradeUnits':len(units)-len(pool_codes)-6-len(hero_codes)-1,'mercenaries':len(mercs),'waves':len(waves),'unitPolicy':'374登记含工人。107随机候选含n085/n2YS两项JASS池补录；375普通建筑可达再加6变形代理（即时升级表补n2YS→n2YR与n085→n084两边）；英雄祭坛与17分支147阶段单列补录，n07D/n07E仅图鉴。保留全部需求，不把资格彩蛋当直接建造入口。','statPolicy':'建筑体取价格/人口/建造时间/兵力；Mk/Ml映射的战斗体取HP/武器/能力。','waveCountPolicy':'直接采用九倍108等计数，20波10、30波6。','abilityPolicy':'保留2949完整能力与原生最终字段，脚本实际执行以skills.js支持状态为准。','legacyPolicy':'旧5.0dJF数据仅旧档兼容；新局只使用v14_前缀。','counts':{'sourceRegistry':374,'units':len(units),'baseUnits':107,'builders':20,'heroes':len(hero_choices),'heroStages':len(hero_codes),'heroAltars':1,'morphProxies':6,'archived':len(archive),'mercenaries':60,'waves':35,'abilities':2949,'easterCatalog':248,'easterMenuNodes':372,'easterRecipes':88,'upgradeRequirements':461},'worker':{'rawcode':'e003','catalog':tables['wisp_data.csv'][0]},'limitations':['英雄祭坛/17分页入口由本版JASS确认，147阶段战斗映射/价格/人口来自本版Mk/Ml与CSV；等级升级链是按当前注册顺序和编号提示重建的Web适配，CSV缺少native Upgrade/Requires，未引入旧版350/450军力门槛。','平台账号、付费/皮肤/赞助资格无法由静态数据模拟；非战斗结束需求保留并按资格门槛限制。','n07E娜迦火蜥、n07D娜迦雷蜥登记存在，但未找到107随机池和302边闭包的基础入口，仅列图鉴。','发兵CSV同名变体有24个stockMax空白/零的预览对象；不把60对象都作为同时可购买商品，实际商店切换待静态原生商品表补全。','魔兽原生寻路、碰撞、动画和未实现脚本仍为浏览器适配。'],'sourceFiles':{'manifest':'reference/v14-source/import-manifest.json','datasetManifest':'reference/v14-source/data/source_manifest.json','jass':'reference/v14-source/raw_extracted/war3map.j'},'combatMappingCount':len(combat_map),'appliedUnitModifications':sum(map(len,unit_overrides.values())),'appliedAbilityModifications':applied_ability_modifications,'buildLimitRecordCount':len(build_limits),'banLimitRecordCount':len(ban_limits),'initialCappedUnitCount':sum(v>=0 for v in initial_caps.values()),'buildLimitPolicy':'47 calls in InitBudingLimit; second parameter is an automatically created capacity marker. RegisterBudingLimitEx releases count on upgrade; ordinary variant tracks lineage until explicit capped-target replacement. Initial call overrides prior BAN initialization; no interactive BAN flow enabled.','sourceValidation':json.loads((snapshot/'data/validation_report.json').read_text()),'sourceMetadata':json.loads((snapshot/'data/mode_rules_x9.json').read_text())}
+    return [('V14_REFERENCE',meta),('V14_ABILITIES',ability_table),('V14_UNIT_TEMPLATES',templates),('V14_UNITS',units),('V14_BUILDERS',builders),('V14_POOLS',pools),('V14_HERO_ENTRIES',hero_entries),('V14_HERO_UPGRADE_EDGES',hero_edges),('V14_UPGRADE_EDGES',edges),('V14_SUPPLEMENTAL_UPGRADE_EDGES',[e for e in edges if e['supplemental']]),('V14_ARCHIVE',archive),('V14_WAVES',waves),('V14_MERCENARIES',mercs),('V14_REQUIREMENTS',dict(requirements)),('V14_BUILD_LIMITS',build_limits),('V14_BAN_LIMITS',ban_limits),('V14_EASTER_RECIPES',tables['easter_egg_recipes.csv']),('V14_EASTER_MENU',tables['easter_egg_menu_tree.csv']),('V14_EASTER_CATALOG',cat_rows),('V14_SCRIPTED_SKILLS',tables['x9_scripted_skills.csv'])]
 
 def encode(exports):
     data=dict(exports);dump=lambda v:json.dumps(v,ensure_ascii=False,separators=(',',':'));out='/* Generated by scripts/import-v14.py from checked-in reference/v14-source. */\n'

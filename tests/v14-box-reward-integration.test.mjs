@@ -42,12 +42,23 @@ test('both source tiers pay their exact resources once, consume all choices, and
   }
 });
 
-test('free farm immediately raises population while retaining paid research and consumes nothing at the cap',()=>{
-  const g=fixture(),p=g.state.players[0];p.populationCap=24;ok(g.command('farm'));
-  const task=clone(p.economyTasks.farmTask),gold=p.gold,wood=p.wood;assert.ok(task);gift(g,'A131');
-  ok(claim(g,'A131'));assert.equal(p.populationCap,24+RULES.farmPopulation);assert.deepEqual(p.economyTasks.farmTask,task);near(p.gold,gold);near(p.wood,wood);consumed(p,'A131');
-  g._advanceEconomy(p,g.state.time,task.finishAt+.01);assert.equal(p.populationCap,24+RULES.farmPopulation*2);
-  p.populationCap=RULES.maxPopulation;gift(g,'A131');assert.equal(g.boxRewardStatus().offers.find(o=>o.id==='A131').canStart,false);rejectUnchanged(g,()=>claim(g,'A131'));
+test('free farm advances a known native prototype while paid research and an unknown prototype retain the reward',()=>{
+  const g=fixture(),p=g.state.players[0];p.populationCap=RULES.initialPopulation;assert.equal(p.sourceFarmRawcode,'h024');gift(g,'A131');
+  const gold=p.gold,wood=p.wood;ok(claim(g,'A131'));assert.equal(p.populationCap,RULES.initialPopulation+8);assert.equal(p.sourceFarmRawcode,'h08C');near(p.gold,gold);near(p.wood,wood);consumed(p,'A131');
+  ok(g.command('farm'));const task=clone(p.economyTasks.farmTask);assert.ok(task);gift(g,'A131');
+  assert.equal(g.boxRewardStatus().offers.find(o=>o.id==='A131').canStart,false);rejectUnchanged(g,()=>claim(g,'A131'));assert.deepEqual(p.economyTasks.farmTask,task);
+  g._advanceEconomy(p,g.state.time,task.finishAt+.01);assert.equal(p.populationCap,RULES.initialPopulation+8+RULES.farmPopulation);assert.equal(p.sourceFarmRawcode,null);
+  rejectUnchanged(g,()=>claim(g,'A131'));
+  p.sourceFarmRawcode='h0A1';p.populationCap=15;rejectUnchanged(g,()=>claim(g,'A131'));
+});
+
+test('free farm uses high-stage fmade differences and only clips the resulting population at the global ceiling',()=>{
+  for(const [raw,next,cap,expected]of [['h098','h09A',79,107],['h0A4','h0A1',187,300],['h024','h08C',300,300]]){
+    const g=fixture(),p=g.state.players[0];p.sourceFarmRawcode=raw;p.populationCap=cap;gift(g,'A131');
+    ok(claim(g,'A131'));assert.equal(p.sourceFarmRawcode,next);assert.equal(p.populationCap,expected);consumed(p,'A131');
+  }
+  const g=fixture(),p=g.state.players[0];delete p.sourceFarmRawcode;p.populationCap=15;gift(g,'A131');rejectUnchanged(g,()=>claim(g,'A131'));
+  const restored=Game.fromSnapshot(clone(g.snapshot()));assert.equal(restored.state.players[0].sourceFarmRawcode??null,null);rejectUnchanged(restored,()=>claim(restored,'A131'));
 });
 
 test('free lumber advances the actual pending technology without charging again or losing its completion',()=>{

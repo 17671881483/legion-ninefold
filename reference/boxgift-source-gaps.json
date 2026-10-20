@@ -1002,7 +1002,8 @@
       "thirty-second-native-branch-dialog-timeout",
       "random-fighter-reward-placement",
       "controllable-builder-reward-spells",
-      "platform-frame-tech-refund-hook"
+      "platform-frame-tech-refund-hook",
+      "ordinary-farm-native-upgrade-target-and-pending-replacement-refund"
     ],
     "note": "The original audit counts above are retained as the pre-fix snapshot."
   }

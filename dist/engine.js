@@ -5,7 +5,7 @@ import { recordEggCompletion, restoreEggHistory, finishEggWave, recordBeastKingK
 import { queueSpecialMonsters, applySpecialMonsterSpawn, specialMonsterDeath, sourceEconomyBuildStart, sourceEconomyUpgradeFinish, farmerGoldRate, sourceEconomyDeath, applyFarmerRoundReward } from './special-rules.js';
 import { alchemistDeathReward } from './alchemist-rules.js';
 import { applySandboxQualification } from './sandbox-qualifications.js';
-import { BOX_REWARD_RULES, advanceBoxRewards, migrateBoxRewardProgress, boxTrainingRewardStatus, boxTrainingTargetStatus, boxTrainingCost, boxTrainingReplacementState, consumeBoxTrainingReward, claimBoxReward, completeBoxSwap, boxBuildFreeRefund } from './box-training-rules.js';
+import { BOX_REWARD_RULES, BOX_FARM_RULES, advanceBoxRewards, migrateBoxRewardProgress, boxTrainingRewardStatus, boxTrainingTargetStatus, boxTrainingCost, boxTrainingReplacementState, consumeBoxTrainingReward, claimBoxReward, completeBoxSwap, boxBuildFreeRefund } from './box-training-rules.js';
 
 const units = Object.fromEntries(UNITS.map(u => [u.id, u]));
 const mercs = Object.fromEntries([...LEGACY_MERCENARIES, ...MERCENARIES].map(u => [u.id, u]));
@@ -69,7 +69,7 @@ export class Game {
         gold: initialGold, wood: rule('initialWood', 40), income: rule('initialIncome', 5),
         workers: rule('initialWorkers', 1), lumberLevel: 0, technologies: { R0GK: 1 }, entitlements: {}, nagaFarmerGoldRate: 0, economyTasks: { workerQueue: [], lumberTask: null }, buildings: [], builderId: id === 0 ? this.options.builderId : this._pick(BUILDERS.filter(b=>b.mode!=='morph'))?.id ?? RULES.defaultBuilderId ?? BUILDERS[0]?.id, roster: [],
         mercStocks: Object.fromEntries(MERCENARIES.map(m => [m.id, { stock: this._mercenaryMaxStock(m), nextReadyAt: null }])),
-        populationCap: rule('initialPopulation', 40), popUsed: rule('initialWorkers', 1), heroId: null, heroAltarCount: 0, healUsed: false, rerolls: 0, stats: { kills: 0, leaks: 0, warps: 0, sent: 0, damage: 0, goldEarned: 0, wavesHeld: 0 }
+        populationCap: rule('initialPopulation', 40), sourceFarmRawcode:'h024', popUsed: rule('initialWorkers', 1), heroId: null, heroAltarCount: 0, healUsed: false, rerolls: 0, stats: { kills: 0, leaks: 0, warps: 0, sent: 0, damage: 0, goldEarned: 0, wavesHeld: 0 }
       })),
       kings: [0, 1].map(team => ({ team, hp: rule('kingInitialHp', 12000), maxHp: rule('kingInitialHp', 12000),
         attack: rule('kingDamage', 135), regen: rule('kingRegen', 4), healCharges: rule('kingHealCharges', 4),
@@ -283,6 +283,11 @@ export class Game {
     }));
   }
   _boxDefinition(b) {const def=units[b?.unitId];return UNIT_TEMPLATES[rawcode(def)]??def;}
+  _boxFarmStatus(p) {
+    const stage=BOX_FARM_RULES.byRawcode[p.sourceFarmRawcode];
+    const reason=!stage?'农场原型尚未核定，暂时保留这项礼物':p.economyTasks?.farmTask?'农场正在升级，原生取消与返费尚未核定，暂时保留礼物':!stage.nextRawcode?'来源农场已经满级':'';
+    return {canStart:!reason,reason,stage};
+  }
   _boxCombatDefinition(def,b) {return b?.permanentAbilityIds?.length?{...def,abilityIds:[...new Set([...(def.abilityIds??[]),...b.permanentAbilityIds])]}:def;}
   _boxOwnedTargets(p,kind='ownedNotSelf') {
     return p.buildings.filter(b=>{
@@ -324,7 +329,7 @@ export class Game {
       let reason='';
       if(entry.handler==='randomFighter')reason='随机兵种礼物尚未接入，可保留礼物或选择其他奖励';
       else if(entry.handler==='builderAbility')reason='建造者主动施法尚未接入，可保留礼物或选择其他奖励';
-      else if(entry.handler==='farm'&&p.populationCap>=rule('maxPopulation',300))reason='农场人口已达上限';
+      else if(entry.handler==='farm')reason=this._boxFarmStatus(p).reason;
       else if(entry.handler==='lumber'&&!this._treasureLumberBranch(p))reason='伐木科技已满（含研究中）';
       else if(targetKind!=='none'&&!targets.length)reason='没有符合条件的己方单位';
       if(this.state.phase==='ended')reason='本局已结束';
@@ -414,7 +419,7 @@ export class Game {
         p.lumberLevel = tasks.lumberTask.targetLevel; p.lumberAdvancedWhileBasicQueued=0; tasks.lumberTask = null;
         if (p.id === 0) this._log(`伐木科技 Lv.${p.lumberLevel} 研究完成。`);
       }
-      if(tasks.farmTask?.finishAt<=cursor+1e-8){tasks.farmTask=null;p.populationCap=Math.min(rule('maxPopulation',300),p.populationCap+rule('farmPopulation',8));if(p.id===0)this._log('农场建造完成，人口上限增加。');}
+      if(tasks.farmTask?.finishAt<=cursor+1e-8){tasks.farmTask=null;p.sourceFarmRawcode=null;p.populationCap=Math.min(rule('maxPopulation',300),p.populationCap+rule('farmPopulation',8));if(p.id===0)this._log('农场建造完成，人口上限增加。');}
       if (cursor >= to - 1e-10) break;
     }
     p.popUsed = this._population(p);
@@ -564,7 +569,7 @@ export class Game {
         const tasks = this._economyTasks(p);
         p.workers += tasks.workerQueue.length; tasks.workerQueue = [];
         if (tasks.lumberTask) { p.lumberLevel = tasks.lumberTask.targetLevel; p.lumberAdvancedWhileBasicQueued=0; tasks.lumberTask = null; }
-        if (tasks.farmTask) { p.populationCap = Math.min(rule('maxPopulation', 300), p.populationCap + rule('farmPopulation', 8)); tasks.farmTask = null; }
+        if (tasks.farmTask) { p.populationCap = Math.min(rule('maxPopulation', 300), p.populationCap + rule('farmPopulation', 8));p.sourceFarmRawcode=null;tasks.farmTask = null; }
         return this._result(true, '本路已支付的施工、招募和研究已全部完成');
       }
       case 'sandboxAI':
@@ -608,7 +613,7 @@ export class Game {
         const offer=this.boxRewardStatus(p.id)?.offers.find(o=>o.id===payload.abilityId);
         if(!offer?.canStart)return this._result(false,offer?.reason??'当前没有此神秘礼物奖励');
         const target=p.buildings.find(b=>b.id===payload.buildingId),api={getDefinition:b=>this._boxDefinition(b),getTarget:()=>target,
-          upFarm:()=>{if(p.populationCap>=rule('maxPopulation',300))return false;p.populationCap=Math.min(rule('maxPopulation',300),p.populationCap+rule('farmPopulation',8));return true;},
+          upFarm:()=>{const farm=this._boxFarmStatus(p);if(!farm.canStart)return false;p.populationCap=Math.min(rule('maxPopulation',300),p.populationCap+farm.stage.populationDelta);p.sourceFarmRawcode=farm.stage.nextRawcode;return true;},
           upLumbering:()=>{const branch=this._treasureLumberBranch(p);if(!branch)return false;const task=p.economyTasks?.lumberTask,levels=this._sourceLumberLevels(p);if(branch==='advanced'&&levels.basic<rule('lumberBasicLevelCap',7))p.lumberAdvancedWhileBasicQueued=number(p.lumberAdvancedWhileBasicQueued,0)+1;p.lumberLevel++;if(task)task.targetLevel++;return true;},
           grantAbilities:(_owner,b,ids)=>{b.permanentAbilityIds=[...new Set([...(b.permanentAbilityIds??[]),...ids])];return true;},
           demolish:(_owner,b,refund)=>{p.gold+=refund.gold;p.buildings=p.buildings.filter(old=>old!==b);return true;},
@@ -1646,6 +1651,7 @@ export class Game {
     migrateBoxRewardProgress(this,{legacySnapshot:true});
     for (const p of this.state.players) {
       p.builderId??=RULES.defaultBuilderId;
+      p.sourceFarmRawcode??=null;
       p.nagaFarmerGoldRate=farmerGoldRate(p,units);
       p.heroAltarCount=this._heroAltarCount(p);
       for(const b of p.buildings.filter(b=>!b.construction))this._recordSourceCompletion(p,units[b.unitId]);

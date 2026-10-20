@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {UNITS,UNIT_TEMPLATES} from '../dist/data.js';
 import {V14_BOX_TRAINING_RULES,V14_ABILITIES} from '../dist/v14-reference.js';
-import {BOX_TRAINING_RULES,BOX_REWARD_RULES,rollBoxRewards,advanceBoxRewards,migrateBoxRewardProgress,
+import {BOX_TRAINING_RULES,BOX_REWARD_RULES,BOX_FARM_STAGES,BOX_FARM_RULES,boxFarmUpgradeStatus,rollBoxRewards,advanceBoxRewards,migrateBoxRewardProgress,
   boxTrainingRewardStatus,consumeBoxTrainingReward,boxTrainingCost,boxTrainingTargetStatus,boxTrainingReplacementState,
   claimBoxReward,completeBoxSwap,boxBuildFreeRefund} from '../dist/box-training-rules.js';
 
@@ -15,6 +15,47 @@ function trainingFixture(code='h010',next='h011'){
   return {p,target,provider:{id:'box0',ownerId:0},def:UNIT_TEMPLATES[next]};
 }
 function rewardFixture(id){const p=player();p.boxRewards={providerId:'box0',providerRawcode:'n060',ownerId:0,tier:BOX_REWARD_RULES[id].tier,abilityIds:[id],consumed:false};return {p,game:{state:{players:[p],wave:6}}};}
+
+test('farm stages follow the literal source next registrations with native food, cost and construction time',()=>{
+  const registrations=[...source.matchAll(/call SaveInteger\(O,\$([0-9A-F]{8}),StringHash\("next"\),\$([0-9A-F]{8})\)/g)]
+    .map(m=>[Buffer.from(m[1],'hex').toString('ascii'),Buffer.from(m[2],'hex').toString('ascii')]);
+  assert.deepEqual(BOX_FARM_STAGES.filter(s=>s.nextRawcode).map(s=>[s.rawcode,s.nextRawcode]),registrations);
+  assert.equal(BOX_FARM_STAGES.length,15);assert.equal(BOX_FARM_RULES.initialRawcode,'h024');
+  assert.deepEqual(BOX_FARM_STAGES.map(s=>s.foodMade),[8,16,24,32,40,48,56,64,72,100,120,140,160,180,300]);
+  assert.equal(BOX_FARM_RULES.byRawcode.h099,undefined,'an omitted 80-food native farm must not be silently inserted');
+  const lines=source.split(/\r?\n/);
+  for(const stage of BOX_FARM_STAGES){
+    const template=UNIT_TEMPLATES[stage.rawcode],f=template.sourceRawFields;
+    assert.equal(stage.foodMade,Number(f.fmade));assert.deepEqual(stage.cost,{gold:Number(f.goldcost??0),wood:Number(f.lumbercost??0)});
+    assert.equal(stage.buildTimeSeconds,Number(f.bldtm));assert.equal(stage.source.nativeRow,template.source.row);
+    if(stage.nextRawcode){const next=UNIT_TEMPLATES[stage.nextRawcode].sourceRawFields;assert.equal(stage.populationDelta,Number(next.fmade)-Number(f.fmade));assert.equal(stage.upgradeBuildTimeSeconds,Number(next.bldtm));assert.match(lines[stage.source.nextLine-1],/StringHash\("next"\)/);}
+    else{assert.equal(stage.populationDelta,0);assert.equal(stage.upgradeCost,null);}
+  }
+  assert.deepEqual(BOX_FARM_RULES.byRawcode.h09A.cost,{gold:60,wood:200});assert.deepEqual(BOX_FARM_RULES.byRawcode.h0A1.cost,{gold:360,wood:1200});
+  for(const line of BOX_FARM_RULES.initialCreateLines)assert.match(lines[line-1],/set Hl\[\d\]=CreateUnit\(h,\$68303234,/);
+  assert.match(lines[BOX_FARM_RULES.source.foodCeilingLine-1],/PLAYER_STATE_FOOD_CAP_CEILING,300/);
+});
+
+test('farm reward status requires an explicit prototype and returns variable source increments without inferring total population',()=>{
+  for(const [rawcode,delta,next]of [['h024',8,'h08C'],['h098',28,'h09A'],['h09A',20,'h0A6'],['h0A4',120,'h0A1']]){
+    const p={...player(),sourceFarmRawcode:rawcode,populationCap:299};
+    const before=JSON.stringify(p),status=boxFarmUpgradeStatus(p);assert.equal(status.canStart,true);assert.equal(status.populationDelta,delta);assert.equal(status.nextRawcode,next);assert.deepEqual(status.cost,{gold:0,wood:0});assert.equal(status.immediate,true);assert.equal(JSON.stringify(p),before);
+  }
+  for(const p of [{populationCap:15},{populationCap:79},{sourceFarmRawcode:'h099',populationCap:87},{sourceFarmRawcode:'h0A1',populationCap:300}])assert.equal(boxFarmUpgradeStatus(p).canStart,false);
+  assert.equal(BOX_REWARD_RULES.A131.status,'partial');assert.match(BOX_FARM_RULES.legacyMigration,/never-infer/);
+});
+
+test('upgrade-in-progress replacement is explicitly unresolved and a refused farm reward leaves all choices available',()=>{
+  const {p,game}=rewardFixture('A131');p.sourceFarmRawcode='h024';p.economyTasks={farmTask:{finishAt:10,targetRawcode:'h08C'}};
+  const before=JSON.stringify(p),status=boxFarmUpgradeStatus(p);assert.equal(status.canStart,false);assert.match(status.reason,/正在升级/);
+  assert.equal(claimBoxReward(game,p,'A131',{}, {upFarm:()=>status.canStart}).ok,false);assert.equal(JSON.stringify(p),before);
+  assert.equal(BOX_FARM_RULES.replacement.removesOldHandle,true);assert.equal(BOX_FARM_RULES.replacement.scriptTransfersNativeUpgradeJob,false);assert.equal(BOX_FARM_RULES.replacement.status,'partial');
+  assert.equal(BOX_FARM_RULES.ordinaryPaidUpgrade.sameNextChainProven,false);assert.equal(BOX_FARM_RULES.ordinaryPaidUpgrade.status,'partial');
+  const upFarm=source.match(/function UpFarm takes[\s\S]*?endfunction/)[0],replace=source.match(/function YDWEReplaceUnitBJNull takes[\s\S]*?endfunction/)[0];
+  assert.match(upFarm,/YDWEReplaceUnitBJNull\(FirstOfGroup\(DG\),Yr,1\)/);assert.doesNotMatch(upFarm,/GetUnitCurrentOrder|UPGRADE|tech_loding/);
+  assert.match(replace,/CreateUnit\(GetOwningPlayer\(Kr\),Ko,/);assert.match(replace,/call RemoveUnit\(Kr\)/);assert.doesNotMatch(replace,/GetUnitCurrentOrder|Issue.*Order|Refund|UPGRADE/);
+  delete p.economyTasks.farmTask;assert.equal(boxFarmUpgradeStatus(p).canStart,true);
+});
 
 test('training metadata uses the literal independent tree and full first/second reward pools rather than treasure rewards',()=>{
   assert.equal(BOX_TRAINING_RULES.abilityId,'A2ZA');assert.deepEqual(BOX_TRAINING_RULES.providerRawcodes,['n060']);

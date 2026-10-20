@@ -1,5 +1,50 @@
 import { V14_ABILITIES, V14_BOX_TRAINING_RULES, V14_UNIT_TEMPLATES } from './v14-reference.js';
 
+// These are the literal O[rawcode]["next"] registrations, rather than a
+// reconstruction from food totals or the names of the farm levels.
+const farmNext = [
+  ['h024','h08C',31383],['h08C','h08D',31384],['h08D','h09B',31385],
+  ['h09B','h09C',31386],['h09C','h095',31387],['h095','h096',31388],
+  ['h096','h097',31389],['h097','h098',31390],['h098','h09A',31391],
+  ['h09A','h0A6',31392],['h0A6','h09J',31393],['h09J','h0A5',31394],
+  ['h0A5','h0A4',31395],['h0A4','h0A1',31396],['h0A1',null,null],
+];
+const farmNative = code => V14_UNIT_TEMPLATES[code]?.sourceRawFields ?? {};
+const farmCost = code => Object.freeze({gold:Number(farmNative(code).goldcost??0),wood:Number(farmNative(code).lumbercost??0)});
+export const BOX_FARM_STAGES = Object.freeze(farmNext.map(([rawcode,nextRawcode,nextLine])=>{
+  const f=farmNative(rawcode),next=nextRawcode?farmNative(nextRawcode):null,foodMade=Number(f.fmade);
+  return Object.freeze({rawcode,name:V14_UNIT_TEMPLATES[rawcode]?.name,nextRawcode,foodMade,
+    nextFoodMade:next?Number(next.fmade):null,populationDelta:next?Number(next.fmade)-foodMade:0,
+    cost:farmCost(rawcode),buildTimeSeconds:Number(f.bldtm),
+    // Native target costs/times are data, not proof that a paid order can
+    // select this target. Only UpFarm's replacement chain is established.
+    upgradeCost:nextRawcode?farmCost(nextRawcode):null,upgradeBuildTimeSeconds:next?Number(next.bldtm):null,
+    source:Object.freeze({file:'war3map.j',nextLine,nativeTable:'all_units.csv',nativeRow:V14_UNIT_TEMPLATES[rawcode]?.source?.row,
+      nativeFields:Object.freeze(['fmade','goldcost','lumbercost','bldtm'])})});
+}));
+export const BOX_FARM_RULES = Object.freeze({initialRawcode:'h024',stages:BOX_FARM_STAGES,
+  byRawcode:Object.freeze(Object.fromEntries(BOX_FARM_STAGES.map(s=>[s.rawcode,s]))),
+  populationCeiling:300,initialCreateLines:Object.freeze([15133,15143,15153,15163,15173,15183,15193,15203]),
+  source:Object.freeze({file:'war3map.j',upFarmLines:Object.freeze([30491,30513]),nextLines:Object.freeze([31383,31396]),
+    rewardLines:Object.freeze([31069,31075]),foodCeilingLine:15891,replacementLines:Object.freeze([7316,7378])}),
+  replacement:Object.freeze({mode:1,immediate:true,removesOldHandle:true,scriptTransfersNativeUpgradeJob:false,
+    status:'partial',partial:'替换 helper 明确创建新单位并 RemoveUnit 旧单位，未转移原生升级任务；在研单位被移除后的退款及升级取消事件由原生引擎决定，本包未提供其定义。'}),
+  ordinaryPaidUpgrade:Object.freeze({status:'partial',sameNextChainProven:false,
+    sourceEventLines:Object.freeze([47282,47285,47312,47315]),
+    partial:'仅核定通用原生 UPGRADE_START/FINISH 入口。解析表未包含原生建筑 Upgrade 目标列表，无法证明付费升级选择同一 next 链；费用和时长字段不能补足此缺口。'}),
+  legacyMigration:'requires-explicit-rawcode-never-infer-from-population',
+});
+
+/** A saved farm prototype is authoritative; aggregate food cannot identify it. */
+export function boxFarmUpgradeStatus(player,{pendingUpgrade=!!player?.economyTasks?.farmTask}={}){
+  const rawcode=player?.sourceFarmRawcode,stage=BOX_FARM_RULES.byRawcode[rawcode];
+  if(!stage)return {canStart:false,reason:'农场原型未核定，保留奖励',rawcode:rawcode??null};
+  if(pendingUpgrade)return {canStart:false,reason:'农场正在升级，原生替换与退款行为尚未核定，保留奖励',rawcode};
+  if(!stage.nextRawcode)return {canStart:false,reason:'农场等级已满',rawcode};
+  return {canStart:true,reason:'',rawcode,nextRawcode:stage.nextRawcode,foodMade:stage.foodMade,nextFoodMade:stage.nextFoodMade,
+    populationDelta:stage.populationDelta,immediate:true,cost:{gold:0,wood:0}};
+}
+
 const pools = Object.freeze({
   box: Object.freeze(['A131','A132','A133','A134','A135','A136','A13M','A2ZA','A2ZB','A2ZC','A2ZD','A2ZE']),
   box2: Object.freeze(['A140','A13N','A13O','A13P','A13Q','A13R','A13S']),
@@ -7,7 +52,7 @@ const pools = Object.freeze({
 const meta = (id, handler, targetKind, description, extra = {}) => Object.freeze({ id, name: V14_ABILITIES[id]?.name ?? id,
   tier: pools.box.includes(id) ? 'box' : 'box2', handler, targetKind, description, status: 'implemented', ...extra });
 export const BOX_REWARD_RULES = Object.freeze({
-  A131: meta('A131','farm','none','原生UpFarm立即免费升一级农场；已经满级则不消费奖励。'),
+  A131: meta('A131','farm','none','按已保存农场原型的原生next链立即免费替换到下一阶；人口增量取fmade差值，未知原型、升级在研或满级时保留奖励。', {status:'partial',partial:'已核定next替换链；旧档无法从总人口反推农场原型，在研原生升级被替换后的退款/取消事件未核定。'}),
   A132: meta('A132','randomFighter','point','在自己的建造区域按KM[1..I7[3]]随机创建一个三级兵并计算人口；成功后消费整组奖励。', { fighterTier: 3, status: 'partial', partial: '创建、原生人口限制与普通单位附加能力初始化由宿主提供。' }),
   A133: meta('A133','gold','none','获得50金币并消费整组第一阶段奖励。', { gold: 50 }),
   A134: meta('A134','wood','none','获得150木材并消费整组第一阶段奖励。', { wood: 150 }),

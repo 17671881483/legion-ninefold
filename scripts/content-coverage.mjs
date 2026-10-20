@@ -6,7 +6,7 @@ import { compileSkills, SKILL_IMPLEMENTATION_REVISION } from '../dist/skills.js'
 const current=UNITS.filter(u=>!u.legacy);
 // This form is created by YseraAwakening at runtime, so it is not a separate
 // build-menu record. Its skills still belong to the player's combat coverage.
-const playerRuntimeForms=['h0YO','h0UD','h0UE','h2AE','n06V','n06W'].map(code=>UNIT_TEMPLATES[code]);
+const playerRuntimeForms=['h0YO','h0UD','h0UE','h2AE','n06V','n06W','h0CZ','h0CL'].map(code=>UNIT_TEMPLATES[code]);
 // Source callbacks inject these exact auxiliary abilities. Keep them visible
 // in coverage even though they are absent from the build-menu ability lists.
 const playerRuntimeAbilities=[
@@ -16,6 +16,9 @@ const playerRuntimeAbilities=[
   {sourceRawcode:'h0UG',abilityIds:['A1CG']},
   {sourceRawcode:'h0SY',abilityIds:['A1BD','A1BE','A1BF','A1BH']},
   {sourceRawcode:'h0SN',abilityIds:['A19Z']},
+  {sourceRawcode:'h0QU',abilityIds:['A15D','A15F','A15I']},
+  {sourceRawcode:'h0PI',abilityIds:['A0ZS','A0ZU','A0ZY']},
+  {sourceRawcode:'h0M0',abilityIds:['A0ZV','A0ZW']},
 ].map(def=>({...def,skillVersion:'v14.1A5',distanceScale:1/3}));
 const specialCodes=[SPECIAL_MONSTERS.waveFive.rawcode,...SPECIAL_MONSTERS.treasure.byWave.map(e=>e.rawcode)];
 const collect=definitions=>{
@@ -43,6 +46,7 @@ const result={
     '包内未提供完整原生商店/菜单字段，部分商品与单位入口仍待补证。',
     'A1U4/A1U5/A1U6献祭奖励可核定，但没有可证实的携带单位或授予路径。',
     '原始地图模型、贴图、音频和v14地形通行格不在解析包内。',
+    'BoxGift兵种训练的5个来源可达叶子节点尚未接入：n08Y/n08Z/n02S/n05H/n07I；该统计仅覆盖当前已接入对象及动态能力，不代表全部来源可达内容。',
   ],
 };
 if(process.argv.includes('--write'))await writeFile(new URL('../reference/content-coverage.json',import.meta.url),JSON.stringify(result,null,2)+'\n');

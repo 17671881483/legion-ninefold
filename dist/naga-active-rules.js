@@ -159,7 +159,7 @@ export function tickNagaUnit(g, e, api = {}) {
 export function castNagaAbility(g, e, id, params = {}, api = {}) {
   const rule = NAGA_ACTIVE_RULES[id], now = g.state.time;
   if (!activeIds.has(id) || !has(e, id)) return { ok: false, message: '该单位没有此娜迦技能' };
-  if (!alive(e) || e.status?.stunUntil > now || e.status?.sourcePaused || e.sourcePaused || e.status?.yseraPaused || e.status?.yseraHidden) return { ok: false, message: '单位当前无法施法' };
+  if (!alive(e) || e.status?.stunUntil > now || e.status?.cycloneUntil > now || e.status?.sourcePaused || e.sourcePaused || e.status?.yseraPaused || e.status?.yseraHidden) return { ok: false, message: '单位当前无法施法' };
   const state = (e.skillStates ??= {})[id] ??= { readyAt: 0, casts: 0 };
   if ((state.readyAt ?? 0) > now) return { ok: false, message: '技能冷却中' };
   if ((e.mana ?? 0) < rule.manaCost) return { ok: false, message: '魔法不足' };

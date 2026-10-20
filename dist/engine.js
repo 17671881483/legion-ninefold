@@ -444,7 +444,7 @@ export class Game {
   _resetSandboxWave(wave = this.state.wave) {
     const s = this.state;
     s.wave = wave; s.phase = 'build'; s.roundMode = 'normal'; s.timer = this.buildDuration(wave);
-    s.paused = false; s.winner = null; s.entities = []; s.sourceSkillJobs = []; s.nagaScriptCasters = {}; s.events = []; s.pendingSends = [];
+    s.paused = false; s.winner = null; s.entities = []; s.sourceSkillJobs = []; s.nagaScriptCasters = {}; s.sourceAuraNextAt=Math.floor(s.time)+1; s.events = []; s.pendingSends = [];
     s.kingBountyPools = [0, 0]; s.teamLeakFlags = [false, false]; s.specialMonsters = {};
     for (const key of ['waveInfo', 'arenaRemaining', 'arenaResult', 'continuousRemaining', 'congestion']) delete s[key];
     this._spawnQueue = []; this._roundTime = 0; this._settledLanes = []; this._overtime = false; this._warpTimer = 0;
@@ -814,7 +814,7 @@ export class Game {
     const w = this._waveData();
     const reference=value(w,['recommendedPower'],[250,350,500,650,800,1000,1200,1450,1600,1850,2050,2400,2700,3100,3500,4000,4500,5000,5500,6000,6500,7100,7700,8500,9500,10600,11800,13000,14000,15000,16000,17000,18000,19000,20000][s.wave-1]??1);
     for(const p of s.players){const factor=this._military(p)/reference-(p.sourceLeaks??0)/150;p.leakBountyFactor=this.options.ggEnabled?factor>=1?1:factor>=.1?factor:0:0;}
-    s.phase = 'combat'; s.timer = 0; s.entities = []; s.sourceSkillJobs = []; s.nagaScriptCasters = {}; s.teamLeakFlags = [false,false]; this._spawnQueue = []; this._roundTime = 0; this._settledLanes = []; this._overtime = false; this._warpTimer = 0; this._battleAuras = [[], []];
+    s.phase = 'combat'; s.timer = 0; s.entities = []; s.sourceSkillJobs = []; s.nagaScriptCasters = {}; s.sourceAuraNextAt=Math.floor(s.time)+1; s.teamLeakFlags = [false,false]; this._spawnQueue = []; this._roundTime = 0; this._settledLanes = []; this._overtime = false; this._warpTimer = 0; this._battleAuras = [[], []];
     if(s.mode !== 'sandbox' && s.wave>=31)s.continuousRemaining=s.wave<35?50:null;
     const boss = !!(w.boss ?? w.isBoss ?? this.state.wave % 10 === 0);
     const baseCount = value(w, ['baseCount', 'quantity'], boss ? 1 : 5);
@@ -1002,16 +1002,16 @@ export class Game {
       this._applyHealingAura(e, battle.auras, dt);
       this._passiveAbility(e, battle, dt);
       tickSourceSkills(this,e,battle,dt);
-      if (e.hp <= 0 || (st.stunUntil ?? 0) > now) { e.pendingAttack = null; continue; }
+      if (e.hp <= 0 || (st.stunUntil ?? 0) > now || (st.cycloneUntil ?? 0) > now) { e.pendingAttack = null; continue; }
       if (e.side === 'monster' && e.pendingAttack && this._advanceMonsterAttack(e, battle)) continue;
       const aggro = Math.max(e.range, number(e.acquisitionRange, Math.max(4.5, e.range + 1)));
       let target = this._worldEntities.get(e.targetId);
-      if (target && (target.hp <= 0 || target.battleTeam !== e.battleTeam || target.side === e.side || !canWeaponTarget(e,target) || distance(e, target) > aggro * 1.25 || (e.nav?.mode === 'support' && distance(target, e.nav.anchor) > aggro * 1.25))) target = null;
+      if (target && (target.hp <= 0 || target.battleTeam !== e.battleTeam || target.side === e.side || !canWeaponTarget(e,target,now) || distance(e, target) > aggro * 1.25 || (e.nav?.mode === 'support' && distance(target, e.nav.anchor) > aggro * 1.25))) target = null;
       if (!target && (st.nextSenseAt ?? 0) <= now) {
         st.nextSenseAt = now + .4;
         let best = Infinity;
         for (const other of this._nearby(e, aggro)) {
-          if (other.id === e.id || other.hp <= 0 || other.side === e.side || !canWeaponTarget(e,other)) continue;
+          if (other.id === e.id || other.hp <= 0 || other.side === e.side || !canWeaponTarget(e,other,now)) continue;
           const delta = distance(e, other);
           if (delta < best && delta <= aggro && !(e.nav?.mode === 'support' && distance(other, e.nav.anchor) > aggro * 1.25) && this._canSegment(worldPoint(e), worldPoint(other), e.battleTeam, 0)) { target = other; best = delta; }
         }
@@ -1021,7 +1021,7 @@ export class Game {
         if (e.side === 'defender' && !e.status.activated) { e.status.activated = true; if (e.nav?.mode === 'guard') this._planReturn(e); }
         if (e.side === 'defender' && e.nav?.mode !== 'support') e.routeMode = 'guard';
         if (e.nav) e.nav.interrupted = true;
-        const reach = (sourceWeapon(e,target)?.range??e.range) + e.radius + target.radius;
+        const reach = (sourceWeapon(e,target,this.state.time)?.range??e.range) + e.radius + target.radius;
         if (distance(e, target) <= reach && this._canSegment(worldPoint(e), worldPoint(target), e.battleTeam, 0)) {
           if (e.side === 'monster') { if (e.attackCd <= 1e-8) this._beginMonsterAttack(e, target, battle); }
           else if (e.attackCd <= 0) this._attack(e, target, battle);
@@ -1123,7 +1123,7 @@ export class Game {
   _beginMonsterAttack(e, target, battle) {
     if (e.pendingAttack || e.hp <= 0 || target.hp <= 0 || target.team === e.team || target.battleTeam !== e.battleTeam ||
       e.buffs?.some(b => b.expiresAt > this.state.time && b.disarm)) return;
-    const weapon = sourceWeapon(e, target); if (!weapon) return;
+    const weapon = sourceWeapon(e, target,this.state.time); if (!weapon) return;
     const sourceWindup = Math.max(0, number(weapon.raw[`dmgpt${weapon.slot}`], 0));
     if (!sourceWindup) { this._attack(e, target, battle); return; }
     let haste = this._auraEffects(e, battle.auras).attackSpeedMultiplier;
@@ -1134,7 +1134,7 @@ export class Game {
   _advanceMonsterAttack(e, battle) {
     const pending = e.pendingAttack, now = this.state.time;
     const target = pending.targetIsKing ? this.state.kings.find(king => king.id === pending.targetId) : this._worldEntities.get(pending.targetId);
-    const weapon = target && sourceWeapon(e, target);
+    const weapon = target && sourceWeapon(e, target,this.state.time);
     const valid = target && target.hp > 0 && target.battleTeam === e.battleTeam && target.team !== e.team && target.side !== e.side && weapon &&
       !e.buffs?.some(b => b.expiresAt > now && b.disarm) &&
       distance(e, target) <= weapon.range + e.radius + (target.radius ?? .8) + 1e-8 && this._canSegment(worldPoint(e), worldPoint(target), e.battleTeam, 0);
@@ -1152,7 +1152,7 @@ export class Game {
     e.facing=Math.atan2(target.worldY-e.worldY,target.worldX-e.worldX)*180/Math.PI;
     const ability = e.ability, type = ability?.type;
     if(e.buffs?.some(b=>b.expiresAt>this.state.time&&b.disarm))return;
-    const weapon=sourceWeapon(e,target);if(!weapon)return;
+    const weapon=sourceWeapon(e,target,this.state.time);if(!weapon)return;
     const sourceAttack=sourceAttackStart(this,e,target);
     const attackAuras = this._auraEffects(e, lane.auras), targetAuras = this._auraEffects(target, lane.auras);
     let damage = weapon.damage * sourceAttack.multiplier+sourceAttack.bonus, haste = attackAuras.attackSpeedMultiplier;
@@ -1190,13 +1190,13 @@ export class Game {
     }
   }
   _hurt(target, damage, attacker, pure = false) {
-    if (target.hp <= 0 || damage <= 0) return 0;
+    if (target.hp <= 0 || damage <= 0 || (target.status?.cycloneUntil??0)>(this._iceEventAt??this._trollEventAt??this._kelthuzadEventAt??this.state.time)) return 0;
     const options=typeof pure==='object'?pure:{spell:!!pure},legacyPure=typeof pure==='boolean'&&pure;
     const revivalCount=target.status.yseraRevivalCount??0;
     let actual = modifyIncoming(this,target,damage,attacker,options);
-    if(actual<=0){if((target.status.yseraRevivalCount??0)>revivalCount)beforeSourceDamage(this,target,0,attacker);return 0;}
+    if(actual<=0){if((target.status.yseraRevivalCount??0)>revivalCount)beforeSourceDamage(this,target,0,attacker,options);return 0;}
     if ((target.status.shield ?? 0) > 0 && !legacyPure) { const absorbed = Math.min(actual, target.status.shield); target.status.shield -= absorbed; actual -= absorbed; }
-    beforeSourceDamage(this,target,actual,attacker);
+    beforeSourceDamage(this,target,actual,attacker,options);
     const sourcePreDamageHp=target.hp;
     target.hp -= actual;
     afterSourceDamage(this,target,actual,attacker,{...options,sourcePreDamageHp});
@@ -1291,7 +1291,7 @@ export class Game {
   }
   _warpDefenders() {
     for (const e of this.state.entities) {
-      if (e.hp <= 0 || e.status.yseraHidden || e.status.yseraPaused || e.status.sourcePaused || e.status.illidanPaused || e.side !== 'defender' || e.status.warped || !this._settledLanes.includes(e.sourceLaneId)) continue;
+      if (e.hp <= 0 || e.status.yseraHidden || e.status.yseraPaused || e.status.sourcePaused || e.status.illidanPaused || e.status.cycloneUntil>this.state.time || e.side !== 'defender' || e.status.warped || !this._settledLanes.includes(e.sourceLaneId)) continue;
       if (e.nav?.mode !== 'return' || distance(e, spawnWarpWorld(e.sourceLaneId)) > .55 || e.targetId) continue;
       const team = e.battleTeam, source = worldPoint(e), base = supportWorld(team);
       const slot = Number(String(e.buildingId ?? e.id).replace(/\D/g, '')) || 0;
@@ -1311,7 +1311,7 @@ export class Game {
   _updateKings(dt) {
     for (const k of this.state.kings) {
       if (k.hp <= 0) continue;
-      if(k.status?.sourcePaused||k.status?.illidanPaused)continue;
+      if(k.status?.sourcePaused||k.status?.illidanPaused||k.status?.cycloneUntil>this.state.time)continue;
       if(this.state.wave>=31&&k.movePath){const nav=k.movePath;while(nav.index<nav.path.length&&distance(this._kingPosition(k.team),nav.path[nav.index])<.03)nav.index++;if(nav.index<nav.path.length){const destination=nav.path[nav.index],from=this._kingPosition(k.team),delta=distance(from,destination),step=Math.min(delta,rule('kingMoveSpeed',250/3)/100*dt),point={x:from.x+(destination.x-from.x)/delta*step,y:from.y+(destination.y-from.y)/delta*step},next=constrainPoint(from,point,k.team,k.radius??.8);k.worldX=next.x;k.worldY=next.y;}else k.movePath=null;}
       const position = this._kingPosition(k.team), auras = this._battleAuras?.[k.team] ?? [];
       const kingTarget = { ...k, ...position, side: 'defender' }, kingAuras = this._auraEffects(kingTarget, auras);
@@ -1319,7 +1319,7 @@ export class Game {
       if (k.attackCd <= 0) {
         const reach = rule('kingRange', 250) / 100 + (k.radius ?? .8);
         const enemies = this._nearby({ ...position, battleTeam: k.team }, reach + .5)
-          .filter(e => e.side === 'monster' && e.hp > 0 && distance(e, position) <= reach + e.radius && this._canSegment(position, worldPoint(e), k.team, 0))
+          .filter(e => e.side === 'monster' && e.hp > 0 && !(e.status?.cycloneUntil>this.state.time) && distance(e, position) <= reach + e.radius && this._canSegment(position, worldPoint(e), k.team, 0))
           .sort((a, b) => distance(a, position) - distance(b, position));
         if (enemies.length) {
           k.attackCd = rule('kingInterval', .85) / ((1 + (k.autoUpgradeCount ?? 0) * rule('kingAttackSpeedPerFourWaves', .1)) * kingAuras.attackSpeedMultiplier);
@@ -1354,7 +1354,7 @@ export class Game {
       return;
     }
     // A cleared round discards its temporary dummies before preparation/arena.
-    s.sourceSkillJobs = []; s.nagaScriptCasters = {};
+    s.sourceSkillJobs = []; s.nagaScriptCasters = {}; s.sourceAuraNextAt=Math.floor(s.time)+1;
     const listedReward = RULES.waveRewards?.[s.wave - 1];
     const bonus = Number.isFinite(listedReward) ? listedReward * ((RULES.bossRewardDoubleWaves??[10,20]).includes(s.wave) ? 2 : 1) : rule('incomeBase', 22) + s.wave * rule('incomePerWave', 8);
     for (const p of s.players) {
@@ -1383,7 +1383,7 @@ export class Game {
 
   _startArena(){
     this._completeMilitaryConstruction();
-    const s=this.state;s.phase='combat';s.roundMode='arena';s.entities=[];s.sourceSkillJobs=[];s.nagaScriptCasters={};s.timer=0;s.arenaRemaining=rule('arenaBattleLimitSeconds',120);this._spawnQueue=[];this._roundTime=0;
+    const s=this.state;s.phase='combat';s.roundMode='arena';s.entities=[];s.sourceSkillJobs=[];s.nagaScriptCasters={};s.sourceAuraNextAt=Math.floor(s.time)+1;s.timer=0;s.arenaRemaining=rule('arenaBattleLimitSeconds',120);this._spawnQueue=[];this._roundTime=0;
     for(const p of s.players)for(const b of p.buildings.filter(b=>!b.construction)){
       const def=units[b.unitId];if(!def||(isSourceUnit(def)&&!def.combatRawcode))continue;const point=laneToWorld(0,1.2+(p.id%4)*1.1+(b.col-2.5)*.12,p.team===0?5+(b.row/8):9-(b.row/8));
       const e=this._entity(def,{team:p.team,side:`arena${p.team}`,battleTeam:0,laneId:0,sourceLaneId:p.id,ownerId:p.id,buildingId:b.id,isArena:true,worldX:point.x,worldY:point.y});
@@ -1399,7 +1399,7 @@ export class Game {
     if (this.state.mode === 'sandbox') { this._resetSandboxWave(); return; }
     const s=this.state,winner=alive[0]&&!alive[1]?0:alive[1]&&!alive[0]?1:-1,reward=s.wave*(winner===-1?rule('arenaDrawGoldPerWave',5):rule('arenaWinnerGoldPerWave',10));
     for(const p of s.players)if(winner===-1||p.team===winner){p.gold+=reward;p.stats.goldEarned+=reward;}
-    s.arenaResult={winner,reward,wave:s.wave};s.entities=[];s.sourceSkillJobs=[];s.nagaScriptCasters={};s.phase='build';s.roundMode='arena-transition';s.timer=rule('arenaAfterBattleSeconds',20);
+    s.arenaResult={winner,reward,wave:s.wave};s.entities=[];s.sourceSkillJobs=[];s.nagaScriptCasters={};s.sourceAuraNextAt=Math.floor(s.time)+1;s.phase='build';s.roundMode='arena-transition';s.timer=rule('arenaAfterBattleSeconds',20);
     this._log(`竞技场${winner===-1?'平局':winner===0?'蓝方获胜':'红方获胜'}，${winner===-1?'双方':'胜方'}每人奖励${reward}金币；20秒过渡后进入30秒准备。`);
   }
   _advanceContinuous(){
@@ -1559,7 +1559,7 @@ export class Game {
     for(const e of this.state.entities){
       const def=units[e.unitId]??mercs[e.unitId]??UNIT_TEMPLATES[e.combatRawcode];
       if(!e.skillSpecs&&def)attachSkills(e,def);
-      else if(def&&isV14(def))refreshSourceSkills(e,def);
+      else if(def&&isV14(def)&&refreshSourceSkills(e,def)){e.status??={};e.status.sourceSkillsRestoredAt=this.state.time;}
       if(isV14(def)&&def.heroFamily)e.isNativeHero=['STR','AGI','INT'].includes(def.sourceRawFields?.Primary);
       e.skillStates??={};e.buffs??=[];
     }

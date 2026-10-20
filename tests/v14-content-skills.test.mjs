@@ -22,7 +22,7 @@ test('verified v14 markers compile with source mechanics and preserve old-versio
  for(const s of compileSkills(def(ids)))assert.equal(s.status,['A2Y1','A2Y5'].includes(s.id)?'partial':'implemented',s.id);
  const [hurricane,ripple]=compileSkills(def(ids));near(hurricane.radius,350/300);near(hurricane.pull,20/300);assert.equal(hurricane.count,25);assert.equal(ripple.count,5);assert.equal(ripple.manaCost,15);
  assert.equal(compileSkills({abilityIds:['A0TA']})[0].status,'unresolved');
- for(const s of compileSkills(def(['A2Y0','A0BH'])))assert.equal(s.status,'unresolved',s.id);
+ assert.equal(compileSkills(def(['A2Y0']))[0].status,'unresolved');assert.equal(compileSkills(def(['A0BH']))[0].status,'partial');
  assert.equal(compileSkills(def(['A1DR']))[0].status,'partial','ice-shield timing and explicit attack classes are implemented; hidden native classes remain unresolved');
 });
 

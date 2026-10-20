@@ -1,0 +1,981 @@
+{
+  "policy": "Read-only source audit; Latin-1 byte mapping and split(\\n), no JASS execution. Catalog membership is not a grant of requirements.",
+  "sourceFunctions": {
+    "BoxUpgradeTreeRegister___Register": {
+      "line": 1450,
+      "endLine": 3338
+    },
+    "BoxGiftGetImmediateUpgradeTargetCount": {
+      "line": 30773,
+      "endLine": 30775
+    },
+    "BoxGiftGetImmediateUpgradeTargetByIndex": {
+      "line": 30776,
+      "endLine": 30778
+    },
+    "BoxGiftTryUpgradeTargetUnitNowByType": {
+      "line": 30818,
+      "endLine": 30907
+    },
+    "BoxGiftIsUpgradeTechReady": {
+      "line": 30690,
+      "endLine": 30705
+    },
+    "BoxGiftIsUpgradeLimitReady": {
+      "line": 30755,
+      "endLine": 30772
+    }
+  },
+  "summary": {
+    "activeUnits": 529,
+    "allSelectableEdges": 225,
+    "allSelectSources": 183,
+    "currentGraphEdges": 450,
+    "reachableSelectableNodes": 534,
+    "missingReachableNodes": 5,
+    "missingReachableRelations": 5,
+    "missingRelationsFromAlreadyPresentSource": 5,
+    "fullOnlyAbsentTargetsNotSelectable": 0,
+    "registrationParseUnknown": 0,
+    "countMismatches": 0,
+    "selectEdgesFromExistingUnits": 223
+  },
+  "missingNodes": [
+    {
+      "rawcode": "n02S",
+      "name": "巫妖王-阿尔萨斯·米奈希尔",
+      "sourceRow": 1703,
+      "combatMapping": {
+        "combat": "h0M0",
+        "line": 17508
+      },
+      "requirements": [
+        {
+          "rawcode": "R0HS",
+          "line": 3326,
+          "name": "冰霜骨龙"
+        },
+        {
+          "rawcode": "u00S",
+          "line": 3327,
+          "name": "兵力要求: 2000"
+        },
+        {
+          "rawcode": "u004",
+          "line": 3328,
+          "name": "等到战斗结束"
+        }
+      ],
+      "gold": "300",
+      "wood": "",
+      "population": "15",
+      "sourcePoints": "650",
+      "presentInUnits": false,
+      "incomingPaths": [
+        {
+          "from": "h0DV",
+          "to": "n02S",
+          "index": 3,
+          "line": 2596
+        }
+      ],
+      "descendantSelects": [],
+      "fullUpgradeEdges": [],
+      "caps": [
+        {
+          "unit_rawcode": "n02S",
+          "unit_name": "巫妖王-阿尔萨斯·米奈希尔",
+          "dialog_label_in_source": "阿尔萨斯",
+          "initial_max_allowed": "1",
+          "initial_limit_meaning": "最多1个",
+          "can_be_selected_for_global_ban": "True",
+          "source_line": "3647"
+        }
+      ],
+      "currentWebHeroPathToSource": [
+        "h0DB",
+        "h0DE",
+        "h0DD",
+        "h0DA",
+        "h0DP",
+        "h0DO",
+        "h0DR",
+        "h0DS",
+        "h0DQ",
+        "h0DU",
+        "h0DT",
+        "h0DV"
+      ],
+      "currentWebHeroPathPolicy": "Existing numbered-stage Web reconstruction, not a claim that the source Box full table defines the intermediate level edges.",
+      "entryKind": "box-gift-train-only",
+      "existsInFullUpgradeTable": false,
+      "externalQualificationRequired": false,
+      "knownGoldTrainingCost": 120,
+      "woodTrainingCost": "GetUnitWoodCost(target)*40/100; source CSV lumbercost is blank, retained as unknown",
+      "priority": 1
+    },
+    {
+      "rawcode": "n05H",
+      "name": "艾萨拉女王",
+      "sourceRow": 1800,
+      "combatMapping": {
+        "combat": "h0OV",
+        "line": 17883
+      },
+      "requirements": [
+        {
+          "rawcode": "h220",
+          "line": 3311,
+          "name": "军团战争超级赞助"
+        },
+        {
+          "rawcode": "R05E",
+          "line": 3312,
+          "name": "山岭巨人+石傀儡"
+        },
+        {
+          "rawcode": "u00S",
+          "line": 3313,
+          "name": "兵力要求: 2000"
+        },
+        {
+          "rawcode": "u004",
+          "line": 3314,
+          "name": "等到战斗结束"
+        }
+      ],
+      "gold": "650",
+      "wood": "",
+      "population": "16",
+      "sourcePoints": "1000",
+      "presentInUnits": false,
+      "incomingPaths": [
+        {
+          "from": "h0H4",
+          "to": "n05H",
+          "index": 1,
+          "line": 2590
+        }
+      ],
+      "descendantSelects": [],
+      "fullUpgradeEdges": [],
+      "caps": [
+        {
+          "unit_rawcode": "n05H",
+          "unit_name": "艾萨拉女王",
+          "dialog_label_in_source": "艾萨拉女王",
+          "initial_max_allowed": "1",
+          "initial_limit_meaning": "最多1个",
+          "can_be_selected_for_global_ban": "True",
+          "source_line": "3625"
+        }
+      ],
+      "currentWebHeroPathToSource": [
+        "h0DB",
+        "h0HC",
+        "h0H6",
+        "h0H7",
+        "h0H8",
+        "h0H3",
+        "h0H9",
+        "h0EN",
+        "h0HA",
+        "h0HB",
+        "h0H5",
+        "h0H4"
+      ],
+      "currentWebHeroPathPolicy": "Existing numbered-stage Web reconstruction, not a claim that the source Box full table defines the intermediate level edges.",
+      "entryKind": "box-gift-train-only",
+      "existsInFullUpgradeTable": false,
+      "externalQualificationRequired": true,
+      "knownGoldTrainingCost": 260,
+      "woodTrainingCost": "GetUnitWoodCost(target)*40/100; source CSV lumbercost is blank, retained as unknown",
+      "priority": 2
+    },
+    {
+      "rawcode": "n07I",
+      "name": "女皇·瓦斯琪女士",
+      "sourceRow": 1871,
+      "combatMapping": {
+        "combat": "h0UQ",
+        "line": 18456
+      },
+      "requirements": [
+        {
+          "rawcode": "u004",
+          "line": 3330,
+          "name": "等到战斗结束"
+        },
+        {
+          "rawcode": "h220",
+          "line": 3331,
+          "name": "军团战争超级赞助"
+        },
+        {
+          "rawcode": "R0D2",
+          "line": 3332,
+          "name": "娜迦海妖战士"
+        }
+      ],
+      "gold": "500",
+      "wood": "",
+      "population": "17",
+      "sourcePoints": "875",
+      "presentInUnits": false,
+      "incomingPaths": [
+        {
+          "from": "h0U2",
+          "to": "n07I",
+          "index": 1,
+          "line": 2598
+        }
+      ],
+      "descendantSelects": [],
+      "fullUpgradeEdges": [],
+      "caps": [
+        {
+          "unit_rawcode": "n07I",
+          "unit_name": "女皇·瓦斯琪女士",
+          "dialog_label_in_source": "瓦斯琪女士",
+          "initial_max_allowed": "1",
+          "initial_limit_meaning": "最多1个",
+          "can_be_selected_for_global_ban": "True",
+          "source_line": "3636"
+        }
+      ],
+      "currentWebHeroPathToSource": [
+        "h0DB",
+        "h0U3",
+        "h0U4",
+        "h0U1",
+        "h0UB",
+        "h0UA",
+        "h0U9",
+        "h0U8",
+        "h0U7",
+        "h0U6",
+        "h0U5",
+        "h0U2"
+      ],
+      "currentWebHeroPathPolicy": "Existing numbered-stage Web reconstruction, not a claim that the source Box full table defines the intermediate level edges.",
+      "entryKind": "box-gift-train-only",
+      "existsInFullUpgradeTable": false,
+      "externalQualificationRequired": true,
+      "knownGoldTrainingCost": 200,
+      "woodTrainingCost": "GetUnitWoodCost(target)*40/100; source CSV lumbercost is blank, retained as unknown",
+      "priority": 2
+    },
+    {
+      "rawcode": "n08Y",
+      "name": "霜之哀伤·阿尔萨斯",
+      "sourceRow": 1922,
+      "combatMapping": {
+        "combat": "h0X9",
+        "line": 18582
+      },
+      "requirements": [
+        {
+          "rawcode": "u004",
+          "line": 3316,
+          "name": "等到战斗结束"
+        },
+        {
+          "rawcode": "h220",
+          "line": 3317,
+          "name": "军团战争超级赞助"
+        },
+        {
+          "rawcode": "R0HM",
+          "line": 3318,
+          "name": "大死灵巫师"
+        },
+        {
+          "rawcode": "R0HS",
+          "line": 3319,
+          "name": "冰霜骨龙"
+        }
+      ],
+      "gold": "605",
+      "wood": "",
+      "population": "17",
+      "sourcePoints": "955",
+      "presentInUnits": false,
+      "incomingPaths": [
+        {
+          "from": "h0DV",
+          "to": "n08Y",
+          "index": 1,
+          "line": 2594
+        }
+      ],
+      "descendantSelects": [],
+      "fullUpgradeEdges": [],
+      "caps": [
+        {
+          "unit_rawcode": "n08Y",
+          "unit_name": "霜之哀伤·阿尔萨斯",
+          "limit_api": "RegisterBudingLimit",
+          "requirement_rawcode": "",
+          "requirement_name": "",
+          "requirement_kind": "",
+          "max_allowed": "1",
+          "source_line": "48293"
+        }
+      ],
+      "currentWebHeroPathToSource": [
+        "h0DB",
+        "h0DE",
+        "h0DD",
+        "h0DA",
+        "h0DP",
+        "h0DO",
+        "h0DR",
+        "h0DS",
+        "h0DQ",
+        "h0DU",
+        "h0DT",
+        "h0DV"
+      ],
+      "currentWebHeroPathPolicy": "Existing numbered-stage Web reconstruction, not a claim that the source Box full table defines the intermediate level edges.",
+      "entryKind": "box-gift-train-only",
+      "existsInFullUpgradeTable": false,
+      "externalQualificationRequired": true,
+      "knownGoldTrainingCost": 242,
+      "woodTrainingCost": "GetUnitWoodCost(target)*40/100; source CSV lumbercost is blank, retained as unknown",
+      "priority": 2
+    },
+    {
+      "rawcode": "n08Z",
+      "name": "圣光圣骑·阿尔萨斯",
+      "sourceRow": 1923,
+      "combatMapping": {
+        "combat": "h0XA",
+        "line": 17451
+      },
+      "requirements": [
+        {
+          "rawcode": "u004",
+          "line": 3321,
+          "name": "等到战斗结束"
+        },
+        {
+          "rawcode": "R01D",
+          "line": 3322,
+          "name": "高级牧师"
+        },
+        {
+          "rawcode": "h220",
+          "line": 3323,
+          "name": "军团战争超级赞助"
+        },
+        {
+          "rawcode": "R0HS",
+          "line": 3324,
+          "name": "冰霜骨龙"
+        }
+      ],
+      "gold": "505",
+      "wood": "",
+      "population": "17",
+      "sourcePoints": "855",
+      "presentInUnits": false,
+      "incomingPaths": [
+        {
+          "from": "h0DV",
+          "to": "n08Z",
+          "index": 2,
+          "line": 2595
+        }
+      ],
+      "descendantSelects": [],
+      "fullUpgradeEdges": [],
+      "caps": [
+        {
+          "unit_rawcode": "n08Z",
+          "unit_name": "圣光圣骑·阿尔萨斯",
+          "limit_api": "RegisterBudingLimit",
+          "requirement_rawcode": "",
+          "requirement_name": "",
+          "requirement_kind": "",
+          "max_allowed": "1",
+          "source_line": "48294"
+        }
+      ],
+      "currentWebHeroPathToSource": [
+        "h0DB",
+        "h0DE",
+        "h0DD",
+        "h0DA",
+        "h0DP",
+        "h0DO",
+        "h0DR",
+        "h0DS",
+        "h0DQ",
+        "h0DU",
+        "h0DT",
+        "h0DV"
+      ],
+      "currentWebHeroPathPolicy": "Existing numbered-stage Web reconstruction, not a claim that the source Box full table defines the intermediate level edges.",
+      "entryKind": "box-gift-train-only",
+      "existsInFullUpgradeTable": false,
+      "externalQualificationRequired": true,
+      "knownGoldTrainingCost": 202,
+      "woodTrainingCost": "GetUnitWoodCost(target)*40/100; source CSV lumbercost is blank, retained as unknown",
+      "priority": 2
+    }
+  ],
+  "missingRelationsFromPresentSources": [
+    {
+      "from": "h0H4",
+      "to": "n05H",
+      "index": 1,
+      "line": 2590,
+      "fromName": "蛇发女妖 - [等级 11]",
+      "toName": "艾萨拉女王",
+      "targetExists": false,
+      "sourceIsHeroPath": true,
+      "requirements": [
+        {
+          "rawcode": "h220",
+          "line": 3311,
+          "name": "军团战争超级赞助"
+        },
+        {
+          "rawcode": "R05E",
+          "line": 3312,
+          "name": "山岭巨人+石傀儡"
+        },
+        {
+          "rawcode": "u00S",
+          "line": 3313,
+          "name": "兵力要求: 2000"
+        },
+        {
+          "rawcode": "u004",
+          "line": 3314,
+          "name": "等到战斗结束"
+        }
+      ]
+    },
+    {
+      "from": "h0DV",
+      "to": "n08Y",
+      "index": 1,
+      "line": 2594,
+      "fromName": "死亡骑士 - [等级 Max]",
+      "toName": "霜之哀伤·阿尔萨斯",
+      "targetExists": false,
+      "sourceIsHeroPath": true,
+      "requirements": [
+        {
+          "rawcode": "u004",
+          "line": 3316,
+          "name": "等到战斗结束"
+        },
+        {
+          "rawcode": "h220",
+          "line": 3317,
+          "name": "军团战争超级赞助"
+        },
+        {
+          "rawcode": "R0HM",
+          "line": 3318,
+          "name": "大死灵巫师"
+        },
+        {
+          "rawcode": "R0HS",
+          "line": 3319,
+          "name": "冰霜骨龙"
+        }
+      ]
+    },
+    {
+      "from": "h0DV",
+      "to": "n08Z",
+      "index": 2,
+      "line": 2595,
+      "fromName": "死亡骑士 - [等级 Max]",
+      "toName": "圣光圣骑·阿尔萨斯",
+      "targetExists": false,
+      "sourceIsHeroPath": true,
+      "requirements": [
+        {
+          "rawcode": "u004",
+          "line": 3321,
+          "name": "等到战斗结束"
+        },
+        {
+          "rawcode": "R01D",
+          "line": 3322,
+          "name": "高级牧师"
+        },
+        {
+          "rawcode": "h220",
+          "line": 3323,
+          "name": "军团战争超级赞助"
+        },
+        {
+          "rawcode": "R0HS",
+          "line": 3324,
+          "name": "冰霜骨龙"
+        }
+      ]
+    },
+    {
+      "from": "h0DV",
+      "to": "n02S",
+      "index": 3,
+      "line": 2596,
+      "fromName": "死亡骑士 - [等级 Max]",
+      "toName": "巫妖王-阿尔萨斯·米奈希尔",
+      "targetExists": false,
+      "sourceIsHeroPath": true,
+      "requirements": [
+        {
+          "rawcode": "R0HS",
+          "line": 3326,
+          "name": "冰霜骨龙"
+        },
+        {
+          "rawcode": "u00S",
+          "line": 3327,
+          "name": "兵力要求: 2000"
+        },
+        {
+          "rawcode": "u004",
+          "line": 3328,
+          "name": "等到战斗结束"
+        }
+      ]
+    },
+    {
+      "from": "h0U2",
+      "to": "n07I",
+      "index": 1,
+      "line": 2598,
+      "fromName": "阿茜萨 - [等级 11]",
+      "toName": "女皇·瓦斯琪女士",
+      "targetExists": false,
+      "sourceIsHeroPath": true,
+      "requirements": [
+        {
+          "rawcode": "u004",
+          "line": 3330,
+          "name": "等到战斗结束"
+        },
+        {
+          "rawcode": "h220",
+          "line": 3331,
+          "name": "军团战争超级赞助"
+        },
+        {
+          "rawcode": "R0D2",
+          "line": 3332,
+          "name": "娜迦海妖战士"
+        }
+      ]
+    }
+  ],
+  "allMissingReachableRelations": [
+    {
+      "from": "h0H4",
+      "to": "n05H",
+      "index": 1,
+      "line": 2590,
+      "fromName": "蛇发女妖 - [等级 11]",
+      "toName": "艾萨拉女王",
+      "targetExists": false,
+      "sourceIsHeroPath": true,
+      "requirements": [
+        {
+          "rawcode": "h220",
+          "line": 3311,
+          "name": "军团战争超级赞助"
+        },
+        {
+          "rawcode": "R05E",
+          "line": 3312,
+          "name": "山岭巨人+石傀儡"
+        },
+        {
+          "rawcode": "u00S",
+          "line": 3313,
+          "name": "兵力要求: 2000"
+        },
+        {
+          "rawcode": "u004",
+          "line": 3314,
+          "name": "等到战斗结束"
+        }
+      ]
+    },
+    {
+      "from": "h0DV",
+      "to": "n08Y",
+      "index": 1,
+      "line": 2594,
+      "fromName": "死亡骑士 - [等级 Max]",
+      "toName": "霜之哀伤·阿尔萨斯",
+      "targetExists": false,
+      "sourceIsHeroPath": true,
+      "requirements": [
+        {
+          "rawcode": "u004",
+          "line": 3316,
+          "name": "等到战斗结束"
+        },
+        {
+          "rawcode": "h220",
+          "line": 3317,
+          "name": "军团战争超级赞助"
+        },
+        {
+          "rawcode": "R0HM",
+          "line": 3318,
+          "name": "大死灵巫师"
+        },
+        {
+          "rawcode": "R0HS",
+          "line": 3319,
+          "name": "冰霜骨龙"
+        }
+      ]
+    },
+    {
+      "from": "h0DV",
+      "to": "n08Z",
+      "index": 2,
+      "line": 2595,
+      "fromName": "死亡骑士 - [等级 Max]",
+      "toName": "圣光圣骑·阿尔萨斯",
+      "targetExists": false,
+      "sourceIsHeroPath": true,
+      "requirements": [
+        {
+          "rawcode": "u004",
+          "line": 3321,
+          "name": "等到战斗结束"
+        },
+        {
+          "rawcode": "R01D",
+          "line": 3322,
+          "name": "高级牧师"
+        },
+        {
+          "rawcode": "h220",
+          "line": 3323,
+          "name": "军团战争超级赞助"
+        },
+        {
+          "rawcode": "R0HS",
+          "line": 3324,
+          "name": "冰霜骨龙"
+        }
+      ]
+    },
+    {
+      "from": "h0DV",
+      "to": "n02S",
+      "index": 3,
+      "line": 2596,
+      "fromName": "死亡骑士 - [等级 Max]",
+      "toName": "巫妖王-阿尔萨斯·米奈希尔",
+      "targetExists": false,
+      "sourceIsHeroPath": true,
+      "requirements": [
+        {
+          "rawcode": "R0HS",
+          "line": 3326,
+          "name": "冰霜骨龙"
+        },
+        {
+          "rawcode": "u00S",
+          "line": 3327,
+          "name": "兵力要求: 2000"
+        },
+        {
+          "rawcode": "u004",
+          "line": 3328,
+          "name": "等到战斗结束"
+        }
+      ]
+    },
+    {
+      "from": "h0U2",
+      "to": "n07I",
+      "index": 1,
+      "line": 2598,
+      "fromName": "阿茜萨 - [等级 11]",
+      "toName": "女皇·瓦斯琪女士",
+      "targetExists": false,
+      "sourceIsHeroPath": true,
+      "requirements": [
+        {
+          "rawcode": "u004",
+          "line": 3330,
+          "name": "等到战斗结束"
+        },
+        {
+          "rawcode": "h220",
+          "line": 3331,
+          "name": "军团战争超级赞助"
+        },
+        {
+          "rawcode": "R0D2",
+          "line": 3332,
+          "name": "娜迦海妖战士"
+        }
+      ]
+    }
+  ],
+  "fullOnlyAbsentTargetsNotSelectable": [],
+  "unreachableSelectSources": [
+    {
+      "rawcode": "n01F",
+      "name": "蛇发女妖 -银鳞魔女 [等级 11]",
+      "sourceRow": 1654,
+      "combatMapping": {
+        "combat": "h0KJ",
+        "line": 17880
+      },
+      "requirements": [],
+      "gold": "100",
+      "wood": "",
+      "population": "11",
+      "sourcePoints": "350",
+      "presentInUnits": false,
+      "incomingPaths": null,
+      "descendantSelects": [
+        {
+          "from": "n01F",
+          "to": "n05H",
+          "index": 1,
+          "line": 2592
+        }
+      ],
+      "fullUpgradeEdges": [],
+      "caps": []
+    },
+    {
+      "rawcode": "n07E",
+      "name": "娜迦火蜥",
+      "sourceRow": 1867,
+      "combatMapping": {
+        "combat": "h0UL",
+        "line": 18453
+      },
+      "requirements": [],
+      "gold": "90",
+      "wood": "",
+      "population": "1",
+      "sourcePoints": "90",
+      "presentInUnits": false,
+      "incomingPaths": null,
+      "descendantSelects": [
+        {
+          "from": "n07E",
+          "to": "n07D",
+          "index": 1,
+          "line": 2585
+        }
+      ],
+      "fullUpgradeEdges": [
+        {
+          "from": "n07E",
+          "to": "n07D",
+          "index": 1,
+          "line": 2190
+        }
+      ],
+      "caps": []
+    }
+  ],
+  "unparsedRegistrations": [],
+  "countMismatches": [],
+  "importerPreliminaryReachable": 373,
+  "missingSourcesOmittedFromPreliminary": [
+    {
+      "raw": "h0H4",
+      "name": "蛇发女妖 - [等级 11]",
+      "target": "n05H",
+      "heroPath": true
+    },
+    {
+      "raw": "h0DV",
+      "name": "死亡骑士 - [等级 Max]",
+      "target": "n08Y",
+      "heroPath": true
+    },
+    {
+      "raw": "h0DV",
+      "name": "死亡骑士 - [等级 Max]",
+      "target": "n08Z",
+      "heroPath": true
+    },
+    {
+      "raw": "h0DV",
+      "name": "死亡骑士 - [等级 Max]",
+      "target": "n02S",
+      "heroPath": true
+    },
+    {
+      "raw": "h0U2",
+      "name": "阿茜萨 - [等级 11]",
+      "target": "n07I",
+      "heroPath": true
+    }
+  ],
+  "ignoredDynamicUiWritesOutsideRegistration": [
+    {
+      "line": 30993,
+      "literal": "call SaveInteger(O,Y2,StringHash(\"box_train_button_count\"),y)\r"
+    },
+    {
+      "line": 31005,
+      "literal": "call SaveInteger(O,GetHandleId(v),StringHash(\"box_train_next_type\"),Y4)\r"
+    }
+  ],
+  "sourceRuntimeContract": {
+    "ability": {
+      "alias": "Oh",
+      "rawcode": "A2ZA",
+      "name": "兵种训练【宝箱】",
+      "declarationLine": 79
+    },
+    "selection": "owned alive non-native-hero, not the reward provider; structures and ancient/tauren altar heroes are not excluded",
+    "sourceIdentityEvidence": {
+      "nativeHeroFieldsForExistingParents": {
+        "h0DV": {
+          "Primary": null,
+          "type": "ancient,tauren",
+          "isbldg": "1"
+        },
+        "h0H4": {
+          "Primary": null,
+          "type": "ancient,tauren",
+          "isbldg": "1"
+        },
+        "h0U2": {
+          "Primary": null,
+          "type": "ancient,tauren",
+          "isbldg": "1"
+        }
+      },
+      "warning": "Do not reject these source parents merely because Web hero=true; source tests UNIT_TYPE_HERO."
+    },
+    "cost": "integer GetUnitGoldCost(target)*40/100 and GetUnitWoodCost(target)*40/100",
+    "finish": "immediate replacement, population/userdata/groups, QC and manual upgrade completion hooks; consume one box reward only on success",
+    "requirements": "every literal target requirement GetPlayerTechCountSimple>0 and source target cap check; no free qualification grants",
+    "sources": {
+      "ownedAlive": [
+        7521,
+        7531
+      ],
+      "trainTarget": [
+        30794,
+        30805
+      ],
+      "tryReplace": [
+        30818,
+        30906
+      ],
+      "consumeGift": [
+        30957,
+        30976
+      ],
+      "upgradeDialog": [
+        30978,
+        31017
+      ]
+    }
+  },
+  "confirmedPrerequisiteGrants": [
+    {
+      "technology": "R0HS",
+      "name": "冰霜骨龙",
+      "onCompletedRawcodes": [
+        "h0D2"
+      ],
+      "sourceLines": [
+        28772,
+        28774
+      ],
+      "currentlyInEggRequirements": false
+    },
+    {
+      "technology": "R0HM",
+      "name": "大死灵巫师",
+      "onCompletedRawcodes": [
+        "h0CS"
+      ],
+      "sourceLines": [
+        28616,
+        28618
+      ],
+      "currentlyInEggRequirements": false
+    },
+    {
+      "technology": "R01D",
+      "name": "高级牧师",
+      "onCompletedRawcodes": [
+        "h09S"
+      ],
+      "sourceLines": [
+        28769,
+        28771
+      ],
+      "currentlyInEggRequirements": false
+    },
+    {
+      "technology": "R0D2",
+      "name": "娜迦海妖战士",
+      "onCompletedRawcodes": [
+        "n07H"
+      ],
+      "sourceLines": [
+        28571,
+        28573
+      ],
+      "currentlyInEggRequirements": false
+    },
+    {
+      "technology": "R05E",
+      "name": "山岭巨人+石傀儡",
+      "onCompletionHistoryAllRawcodes": [
+        "h01L",
+        "h047"
+      ],
+      "sourceLines": [
+        28763,
+        28768
+      ],
+      "currentlyInEggRequirements": false
+    },
+    {
+      "requirement": "u00S",
+      "military": 2000,
+      "sourceLines": [
+        24836,
+        24838
+      ],
+      "status": "already supported by Web military requirement semantics"
+    },
+    {
+      "requirement": "u004",
+      "name": "等到战斗结束",
+      "status": "existing Web build phase requirement semantics"
+    },
+    {
+      "requirement": "h220",
+      "name": "军团战争超级赞助",
+      "status": "external qualification, retain locked without trusted account evidence"
+    }
+  ],
+  "boundedNextStep": [
+    "Parse immediate selectable edges and source requirements into a distinct train-only relation set, after unioning real pool/CSV reachable nodes with JASS hero entry/stage nodes; iterate closure to a fixed point.",
+    "Import the 5 leaf building nodes from raw data and their exact Mk/Ml combat mapping, costs/population/power/caps/requirements; no name joins, no made-up wood cost, no sponsor unlock.",
+    "Keep the 5 Box-only edges distinct from ordinary upgrade edges; source requires A2ZA reward, owned alive non-native-hero, immediate 40-percent target-price replacement and one reward consumption.",
+    "Add source-confirmed prerequisite history grants R0HS/R0HM/R01D/R0D2/R05E; merely adding nodes leaves every branch locked because these five grants are currently absent in EGG_REQUIREMENTS.",
+    "Replace the supplemental==two hardcoded assertion with explicit expected registration/closure consistency checks; preserve existing normal two supplemental edges and hero stage reconstruction metadata."
+  ]
+}

@@ -115,7 +115,7 @@ export const canIllidanCastAbility = (e, id) => ILLIDAN_COMBAT_TYPES.includes(ra
 export function castIllidanAbility(g, e, id, params = {}, api = {}) {
   const result = reason => ({ ok: !reason, skillId: id, ...(reason ? { reason } : {}) });
   if (!canIllidanCastAbility(e, id)) return result('当前形态没有此技能');
-  if (!alive(e) || st(e).illidanPaused || e.status.sourcePaused || e.status.yseraPaused || e.status.yseraHidden || e.status.stunUntil > now(g)) return result('单位当前无法施法');
+  if (!alive(e) || st(e).illidanPaused || e.status.sourcePaused || e.status.yseraPaused || e.status.yseraHidden || e.status.stunUntil > now(g) || e.status.cycloneUntil > now(g)) return result('单位当前无法施法');
   const rule = ILLIDAN_ACTIVE_RULES[id], state = skillState(e, id), at = now(g);
   if ((state.readyAt ?? 0) > at + 1e-8) return result('技能冷却中');
   if ((e.mana ?? 0) < rule.manaCost) return result('魔法不足');

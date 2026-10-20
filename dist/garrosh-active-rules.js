@@ -27,7 +27,7 @@ const worldScale=e=>(e.distanceScale??1/3)/100;
 const has=(e,id,api={})=>api.hasAbility?api.hasAbility(e,id):Array.isArray(e?.skillSpecs)?e.skillSpecs.some(s=>s.id===id):(e?.abilityIds??[]).includes(id);
 const living=e=>!!e&&e.hp>.405&&!e.status?.yseraRemoved;
 const allied=(a,b)=>a?.team!==undefined&&b?.team!==undefined?a.team===b.team:a?.side===b?.side;
-const available=(e,api)=>living(e)&&!e.status?.deathCounted&&!e.status?.sourceDeathHandled&&!e.status?.yseraHidden&&!e.status?.yseraPaused&&!e.status?.sourcePaused&&!(e.status?.stunUntil>api.now);
+const available=(e,api)=>living(e)&&!e.status?.deathCounted&&!e.status?.sourceDeathHandled&&!e.status?.yseraHidden&&!e.status?.yseraPaused&&!e.status?.sourcePaused&&!(e.status?.stunUntil>api.now)&&!(e.status?.cycloneUntil>api.now);
 const all=game=>{const seen=new Set();return [...(game.state.entities??[]),...(game.state.kings??[])].filter(e=>!seen.has(e.id)&&seen.add(e.id));};
 const find=(game,id)=>all(game).find(e=>e.id===id);
 const invulnerable=(e,api)=>!!e.invulnerable||has(e,'Avul',api)||!!api.scriptInvulnerable?.(e);

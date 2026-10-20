@@ -1,6 +1,6 @@
 {
   "sourceVersion": "v14.1A5",
-  "skillImplementationRevision": "v14-content-20261020-3",
+  "skillImplementationRevision": "v14-content-20261020-4",
   "units": 529,
   "mercenaryRecords": 60,
   "mainWaves": 35,
@@ -15,7 +15,9 @@
     "h0UE",
     "h2AE",
     "n06V",
-    "n06W"
+    "n06W",
+    "h0CZ",
+    "h0CL"
   ],
   "playerRuntimeAbilities": [
     {
@@ -57,14 +59,37 @@
       "abilityIds": [
         "A19Z"
       ]
+    },
+    {
+      "sourceRawcode": "h0QU",
+      "abilityIds": [
+        "A15D",
+        "A15F",
+        "A15I"
+      ]
+    },
+    {
+      "sourceRawcode": "h0PI",
+      "abilityIds": [
+        "A0ZS",
+        "A0ZU",
+        "A0ZY"
+      ]
+    },
+    {
+      "sourceRawcode": "h0M0",
+      "abilityIds": [
+        "A0ZV",
+        "A0ZW"
+      ]
     }
   ],
   "playerSkills": {
     "counts": {
-      "implemented": 370,
-      "partial": 20,
-      "marker": 31,
-      "unresolved": 135
+      "implemented": 373,
+      "partial": 34,
+      "marker": 34,
+      "unresolved": 122
     },
     "abilities": [
       {
@@ -1339,8 +1364,8 @@
       {
         "rawcode": "A0BH",
         "name": "Heartstopper Aura",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "source_heartstopper",
         "unitRawcodes": [
           "h0CV"
         ]
@@ -3050,6 +3075,7 @@
         "kind": "lifesteal",
         "unitRawcodes": [
           "h0CK",
+          "h0CL",
           "h0TQ"
         ]
       },
@@ -3438,7 +3464,7 @@
         "rawcode": "A0ZN",
         "name": "死亡凋零",
         "status": "implemented",
-        "kind": "aura_armor",
+        "kind": "kelthuzad_source",
         "unitRawcodes": [
           "h0PJ",
           "h0TC",
@@ -3448,7 +3474,7 @@
       {
         "rawcode": "A0ZO",
         "name": "冰霜新星",
-        "status": "implemented",
+        "status": "partial",
         "kind": "nova",
         "unitRawcodes": [
           "h0PJ",
@@ -3459,8 +3485,8 @@
       {
         "rawcode": "A0ZP",
         "name": "死亡与忠诚",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "marker",
+        "kind": "kelthuzad_source",
         "unitRawcodes": [
           "h0PJ",
           "h0TC",
@@ -3470,8 +3496,8 @@
       {
         "rawcode": "A0ZQ",
         "name": "克尔苏加德的护命匣",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "kelthuzad_source",
         "unitRawcodes": [
           "h0PJ",
           "h0TC",
@@ -3481,8 +3507,8 @@
       {
         "rawcode": "A0ZR",
         "name": "克尔苏加德锁链",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "kelthuzad_source",
         "unitRawcodes": [
           "h0PJ",
           "h0TC",
@@ -3495,16 +3521,53 @@
         "status": "implemented",
         "kind": "aura_damage",
         "unitRawcodes": [
+          "h0PI",
           "h0PJ",
           "h0TC",
           "h0WU"
         ]
       },
       {
+        "rawcode": "A0ZU",
+        "name": "克尔苏加德复活",
+        "status": "partial",
+        "kind": "kelthuzad_source",
+        "unitRawcodes": [
+          "h0PI"
+        ]
+      },
+      {
+        "rawcode": "A0ZV",
+        "name": "克尔苏加德防御",
+        "status": "implemented",
+        "kind": "passive_stats",
+        "unitRawcodes": [
+          "h0M0"
+        ]
+      },
+      {
+        "rawcode": "A0ZW",
+        "name": "克尔苏加德攻击力",
+        "status": "implemented",
+        "kind": "kelthuzad_source",
+        "unitRawcodes": [
+          "h0M0"
+        ]
+      },
+      {
+        "rawcode": "A0ZY",
+        "name": "球体",
+        "status": "marker",
+        "kind": "pending",
+        "unitRawcodes": [
+          "h0PI"
+        ]
+      },
+      {
         "rawcode": "A0ZZ",
         "name": "暗影裂隙",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "kelthuzad_source",
         "unitRawcodes": [
           "h0PJ",
           "h0TC",
@@ -3909,38 +3972,65 @@
       {
         "rawcode": "A15C",
         "name": "断头斧",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "troll_source",
         "unitRawcodes": [
           "h0QV",
           "h0WQ"
+        ]
+      },
+      {
+        "rawcode": "A15D",
+        "name": "断头斧",
+        "status": "implemented",
+        "kind": "troll_source",
+        "unitRawcodes": [
+          "h0QU"
         ]
       },
       {
         "rawcode": "A15E",
         "name": "鲁莽",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "troll_source",
         "unitRawcodes": [
           "h0QV",
           "h0WQ"
+        ]
+      },
+      {
+        "rawcode": "A15F",
+        "name": "攻速",
+        "status": "implemented",
+        "kind": "troll_source",
+        "unitRawcodes": [
+          "h0QU"
         ]
       },
       {
         "rawcode": "A15G",
         "name": "塔兹丁苟",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "troll_source",
         "unitRawcodes": [
           "h0QV",
           "h0WQ"
         ]
       },
       {
+        "rawcode": "A15I",
+        "name": "诱捕",
+        "status": "partial",
+        "kind": "troll_source",
+        "unitRawcodes": [
+          "h0QU"
+        ]
+      },
+      {
         "rawcode": "A15J",
         "name": "诱捕",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "marker",
+        "kind": "troll_source",
         "unitRawcodes": [
           "h0QV",
           "h0WQ"
@@ -4057,8 +4147,8 @@
       {
         "rawcode": "A19O",
         "name": "寒冰碎片",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "ice_source",
         "unitRawcodes": [
           "n06I"
         ]
@@ -4066,8 +4156,8 @@
       {
         "rawcode": "A19P",
         "name": "雪崩",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "ice_source",
         "unitRawcodes": [
           "n06I"
         ]
@@ -4075,8 +4165,8 @@
       {
         "rawcode": "A19Q",
         "name": "冰霜掌控",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "ice_source",
         "unitRawcodes": [
           "n06I"
         ]
@@ -4084,8 +4174,8 @@
       {
         "rawcode": "A19R",
         "name": "尖啸之风",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "ice_source",
         "unitRawcodes": [
           "n06I"
         ]
@@ -5228,7 +5318,8 @@
         "status": "implemented",
         "kind": "disease",
         "unitRawcodes": [
-          "h0CY"
+          "h0CY",
+          "h0CZ"
         ]
       },
       {
@@ -5502,10 +5593,10 @@
   },
   "battleSkills": {
     "counts": {
-      "implemented": 421,
-      "partial": 20,
-      "marker": 44,
-      "unresolved": 156
+      "implemented": 424,
+      "partial": 34,
+      "marker": 47,
+      "unresolved": 143
     },
     "abilities": [
       {
@@ -7091,8 +7182,8 @@
       {
         "rawcode": "A0BH",
         "name": "Heartstopper Aura",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "source_heartstopper",
         "unitRawcodes": [
           "h0CV"
         ]
@@ -8934,6 +9025,7 @@
         "kind": "lifesteal",
         "unitRawcodes": [
           "h0CK",
+          "h0CL",
           "h0TQ"
         ]
       },
@@ -9352,7 +9444,7 @@
         "rawcode": "A0ZN",
         "name": "死亡凋零",
         "status": "implemented",
-        "kind": "aura_armor",
+        "kind": "kelthuzad_source",
         "unitRawcodes": [
           "h0PJ",
           "h0TC",
@@ -9362,7 +9454,7 @@
       {
         "rawcode": "A0ZO",
         "name": "冰霜新星",
-        "status": "implemented",
+        "status": "partial",
         "kind": "nova",
         "unitRawcodes": [
           "h0PJ",
@@ -9373,8 +9465,8 @@
       {
         "rawcode": "A0ZP",
         "name": "死亡与忠诚",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "marker",
+        "kind": "kelthuzad_source",
         "unitRawcodes": [
           "h0PJ",
           "h0TC",
@@ -9384,8 +9476,8 @@
       {
         "rawcode": "A0ZQ",
         "name": "克尔苏加德的护命匣",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "kelthuzad_source",
         "unitRawcodes": [
           "h0PJ",
           "h0TC",
@@ -9395,8 +9487,8 @@
       {
         "rawcode": "A0ZR",
         "name": "克尔苏加德锁链",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "kelthuzad_source",
         "unitRawcodes": [
           "h0PJ",
           "h0TC",
@@ -9409,16 +9501,53 @@
         "status": "implemented",
         "kind": "aura_damage",
         "unitRawcodes": [
+          "h0PI",
           "h0PJ",
           "h0TC",
           "h0WU"
         ]
       },
       {
+        "rawcode": "A0ZU",
+        "name": "克尔苏加德复活",
+        "status": "partial",
+        "kind": "kelthuzad_source",
+        "unitRawcodes": [
+          "h0PI"
+        ]
+      },
+      {
+        "rawcode": "A0ZV",
+        "name": "克尔苏加德防御",
+        "status": "implemented",
+        "kind": "passive_stats",
+        "unitRawcodes": [
+          "h0M0"
+        ]
+      },
+      {
+        "rawcode": "A0ZW",
+        "name": "克尔苏加德攻击力",
+        "status": "implemented",
+        "kind": "kelthuzad_source",
+        "unitRawcodes": [
+          "h0M0"
+        ]
+      },
+      {
+        "rawcode": "A0ZY",
+        "name": "球体",
+        "status": "marker",
+        "kind": "pending",
+        "unitRawcodes": [
+          "h0PI"
+        ]
+      },
+      {
         "rawcode": "A0ZZ",
         "name": "暗影裂隙",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "kelthuzad_source",
         "unitRawcodes": [
           "h0PJ",
           "h0TC",
@@ -9932,38 +10061,65 @@
       {
         "rawcode": "A15C",
         "name": "断头斧",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "troll_source",
         "unitRawcodes": [
           "h0QV",
           "h0WQ"
+        ]
+      },
+      {
+        "rawcode": "A15D",
+        "name": "断头斧",
+        "status": "implemented",
+        "kind": "troll_source",
+        "unitRawcodes": [
+          "h0QU"
         ]
       },
       {
         "rawcode": "A15E",
         "name": "鲁莽",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "troll_source",
         "unitRawcodes": [
           "h0QV",
           "h0WQ"
+        ]
+      },
+      {
+        "rawcode": "A15F",
+        "name": "攻速",
+        "status": "implemented",
+        "kind": "troll_source",
+        "unitRawcodes": [
+          "h0QU"
         ]
       },
       {
         "rawcode": "A15G",
         "name": "塔兹丁苟",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "troll_source",
         "unitRawcodes": [
           "h0QV",
           "h0WQ"
         ]
       },
       {
+        "rawcode": "A15I",
+        "name": "诱捕",
+        "status": "partial",
+        "kind": "troll_source",
+        "unitRawcodes": [
+          "h0QU"
+        ]
+      },
+      {
         "rawcode": "A15J",
         "name": "诱捕",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "marker",
+        "kind": "troll_source",
         "unitRawcodes": [
           "h0QV",
           "h0WQ"
@@ -10209,8 +10365,8 @@
       {
         "rawcode": "A19O",
         "name": "寒冰碎片",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "ice_source",
         "unitRawcodes": [
           "n06I"
         ]
@@ -10218,8 +10374,8 @@
       {
         "rawcode": "A19P",
         "name": "雪崩",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "ice_source",
         "unitRawcodes": [
           "n06I"
         ]
@@ -10227,8 +10383,8 @@
       {
         "rawcode": "A19Q",
         "name": "冰霜掌控",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "ice_source",
         "unitRawcodes": [
           "n06I"
         ]
@@ -10236,8 +10392,8 @@
       {
         "rawcode": "A19R",
         "name": "尖啸之风",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "ice_source",
         "unitRawcodes": [
           "n06I"
         ]
@@ -11515,7 +11671,8 @@
         "status": "implemented",
         "kind": "disease",
         "unitRawcodes": [
-          "h0CY"
+          "h0CY",
+          "h0CZ"
         ]
       },
       {
@@ -11867,6 +12024,7 @@
     "未核定技能逐项保留在abilities中；已实现状态也不代表整套兵种联动已还原。",
     "包内未提供完整原生商店/菜单字段，部分商品与单位入口仍待补证。",
     "A1U4/A1U5/A1U6献祭奖励可核定，但没有可证实的携带单位或授予路径。",
-    "原始地图模型、贴图、音频和v14地形通行格不在解析包内。"
+    "原始地图模型、贴图、音频和v14地形通行格不在解析包内。",
+    "BoxGift兵种训练的5个来源可达叶子节点尚未接入：n08Y/n08Z/n02S/n05H/n07I；该统计仅覆盖当前已接入对象及动态能力，不代表全部来源可达内容。"
   ]
 }

@@ -16,7 +16,7 @@ function battle(g){const a=g.state.entities;a.auras=a.filter(e=>e.skillSpecs.som
 
 test('v14 compile cache uses its own objects while old definitions retain old semantics',()=>{
  const old=compileSkills({abilityIds:['A06O','A01I','A0BH']}),current=compileSkills(v14(['A06O','A01I','A0BH']));
- assert.equal(old[0].effectText.includes('25'),true);assert.equal(current[0].heal,80);assert.equal(current[1].kind,'mana_strike_hit');assert.equal(old[1].kind,'mana_strike');assert.equal(current[2].status,'unresolved');assert.equal(old[2].kind,'aura_heartstopper');
+ assert.equal(old[0].effectText.includes('25'),true);assert.equal(current[0].heal,80);assert.equal(current[1].kind,'mana_strike_hit');assert.equal(old[1].kind,'mana_strike');assert.equal(current[2].status,'partial');assert.equal(old[2].kind,'aura_heartstopper');
  assert.equal(compileSkills({abilityIds:['A06O']})[0].version,'5.0dJF');assert.equal(compileSkills(v14(['A06O']))[0].version,'v14.1A5');
 });
 test('v14 mirror uses actual native values, not the stale tooltip',()=>{
@@ -67,7 +67,7 @@ test('v14 kill heal uses 50% of dead maximum HP and A0SB follows ability holders
  const g=fixture(),killer=add(g,v14([],{rawcode:'h0CZ',hp:2000})),dead=add(g,v14(['A0SB'],{rawcode:'some'}),'monster',.2),other=add(g,v14(),'defender',.4);killer.hp=100;g._hurt(dead,2000,killer,{spell:true});near(killer.hp,574);near(other.hp,974);
 });
 test('unverified v14 script markers remain visible as unresolved, not old-version effects',()=>{
- for(const id of ['A0BH','A0R5','A0VX']){const source=V14_ABILITIES[id];assert.ok(source,id);const [s]=describeSkills(v14([id]));assert.equal(s.status,'unresolved',id);assert.ok(s.effectText);}
+ for(const id of ['A0R5','A0VX']){const source=V14_ABILITIES[id];assert.ok(source,id);const [s]=describeSkills(v14([id]));assert.equal(s.status,'unresolved',id);assert.ok(s.effectText);}
 });
 
 

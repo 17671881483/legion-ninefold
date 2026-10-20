@@ -1,7 +1,7 @@
 {
   "sourceVersion": "v14.1A5",
-  "skillImplementationRevision": "v14-content-20261020-4",
-  "units": 529,
+  "skillImplementationRevision": "v14-content-20261020-v15-1",
+  "units": 534,
   "mercenaryRecords": 60,
   "mainWaves": 35,
   "specialMonsterTypes": 14,
@@ -82,14 +82,30 @@
         "A0ZV",
         "A0ZW"
       ]
+    },
+    {
+      "sourceRawcode": "h011",
+      "abilityIds": [
+        "A138",
+        "A13A",
+        "A139",
+        "A13B",
+        "A13T",
+        "A13U",
+        "A13V",
+        "A13W",
+        "A13X",
+        "A13Y",
+        "A2ZG"
+      ]
     }
   ],
   "playerSkills": {
     "counts": {
-      "implemented": 373,
+      "implemented": 391,
       "partial": 34,
       "marker": 34,
-      "unresolved": 122
+      "unresolved": 139
     },
     "abilities": [
       {
@@ -2687,6 +2703,33 @@
         ]
       },
       {
+        "rawcode": "A0KO",
+        "name": "邪恶光环",
+        "status": "implemented",
+        "kind": "aura_regen",
+        "unitRawcodes": [
+          "n02S"
+        ]
+      },
+      {
+        "rawcode": "A0KP",
+        "name": "亡者呼唤",
+        "status": "implemented",
+        "kind": "aura_regen",
+        "unitRawcodes": [
+          "n02S"
+        ]
+      },
+      {
+        "rawcode": "A0KQ",
+        "name": "召唤辛达苟萨",
+        "status": "implemented",
+        "kind": "debuff",
+        "unitRawcodes": [
+          "n02S"
+        ]
+      },
+      {
         "rawcode": "A0LG",
         "name": "神圣愤怒",
         "status": "implemented",
@@ -3312,6 +3355,51 @@
         ]
       },
       {
+        "rawcode": "A0VW",
+        "name": "分裂箭",
+        "status": "implemented",
+        "kind": "barrage",
+        "unitRawcodes": [
+          "n05H"
+        ]
+      },
+      {
+        "rawcode": "A0VX",
+        "name": "秘术异蛇",
+        "status": "unresolved",
+        "kind": "pending",
+        "unitRawcodes": [
+          "n05H"
+        ]
+      },
+      {
+        "rawcode": "A0VY",
+        "name": "魔法护盾",
+        "status": "implemented",
+        "kind": "shield",
+        "unitRawcodes": [
+          "n05H"
+        ]
+      },
+      {
+        "rawcode": "A0VZ",
+        "name": "减少伤害50%",
+        "status": "unresolved",
+        "kind": "pending",
+        "unitRawcodes": [
+          "n05H"
+        ]
+      },
+      {
+        "rawcode": "A0W1",
+        "name": "减速光环",
+        "status": "implemented",
+        "kind": "aura_slow",
+        "unitRawcodes": [
+          "n05H"
+        ]
+      },
+      {
         "rawcode": "A0WM",
         "name": "嗜血术",
         "status": "implemented",
@@ -3827,6 +3915,96 @@
         "kind": "pending",
         "unitRawcodes": [
           "n05W"
+        ]
+      },
+      {
+        "rawcode": "A138",
+        "name": "银麟胸甲",
+        "status": "implemented",
+        "kind": "passive_stats",
+        "unitRawcodes": [
+          "h011"
+        ]
+      },
+      {
+        "rawcode": "A139",
+        "name": "精钢小刀",
+        "status": "implemented",
+        "kind": "passive_stats",
+        "unitRawcodes": [
+          "h011"
+        ]
+      },
+      {
+        "rawcode": "A13A",
+        "name": "银鳞胸甲",
+        "status": "implemented",
+        "kind": "passive_stats",
+        "unitRawcodes": [
+          "h011"
+        ]
+      },
+      {
+        "rawcode": "A13B",
+        "name": "精钢小刀",
+        "status": "implemented",
+        "kind": "passive_stats",
+        "unitRawcodes": [
+          "h011"
+        ]
+      },
+      {
+        "rawcode": "A13T",
+        "name": "神圣守护",
+        "status": "implemented",
+        "kind": "passive_stats",
+        "unitRawcodes": [
+          "h011"
+        ]
+      },
+      {
+        "rawcode": "A13U",
+        "name": "神圣守护",
+        "status": "implemented",
+        "kind": "passive_stats",
+        "unitRawcodes": [
+          "h011"
+        ]
+      },
+      {
+        "rawcode": "A13V",
+        "name": "神圣守护",
+        "status": "implemented",
+        "kind": "passive_stats",
+        "unitRawcodes": [
+          "h011"
+        ]
+      },
+      {
+        "rawcode": "A13W",
+        "name": "寒光利刃",
+        "status": "implemented",
+        "kind": "passive_stats",
+        "unitRawcodes": [
+          "h011"
+        ]
+      },
+      {
+        "rawcode": "A13X",
+        "name": "寒光利刃",
+        "status": "implemented",
+        "kind": "passive_stats",
+        "unitRawcodes": [
+          "h011"
+        ]
+      },
+      {
+        "rawcode": "A13Y",
+        "name": "寒光利刃",
+        "status": "implemented",
+        "kind": "crit",
+        "unitRawcodes": [
+          "h011"
         ]
       },
       {
@@ -4600,6 +4778,51 @@
         ]
       },
       {
+        "rawcode": "A1N1",
+        "name": "寒冰之箭",
+        "status": "unresolved",
+        "kind": "pending",
+        "unitRawcodes": [
+          "n07I"
+        ]
+      },
+      {
+        "rawcode": "A1O5",
+        "name": "闪电箭",
+        "status": "unresolved",
+        "kind": "pending",
+        "unitRawcodes": [
+          "n07I"
+        ]
+      },
+      {
+        "rawcode": "A1O7",
+        "name": "毒性孢子",
+        "status": "unresolved",
+        "kind": "pending",
+        "unitRawcodes": [
+          "n07I"
+        ]
+      },
+      {
+        "rawcode": "A1O8",
+        "name": "双子召唤",
+        "status": "implemented",
+        "kind": "summon",
+        "unitRawcodes": [
+          "n07I"
+        ]
+      },
+      {
+        "rawcode": "A1OC",
+        "name": "女王的祝福与惩戒2",
+        "status": "unresolved",
+        "kind": "pending",
+        "unitRawcodes": [
+          "n07I"
+        ]
+      },
+      {
         "rawcode": "A1PG",
         "name": "穿刺射击",
         "status": "unresolved",
@@ -4988,6 +5211,105 @@
         ]
       },
       {
+        "rawcode": "A1VR",
+        "name": "霜之哀伤的饥渴",
+        "status": "unresolved",
+        "kind": "pending",
+        "unitRawcodes": [
+          "n08Y"
+        ]
+      },
+      {
+        "rawcode": "A1VS",
+        "name": "凛风冲击",
+        "status": "unresolved",
+        "kind": "pending",
+        "unitRawcodes": [
+          "n08Y"
+        ]
+      },
+      {
+        "rawcode": "A1VT",
+        "name": "死亡缠绕",
+        "status": "unresolved",
+        "kind": "pending",
+        "unitRawcodes": [
+          "n08Y"
+        ]
+      },
+      {
+        "rawcode": "A1VU",
+        "name": "寒冰风暴",
+        "status": "unresolved",
+        "kind": "pending",
+        "unitRawcodes": [
+          "n08Y"
+        ]
+      },
+      {
+        "rawcode": "A1VV",
+        "name": "王者大军",
+        "status": "unresolved",
+        "kind": "pending",
+        "unitRawcodes": [
+          "n08Y"
+        ]
+      },
+      {
+        "rawcode": "A1VW",
+        "name": "召唤辛达苟萨",
+        "status": "unresolved",
+        "kind": "pending",
+        "unitRawcodes": [
+          "n08Y"
+        ]
+      },
+      {
+        "rawcode": "A1VX",
+        "name": "王者之光",
+        "status": "unresolved",
+        "kind": "pending",
+        "unitRawcodes": [
+          "n08Z"
+        ]
+      },
+      {
+        "rawcode": "A1VY",
+        "name": "神圣壁垒",
+        "status": "unresolved",
+        "kind": "pending",
+        "unitRawcodes": [
+          "n08Z"
+        ]
+      },
+      {
+        "rawcode": "A1VZ",
+        "name": "圣光之怒",
+        "status": "unresolved",
+        "kind": "pending",
+        "unitRawcodes": [
+          "n08Z"
+        ]
+      },
+      {
+        "rawcode": "A1W0",
+        "name": "圣光审判",
+        "status": "unresolved",
+        "kind": "pending",
+        "unitRawcodes": [
+          "n08Z"
+        ]
+      },
+      {
+        "rawcode": "A1W1",
+        "name": "圣光之锤",
+        "status": "unresolved",
+        "kind": "pending",
+        "unitRawcodes": [
+          "n08Z"
+        ]
+      },
+      {
         "rawcode": "A201",
         "name": "龙族荣耀",
         "status": "implemented",
@@ -5272,6 +5594,15 @@
           "n091",
           "n092",
           "n093"
+        ]
+      },
+      {
+        "rawcode": "A2ZG",
+        "name": "单位护盾标记",
+        "status": "implemented",
+        "kind": "box_damage_shield",
+        "unitRawcodes": [
+          "h011"
         ]
       },
       {
@@ -5593,10 +5924,10 @@
   },
   "battleSkills": {
     "counts": {
-      "implemented": 424,
+      "implemented": 442,
       "partial": 34,
       "marker": 47,
-      "unresolved": 143
+      "unresolved": 160
     },
     "abilities": [
       {
@@ -8597,6 +8928,33 @@
         ]
       },
       {
+        "rawcode": "A0KO",
+        "name": "邪恶光环",
+        "status": "implemented",
+        "kind": "aura_regen",
+        "unitRawcodes": [
+          "n02S"
+        ]
+      },
+      {
+        "rawcode": "A0KP",
+        "name": "亡者呼唤",
+        "status": "implemented",
+        "kind": "aura_regen",
+        "unitRawcodes": [
+          "n02S"
+        ]
+      },
+      {
+        "rawcode": "A0KQ",
+        "name": "召唤辛达苟萨",
+        "status": "implemented",
+        "kind": "debuff",
+        "unitRawcodes": [
+          "n02S"
+        ]
+      },
+      {
         "rawcode": "A0LG",
         "name": "神圣愤怒",
         "status": "implemented",
@@ -9292,6 +9650,51 @@
         ]
       },
       {
+        "rawcode": "A0VW",
+        "name": "分裂箭",
+        "status": "implemented",
+        "kind": "barrage",
+        "unitRawcodes": [
+          "n05H"
+        ]
+      },
+      {
+        "rawcode": "A0VX",
+        "name": "秘术异蛇",
+        "status": "unresolved",
+        "kind": "pending",
+        "unitRawcodes": [
+          "n05H"
+        ]
+      },
+      {
+        "rawcode": "A0VY",
+        "name": "魔法护盾",
+        "status": "implemented",
+        "kind": "shield",
+        "unitRawcodes": [
+          "n05H"
+        ]
+      },
+      {
+        "rawcode": "A0VZ",
+        "name": "减少伤害50%",
+        "status": "unresolved",
+        "kind": "pending",
+        "unitRawcodes": [
+          "n05H"
+        ]
+      },
+      {
+        "rawcode": "A0W1",
+        "name": "减速光环",
+        "status": "implemented",
+        "kind": "aura_slow",
+        "unitRawcodes": [
+          "n05H"
+        ]
+      },
+      {
         "rawcode": "A0WM",
         "name": "嗜血术",
         "status": "implemented",
@@ -9906,6 +10309,96 @@
         "kind": "pending",
         "unitRawcodes": [
           "n05W"
+        ]
+      },
+      {
+        "rawcode": "A138",
+        "name": "银麟胸甲",
+        "status": "implemented",
+        "kind": "passive_stats",
+        "unitRawcodes": [
+          "h011"
+        ]
+      },
+      {
+        "rawcode": "A139",
+        "name": "精钢小刀",
+        "status": "implemented",
+        "kind": "passive_stats",
+        "unitRawcodes": [
+          "h011"
+        ]
+      },
+      {
+        "rawcode": "A13A",
+        "name": "银鳞胸甲",
+        "status": "implemented",
+        "kind": "passive_stats",
+        "unitRawcodes": [
+          "h011"
+        ]
+      },
+      {
+        "rawcode": "A13B",
+        "name": "精钢小刀",
+        "status": "implemented",
+        "kind": "passive_stats",
+        "unitRawcodes": [
+          "h011"
+        ]
+      },
+      {
+        "rawcode": "A13T",
+        "name": "神圣守护",
+        "status": "implemented",
+        "kind": "passive_stats",
+        "unitRawcodes": [
+          "h011"
+        ]
+      },
+      {
+        "rawcode": "A13U",
+        "name": "神圣守护",
+        "status": "implemented",
+        "kind": "passive_stats",
+        "unitRawcodes": [
+          "h011"
+        ]
+      },
+      {
+        "rawcode": "A13V",
+        "name": "神圣守护",
+        "status": "implemented",
+        "kind": "passive_stats",
+        "unitRawcodes": [
+          "h011"
+        ]
+      },
+      {
+        "rawcode": "A13W",
+        "name": "寒光利刃",
+        "status": "implemented",
+        "kind": "passive_stats",
+        "unitRawcodes": [
+          "h011"
+        ]
+      },
+      {
+        "rawcode": "A13X",
+        "name": "寒光利刃",
+        "status": "implemented",
+        "kind": "passive_stats",
+        "unitRawcodes": [
+          "h011"
+        ]
+      },
+      {
+        "rawcode": "A13Y",
+        "name": "寒光利刃",
+        "status": "implemented",
+        "kind": "crit",
+        "unitRawcodes": [
+          "h011"
         ]
       },
       {
@@ -10866,6 +11359,51 @@
         ]
       },
       {
+        "rawcode": "A1N1",
+        "name": "寒冰之箭",
+        "status": "unresolved",
+        "kind": "pending",
+        "unitRawcodes": [
+          "n07I"
+        ]
+      },
+      {
+        "rawcode": "A1O5",
+        "name": "闪电箭",
+        "status": "unresolved",
+        "kind": "pending",
+        "unitRawcodes": [
+          "n07I"
+        ]
+      },
+      {
+        "rawcode": "A1O7",
+        "name": "毒性孢子",
+        "status": "unresolved",
+        "kind": "pending",
+        "unitRawcodes": [
+          "n07I"
+        ]
+      },
+      {
+        "rawcode": "A1O8",
+        "name": "双子召唤",
+        "status": "implemented",
+        "kind": "summon",
+        "unitRawcodes": [
+          "n07I"
+        ]
+      },
+      {
+        "rawcode": "A1OC",
+        "name": "女王的祝福与惩戒2",
+        "status": "unresolved",
+        "kind": "pending",
+        "unitRawcodes": [
+          "n07I"
+        ]
+      },
+      {
         "rawcode": "A1PG",
         "name": "穿刺射击",
         "status": "unresolved",
@@ -11321,6 +11859,105 @@
         ]
       },
       {
+        "rawcode": "A1VR",
+        "name": "霜之哀伤的饥渴",
+        "status": "unresolved",
+        "kind": "pending",
+        "unitRawcodes": [
+          "n08Y"
+        ]
+      },
+      {
+        "rawcode": "A1VS",
+        "name": "凛风冲击",
+        "status": "unresolved",
+        "kind": "pending",
+        "unitRawcodes": [
+          "n08Y"
+        ]
+      },
+      {
+        "rawcode": "A1VT",
+        "name": "死亡缠绕",
+        "status": "unresolved",
+        "kind": "pending",
+        "unitRawcodes": [
+          "n08Y"
+        ]
+      },
+      {
+        "rawcode": "A1VU",
+        "name": "寒冰风暴",
+        "status": "unresolved",
+        "kind": "pending",
+        "unitRawcodes": [
+          "n08Y"
+        ]
+      },
+      {
+        "rawcode": "A1VV",
+        "name": "王者大军",
+        "status": "unresolved",
+        "kind": "pending",
+        "unitRawcodes": [
+          "n08Y"
+        ]
+      },
+      {
+        "rawcode": "A1VW",
+        "name": "召唤辛达苟萨",
+        "status": "unresolved",
+        "kind": "pending",
+        "unitRawcodes": [
+          "n08Y"
+        ]
+      },
+      {
+        "rawcode": "A1VX",
+        "name": "王者之光",
+        "status": "unresolved",
+        "kind": "pending",
+        "unitRawcodes": [
+          "n08Z"
+        ]
+      },
+      {
+        "rawcode": "A1VY",
+        "name": "神圣壁垒",
+        "status": "unresolved",
+        "kind": "pending",
+        "unitRawcodes": [
+          "n08Z"
+        ]
+      },
+      {
+        "rawcode": "A1VZ",
+        "name": "圣光之怒",
+        "status": "unresolved",
+        "kind": "pending",
+        "unitRawcodes": [
+          "n08Z"
+        ]
+      },
+      {
+        "rawcode": "A1W0",
+        "name": "圣光审判",
+        "status": "unresolved",
+        "kind": "pending",
+        "unitRawcodes": [
+          "n08Z"
+        ]
+      },
+      {
+        "rawcode": "A1W1",
+        "name": "圣光之锤",
+        "status": "unresolved",
+        "kind": "pending",
+        "unitRawcodes": [
+          "n08Z"
+        ]
+      },
+      {
         "rawcode": "A201",
         "name": "龙族荣耀",
         "status": "implemented",
@@ -11625,6 +12262,15 @@
           "n091",
           "n092",
           "n093"
+        ]
+      },
+      {
+        "rawcode": "A2ZG",
+        "name": "单位护盾标记",
+        "status": "implemented",
+        "kind": "box_damage_shield",
+        "unitRawcodes": [
+          "h011"
         ]
       },
       {
@@ -12025,6 +12671,7 @@
     "包内未提供完整原生商店/菜单字段，部分商品与单位入口仍待补证。",
     "A1U4/A1U5/A1U6献祭奖励可核定，但没有可证实的携带单位或授予路径。",
     "原始地图模型、贴图、音频和v14地形通行格不在解析包内。",
-    "BoxGift兵种训练的5个来源可达叶子节点尚未接入：n08Y/n08Z/n02S/n05H/n07I；该统计仅覆盖当前已接入对象及动态能力，不代表全部来源可达内容。"
+    "BoxGift五个隐藏训练叶子及225条训练路径已接入；新增单位的未核定技能仍按实际状态计数。神秘礼物的随机兵种创建、可操纵建造者技能及平台专用Frame科技返费宿主仍待补齐。",
+    "原图训练多分支对话框限时30秒；Web用持久表单重新校验提交，未模拟对话框超时。旧版无礼物历史的存档不会补抽已过波次奖励。"
   ]
 }

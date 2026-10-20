@@ -1,6 +1,41 @@
 // v14.1A5 document audit: recipeSources in the corrected workbook.
 // Raw source predicates remain explicit; appearance records are never consumed materials.
 export const EGG_REQUIREMENTS = Object.freeze({
+  "R0HS": {
+    "text": "曾实际完成冰霜骨龙（h0D2）；完成记录永久保留。仅完成外观 h2A3/h0US 不替代原始单位完成事件",
+    "status": "confirmed",
+    "sourceLines": [28772, 28774],
+    "completionMode": "raw",
+    "groups": [["h0D2"]]
+  },
+  "R0HM": {
+    "text": "曾实际完成大死灵巫师（h0CS）；完成记录永久保留",
+    "status": "confirmed",
+    "sourceLines": [28616, 28618],
+    "completionMode": "raw",
+    "groups": [["h0CS"]]
+  },
+  "R01D": {
+    "text": "曾实际完成高级牧师（h09S）；完成记录永久保留。仅完成外观 h0P6 不替代原始单位完成事件",
+    "status": "confirmed",
+    "sourceLines": [28769, 28771],
+    "completionMode": "raw",
+    "groups": [["h09S"]]
+  },
+  "R0D2": {
+    "text": "曾实际完成娜迦海妖战士（n07H）；完成记录永久保留",
+    "status": "confirmed",
+    "sourceLines": [28571, 28573],
+    "completionMode": "raw",
+    "groups": [["n07H"]]
+  },
+  "R05E": {
+    "text": "曾分别实际完成山岭巨人（h01L）和石傀儡（h047）；不要求同时在场，完成记录永久保留",
+    "status": "confirmed",
+    "sourceLines": [28763, 28768],
+    "completionMode": "raw",
+    "groups": [["h01L", "h047"]]
+  },
   "R00M": {
     "text": "曾完成骑士和满级圣骑士；或曾完成满级圣骑士的对应外观记录。另有老兵历练替代触发，完整条件待确认",
     "status": "unconfirmed",
@@ -676,7 +711,7 @@ export const DOCUMENT_EGG_TARGETS = Object.freeze([
   }
 ]);
 
-const HISTORY_VERSION = 1;
+const HISTORY_VERSION = 2;
 const beastKingCodes = new Set(['h0CC', 'h1CC', 'h0CB', 'h1CB']);
 const rawcode = def => def?.sourceRawcode ?? def?.rawcode ?? def?.combatRawcode;
 const isV14 = def => def?.provenance === 'v14.1A5-dataset' || String(def?.sourceVersion ?? '').includes('v14.1A5');
@@ -697,6 +732,14 @@ function historyFor(player) {
   history.completed ??= {};
   history.counts ??= {};
   history.events ??= {};
+  history.rawCompleted ??= {};
+  // Version-1 events retain the actual completed stage after the final colon.
+  // Expanded skin/base history and completedSourceUnits alone cannot prove an
+  // exact raw completion: do not fabricate sold base units from those aliases.
+  for (const [event, completed] of Object.entries(history.events)) {
+    const code = event.slice(event.lastIndexOf(':') + 1);
+    if (completed && /^[A-Za-z0-9]{4}$/.test(code)) history.rawCompleted[code] = true;
+  }
   history.countedStages ??= {};
   history.firstWaveHippogryphs ??= 0;
   history.firstWaveClosed ??= false;
@@ -714,7 +757,8 @@ function grant(player, id, granted) {
 function applyConfirmedHistory(player, history) {
   const granted = [], completed = history.completed;
   for (const [id, rule] of Object.entries(EGG_REQUIREMENTS)) {
-    if (rule.status === 'confirmed' && rule.groups?.some(group => group.every(code => completed[code]))) grant(player, id, granted);
+    const proof = rule.completionMode === 'raw' ? history.rawCompleted : completed;
+    if (rule.status === 'confirmed' && rule.groups?.some(group => group.every(code => proof[code]))) grant(player, id, granted);
   }
   const dragonKinds = [
     ['h01B', 'h11B', 'h0R8'], ['h0BP', 'n05M'], ['h0D2'],
@@ -727,8 +771,14 @@ function applyConfirmedHistory(player, history) {
 /** Called once for a paid military completion, never when an order starts. */
 export function recordEggCompletion(player, def, { buildingId, wave, buildings = player.buildings ?? [], unitsById = {}, restoring = false } = {}) {
   if (!isV14(def) || def?.morphProxy || !rawcode(def)) return [];
+  const building = buildings.find(b => b.id === buildingId);
+  // An active upgrade's old stage has completed; its target stage has not.
+  // Completion callers normally clear construction before recording, while
+  // restore may legitimately backfill only that old completed stage.
+  if (building?.construction && (building.construction.targetId === building.unitId || building.construction.targetId === def.id || rawcode(unitsById[building.construction.targetId]) === rawcode(def))) return [];
   const history = historyFor(player), codes = completionCodes(def), code = rawcode(def);
   const eventKey = `${buildingId ?? 'unknown'}:${code}`;
+  history.rawCompleted[code] = true;
   for (const id of codes) { history.completed[id] = true; player.completedSourceUnits[id] = true; }
   // Separate raw-stage and base-stage journals: changing a skin cannot add a
   // second worm/hippogryph completion, and restoring cannot replay an event.

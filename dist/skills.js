@@ -13,7 +13,7 @@ import { closestWalkable, isWalkable } from './layout.js';
 import { GARROSH_ACTIVE_RULES, GARROSH_PASSIVE_RULES, canGarroshCastAbility, castGarroshAbility, tryGarroshAutoCast, garroshActiveAfterDamage, sourceGarroshActiveDeath, tickGarroshActiveJob } from './garrosh-active-rules.js';
 import { ILLIDAN_RULES, ILLIDAN_ACTIVE_RULES, canIllidanCastAbility, castIllidanAbility, registerIllidanSource, tickIllidanSource, illidanOnAttackHit, tryIllidanAutoCast, illidanAfterDamage, sourceIllidanDeath, tickIllidanJob, isIllidanJobType } from './illidan-rules.js';
 
-export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261020-4';
+export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261020-v15-1';
 
 // Values come from resolved object fields. Empty fields remain empty: a missing
 // native default is reported, rather than replacing it with tooltip numbers.
@@ -154,6 +154,10 @@ function compile(id,version='5.0dJF') {
     if(id==='A0TH'){s.kind='anchor_smash';s.status='implemented';s.damage=10;s.radius=1.5;s.chance=.33;s.effectText='实际普攻命中时按JASS GetRandomReal(1,101)≥68判定（33%）；自身暂停1秒，对自身150范围目标阵营单位造成10点混乱攻击/通用伤害';}
     if(id==='A0YD'){s.kind='dragon_soul';s.status='implemented';s.chance=29/99;s.effectText='实际普攻命中时按JASS GetRandomReal(1,100)<30判定（约29.29%，非文案40%）；原生英雄受到最大生命30%的混乱攻击/通用伤害，其他单位受到99999点同类伤害，并非直接设置死亡';}
     if(['AIde','AIas'].includes(a.base_code)&&has('DataA')){s.kind='passive_stats';s.status='implemented';if(a.base_code==='AIde'){s.armor=A;s.effectText=`原生物品能力：自身护甲+${A}`;}else{s.haste=A;s.effectText=`原生物品能力：自身攻速+${A*100}%`;}}
+    if(['A138','A13T'].includes(id)){s.kind='passive_stats';s.status='implemented';s.bonusHp=A;s.effectText=`神秘礼物原生AIml：自身最大生命+${A}；部署时应用一次，不随存档刷新重复增加`;}
+    if(['A139','A13X'].includes(id)){s.kind='passive_stats';s.status='implemented';s.flatDamage=A;s.effectText=`神秘礼物原生AIat：两组普通武器攻击力各+${A}，不增加法术固定伤害`;}
+    if(id==='A13V'){s.kind='passive_stats';s.status='implemented';s.selfRegen=A;s.effectText=`神秘礼物原生Arel：自身每秒恢复${A}生命，不是范围光环或最大生命百分比恢复`;}
+    if(id==='A2ZG'){s.kind='box_damage_shield';s.status='implemented';s.damageFactor=.85;s.sourceLines=[40524,40574];s.effectText='单位护盾按主伤害事件将正敌对伤害乘以0.85，包括通用与法术伤害；排除空来源、自伤、盟友及带A2Y7的来源，主监听内部追加伤害不重复触发。先于翡翠复苏判断（JASS 40551–40585）';}
   }
   if(s.kind==='summon'&&!TEMPLATES[s.summonId]){s.status='unresolved';s.effectText=`召唤模板${s.summonId??'未指定'}缺失`;}
   if(['crit','evasion','hardened','demolish','orb','barrage','pulverize'].includes(s.kind)&&!has('DataA')&&!has('DataB')){s.status='unresolved';s.effectText='缺少原生效果数据，不应用空值默认';}
@@ -214,6 +218,17 @@ export function attachSkills(e,def) {
   // Altar heroes are giant units in the source, with a separate UI category.
   if(isV14(def)&&def.heroFamily)e.isNativeHero=['STR','AGI','INT'].includes(f.Primary);
   for(const s of e.skillSpecs)e.skillStates[s.id]={readyAt:0,casts:0,...(s.kind==='x9_sapper'&&Number.isFinite(e.createdAt)?{nextPulseAt:e.createdAt+1}:{})};
+  // The source adds these native item abilities to the freshly deployed body
+  // (43658–43698). Their literal bonuses follow the creation HP scaling.
+  // Keep an ability journal so reattachment cannot add the same stats twice;
+  // refreshing a saved skill definition deliberately does not run this step.
+  for(const s of active(e))if(s.kind==='passive_stats'&&(s.bonusHp||s.flatDamage)){
+    const applied=e.sourcePassiveStatBonuses??={};if(Object.hasOwn(applied,s.id))continue;
+    const bonusHp=s.bonusHp??0,flatDamage=s.flatDamage??0;
+    if(bonusHp){e.maxHp=num(e.maxHp)+bonusHp;if(e.hp>0)e.hp=Math.min(e.maxHp,e.hp+bonusHp);}
+    if(flatDamage)e.damage=num(e.damage)+flatDamage;
+    applied[s.id]={bonusHp,flatDamage};
+  }
 }
 export function refreshSourceSkills(e,def) {
   if(e.skillImplementationRevision===SKILL_IMPLEMENTATION_REVISION)return false;
@@ -247,7 +262,7 @@ export function sourceWeapon(source,target,now=0){
   if(source.side!==target.side&&scriptInvulnerable(target))return null;
   if(isV14(source)&&source.isBuilding&&source.sourceRawFields?.weapsOn===undefined)return null;
   const explicit=source.skillSource;for(const slot of [1,2]){const w=slot===1?source.weapon1:source.weapon2;if(!w||!Object.keys(w).length)continue;const type=w[`weapTp${slot}`],mask=num(w.weapsOn,source.sourceRawFields?.weapsOn??1);if(!(mask&(1<<(slot-1)))||!type||type==='_')continue;const targets=String(w[`targs${slot}`]??'_').split(',');if(!matchesTargets({targets},source,target))continue;
-    return {slot,raw:w,type,range:num(w[`rangeN${slot}`],source.range*100/(source.distanceScale||1))/100*(source.distanceScale??1),interval:num(w[`cool${slot}`],source.attackInterval),attackType:w[`atkType${slot}`]??source.attackType,damage:slot===1?source.damage:num(w.dmgplus2)+num(w.dice2)*(num(w.sides2)+1)/2};
+    return {slot,raw:w,type,range:num(w[`rangeN${slot}`],source.range*100/(source.distanceScale||1))/100*(source.distanceScale??1),interval:num(w[`cool${slot}`],source.attackInterval),attackType:w[`atkType${slot}`]??source.attackType,damage:slot===1?source.damage:num(w.dmgplus2)+num(w.dice2)*(num(w.sides2)+1)/2+Object.values(source.sourcePassiveStatBonuses??{}).reduce((sum,bonus)=>sum+(bonus.flatDamage??0),0)};
   }
   return explicit?null:{slot:1,raw:{},type:'normal',range:source.range,interval:source.attackInterval,attackType:source.attackType,damage:source.damage};
 }
@@ -271,7 +286,7 @@ export function sourceAuraEffects(game,target,auras) {
   }
   if(isV14(target))effects.haste+=trollHaste(target);
   for(const s of active(target))if(s.kind==='carapace')effects.armor+=s.armor;
-  for(const s of active(target))if(s.kind==='passive_stats'){effects.armor+=s.armor??0;effects.haste+=s.haste??0;}
+  for(const s of active(target))if(s.kind==='passive_stats'){effects.armor+=s.armor??0;effects.haste+=s.haste??0;effects.healRate+=s.selfRegen??0;}
   for(const b of target.buffs??[])if(b.expiresAt>game.state.time){effects.damage+=b.damage??0;effects.armor+=b.armor??0;effects.haste+=b.haste??0;effects.move+=b.move??0;effects.healRate+=b.regen??0;}
   return effects;
 }
@@ -428,6 +443,13 @@ export function modifyIncoming(game,target,damage,attacker,options={}) {
   }
   for(const b of target.buffs??[])if(b.expiresAt>game.state.time)result*=1+(b.incoming??0);
   result*=target.status?.incomingMultiplier??1;
+  // Trig_UnitDamageActions 40551–40574: QC changes this main listener's
+  // event damage before YseraOnDamage. Universal damage is not exempt, but
+  // its own nested damage runs while this trigger is disabled. UB and other
+  // independent listeners can still create fresh, eligible main events.
+  if(isV14(target)&&!game._sourceDamageTriggerDepth&&result>0&&attacker&&attacker.id!==target.id&&attacker.side!==target.side&&!(attacker.skillSpecs??[]).some(s=>s.id==='A2Y7')){
+    const shield=active(target).find(s=>s.kind==='box_damage_shield');if(shield)result*=shield.damageFactor;
+  }
   if(isV14(target)&&!game._sourceDamageTriggerDepth&&result>0&&target.hp>0&&active(target).some(s=>s.kind==='ysera_revival')){
     const now=game.state.time,status=target.status??={};
     if((status.yseraSleepingUntil??0)>now)return result*.2;

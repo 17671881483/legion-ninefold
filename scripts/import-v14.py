@@ -64,6 +64,45 @@ def literal_special_monsters(jass):
     scale,scale_source=jass_function(jass,'Trig_CreateUnitHookGetLifeScale')
     if not re.search(r'if Dg<=10 then\s+return 1\.5\s+endif\s+return 3\.',scale):raise ValueError('Unrecognized special monster life scale')
     return {'waveFive':{'wave':5,'rawcode':code(spawn[1]),'perLane':1,'spawnAt':'last-main-batch','lifetimeSeconds':int(lifetime[2]),'timedLifeBuffRawcode':code(lifetime[1]),'maxHp':int(maximum_hp[1]),'laneOneCurrentHp':int(lane_hp[2]),'setCurrentHpLane':int(lane_hp[1]),'otherLaneCurrentHpPolicy':'native-current-life-after-max-life-change','ordinaryKillGold':False,'firstAndLastKillReward':{'gold':80,'wood':150,'scope':'global-cumulative-spawn-and-death-counts','source':{'file':'war3map.j','line':19152,'endLine':19167}},'source':reward_source,'batchSource':batch_source},'treasure':{'byWave':by_wave,'perTeam':1,'maximumPerWave':int(maximum[1]),'spawnAt':'first-batch-after-main-monsters','recipient':'random-living-player-per-team','creationHpScale':{'requires':'ninefold-and-sapper-not-structure-summoned-or-giant','firstWave':6,'throughWave10':1.5,'fromWave11':3,'source':scale_source},'source':register_source,'initializationSource':init_source,'selectionSource':selection_source,'batchSource':batch_source}}
+def literal_box_training(jass):
+    """Keep the native reward-only selection graph separate from Upgrade."""
+    body,registration=jass_function(jass,'BoxUpgradeTreeRegister___Register')
+    def literal_rows(prefix,raw_key,values_key):
+        counts={};choices=defaultdict(dict)
+        for offset,line in enumerate(body.split('\n')):
+            match=re.fullmatch(r'call SaveInteger\(O,\$([0-9A-F]{8}),StringHash\("'+prefix+r'_(count|\d+)"\),(\$[0-9A-F]{8}|\d+)\)\r?',line)
+            if not match:continue
+            raw,key,target=match.groups();raw=code(raw);script_line=registration['line']+offset
+            if key=='count':
+                if target.startswith('$') or raw in counts:raise ValueError('Duplicate/nonliteral '+prefix+' count '+raw)
+                counts[raw]={'count':int(target),'line':script_line}
+            else:
+                index=int(key)
+                if not target.startswith('$') or index in choices[raw]:raise ValueError('Duplicate/nonliteral '+prefix+' value '+raw)
+                choices[raw][index]={'rawcode':code(target[1:]),'line':script_line}
+        if set(counts)!=set(choices):raise ValueError(prefix+' source/count mismatch')
+        result={}
+        for raw,count in counts.items():
+            ordered=choices[raw]
+            if sorted(ordered)!=list(range(1,count['count']+1)):raise ValueError(prefix+' indexes differ from count '+raw)
+            result[raw]={raw_key:raw,'count':count['count'],values_key:[ordered[i]['rawcode'] for i in sorted(ordered)],'indices':sorted(ordered),'scriptLines':[ordered[i]['line'] for i in sorted(ordered)],'countScriptLine':count['line']}
+        return result
+    selections=literal_rows('box_train_select','sourceRawcode','rawTargets')
+    requirements=literal_rows('box_train_upgrade_require','targetRawcode','rawRequirements')
+    action,action_source=jass_function(jass,'BoxGiftTryUpgradeTargetUnitNowByType')
+    target,target_source=jass_function(jass,'BoxGiftIsTrainTarget')
+    owned,owned_source=jass_function(jass,'BoxGiftIsOwnedAlive')
+    consume,consume_source=jass_function(jass,'BoxGiftTrainUpgradeDialogAction')
+    tech,tech_source=jass_function(jass,'BoxGiftIsUpgradeTechReady')
+    limit,limit_source=jass_function(jass,'BoxGiftIsUpgradeLimitReady')
+    count_limits,count_limits_source=jass_function(jass,'BoxGiftCountPlayerLimitUsed')
+    count_enum,count_enum_source=jass_function(jass,'BoxGiftCountPlayerLimitUsedEnum')
+    alias=re.search(r'^integer Oh=\$([0-9A-F]{8})\r?$',jass,re.M)
+    if not alias or 'if not IsUnitType(Om,UNIT_TYPE_HERO) then' not in target or 'Om!=Pf' not in target or 'GetOwningPlayer(i)==h and not IsUnitType(i,UNIT_TYPE_DEAD)' not in owned:raise ValueError('Unrecognized box training target contract')
+    if 'set BU=GetUnitGoldCost(Y4)*40/100' not in action or 'set BV=GetUnitWoodCost(Y4)*40/100' not in action or 'GetUnitAbilityLevel(Pf,Oh)<=0' not in action or 'BoxGiftIsUpgradeLimitReady(h,Om,Y4)' not in action or 'BoxGiftIsUpgradeTechReady(h,Y4)' not in action:raise ValueError('Unrecognized box training cost/requirement contract')
+    if 'if BoxGiftTryUpgradeTargetUnitNowByType(Pf,Om,Y4) then\r\ncall BoxGiftConsumeBoxReward(Pf)' not in consume:raise ValueError('Unrecognized box training reward consumption')
+    if 'StringHash("box_train_upgrade_require_count")' not in tech or 'HaveSavedInteger(O,Y4,StringHash("count"))' not in limit or 'LoadBoolean(O,Y9,StringHash("limitid_ex"))' not in count_enum:raise ValueError('Unrecognized box training native requirement/cap helpers')
+    return {'selections':selections,'targetRequirements':requirements,'targetLimits':{},'contract':{'abilityRawcode':code(alias[1]),'costPercent':40,'costRounding':'JASS integer multiplication/division','ownedAliveOnly':True,'excludesNativeHeroes':True,'excludesBuildings':False,'excludesRewardProvider':True,'requiresActiveReward':True,'checksTargetRequirements':True,'checksTargetBuildLimit':True,'requirementCountAbsent':'zero-checks','limitCountAbsent':'unlimited-by-training-helper','limitCountPolicy':'max(group-count,all-owned-unit-count), excluding replaced unit and dead units; exact type or base_id lineage unless limitid_ex','consumeReward':'once-on-success','immediate':True,'source':{'action':action_source,'target':target_source,'ownedAlive':owned_source,'consume':consume_source,'tech':tech_source,'limit':limit_source,'countLimits':count_limits_source,'countLimitEnum':count_enum_source,'abilityAlias':{'file':'war3map.j','line':jass.count('\n',0,alias.start())+1}}},'source':registration,'selectionCount':sum(x['count'] for x in selections.values()),'requirementCount':sum(x['count'] for x in requirements.values()),'importedRawcodes':[]}
 def refresh(src, dest):
     (dest/'data').mkdir(parents=True,exist_ok=True)
     for path in sorted((src/'data').iterdir()):
@@ -90,6 +129,7 @@ def generate(snapshot):
     # The source JASS contains mixed-encoding strings. Latin-1 is a reversible
     # byte mapping; this parser reads only ASCII identifiers and hex literals.
     jass=(snapshot/'raw_extracted/war3map.j').read_bytes().decode('latin1')
+    box_training=literal_box_training(jass)
     pairs=[]
     for m in re.finditer(r'set Mk\[Bi\]=\$([0-9A-F]{8})\s+set Ml\[Bi\]=\$([0-9A-F]{8})',jass):
         pairs.append({'combat':code(m[1]),'building':code(m[2]),'line':jass.count('\n',0,m.start())+1})
@@ -111,9 +151,9 @@ def generate(snapshot):
     for rowno,r in enumerate(tables['unit_upgrade_requirements.csv'],2):
         requirements[r['target_rawcode']].append({'rawcode':r['requirement_rawcode'],'name':r['requirement_name'],'kind':r['requirement_kind'],'source':source('unit_upgrade_requirements.csv',rowno,r['target_rawcode']),'scriptLine':int(num(r['source_line']))})
     source_edge_rows=tables['unit_upgrade_edges.csv'];edge_rows=list(source_edge_rows)
-    # The packet's full-tree CSV omits two real upgrades whose source units
-    # are present only in the literal random pools. Read the immediate table
-    # independently, and supplement only edges with already proven entrances.
+    # Retain the established ordinary pool/CSV closure supplements. Hero
+    # training branches are resolved separately after hero registration below;
+    # a reward-only selection must not become an ordinary upgrade by accident.
     preliminary=set(pool_codes)
     while True:
         expanded=preliminary|{r['target_rawcode'] for r in edge_rows if r['source_rawcode'] in preliminary}
@@ -126,7 +166,9 @@ def generate(snapshot):
         r=raw_units[b];line=jass.count('\n',0,m.start())+1
         addition={'source_rawcode':a,'source_name':raw_units[a]['name'],'target_rawcode':b,'target_name':r['name'],'choice_slot':m[2],'is_immediate_select_edge':'True','not_in_immediate_select_table':'False','target_in_easter_catalog':'False','explicit_easter_text':'False','target_gold_cost':r['goldcost'],'target_lumber_cost':r['lumbercost'],'target_build_time':r['bldtm'],'target_total_power_points':r['points'],'requirement_rawcodes':','.join(x['rawcode'] for x in requirements.get(b,[])),'requirement_names':','.join(x['name'] for x in requirements.get(b,[])),'source_line':str(line),'supplemental':True}
         supplemental_edges.append(addition);edge_rows.append(addition);present.add((a,b));preliminary.add(b)
-    assert {(r['source_rawcode'],r['target_rawcode']) for r in supplemental_edges}=={('n2YS','n2YR'),('n085','n084')}
+    literal_training_edges={(a,b) for a,entry in box_training['selections'].items() for b in entry['rawTargets']}
+    assert all((r['source_rawcode'],r['target_rawcode']) in literal_training_edges for r in supplemental_edges)
+    assert len({(r['source_rawcode'],r['target_rawcode']) for r in supplemental_edges})==len(supplemental_edges)
     successors=defaultdict(list);parents=defaultdict(list)
     for r in edge_rows:
         successors[r['source_rawcode']].append(r['target_rawcode']);parents[r['target_rawcode']].append(r['source_rawcode'])
@@ -212,6 +254,11 @@ def generate(snapshot):
         scope='type' if extended else 'lineage'
         entry={**r,'unitRawcode':c,'unitId':uid(c),'maxAllowed':maximum,'maximum':maximum,'api':r['limit_api'],'counterMarkerRawcode':marker,'counterMarkerName':clean(raw_units.get(marker,{}).get('name')) if marker else '', 'counterMarkerRole':'automatically_created_capacity_marker' if marker else None,'counterMarkerAvailableBelowLimit':bool(marker),'requirementRawcode':marker,'requirementName':clean(raw_units.get(marker,{}).get('name')) if marker else '', 'requires':[],'scope':scope,'releaseOnUpgrade':extended,'initial':True,'initialDelaySeconds':1,'condition':'BD' if c=='n04W' and len(limits[c])==0 else '!BD' if c=='n04W' else 'always','conditionEquivalentForNinefold':True,'source':source('easter_egg_build_limits.csv',rowno,c),'scriptLine':int(num(r['source_line'])),'scriptEvidence':{'file':'war3map.j','registerLines':[28382,28418],'enforceLines':[28427,28483]}}
         build_limits.append(entry);limits[c].append(entry)
+    # BoxGift reads the hashtable count written by RegisterBudingLimit, not
+    # SetPlayerTechMaxAllowed's separate BAN initialization. Preserve exactly
+    # those saved-count targets, including the source's base_id/Ex distinction.
+    for c,entries in limits.items():
+        box_training['targetLimits'][c]={'targetRawcode':c,'hasSavedCount':True,'count':entries[-1]['maxAllowed'],'limitidEx':any(e['releaseOnUpgrade'] for e in entries),'registrations':[{'api':e['api'],'count':e['maxAllowed'],'counterMarkerRawcode':e['counterMarkerRawcode'],'scriptLine':e['scriptLine'],'condition':e['condition']} for e in entries],'source':{'file':'war3map.j','countStoreLine':28408,'extendedFlagLine':28416}}
     bans={}
     for rowno,r in enumerate(tables['easter_egg_ban_limits.csv'],2):
         c=r['unit_rawcode'];cap=int(num(r['initial_max_allowed'],-1));entry={**r,'unitRawcode':c,'unitId':uid(c),'maxAllowed':cap,'initial':True,'scope':'type','source':source('easter_egg_ban_limits.csv',rowno,c),'scriptLine':int(num(r['source_line'])),'alsoAppliesToRawcodes':['h0NP'] if c=='h0JM' else [],'interactiveBanEnabled':False}
@@ -302,6 +349,40 @@ def generate(snapshot):
             target=raw_units[b];reqs=requirements.get(b,[])
             hero_edges.append({'fromId':uid(a),'toId':uid(b),'fromRawcode':a,'toRawcode':b,'resolved':True,'cost':compact(num(target['goldcost'])),'woodCost':compact(num(target['lumbercost'])),'requires':[r['rawcode'] for r in reqs],'requirementNames':[r['name'] for r in reqs],'immediateSelect':True,'hidden':False,'source':{'file':'war3map.j','line':hero_choice_sources[family]['line'] if a=='h0DB' else combat_map[b]['line'],'rawcode':b,'kind':'hero-page-entry' if a=='h0DB' else 'hero-numbered-stage-reconstruction'},'supplemental':False,'heroProgression':True,'inferred':a!='h0DB','sourceLines':[combat_map[b]['line']],'scriptLine':combat_map[b]['line']})
     assert len(hero_edges)==147
+    # BoxGift can train the final altar stages into five extra source objects.
+    # Resolve this graph only after the numbered hero entries exist. Keep it
+    # separate from successors/hero_edges: native training needs A2ZA and pays
+    # forty percent of the target price, rather than a normal Upgrade order.
+    training_by_source=box_training['selections']
+    training_parents=defaultdict(list);training_evidence=defaultdict(list)
+    for a,selection in training_by_source.items():
+        for index,b,line in zip(selection['indices'],selection['rawTargets'],selection['scriptLines']):
+            if b not in raw_units:raise ValueError('Unknown literal box training target '+b)
+            training_parents[b].append(a);training_evidence[b].append({'sourceRawcode':a,'index':index,'scriptLine':line,'file':'war3map.j'})
+    existing_units={u['sourceRawcode']:u for u in units}
+    ordinary_unit_count=len(units);training_codes=[]
+    while True:
+        added=False
+        for a,selection in training_by_source.items():
+            if a not in existing_units:continue
+            parent=existing_units[a]
+            for b in selection['rawTargets']:
+                if b in existing_units:continue
+                mapping=combat_map.get(b)
+                if not mapping:raise ValueError('Training target has no proven combat mapping '+b)
+                if not parent.get('hero') or not parent.get('heroFamily'):raise ValueError('Unreviewed non-hero training-only extension '+a+' -> '+b)
+                r=raw_units[b];reqs=requirements.get(b,[])
+                entry=hero_record(b,mapping['combat'],parent['heroFamily'],None,None,[],False,parent.get('heroPage',0),None)
+                entry.update({'trainingOnly':True,'trainingSources':training_parents[b].copy(),'specialForm':True,'isNativeHero':raw_units[mapping['combat']].get('Primary') in ['STR','AGI','INT'],'acquisition':'宝箱兵种训练','sourceCategory':'JASS宝箱兵种训练补录','reachability':'JASS即时训练入口；不属于普通升级树','easterEgg':bool(catalog.get(b)),'buildLimits':limits.get(b,[]),'buildLimitDetails':limits.get(b,[]),'buildLimit':initial_caps.get(b,-1),'initialBuildLimit':initial_caps.get(b,-1),'buildLimitScope':limits[b][-1]['scope'] if limits.get(b) else 'type','sourceCaps':{'initialBuildLimit':limits.get(b,[]),'banInitialLimit':bans.get(b),'trainingLimit':box_training['targetLimits'].get(b),'policy':'Normal initial caps are retained separately; BoxGift checks only saved RegisterBudingLimit count, not BAN max-allowed.'},'sourceEvidence':{'combatMapping':mapping,'trainingSelections':training_evidence[b],'trainingContract':box_training['contract']['source'],'progressionPolicy':'BoxGift literal training leaf, separate from the Web numbered-stage reconstruction and ordinary Upgrade edges.','nativeHeroClassification':'Primary of the mapped combat object; Web altar-family identity does not imply UNIT_TYPE_HERO.','missingNativeFields':[field for field in ['goldcost','lumbercost','fused','points'] if r[field] in [None,'','_']],'pricingPolicy':'Normal numeric catalog adapters retain their existing empty-field fallback; original missing fields remain absent in buildingRawFields.'}})
+                units.append(entry);existing_units[b]=entry;training_codes.append(b);all_catalog_codes.add(b);added=True
+        if not added:break
+    box_training['importedRawcodes']=sorted(training_codes)
+    box_training['ordinaryUnitCount']=ordinary_unit_count
+    box_training['trainingOnlyUnitCount']=len(training_codes)
+    box_training['ordinaryUpgradeEdgesAdded']=0
+    for entry in units:
+        selection=training_by_source.get(entry['sourceRawcode'])
+        if selection:entry['trainTargets']=[uid(c) for c in selection['rawTargets'] if c in existing_units]
     edges=[]
     for rowno,r in enumerate(edge_rows,2):
         edges.append({'fromId':uid(r['source_rawcode']),'toId':uid(r['target_rawcode']),'fromRawcode':r['source_rawcode'],'toRawcode':r['target_rawcode'],'resolved':r['target_rawcode'] in all_catalog_codes,'cost':compact(num(r['target_gold_cost'])),'woodCost':compact(num(r['target_lumber_cost'])),'requires':split(r['requirement_rawcodes']),'requirementNames':split(r['requirement_names']),'immediateSelect':boolean(r['is_immediate_select_edge']),'hidden':boolean(r['not_in_immediate_select_table']),'source':{'file':'war3map.j','line':int(r['source_line']),'rawcode':r['target_rawcode'],'kind':'immediate-select-supplement'} if r.get('supplemental') else source('unit_upgrade_edges.csv',rowno,r['target_rawcode']),'supplemental':bool(r.get('supplemental')),'sourceLines':[int(num(r['source_line']))],'scriptLine':int(num(r['source_line']))})
@@ -324,7 +405,11 @@ def generate(snapshot):
     meta={'dataRevision':'v14.1A5-ninefold-dataset-v1','heroDataRevision':'v14.1A5-hero-paths-v1','title':'军团战争 · v14.1A5 九倍怪物','sourceVersion':VERSION,'provenance':PROVENANCE,'distanceScale':SCALE,'defaultBuilderId':builder_map['先知'],'sourceRegistryCount':len(roster),'activeUnitCount':len(units),'activeBaseUnitCount':len(pool_codes),'activeMercenaryCount':len(mercs),'activeWaveCount':len(waves),'builderCount':len(builders),'heroEntryCount':len(hero_entries),'heroChoiceCount':len(hero_choices),'heroStageCount':len(hero_codes),'heroUpgradeEdgeCount':len(hero_edges),'morphProxyCount':6,'archiveCount':len(archive),'upgradeEdgeCount':len(edges),'sourceUpgradeEdgeCount':len(source_edge_rows),'supplementalUpgradeEdgeCount':len(supplemental_edges),'resolvedUpgradeEdgeCount':sum(e['resolved'] for e in edges),'abilityCount':len(ability_table),'sourceAbilityCount':len(ability_table),'sourceUnitCount':len(templates),'templateCount':len(templates),'units':len(units),'baseUnits':len(pool_codes),'upgradeUnits':len(units)-len(pool_codes)-6-len(hero_codes)-1,'mercenaries':len(mercs),'waves':len(waves),'unitPolicy':'374登记含工人。107随机候选含n085/n2YS两项JASS池补录；375普通建筑可达再加6变形代理（即时升级表补n2YS→n2YR与n085→n084两边）；英雄祭坛与17分支147阶段单列补录，n07D/n07E仅图鉴。保留全部需求，不把资格彩蛋当直接建造入口。','statPolicy':'建筑体取价格/人口/建造时间/兵力；Mk/Ml映射的战斗体取HP/武器/能力。','waveCountPolicy':'直接采用九倍108等计数，20波10、30波6。','abilityPolicy':'保留2949完整能力与原生最终字段，脚本实际执行以skills.js支持状态为准。','legacyPolicy':'旧5.0dJF数据仅旧档兼容；新局只使用v14_前缀。','counts':{'sourceRegistry':374,'units':len(units),'baseUnits':107,'builders':20,'heroes':len(hero_choices),'heroStages':len(hero_codes),'heroAltars':1,'morphProxies':6,'archived':len(archive),'mercenaries':60,'waves':35,'abilities':2949,'easterCatalog':248,'easterMenuNodes':372,'easterRecipes':88,'upgradeRequirements':461},'worker':{'rawcode':'e003','catalog':tables['wisp_data.csv'][0]},'limitations':['英雄祭坛/17分页入口由本版JASS确认，147阶段战斗映射/价格/人口来自本版Mk/Ml与CSV；等级升级链是按当前注册顺序和编号提示重建的Web适配，CSV缺少native Upgrade/Requires，未引入旧版350/450军力门槛。','平台账号、付费/皮肤/赞助资格无法由静态数据模拟；非战斗结束需求保留并按资格门槛限制。','n07E娜迦火蜥、n07D娜迦雷蜥登记存在，但未找到107随机池和302边闭包的基础入口，仅列图鉴。','发兵CSV同名变体有24个stockMax空白/零的预览对象；不把60对象都作为同时可购买商品，实际商店切换待静态原生商品表补全。','魔兽原生寻路、碰撞、动画和未实现脚本仍为浏览器适配。'],'sourceFiles':{'manifest':'reference/v14-source/import-manifest.json','datasetManifest':'reference/v14-source/data/source_manifest.json','jass':'reference/v14-source/raw_extracted/war3map.j'},'combatMappingCount':len(combat_map),'appliedUnitModifications':sum(map(len,unit_overrides.values())),'appliedAbilityModifications':applied_ability_modifications,'buildLimitRecordCount':len(build_limits),'banLimitRecordCount':len(ban_limits),'initialCappedUnitCount':sum(v>=0 for v in initial_caps.values()),'buildLimitPolicy':'47 calls in InitBudingLimit; second parameter is an automatically created capacity marker. RegisterBudingLimitEx releases count on upgrade; ordinary variant tracks lineage until explicit capped-target replacement. Initial call overrides prior BAN initialization; no interactive BAN flow enabled.','sourceValidation':json.loads((snapshot/'data/validation_report.json').read_text()),'sourceMetadata':json.loads((snapshot/'data/mode_rules_x9.json').read_text())}
     meta.update({'sourceItemCount':len(object_catalogs['V14_ITEMS']),'sourceTechnologyCount':len(object_catalogs['V14_TECHNOLOGIES']),'specialGoldEventCount':len(special_gold_rewards),'sacrificeRewardTierCount':len(sacrifice_rewards),'objectCatalogPolicy':'Complete source object dictionaries; source-only records do not establish shop or research access. Empty source fields are not assigned fabricated prices or values.','rules':{'specialMonsters':special_monsters,'easterSacrifice':{'tiers':sacrifice_rewards,'availability':'ability-carrier-source-absent','policy':'The reward handler is proven, but the packet does not identify units granted A1U4/A1U5/A1U6. Do not grant sacrifice access by name or easter-egg category.'}}})
     meta['counts'].update({'items':meta['sourceItemCount'],'technologies':meta['sourceTechnologyCount'],'specialGoldEvents':len(special_gold_rewards),'sacrificeRewardTiers':len(sacrifice_rewards)})
-    return [('V14_REFERENCE',meta),('V14_ABILITIES',ability_table),('V14_UNIT_TEMPLATES',templates),('V14_UNITS',units),('V14_BUILDERS',builders),('V14_POOLS',pools),('V14_HERO_ENTRIES',hero_entries),('V14_HERO_UPGRADE_EDGES',hero_edges),('V14_UPGRADE_EDGES',edges),('V14_SUPPLEMENTAL_UPGRADE_EDGES',[e for e in edges if e['supplemental']]),('V14_ARCHIVE',archive),('V14_WAVES',waves),('V14_MERCENARIES',mercs),('V14_REQUIREMENTS',dict(requirements)),('V14_BUILD_LIMITS',build_limits),('V14_BAN_LIMITS',ban_limits),('V14_EASTER_RECIPES',tables['easter_egg_recipes.csv']),('V14_EASTER_MENU',tables['easter_egg_menu_tree.csv']),('V14_EASTER_CATALOG',cat_rows),('V14_SCRIPTED_SKILLS',tables['x9_scripted_skills.csv']),('V14_SPECIAL_MONSTERS',special_monsters),('V14_SPECIAL_GOLD_REWARDS',special_gold_rewards),('V14_SACRIFICE_REWARDS',sacrifice_rewards),*object_catalogs.items()]
+    meta['trainingOnlyUnitCount']=len(training_codes);meta['boxTrainingSelectionCount']=box_training['selectionCount']
+    meta['upgradeUnits']-=len(training_codes)
+    meta['counts'].update({'trainingLeaves':len(training_codes),'trainingSelections':box_training['selectionCount']})
+    meta['unitPolicy']+='另按完整225条宝箱即时训练选择补入5个英雄转职叶子，独立于普通升级；训练奖励、40%目标费用、全部资格和数量条件另判。'
+    return [('V14_REFERENCE',meta),('V14_ABILITIES',ability_table),('V14_UNIT_TEMPLATES',templates),('V14_UNITS',units),('V14_BUILDERS',builders),('V14_POOLS',pools),('V14_HERO_ENTRIES',hero_entries),('V14_HERO_UPGRADE_EDGES',hero_edges),('V14_UPGRADE_EDGES',edges),('V14_SUPPLEMENTAL_UPGRADE_EDGES',[e for e in edges if e['supplemental']]),('V14_BOX_TRAINING_RULES',box_training),('V14_ARCHIVE',archive),('V14_WAVES',waves),('V14_MERCENARIES',mercs),('V14_REQUIREMENTS',dict(requirements)),('V14_BUILD_LIMITS',build_limits),('V14_BAN_LIMITS',ban_limits),('V14_EASTER_RECIPES',tables['easter_egg_recipes.csv']),('V14_EASTER_MENU',tables['easter_egg_menu_tree.csv']),('V14_EASTER_CATALOG',cat_rows),('V14_SCRIPTED_SKILLS',tables['x9_scripted_skills.csv']),('V14_SPECIAL_MONSTERS',special_monsters),('V14_SPECIAL_GOLD_REWARDS',special_gold_rewards),('V14_SACRIFICE_REWARDS',sacrifice_rewards),*object_catalogs.items()]
 
 def encode(exports):
     data=dict(exports);dump=lambda v:json.dumps(v,ensure_ascii=False,separators=(',',':'));out='/* Generated by scripts/import-v14.py from checked-in reference/v14-source. */\n'
@@ -351,5 +436,8 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--source',type=Path);args=parser.parse_args();snapshot=ROOT/'reference/v14-source'
     if args.source:refresh(args.source,snapshot)
     exports=generate(snapshot);output=encode(exports);(ROOT/'dist/v14-reference.js').write_text(output)
-    meta=dict(exports)['V14_REFERENCE'];print(json.dumps({k:meta[k] for k in ['sourceRegistryCount','activeUnitCount','activeBaseUnitCount','builderCount','activeMercenaryCount','activeWaveCount','abilityCount','archiveCount']}|{'generatedBytes':len(output.encode())},ensure_ascii=False))
+    generated=dict(exports);meta=generated['V14_REFERENCE'];training=generated['V14_BOX_TRAINING_RULES']
+    report={'generator':'scripts/import-v14.py','sourceVersion':VERSION,'activeUnitCount':len(generated['V14_UNITS']),'boxTraining':{**training,'importedUnits':[{key:u.get(key) for key in ['id','sourceRawcode','combatRawcode','heroFamily','hero','isNativeHero','trainingOnly','trainingSources','cost','woodCost','population','sourcePoints','requiresDetails','initialBuildLimit','buildLimits','sourceEvidence']} for u in generated['V14_UNITS'] if u.get('trainingOnly')]}}
+    (ROOT/'reference/v14-import-report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
+    print(json.dumps({k:meta[k] for k in ['sourceRegistryCount','activeUnitCount','activeBaseUnitCount','builderCount','activeMercenaryCount','activeWaveCount','abilityCount','archiveCount']}|{'generatedBytes':len(output.encode()),'trainingOnlyUnitCount':len(training['importedRawcodes']),'trainingSelectionCount':training['selectionCount']},ensure_ascii=False))
 if __name__=='__main__':main()

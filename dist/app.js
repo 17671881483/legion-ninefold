@@ -18,6 +18,7 @@ try{saved=readMatch(localStorage,mode);}catch{}
 let game=new Game({seed:42,difficulty:'normal'}),started=false,tab='build',difficulty='normal',builderId=RULES.defaultBuilderId,selected=null,buildUnit=null,panelKey='',selectionKey='',uiTimer=0,saveTimer=0,lastFrame=0,endShown=false,soundOn=false,audio=null,lastWave=1,lastPhase='build';
 let autoFollowWave=0,autoFollowing=false,kingMoveMode=false,tMonsterMode=false,spellTargetMode=null;
 let economyDisplayGame=null,economyDisplayWorkers=0,economyDisplayLevel=0;
+let boxGiftDisplayGame=null,boxGiftDisplayKey='',boxGiftSelections=Object.create(null);
 const battlefield=new Battlefield($('battlefield'),handleBattlefieldClick);
 const initialState=game.state;
 updateModeChoice();
@@ -165,6 +166,66 @@ function renderTreasurePanel(){
   if(!rewards.length)return '';
   return `<section class="treasure-section" aria-label="宝藏奖励"><h3>宝藏奖励 <small>${rewards.length} 份待领取</small></h3><p>每份选择一项。军团护甲保留在建筑上，从下次出战生效。</p>${rewards.map(t=>`<details class="treasure-card" data-treasure-id="${esc(t.id)}" ${rewards.length===1?'open':''}><summary>第${t.sourceWave}波宝藏 · ${t.level}级奖励</summary><div class="treasure-options"><button data-treasure="${esc(t.id)}" data-reward="gold">金币 +${t.gold}</button><button data-treasure="${esc(t.id)}" data-reward="wood">木材 +${t.wood}</button><button data-treasure="${esc(t.id)}" data-reward="kingArmor">国王护甲 +${t.kingArmor}</button>${t.canLumber?`<button data-treasure="${esc(t.id)}" data-reward="lumber" ${t.lumberAvailable?'':'disabled'} title="${t.lumberAvailable?'立即免费提升1级伐木科技':'伐木科技已满，包含研究中的预留'}">伐木科技 +1</button>`:''}</div><label class="treasure-target">强化军团<select aria-label="选择宝藏护甲目标" data-treasure-target>${t.targets.length?t.targets.map(b=>`<option value="${esc(b.buildingId)}">${esc(b.name)} · 护甲${b.armor}</option>`).join(''):'<option value="">请先完成军团建筑</option>'}</select></label><button class="treasure-armor" data-treasure="${esc(t.id)}" data-reward="unitArmor" ${t.targets.length?'':'disabled'}>所选军团护甲 +${t.unitArmor}</button></details>`).join('')}</section>`;
 }
+function ensureBoxGiftPanel(){
+  const panel=$('panel-content');
+  if(!$('box-gift-section')){
+    const section=document.createElement('section');section.id='box-gift-section';section.className='box-gift-section';section.setAttribute('aria-label','神秘礼物');
+    section.innerHTML='<details data-box-details><summary><span>神秘礼物</span><small data-box-summary>暂无待领取礼物</small></summary><p class="box-gift-intro">普通对局清完第6波后随机三选一，清完第13波后替换当前组选项。领取一项即用完当前整组礼物，与宝藏分别领取。</p><div class="box-gift-offers" data-box-offers></div><p class="box-gift-empty" data-box-empty>尚未获得神秘礼物。</p></details>';
+    const main=document.createElement('div');main.dataset.panelMain='';panel.replaceChildren(section,main);boxGiftDisplayKey='';
+  }
+  return $('box-gift-section');
+}
+function setBoxText(element,value){const text=String(value??'');if(element&&element.textContent!==text)element.textContent=text;}
+function syncBoxOptions(select,entries,value,placeholder){
+  const key=JSON.stringify(entries.map(entry=>String(entry.id)));
+  if(select.dataset.optionsKey!==key){select.dataset.optionsKey=key;select.innerHTML='<option value=""></option>'+entries.map(entry=>`<option value="${esc(entry.id)}"></option>`).join('');}
+  setBoxText(select.options[0],placeholder);entries.forEach((entry,index)=>setBoxText(select.options[index+1],entry.name));
+  if(select.value!==value)select.value=value;
+}
+function updateBoxGiftPanel(){
+  const section=ensureBoxGiftPanel(),reward=game.boxRewardStatus?.(0)??null,offers=reward?.offers??[],key=JSON.stringify([reward?.providerId??null,reward?.tier??null,reward?.sourceWave??null,reward?.pendingSwap??null,offers.map(offer=>[offer.id,offer.targetKind,offer.pendingSwap??null])]);
+  if(boxGiftDisplayGame!==game||boxGiftDisplayKey!==key){
+    boxGiftDisplayGame=game;boxGiftDisplayKey=key;boxGiftSelections=Object.create(null);
+    section.querySelector('[data-box-offers]').innerHTML=offers.map((offer,index)=>`<article class="box-gift-card" data-box-offer="${esc(offer.id)}"><h4><span class="box-gift-number">${index+1}</span><span data-box-name></span></h4><p class="box-gift-description" data-box-description></p>${offer.targetKind==='none'?'':`<label class="box-gift-field">选择自己的建筑<select data-box-building aria-label="${esc(offer.name)}：选择建筑"></select></label>`}${offer.targetKind==='training'?'<label class="box-gift-field">训练目标分支<select data-box-unit aria-label="兵种训练：选择目标分支"></select></label><p class="box-gift-cost" data-box-cost></p><details class="box-gift-conditions"><summary>查看分支费用与条件</summary><ul data-box-conditions></ul></details><p class="box-gift-training-note">按目标原价40%支付金币和木材，即时训练；训练失败保留本组礼物。</p>':''}<p class="box-gift-reason" data-box-reason role="status" aria-live="polite"></p><button data-box-claim="${esc(offer.id)}">${offer.targetKind==='training'?'支付并训练':'领取此项礼物'}</button></article>`).join('');
+    section.querySelector('[data-box-details]').open=!!offers.length;
+  }
+  section.classList.toggle('has-reward',!!offers.length);section.querySelector('[data-box-empty]').hidden=!!offers.length;
+  setBoxText(section.querySelector('[data-box-summary]'),offers.length?`第${reward.sourceWave}波 · ${offers.length}选1`:'暂无待领取礼物');
+  for(const offer of offers){
+    const card=[...section.querySelectorAll('[data-box-offer]')].find(node=>node.dataset.boxOffer===String(offer.id));if(!card)continue;
+    const selection=boxGiftSelections[offer.id]??={buildingId:'',unitId:''},buildings=offer.targets??[],buildingSelect=card.querySelector('[data-box-building]');
+    setBoxText(card.querySelector('[data-box-name]'),offer.name);setBoxText(card.querySelector('[data-box-description]'),offer.description);
+    if(buildingSelect){
+      if(!buildings.some(target=>String(target.buildingId)===selection.buildingId)){selection.buildingId='';selection.unitId='';}
+      syncBoxOptions(buildingSelect,buildings.map(target=>({id:target.buildingId,name:`${target.name}${target.canStart===false?' · 当前不可用':''}`})),selection.buildingId,buildings.length?'请选择建筑':'当前没有可选建筑');buildingSelect.disabled=!buildings.length;
+    }
+    let canStart=!!offer.canStart,reason=offer.reason||'';
+    if(offer.targetKind==='training'){
+      const building=buildings.find(target=>String(target.buildingId)===selection.buildingId),training=building?game.boxTrainingStatus?.(building.buildingId,0):null,targets=training?.targets??[],unitSelect=card.querySelector('[data-box-unit]');
+      if(!targets.some(target=>String(target.unitId)===selection.unitId))selection.unitId='';
+      syncBoxOptions(unitSelect,targets.map(target=>({id:target.unitId,name:`${target.name} · ${num(target.cost?.gold)}金＋${num(target.cost?.wood)}木${target.canStart?'':' · 未满足条件'}`})),selection.unitId,building?(targets.length?'请选择训练分支':'这座建筑没有训练分支'):'请先选择建筑');unitSelect.disabled=!building||!targets.length;
+      const target=targets.find(target=>String(target.unitId)===selection.unitId);
+      setBoxText(card.querySelector('[data-box-cost]'),target?`本次支付 ${num(target.cost?.gold)} 金币＋${num(target.cost?.wood)} 木材 · 原价40%`:'选定分支后显示本次训练费用（原价40%）');
+      reason=offer.reason||(!building?'请选择要训练的建筑':!target?(training?.reason||'请选择训练目标分支'):target.reason||(!training?.canStart?training?.reason:'')||'');
+      canStart=canStart&&!!building&&!!training?.canStart&&!!target?.canStart;
+      const conditions=card.querySelector('[data-box-conditions]'),conditionsKey=JSON.stringify(targets.map(target=>[target.unitId,target.name,target.cost,target.canStart,target.reason]));
+      if(conditions.dataset.key!==conditionsKey){conditions.dataset.key=conditionsKey;conditions.innerHTML=targets.length?targets.map(target=>`<li class="${target.canStart?'available':'blocked'}"><b>${esc(target.name)}</b><span>${num(target.cost?.gold)}金＋${num(target.cost?.wood)}木 · ${esc(target.canStart?'条件已满足':target.reason||'当前不可训练')}</span></li>`).join(''):'<li>选定建筑后查看目标分支。</li>';}
+    }else if(offer.targetKind==='building'){
+      const building=buildings.find(target=>String(target.buildingId)===selection.buildingId);canStart=canStart&&!!building&&building.canStart!==false;reason=reason||building?.reason||(!building?'请选择领取效果的建筑':'');
+    }
+    const button=card.querySelector('[data-box-claim]');button.disabled=!canStart;button.title=reason||(offer.targetKind==='training'?'支付所列费用，训练并用完本组礼物':'领取此项并用完本组礼物');
+    const reasonElement=card.querySelector('[data-box-reason]');setBoxText(reasonElement,reason||(canStart?'可以领取 · 领取后本组其余选项消失':''));reasonElement.classList.toggle('blocked',!canStart);
+  }
+}
+function claimBoxGift(button){
+  if(!button.dataset.boxClaim)return false;
+  const reward=game.boxRewardStatus?.(0),offer=reward?.offers?.find(offer=>String(offer.id)===button.dataset.boxClaim),selection=boxGiftSelections[button.dataset.boxClaim];
+  if(!offer){updateBoxGiftPanel();return true;}
+  const building=offer.targets?.find(target=>String(target.buildingId)===selection?.buildingId);
+  if(offer.targetKind==='training')command('boxTrain',{buildingId:building?.buildingId,unitId:selection?.unitId});
+  else command('boxReward',{abilityId:offer.id,...(offer.targetKind==='building'?{buildingId:building?.buildingId}:{})});
+  return true;
+}
 function renderPanel(){
   const s=game.state,p=s.players[0],key=[tab,p.roster.join(','),p.builderId,p.heroId,s.phase,s.wave,p.populationCap,p.rerolls,p.raceChanges,p.builderChoices?.join(','),buildUnit,(p.treasures??[]).map(t=>t.id).join(','),p.treasures?.length?p.buildings.map(b=>[b.id,b.unitId,!!b.construction,b.treasureArmor]).join(';'):'',p.treasures?.length?p.lumberLevel:''].join('|');
   if(key===panelKey){if(tab==='king')updateKingPanel();if(tab==='attack')updateMercPanel();return;}panelKey=key;
@@ -178,7 +239,7 @@ function renderPanel(){
   }else{
     const k=s.kings[0];html=`<div class="king-panel"><svg class="king-large"><use href="#i-crown"/></svg><h3>联盟国王</h3><p>四路共同的最后防线<br>花费木材强化国王，同时获得回合收入</p><div class="king-health"><i id="king-panel-bar"></i></div><div id="king-panel-hp" class="king-hp-label"></div>`+[['hp','heart','生命上限',`下级 +${RULES.kingHpUpgradeIncrements?.[k.hpLevel]??RULES.kingHpPerUpgrade} 生命（静态映射）`,k.hpLevel],['attack','swords','攻击力',`每级 +${RULES.kingDamagePerUpgrade} 攻击`,k.attackLevel],['regen','spark','生命恢复',`每级 +${RULES.kingRegenPerUpgrade} 回复/秒`,k.regenLevel]].map(([stat,ico,label,desc,lv])=>`<button class="king-upgrade" data-king="${stat}" title="${RULES.kingUpgradeCost}木材，收入增加${RULES.kingIncome}">${icon(ico)}<span><b>${label} <small style="display:inline">Lv.${lv}/${kingCap(stat)}</small></b><small>${desc}</small></span><em>${RULES.kingUpgradeCost} 木</em></button>`).join('')+`<div class="team-heals">`+[0,1,2,3].map(i=>`<svg class="heal-charge ${i>=k.healCharges?'empty':''}"><use href="#i-heart"/></svg>`).join('')+`</div><p class="hero-copy">国王治疗每名玩家一口，全队共 4 次，每次回复 ${num(healAmount())} 生命（最大生命${Math.round((RULES.kingHealFraction??.5)*100)}%）。<br>团队治疗间隔 ${RULES.kingHealLockSeconds} 秒。</p><button class="king-move" data-action="kingmove" ${s.wave<31||s.phase==='ended'?'disabled':''}>移动国王<small>${s.wave<31?'第31波起开放':'选择后点击路面'}</small></button></div>`;
   }
-  $('panel-content').innerHTML=renderTreasurePanel()+html;if(tab==='king')updateKingPanel();if(tab==='attack')updateMercPanel();
+  ensureBoxGiftPanel();$('panel-content').querySelector('[data-panel-main]').innerHTML=renderTreasurePanel()+html;if(tab==='king')updateKingPanel();if(tab==='attack')updateMercPanel();
 }
 function updateMercPanel(){
   const s=game.state,p=s.players[0],sandboxCombat=matchMode(s)==='sandbox'&&s.phase==='combat';
@@ -219,7 +280,7 @@ function updateEconomyPanel(){
   $('lumber-price').textContent=ended?'对局结束':lumberTask?`${price(lumberTask.cost)} · ${Math.ceil(lumberTask.remaining)}s`:l.current>=l.max?'已满级':`${price(l.cost)} · ${l.duration}s`;
   $('worker').disabled=!w.canStart;$('lumber').disabled=!l.canStart;
   const workerHint=`已完成 ${w.current}/${w.max}，训练队列 ${w.queued}/${w.queueLimit}`;
-  $('worker').title=`招募小精灵：${price(w.cost)}，${w.duration}秒。${workerHint}。${workerTask?`当前剩余${workerTask.remaining.toFixed(1)}秒，`:'备战与战斗期间均可招募，'}${s.paused?'已暂停，':''}${w.canStart?'点击排入训练队列':w.reason}`;
+  $('worker').title=`招募小精灵：预付${price(w.cost)}，开始招募后返还；${w.duration}秒。${workerHint}。${workerTask?`当前剩余${workerTask.remaining.toFixed(1)}秒，`:'备战与战斗期间均可招募，'}${s.paused?'已暂停，':''}${w.canStart?'点击排入训练队列':w.reason}`;
   $('lumber').title=`伐木科技：${l.current}/${l.max}。${price(lumberTask?.cost??l.cost)}，${lumberTask?.duration??l.duration}秒。${lumberTask?`正在研究${lumberTask.targetLevel}级，剩余${lumberTask.remaining.toFixed(1)}秒，`:''}${s.paused?'已暂停，':''}${l.canStart?'点击开始研究':l.reason}`;
   $('worker').setAttribute('aria-label',$('worker').title);$('lumber').setAttribute('aria-label',$('lumber').title);
   for(const [id,task]of[['worker',workerTask],['lumber',lumberTask]]){
@@ -290,7 +351,7 @@ function updateUI(){
 
   $('army-power').textContent=num(power(p));$('army-pop').textContent=`${population(p)} / ${p.populationCap??RULES.initialPopulation}`;$('army-pop').title=`已使用人口 ${population(p)}，含训练与施工预留 ${reservedPopulation(p)} 人口`;$('army-pop').setAttribute('aria-label',$('army-pop').title);$('kill-count').textContent=num(p.stats.kills);
   $('logs').innerHTML=s.logs.slice(-5).reverse().map(l=>`<div><span>${time(l.time)}</span>${esc(l.text)}</div>`).join('');
-  renderPanel();updateSelection();updateBuildPanel();if($('sandbox-dialog').open)updateSandbox();
+  renderPanel();updateBoxGiftPanel();updateSelection();updateBuildPanel();if($('sandbox-dialog').open)updateSandbox();
   const raceButton=document.querySelector('[data-action="race"]'),rerollButton=document.querySelector('[data-action="reroll"]');if(raceButton){raceButton.disabled=s.phase!=='build'||!!p.builderChoices?.length||(p.raceChanges||0)>=RULES.rerollCount||game.heroStatus().used;if(game.heroStatus().used)raceButton.title='英雄祭坛名额已用完，不能再更换种族';}if(rerollButton)rerollButton.disabled=s.phase!=='build'||p.rerolls>=RULES.rerollCount;
   const farmButton=document.querySelector('[data-action="farm"]'),farm=p.economyTasks?.farmTask;if(farmButton){farmButton.textContent=farm?`农场 ${Math.max(0,farm.finishAt-s.time).toFixed(1)}s`:'建造农场';farmButton.disabled=!!farm||s.phase==='ended'||p.gold<RULES.farmCost||p.wood<RULES.farmWoodCost||p.populationCap>=RULES.maxPopulation;}
   if(s.wave!==lastWave){lastWave=s.wave;panelKey='';sound('wave');toast(`第 ${s.wave} 波${s.wave>=31&&!sandbox?'追加':'准备'}：${wave.name}`);save();}
@@ -310,7 +371,8 @@ function help(which='play'){
   $('help-dialog').showModal();
 }
 
-$('panel-content').addEventListener('click',e=>{const target=e.target.closest('button');if(!target||target.disabled)return;if(target.dataset.treasure){command('treasure',{treasureId:target.dataset.treasure,reward:target.dataset.reward,buildingId:target.closest('[data-treasure-id]')?.querySelector('[data-treasure-target]')?.value});return;}if(target.dataset.unit){cancelBuild();buildUnit=target.dataset.unit;battlefield.buildUnit=buildUnit;selected={type:'unit',unitId:buildUnit};battlefield.selected=null;$('battlefield').classList.add('building');$('build-hint').textContent=`${defs[buildUnit].heroEntry?'建造':'部署'} ${defs[buildUnit].name} · ${unitPrice(defs[buildUnit])} · 点击自己的空格`; $('build-hint').hidden=false;panelKey='';selectionKey='';renderPanel();updateSelection();updateBuildPanel();sound();}if(target.dataset.heroBuilding){const building=game.state.players[0].buildings.find(b=>b.id===target.dataset.heroBuilding);if(building){cancelBuild();focus(0);select({type:'building',buildingId:building.id,playerId:0});}}if(target.dataset.builder)command('builder',{builderId:target.dataset.builder});if(target.dataset.merc)command('merc',{mercId:target.dataset.merc});if(target.dataset.hero)command('hero',{heroId:target.dataset.hero});if(target.dataset.king)command('king',{stat:target.dataset.king});if(target.dataset.action==='heroes'){const panel=$('panel-content'),section=panel.querySelector('.hero-section');if(section){panel.scrollTop=section.offsetTop-panel.offsetTop;section.querySelector('[data-unit]:not(:disabled)')?.focus({preventScroll:true});}}else if(target.dataset.action==='kingmove'){cancelBuild();kingMoveMode=true;buildUnit=null;battlefield.buildUnit=null;focus(8);$('build-hint').hidden=false;$('build-hint').textContent='点击可行走地面，移动联盟国王 · Esc取消';}else if(target.dataset.action==='catalog')openCatalog();else if(target.dataset.action)command(target.dataset.action);});
+$('panel-content').addEventListener('click',e=>{const target=e.target.closest('button');if(!target||target.disabled)return;if(claimBoxGift(target))return;if(target.dataset.treasure){command('treasure',{treasureId:target.dataset.treasure,reward:target.dataset.reward,buildingId:target.closest('[data-treasure-id]')?.querySelector('[data-treasure-target]')?.value});return;}if(target.dataset.unit){cancelBuild();buildUnit=target.dataset.unit;battlefield.buildUnit=buildUnit;selected={type:'unit',unitId:buildUnit};battlefield.selected=null;$('battlefield').classList.add('building');$('build-hint').textContent=`${defs[buildUnit].heroEntry?'建造':'部署'} ${defs[buildUnit].name} · ${unitPrice(defs[buildUnit])} · 点击自己的空格`; $('build-hint').hidden=false;panelKey='';selectionKey='';renderPanel();updateSelection();updateBuildPanel();sound();}if(target.dataset.heroBuilding){const building=game.state.players[0].buildings.find(b=>b.id===target.dataset.heroBuilding);if(building){cancelBuild();focus(0);select({type:'building',buildingId:building.id,playerId:0});}}if(target.dataset.builder)command('builder',{builderId:target.dataset.builder});if(target.dataset.merc)command('merc',{mercId:target.dataset.merc});if(target.dataset.hero)command('hero',{heroId:target.dataset.hero});if(target.dataset.king)command('king',{stat:target.dataset.king});if(target.dataset.action==='heroes'){const panel=$('panel-content'),section=panel.querySelector('.hero-section');if(section){panel.scrollTop=section.offsetTop-panel.offsetTop;section.querySelector('[data-unit]:not(:disabled)')?.focus({preventScroll:true});}}else if(target.dataset.action==='kingmove'){cancelBuild();kingMoveMode=true;buildUnit=null;battlefield.buildUnit=null;focus(8);$('build-hint').hidden=false;$('build-hint').textContent='点击可行走地面，移动联盟国王 · Esc取消';}else if(target.dataset.action==='catalog')openCatalog();else if(target.dataset.action)command(target.dataset.action);});
+$('panel-content').addEventListener('change',e=>{const field=e.target;if(!field.matches('[data-box-building],[data-box-unit]'))return;const card=field.closest('[data-box-offer]'),selection=boxGiftSelections[card?.dataset.boxOffer];if(!selection)return;if(field.matches('[data-box-building]')){selection.buildingId=field.value;selection.unitId='';}else selection.unitId=field.value;updateBoxGiftPanel();});
 $('selection-actions').addEventListener('click',e=>{const t=e.target.closest('button');if(!t||t.disabled)return;if(t.dataset.castSkill){const entity=game.state.entities.find(v=>String(v.id)===t.dataset.castEntity&&isEntityVisible(v)),skill=entity?game.unitSkillStatus?.(entity.id,0).find(a=>a.id===t.dataset.castSkill):null;if(!skill?.canStart){toast(skill?.reason||'当前技能不可用',true);return;}if(spellTargetMode?.entityId===entity.id&&spellTargetMode.skillId===skill.id){clearSpellTarget();updateUI();return;}if(skill.targetKind==='none'){clearSpellTarget();command('cast',{entityId:entity.id,skillId:skill.id,playerId:0});}else startSpellTarget(entity.id,skill);return;}if(t.dataset.upgrade)command('upgrade',{buildingId:selected?.buildingId,unitId:t.dataset.upgrade});if(t.dataset.sell){command('sell',{buildingId:t.dataset.sell});select(null);}if(t.dataset.cancel)cancelBuild();if(t.dataset.inspect)openCatalog(t.dataset.inspect);if(t.dataset.form)command('form',{buildingId:t.dataset.form});if(t.dataset.stim)command('stim',{buildingId:t.dataset.stim});});
 document.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click',()=>{tab=b.dataset.tab;document.querySelectorAll('[data-tab]').forEach(x=>{const active=x===b;x.classList.toggle('active',active);x.setAttribute('aria-selected',String(active));});panelKey='';renderPanel();updateBuildPanel();}));
 $('worker').onclick=()=>command('worker');$('lumber').onclick=()=>command('lumber');$('ready').onclick=()=>command('ready');$('pause').onclick=()=>command('pause');$('interfere').onclick=()=>{if(tMonsterMode){cancelBuild();return;}cancelBuild();tMonsterMode=true;battlefield.targetRadius=RULES.interfereRadius;const r=$('battlefield').getBoundingClientRect();battlefield.pointerPoint={x:r.width/2,y:r.height*.48};$('battlefield').classList.add('targeting');$('build-hint').hidden=false;$('build-hint').textContent='T怪：点击圆内怪物位置 · 双方怪物均可 · Esc取消';updateUI();};$('heal').onclick=()=>{const r=command('heal');if(r.ok)focus(8);};
@@ -341,6 +403,8 @@ $('sandbox-enable-qualification').onclick=()=>sandboxCommand('sandboxQualificati
 $('sandbox-disable-qualification').onclick=()=>sandboxCommand('sandboxQualification',{key:$('sandbox-qualification').value,enabled:false});
 $('sandbox-enable-all').onclick=()=>sandboxCommand('sandboxQualification',{keys:[...SANDBOX_QUALIFICATION_KEYS],enabled:true});
 $('sandbox-disable-all').onclick=()=>sandboxCommand('sandboxQualification',{keys:[...SANDBOX_QUALIFICATION_KEYS],enabled:false});
+const boxTrainingTestButton=document.createElement('button');boxTrainingTestButton.id='sandbox-box-training';boxTrainingTestButton.dataset.sandbox='sandboxBoxTraining';boxTrainingTestButton.innerHTML='<b>训练礼物测试</b><small>测试赠予一组含兵种训练的礼物，替换当前组选项</small>';$('sandbox-dialog').querySelector('.sandbox-actions').append(boxTrainingTestButton);
+const boxTrainingTestNote=document.createElement('p');boxTrainingTestNote.className='sandbox-foot box-gift-test-note';boxTrainingTestNote.textContent='测试礼物须显式点击赠予。普通对局清完第6波后随机三选一，清完第13波后替换当前组选项。';boxTrainingTestButton.parentElement.after(boxTrainingTestNote);
 document.querySelectorAll('[data-sandbox]').forEach(button=>button.onclick=()=>sandboxCommand(button.dataset.sandbox));
 $('sandbox-end-reset').onclick=()=>sandboxCommand('sandboxReset');
 document.querySelectorAll('.close-dialog').forEach(b=>b.onclick=()=>b.closest('dialog').close());document.querySelectorAll('dialog').forEach(d=>d.addEventListener('click',e=>{if(e.target===d){const r=d.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)d.close();}}));

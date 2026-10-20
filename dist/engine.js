@@ -1,10 +1,11 @@
-import { UNITS, MERCENARIES, LEGACY_MERCENARIES, WAVES, RULES, HEROES, BUILDERS, PROPHET_POOLS, UNIT_TEMPLATES } from './data.js';
+import { UNITS, MERCENARIES, LEGACY_MERCENARIES, WAVES, RULES, HEROES, BUILDERS, PROPHET_POOLS, UNIT_TEMPLATES, TECHNOLOGIES, BOX_TRAINING_RULES } from './data.js';
 import { attachSkills, refreshSourceSkills, initializeSourceSkills, compileSkills, sourceAuraEffects, tickSourceSkills, sourceAttackStart, sourceOnHit, modifyIncoming, beforeSourceDamage, afterSourceDamage, sourceDeath, sourceMoveFactor, canWeaponTarget, sourceWeapon, tickSourceScriptJobs, manualSourceSkills, castManualSourceSkill } from './skills.js';
 import { MAP, laneToWorld, worldToLane, kingWorld, spawnWarpWorld, supportWorld, routePoints, isWalkable, isSegmentWalkable, constrainPoint, closestWalkable, navigationPath } from './layout.js';
 import { recordEggCompletion, restoreEggHistory, finishEggWave, recordBeastKingKill, eggRequirementStatus, appearanceQualificationStatus } from './egg-rules.js';
 import { queueSpecialMonsters, applySpecialMonsterSpawn, specialMonsterDeath, sourceEconomyBuildStart, sourceEconomyUpgradeFinish, farmerGoldRate, sourceEconomyDeath, applyFarmerRoundReward } from './special-rules.js';
 import { alchemistDeathReward } from './alchemist-rules.js';
 import { applySandboxQualification } from './sandbox-qualifications.js';
+import { BOX_REWARD_RULES, advanceBoxRewards, migrateBoxRewardProgress, boxTrainingRewardStatus, boxTrainingTargetStatus, boxTrainingCost, boxTrainingReplacementState, consumeBoxTrainingReward, claimBoxReward, completeBoxSwap, boxBuildFreeRefund } from './box-training-rules.js';
 
 const units = Object.fromEntries(UNITS.map(u => [u.id, u]));
 const mercs = Object.fromEntries([...LEGACY_MERCENARIES, ...MERCENARIES].map(u => [u.id, u]));
@@ -33,6 +34,15 @@ for (const code of ['h201', 'h204']) sourceLimits[code] = { unitRawcode: 'h201',
 const gameMode = mode => mode === 'sandbox' ? 'sandbox' : 'normal';
 const SANDBOX_RESOURCES = 100000;
 const SANDBOX_POPULATION = 300;
+const BOX_PLAYER_DESCRIPTIONS={
+  A131:'立即免费提升一级农场，增加人口上限。',A132:'在自己的建造区获得一个随机三级兵。',
+  A133:'获得50金币。',A134:'获得150木材。',A135:'所选军团永久增加300生命、1护甲。',A136:'所选军团永久增加30攻击、10%攻速。',
+  A13M:'给建造者获得“死亡一指”主动技能。',A2ZA:'选择己方兵种，支付目标原价40%的金币和木材，即时训练为目标分支；成功后用完本组礼物。',
+  A2ZB:'获得一次免费建造资格；科技快捷升级入口尚未接入。',A2ZC:'所选单位永久获得护盾，受到的敌对伤害降低15%。',
+  A2ZD:'先选择一个己方军团，再选择另一个，交换两者的建造位置。',A2ZE:'拆除所选兵种，按兵力值返还金币，不返还木材。',
+  A140:'立即免费提升一级伐木科技。',A13N:'在自己的建造区获得一个随机六级兵。',A13O:'获得300金币。',A13P:'获得800木材。',
+  A13Q:'所选军团永久增加800生命、2护甲及每秒40生命恢复。',A13R:'所选军团永久增加80攻击、20%攻速，获得40%概率的双倍暴击。',A13S:'给建造者获得“雷霆一击”主动技能。',
+};
 
 
 
@@ -66,7 +76,7 @@ export class Game {
         armor: rule('kingArmor', 8), armorType: 'hero', attackType: 'hero', autoUpgradeCount: 0, healBlockedUntil: 0,
         id:`king-${team}`,unitId:'king',side:'defender',isKing:true,battleTeam:team,laneId:8+team,status:{},targetType:'structure',traits:['mechanical'],isBuilding:true,hpLevel: 0, attackLevel: 0, regenLevel: 0, attackCd: 0, worldX: kingWorld(team).x, worldY: kingWorld(team).y, radius: .8 })),
       entities: [], sourceSkillJobs: [], nagaScriptCasters: {}, events: [], logs: [], pendingSends: [], kingBountyPools: [0, 0], teamLeakFlags: [false, false],
-      metrics: { spawned: 0, killed: 0, leaked: 0 },
+      metrics: { spawned: 0, killed: 0, leaked: 0 }, boxRewardProgress: { firstGranted:false, secondGranted:false },
     };
     for (const p of this.state.players) {
       p.roster = this._roster(p.builderId);
@@ -111,6 +121,7 @@ export class Game {
     return {canStart,reason:canStart?'':`${u.name}来源限造${limit.maxAllowed}个（含施工及预留）`,current,max:limit.maxAllowed,scope:limit.scope,rawcode:limit.unitRawcode,source:limit.source};
   }
   _recordLimitOrigins(b, def) {
+    delete b.boxLimitTransferred;
     const next=sourceLimits[rawcode(def)];b.limitOrigins??=[];
     // Native base_id keeps a normal lineage through unlimited upgrades; a new
     // limited branch replaces marker-free base groups (JASS28440—28447).
@@ -270,6 +281,57 @@ export class Game {
       unitArmor:[0,15,30,50][t.level]??0,targets,
       lumberAvailable:!!t.canLumber&&!!this._treasureLumberBranch(p),
     }));
+  }
+  _boxDefinition(b) {const def=units[b?.unitId];return UNIT_TEMPLATES[rawcode(def)]??def;}
+  _boxCombatDefinition(def,b) {return b?.permanentAbilityIds?.length?{...def,abilityIds:[...new Set([...(def.abilityIds??[]),...b.permanentAbilityIds])]}:def;}
+  _boxOwnedTargets(p,kind='ownedNotSelf') {
+    return p.buildings.filter(b=>{
+      const def=this._boxDefinition(b),flags=String(def?.sourceRawFields?.type??'').split(',');
+      return def&&b.hp!==0&&b.removed!==true&&(kind!=='ancient'||flags.includes('ancient'))&&(kind!=='ownedNonTauren'||!flags.includes('tauren'))&&(kind!=='ownedNonHero'||!['STR','AGI','INT'].includes(def.sourceRawFields?.Primary));
+    });
+  }
+  _boxTechStatus(p,def) {
+    const codes=BOX_TRAINING_RULES.targetRequirements?.[rawcode(def)]?.rawRequirements??[];
+    const requirements=codes.map(code=>def.requiresDetails?.find(r=>r.rawcode===code)??{rawcode:code,name:TECHNOLOGIES[code]?.name??UNIT_TEMPLATES[code]?.name??code});
+    // The native helper reads only its registered tech list. Ordinary menu
+    // caps, appearance purchase gates and altar selection rules do not run.
+    const all=this.requirementStatus({...def,requiresDetails:requirements,documentGate:null,heroEntry:false,heroChoice:false},p.id).requirements.filter(r=>r.kind!=='build_limit');
+    const failed=all.find(r=>!r.met);
+    return {canStart:!failed,reason:failed?failed.kind==='battle_end'?'等到战斗结束':failed.kind==='military'?`需要军力 ${failed.required}`:`未满足训练条件：${failed.name}`:'',requirements:all};
+  }
+  _boxLimitReady(p,old,def,limit) {
+    if(!limit)return true;
+    const code=rawcode(def),used=p.buildings.filter(b=>b.id!==old.id&&b.hp!==0&&(rawcode(units[b.unitId])===code||!limit.limitidEx&&(b.baseId===code||b.limitOrigins?.includes(code)))).length;
+    return used<limit.count;
+  }
+  boxTrainingStatus(buildingId,playerId=0) {
+    const p=this.state.players[playerId],b=p?.buildings.find(b=>b.id===buildingId),reward=boxTrainingRewardStatus(p);
+    if(!p||!b)return {canStart:false,reason:'请选择自己的训练单位',targets:[]};
+    const def=units[b.unitId],provider={id:p.boxRewards?.providerId,ownerId:p.id},selection=BOX_TRAINING_RULES.selections[rawcode(def)];
+    const targets=(selection?.rawTargets??[]).map(code=>UNITS.find(u=>!u.legacy&&rawcode(u)===code)).filter(Boolean).map(next=>{
+      const gate=this._boxTechStatus(p,next),status=boxTrainingTargetStatus(p,provider,b,next,{getDefinition:u=>this._boxDefinition(u),isNativeHero:u=>['STR','AGI','INT'].includes(this._boxDefinition(u)?.sourceRawFields?.Primary),techReady:()=>gate.canStart,limitReady:(owner,old,target,limit)=>this._boxLimitReady(owner,old,target,limit)});
+      const reason=!status.canStart&&status.reason.includes('科技')?gate.reason:status.reason??'';
+      return {unitId:next.id,name:next.name,cost:status.fee??boxTrainingCost(next),canStart:this.state.phase!=='ended'&&status.canStart,reason:this.state.phase==='ended'?'本局已结束':reason};
+    });
+    return {canStart:targets.some(t=>t.canStart),reason:!reward.available?reward.reason:!targets.length?'该单位没有已核定的训练分支':targets.every(t=>!t.canStart)?targets[0].reason:'',targets};
+  }
+  boxRewardStatus(playerId=0) {
+    const p=this.state.players[playerId],holder=p?.boxRewards;if(!p||!holder)return null;
+    const offers=(!holder.consumed?holder.abilityIds??[]:[]).map(id=>{
+      const entry=BOX_REWARD_RULES[id];if(!entry)return null;
+      const training=entry.handler==='training',targetKind=training?'training':['ancient','ownedNotSelf','ownedNonTauren'].includes(entry.targetKind)?'building':'none';
+      const targets=targetKind==='none'?[]:this._boxOwnedTargets(p,training?'ownedNonHero':entry.targetKind).map(b=>({buildingId:b.id,name:units[b.unitId]?.name??b.unitId}));
+      let reason='';
+      if(entry.handler==='randomFighter')reason='随机兵种礼物尚未接入，可保留礼物或选择其他奖励';
+      else if(entry.handler==='builderAbility')reason='建造者主动施法尚未接入，可保留礼物或选择其他奖励';
+      else if(entry.handler==='farm'&&p.populationCap>=rule('maxPopulation',300))reason='农场人口已达上限';
+      else if(entry.handler==='lumber'&&!this._treasureLumberBranch(p))reason='伐木科技已满（含研究中）';
+      else if(targetKind!=='none'&&!targets.length)reason='没有符合条件的己方单位';
+      if(this.state.phase==='ended')reason='本局已结束';
+      return {id,name:entry.name,description:BOX_PLAYER_DESCRIPTIONS[id]??entry.description,targetKind,targets,canStart:!reason,reason};
+    }).filter(Boolean);
+    if(p.boxSwap){const targets=this._boxOwnedTargets(p,'ancient').filter(b=>b.id!==p.boxSwap.firstTargetId).map(b=>({buildingId:b.id,name:units[b.unitId]?.name??b.unitId}));offers.push({id:'A2ZF',name:'完成单位换位',description:'选择另一个己方单位，交换两个建筑的位置；第二次选择失败不会丢失换位资格。',targetKind:'building',targets,canStart:targets.length>0,reason:targets.length?'':'还需要另一个己方远古单位'});}
+    return offers.length?{providerId:holder.providerId,tier:holder.tier,sourceWave:holder.sourceWave,pendingSwap:!!p.boxSwap,offers}:null;
   }
   _woodRate(p) {
     const difficulty = p.team === 1 ? ({ easy: .85, normal: 1, hard: 1.18 }[this.options.difficulty] ?? 1) : 1;
@@ -480,6 +542,10 @@ export class Game {
       return this._result(true, '本波已重置，可调整阵容后再次出兵');
     }
     if(type==='sandboxQualification'){const result=applySandboxQualification(this,payload);return this._result(result.ok,result.message);}
+    if(type==='sandboxBoxTraining'){
+      p.boxRewards={providerId:`box-n060-${p.id}`,providerRawcode:'n060',ownerId:p.id,tier:'box',abilityIds:['A2ZA','A133','A134'],sourceWave:6,consumed:false,testGrant:true};
+      delete p.boxSwap;return this._result(true,'已赠予沙盒训练测试礼物，请在神秘礼物面板选择训练目标');
+    }
     if (!['sandboxBuilder', 'sandboxClear', 'sandboxComplete', 'sandboxAI'].includes(type)) return this._result(false, '未知测试指令');
     if (this.state.phase !== 'build') return this._result(false, '请先重置本波，再使用备战期测试指令');
     switch (type) {
@@ -522,6 +588,35 @@ export class Game {
     const p = this._getPlayer(payload);
     if (!p) return this._result(false, '玩家不存在');
     switch (type) {
+      case 'boxTrain': {
+        const found=this._building(payload.buildingId),status=this.boxTrainingStatus(payload.buildingId,p.id),choice=status.targets.find(t=>t.unitId===payload.unitId);
+        if(!found||found.p.id!==p.id||!choice?.canStart)return this._result(false,choice?.reason||status.reason||'该训练分支不可用');
+        const old=found.b,def=units[old.unitId],next=units[choice.unitId],native=UNIT_TEMPLATES[rawcode(next)]??next;
+        const replacement={...boxTrainingReplacementState(old,native),id:this._uid('b'),ownerId:p.id,userData:old.userData??p.id+1,unitId:next.id,col:old.col,row:old.row,
+          spent:choice.cost.gold,totalSpent:choice.cost.gold,boxLimitTransferred:true,boxTraining:{fromRawcode:rawcode(def),at:this.state.time,sourceWave:p.boxRewards.sourceWave}};
+        // Revalidation above performs every possible failure before mutation.
+        // Native replacement destroys the old handle and its arbitrary state.
+        p.gold-=choice.cost.gold;p.wood-=choice.cost.wood;
+        sourceEconomyUpgradeFinish(this,p,old,def);
+        p.buildings.splice(p.buildings.indexOf(old),1,replacement);
+        this._recordSourceCompletion(p,next);this._recordEggCompletion(p,next,replacement);
+        consumeBoxTrainingReward(p);p.popUsed=this._population(p);
+        this._event('upgrade',{laneId:p.id,x:old.col+.5,y:old.row+4.5},`训练为 ${next.name}`);
+        return this._result(true,`已训练为 ${next.name}，消耗${choice.cost.gold}金、${choice.cost.wood}木及整组礼物`);
+      }
+      case 'boxReward': {
+        const offer=this.boxRewardStatus(p.id)?.offers.find(o=>o.id===payload.abilityId);
+        if(!offer?.canStart)return this._result(false,offer?.reason??'当前没有此神秘礼物奖励');
+        const target=p.buildings.find(b=>b.id===payload.buildingId),api={getDefinition:b=>this._boxDefinition(b),getTarget:()=>target,
+          upFarm:()=>{if(p.populationCap>=rule('maxPopulation',300))return false;p.populationCap=Math.min(rule('maxPopulation',300),p.populationCap+rule('farmPopulation',8));return true;},
+          upLumbering:()=>{const branch=this._treasureLumberBranch(p);if(!branch)return false;const task=p.economyTasks?.lumberTask,levels=this._sourceLumberLevels(p);if(branch==='advanced'&&levels.basic<rule('lumberBasicLevelCap',7))p.lumberAdvancedWhileBasicQueued=number(p.lumberAdvancedWhileBasicQueued,0)+1;p.lumberLevel++;if(task)task.targetLevel++;return true;},
+          grantAbilities:(_owner,b,ids)=>{b.permanentAbilityIds=[...new Set([...(b.permanentAbilityIds??[]),...ids])];return true;},
+          demolish:(_owner,b,refund)=>{p.gold+=refund.gold;p.buildings=p.buildings.filter(old=>old!==b);return true;},
+          swap:(_owner,a,b)=>{[a.col,b.col]=[b.col,a.col];[a.row,b.row]=[b.row,a.row];return true;},
+        };
+        const result=payload.abilityId==='A2ZF'?completeBoxSwap(this,p,target,api):claimBoxReward(this,p,payload.abilityId,payload,api);
+        return this._result(result.ok,result.message??result.reason);
+      }
       case 'cast':{
         const e=this.state.entities.find(e=>e.id===payload.entityId),s=this.unitSkillStatus(payload.entityId,p.id).find(s=>s.id===payload.skillId);
         if(!s||!s.canStart)return this._result(false,s?.reason??'当前单位不能释放此技能');
@@ -649,6 +744,7 @@ export class Game {
         const task = { id: this._uid('eco'), type: 'worker', duration: status.duration, startAt, finishAt: startAt + status.duration,
           cost: { ...status.cost }, targetLevel: p.workers + tasks.workerQueue.length + 1 };
         p.gold -= status.cost.gold; p.wood -= status.cost.wood; tasks.workerQueue.push(task);
+        boxBuildFreeRefund(p,status.cost.gold,status.cost.wood,{context:'native-worker',rawcode:'e003'});
         return this._result(true, `小精灵已加入招募队列，耗时 ${status.duration} 秒`);
       }
       case 'lumber': {
@@ -879,6 +975,7 @@ export class Game {
   }
   _spawnDefender(def, player, x, y, buildingId, isHero = false) {
     if (!def || (isSourceUnit(def)&&!def.combatRawcode)) return;
+    def=this._boxCombatDefinition(def,player.buildings.find(b=>b.id===buildingId));
     const e = this._entity(def, { team: player.team, side: 'defender', laneId: player.id,
       ownerId: player.id, sourceLaneId: player.id, x, y, buildingId, isHero });
     // PassiveSkill copies A1PE from the persistent building on every deployment.
@@ -1353,6 +1450,8 @@ export class Game {
       this._resetSandboxWave(); this._log(`测试沙盒：第 ${s.wave} 波测试完成，回到备战；未结算过波奖励，可再次手动出兵。`);
       return;
     }
+    const boxGrants=advanceBoxRewards(this,s.wave);
+    if(boxGrants.some(g=>g.playerId===0))this._log(`神秘礼物：第${s.wave>=13?13:6}波礼物已开放，三项中任选一项。`);
     // A cleared round discards its temporary dummies before preparation/arena.
     s.sourceSkillJobs = []; s.nagaScriptCasters = {}; s.sourceAuraNextAt=Math.floor(s.time)+1;
     const listedReward = RULES.waveRewards?.[s.wave - 1];
@@ -1385,7 +1484,7 @@ export class Game {
     this._completeMilitaryConstruction();
     const s=this.state;s.phase='combat';s.roundMode='arena';s.entities=[];s.sourceSkillJobs=[];s.nagaScriptCasters={};s.sourceAuraNextAt=Math.floor(s.time)+1;s.timer=0;s.arenaRemaining=rule('arenaBattleLimitSeconds',120);this._spawnQueue=[];this._roundTime=0;
     for(const p of s.players)for(const b of p.buildings.filter(b=>!b.construction)){
-      const def=units[b.unitId];if(!def||(isSourceUnit(def)&&!def.combatRawcode))continue;const point=laneToWorld(0,1.2+(p.id%4)*1.1+(b.col-2.5)*.12,p.team===0?5+(b.row/8):9-(b.row/8));
+      let def=units[b.unitId];if(!def||(isSourceUnit(def)&&!def.combatRawcode))continue;def=this._boxCombatDefinition(def,b);const point=laneToWorld(0,1.2+(p.id%4)*1.1+(b.col-2.5)*.12,p.team===0?5+(b.row/8):9-(b.row/8));
       const e=this._entity(def,{team:p.team,side:`arena${p.team}`,battleTeam:0,laneId:0,sourceLaneId:p.id,ownerId:p.id,buildingId:b.id,isArena:true,worldX:point.x,worldY:point.y});
       e.armor+=number(b.treasureArmor,0);
       if(b.garroshArmorLevel){e.armor+=b.garroshArmorLevel;e.status.garroshArmorLevel=b.garroshArmorLevel;}
@@ -1544,13 +1643,14 @@ export class Game {
       this.state.dataRevision=RULES.dataRevision;this.state.migrationNotice='旧存档已按文档迁移，原始存档已备份；无法映射的历史Web单位继续标记为兼容单位。';
     }
     this.state.kingBountyPools ??= [0, 0]; this.state.sourceSkillJobs??=[]; this.state.nagaScriptCasters??={}; this.state.teamLeakFlags??=[false,false];
+    migrateBoxRewardProgress(this,{legacySnapshot:true});
     for (const p of this.state.players) {
       p.builderId??=RULES.defaultBuilderId;
       p.nagaFarmerGoldRate=farmerGoldRate(p,units);
       p.heroAltarCount=this._heroAltarCount(p);
       for(const b of p.buildings.filter(b=>!b.construction))this._recordSourceCompletion(p,units[b.unitId]);
       restoreEggHistory(p,{wave:this.state.wave,buildings:p.buildings,unitsById:units});
-      for(const b of p.buildings)if(!b.construction)this._recordLimitOrigins(b,units[b.unitId]);
+      for(const b of p.buildings)if(!b.construction&&!b.boxLimitTransferred)this._recordLimitOrigins(b,units[b.unitId]);
       if(p.workers>rule('maxWorkers',7)||p.lumberLevel>rule('maxLumberLevel',15)){p.workers=Math.min(p.workers,rule('maxWorkers',7));p.lumberLevel=Math.min(p.lumberLevel,rule('maxLumberLevel',15));this.state.migrationNotice=`旧存档已限制为${RULES.maxWorkers}小精灵、${RULES.maxLumberLevel}级科技；原进度已保留备份。`;}
       const tasks=this._economyTasks(p);tasks.workerQueue=tasks.workerQueue.slice(0,Math.max(0,rule('maxWorkers',7)-p.workers));if(tasks.lumberTask?.targetLevel>rule('maxLumberLevel',15))tasks.lumberTask=null;
       p.popUsed = this._population(p);

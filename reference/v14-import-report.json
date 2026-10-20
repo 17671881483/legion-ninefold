@@ -1,0 +1,8888 @@
+{
+  "generator": "scripts/import-v14.py",
+  "sourceVersion": "军团战争 v14.1A5 · 九倍怪物",
+  "activeUnitCount": 534,
+  "boxTraining": {
+    "selections": {
+      "h010": {
+        "sourceRawcode": "h010",
+        "count": 1,
+        "rawTargets": [
+          "h011"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2196
+        ],
+        "countScriptLine": 2195
+      },
+      "h011": {
+        "sourceRawcode": "h011",
+        "count": 1,
+        "rawTargets": [
+          "h100"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2198
+        ],
+        "countScriptLine": 2197
+      },
+      "h012": {
+        "sourceRawcode": "h012",
+        "count": 1,
+        "rawTargets": [
+          "h013"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2200
+        ],
+        "countScriptLine": 2199
+      },
+      "h013": {
+        "sourceRawcode": "h013",
+        "count": 1,
+        "rawTargets": [
+          "h0OX"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2202
+        ],
+        "countScriptLine": 2201
+      },
+      "h014": {
+        "sourceRawcode": "h014",
+        "count": 2,
+        "rawTargets": [
+          "h015",
+          "n0JG"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2204,
+          2205
+        ],
+        "countScriptLine": 2203
+      },
+      "h016": {
+        "sourceRawcode": "h016",
+        "count": 1,
+        "rawTargets": [
+          "h017"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2207
+        ],
+        "countScriptLine": 2206
+      },
+      "h017": {
+        "sourceRawcode": "h017",
+        "count": 1,
+        "rawTargets": [
+          "h0QV"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2209
+        ],
+        "countScriptLine": 2208
+      },
+      "h018": {
+        "sourceRawcode": "h018",
+        "count": 1,
+        "rawTargets": [
+          "h019"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2211
+        ],
+        "countScriptLine": 2210
+      },
+      "h01A": {
+        "sourceRawcode": "h01A",
+        "count": 2,
+        "rawTargets": [
+          "h01B",
+          "h11B"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2213,
+          2214
+        ],
+        "countScriptLine": 2212
+      },
+      "h01B": {
+        "sourceRawcode": "h01B",
+        "count": 1,
+        "rawTargets": [
+          "n066"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2216
+        ],
+        "countScriptLine": 2215
+      },
+      "h11B": {
+        "sourceRawcode": "h11B",
+        "count": 1,
+        "rawTargets": [
+          "n066"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2218
+        ],
+        "countScriptLine": 2217
+      },
+      "h0R8": {
+        "sourceRawcode": "h0R8",
+        "count": 1,
+        "rawTargets": [
+          "n066"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2220
+        ],
+        "countScriptLine": 2219
+      },
+      "h00M": {
+        "sourceRawcode": "h00M",
+        "count": 1,
+        "rawTargets": [
+          "h00T"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2222
+        ],
+        "countScriptLine": 2221
+      },
+      "h00T": {
+        "sourceRawcode": "h00T",
+        "count": 1,
+        "rawTargets": [
+          "h203"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2224
+        ],
+        "countScriptLine": 2223
+      },
+      "h00O": {
+        "sourceRawcode": "h00O",
+        "count": 2,
+        "rawTargets": [
+          "h00X",
+          "h00Y"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2226,
+          2227
+        ],
+        "countScriptLine": 2225
+      },
+      "h00X": {
+        "sourceRawcode": "h00X",
+        "count": 1,
+        "rawTargets": [
+          "h1S2"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2229
+        ],
+        "countScriptLine": 2228
+      },
+      "h0P5": {
+        "sourceRawcode": "h0P5",
+        "count": 1,
+        "rawTargets": [
+          "h1S2"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2231
+        ],
+        "countScriptLine": 2230
+      },
+      "h2AB": {
+        "sourceRawcode": "h2AB",
+        "count": 1,
+        "rawTargets": [
+          "h1S2"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2233
+        ],
+        "countScriptLine": 2232
+      },
+      "h00Y": {
+        "sourceRawcode": "h00Y",
+        "count": 2,
+        "rawTargets": [
+          "h1S4",
+          "n07R"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2235,
+          2236
+        ],
+        "countScriptLine": 2234
+      },
+      "h00P": {
+        "sourceRawcode": "h00P",
+        "count": 1,
+        "rawTargets": [
+          "h00Z"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2238
+        ],
+        "countScriptLine": 2237
+      },
+      "h00N": {
+        "sourceRawcode": "h00N",
+        "count": 1,
+        "rawTargets": [
+          "h00U"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2240
+        ],
+        "countScriptLine": 2239
+      },
+      "h00Q": {
+        "sourceRawcode": "h00Q",
+        "count": 1,
+        "rawTargets": [
+          "h00W"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2242
+        ],
+        "countScriptLine": 2241
+      },
+      "h00S": {
+        "sourceRawcode": "h00S",
+        "count": 1,
+        "rawTargets": [
+          "h00V"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2244
+        ],
+        "countScriptLine": 2243
+      },
+      "h01C": {
+        "sourceRawcode": "h01C",
+        "count": 1,
+        "rawTargets": [
+          "h01D"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2246
+        ],
+        "countScriptLine": 2245
+      },
+      "h01D": {
+        "sourceRawcode": "h01D",
+        "count": 1,
+        "rawTargets": [
+          "h0O6"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2248
+        ],
+        "countScriptLine": 2247
+      },
+      "h01E": {
+        "sourceRawcode": "h01E",
+        "count": 1,
+        "rawTargets": [
+          "h01F"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2250
+        ],
+        "countScriptLine": 2249
+      },
+      "h01H": {
+        "sourceRawcode": "h01H",
+        "count": 2,
+        "rawTargets": [
+          "h01G",
+          "h11G"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2252,
+          2253
+        ],
+        "countScriptLine": 2251
+      },
+      "h01I": {
+        "sourceRawcode": "h01I",
+        "count": 1,
+        "rawTargets": [
+          "h01J"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2255
+        ],
+        "countScriptLine": 2254
+      },
+      "h01K": {
+        "sourceRawcode": "h01K",
+        "count": 1,
+        "rawTargets": [
+          "h01L"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2257
+        ],
+        "countScriptLine": 2256
+      },
+      "h01M": {
+        "sourceRawcode": "h01M",
+        "count": 2,
+        "rawTargets": [
+          "h01N",
+          "h01O"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2259,
+          2260
+        ],
+        "countScriptLine": 2258
+      },
+      "h01P": {
+        "sourceRawcode": "h01P",
+        "count": 3,
+        "rawTargets": [
+          "h01Q",
+          "h01R",
+          "h01S"
+        ],
+        "indices": [
+          1,
+          2,
+          3
+        ],
+        "scriptLines": [
+          2262,
+          2263,
+          2264
+        ],
+        "countScriptLine": 2261
+      },
+      "h01Q": {
+        "sourceRawcode": "h01Q",
+        "count": 1,
+        "rawTargets": [
+          "h0JK"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2266
+        ],
+        "countScriptLine": 2265
+      },
+      "h0OD": {
+        "sourceRawcode": "h0OD",
+        "count": 1,
+        "rawTargets": [
+          "h0JK"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2268
+        ],
+        "countScriptLine": 2267
+      },
+      "h01R": {
+        "sourceRawcode": "h01R",
+        "count": 1,
+        "rawTargets": [
+          "h0JO"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2270
+        ],
+        "countScriptLine": 2269
+      },
+      "h01S": {
+        "sourceRawcode": "h01S",
+        "count": 1,
+        "rawTargets": [
+          "h0JQ"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2272
+        ],
+        "countScriptLine": 2271
+      },
+      "h01T": {
+        "sourceRawcode": "h01T",
+        "count": 2,
+        "rawTargets": [
+          "h01U",
+          "n0JI"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2274,
+          2275
+        ],
+        "countScriptLine": 2273
+      },
+      "h01V": {
+        "sourceRawcode": "h01V",
+        "count": 1,
+        "rawTargets": [
+          "h01W"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2277
+        ],
+        "countScriptLine": 2276
+      },
+      "h01X": {
+        "sourceRawcode": "h01X",
+        "count": 1,
+        "rawTargets": [
+          "h01Y"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2279
+        ],
+        "countScriptLine": 2278
+      },
+      "h01Z": {
+        "sourceRawcode": "h01Z",
+        "count": 1,
+        "rawTargets": [
+          "h020"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2281
+        ],
+        "countScriptLine": 2280
+      },
+      "h020": {
+        "sourceRawcode": "h020",
+        "count": 1,
+        "rawTargets": [
+          "n08H"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2283
+        ],
+        "countScriptLine": 2282
+      },
+      "n06T": {
+        "sourceRawcode": "n06T",
+        "count": 1,
+        "rawTargets": [
+          "n08H"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2285
+        ],
+        "countScriptLine": 2284
+      },
+      "n06L": {
+        "sourceRawcode": "n06L",
+        "count": 1,
+        "rawTargets": [
+          "h020"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2287
+        ],
+        "countScriptLine": 2286
+      },
+      "h021": {
+        "sourceRawcode": "h021",
+        "count": 1,
+        "rawTargets": [
+          "h022"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2289
+        ],
+        "countScriptLine": 2288
+      },
+      "h040": {
+        "sourceRawcode": "h040",
+        "count": 1,
+        "rawTargets": [
+          "h041"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2291
+        ],
+        "countScriptLine": 2290
+      },
+      "h042": {
+        "sourceRawcode": "h042",
+        "count": 1,
+        "rawTargets": [
+          "h043"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2293
+        ],
+        "countScriptLine": 2292
+      },
+      "h044": {
+        "sourceRawcode": "h044",
+        "count": 1,
+        "rawTargets": [
+          "h045"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2295
+        ],
+        "countScriptLine": 2294
+      },
+      "h045": {
+        "sourceRawcode": "h045",
+        "count": 1,
+        "rawTargets": [
+          "n086"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2297
+        ],
+        "countScriptLine": 2296
+      },
+      "h046": {
+        "sourceRawcode": "h046",
+        "count": 2,
+        "rawTargets": [
+          "h047",
+          "n0JH"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2299,
+          2300
+        ],
+        "countScriptLine": 2298
+      },
+      "h048": {
+        "sourceRawcode": "h048",
+        "count": 1,
+        "rawTargets": [
+          "h049"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2302
+        ],
+        "countScriptLine": 2301
+      },
+      "h049": {
+        "sourceRawcode": "h049",
+        "count": 1,
+        "rawTargets": [
+          "h102"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2304
+        ],
+        "countScriptLine": 2303
+      },
+      "n07P": {
+        "sourceRawcode": "n07P",
+        "count": 1,
+        "rawTargets": [
+          "h102"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2306
+        ],
+        "countScriptLine": 2305
+      },
+      "h04A": {
+        "sourceRawcode": "h04A",
+        "count": 1,
+        "rawTargets": [
+          "h04B"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2308
+        ],
+        "countScriptLine": 2307
+      },
+      "h05N": {
+        "sourceRawcode": "h05N",
+        "count": 1,
+        "rawTargets": [
+          "h05O"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2310
+        ],
+        "countScriptLine": 2309
+      },
+      "h05O": {
+        "sourceRawcode": "h05O",
+        "count": 1,
+        "rawTargets": [
+          "h05P"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2312
+        ],
+        "countScriptLine": 2311
+      },
+      "h05S": {
+        "sourceRawcode": "h05S",
+        "count": 2,
+        "rawTargets": [
+          "h062",
+          "h05T"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2314,
+          2315
+        ],
+        "countScriptLine": 2313
+      },
+      "h05R": {
+        "sourceRawcode": "h05R",
+        "count": 1,
+        "rawTargets": [
+          "h05U"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2317
+        ],
+        "countScriptLine": 2316
+      },
+      "h05U": {
+        "sourceRawcode": "h05U",
+        "count": 1,
+        "rawTargets": [
+          "h0O8"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2319
+        ],
+        "countScriptLine": 2318
+      },
+      "h05V": {
+        "sourceRawcode": "h05V",
+        "count": 1,
+        "rawTargets": [
+          "h05W"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2321
+        ],
+        "countScriptLine": 2320
+      },
+      "h05X": {
+        "sourceRawcode": "h05X",
+        "count": 1,
+        "rawTargets": [
+          "h05Y"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2323
+        ],
+        "countScriptLine": 2322
+      },
+      "h05Z": {
+        "sourceRawcode": "h05Z",
+        "count": 2,
+        "rawTargets": [
+          "h060",
+          "h160"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2325,
+          2326
+        ],
+        "countScriptLine": 2324
+      },
+      "h06J": {
+        "sourceRawcode": "h06J",
+        "count": 1,
+        "rawTargets": [
+          "h078"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2328
+        ],
+        "countScriptLine": 2327
+      },
+      "h078": {
+        "sourceRawcode": "h078",
+        "count": 1,
+        "rawTargets": [
+          "h06I"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2330
+        ],
+        "countScriptLine": 2329
+      },
+      "h06I": {
+        "sourceRawcode": "h06I",
+        "count": 1,
+        "rawTargets": [
+          "h076"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2332
+        ],
+        "countScriptLine": 2331
+      },
+      "h06K": {
+        "sourceRawcode": "h06K",
+        "count": 1,
+        "rawTargets": [
+          "h06L"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2334
+        ],
+        "countScriptLine": 2333
+      },
+      "h06M": {
+        "sourceRawcode": "h06M",
+        "count": 1,
+        "rawTargets": [
+          "h06N"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2336
+        ],
+        "countScriptLine": 2335
+      },
+      "h06N": {
+        "sourceRawcode": "h06N",
+        "count": 1,
+        "rawTargets": [
+          "h0NP"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2338
+        ],
+        "countScriptLine": 2337
+      },
+      "h06O": {
+        "sourceRawcode": "h06O",
+        "count": 1,
+        "rawTargets": [
+          "h06P"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2340
+        ],
+        "countScriptLine": 2339
+      },
+      "h06P": {
+        "sourceRawcode": "h06P",
+        "count": 1,
+        "rawTargets": [
+          "n03Z"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2342
+        ],
+        "countScriptLine": 2341
+      },
+      "h2A1": {
+        "sourceRawcode": "h2A1",
+        "count": 1,
+        "rawTargets": [
+          "n03Z"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2344
+        ],
+        "countScriptLine": 2343
+      },
+      "h06Q": {
+        "sourceRawcode": "h06Q",
+        "count": 2,
+        "rawTargets": [
+          "h06R",
+          "h16R"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2346,
+          2347
+        ],
+        "countScriptLine": 2345
+      },
+      "h06S": {
+        "sourceRawcode": "h06S",
+        "count": 2,
+        "rawTargets": [
+          "h06T",
+          "h0NR"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2349,
+          2350
+        ],
+        "countScriptLine": 2348
+      },
+      "h07J": {
+        "sourceRawcode": "h07J",
+        "count": 1,
+        "rawTargets": [
+          "h07L"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2352
+        ],
+        "countScriptLine": 2351
+      },
+      "h07L": {
+        "sourceRawcode": "h07L",
+        "count": 2,
+        "rawTargets": [
+          "h07N",
+          "h07M"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2354,
+          2355
+        ],
+        "countScriptLine": 2353
+      },
+      "h07O": {
+        "sourceRawcode": "h07O",
+        "count": 2,
+        "rawTargets": [
+          "h07P",
+          "h201"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2357,
+          2358
+        ],
+        "countScriptLine": 2356
+      },
+      "h201": {
+        "sourceRawcode": "h201",
+        "count": 1,
+        "rawTargets": [
+          "h0PD"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2360
+        ],
+        "countScriptLine": 2359
+      },
+      "h204": {
+        "sourceRawcode": "h204",
+        "count": 1,
+        "rawTargets": [
+          "h0PD"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2362
+        ],
+        "countScriptLine": 2361
+      },
+      "h07Q": {
+        "sourceRawcode": "h07Q",
+        "count": 1,
+        "rawTargets": [
+          "h07R"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2364
+        ],
+        "countScriptLine": 2363
+      },
+      "h07S": {
+        "sourceRawcode": "h07S",
+        "count": 2,
+        "rawTargets": [
+          "h07T",
+          "h0SJ"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2366,
+          2367
+        ],
+        "countScriptLine": 2365
+      },
+      "h07T": {
+        "sourceRawcode": "h07T",
+        "count": 1,
+        "rawTargets": [
+          "h107"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2369
+        ],
+        "countScriptLine": 2368
+      },
+      "h0SJ": {
+        "sourceRawcode": "h0SJ",
+        "count": 1,
+        "rawTargets": [
+          "h107"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2371
+        ],
+        "countScriptLine": 2370
+      },
+      "h07U": {
+        "sourceRawcode": "h07U",
+        "count": 1,
+        "rawTargets": [
+          "h07V"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2373
+        ],
+        "countScriptLine": 2372
+      },
+      "h07W": {
+        "sourceRawcode": "h07W",
+        "count": 1,
+        "rawTargets": [
+          "h07X"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2375
+        ],
+        "countScriptLine": 2374
+      },
+      "n06P": {
+        "sourceRawcode": "n06P",
+        "count": 1,
+        "rawTargets": [
+          "h07X"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2377
+        ],
+        "countScriptLine": 2376
+      },
+      "h0BC": {
+        "sourceRawcode": "h0BC",
+        "count": 1,
+        "rawTargets": [
+          "h0BD"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2379
+        ],
+        "countScriptLine": 2378
+      },
+      "h0BD": {
+        "sourceRawcode": "h0BD",
+        "count": 3,
+        "rawTargets": [
+          "h202",
+          "h0LW",
+          "h0P8"
+        ],
+        "indices": [
+          1,
+          2,
+          3
+        ],
+        "scriptLines": [
+          2381,
+          2382,
+          2383
+        ],
+        "countScriptLine": 2380
+      },
+      "h202": {
+        "sourceRawcode": "h202",
+        "count": 1,
+        "rawTargets": [
+          "n06I"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2385
+        ],
+        "countScriptLine": 2384
+      },
+      "h0LW": {
+        "sourceRawcode": "h0LW",
+        "count": 1,
+        "rawTargets": [
+          "n06I"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2387
+        ],
+        "countScriptLine": 2386
+      },
+      "h0P8": {
+        "sourceRawcode": "h0P8",
+        "count": 1,
+        "rawTargets": [
+          "n06I"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2389
+        ],
+        "countScriptLine": 2388
+      },
+      "h0Q6": {
+        "sourceRawcode": "h0Q6",
+        "count": 1,
+        "rawTargets": [
+          "n06I"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2391
+        ],
+        "countScriptLine": 2390
+      },
+      "h0BE": {
+        "sourceRawcode": "h0BE",
+        "count": 1,
+        "rawTargets": [
+          "h0BG"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2393
+        ],
+        "countScriptLine": 2392
+      },
+      "h0BH": {
+        "sourceRawcode": "h0BH",
+        "count": 1,
+        "rawTargets": [
+          "h0BI"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2395
+        ],
+        "countScriptLine": 2394
+      },
+      "h0BJ": {
+        "sourceRawcode": "h0BJ",
+        "count": 1,
+        "rawTargets": [
+          "h0BK"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2397
+        ],
+        "countScriptLine": 2396
+      },
+      "h0BM": {
+        "sourceRawcode": "h0BM",
+        "count": 1,
+        "rawTargets": [
+          "h0BL"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2399
+        ],
+        "countScriptLine": 2398
+      },
+      "h0BO": {
+        "sourceRawcode": "h0BO",
+        "count": 1,
+        "rawTargets": [
+          "h0BP"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2401
+        ],
+        "countScriptLine": 2400
+      },
+      "h0BP": {
+        "sourceRawcode": "h0BP",
+        "count": 1,
+        "rawTargets": [
+          "n07T"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2403
+        ],
+        "countScriptLine": 2402
+      },
+      "n05M": {
+        "sourceRawcode": "n05M",
+        "count": 1,
+        "rawTargets": [
+          "n07T"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2405
+        ],
+        "countScriptLine": 2404
+      },
+      "h0A8": {
+        "sourceRawcode": "h0A8",
+        "count": 1,
+        "rawTargets": [
+          "h0AT"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2407
+        ],
+        "countScriptLine": 2406
+      },
+      "h0AT": {
+        "sourceRawcode": "h0AT",
+        "count": 1,
+        "rawTargets": [
+          "h0AU"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2409
+        ],
+        "countScriptLine": 2408
+      },
+      "h0AB": {
+        "sourceRawcode": "h0AB",
+        "count": 1,
+        "rawTargets": [
+          "h0AA"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2411
+        ],
+        "countScriptLine": 2410
+      },
+      "h0AE": {
+        "sourceRawcode": "h0AE",
+        "count": 1,
+        "rawTargets": [
+          "h0AF"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2413
+        ],
+        "countScriptLine": 2412
+      },
+      "h0AH": {
+        "sourceRawcode": "h0AH",
+        "count": 1,
+        "rawTargets": [
+          "h0AJ"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2415
+        ],
+        "countScriptLine": 2414
+      },
+      "h0AL": {
+        "sourceRawcode": "h0AL",
+        "count": 1,
+        "rawTargets": [
+          "h0AO"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2417
+        ],
+        "countScriptLine": 2416
+      },
+      "h0AR": {
+        "sourceRawcode": "h0AR",
+        "count": 1,
+        "rawTargets": [
+          "h0AQ"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2419
+        ],
+        "countScriptLine": 2418
+      },
+      "h09L": {
+        "sourceRawcode": "h09L",
+        "count": 1,
+        "rawTargets": [
+          "h09H"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2421
+        ],
+        "countScriptLine": 2420
+      },
+      "h09H": {
+        "sourceRawcode": "h09H",
+        "count": 1,
+        "rawTargets": [
+          "h29H"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2423
+        ],
+        "countScriptLine": 2422
+      },
+      "h09W": {
+        "sourceRawcode": "h09W",
+        "count": 2,
+        "rawTargets": [
+          "h09M",
+          "h19M"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2425,
+          2426
+        ],
+        "countScriptLine": 2424
+      },
+      "h09N": {
+        "sourceRawcode": "h09N",
+        "count": 2,
+        "rawTargets": [
+          "h09O",
+          "h19O"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2428,
+          2429
+        ],
+        "countScriptLine": 2427
+      },
+      "h09O": {
+        "sourceRawcode": "h09O",
+        "count": 1,
+        "rawTargets": [
+          "h0M2"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2431
+        ],
+        "countScriptLine": 2430
+      },
+      "n07X": {
+        "sourceRawcode": "n07X",
+        "count": 1,
+        "rawTargets": [
+          "h0M2"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2433
+        ],
+        "countScriptLine": 2432
+      },
+      "h19O": {
+        "sourceRawcode": "h19O",
+        "count": 1,
+        "rawTargets": [
+          "h0M2"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2435
+        ],
+        "countScriptLine": 2434
+      },
+      "h09R": {
+        "sourceRawcode": "h09R",
+        "count": 1,
+        "rawTargets": [
+          "h09S"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2437
+        ],
+        "countScriptLine": 2436
+      },
+      "h09T": {
+        "sourceRawcode": "h09T",
+        "count": 1,
+        "rawTargets": [
+          "h09U"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2439
+        ],
+        "countScriptLine": 2438
+      },
+      "h09U": {
+        "sourceRawcode": "h09U",
+        "count": 1,
+        "rawTargets": [
+          "n07A"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2441
+        ],
+        "countScriptLine": 2440
+      },
+      "h0A3": {
+        "sourceRawcode": "h0A3",
+        "count": 1,
+        "rawTargets": [
+          "h0A0"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2443
+        ],
+        "countScriptLine": 2442
+      },
+      "h08F": {
+        "sourceRawcode": "h08F",
+        "count": 1,
+        "rawTargets": [
+          "h08I"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2445
+        ],
+        "countScriptLine": 2444
+      },
+      "h08I": {
+        "sourceRawcode": "h08I",
+        "count": 1,
+        "rawTargets": [
+          "h18I"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2447
+        ],
+        "countScriptLine": 2446
+      },
+      "h18I": {
+        "sourceRawcode": "h18I",
+        "count": 1,
+        "rawTargets": [
+          "n083"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2449
+        ],
+        "countScriptLine": 2448
+      },
+      "n07Z": {
+        "sourceRawcode": "n07Z",
+        "count": 1,
+        "rawTargets": [
+          "n083"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2451
+        ],
+        "countScriptLine": 2450
+      },
+      "h08H": {
+        "sourceRawcode": "h08H",
+        "count": 1,
+        "rawTargets": [
+          "h08L"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2453
+        ],
+        "countScriptLine": 2452
+      },
+      "h08L": {
+        "sourceRawcode": "h08L",
+        "count": 2,
+        "rawTargets": [
+          "h0Q0",
+          "n087"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2455,
+          2456
+        ],
+        "countScriptLine": 2454
+      },
+      "h0WS": {
+        "sourceRawcode": "h0WS",
+        "count": 2,
+        "rawTargets": [
+          "h0Q0",
+          "n087"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2458,
+          2459
+        ],
+        "countScriptLine": 2457
+      },
+      "h08N": {
+        "sourceRawcode": "h08N",
+        "count": 1,
+        "rawTargets": [
+          "h08P"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2461
+        ],
+        "countScriptLine": 2460
+      },
+      "h08Q": {
+        "sourceRawcode": "h08Q",
+        "count": 1,
+        "rawTargets": [
+          "h08S"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2463
+        ],
+        "countScriptLine": 2462
+      },
+      "h08V": {
+        "sourceRawcode": "h08V",
+        "count": 3,
+        "rawTargets": [
+          "h08Y",
+          "h08Z",
+          "h0JV"
+        ],
+        "indices": [
+          1,
+          2,
+          3
+        ],
+        "scriptLines": [
+          2465,
+          2466,
+          2467
+        ],
+        "countScriptLine": 2464
+      },
+      "h08Y": {
+        "sourceRawcode": "h08Y",
+        "count": 1,
+        "rawTargets": [
+          "h0YM"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2469
+        ],
+        "countScriptLine": 2468
+      },
+      "h090": {
+        "sourceRawcode": "h090",
+        "count": 2,
+        "rawTargets": [
+          "h093",
+          "h193"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2471,
+          2472
+        ],
+        "countScriptLine": 2470
+      },
+      "h093": {
+        "sourceRawcode": "h093",
+        "count": 1,
+        "rawTargets": [
+          "n08G"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2474
+        ],
+        "countScriptLine": 2473
+      },
+      "h193": {
+        "sourceRawcode": "h193",
+        "count": 1,
+        "rawTargets": [
+          "n08G"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2476
+        ],
+        "countScriptLine": 2475
+      },
+      "h0BF": {
+        "sourceRawcode": "h0BF",
+        "count": 1,
+        "rawTargets": [
+          "h0BS"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2478
+        ],
+        "countScriptLine": 2477
+      },
+      "h0BS": {
+        "sourceRawcode": "h0BS",
+        "count": 1,
+        "rawTargets": [
+          "h0BU"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2480
+        ],
+        "countScriptLine": 2479
+      },
+      "h0BU": {
+        "sourceRawcode": "h0BU",
+        "count": 1,
+        "rawTargets": [
+          "n06K"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2482
+        ],
+        "countScriptLine": 2481
+      },
+      "h0BV": {
+        "sourceRawcode": "h0BV",
+        "count": 1,
+        "rawTargets": [
+          "h0BW"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2484
+        ],
+        "countScriptLine": 2483
+      },
+      "h0BX": {
+        "sourceRawcode": "h0BX",
+        "count": 1,
+        "rawTargets": [
+          "h0C0"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2486
+        ],
+        "countScriptLine": 2485
+      },
+      "h0C4": {
+        "sourceRawcode": "h0C4",
+        "count": 2,
+        "rawTargets": [
+          "h0C2",
+          "h1C2"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2488,
+          2489
+        ],
+        "countScriptLine": 2487
+      },
+      "h0C2": {
+        "sourceRawcode": "h0C2",
+        "count": 2,
+        "rawTargets": [
+          "h2C2",
+          "n07V"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2491,
+          2492
+        ],
+        "countScriptLine": 2490
+      },
+      "h1C2": {
+        "sourceRawcode": "h1C2",
+        "count": 2,
+        "rawTargets": [
+          "h2C2",
+          "n07V"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2494,
+          2495
+        ],
+        "countScriptLine": 2493
+      },
+      "h0C5": {
+        "sourceRawcode": "h0C5",
+        "count": 1,
+        "rawTargets": [
+          "h0C8"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2497
+        ],
+        "countScriptLine": 2496
+      },
+      "h0C9": {
+        "sourceRawcode": "h0C9",
+        "count": 1,
+        "rawTargets": [
+          "h0CC"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2499
+        ],
+        "countScriptLine": 2498
+      },
+      "h0CF": {
+        "sourceRawcode": "h0CF",
+        "count": 1,
+        "rawTargets": [
+          "h0CH"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2501
+        ],
+        "countScriptLine": 2500
+      },
+      "h0CI": {
+        "sourceRawcode": "h0CI",
+        "count": 1,
+        "rawTargets": [
+          "h0CK"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2503
+        ],
+        "countScriptLine": 2502
+      },
+      "n071": {
+        "sourceRawcode": "n071",
+        "count": 1,
+        "rawTargets": [
+          "h0CK"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2505
+        ],
+        "countScriptLine": 2504
+      },
+      "h0CO": {
+        "sourceRawcode": "h0CO",
+        "count": 1,
+        "rawTargets": [
+          "h0CP"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2507
+        ],
+        "countScriptLine": 2506
+      },
+      "h0CQ": {
+        "sourceRawcode": "h0CQ",
+        "count": 2,
+        "rawTargets": [
+          "h0CS",
+          "h0CV"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2509,
+          2510
+        ],
+        "countScriptLine": 2508
+      },
+      "h0CV": {
+        "sourceRawcode": "h0CV",
+        "count": 1,
+        "rawTargets": [
+          "h0PJ"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2512
+        ],
+        "countScriptLine": 2511
+      },
+      "h0CW": {
+        "sourceRawcode": "h0CW",
+        "count": 1,
+        "rawTargets": [
+          "h0CY"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2514
+        ],
+        "countScriptLine": 2513
+      },
+      "h0D0": {
+        "sourceRawcode": "h0D0",
+        "count": 1,
+        "rawTargets": [
+          "h0D2"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2516
+        ],
+        "countScriptLine": 2515
+      },
+      "h0OM": {
+        "sourceRawcode": "h0OM",
+        "count": 1,
+        "rawTargets": [
+          "h0D2"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2518
+        ],
+        "countScriptLine": 2517
+      },
+      "h0SC": {
+        "sourceRawcode": "h0SC",
+        "count": 1,
+        "rawTargets": [
+          "h0SD"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2520
+        ],
+        "countScriptLine": 2519
+      },
+      "h0SD": {
+        "sourceRawcode": "h0SD",
+        "count": 1,
+        "rawTargets": [
+          "h105"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2522
+        ],
+        "countScriptLine": 2521
+      },
+      "h2AD": {
+        "sourceRawcode": "h2AD",
+        "count": 1,
+        "rawTargets": [
+          "h105"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2524
+        ],
+        "countScriptLine": 2523
+      },
+      "h0SA": {
+        "sourceRawcode": "h0SA",
+        "count": 1,
+        "rawTargets": [
+          "h0SB"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2526
+        ],
+        "countScriptLine": 2525
+      },
+      "h0S7": {
+        "sourceRawcode": "h0S7",
+        "count": 1,
+        "rawTargets": [
+          "h0S8"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2528
+        ],
+        "countScriptLine": 2527
+      },
+      "h0S5": {
+        "sourceRawcode": "h0S5",
+        "count": 1,
+        "rawTargets": [
+          "h0S6"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2530
+        ],
+        "countScriptLine": 2529
+      },
+      "h0S3": {
+        "sourceRawcode": "h0S3",
+        "count": 2,
+        "rawTargets": [
+          "h0S4",
+          "h0JF"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2532,
+          2533
+        ],
+        "countScriptLine": 2531
+      },
+      "h0S1": {
+        "sourceRawcode": "h0S1",
+        "count": 1,
+        "rawTargets": [
+          "h0S2"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2535
+        ],
+        "countScriptLine": 2534
+      },
+      "h0S2": {
+        "sourceRawcode": "h0S2",
+        "count": 1,
+        "rawTargets": [
+          "n06U"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2537
+        ],
+        "countScriptLine": 2536
+      },
+      "h0PA": {
+        "sourceRawcode": "h0PA",
+        "count": 1,
+        "rawTargets": [
+          "n06U"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2539
+        ],
+        "countScriptLine": 2538
+      },
+      "n04F": {
+        "sourceRawcode": "n04F",
+        "count": 3,
+        "rawTargets": [
+          "n04H",
+          "n04K",
+          "n04L"
+        ],
+        "indices": [
+          1,
+          2,
+          3
+        ],
+        "scriptLines": [
+          2541,
+          2542,
+          2543
+        ],
+        "countScriptLine": 2540
+      },
+      "n04N": {
+        "sourceRawcode": "n04N",
+        "count": 1,
+        "rawTargets": [
+          "n04Q"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2545
+        ],
+        "countScriptLine": 2544
+      },
+      "n04T": {
+        "sourceRawcode": "n04T",
+        "count": 3,
+        "rawTargets": [
+          "n04U",
+          "n04V",
+          "n04W"
+        ],
+        "indices": [
+          1,
+          2,
+          3
+        ],
+        "scriptLines": [
+          2547,
+          2548,
+          2549
+        ],
+        "countScriptLine": 2546
+      },
+      "n05C": {
+        "sourceRawcode": "n05C",
+        "count": 1,
+        "rawTargets": [
+          "n05D"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2551
+        ],
+        "countScriptLine": 2550
+      },
+      "n05P": {
+        "sourceRawcode": "n05P",
+        "count": 1,
+        "rawTargets": [
+          "h0PR"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2553
+        ],
+        "countScriptLine": 2552
+      },
+      "n05Q": {
+        "sourceRawcode": "n05Q",
+        "count": 1,
+        "rawTargets": [
+          "n05R"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2555
+        ],
+        "countScriptLine": 2554
+      },
+      "n05R": {
+        "sourceRawcode": "n05R",
+        "count": 1,
+        "rawTargets": [
+          "n05S"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2557
+        ],
+        "countScriptLine": 2556
+      },
+      "n05U": {
+        "sourceRawcode": "n05U",
+        "count": 2,
+        "rawTargets": [
+          "n05V",
+          "n05X"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2559,
+          2560
+        ],
+        "countScriptLine": 2558
+      },
+      "n05V": {
+        "sourceRawcode": "n05V",
+        "count": 1,
+        "rawTargets": [
+          "n05W"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2562
+        ],
+        "countScriptLine": 2561
+      },
+      "n05X": {
+        "sourceRawcode": "n05X",
+        "count": 1,
+        "rawTargets": [
+          "n05Y"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2564
+        ],
+        "countScriptLine": 2563
+      },
+      "n061": {
+        "sourceRawcode": "n061",
+        "count": 1,
+        "rawTargets": [
+          "n062"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2566
+        ],
+        "countScriptLine": 2565
+      },
+      "h0QG": {
+        "sourceRawcode": "h0QG",
+        "count": 3,
+        "rawTargets": [
+          "h0QH",
+          "h0QI",
+          "h0QJ"
+        ],
+        "indices": [
+          1,
+          2,
+          3
+        ],
+        "scriptLines": [
+          2568,
+          2569,
+          2570
+        ],
+        "countScriptLine": 2567
+      },
+      "h0QO": {
+        "sourceRawcode": "h0QO",
+        "count": 1,
+        "rawTargets": [
+          "h0QP"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2572
+        ],
+        "countScriptLine": 2571
+      },
+      "h0QP": {
+        "sourceRawcode": "h0QP",
+        "count": 1,
+        "rawTargets": [
+          "n064"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2574
+        ],
+        "countScriptLine": 2573
+      },
+      "n076": {
+        "sourceRawcode": "n076",
+        "count": 1,
+        "rawTargets": [
+          "n077"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2576
+        ],
+        "countScriptLine": 2575
+      },
+      "h2AF": {
+        "sourceRawcode": "h2AF",
+        "count": 1,
+        "rawTargets": [
+          "n077"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2578
+        ],
+        "countScriptLine": 2577
+      },
+      "n077": {
+        "sourceRawcode": "n077",
+        "count": 2,
+        "rawTargets": [
+          "n078",
+          "n079"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2580,
+          2581
+        ],
+        "countScriptLine": 2579
+      },
+      "n07B": {
+        "sourceRawcode": "n07B",
+        "count": 1,
+        "rawTargets": [
+          "n07C"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2583
+        ],
+        "countScriptLine": 2582
+      },
+      "n07E": {
+        "sourceRawcode": "n07E",
+        "count": 1,
+        "rawTargets": [
+          "n07D"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2585
+        ],
+        "countScriptLine": 2584
+      },
+      "n07F": {
+        "sourceRawcode": "n07F",
+        "count": 2,
+        "rawTargets": [
+          "n07G",
+          "n07H"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2587,
+          2588
+        ],
+        "countScriptLine": 2586
+      },
+      "h0H4": {
+        "sourceRawcode": "h0H4",
+        "count": 1,
+        "rawTargets": [
+          "n05H"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2590
+        ],
+        "countScriptLine": 2589
+      },
+      "n01F": {
+        "sourceRawcode": "n01F",
+        "count": 1,
+        "rawTargets": [
+          "n05H"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2592
+        ],
+        "countScriptLine": 2591
+      },
+      "h0DV": {
+        "sourceRawcode": "h0DV",
+        "count": 3,
+        "rawTargets": [
+          "n08Y",
+          "n08Z",
+          "n02S"
+        ],
+        "indices": [
+          1,
+          2,
+          3
+        ],
+        "scriptLines": [
+          2594,
+          2595,
+          2596
+        ],
+        "countScriptLine": 2593
+      },
+      "h0U2": {
+        "sourceRawcode": "h0U2",
+        "count": 1,
+        "rawTargets": [
+          "n07I"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2598
+        ],
+        "countScriptLine": 2597
+      },
+      "n2YS": {
+        "sourceRawcode": "n2YS",
+        "count": 1,
+        "rawTargets": [
+          "n2YR"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2600
+        ],
+        "countScriptLine": 2599
+      },
+      "n085": {
+        "sourceRawcode": "n085",
+        "count": 1,
+        "rawTargets": [
+          "n084"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2602
+        ],
+        "countScriptLine": 2601
+      }
+    },
+    "targetRequirements": {
+      "h011": {
+        "targetRawcode": "h011",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2604
+        ],
+        "countScriptLine": 2603
+      },
+      "h100": {
+        "targetRawcode": "h100",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2606
+        ],
+        "countScriptLine": 2605
+      },
+      "h0UU": {
+        "targetRawcode": "h0UU",
+        "count": 2,
+        "rawRequirements": [
+          "u004",
+          "R0DO"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2608,
+          2609
+        ],
+        "countScriptLine": 2607
+      },
+      "h013": {
+        "targetRawcode": "h013",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2611
+        ],
+        "countScriptLine": 2610
+      },
+      "h0OX": {
+        "targetRawcode": "h0OX",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2613
+        ],
+        "countScriptLine": 2612
+      },
+      "h0SV": {
+        "targetRawcode": "h0SV",
+        "count": 2,
+        "rawRequirements": [
+          "u004",
+          "R0BE"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2615,
+          2616
+        ],
+        "countScriptLine": 2614
+      },
+      "h015": {
+        "targetRawcode": "h015",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2618
+        ],
+        "countScriptLine": 2617
+      },
+      "n0JG": {
+        "targetRawcode": "n0JG",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2620
+        ],
+        "countScriptLine": 2619
+      },
+      "h017": {
+        "targetRawcode": "h017",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2622
+        ],
+        "countScriptLine": 2621
+      },
+      "h0QV": {
+        "targetRawcode": "h0QV",
+        "count": 3,
+        "rawRequirements": [
+          "u004",
+          "R08G",
+          "h230"
+        ],
+        "indices": [
+          1,
+          2,
+          3
+        ],
+        "scriptLines": [
+          2624,
+          2625,
+          2626
+        ],
+        "countScriptLine": 2623
+      },
+      "h0WQ": {
+        "targetRawcode": "h0WQ",
+        "count": 4,
+        "rawRequirements": [
+          "u004",
+          "R08G",
+          "h230",
+          "R0HE"
+        ],
+        "indices": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "scriptLines": [
+          2628,
+          2629,
+          2630,
+          2631
+        ],
+        "countScriptLine": 2627
+      },
+      "h019": {
+        "targetRawcode": "h019",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2633
+        ],
+        "countScriptLine": 2632
+      },
+      "h0RZ": {
+        "targetRawcode": "h0RZ",
+        "count": 2,
+        "rawRequirements": [
+          "u004",
+          "R0A7"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2635,
+          2636
+        ],
+        "countScriptLine": 2634
+      },
+      "h01B": {
+        "targetRawcode": "h01B",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2638
+        ],
+        "countScriptLine": 2637
+      },
+      "h11B": {
+        "targetRawcode": "h11B",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2640
+        ],
+        "countScriptLine": 2639
+      },
+      "h0R8": {
+        "targetRawcode": "h0R8",
+        "count": 2,
+        "rawRequirements": [
+          "u004",
+          "R0A6"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2642,
+          2643
+        ],
+        "countScriptLine": 2641
+      },
+      "n066": {
+        "targetRawcode": "n066",
+        "count": 3,
+        "rawRequirements": [
+          "u004",
+          "h220",
+          "R09D"
+        ],
+        "indices": [
+          1,
+          2,
+          3
+        ],
+        "scriptLines": [
+          2645,
+          2646,
+          2647
+        ],
+        "countScriptLine": 2644
+      },
+      "n08E": {
+        "targetRawcode": "n08E",
+        "count": 4,
+        "rawRequirements": [
+          "u004",
+          "h220",
+          "R09D",
+          "R0GF"
+        ],
+        "indices": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "scriptLines": [
+          2649,
+          2650,
+          2651,
+          2652
+        ],
+        "countScriptLine": 2648
+      },
+      "h00T": {
+        "targetRawcode": "h00T",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2654
+        ],
+        "countScriptLine": 2653
+      },
+      "h203": {
+        "targetRawcode": "h203",
+        "count": 3,
+        "rawRequirements": [
+          "R00M",
+          "u004",
+          "h230"
+        ],
+        "indices": [
+          1,
+          2,
+          3
+        ],
+        "scriptLines": [
+          2656,
+          2657,
+          2658
+        ],
+        "countScriptLine": 2655
+      },
+      "h00X": {
+        "targetRawcode": "h00X",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2660
+        ],
+        "countScriptLine": 2659
+      },
+      "h00Y": {
+        "targetRawcode": "h00Y",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2662
+        ],
+        "countScriptLine": 2661
+      },
+      "h0P5": {
+        "targetRawcode": "h0P5",
+        "count": 2,
+        "rawRequirements": [
+          "u004",
+          "R060"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2664,
+          2665
+        ],
+        "countScriptLine": 2663
+      },
+      "h2AB": {
+        "targetRawcode": "h2AB",
+        "count": 2,
+        "rawRequirements": [
+          "u004",
+          "R0J5"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2667,
+          2668
+        ],
+        "countScriptLine": 2666
+      },
+      "h1S2": {
+        "targetRawcode": "h1S2",
+        "count": 2,
+        "rawRequirements": [
+          "u004",
+          "R00S"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2670,
+          2671
+        ],
+        "countScriptLine": 2669
+      },
+      "h1S4": {
+        "targetRawcode": "h1S4",
+        "count": 2,
+        "rawRequirements": [
+          "R00S",
+          "u004"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2673,
+          2674
+        ],
+        "countScriptLine": 2672
+      },
+      "n07R": {
+        "targetRawcode": "n07R",
+        "count": 3,
+        "rawRequirements": [
+          "u004",
+          "h210",
+          "R0DU"
+        ],
+        "indices": [
+          1,
+          2,
+          3
+        ],
+        "scriptLines": [
+          2676,
+          2677,
+          2678
+        ],
+        "countScriptLine": 2675
+      },
+      "h0WC": {
+        "targetRawcode": "h0WC",
+        "count": 2,
+        "rawRequirements": [
+          "R0GB",
+          "u004"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2680,
+          2681
+        ],
+        "countScriptLine": 2679
+      },
+      "h2A7": {
+        "targetRawcode": "h2A7",
+        "count": 4,
+        "rawRequirements": [
+          "u004",
+          "h210",
+          "R0DU",
+          "R0J3"
+        ],
+        "indices": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "scriptLines": [
+          2683,
+          2684,
+          2685,
+          2686
+        ],
+        "countScriptLine": 2682
+      },
+      "n07S": {
+        "targetRawcode": "n07S",
+        "count": 4,
+        "rawRequirements": [
+          "u004",
+          "h210",
+          "R0DU",
+          "R0E2"
+        ],
+        "indices": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "scriptLines": [
+          2688,
+          2689,
+          2690,
+          2691
+        ],
+        "countScriptLine": 2687
+      },
+      "h00Z": {
+        "targetRawcode": "h00Z",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2693
+        ],
+        "countScriptLine": 2692
+      },
+      "h00U": {
+        "targetRawcode": "h00U",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2695
+        ],
+        "countScriptLine": 2694
+      },
+      "h00W": {
+        "targetRawcode": "h00W",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2697
+        ],
+        "countScriptLine": 2696
+      },
+      "h0OH": {
+        "targetRawcode": "h0OH",
+        "count": 2,
+        "rawRequirements": [
+          "u004",
+          "R0FC"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2699,
+          2700
+        ],
+        "countScriptLine": 2698
+      },
+      "h00V": {
+        "targetRawcode": "h00V",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2702
+        ],
+        "countScriptLine": 2701
+      },
+      "n06Q": {
+        "targetRawcode": "n06Q",
+        "count": 2,
+        "rawRequirements": [
+          "u004",
+          "R0BL"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2704,
+          2705
+        ],
+        "countScriptLine": 2703
+      },
+      "h01D": {
+        "targetRawcode": "h01D",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2707
+        ],
+        "countScriptLine": 2706
+      },
+      "h0O6": {
+        "targetRawcode": "h0O6",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2709
+        ],
+        "countScriptLine": 2708
+      },
+      "h01F": {
+        "targetRawcode": "h01F",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2711
+        ],
+        "countScriptLine": 2710
+      },
+      "h01G": {
+        "targetRawcode": "h01G",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2713
+        ],
+        "countScriptLine": 2712
+      },
+      "h11G": {
+        "targetRawcode": "h11G",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2715
+        ],
+        "countScriptLine": 2714
+      },
+      "h01J": {
+        "targetRawcode": "h01J",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2717
+        ],
+        "countScriptLine": 2716
+      },
+      "h01L": {
+        "targetRawcode": "h01L",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2719
+        ],
+        "countScriptLine": 2718
+      },
+      "h01N": {
+        "targetRawcode": "h01N",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2721
+        ],
+        "countScriptLine": 2720
+      },
+      "h01O": {
+        "targetRawcode": "h01O",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2723
+        ],
+        "countScriptLine": 2722
+      },
+      "h01Q": {
+        "targetRawcode": "h01Q",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2725
+        ],
+        "countScriptLine": 2724
+      },
+      "h01R": {
+        "targetRawcode": "h01R",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2727
+        ],
+        "countScriptLine": 2726
+      },
+      "h01S": {
+        "targetRawcode": "h01S",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2729
+        ],
+        "countScriptLine": 2728
+      },
+      "h0JK": {
+        "targetRawcode": "h0JK",
+        "count": 3,
+        "rawRequirements": [
+          "R00V",
+          "h210",
+          "u004"
+        ],
+        "indices": [
+          1,
+          2,
+          3
+        ],
+        "scriptLines": [
+          2731,
+          2732,
+          2733
+        ],
+        "countScriptLine": 2730
+      },
+      "h0OD": {
+        "targetRawcode": "h0OD",
+        "count": 2,
+        "rawRequirements": [
+          "u004",
+          "R0FB"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2735,
+          2736
+        ],
+        "countScriptLine": 2734
+      },
+      "h0JO": {
+        "targetRawcode": "h0JO",
+        "count": 3,
+        "rawRequirements": [
+          "R00W",
+          "h210",
+          "u004"
+        ],
+        "indices": [
+          1,
+          2,
+          3
+        ],
+        "scriptLines": [
+          2738,
+          2739,
+          2740
+        ],
+        "countScriptLine": 2737
+      },
+      "h0OY": {
+        "targetRawcode": "h0OY",
+        "count": 4,
+        "rawRequirements": [
+          "R00W",
+          "h210",
+          "R063",
+          "u004"
+        ],
+        "indices": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "scriptLines": [
+          2742,
+          2743,
+          2744,
+          2745
+        ],
+        "countScriptLine": 2741
+      },
+      "h0JQ": {
+        "targetRawcode": "h0JQ",
+        "count": 3,
+        "rawRequirements": [
+          "R00U",
+          "h210",
+          "u004"
+        ],
+        "indices": [
+          1,
+          2,
+          3
+        ],
+        "scriptLines": [
+          2747,
+          2748,
+          2749
+        ],
+        "countScriptLine": 2746
+      },
+      "h01U": {
+        "targetRawcode": "h01U",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2751
+        ],
+        "countScriptLine": 2750
+      },
+      "n0JI": {
+        "targetRawcode": "n0JI",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2753
+        ],
+        "countScriptLine": 2752
+      },
+      "h0OL": {
+        "targetRawcode": "h0OL",
+        "count": 2,
+        "rawRequirements": [
+          "R059",
+          "u004"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2755,
+          2756
+        ],
+        "countScriptLine": 2754
+      },
+      "h0UW": {
+        "targetRawcode": "h0UW",
+        "count": 2,
+        "rawRequirements": [
+          "u004",
+          "R0DP"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2758,
+          2759
+        ],
+        "countScriptLine": 2757
+      },
+      "h01W": {
+        "targetRawcode": "h01W",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2761
+        ],
+        "countScriptLine": 2760
+      },
+      "h01Y": {
+        "targetRawcode": "h01Y",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2763
+        ],
+        "countScriptLine": 2762
+      },
+      "h020": {
+        "targetRawcode": "h020",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2765
+        ],
+        "countScriptLine": 2764
+      },
+      "n06L": {
+        "targetRawcode": "n06L",
+        "count": 2,
+        "rawRequirements": [
+          "u004",
+          "R0BD"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2767,
+          2768
+        ],
+        "countScriptLine": 2766
+      },
+      "n06T": {
+        "targetRawcode": "n06T",
+        "count": 2,
+        "rawRequirements": [
+          "u004",
+          "R0BD"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2770,
+          2771
+        ],
+        "countScriptLine": 2769
+      },
+      "n08H": {
+        "targetRawcode": "n08H",
+        "count": 3,
+        "rawRequirements": [
+          "u004",
+          "R0GL",
+          "h220"
+        ],
+        "indices": [
+          1,
+          2,
+          3
+        ],
+        "scriptLines": [
+          2773,
+          2774,
+          2775
+        ],
+        "countScriptLine": 2772
+      },
+      "h022": {
+        "targetRawcode": "h022",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2777
+        ],
+        "countScriptLine": 2776
+      },
+      "h0TO": {
+        "targetRawcode": "h0TO",
+        "count": 2,
+        "rawRequirements": [
+          "u004",
+          "R0CT"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2779,
+          2780
+        ],
+        "countScriptLine": 2778
+      },
+      "h041": {
+        "targetRawcode": "h041",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2782
+        ],
+        "countScriptLine": 2781
+      },
+      "h043": {
+        "targetRawcode": "h043",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2784
+        ],
+        "countScriptLine": 2783
+      },
+      "h045": {
+        "targetRawcode": "h045",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2786
+        ],
+        "countScriptLine": 2785
+      },
+      "n086": {
+        "targetRawcode": "n086",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2788
+        ],
+        "countScriptLine": 2787
+      },
+      "h047": {
+        "targetRawcode": "h047",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2790
+        ],
+        "countScriptLine": 2789
+      },
+      "n0JH": {
+        "targetRawcode": "n0JH",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2792
+        ],
+        "countScriptLine": 2791
+      },
+      "h0OR": {
+        "targetRawcode": "h0OR",
+        "count": 2,
+        "rawRequirements": [
+          "R05A",
+          "u004"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2794,
+          2795
+        ],
+        "countScriptLine": 2793
+      },
+      "h0LV": {
+        "targetRawcode": "h0LV",
+        "count": 2,
+        "rawRequirements": [
+          "R05D",
+          "u004"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2797,
+          2798
+        ],
+        "countScriptLine": 2796
+      },
+      "h049": {
+        "targetRawcode": "h049",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2800
+        ],
+        "countScriptLine": 2799
+      },
+      "h102": {
+        "targetRawcode": "h102",
+        "count": 2,
+        "rawRequirements": [
+          "R00O",
+          "u004"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2802,
+          2803
+        ],
+        "countScriptLine": 2801
+      },
+      "n07P": {
+        "targetRawcode": "n07P",
+        "count": 2,
+        "rawRequirements": [
+          "u004",
+          "R0DT"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2805,
+          2806
+        ],
+        "countScriptLine": 2804
+      },
+      "h04B": {
+        "targetRawcode": "h04B",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2808
+        ],
+        "countScriptLine": 2807
+      },
+      "h205": {
+        "targetRawcode": "h205",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2810
+        ],
+        "countScriptLine": 2809
+      },
+      "n05L": {
+        "targetRawcode": "n05L",
+        "count": 2,
+        "rawRequirements": [
+          "R066",
+          "u004"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2812,
+          2813
+        ],
+        "countScriptLine": 2811
+      },
+      "n06Y": {
+        "targetRawcode": "n06Y",
+        "count": 2,
+        "rawRequirements": [
+          "u004",
+          "R0CR"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2815,
+          2816
+        ],
+        "countScriptLine": 2814
+      },
+      "h05O": {
+        "targetRawcode": "h05O",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2818
+        ],
+        "countScriptLine": 2817
+      },
+      "h05P": {
+        "targetRawcode": "h05P",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2820
+        ],
+        "countScriptLine": 2819
+      },
+      "h062": {
+        "targetRawcode": "h062",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2822
+        ],
+        "countScriptLine": 2821
+      },
+      "h05T": {
+        "targetRawcode": "h05T",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2824
+        ],
+        "countScriptLine": 2823
+      },
+      "h05U": {
+        "targetRawcode": "h05U",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2826
+        ],
+        "countScriptLine": 2825
+      },
+      "h0O8": {
+        "targetRawcode": "h0O8",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2828
+        ],
+        "countScriptLine": 2827
+      },
+      "h0VN": {
+        "targetRawcode": "h0VN",
+        "count": 2,
+        "rawRequirements": [
+          "u004",
+          "R0E7"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2830,
+          2831
+        ],
+        "countScriptLine": 2829
+      },
+      "h0OF": {
+        "targetRawcode": "h0OF",
+        "count": 1,
+        "rawRequirements": [
+          "R0E3"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2833
+        ],
+        "countScriptLine": 2832
+      },
+      "h05W": {
+        "targetRawcode": "h05W",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2835
+        ],
+        "countScriptLine": 2834
+      },
+      "h05Y": {
+        "targetRawcode": "h05Y",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2837
+        ],
+        "countScriptLine": 2836
+      },
+      "h060": {
+        "targetRawcode": "h060",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2839
+        ],
+        "countScriptLine": 2838
+      },
+      "h160": {
+        "targetRawcode": "h160",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2841
+        ],
+        "countScriptLine": 2840
+      },
+      "h0T0": {
+        "targetRawcode": "h0T0",
+        "count": 2,
+        "rawRequirements": [
+          "u004",
+          "R0BH"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2843,
+          2844
+        ],
+        "countScriptLine": 2842
+      },
+      "h078": {
+        "targetRawcode": "h078",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2846
+        ],
+        "countScriptLine": 2845
+      },
+      "h06I": {
+        "targetRawcode": "h06I",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2848
+        ],
+        "countScriptLine": 2847
+      },
+      "h076": {
+        "targetRawcode": "h076",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2850
+        ],
+        "countScriptLine": 2849
+      },
+      "h0T3": {
+        "targetRawcode": "h0T3",
+        "count": 2,
+        "rawRequirements": [
+          "u004",
+          "R0BJ"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2852,
+          2853
+        ],
+        "countScriptLine": 2851
+      },
+      "h06L": {
+        "targetRawcode": "h06L",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2855
+        ],
+        "countScriptLine": 2854
+      },
+      "h06N": {
+        "targetRawcode": "h06N",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2857
+        ],
+        "countScriptLine": 2856
+      },
+      "h0NP": {
+        "targetRawcode": "h0NP",
+        "count": 3,
+        "rawRequirements": [
+          "h230",
+          "R03D",
+          "u004"
+        ],
+        "indices": [
+          1,
+          2,
+          3
+        ],
+        "scriptLines": [
+          2859,
+          2860,
+          2861
+        ],
+        "countScriptLine": 2858
+      },
+      "h0SS": {
+        "targetRawcode": "h0SS",
+        "count": 2,
+        "rawRequirements": [
+          "u004",
+          "R0BC"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2863,
+          2864
+        ],
+        "countScriptLine": 2862
+      },
+      "h06P": {
+        "targetRawcode": "h06P",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2866
+        ],
+        "countScriptLine": 2865
+      },
+      "h2A1": {
+        "targetRawcode": "h2A1",
+        "count": 2,
+        "rawRequirements": [
+          "u004",
+          "R0J0"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2868,
+          2869
+        ],
+        "countScriptLine": 2867
+      },
+      "n03Z": {
+        "targetRawcode": "n03Z",
+        "count": 3,
+        "rawRequirements": [
+          "R02Q",
+          "h210",
+          "u004"
+        ],
+        "indices": [
+          1,
+          2,
+          3
+        ],
+        "scriptLines": [
+          2871,
+          2872,
+          2873
+        ],
+        "countScriptLine": 2870
+      },
+      "h06R": {
+        "targetRawcode": "h06R",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2875
+        ],
+        "countScriptLine": 2874
+      },
+      "h16R": {
+        "targetRawcode": "h16R",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2877
+        ],
+        "countScriptLine": 2876
+      },
+      "h06T": {
+        "targetRawcode": "h06T",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2879
+        ],
+        "countScriptLine": 2878
+      },
+      "h0LU": {
+        "targetRawcode": "h0LU",
+        "count": 2,
+        "rawRequirements": [
+          "u004",
+          "R0FE"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2881,
+          2882
+        ],
+        "countScriptLine": 2880
+      },
+      "h0NR": {
+        "targetRawcode": "h0NR",
+        "count": 2,
+        "rawRequirements": [
+          "u004",
+          "R0FD"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2884,
+          2885
+        ],
+        "countScriptLine": 2883
+      },
+      "h0TA": {
+        "targetRawcode": "h0TA",
+        "count": 2,
+        "rawRequirements": [
+          "u004",
+          "R0CS"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2887,
+          2888
+        ],
+        "countScriptLine": 2886
+      },
+      "h07L": {
+        "targetRawcode": "h07L",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2890
+        ],
+        "countScriptLine": 2889
+      },
+      "h07N": {
+        "targetRawcode": "h07N",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2892
+        ],
+        "countScriptLine": 2891
+      },
+      "h07M": {
+        "targetRawcode": "h07M",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2894
+        ],
+        "countScriptLine": 2893
+      },
+      "h0W8": {
+        "targetRawcode": "h0W8",
+        "count": 2,
+        "rawRequirements": [
+          "u004",
+          "R0G9"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2896,
+          2897
+        ],
+        "countScriptLine": 2895
+      },
+      "h0WA": {
+        "targetRawcode": "h0WA",
+        "count": 2,
+        "rawRequirements": [
+          "u004",
+          "R0GA"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2899,
+          2900
+        ],
+        "countScriptLine": 2898
+      },
+      "h0NT": {
+        "targetRawcode": "h0NT",
+        "count": 2,
+        "rawRequirements": [
+          "u004",
+          "R041"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2902,
+          2903
+        ],
+        "countScriptLine": 2901
+      },
+      "h0OO": {
+        "targetRawcode": "h0OO",
+        "count": 2,
+        "rawRequirements": [
+          "R05B",
+          "u004"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2905,
+          2906
+        ],
+        "countScriptLine": 2904
+      },
+      "h07P": {
+        "targetRawcode": "h07P",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2908
+        ],
+        "countScriptLine": 2907
+      },
+      "h201": {
+        "targetRawcode": "h201",
+        "count": 2,
+        "rawRequirements": [
+          "R00R",
+          "u004"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2910,
+          2911
+        ],
+        "countScriptLine": 2909
+      },
+      "h204": {
+        "targetRawcode": "h204",
+        "count": 2,
+        "rawRequirements": [
+          "R00R",
+          "u004"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2913,
+          2914
+        ],
+        "countScriptLine": 2912
+      },
+      "h0PD": {
+        "targetRawcode": "h0PD",
+        "count": 3,
+        "rawRequirements": [
+          "R06U",
+          "h220",
+          "u004"
+        ],
+        "indices": [
+          1,
+          2,
+          3
+        ],
+        "scriptLines": [
+          2916,
+          2917,
+          2918
+        ],
+        "countScriptLine": 2915
+      },
+      "h0UZ": {
+        "targetRawcode": "h0UZ",
+        "count": 4,
+        "rawRequirements": [
+          "R06U",
+          "h220",
+          "u004",
+          "R0DS"
+        ],
+        "indices": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "scriptLines": [
+          2920,
+          2921,
+          2922,
+          2923
+        ],
+        "countScriptLine": 2919
+      },
+      "h0XF": {
+        "targetRawcode": "h0XF",
+        "count": 4,
+        "rawRequirements": [
+          "R06U",
+          "h220",
+          "u004",
+          "R0HR"
+        ],
+        "indices": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "scriptLines": [
+          2925,
+          2926,
+          2927,
+          2928
+        ],
+        "countScriptLine": 2924
+      },
+      "h07R": {
+        "targetRawcode": "h07R",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2930
+        ],
+        "countScriptLine": 2929
+      },
+      "h0TG": {
+        "targetRawcode": "h0TG",
+        "count": 2,
+        "rawRequirements": [
+          "u004",
+          "R0CJ"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2932,
+          2933
+        ],
+        "countScriptLine": 2931
+      },
+      "h07T": {
+        "targetRawcode": "h07T",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2935
+        ],
+        "countScriptLine": 2934
+      },
+      "h0SJ": {
+        "targetRawcode": "h0SJ",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2937
+        ],
+        "countScriptLine": 2936
+      },
+      "h107": {
+        "targetRawcode": "h107",
+        "count": 2,
+        "rawRequirements": [
+          "R00X",
+          "u004"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2939,
+          2940
+        ],
+        "countScriptLine": 2938
+      },
+      "h07V": {
+        "targetRawcode": "h07V",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2942
+        ],
+        "countScriptLine": 2941
+      },
+      "n08B": {
+        "targetRawcode": "n08B",
+        "count": 2,
+        "rawRequirements": [
+          "u004",
+          "R0GC"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2944,
+          2945
+        ],
+        "countScriptLine": 2943
+      },
+      "h0SH": {
+        "targetRawcode": "h0SH",
+        "count": 2,
+        "rawRequirements": [
+          "u004",
+          "h210"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2947,
+          2948
+        ],
+        "countScriptLine": 2946
+      },
+      "h07X": {
+        "targetRawcode": "h07X",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2950
+        ],
+        "countScriptLine": 2949
+      },
+      "n06P": {
+        "targetRawcode": "n06P",
+        "count": 2,
+        "rawRequirements": [
+          "u004",
+          "R0BK"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2952,
+          2953
+        ],
+        "countScriptLine": 2951
+      },
+      "h0PV": {
+        "targetRawcode": "h0PV",
+        "count": 2,
+        "rawRequirements": [
+          "u004",
+          "R07L"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2955,
+          2956
+        ],
+        "countScriptLine": 2954
+      },
+      "h0BD": {
+        "targetRawcode": "h0BD",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2958
+        ],
+        "countScriptLine": 2957
+      },
+      "h202": {
+        "targetRawcode": "h202",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2960
+        ],
+        "countScriptLine": 2959
+      },
+      "h0LW": {
+        "targetRawcode": "h0LW",
+        "count": 2,
+        "rawRequirements": [
+          "R068",
+          "u004"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2962,
+          2963
+        ],
+        "countScriptLine": 2961
+      },
+      "h0P8": {
+        "targetRawcode": "h0P8",
+        "count": 2,
+        "rawRequirements": [
+          "R065",
+          "u004"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2965,
+          2966
+        ],
+        "countScriptLine": 2964
+      },
+      "h0Q6": {
+        "targetRawcode": "h0Q6",
+        "count": 2,
+        "rawRequirements": [
+          "R083",
+          "u004"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          2968,
+          2969
+        ],
+        "countScriptLine": 2967
+      },
+      "n06I": {
+        "targetRawcode": "n06I",
+        "count": 4,
+        "rawRequirements": [
+          "u004",
+          "R0AL",
+          "R0AM",
+          "h230"
+        ],
+        "indices": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "scriptLines": [
+          2971,
+          2972,
+          2973,
+          2974
+        ],
+        "countScriptLine": 2970
+      },
+      "h0BG": {
+        "targetRawcode": "h0BG",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2976
+        ],
+        "countScriptLine": 2975
+      },
+      "h0BI": {
+        "targetRawcode": "h0BI",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2978
+        ],
+        "countScriptLine": 2977
+      },
+      "h0BK": {
+        "targetRawcode": "h0BK",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2980
+        ],
+        "countScriptLine": 2979
+      },
+      "h0BL": {
+        "targetRawcode": "h0BL",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2982
+        ],
+        "countScriptLine": 2981
+      },
+      "h0BP": {
+        "targetRawcode": "h0BP",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2984
+        ],
+        "countScriptLine": 2983
+      },
+      "n05M": {
+        "targetRawcode": "n05M",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2986
+        ],
+        "countScriptLine": 2985
+      },
+      "n07T": {
+        "targetRawcode": "n07T",
+        "count": 3,
+        "rawRequirements": [
+          "u004",
+          "R0EA",
+          "h220"
+        ],
+        "indices": [
+          1,
+          2,
+          3
+        ],
+        "scriptLines": [
+          2988,
+          2989,
+          2990
+        ],
+        "countScriptLine": 2987
+      },
+      "h0AT": {
+        "targetRawcode": "h0AT",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2992
+        ],
+        "countScriptLine": 2991
+      },
+      "h0AU": {
+        "targetRawcode": "h0AU",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2994
+        ],
+        "countScriptLine": 2993
+      },
+      "h0AA": {
+        "targetRawcode": "h0AA",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2996
+        ],
+        "countScriptLine": 2995
+      },
+      "h0AF": {
+        "targetRawcode": "h0AF",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          2998
+        ],
+        "countScriptLine": 2997
+      },
+      "h0AJ": {
+        "targetRawcode": "h0AJ",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3000
+        ],
+        "countScriptLine": 2999
+      },
+      "h0AO": {
+        "targetRawcode": "h0AO",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3002
+        ],
+        "countScriptLine": 3001
+      },
+      "h0AQ": {
+        "targetRawcode": "h0AQ",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3004
+        ],
+        "countScriptLine": 3003
+      },
+      "h09H": {
+        "targetRawcode": "h09H",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3006
+        ],
+        "countScriptLine": 3005
+      },
+      "h29H": {
+        "targetRawcode": "h29H",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3008
+        ],
+        "countScriptLine": 3007
+      },
+      "h09M": {
+        "targetRawcode": "h09M",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3010
+        ],
+        "countScriptLine": 3009
+      },
+      "h19M": {
+        "targetRawcode": "h19M",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3012
+        ],
+        "countScriptLine": 3011
+      },
+      "h09O": {
+        "targetRawcode": "h09O",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3014
+        ],
+        "countScriptLine": 3013
+      },
+      "h19O": {
+        "targetRawcode": "h19O",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3016
+        ],
+        "countScriptLine": 3015
+      },
+      "h0M2": {
+        "targetRawcode": "h0M2",
+        "count": 3,
+        "rawRequirements": [
+          "R01X",
+          "u004",
+          "h230"
+        ],
+        "indices": [
+          1,
+          2,
+          3
+        ],
+        "scriptLines": [
+          3018,
+          3019,
+          3020
+        ],
+        "countScriptLine": 3017
+      },
+      "n07X": {
+        "targetRawcode": "n07X",
+        "count": 2,
+        "rawRequirements": [
+          "u004",
+          "R0F7"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          3022,
+          3023
+        ],
+        "countScriptLine": 3021
+      },
+      "h0VU": {
+        "targetRawcode": "h0VU",
+        "count": 4,
+        "rawRequirements": [
+          "R01X",
+          "u004",
+          "h230",
+          "R0F6"
+        ],
+        "indices": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "scriptLines": [
+          3025,
+          3026,
+          3027,
+          3028
+        ],
+        "countScriptLine": 3024
+      },
+      "h09S": {
+        "targetRawcode": "h09S",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3030
+        ],
+        "countScriptLine": 3029
+      },
+      "h0P6": {
+        "targetRawcode": "h0P6",
+        "count": 2,
+        "rawRequirements": [
+          "u004",
+          "R062"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          3032,
+          3033
+        ],
+        "countScriptLine": 3031
+      },
+      "h09U": {
+        "targetRawcode": "h09U",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3035
+        ],
+        "countScriptLine": 3034
+      },
+      "n07A": {
+        "targetRawcode": "n07A",
+        "count": 2,
+        "rawRequirements": [
+          "u004",
+          "R0CW"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          3037,
+          3038
+        ],
+        "countScriptLine": 3036
+      },
+      "h2A5": {
+        "targetRawcode": "h2A5",
+        "count": 3,
+        "rawRequirements": [
+          "u004",
+          "R0CW",
+          "R0J2"
+        ],
+        "indices": [
+          1,
+          2,
+          3
+        ],
+        "scriptLines": [
+          3040,
+          3041,
+          3042
+        ],
+        "countScriptLine": 3039
+      },
+      "h0A0": {
+        "targetRawcode": "h0A0",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3044
+        ],
+        "countScriptLine": 3043
+      },
+      "h08I": {
+        "targetRawcode": "h08I",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3046
+        ],
+        "countScriptLine": 3045
+      },
+      "h18I": {
+        "targetRawcode": "h18I",
+        "count": 2,
+        "rawRequirements": [
+          "R00N",
+          "u004"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          3048,
+          3049
+        ],
+        "countScriptLine": 3047
+      },
+      "n083": {
+        "targetRawcode": "n083",
+        "count": 2,
+        "rawRequirements": [
+          "u004",
+          "h230"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          3051,
+          3052
+        ],
+        "countScriptLine": 3050
+      },
+      "n07Z": {
+        "targetRawcode": "n07Z",
+        "count": 2,
+        "rawRequirements": [
+          "u004",
+          "R0F8"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          3054,
+          3055
+        ],
+        "countScriptLine": 3053
+      },
+      "n08N": {
+        "targetRawcode": "n08N",
+        "count": 3,
+        "rawRequirements": [
+          "u004",
+          "h230",
+          "R0HI"
+        ],
+        "indices": [
+          1,
+          2,
+          3
+        ],
+        "scriptLines": [
+          3057,
+          3058,
+          3059
+        ],
+        "countScriptLine": 3056
+      },
+      "h08L": {
+        "targetRawcode": "h08L",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3061
+        ],
+        "countScriptLine": 3060
+      },
+      "h0Q0": {
+        "targetRawcode": "h0Q0",
+        "count": 4,
+        "rawRequirements": [
+          "R07M",
+          "R07N",
+          "h210",
+          "u004"
+        ],
+        "indices": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "scriptLines": [
+          3063,
+          3064,
+          3065,
+          3066
+        ],
+        "countScriptLine": 3062
+      },
+      "n087": {
+        "targetRawcode": "n087",
+        "count": 3,
+        "rawRequirements": [
+          "u004",
+          "R0FM",
+          "h220"
+        ],
+        "indices": [
+          1,
+          2,
+          3
+        ],
+        "scriptLines": [
+          3068,
+          3069,
+          3070
+        ],
+        "countScriptLine": 3067
+      },
+      "h0WS": {
+        "targetRawcode": "h0WS",
+        "count": 2,
+        "rawRequirements": [
+          "u004",
+          "R0HF"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          3072,
+          3073
+        ],
+        "countScriptLine": 3071
+      },
+      "h0XD": {
+        "targetRawcode": "h0XD",
+        "count": 5,
+        "rawRequirements": [
+          "R07M",
+          "R07N",
+          "h210",
+          "u004",
+          "R0HQ"
+        ],
+        "indices": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "scriptLines": [
+          3075,
+          3076,
+          3077,
+          3078,
+          3079
+        ],
+        "countScriptLine": 3074
+      },
+      "n090": {
+        "targetRawcode": "n090",
+        "count": 4,
+        "rawRequirements": [
+          "u004",
+          "R0FM",
+          "h220",
+          "R0HP"
+        ],
+        "indices": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "scriptLines": [
+          3081,
+          3082,
+          3083,
+          3084
+        ],
+        "countScriptLine": 3080
+      },
+      "h08P": {
+        "targetRawcode": "h08P",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3086
+        ],
+        "countScriptLine": 3085
+      },
+      "h08S": {
+        "targetRawcode": "h08S",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3088
+        ],
+        "countScriptLine": 3087
+      },
+      "h08Y": {
+        "targetRawcode": "h08Y",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3090
+        ],
+        "countScriptLine": 3089
+      },
+      "h08Z": {
+        "targetRawcode": "h08Z",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3092
+        ],
+        "countScriptLine": 3091
+      },
+      "h0JV": {
+        "targetRawcode": "h0JV",
+        "count": 3,
+        "rawRequirements": [
+          "R010",
+          "h230",
+          "u004"
+        ],
+        "indices": [
+          1,
+          2,
+          3
+        ],
+        "scriptLines": [
+          3094,
+          3095,
+          3096
+        ],
+        "countScriptLine": 3093
+      },
+      "h0YM": {
+        "targetRawcode": "h0YM",
+        "count": 3,
+        "rawRequirements": [
+          "u004",
+          "h220",
+          "R2YA"
+        ],
+        "indices": [
+          1,
+          2,
+          3
+        ],
+        "scriptLines": [
+          3098,
+          3099,
+          3100
+        ],
+        "countScriptLine": 3097
+      },
+      "h093": {
+        "targetRawcode": "h093",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3102
+        ],
+        "countScriptLine": 3101
+      },
+      "h193": {
+        "targetRawcode": "h193",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3104
+        ],
+        "countScriptLine": 3103
+      },
+      "n08G": {
+        "targetRawcode": "n08G",
+        "count": 2,
+        "rawRequirements": [
+          "u004",
+          "R0GG"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          3106,
+          3107
+        ],
+        "countScriptLine": 3105
+      },
+      "h0BS": {
+        "targetRawcode": "h0BS",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3109
+        ],
+        "countScriptLine": 3108
+      },
+      "h0BU": {
+        "targetRawcode": "h0BU",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3111
+        ],
+        "countScriptLine": 3110
+      },
+      "n06K": {
+        "targetRawcode": "n06K",
+        "count": 4,
+        "rawRequirements": [
+          "u004",
+          "h230",
+          "R0AJ",
+          "R0AK"
+        ],
+        "indices": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "scriptLines": [
+          3113,
+          3114,
+          3115,
+          3116
+        ],
+        "countScriptLine": 3112
+      },
+      "h0BW": {
+        "targetRawcode": "h0BW",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3118
+        ],
+        "countScriptLine": 3117
+      },
+      "h0C0": {
+        "targetRawcode": "h0C0",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3120
+        ],
+        "countScriptLine": 3119
+      },
+      "h0C2": {
+        "targetRawcode": "h0C2",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3122
+        ],
+        "countScriptLine": 3121
+      },
+      "h1C2": {
+        "targetRawcode": "h1C2",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3124
+        ],
+        "countScriptLine": 3123
+      },
+      "h2C2": {
+        "targetRawcode": "h2C2",
+        "count": 2,
+        "rawRequirements": [
+          "R00L",
+          "u004"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          3126,
+          3127
+        ],
+        "countScriptLine": 3125
+      },
+      "n07V": {
+        "targetRawcode": "n07V",
+        "count": 3,
+        "rawRequirements": [
+          "u004",
+          "R0AK",
+          "h220"
+        ],
+        "indices": [
+          1,
+          2,
+          3
+        ],
+        "scriptLines": [
+          3129,
+          3130,
+          3131
+        ],
+        "countScriptLine": 3128
+      },
+      "h0VL": {
+        "targetRawcode": "h0VL",
+        "count": 3,
+        "rawRequirements": [
+          "R00L",
+          "u004",
+          "R0E4"
+        ],
+        "indices": [
+          1,
+          2,
+          3
+        ],
+        "scriptLines": [
+          3133,
+          3134,
+          3135
+        ],
+        "countScriptLine": 3132
+      },
+      "h0C8": {
+        "targetRawcode": "h0C8",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3137
+        ],
+        "countScriptLine": 3136
+      },
+      "h0CC": {
+        "targetRawcode": "h0CC",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3139
+        ],
+        "countScriptLine": 3138
+      },
+      "h0CH": {
+        "targetRawcode": "h0CH",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3141
+        ],
+        "countScriptLine": 3140
+      },
+      "h0CK": {
+        "targetRawcode": "h0CK",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3143
+        ],
+        "countScriptLine": 3142
+      },
+      "n071": {
+        "targetRawcode": "n071",
+        "count": 2,
+        "rawRequirements": [
+          "u004",
+          "R0CH"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          3145,
+          3146
+        ],
+        "countScriptLine": 3144
+      },
+      "h0TQ": {
+        "targetRawcode": "h0TQ",
+        "count": 2,
+        "rawRequirements": [
+          "u004",
+          "R0CH"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          3148,
+          3149
+        ],
+        "countScriptLine": 3147
+      },
+      "h0CP": {
+        "targetRawcode": "h0CP",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3151
+        ],
+        "countScriptLine": 3150
+      },
+      "h0CS": {
+        "targetRawcode": "h0CS",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3153
+        ],
+        "countScriptLine": 3152
+      },
+      "h0CV": {
+        "targetRawcode": "h0CV",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3155
+        ],
+        "countScriptLine": 3154
+      },
+      "h0PJ": {
+        "targetRawcode": "h0PJ",
+        "count": 3,
+        "rawRequirements": [
+          "R0BQ",
+          "u004",
+          "h210"
+        ],
+        "indices": [
+          1,
+          2,
+          3
+        ],
+        "scriptLines": [
+          3157,
+          3158,
+          3159
+        ],
+        "countScriptLine": 3156
+      },
+      "h0TC": {
+        "targetRawcode": "h0TC",
+        "count": 4,
+        "rawRequirements": [
+          "R0BQ",
+          "u004",
+          "h220",
+          "R0CQ"
+        ],
+        "indices": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "scriptLines": [
+          3161,
+          3162,
+          3163,
+          3164
+        ],
+        "countScriptLine": 3160
+      },
+      "h0WU": {
+        "targetRawcode": "h0WU",
+        "count": 4,
+        "rawRequirements": [
+          "R0BQ",
+          "u004",
+          "h210",
+          "R0HG"
+        ],
+        "indices": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "scriptLines": [
+          3166,
+          3167,
+          3168,
+          3169
+        ],
+        "countScriptLine": 3165
+      },
+      "h0CY": {
+        "targetRawcode": "h0CY",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3171
+        ],
+        "countScriptLine": 3170
+      },
+      "h0OM": {
+        "targetRawcode": "h0OM",
+        "count": 2,
+        "rawRequirements": [
+          "u004",
+          "R05C"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          3173,
+          3174
+        ],
+        "countScriptLine": 3172
+      },
+      "h0D2": {
+        "targetRawcode": "h0D2",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3176
+        ],
+        "countScriptLine": 3175
+      },
+      "h2A3": {
+        "targetRawcode": "h2A3",
+        "count": 2,
+        "rawRequirements": [
+          "u004",
+          "R0J1"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          3178,
+          3179
+        ],
+        "countScriptLine": 3177
+      },
+      "h0US": {
+        "targetRawcode": "h0US",
+        "count": 2,
+        "rawRequirements": [
+          "u004",
+          "R0DN"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          3181,
+          3182
+        ],
+        "countScriptLine": 3180
+      },
+      "h0SD": {
+        "targetRawcode": "h0SD",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3184
+        ],
+        "countScriptLine": 3183
+      },
+      "h2AD": {
+        "targetRawcode": "h2AD",
+        "count": 2,
+        "rawRequirements": [
+          "u004",
+          "R0J6"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          3186,
+          3187
+        ],
+        "countScriptLine": 3185
+      },
+      "h105": {
+        "targetRawcode": "h105",
+        "count": 3,
+        "rawRequirements": [
+          "R00P",
+          "u01I",
+          "u004"
+        ],
+        "indices": [
+          1,
+          2,
+          3
+        ],
+        "scriptLines": [
+          3189,
+          3190,
+          3191
+        ],
+        "countScriptLine": 3188
+      },
+      "h2A9": {
+        "targetRawcode": "h2A9",
+        "count": 4,
+        "rawRequirements": [
+          "R00P",
+          "u01I",
+          "u004",
+          "R0J4"
+        ],
+        "indices": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "scriptLines": [
+          3193,
+          3194,
+          3195,
+          3196
+        ],
+        "countScriptLine": 3192
+      },
+      "h0SB": {
+        "targetRawcode": "h0SB",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3198
+        ],
+        "countScriptLine": 3197
+      },
+      "h0S8": {
+        "targetRawcode": "h0S8",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3200
+        ],
+        "countScriptLine": 3199
+      },
+      "h0S6": {
+        "targetRawcode": "h0S6",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3202
+        ],
+        "countScriptLine": 3201
+      },
+      "h0S4": {
+        "targetRawcode": "h0S4",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3204
+        ],
+        "countScriptLine": 3203
+      },
+      "h0JF": {
+        "targetRawcode": "h0JF",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3206
+        ],
+        "countScriptLine": 3205
+      },
+      "h0TI": {
+        "targetRawcode": "h0TI",
+        "count": 2,
+        "rawRequirements": [
+          "u004",
+          "R0CK"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          3208,
+          3209
+        ],
+        "countScriptLine": 3207
+      },
+      "h0LT": {
+        "targetRawcode": "h0LT",
+        "count": 2,
+        "rawRequirements": [
+          "u004",
+          "R0CU"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          3211,
+          3212
+        ],
+        "countScriptLine": 3210
+      },
+      "h0S2": {
+        "targetRawcode": "h0S2",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3214
+        ],
+        "countScriptLine": 3213
+      },
+      "h0PA": {
+        "targetRawcode": "h0PA",
+        "count": 2,
+        "rawRequirements": [
+          "R067",
+          "u004"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          3216,
+          3217
+        ],
+        "countScriptLine": 3215
+      },
+      "n06U": {
+        "targetRawcode": "n06U",
+        "count": 3,
+        "rawRequirements": [
+          "u004",
+          "h220",
+          "R0BS"
+        ],
+        "indices": [
+          1,
+          2,
+          3
+        ],
+        "scriptLines": [
+          3219,
+          3220,
+          3221
+        ],
+        "countScriptLine": 3218
+      },
+      "n080": {
+        "targetRawcode": "n080",
+        "count": 4,
+        "rawRequirements": [
+          "u004",
+          "h220",
+          "R0BS",
+          "R0F9"
+        ],
+        "indices": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "scriptLines": [
+          3223,
+          3224,
+          3225,
+          3226
+        ],
+        "countScriptLine": 3222
+      },
+      "n082": {
+        "targetRawcode": "n082",
+        "count": 2,
+        "rawRequirements": [
+          "u004",
+          "R0FA"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          3228,
+          3229
+        ],
+        "countScriptLine": 3227
+      },
+      "n06Z": {
+        "targetRawcode": "n06Z",
+        "count": 2,
+        "rawRequirements": [
+          "u004",
+          "R0CG"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          3231,
+          3232
+        ],
+        "countScriptLine": 3230
+      },
+      "n04H": {
+        "targetRawcode": "n04H",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3234
+        ],
+        "countScriptLine": 3233
+      },
+      "n04K": {
+        "targetRawcode": "n04K",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3236
+        ],
+        "countScriptLine": 3235
+      },
+      "n04L": {
+        "targetRawcode": "n04L",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3238
+        ],
+        "countScriptLine": 3237
+      },
+      "n04Q": {
+        "targetRawcode": "n04Q",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3240
+        ],
+        "countScriptLine": 3239
+      },
+      "n04U": {
+        "targetRawcode": "n04U",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3242
+        ],
+        "countScriptLine": 3241
+      },
+      "n04V": {
+        "targetRawcode": "n04V",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3244
+        ],
+        "countScriptLine": 3243
+      },
+      "n05N": {
+        "targetRawcode": "n05N",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3246
+        ],
+        "countScriptLine": 3245
+      },
+      "n04W": {
+        "targetRawcode": "n04W",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3248
+        ],
+        "countScriptLine": 3247
+      },
+      "n06O": {
+        "targetRawcode": "n06O",
+        "count": 2,
+        "rawRequirements": [
+          "u004",
+          "R0BI"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          3250,
+          3251
+        ],
+        "countScriptLine": 3249
+      },
+      "n06S": {
+        "targetRawcode": "n06S",
+        "count": 2,
+        "rawRequirements": [
+          "u004",
+          "R0BF"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          3253,
+          3254
+        ],
+        "countScriptLine": 3252
+      },
+      "n05D": {
+        "targetRawcode": "n05D",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3256
+        ],
+        "countScriptLine": 3255
+      },
+      "h0PR": {
+        "targetRawcode": "h0PR",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3258
+        ],
+        "countScriptLine": 3257
+      },
+      "n05R": {
+        "targetRawcode": "n05R",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3260
+        ],
+        "countScriptLine": 3259
+      },
+      "n05S": {
+        "targetRawcode": "n05S",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3262
+        ],
+        "countScriptLine": 3261
+      },
+      "n06M": {
+        "targetRawcode": "n06M",
+        "count": 2,
+        "rawRequirements": [
+          "u004",
+          "R0BG"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          3264,
+          3265
+        ],
+        "countScriptLine": 3263
+      },
+      "n05V": {
+        "targetRawcode": "n05V",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3267
+        ],
+        "countScriptLine": 3266
+      },
+      "n05X": {
+        "targetRawcode": "n05X",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3269
+        ],
+        "countScriptLine": 3268
+      },
+      "n05W": {
+        "targetRawcode": "n05W",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3271
+        ],
+        "countScriptLine": 3270
+      },
+      "n05Y": {
+        "targetRawcode": "n05Y",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3273
+        ],
+        "countScriptLine": 3272
+      },
+      "n062": {
+        "targetRawcode": "n062",
+        "count": 2,
+        "rawRequirements": [
+          "R0BR",
+          "u004"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          3275,
+          3276
+        ],
+        "countScriptLine": 3274
+      },
+      "n07O": {
+        "targetRawcode": "n07O",
+        "count": 3,
+        "rawRequirements": [
+          "R0BR",
+          "u004",
+          "R0DR"
+        ],
+        "indices": [
+          1,
+          2,
+          3
+        ],
+        "scriptLines": [
+          3278,
+          3279,
+          3280
+        ],
+        "countScriptLine": 3277
+      },
+      "h0QH": {
+        "targetRawcode": "h0QH",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3282
+        ],
+        "countScriptLine": 3281
+      },
+      "h0QI": {
+        "targetRawcode": "h0QI",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3284
+        ],
+        "countScriptLine": 3283
+      },
+      "h0QJ": {
+        "targetRawcode": "h0QJ",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3286
+        ],
+        "countScriptLine": 3285
+      },
+      "h0QP": {
+        "targetRawcode": "h0QP",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3288
+        ],
+        "countScriptLine": 3287
+      },
+      "n064": {
+        "targetRawcode": "n064",
+        "count": 2,
+        "rawRequirements": [
+          "u004",
+          "R08F"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          3290,
+          3291
+        ],
+        "countScriptLine": 3289
+      },
+      "h2AF": {
+        "targetRawcode": "h2AF",
+        "count": 3,
+        "rawRequirements": [
+          "u004",
+          "u03O",
+          "R0J7"
+        ],
+        "indices": [
+          1,
+          2,
+          3
+        ],
+        "scriptLines": [
+          3293,
+          3294,
+          3295
+        ],
+        "countScriptLine": 3292
+      },
+      "n077": {
+        "targetRawcode": "n077",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3297
+        ],
+        "countScriptLine": 3296
+      },
+      "n078": {
+        "targetRawcode": "n078",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3299
+        ],
+        "countScriptLine": 3298
+      },
+      "n079": {
+        "targetRawcode": "n079",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3301
+        ],
+        "countScriptLine": 3300
+      },
+      "n07C": {
+        "targetRawcode": "n07C",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3303
+        ],
+        "countScriptLine": 3302
+      },
+      "n07D": {
+        "targetRawcode": "n07D",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3305
+        ],
+        "countScriptLine": 3304
+      },
+      "n07G": {
+        "targetRawcode": "n07G",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3307
+        ],
+        "countScriptLine": 3306
+      },
+      "n07H": {
+        "targetRawcode": "n07H",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3309
+        ],
+        "countScriptLine": 3308
+      },
+      "n05H": {
+        "targetRawcode": "n05H",
+        "count": 4,
+        "rawRequirements": [
+          "h220",
+          "R05E",
+          "u00S",
+          "u004"
+        ],
+        "indices": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "scriptLines": [
+          3311,
+          3312,
+          3313,
+          3314
+        ],
+        "countScriptLine": 3310
+      },
+      "n08Y": {
+        "targetRawcode": "n08Y",
+        "count": 4,
+        "rawRequirements": [
+          "u004",
+          "h220",
+          "R0HM",
+          "R0HS"
+        ],
+        "indices": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "scriptLines": [
+          3316,
+          3317,
+          3318,
+          3319
+        ],
+        "countScriptLine": 3315
+      },
+      "n08Z": {
+        "targetRawcode": "n08Z",
+        "count": 4,
+        "rawRequirements": [
+          "u004",
+          "R01D",
+          "h220",
+          "R0HS"
+        ],
+        "indices": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "scriptLines": [
+          3321,
+          3322,
+          3323,
+          3324
+        ],
+        "countScriptLine": 3320
+      },
+      "n02S": {
+        "targetRawcode": "n02S",
+        "count": 3,
+        "rawRequirements": [
+          "R0HS",
+          "u00S",
+          "u004"
+        ],
+        "indices": [
+          1,
+          2,
+          3
+        ],
+        "scriptLines": [
+          3326,
+          3327,
+          3328
+        ],
+        "countScriptLine": 3325
+      },
+      "n07I": {
+        "targetRawcode": "n07I",
+        "count": 3,
+        "rawRequirements": [
+          "u004",
+          "h220",
+          "R0D2"
+        ],
+        "indices": [
+          1,
+          2,
+          3
+        ],
+        "scriptLines": [
+          3330,
+          3331,
+          3332
+        ],
+        "countScriptLine": 3329
+      },
+      "n2YR": {
+        "targetRawcode": "n2YR",
+        "count": 2,
+        "rawRequirements": [
+          "u004",
+          "u04J"
+        ],
+        "indices": [
+          1,
+          2
+        ],
+        "scriptLines": [
+          3334,
+          3335
+        ],
+        "countScriptLine": 3333
+      },
+      "n084": {
+        "targetRawcode": "n084",
+        "count": 1,
+        "rawRequirements": [
+          "u004"
+        ],
+        "indices": [
+          1
+        ],
+        "scriptLines": [
+          3337
+        ],
+        "countScriptLine": 3336
+      }
+    },
+    "targetLimits": {
+      "h06K": {
+        "targetRawcode": "h06K",
+        "hasSavedCount": true,
+        "count": 16,
+        "limitidEx": false,
+        "registrations": [
+          {
+            "api": "RegisterBudingLimit",
+            "count": 16,
+            "counterMarkerRawcode": "u01L",
+            "scriptLine": 48256,
+            "condition": "always"
+          }
+        ],
+        "source": {
+          "file": "war3map.j",
+          "countStoreLine": 28408,
+          "extendedFlagLine": 28416
+        }
+      },
+      "n04B": {
+        "targetRawcode": "n04B",
+        "hasSavedCount": true,
+        "count": 2,
+        "limitidEx": false,
+        "registrations": [
+          {
+            "api": "RegisterBudingLimit",
+            "count": 2,
+            "counterMarkerRawcode": "u01M",
+            "scriptLine": 48257,
+            "condition": "always"
+          }
+        ],
+        "source": {
+          "file": "war3map.j",
+          "countStoreLine": 28408,
+          "extendedFlagLine": 28416
+        }
+      },
+      "n04D": {
+        "targetRawcode": "n04D",
+        "hasSavedCount": true,
+        "count": 2,
+        "limitidEx": false,
+        "registrations": [
+          {
+            "api": "RegisterBudingLimit",
+            "count": 2,
+            "counterMarkerRawcode": "u01N",
+            "scriptLine": 48258,
+            "condition": "always"
+          }
+        ],
+        "source": {
+          "file": "war3map.j",
+          "countStoreLine": 28408,
+          "extendedFlagLine": 28416
+        }
+      },
+      "n04F": {
+        "targetRawcode": "n04F",
+        "hasSavedCount": true,
+        "count": 3,
+        "limitidEx": true,
+        "registrations": [
+          {
+            "api": "RegisterBudingLimitEx",
+            "count": 3,
+            "counterMarkerRawcode": "u01O",
+            "scriptLine": 48259,
+            "condition": "always"
+          }
+        ],
+        "source": {
+          "file": "war3map.j",
+          "countStoreLine": 28408,
+          "extendedFlagLine": 28416
+        }
+      },
+      "n04N": {
+        "targetRawcode": "n04N",
+        "hasSavedCount": true,
+        "count": 1,
+        "limitidEx": true,
+        "registrations": [
+          {
+            "api": "RegisterBudingLimitEx",
+            "count": 1,
+            "counterMarkerRawcode": "u01P",
+            "scriptLine": 48260,
+            "condition": "always"
+          }
+        ],
+        "source": {
+          "file": "war3map.j",
+          "countStoreLine": 28408,
+          "extendedFlagLine": 28416
+        }
+      },
+      "n04T": {
+        "targetRawcode": "n04T",
+        "hasSavedCount": true,
+        "count": 3,
+        "limitidEx": true,
+        "registrations": [
+          {
+            "api": "RegisterBudingLimitEx",
+            "count": 3,
+            "counterMarkerRawcode": "u01Q",
+            "scriptLine": 48261,
+            "condition": "always"
+          }
+        ],
+        "source": {
+          "file": "war3map.j",
+          "countStoreLine": 28408,
+          "extendedFlagLine": 28416
+        }
+      },
+      "n076": {
+        "targetRawcode": "n076",
+        "hasSavedCount": true,
+        "count": 20,
+        "limitidEx": true,
+        "registrations": [
+          {
+            "api": "RegisterBudingLimitEx",
+            "count": 20,
+            "counterMarkerRawcode": "u03O",
+            "scriptLine": 48262,
+            "condition": "always"
+          }
+        ],
+        "source": {
+          "file": "war3map.j",
+          "countStoreLine": 28408,
+          "extendedFlagLine": 28416
+        }
+      },
+      "n077": {
+        "targetRawcode": "n077",
+        "hasSavedCount": true,
+        "count": 5,
+        "limitidEx": true,
+        "registrations": [
+          {
+            "api": "RegisterBudingLimitEx",
+            "count": 5,
+            "counterMarkerRawcode": "",
+            "scriptLine": 48263,
+            "condition": "always"
+          }
+        ],
+        "source": {
+          "file": "war3map.j",
+          "countStoreLine": 28408,
+          "extendedFlagLine": 28416
+        }
+      },
+      "n078": {
+        "targetRawcode": "n078",
+        "hasSavedCount": true,
+        "count": 2,
+        "limitidEx": true,
+        "registrations": [
+          {
+            "api": "RegisterBudingLimitEx",
+            "count": 2,
+            "counterMarkerRawcode": "",
+            "scriptLine": 48264,
+            "condition": "always"
+          }
+        ],
+        "source": {
+          "file": "war3map.j",
+          "countStoreLine": 28408,
+          "extendedFlagLine": 28416
+        }
+      },
+      "n079": {
+        "targetRawcode": "n079",
+        "hasSavedCount": true,
+        "count": 2,
+        "limitidEx": false,
+        "registrations": [
+          {
+            "api": "RegisterBudingLimit",
+            "count": 2,
+            "counterMarkerRawcode": "",
+            "scriptLine": 48265,
+            "condition": "always"
+          }
+        ],
+        "source": {
+          "file": "war3map.j",
+          "countStoreLine": 28408,
+          "extendedFlagLine": 28416
+        }
+      },
+      "n05C": {
+        "targetRawcode": "n05C",
+        "hasSavedCount": true,
+        "count": 2,
+        "limitidEx": false,
+        "registrations": [
+          {
+            "api": "RegisterBudingLimit",
+            "count": 2,
+            "counterMarkerRawcode": "u01R",
+            "scriptLine": 48266,
+            "condition": "always"
+          }
+        ],
+        "source": {
+          "file": "war3map.j",
+          "countStoreLine": 28408,
+          "extendedFlagLine": 28416
+        }
+      },
+      "h022": {
+        "targetRawcode": "h022",
+        "hasSavedCount": true,
+        "count": 4,
+        "limitidEx": false,
+        "registrations": [
+          {
+            "api": "RegisterBudingLimit",
+            "count": 4,
+            "counterMarkerRawcode": "",
+            "scriptLine": 48267,
+            "condition": "always"
+          }
+        ],
+        "source": {
+          "file": "war3map.j",
+          "countStoreLine": 28408,
+          "extendedFlagLine": 28416
+        }
+      },
+      "h0PJ": {
+        "targetRawcode": "h0PJ",
+        "hasSavedCount": true,
+        "count": 1,
+        "limitidEx": false,
+        "registrations": [
+          {
+            "api": "RegisterBudingLimit",
+            "count": 1,
+            "counterMarkerRawcode": "",
+            "scriptLine": 48268,
+            "condition": "always"
+          }
+        ],
+        "source": {
+          "file": "war3map.j",
+          "countStoreLine": 28408,
+          "extendedFlagLine": 28416
+        }
+      },
+      "h0JF": {
+        "targetRawcode": "h0JF",
+        "hasSavedCount": true,
+        "count": 10,
+        "limitidEx": false,
+        "registrations": [
+          {
+            "api": "RegisterBudingLimit",
+            "count": 10,
+            "counterMarkerRawcode": "",
+            "scriptLine": 48269,
+            "condition": "always"
+          }
+        ],
+        "source": {
+          "file": "war3map.j",
+          "countStoreLine": 28408,
+          "extendedFlagLine": 28416
+        }
+      },
+      "n04U": {
+        "targetRawcode": "n04U",
+        "hasSavedCount": true,
+        "count": 1,
+        "limitidEx": false,
+        "registrations": [
+          {
+            "api": "RegisterBudingLimit",
+            "count": 1,
+            "counterMarkerRawcode": "",
+            "scriptLine": 48270,
+            "condition": "always"
+          }
+        ],
+        "source": {
+          "file": "war3map.j",
+          "countStoreLine": 28408,
+          "extendedFlagLine": 28416
+        }
+      },
+      "n04W": {
+        "targetRawcode": "n04W",
+        "hasSavedCount": true,
+        "count": 3,
+        "limitidEx": false,
+        "registrations": [
+          {
+            "api": "RegisterBudingLimit",
+            "count": 3,
+            "counterMarkerRawcode": "",
+            "scriptLine": 48272,
+            "condition": "BD"
+          },
+          {
+            "api": "RegisterBudingLimit",
+            "count": 3,
+            "counterMarkerRawcode": "",
+            "scriptLine": 48274,
+            "condition": "!BD"
+          }
+        ],
+        "source": {
+          "file": "war3map.j",
+          "countStoreLine": 28408,
+          "extendedFlagLine": 28416
+        }
+      },
+      "h0JM": {
+        "targetRawcode": "h0JM",
+        "hasSavedCount": true,
+        "count": 1,
+        "limitidEx": false,
+        "registrations": [
+          {
+            "api": "RegisterBudingLimit",
+            "count": 1,
+            "counterMarkerRawcode": "",
+            "scriptLine": 48276,
+            "condition": "always"
+          }
+        ],
+        "source": {
+          "file": "war3map.j",
+          "countStoreLine": 28408,
+          "extendedFlagLine": 28416
+        }
+      },
+      "h0NP": {
+        "targetRawcode": "h0NP",
+        "hasSavedCount": true,
+        "count": 1,
+        "limitidEx": false,
+        "registrations": [
+          {
+            "api": "RegisterBudingLimit",
+            "count": 1,
+            "counterMarkerRawcode": "",
+            "scriptLine": 48277,
+            "condition": "always"
+          }
+        ],
+        "source": {
+          "file": "war3map.j",
+          "countStoreLine": 28408,
+          "extendedFlagLine": 28416
+        }
+      },
+      "n05S": {
+        "targetRawcode": "n05S",
+        "hasSavedCount": true,
+        "count": 4,
+        "limitidEx": false,
+        "registrations": [
+          {
+            "api": "RegisterBudingLimit",
+            "count": 4,
+            "counterMarkerRawcode": "",
+            "scriptLine": 48278,
+            "condition": "always"
+          }
+        ],
+        "source": {
+          "file": "war3map.j",
+          "countStoreLine": 28408,
+          "extendedFlagLine": 28416
+        }
+      },
+      "n07A": {
+        "targetRawcode": "n07A",
+        "hasSavedCount": true,
+        "count": 1,
+        "limitidEx": false,
+        "registrations": [
+          {
+            "api": "RegisterBudingLimit",
+            "count": 1,
+            "counterMarkerRawcode": "",
+            "scriptLine": 48279,
+            "condition": "always"
+          }
+        ],
+        "source": {
+          "file": "war3map.j",
+          "countStoreLine": 28408,
+          "extendedFlagLine": 28416
+        }
+      },
+      "n06U": {
+        "targetRawcode": "n06U",
+        "hasSavedCount": true,
+        "count": 1,
+        "limitidEx": false,
+        "registrations": [
+          {
+            "api": "RegisterBudingLimit",
+            "count": 1,
+            "counterMarkerRawcode": "",
+            "scriptLine": 48280,
+            "condition": "always"
+          }
+        ],
+        "source": {
+          "file": "war3map.j",
+          "countStoreLine": 28408,
+          "extendedFlagLine": 28416
+        }
+      },
+      "h0PD": {
+        "targetRawcode": "h0PD",
+        "hasSavedCount": true,
+        "count": 1,
+        "limitidEx": false,
+        "registrations": [
+          {
+            "api": "RegisterBudingLimit",
+            "count": 1,
+            "counterMarkerRawcode": "",
+            "scriptLine": 48281,
+            "condition": "always"
+          }
+        ],
+        "source": {
+          "file": "war3map.j",
+          "countStoreLine": 28408,
+          "extendedFlagLine": 28416
+        }
+      },
+      "n062": {
+        "targetRawcode": "n062",
+        "hasSavedCount": true,
+        "count": 1,
+        "limitidEx": false,
+        "registrations": [
+          {
+            "api": "RegisterBudingLimit",
+            "count": 1,
+            "counterMarkerRawcode": "",
+            "scriptLine": 48282,
+            "condition": "always"
+          }
+        ],
+        "source": {
+          "file": "war3map.j",
+          "countStoreLine": 28408,
+          "extendedFlagLine": 28416
+        }
+      },
+      "n07R": {
+        "targetRawcode": "n07R",
+        "hasSavedCount": true,
+        "count": 1,
+        "limitidEx": false,
+        "registrations": [
+          {
+            "api": "RegisterBudingLimit",
+            "count": 1,
+            "counterMarkerRawcode": "",
+            "scriptLine": 48283,
+            "condition": "always"
+          }
+        ],
+        "source": {
+          "file": "war3map.j",
+          "countStoreLine": 28408,
+          "extendedFlagLine": 28416
+        }
+      },
+      "h105": {
+        "targetRawcode": "h105",
+        "hasSavedCount": true,
+        "count": 10,
+        "limitidEx": false,
+        "registrations": [
+          {
+            "api": "RegisterBudingLimit",
+            "count": 10,
+            "counterMarkerRawcode": "",
+            "scriptLine": 48284,
+            "condition": "always"
+          }
+        ],
+        "source": {
+          "file": "war3map.j",
+          "countStoreLine": 28408,
+          "extendedFlagLine": 28416
+        }
+      },
+      "h0O8": {
+        "targetRawcode": "h0O8",
+        "hasSavedCount": true,
+        "count": 3,
+        "limitidEx": false,
+        "registrations": [
+          {
+            "api": "RegisterBudingLimit",
+            "count": 3,
+            "counterMarkerRawcode": "",
+            "scriptLine": 48285,
+            "condition": "always"
+          }
+        ],
+        "source": {
+          "file": "war3map.j",
+          "countStoreLine": 28408,
+          "extendedFlagLine": 28416
+        }
+      },
+      "h2C2": {
+        "targetRawcode": "h2C2",
+        "hasSavedCount": true,
+        "count": 1,
+        "limitidEx": false,
+        "registrations": [
+          {
+            "api": "RegisterBudingLimit",
+            "count": 1,
+            "counterMarkerRawcode": "",
+            "scriptLine": 48286,
+            "condition": "always"
+          }
+        ],
+        "source": {
+          "file": "war3map.j",
+          "countStoreLine": 28408,
+          "extendedFlagLine": 28416
+        }
+      },
+      "n07T": {
+        "targetRawcode": "n07T",
+        "hasSavedCount": true,
+        "count": 1,
+        "limitidEx": false,
+        "registrations": [
+          {
+            "api": "RegisterBudingLimit",
+            "count": 1,
+            "counterMarkerRawcode": "",
+            "scriptLine": 48287,
+            "condition": "always"
+          }
+        ],
+        "source": {
+          "file": "war3map.j",
+          "countStoreLine": 28408,
+          "extendedFlagLine": 28416
+        }
+      },
+      "n07V": {
+        "targetRawcode": "n07V",
+        "hasSavedCount": true,
+        "count": 1,
+        "limitidEx": false,
+        "registrations": [
+          {
+            "api": "RegisterBudingLimit",
+            "count": 1,
+            "counterMarkerRawcode": "",
+            "scriptLine": 48288,
+            "condition": "always"
+          }
+        ],
+        "source": {
+          "file": "war3map.j",
+          "countStoreLine": 28408,
+          "extendedFlagLine": 28416
+        }
+      },
+      "h0Q0": {
+        "targetRawcode": "h0Q0",
+        "hasSavedCount": true,
+        "count": 1,
+        "limitidEx": false,
+        "registrations": [
+          {
+            "api": "RegisterBudingLimit",
+            "count": 1,
+            "counterMarkerRawcode": "",
+            "scriptLine": 48289,
+            "condition": "always"
+          }
+        ],
+        "source": {
+          "file": "war3map.j",
+          "countStoreLine": 28408,
+          "extendedFlagLine": 28416
+        }
+      },
+      "h0M2": {
+        "targetRawcode": "h0M2",
+        "hasSavedCount": true,
+        "count": 1,
+        "limitidEx": false,
+        "registrations": [
+          {
+            "api": "RegisterBudingLimit",
+            "count": 1,
+            "counterMarkerRawcode": "",
+            "scriptLine": 48290,
+            "condition": "always"
+          }
+        ],
+        "source": {
+          "file": "war3map.j",
+          "countStoreLine": 28408,
+          "extendedFlagLine": 28416
+        }
+      },
+      "h18I": {
+        "targetRawcode": "h18I",
+        "hasSavedCount": true,
+        "count": 1,
+        "limitidEx": false,
+        "registrations": [
+          {
+            "api": "RegisterBudingLimit",
+            "count": 1,
+            "counterMarkerRawcode": "",
+            "scriptLine": 48291,
+            "condition": "always"
+          }
+        ],
+        "source": {
+          "file": "war3map.j",
+          "countStoreLine": 28408,
+          "extendedFlagLine": 28416
+        }
+      },
+      "n083": {
+        "targetRawcode": "n083",
+        "hasSavedCount": true,
+        "count": 1,
+        "limitidEx": false,
+        "registrations": [
+          {
+            "api": "RegisterBudingLimit",
+            "count": 1,
+            "counterMarkerRawcode": "",
+            "scriptLine": 48292,
+            "condition": "always"
+          }
+        ],
+        "source": {
+          "file": "war3map.j",
+          "countStoreLine": 28408,
+          "extendedFlagLine": 28416
+        }
+      },
+      "n08Y": {
+        "targetRawcode": "n08Y",
+        "hasSavedCount": true,
+        "count": 1,
+        "limitidEx": false,
+        "registrations": [
+          {
+            "api": "RegisterBudingLimit",
+            "count": 1,
+            "counterMarkerRawcode": "",
+            "scriptLine": 48293,
+            "condition": "always"
+          }
+        ],
+        "source": {
+          "file": "war3map.j",
+          "countStoreLine": 28408,
+          "extendedFlagLine": 28416
+        }
+      },
+      "n08Z": {
+        "targetRawcode": "n08Z",
+        "hasSavedCount": true,
+        "count": 1,
+        "limitidEx": false,
+        "registrations": [
+          {
+            "api": "RegisterBudingLimit",
+            "count": 1,
+            "counterMarkerRawcode": "",
+            "scriptLine": 48294,
+            "condition": "always"
+          }
+        ],
+        "source": {
+          "file": "war3map.j",
+          "countStoreLine": 28408,
+          "extendedFlagLine": 28416
+        }
+      },
+      "n08H": {
+        "targetRawcode": "n08H",
+        "hasSavedCount": true,
+        "count": 1,
+        "limitidEx": false,
+        "registrations": [
+          {
+            "api": "RegisterBudingLimit",
+            "count": 1,
+            "counterMarkerRawcode": "",
+            "scriptLine": 48295,
+            "condition": "always"
+          }
+        ],
+        "source": {
+          "file": "war3map.j",
+          "countStoreLine": 28408,
+          "extendedFlagLine": 28416
+        }
+      },
+      "n084": {
+        "targetRawcode": "n084",
+        "hasSavedCount": true,
+        "count": 1,
+        "limitidEx": false,
+        "registrations": [
+          {
+            "api": "RegisterBudingLimit",
+            "count": 1,
+            "counterMarkerRawcode": "",
+            "scriptLine": 48296,
+            "condition": "always"
+          }
+        ],
+        "source": {
+          "file": "war3map.j",
+          "countStoreLine": 28408,
+          "extendedFlagLine": 28416
+        }
+      },
+      "n086": {
+        "targetRawcode": "n086",
+        "hasSavedCount": true,
+        "count": 1,
+        "limitidEx": false,
+        "registrations": [
+          {
+            "api": "RegisterBudingLimit",
+            "count": 1,
+            "counterMarkerRawcode": "",
+            "scriptLine": 48297,
+            "condition": "always"
+          }
+        ],
+        "source": {
+          "file": "war3map.j",
+          "countStoreLine": 28408,
+          "extendedFlagLine": 28416
+        }
+      },
+      "n087": {
+        "targetRawcode": "n087",
+        "hasSavedCount": true,
+        "count": 1,
+        "limitidEx": false,
+        "registrations": [
+          {
+            "api": "RegisterBudingLimit",
+            "count": 1,
+            "counterMarkerRawcode": "",
+            "scriptLine": 48298,
+            "condition": "always"
+          }
+        ],
+        "source": {
+          "file": "war3map.j",
+          "countStoreLine": 28408,
+          "extendedFlagLine": 28416
+        }
+      },
+      "n066": {
+        "targetRawcode": "n066",
+        "hasSavedCount": true,
+        "count": 1,
+        "limitidEx": false,
+        "registrations": [
+          {
+            "api": "RegisterBudingLimit",
+            "count": 1,
+            "counterMarkerRawcode": "",
+            "scriptLine": 48299,
+            "condition": "always"
+          }
+        ],
+        "source": {
+          "file": "war3map.j",
+          "countStoreLine": 28408,
+          "extendedFlagLine": 28416
+        }
+      },
+      "h0YM": {
+        "targetRawcode": "h0YM",
+        "hasSavedCount": true,
+        "count": 1,
+        "limitidEx": false,
+        "registrations": [
+          {
+            "api": "RegisterBudingLimit",
+            "count": 1,
+            "counterMarkerRawcode": "",
+            "scriptLine": 48300,
+            "condition": "always"
+          }
+        ],
+        "source": {
+          "file": "war3map.j",
+          "countStoreLine": 28408,
+          "extendedFlagLine": 28416
+        }
+      },
+      "h0QV": {
+        "targetRawcode": "h0QV",
+        "hasSavedCount": true,
+        "count": 1,
+        "limitidEx": false,
+        "registrations": [
+          {
+            "api": "RegisterBudingLimit",
+            "count": 1,
+            "counterMarkerRawcode": "",
+            "scriptLine": 48301,
+            "condition": "always"
+          }
+        ],
+        "source": {
+          "file": "war3map.j",
+          "countStoreLine": 28408,
+          "extendedFlagLine": 28416
+        }
+      },
+      "n08G": {
+        "targetRawcode": "n08G",
+        "hasSavedCount": true,
+        "count": 2,
+        "limitidEx": false,
+        "registrations": [
+          {
+            "api": "RegisterBudingLimit",
+            "count": 2,
+            "counterMarkerRawcode": "",
+            "scriptLine": 48302,
+            "condition": "always"
+          }
+        ],
+        "source": {
+          "file": "war3map.j",
+          "countStoreLine": 28408,
+          "extendedFlagLine": 28416
+        }
+      },
+      "n085": {
+        "targetRawcode": "n085",
+        "hasSavedCount": true,
+        "count": 25,
+        "limitidEx": true,
+        "registrations": [
+          {
+            "api": "RegisterBudingLimitEx",
+            "count": 25,
+            "counterMarkerRawcode": "u047",
+            "scriptLine": 48303,
+            "condition": "always"
+          }
+        ],
+        "source": {
+          "file": "war3map.j",
+          "countStoreLine": 28408,
+          "extendedFlagLine": 28416
+        }
+      },
+      "n2YS": {
+        "targetRawcode": "n2YS",
+        "hasSavedCount": true,
+        "count": 5,
+        "limitidEx": true,
+        "registrations": [
+          {
+            "api": "RegisterBudingLimitEx",
+            "count": 5,
+            "counterMarkerRawcode": "u04I",
+            "scriptLine": 48304,
+            "condition": "always"
+          }
+        ],
+        "source": {
+          "file": "war3map.j",
+          "countStoreLine": 28408,
+          "extendedFlagLine": 28416
+        }
+      },
+      "n2YR": {
+        "targetRawcode": "n2YR",
+        "hasSavedCount": true,
+        "count": 3,
+        "limitidEx": true,
+        "registrations": [
+          {
+            "api": "RegisterBudingLimitEx",
+            "count": 3,
+            "counterMarkerRawcode": "u04J",
+            "scriptLine": 48305,
+            "condition": "always"
+          }
+        ],
+        "source": {
+          "file": "war3map.j",
+          "countStoreLine": 28408,
+          "extendedFlagLine": 28416
+        }
+      }
+    },
+    "contract": {
+      "abilityRawcode": "A2ZA",
+      "costPercent": 40,
+      "costRounding": "JASS integer multiplication/division",
+      "ownedAliveOnly": true,
+      "excludesNativeHeroes": true,
+      "excludesBuildings": false,
+      "excludesRewardProvider": true,
+      "requiresActiveReward": true,
+      "checksTargetRequirements": true,
+      "checksTargetBuildLimit": true,
+      "requirementCountAbsent": "zero-checks",
+      "limitCountAbsent": "unlimited-by-training-helper",
+      "limitCountPolicy": "max(group-count,all-owned-unit-count), excluding replaced unit and dead units; exact type or base_id lineage unless limitid_ex",
+      "consumeReward": "once-on-success",
+      "immediate": true,
+      "source": {
+        "action": {
+          "file": "war3map.j",
+          "function": "BoxGiftTryUpgradeTargetUnitNowByType",
+          "line": 30818,
+          "endLine": 30907
+        },
+        "target": {
+          "file": "war3map.j",
+          "function": "BoxGiftIsTrainTarget",
+          "line": 30794,
+          "endLine": 30805
+        },
+        "ownedAlive": {
+          "file": "war3map.j",
+          "function": "BoxGiftIsOwnedAlive",
+          "line": 7521,
+          "endLine": 7531
+        },
+        "consume": {
+          "file": "war3map.j",
+          "function": "BoxGiftTrainUpgradeDialogAction",
+          "line": 30957,
+          "endLine": 30977
+        },
+        "tech": {
+          "file": "war3map.j",
+          "function": "BoxGiftIsUpgradeTechReady",
+          "line": 30690,
+          "endLine": 30705
+        },
+        "limit": {
+          "file": "war3map.j",
+          "function": "BoxGiftIsUpgradeLimitReady",
+          "line": 30755,
+          "endLine": 30772
+        },
+        "countLimits": {
+          "file": "war3map.j",
+          "function": "BoxGiftCountPlayerLimitUsed",
+          "line": 30720,
+          "endLine": 30754
+        },
+        "countLimitEnum": {
+          "file": "war3map.j",
+          "function": "BoxGiftCountPlayerLimitUsedEnum",
+          "line": 30706,
+          "endLine": 30719
+        },
+        "abilityAlias": {
+          "file": "war3map.j",
+          "line": 79
+        }
+      }
+    },
+    "source": {
+      "file": "war3map.j",
+      "function": "BoxUpgradeTreeRegister___Register",
+      "line": 1450,
+      "endLine": 3338
+    },
+    "selectionCount": 225,
+    "requirementCount": 461,
+    "importedRawcodes": [
+      "n02S",
+      "n05H",
+      "n07I",
+      "n08Y",
+      "n08Z"
+    ],
+    "ordinaryUnitCount": 529,
+    "trainingOnlyUnitCount": 5,
+    "ordinaryUpgradeEdgesAdded": 0,
+    "importedUnits": [
+      {
+        "id": "v14_n05H",
+        "sourceRawcode": "n05H",
+        "combatRawcode": "h0OV",
+        "heroFamily": "h0HC",
+        "hero": true,
+        "isNativeHero": false,
+        "trainingOnly": true,
+        "trainingSources": [
+          "h0H4",
+          "n01F"
+        ],
+        "cost": 650,
+        "woodCost": 0,
+        "population": 16,
+        "sourcePoints": 1000,
+        "requiresDetails": [
+          {
+            "rawcode": "h220",
+            "name": "军团战争超级赞助",
+            "kind": "unit_or_requirement_marker",
+            "source": {
+              "table": "unit_upgrade_requirements.csv",
+              "row": 333,
+              "rawcode": "n05H"
+            },
+            "scriptLine": 3311
+          },
+          {
+            "rawcode": "R05E",
+            "name": "山岭巨人+石傀儡",
+            "kind": "technology",
+            "source": {
+              "table": "unit_upgrade_requirements.csv",
+              "row": 334,
+              "rawcode": "n05H"
+            },
+            "scriptLine": 3312
+          },
+          {
+            "rawcode": "u00S",
+            "name": "兵力要求: 2000",
+            "kind": "unit_or_requirement_marker",
+            "source": {
+              "table": "unit_upgrade_requirements.csv",
+              "row": 335,
+              "rawcode": "n05H"
+            },
+            "scriptLine": 3313
+          },
+          {
+            "rawcode": "u004",
+            "name": "等到战斗结束",
+            "kind": "unit_or_requirement_marker",
+            "source": {
+              "table": "unit_upgrade_requirements.csv",
+              "row": 336,
+              "rawcode": "n05H"
+            },
+            "scriptLine": 3314
+          }
+        ],
+        "initialBuildLimit": 1,
+        "buildLimits": [],
+        "sourceEvidence": {
+          "combatMapping": {
+            "combat": "h0OV",
+            "building": "n05H",
+            "line": 17883
+          },
+          "trainingSelections": [
+            {
+              "sourceRawcode": "h0H4",
+              "index": 1,
+              "scriptLine": 2590,
+              "file": "war3map.j"
+            },
+            {
+              "sourceRawcode": "n01F",
+              "index": 1,
+              "scriptLine": 2592,
+              "file": "war3map.j"
+            }
+          ],
+          "trainingContract": {
+            "action": {
+              "file": "war3map.j",
+              "function": "BoxGiftTryUpgradeTargetUnitNowByType",
+              "line": 30818,
+              "endLine": 30907
+            },
+            "target": {
+              "file": "war3map.j",
+              "function": "BoxGiftIsTrainTarget",
+              "line": 30794,
+              "endLine": 30805
+            },
+            "ownedAlive": {
+              "file": "war3map.j",
+              "function": "BoxGiftIsOwnedAlive",
+              "line": 7521,
+              "endLine": 7531
+            },
+            "consume": {
+              "file": "war3map.j",
+              "function": "BoxGiftTrainUpgradeDialogAction",
+              "line": 30957,
+              "endLine": 30977
+            },
+            "tech": {
+              "file": "war3map.j",
+              "function": "BoxGiftIsUpgradeTechReady",
+              "line": 30690,
+              "endLine": 30705
+            },
+            "limit": {
+              "file": "war3map.j",
+              "function": "BoxGiftIsUpgradeLimitReady",
+              "line": 30755,
+              "endLine": 30772
+            },
+            "countLimits": {
+              "file": "war3map.j",
+              "function": "BoxGiftCountPlayerLimitUsed",
+              "line": 30720,
+              "endLine": 30754
+            },
+            "countLimitEnum": {
+              "file": "war3map.j",
+              "function": "BoxGiftCountPlayerLimitUsedEnum",
+              "line": 30706,
+              "endLine": 30719
+            },
+            "abilityAlias": {
+              "file": "war3map.j",
+              "line": 79
+            }
+          },
+          "progressionPolicy": "BoxGift literal training leaf, separate from the Web numbered-stage reconstruction and ordinary Upgrade edges.",
+          "nativeHeroClassification": "Primary of the mapped combat object; Web altar-family identity does not imply UNIT_TYPE_HERO.",
+          "missingNativeFields": [
+            "lumbercost"
+          ],
+          "pricingPolicy": "Normal numeric catalog adapters retain their existing empty-field fallback; original missing fields remain absent in buildingRawFields."
+        }
+      },
+      {
+        "id": "v14_n08Y",
+        "sourceRawcode": "n08Y",
+        "combatRawcode": "h0X9",
+        "heroFamily": "h0DE",
+        "hero": true,
+        "isNativeHero": false,
+        "trainingOnly": true,
+        "trainingSources": [
+          "h0DV"
+        ],
+        "cost": 605,
+        "woodCost": 0,
+        "population": 17,
+        "sourcePoints": 955,
+        "requiresDetails": [
+          {
+            "rawcode": "u004",
+            "name": "等到战斗结束",
+            "kind": "unit_or_requirement_marker",
+            "source": {
+              "table": "unit_upgrade_requirements.csv",
+              "row": 446,
+              "rawcode": "n08Y"
+            },
+            "scriptLine": 3316
+          },
+          {
+            "rawcode": "h220",
+            "name": "军团战争超级赞助",
+            "kind": "unit_or_requirement_marker",
+            "source": {
+              "table": "unit_upgrade_requirements.csv",
+              "row": 447,
+              "rawcode": "n08Y"
+            },
+            "scriptLine": 3317
+          },
+          {
+            "rawcode": "R0HM",
+            "name": "大死灵巫师",
+            "kind": "technology",
+            "source": {
+              "table": "unit_upgrade_requirements.csv",
+              "row": 448,
+              "rawcode": "n08Y"
+            },
+            "scriptLine": 3318
+          },
+          {
+            "rawcode": "R0HS",
+            "name": "冰霜骨龙",
+            "kind": "technology",
+            "source": {
+              "table": "unit_upgrade_requirements.csv",
+              "row": 449,
+              "rawcode": "n08Y"
+            },
+            "scriptLine": 3319
+          }
+        ],
+        "initialBuildLimit": 1,
+        "buildLimits": [
+          {
+            "unit_rawcode": "n08Y",
+            "unit_name": "霜之哀伤·阿尔萨斯",
+            "limit_api": "RegisterBudingLimit",
+            "requirement_rawcode": "",
+            "requirement_name": "",
+            "requirement_kind": "",
+            "max_allowed": "1",
+            "source_line": "48293",
+            "unitRawcode": "n08Y",
+            "unitId": "v14_n08Y",
+            "maxAllowed": 1,
+            "maximum": 1,
+            "api": "RegisterBudingLimit",
+            "counterMarkerRawcode": "",
+            "counterMarkerName": "",
+            "counterMarkerRole": null,
+            "counterMarkerAvailableBelowLimit": false,
+            "requirementRawcode": "",
+            "requirementName": "",
+            "requires": [],
+            "scope": "lineage",
+            "releaseOnUpgrade": false,
+            "initial": true,
+            "initialDelaySeconds": 1,
+            "condition": "always",
+            "conditionEquivalentForNinefold": true,
+            "source": {
+              "table": "easter_egg_build_limits.csv",
+              "row": 36,
+              "rawcode": "n08Y"
+            },
+            "scriptLine": 48293,
+            "scriptEvidence": {
+              "file": "war3map.j",
+              "registerLines": [
+                28382,
+                28418
+              ],
+              "enforceLines": [
+                28427,
+                28483
+              ]
+            }
+          }
+        ],
+        "sourceEvidence": {
+          "combatMapping": {
+            "combat": "h0X9",
+            "building": "n08Y",
+            "line": 18582
+          },
+          "trainingSelections": [
+            {
+              "sourceRawcode": "h0DV",
+              "index": 1,
+              "scriptLine": 2594,
+              "file": "war3map.j"
+            }
+          ],
+          "trainingContract": {
+            "action": {
+              "file": "war3map.j",
+              "function": "BoxGiftTryUpgradeTargetUnitNowByType",
+              "line": 30818,
+              "endLine": 30907
+            },
+            "target": {
+              "file": "war3map.j",
+              "function": "BoxGiftIsTrainTarget",
+              "line": 30794,
+              "endLine": 30805
+            },
+            "ownedAlive": {
+              "file": "war3map.j",
+              "function": "BoxGiftIsOwnedAlive",
+              "line": 7521,
+              "endLine": 7531
+            },
+            "consume": {
+              "file": "war3map.j",
+              "function": "BoxGiftTrainUpgradeDialogAction",
+              "line": 30957,
+              "endLine": 30977
+            },
+            "tech": {
+              "file": "war3map.j",
+              "function": "BoxGiftIsUpgradeTechReady",
+              "line": 30690,
+              "endLine": 30705
+            },
+            "limit": {
+              "file": "war3map.j",
+              "function": "BoxGiftIsUpgradeLimitReady",
+              "line": 30755,
+              "endLine": 30772
+            },
+            "countLimits": {
+              "file": "war3map.j",
+              "function": "BoxGiftCountPlayerLimitUsed",
+              "line": 30720,
+              "endLine": 30754
+            },
+            "countLimitEnum": {
+              "file": "war3map.j",
+              "function": "BoxGiftCountPlayerLimitUsedEnum",
+              "line": 30706,
+              "endLine": 30719
+            },
+            "abilityAlias": {
+              "file": "war3map.j",
+              "line": 79
+            }
+          },
+          "progressionPolicy": "BoxGift literal training leaf, separate from the Web numbered-stage reconstruction and ordinary Upgrade edges.",
+          "nativeHeroClassification": "Primary of the mapped combat object; Web altar-family identity does not imply UNIT_TYPE_HERO.",
+          "missingNativeFields": [
+            "lumbercost"
+          ],
+          "pricingPolicy": "Normal numeric catalog adapters retain their existing empty-field fallback; original missing fields remain absent in buildingRawFields."
+        }
+      },
+      {
+        "id": "v14_n08Z",
+        "sourceRawcode": "n08Z",
+        "combatRawcode": "h0XA",
+        "heroFamily": "h0DE",
+        "hero": true,
+        "isNativeHero": false,
+        "trainingOnly": true,
+        "trainingSources": [
+          "h0DV"
+        ],
+        "cost": 505,
+        "woodCost": 0,
+        "population": 17,
+        "sourcePoints": 855,
+        "requiresDetails": [
+          {
+            "rawcode": "u004",
+            "name": "等到战斗结束",
+            "kind": "unit_or_requirement_marker",
+            "source": {
+              "table": "unit_upgrade_requirements.csv",
+              "row": 450,
+              "rawcode": "n08Z"
+            },
+            "scriptLine": 3321
+          },
+          {
+            "rawcode": "R01D",
+            "name": "高级牧师",
+            "kind": "technology",
+            "source": {
+              "table": "unit_upgrade_requirements.csv",
+              "row": 451,
+              "rawcode": "n08Z"
+            },
+            "scriptLine": 3322
+          },
+          {
+            "rawcode": "h220",
+            "name": "军团战争超级赞助",
+            "kind": "unit_or_requirement_marker",
+            "source": {
+              "table": "unit_upgrade_requirements.csv",
+              "row": 452,
+              "rawcode": "n08Z"
+            },
+            "scriptLine": 3323
+          },
+          {
+            "rawcode": "R0HS",
+            "name": "冰霜骨龙",
+            "kind": "technology",
+            "source": {
+              "table": "unit_upgrade_requirements.csv",
+              "row": 453,
+              "rawcode": "n08Z"
+            },
+            "scriptLine": 3324
+          }
+        ],
+        "initialBuildLimit": 1,
+        "buildLimits": [
+          {
+            "unit_rawcode": "n08Z",
+            "unit_name": "圣光圣骑·阿尔萨斯",
+            "limit_api": "RegisterBudingLimit",
+            "requirement_rawcode": "",
+            "requirement_name": "",
+            "requirement_kind": "",
+            "max_allowed": "1",
+            "source_line": "48294",
+            "unitRawcode": "n08Z",
+            "unitId": "v14_n08Z",
+            "maxAllowed": 1,
+            "maximum": 1,
+            "api": "RegisterBudingLimit",
+            "counterMarkerRawcode": "",
+            "counterMarkerName": "",
+            "counterMarkerRole": null,
+            "counterMarkerAvailableBelowLimit": false,
+            "requirementRawcode": "",
+            "requirementName": "",
+            "requires": [],
+            "scope": "lineage",
+            "releaseOnUpgrade": false,
+            "initial": true,
+            "initialDelaySeconds": 1,
+            "condition": "always",
+            "conditionEquivalentForNinefold": true,
+            "source": {
+              "table": "easter_egg_build_limits.csv",
+              "row": 37,
+              "rawcode": "n08Z"
+            },
+            "scriptLine": 48294,
+            "scriptEvidence": {
+              "file": "war3map.j",
+              "registerLines": [
+                28382,
+                28418
+              ],
+              "enforceLines": [
+                28427,
+                28483
+              ]
+            }
+          }
+        ],
+        "sourceEvidence": {
+          "combatMapping": {
+            "combat": "h0XA",
+            "building": "n08Z",
+            "line": 17451
+          },
+          "trainingSelections": [
+            {
+              "sourceRawcode": "h0DV",
+              "index": 2,
+              "scriptLine": 2595,
+              "file": "war3map.j"
+            }
+          ],
+          "trainingContract": {
+            "action": {
+              "file": "war3map.j",
+              "function": "BoxGiftTryUpgradeTargetUnitNowByType",
+              "line": 30818,
+              "endLine": 30907
+            },
+            "target": {
+              "file": "war3map.j",
+              "function": "BoxGiftIsTrainTarget",
+              "line": 30794,
+              "endLine": 30805
+            },
+            "ownedAlive": {
+              "file": "war3map.j",
+              "function": "BoxGiftIsOwnedAlive",
+              "line": 7521,
+              "endLine": 7531
+            },
+            "consume": {
+              "file": "war3map.j",
+              "function": "BoxGiftTrainUpgradeDialogAction",
+              "line": 30957,
+              "endLine": 30977
+            },
+            "tech": {
+              "file": "war3map.j",
+              "function": "BoxGiftIsUpgradeTechReady",
+              "line": 30690,
+              "endLine": 30705
+            },
+            "limit": {
+              "file": "war3map.j",
+              "function": "BoxGiftIsUpgradeLimitReady",
+              "line": 30755,
+              "endLine": 30772
+            },
+            "countLimits": {
+              "file": "war3map.j",
+              "function": "BoxGiftCountPlayerLimitUsed",
+              "line": 30720,
+              "endLine": 30754
+            },
+            "countLimitEnum": {
+              "file": "war3map.j",
+              "function": "BoxGiftCountPlayerLimitUsedEnum",
+              "line": 30706,
+              "endLine": 30719
+            },
+            "abilityAlias": {
+              "file": "war3map.j",
+              "line": 79
+            }
+          },
+          "progressionPolicy": "BoxGift literal training leaf, separate from the Web numbered-stage reconstruction and ordinary Upgrade edges.",
+          "nativeHeroClassification": "Primary of the mapped combat object; Web altar-family identity does not imply UNIT_TYPE_HERO.",
+          "missingNativeFields": [
+            "lumbercost"
+          ],
+          "pricingPolicy": "Normal numeric catalog adapters retain their existing empty-field fallback; original missing fields remain absent in buildingRawFields."
+        }
+      },
+      {
+        "id": "v14_n02S",
+        "sourceRawcode": "n02S",
+        "combatRawcode": "h0M0",
+        "heroFamily": "h0DE",
+        "hero": true,
+        "isNativeHero": false,
+        "trainingOnly": true,
+        "trainingSources": [
+          "h0DV"
+        ],
+        "cost": 300,
+        "woodCost": 0,
+        "population": 15,
+        "sourcePoints": 650,
+        "requiresDetails": [
+          {
+            "rawcode": "R0HS",
+            "name": "冰霜骨龙",
+            "kind": "technology",
+            "source": {
+              "table": "unit_upgrade_requirements.csv",
+              "row": 319,
+              "rawcode": "n02S"
+            },
+            "scriptLine": 3326
+          },
+          {
+            "rawcode": "u00S",
+            "name": "兵力要求: 2000",
+            "kind": "unit_or_requirement_marker",
+            "source": {
+              "table": "unit_upgrade_requirements.csv",
+              "row": 320,
+              "rawcode": "n02S"
+            },
+            "scriptLine": 3327
+          },
+          {
+            "rawcode": "u004",
+            "name": "等到战斗结束",
+            "kind": "unit_or_requirement_marker",
+            "source": {
+              "table": "unit_upgrade_requirements.csv",
+              "row": 321,
+              "rawcode": "n02S"
+            },
+            "scriptLine": 3328
+          }
+        ],
+        "initialBuildLimit": 1,
+        "buildLimits": [],
+        "sourceEvidence": {
+          "combatMapping": {
+            "combat": "h0M0",
+            "building": "n02S",
+            "line": 17508
+          },
+          "trainingSelections": [
+            {
+              "sourceRawcode": "h0DV",
+              "index": 3,
+              "scriptLine": 2596,
+              "file": "war3map.j"
+            }
+          ],
+          "trainingContract": {
+            "action": {
+              "file": "war3map.j",
+              "function": "BoxGiftTryUpgradeTargetUnitNowByType",
+              "line": 30818,
+              "endLine": 30907
+            },
+            "target": {
+              "file": "war3map.j",
+              "function": "BoxGiftIsTrainTarget",
+              "line": 30794,
+              "endLine": 30805
+            },
+            "ownedAlive": {
+              "file": "war3map.j",
+              "function": "BoxGiftIsOwnedAlive",
+              "line": 7521,
+              "endLine": 7531
+            },
+            "consume": {
+              "file": "war3map.j",
+              "function": "BoxGiftTrainUpgradeDialogAction",
+              "line": 30957,
+              "endLine": 30977
+            },
+            "tech": {
+              "file": "war3map.j",
+              "function": "BoxGiftIsUpgradeTechReady",
+              "line": 30690,
+              "endLine": 30705
+            },
+            "limit": {
+              "file": "war3map.j",
+              "function": "BoxGiftIsUpgradeLimitReady",
+              "line": 30755,
+              "endLine": 30772
+            },
+            "countLimits": {
+              "file": "war3map.j",
+              "function": "BoxGiftCountPlayerLimitUsed",
+              "line": 30720,
+              "endLine": 30754
+            },
+            "countLimitEnum": {
+              "file": "war3map.j",
+              "function": "BoxGiftCountPlayerLimitUsedEnum",
+              "line": 30706,
+              "endLine": 30719
+            },
+            "abilityAlias": {
+              "file": "war3map.j",
+              "line": 79
+            }
+          },
+          "progressionPolicy": "BoxGift literal training leaf, separate from the Web numbered-stage reconstruction and ordinary Upgrade edges.",
+          "nativeHeroClassification": "Primary of the mapped combat object; Web altar-family identity does not imply UNIT_TYPE_HERO.",
+          "missingNativeFields": [
+            "lumbercost"
+          ],
+          "pricingPolicy": "Normal numeric catalog adapters retain their existing empty-field fallback; original missing fields remain absent in buildingRawFields."
+        }
+      },
+      {
+        "id": "v14_n07I",
+        "sourceRawcode": "n07I",
+        "combatRawcode": "h0UQ",
+        "heroFamily": "h0U3",
+        "hero": true,
+        "isNativeHero": false,
+        "trainingOnly": true,
+        "trainingSources": [
+          "h0U2"
+        ],
+        "cost": 500,
+        "woodCost": 0,
+        "population": 17,
+        "sourcePoints": 875,
+        "requiresDetails": [
+          {
+            "rawcode": "u004",
+            "name": "等到战斗结束",
+            "kind": "unit_or_requirement_marker",
+            "source": {
+              "table": "unit_upgrade_requirements.csv",
+              "row": 394,
+              "rawcode": "n07I"
+            },
+            "scriptLine": 3330
+          },
+          {
+            "rawcode": "h220",
+            "name": "军团战争超级赞助",
+            "kind": "unit_or_requirement_marker",
+            "source": {
+              "table": "unit_upgrade_requirements.csv",
+              "row": 395,
+              "rawcode": "n07I"
+            },
+            "scriptLine": 3331
+          },
+          {
+            "rawcode": "R0D2",
+            "name": "娜迦海妖战士",
+            "kind": "technology",
+            "source": {
+              "table": "unit_upgrade_requirements.csv",
+              "row": 396,
+              "rawcode": "n07I"
+            },
+            "scriptLine": 3332
+          }
+        ],
+        "initialBuildLimit": 1,
+        "buildLimits": [],
+        "sourceEvidence": {
+          "combatMapping": {
+            "combat": "h0UQ",
+            "building": "n07I",
+            "line": 18456
+          },
+          "trainingSelections": [
+            {
+              "sourceRawcode": "h0U2",
+              "index": 1,
+              "scriptLine": 2598,
+              "file": "war3map.j"
+            }
+          ],
+          "trainingContract": {
+            "action": {
+              "file": "war3map.j",
+              "function": "BoxGiftTryUpgradeTargetUnitNowByType",
+              "line": 30818,
+              "endLine": 30907
+            },
+            "target": {
+              "file": "war3map.j",
+              "function": "BoxGiftIsTrainTarget",
+              "line": 30794,
+              "endLine": 30805
+            },
+            "ownedAlive": {
+              "file": "war3map.j",
+              "function": "BoxGiftIsOwnedAlive",
+              "line": 7521,
+              "endLine": 7531
+            },
+            "consume": {
+              "file": "war3map.j",
+              "function": "BoxGiftTrainUpgradeDialogAction",
+              "line": 30957,
+              "endLine": 30977
+            },
+            "tech": {
+              "file": "war3map.j",
+              "function": "BoxGiftIsUpgradeTechReady",
+              "line": 30690,
+              "endLine": 30705
+            },
+            "limit": {
+              "file": "war3map.j",
+              "function": "BoxGiftIsUpgradeLimitReady",
+              "line": 30755,
+              "endLine": 30772
+            },
+            "countLimits": {
+              "file": "war3map.j",
+              "function": "BoxGiftCountPlayerLimitUsed",
+              "line": 30720,
+              "endLine": 30754
+            },
+            "countLimitEnum": {
+              "file": "war3map.j",
+              "function": "BoxGiftCountPlayerLimitUsedEnum",
+              "line": 30706,
+              "endLine": 30719
+            },
+            "abilityAlias": {
+              "file": "war3map.j",
+              "line": 79
+            }
+          },
+          "progressionPolicy": "BoxGift literal training leaf, separate from the Web numbered-stage reconstruction and ordinary Upgrade edges.",
+          "nativeHeroClassification": "Primary of the mapped combat object; Web altar-family identity does not imply UNIT_TYPE_HERO.",
+          "missingNativeFields": [
+            "lumbercost"
+          ],
+          "pricingPolicy": "Normal numeric catalog adapters retain their existing empty-field fallback; original missing fields remain absent in buildingRawFields."
+        }
+      }
+    ]
+  }
+}

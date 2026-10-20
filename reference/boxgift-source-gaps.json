@@ -977,5 +977,33 @@
     "Keep the 5 Box-only edges distinct from ordinary upgrade edges; source requires A2ZA reward, owned alive non-native-hero, immediate 40-percent target-price replacement and one reward consumption.",
     "Add source-confirmed prerequisite history grants R0HS/R0HM/R01D/R0D2/R05E; merely adding nodes leaves every branch locked because these five grants are currently absent in EGG_REQUIREMENTS.",
     "Replace the supplemental==two hardcoded assertion with explicit expected registration/closure consistency checks; preserve existing normal two supplemental edges and hero stage reconstruction metadata."
-  ]
+  ],
+  "resolution": {
+    "revision": "v15",
+    "activeUnitCount": 534,
+    "trainingOnlyRawcodes": [
+      "n02S",
+      "n05H",
+      "n07I",
+      "n08Y",
+      "n08Z"
+    ],
+    "selectionCount": 225,
+    "implemented": [
+      "source-reward-wave6-wave13",
+      "training-command-and-ui",
+      "five-exact-completion-technologies",
+      "40-percent-native-building-cost",
+      "consume-entire-pool-only-on-success",
+      "source-limit-registration-only",
+      "fresh-unit-state-with-QC-and-limit-transfer"
+    ],
+    "remaining": [
+      "thirty-second-native-branch-dialog-timeout",
+      "random-fighter-reward-placement",
+      "controllable-builder-reward-spells",
+      "platform-frame-tech-refund-hook"
+    ],
+    "note": "The original audit counts above are retained as the pre-fix snapshot."
+  }
 }

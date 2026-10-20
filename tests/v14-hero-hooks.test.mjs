@@ -52,11 +52,12 @@ test('the independent Garrosh bleed timer can cross the alchemist rage threshold
 
 test('synchronous source damage additions do not reenter the main hero trigger, but a later standalone scripted event does',()=>{
   assert.match(jass,/call DisableTrigger\(Eb\)[\s\S]*?call SingedChemicalRage\(i,P8\)/);
-  const game=fixture(),attacker=entity(game,'n0S4'),alchemist=entity(game,'h0XH',{ownerId:4,team:1,side:'monster'});
+  const game=fixture(),attacker=entity(game,'h002'),alchemist=entity(game,'h0XH',{ownerId:4,team:1,side:'monster'});
+  attacker.skillSpecs=compileSkills({id:'v14-main-event-fixture',skillVersion:'v14.1A5',abilityIds:['A01I']});attacker.mana=20;
   alchemist.hp=alchemist.maxHp*.25+101;
   let events=0;const original=game._hurt.bind(game);game._hurt=(...args)=>{events++;assert.ok(events<10,'main damage additions must not recursively trigger themselves');return original(...args);};
   game._hurt(alchemist,100,attacker,{spell:true,universal:true});
-  assert.equal(events,2);assert.ok(alchemist.hp<alchemist.maxHp*.25);assert.equal(rage(alchemist),undefined,'the nested 3% addition runs while the original main damage trigger is disabled');
+  assert.equal(events,2);assert.ok(alchemist.hp<alchemist.maxHp*.25);assert.equal(rage(alchemist),undefined,'the nested A01I mana addition runs while the original main damage trigger is disabled');
   assert.equal(game._sourceDamageTriggerDepth??0,0,'the depth is released after the event');
   game._hurt(alchemist,1,attacker,{spell:true,universal:true,scripted:true});
   assert.ok(rage(alchemist));assert.equal(alchemist.skillStates.A2Z2.casts,1);assert.equal(game._sourceDamageTriggerDepth??0,0);

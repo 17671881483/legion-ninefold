@@ -19,10 +19,11 @@ function fixture(){
 
 test('verified v14 markers compile with source mechanics and preserve old-version isolation',()=>{
  const ids=['A2Y1','A2Y5','A2Y6','A0TA','A0JO','A0IC','A1Q0','A0TH','A0YD'];
- for(const s of compileSkills(def(ids)))assert.equal(s.status,'implemented',s.id);
+ for(const s of compileSkills(def(ids)))assert.equal(s.status,['A2Y1','A2Y5'].includes(s.id)?'partial':'implemented',s.id);
  const [hurricane,ripple]=compileSkills(def(ids));near(hurricane.radius,350/300);near(hurricane.pull,20/300);assert.equal(hurricane.count,25);assert.equal(ripple.count,5);assert.equal(ripple.manaCost,15);
  assert.equal(compileSkills({abilityIds:['A0TA']})[0].status,'unresolved');
- for(const s of compileSkills(def(['A2Y0','A1DR','A0BH'])))assert.equal(s.status,'unresolved',s.id);
+ for(const s of compileSkills(def(['A2Y0','A0BH'])))assert.equal(s.status,'unresolved',s.id);
+ assert.equal(compileSkills(def(['A1DR']))[0].status,'partial','ice-shield timing and explicit attack classes are implemented; hidden native classes remain unresolved');
 });
 
 test('hurricane waits for a damage event, then deals 25 exact pulses and keeps a fixed center after caster death',()=>{

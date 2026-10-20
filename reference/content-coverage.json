@@ -1,6 +1,6 @@
 {
   "sourceVersion": "v14.1A5",
-  "skillImplementationRevision": "v14-content-20261020-2",
+  "skillImplementationRevision": "v14-content-20261020-3",
   "units": 529,
   "mercenaryRecords": 60,
   "mainWaves": 35,
@@ -10,14 +10,61 @@
     "technologies": 815
   },
   "playerRuntimeForms": [
-    "h0YO"
+    "h0YO",
+    "h0UD",
+    "h0UE",
+    "h2AE",
+    "n06V",
+    "n06W"
+  ],
+  "playerRuntimeAbilities": [
+    {
+      "sourceRawcode": "h0UD",
+      "abilityIds": [
+        "A1CP"
+      ]
+    },
+    {
+      "sourceRawcode": "h2AE",
+      "abilityIds": [
+        "A1CP"
+      ]
+    },
+    {
+      "sourceRawcode": "e008",
+      "abilityIds": [
+        "A1CV",
+        "A1CW"
+      ]
+    },
+    {
+      "sourceRawcode": "h0UG",
+      "abilityIds": [
+        "A1CG"
+      ]
+    },
+    {
+      "sourceRawcode": "h0SY",
+      "abilityIds": [
+        "A1BD",
+        "A1BE",
+        "A1BF",
+        "A1BH"
+      ]
+    },
+    {
+      "sourceRawcode": "h0SN",
+      "abilityIds": [
+        "A19Z"
+      ]
+    }
   ],
   "playerSkills": {
     "counts": {
-      "implemented": 355,
-      "partial": 2,
-      "marker": 30,
-      "unresolved": 160
+      "implemented": 370,
+      "partial": 20,
+      "marker": 31,
+      "unresolved": 135
     },
     "abilities": [
       {
@@ -364,6 +411,8 @@
         "kind": "poison",
         "unitRawcodes": [
           "h010",
+          "h0UD",
+          "h2AE",
           "h2AF",
           "n076"
         ]
@@ -3073,8 +3122,8 @@
       {
         "rawcode": "A0S3",
         "name": "冥火",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "implemented",
+        "kind": "hellfire_damage",
         "unitRawcodes": [
           "h0S4"
         ]
@@ -3127,8 +3176,8 @@
       {
         "rawcode": "A0SA",
         "name": "自爆",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "implemented",
+        "kind": "death_explosion",
         "unitRawcodes": [
           "h0SC"
         ]
@@ -4051,10 +4100,19 @@
         ]
       },
       {
+        "rawcode": "A19Z",
+        "name": "攻击力",
+        "status": "implemented",
+        "kind": "script_attack_level",
+        "unitRawcodes": [
+          "h0SN"
+        ]
+      },
+      {
         "rawcode": "A1A1",
         "name": "致命挥砍",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "implemented",
+        "kind": "garrosh_source",
         "unitRawcodes": [
           "n06K"
         ]
@@ -4062,8 +4120,8 @@
       {
         "rawcode": "A1A2",
         "name": "裂地重斧",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "garrosh_source",
         "unitRawcodes": [
           "n06K"
         ]
@@ -4071,8 +4129,8 @@
       {
         "rawcode": "A1A3",
         "name": "肉弹抛投",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "garrosh_source",
         "unitRawcodes": [
           "n06K"
         ]
@@ -4080,8 +4138,8 @@
       {
         "rawcode": "A1A4",
         "name": "氏族荣耀",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "implemented",
+        "kind": "garrosh_source",
         "unitRawcodes": [
           "n06K"
         ]
@@ -4107,8 +4165,8 @@
       {
         "rawcode": "A1B6",
         "name": "灵魂汲取",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "implemented",
+        "kind": "illidan_source",
         "unitRawcodes": [
           "n06U",
           "n080"
@@ -4117,8 +4175,8 @@
       {
         "rawcode": "A1B7",
         "name": "暗夜寄生",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "implemented",
+        "kind": "illidan_source",
         "unitRawcodes": [
           "n06U",
           "n080"
@@ -4137,8 +4195,8 @@
       {
         "rawcode": "A1B9",
         "name": "恐怖光环",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "illidan_source",
         "unitRawcodes": [
           "n06U",
           "n080"
@@ -4147,8 +4205,8 @@
       {
         "rawcode": "A1BA",
         "name": "邪能烈焰",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "illidan_source",
         "unitRawcodes": [
           "n06U",
           "n080"
@@ -4157,8 +4215,8 @@
       {
         "rawcode": "A1BB",
         "name": "艾辛诺斯烈焰",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "illidan_source",
         "unitRawcodes": [
           "n06U",
           "n080"
@@ -4167,11 +4225,47 @@
       {
         "rawcode": "A1BC",
         "name": "恶魔形态",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "illidan_source",
         "unitRawcodes": [
           "n06U",
           "n080"
+        ]
+      },
+      {
+        "rawcode": "A1BD",
+        "name": "攻击力",
+        "status": "implemented",
+        "kind": "illidan_source",
+        "unitRawcodes": [
+          "h0SY"
+        ]
+      },
+      {
+        "rawcode": "A1BE",
+        "name": "召唤暗影魔",
+        "status": "partial",
+        "kind": "illidan_source",
+        "unitRawcodes": [
+          "h0SY"
+        ]
+      },
+      {
+        "rawcode": "A1BF",
+        "name": "眼棱",
+        "status": "partial",
+        "kind": "illidan_source",
+        "unitRawcodes": [
+          "h0SY"
+        ]
+      },
+      {
+        "rawcode": "A1BH",
+        "name": "伊利丹恶魔形态",
+        "status": "implemented",
+        "kind": "illidan_source",
+        "unitRawcodes": [
+          "h0SY"
         ]
       },
       {
@@ -4204,6 +4298,15 @@
         ]
       },
       {
+        "rawcode": "A1CG",
+        "name": "潮汐之力伤害减少",
+        "status": "implemented",
+        "kind": "naga_spell_resistance",
+        "unitRawcodes": [
+          "h0UG"
+        ]
+      },
+      {
         "rawcode": "A1CH",
         "name": "海浪赞歌",
         "status": "implemented",
@@ -4233,17 +4336,28 @@
       {
         "rawcode": "A1CO",
         "name": "战吼",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "implemented",
+        "kind": "naga_source",
         "unitRawcodes": [
+          "h0UE",
           "n077"
+        ]
+      },
+      {
+        "rawcode": "A1CP",
+        "name": "鱼人战吼吸血",
+        "status": "implemented",
+        "kind": "aura_lifesteal",
+        "unitRawcodes": [
+          "h0UD",
+          "h2AE"
         ]
       },
       {
         "rawcode": "A1CQ",
         "name": "鱼人袭击",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "implemented",
+        "kind": "naga_source",
         "unitRawcodes": [
           "n078"
         ]
@@ -4260,8 +4374,8 @@
       {
         "rawcode": "A1CS",
         "name": "冲锋",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "naga_source",
         "unitRawcodes": [
           "n078"
         ]
@@ -4269,8 +4383,8 @@
       {
         "rawcode": "A1CT",
         "name": "海洋治愈",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "naga_source",
         "unitRawcodes": [
           "n079"
         ]
@@ -4278,17 +4392,35 @@
       {
         "rawcode": "A1CU",
         "name": "潮汐之泉",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "naga_source",
         "unitRawcodes": [
           "n079"
         ]
       },
       {
+        "rawcode": "A1CV",
+        "name": "潮汐之泉",
+        "status": "implemented",
+        "kind": "aura_regen",
+        "unitRawcodes": [
+          "e008"
+        ]
+      },
+      {
+        "rawcode": "A1CW",
+        "name": "潮汐之泉",
+        "status": "implemented",
+        "kind": "aura_damage",
+        "unitRawcodes": [
+          "e008"
+        ]
+      },
+      {
         "rawcode": "A1D7",
         "name": "虚幻",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "naga_source",
         "unitRawcodes": [
           "h2A5",
           "n07A"
@@ -4297,8 +4429,8 @@
       {
         "rawcode": "A1D8",
         "name": "冲刺",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "naga_source",
         "unitRawcodes": [
           "h2A5",
           "n07A"
@@ -4307,8 +4439,8 @@
       {
         "rawcode": "A1D9",
         "name": "盾甲",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "implemented",
+        "kind": "naga_source",
         "unitRawcodes": [
           "h2A5",
           "n07A"
@@ -4335,8 +4467,8 @@
       {
         "rawcode": "A1DD",
         "name": "毒素吐息",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "naga_source",
         "unitRawcodes": [
           "n07C"
         ]
@@ -4353,8 +4485,8 @@
       {
         "rawcode": "A1DP",
         "name": "水晶箭",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "implemented",
+        "kind": "naga_source",
         "unitRawcodes": [
           "n07G"
         ]
@@ -4362,8 +4494,8 @@
       {
         "rawcode": "A1DQ",
         "name": "潮汐斩",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "naga_source",
         "unitRawcodes": [
           "n07H"
         ]
@@ -4371,8 +4503,8 @@
       {
         "rawcode": "A1DR",
         "name": "冰盾",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "naga_source",
         "unitRawcodes": [
           "n07H"
         ]
@@ -4884,7 +5016,7 @@
       {
         "rawcode": "A2Y1",
         "name": "潮汐飓风",
-        "status": "implemented",
+        "status": "partial",
         "kind": "naga_hurricane",
         "unitRawcodes": [
           "n2YR"
@@ -4902,7 +5034,7 @@
       {
         "rawcode": "A2Y5",
         "name": "诅咒波纹",
-        "status": "implemented",
+        "status": "partial",
         "kind": "naga_ripple",
         "unitRawcodes": [
           "n2YS"
@@ -5002,8 +5134,8 @@
       {
         "rawcode": "A2YJ",
         "name": "巨龙之梦",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "marker",
+        "kind": "form_description",
         "unitRawcodes": [
           "h0YM"
         ]
@@ -5370,10 +5502,10 @@
   },
   "battleSkills": {
     "counts": {
-      "implemented": 406,
-      "partial": 2,
-      "marker": 43,
-      "unresolved": 181
+      "implemented": 421,
+      "partial": 20,
+      "marker": 44,
+      "unresolved": 156
     },
     "abilities": [
       {
@@ -5741,6 +5873,8 @@
         "kind": "poison",
         "unitRawcodes": [
           "h010",
+          "h0UD",
+          "h2AE",
           "h2AF",
           "n076"
         ]
@@ -8872,8 +9006,8 @@
       {
         "rawcode": "A0S3",
         "name": "冥火",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "implemented",
+        "kind": "hellfire_damage",
         "unitRawcodes": [
           "h0S4"
         ]
@@ -8926,8 +9060,8 @@
       {
         "rawcode": "A0SA",
         "name": "自爆",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "implemented",
+        "kind": "death_explosion",
         "unitRawcodes": [
           "h0SC"
         ]
@@ -10118,10 +10252,19 @@
         ]
       },
       {
+        "rawcode": "A19Z",
+        "name": "攻击力",
+        "status": "implemented",
+        "kind": "script_attack_level",
+        "unitRawcodes": [
+          "h0SN"
+        ]
+      },
+      {
         "rawcode": "A1A1",
         "name": "致命挥砍",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "implemented",
+        "kind": "garrosh_source",
         "unitRawcodes": [
           "n06K"
         ]
@@ -10129,8 +10272,8 @@
       {
         "rawcode": "A1A2",
         "name": "裂地重斧",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "garrosh_source",
         "unitRawcodes": [
           "n06K"
         ]
@@ -10138,8 +10281,8 @@
       {
         "rawcode": "A1A3",
         "name": "肉弹抛投",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "garrosh_source",
         "unitRawcodes": [
           "n06K"
         ]
@@ -10147,8 +10290,8 @@
       {
         "rawcode": "A1A4",
         "name": "氏族荣耀",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "implemented",
+        "kind": "garrosh_source",
         "unitRawcodes": [
           "n06K"
         ]
@@ -10194,8 +10337,8 @@
       {
         "rawcode": "A1B6",
         "name": "灵魂汲取",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "implemented",
+        "kind": "illidan_source",
         "unitRawcodes": [
           "n06U",
           "n080"
@@ -10204,8 +10347,8 @@
       {
         "rawcode": "A1B7",
         "name": "暗夜寄生",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "implemented",
+        "kind": "illidan_source",
         "unitRawcodes": [
           "n06U",
           "n080"
@@ -10224,8 +10367,8 @@
       {
         "rawcode": "A1B9",
         "name": "恐怖光环",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "illidan_source",
         "unitRawcodes": [
           "n06U",
           "n080"
@@ -10234,8 +10377,8 @@
       {
         "rawcode": "A1BA",
         "name": "邪能烈焰",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "illidan_source",
         "unitRawcodes": [
           "n06U",
           "n080"
@@ -10244,8 +10387,8 @@
       {
         "rawcode": "A1BB",
         "name": "艾辛诺斯烈焰",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "illidan_source",
         "unitRawcodes": [
           "n06U",
           "n080"
@@ -10254,11 +10397,47 @@
       {
         "rawcode": "A1BC",
         "name": "恶魔形态",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "illidan_source",
         "unitRawcodes": [
           "n06U",
           "n080"
+        ]
+      },
+      {
+        "rawcode": "A1BD",
+        "name": "攻击力",
+        "status": "implemented",
+        "kind": "illidan_source",
+        "unitRawcodes": [
+          "h0SY"
+        ]
+      },
+      {
+        "rawcode": "A1BE",
+        "name": "召唤暗影魔",
+        "status": "partial",
+        "kind": "illidan_source",
+        "unitRawcodes": [
+          "h0SY"
+        ]
+      },
+      {
+        "rawcode": "A1BF",
+        "name": "眼棱",
+        "status": "partial",
+        "kind": "illidan_source",
+        "unitRawcodes": [
+          "h0SY"
+        ]
+      },
+      {
+        "rawcode": "A1BH",
+        "name": "伊利丹恶魔形态",
+        "status": "implemented",
+        "kind": "illidan_source",
+        "unitRawcodes": [
+          "h0SY"
         ]
       },
       {
@@ -10298,6 +10477,15 @@
           "h0U9",
           "h0UA",
           "h0UB"
+        ]
+      },
+      {
+        "rawcode": "A1CG",
+        "name": "潮汐之力伤害减少",
+        "status": "implemented",
+        "kind": "naga_spell_resistance",
+        "unitRawcodes": [
+          "h0UG"
         ]
       },
       {
@@ -10348,17 +10536,28 @@
       {
         "rawcode": "A1CO",
         "name": "战吼",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "implemented",
+        "kind": "naga_source",
         "unitRawcodes": [
+          "h0UE",
           "n077"
+        ]
+      },
+      {
+        "rawcode": "A1CP",
+        "name": "鱼人战吼吸血",
+        "status": "implemented",
+        "kind": "aura_lifesteal",
+        "unitRawcodes": [
+          "h0UD",
+          "h2AE"
         ]
       },
       {
         "rawcode": "A1CQ",
         "name": "鱼人袭击",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "implemented",
+        "kind": "naga_source",
         "unitRawcodes": [
           "n078"
         ]
@@ -10375,8 +10574,8 @@
       {
         "rawcode": "A1CS",
         "name": "冲锋",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "naga_source",
         "unitRawcodes": [
           "n078"
         ]
@@ -10384,8 +10583,8 @@
       {
         "rawcode": "A1CT",
         "name": "海洋治愈",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "naga_source",
         "unitRawcodes": [
           "n079"
         ]
@@ -10393,17 +10592,35 @@
       {
         "rawcode": "A1CU",
         "name": "潮汐之泉",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "naga_source",
         "unitRawcodes": [
           "n079"
         ]
       },
       {
+        "rawcode": "A1CV",
+        "name": "潮汐之泉",
+        "status": "implemented",
+        "kind": "aura_regen",
+        "unitRawcodes": [
+          "e008"
+        ]
+      },
+      {
+        "rawcode": "A1CW",
+        "name": "潮汐之泉",
+        "status": "implemented",
+        "kind": "aura_damage",
+        "unitRawcodes": [
+          "e008"
+        ]
+      },
+      {
         "rawcode": "A1D7",
         "name": "虚幻",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "naga_source",
         "unitRawcodes": [
           "h2A5",
           "n07A"
@@ -10412,8 +10629,8 @@
       {
         "rawcode": "A1D8",
         "name": "冲刺",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "naga_source",
         "unitRawcodes": [
           "h2A5",
           "n07A"
@@ -10422,8 +10639,8 @@
       {
         "rawcode": "A1D9",
         "name": "盾甲",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "implemented",
+        "kind": "naga_source",
         "unitRawcodes": [
           "h2A5",
           "n07A"
@@ -10450,8 +10667,8 @@
       {
         "rawcode": "A1DD",
         "name": "毒素吐息",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "naga_source",
         "unitRawcodes": [
           "n07C"
         ]
@@ -10468,8 +10685,8 @@
       {
         "rawcode": "A1DP",
         "name": "水晶箭",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "implemented",
+        "kind": "naga_source",
         "unitRawcodes": [
           "n07G"
         ]
@@ -10477,8 +10694,8 @@
       {
         "rawcode": "A1DQ",
         "name": "潮汐斩",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "naga_source",
         "unitRawcodes": [
           "n07H"
         ]
@@ -10486,8 +10703,8 @@
       {
         "rawcode": "A1DR",
         "name": "冰盾",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "naga_source",
         "unitRawcodes": [
           "n07H"
         ]
@@ -11086,7 +11303,7 @@
       {
         "rawcode": "A2Y1",
         "name": "潮汐飓风",
-        "status": "implemented",
+        "status": "partial",
         "kind": "naga_hurricane",
         "unitRawcodes": [
           "n2YR"
@@ -11104,7 +11321,7 @@
       {
         "rawcode": "A2Y5",
         "name": "诅咒波纹",
-        "status": "implemented",
+        "status": "partial",
         "kind": "naga_ripple",
         "unitRawcodes": [
           "n2YS"
@@ -11204,8 +11421,8 @@
       {
         "rawcode": "A2YJ",
         "name": "巨龙之梦",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "marker",
+        "kind": "form_description",
         "unitRawcodes": [
           "h0YM"
         ]

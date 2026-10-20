@@ -374,6 +374,19 @@
 .sandbox-feedback{font-size:11px;color:#dfc98e;line-height:1.7;margin:0 0 10px;min-height:0}
 .sandbox-feedback:empty{display:none}.sandbox-feedback.error{color:#df9c86}
 #sandbox-modes{display:block;width:100%;margin-top:8px;padding:8px;font-size:11px}
+.treasure-section{border:1px solid #a48d58;padding:11px;margin:0 0 15px;background:#303a24;color:#ead098}
+.treasure-section h3{font:600 14px var(--serif);margin:0 0 6px}.treasure-section h3 small{font:10px var(--sans);float:right}
+.treasure-section>p{font-size:10px;line-height:1.7;color:#bdc4a4;margin:0 0 8px}
+.treasure-card{border-top:1px solid #67724c;padding:8px 0 2px}.treasure-card summary{font-size:11px;cursor:pointer;padding:2px 0 5px}
+.treasure-options{display:grid;grid-template-columns:1fr 1fr;gap:5px}.treasure-card button{font-size:10px;padding:7px 4px;min-width:0}
+.treasure-target{display:block;font-size:10px;margin:8px 0 5px;color:#c4cbae}.treasure-target select{display:block;width:100%;margin-top:5px;padding:6px;background:#152318;color:#dedfc3;border:1px solid #68764e;font:10px var(--sans)}
+.treasure-armor{width:100%}
+.catalog-kinds{flex-wrap:wrap}
+.catalog-source-symbol{display:grid;place-items:center;min-width:48px;height:48px;border:1px solid #75845d;background:#243321;color:#e0c58b;font:20px var(--serif)}
+.catalog-raw-fields{display:block;font-size:10px;margin:12px 0}.catalog-raw-fields>div{display:grid;grid-template-columns:minmax(80px,1fr) minmax(0,2fr)}
+.catalog-row>.catalog-source-symbol{flex:0 0 35px;min-width:35px;height:35px}
+.catalog-raw-fields dt,.catalog-raw-fields dd{padding:5px;border-bottom:1px solid #3b4c34;overflow-wrap:anywhere;margin:0}.catalog-raw-fields dt{color:#b9c79d}.catalog-raw-fields dd{color:#d3d7be;white-space:pre-wrap}
+.catalog-evidence{font-size:10px;line-height:1.7;color:#a5b69a;overflow-wrap:anywhere}
 input:focus-visible,select:focus-visible{outline:2px solid #edcc83;outline-offset:2px}
 @media(max-width:700px){
   .sandbox-content{padding:14px 16px 18px}

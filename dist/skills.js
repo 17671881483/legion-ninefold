@@ -2,6 +2,8 @@ import { RULES } from './data.js';
 import { WORKBOOK_ABILITIES, WORKBOOK_UNIT_TEMPLATES } from './workbook-reference.js';
 import { V14_ABILITIES, V14_UNIT_TEMPLATES } from './v14-reference.js';
 
+export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261020-1';
+
 // Values come from resolved object fields. Empty fields remain empty: a missing
 // native default is reported, rather than replacing it with tooltip numbers.
 const num = (v, d = 0) => v !== null && v !== '' && Number.isFinite(Number(v)) ? Number(v) : d;
@@ -115,6 +117,20 @@ function compile(id,version='5.0dJF') {
     if(id==='A1TP'){s.kind='fixed_totem';s.status='implemented';s.radius=3;s.heal=100;s.targets=['friend'];s.effectText='每次施法在当时坐标建立固定图腾区：每1秒为300范围友军回复100生命，施法者死亡后结束；多次施法分别计时';}
     if(id==='A1TQ'){s.kind='charging_wave';s.status='implemented';s.damage=100;s.length=12;s.radius=3;s.duration=.4;s.targets=['enemies'];s.effectText='独立冲锋虚体按1200距离/0.4秒配置每40毫秒推进120（末步前销毁，实际回调位置120至1080），每次施法对300范围敌军仅造成一次100点混乱攻击/通用伤害；施法者不位移';}
     if(id==='A1TT'){s.kind='x9_sapper';s.status='implemented';s.damage=5;s.deathDamage=56;s.radius=2;s.deathRadius=3;s.targets=['enemies'];s.effectText='九倍创建钩子：每1秒对200范围敌军造成5点混乱攻击/通用伤害；死亡对300范围敌军造成56点伤害；不使用88伤害文案';}
+    // These effects are reached from New_UnitDamaged / New_UnitAttack, rather
+    // than from the marker object's tooltip (raw JASS 33074–33184, 40881–40901,
+    // 41542, 42282–42289, 42576–42578 and 42725–42727).
+    if(id==='A2Y1'){s.kind='naga_hurricane';s.status='implemented';s.activation='damage_event';s.manaCost=20;s.cooldown=15;s.radius=3.5;s.damage=13;s.interval=.2;s.count=25;s.pull=.2;s.targets=['enemies'];s.effectText='敌对伤害事件触发自动施法，消耗20魔法、冷却15秒；固定350范围每0.2秒造成13点混乱攻击/通用伤害并向中心牵引20码，共25次，施法者死亡后仍继续';}
+    if(id==='A2Y5'){s.kind='naga_ripple';s.status='implemented';s.activation='damage_event';s.manaCost=15;s.cooldown=12;s.radius=3;s.damage=15;s.interval=1;s.count=5;s.targets=['enemies'];s.effectText='敌对伤害事件触发自动施法，实际消耗15魔法、冷却12秒；选中地点300范围当时存活敌军，每秒受到15点混乱攻击/通用伤害，共5次；JASS未施加文案中的攻速/移速削弱';}
+    if(id==='A2Y6'){s.kind='naga_boon';s.status='implemented';s.radius=6;s.chance=.2;s.cooldown=5;s.effectText='受到实际普攻伤害时20%概率触发，内置冷却5秒；600范围存活非无敌友军护甲+3持续3秒，攻速+15%持续5秒，同名效果刷新而不叠加';}
+    if(id==='A0TA'){s.kind='stacking_bite';s.status='implemented';s.damage=5;s.effectText='实际普攻命中时，对该攻击者/受害者组合累计5点额外混乱攻击/通用伤害：5、10、15…；换目标不清除先前目标累计值';}
+    if(id==='A0JO'){s.kind='damage_mana';s.status='implemented';s.manaGain=2;s.effectText='造成敌对实际伤害事件时回复2点魔法，最高不超过最大魔法；JASS并不限于攻击启动';}
+    if(id==='A0LM'){s.kind='economic_marker';s.status='implemented';s.effectText='原图qC普通怪物击杀结算：技能等级1时35%概率获得1木材；飞行怪h0OU走专属奖励分支，31波及以后不触发。本效果由经济结算统一执行';}
+    if(id==='A0IC'){s.kind='blood_boil';s.status='implemented';s.effectText='实际普攻命中且自身生命高于10%时，直接扣除当前生命6%，对目标追加自身最大生命4%的混乱攻击/神圣伤害';}
+    if(id==='A1Q0'){s.kind='azure_fire';s.status='implemented';s.damage=20;s.effectText='实际普攻命中追加20点混乱攻击/通用伤害，可伤害魔免单位；不采用文案的魔法伤害类型';}
+    if(id==='A0TH'){s.kind='anchor_smash';s.status='implemented';s.damage=10;s.radius=1.5;s.chance=.33;s.effectText='实际普攻命中时按JASS GetRandomReal(1,101)≥68判定（33%）；自身暂停1秒，对自身150范围目标阵营单位造成10点混乱攻击/通用伤害';}
+    if(id==='A0YD'){s.kind='dragon_soul';s.status='implemented';s.chance=29/99;s.effectText='实际普攻命中时按JASS GetRandomReal(1,100)<30判定（约29.29%，非文案40%）；原生英雄受到最大生命30%的混乱攻击/通用伤害，其他单位受到99999点同类伤害，并非直接设置死亡';}
+    if(['AIde','AIas'].includes(a.base_code)&&has('DataA')){s.kind='passive_stats';s.status='implemented';if(a.base_code==='AIde'){s.armor=A;s.effectText=`原生物品能力：自身护甲+${A}`;}else{s.haste=A;s.effectText=`原生物品能力：自身攻速+${A*100}%`;}}
   }
   if(s.kind==='summon'&&!TEMPLATES[s.summonId]){s.status='unresolved';s.effectText=`召唤模板${s.summonId??'未指定'}缺失`;}
   if(['crit','evasion','hardened','demolish','orb','barrage','pulverize'].includes(s.kind)&&!has('DataA')&&!has('DataB')){s.status='unresolved';s.effectText='缺少原生效果数据，不应用空值默认';}
@@ -154,15 +170,30 @@ function effectSummary(s){
 }
 const TRIGGER_DESCRIPTIONS={n0S4:'每次伤害事件追加受害者当前生命3%的伤害',n0S6:'每次伤害事件追加受害者最大生命1%的魔法伤害',n0SC:'死亡时300范围敌军受到8伤害',n0SD:'死亡时300范围敌军受到26伤害',h0CZ:'击杀时回复死者最大生命60%',h08B:'潜地1.5秒无敌，结束追加5秒攻速25%与移速5%',h03B:'攻击启动30%概率自施2秒狂热与2秒增益',H08U:'死亡后原位置重新生成同类型单位'};
 const V14_TRIGGER_DESCRIPTIONS={n0S4:'伤害事件>0时追加受害者当前生命3%的普通攻击/通用伤害（两倍模式分支为2%，不用于九倍）',n0S6:'伤害事件>40时，对英雄追加当前生命1%、其他单位追加最大生命1%的普通攻击/普通伤害',n0SC:'死亡时300范围敌军受到8点普通攻击/火焰伤害',h0CZ:'击杀时回复死者最大生命50%',h03B:'攻击启动30%概率自施2秒狂热与增益，击杀时追加增益',h0OC:'攻击启动30%概率自施2秒狂热与增益，击杀时追加增益',H08U:'死亡后原位置重新生成同类型单位'};
-export function compileSkills(def) {const scale=def.distanceScale??1,version=versionOf(def);return [...new Set(def.abilityIds??def.sourceAbilityIds??(def.sourceAbilities??[]).map(a=>a.rawcode??a.id))].filter(Boolean).map(id=>compile(id,version)).map(s=>({...s,...Object.fromEntries(['range','radius','length','width','inner','outer','outerRadius','deathRadius'].filter(k=>s[k]!==undefined).map(k=>[k,s[k]*scale]))}));}
-export function describeSkills(def) {const list=compileSkills(def).map(s=>({id:s.id,name:s.name,description:s.description,status:s.status,effectText:s.effectText,cooldown:s.cooldown,manaCost:s.manaCost,duration:s.duration,range:s.range,radius:s.radius}));const r=raw(def),descriptions=isV14(def)?V14_TRIGGER_DESCRIPTIONS:TRIGGER_DESCRIPTIONS;if(descriptions[r])list.push({id:'trigger:'+r,name:'脚本机制',description:descriptions[r],effectText:descriptions[r],status:'implemented',cooldown:0,manaCost:0});return list;}
+const V14_ECONOMY_DESCRIPTIONS={
+  farmer:{name:'淘金（玩家级经济）',rawcodes:['n085','h0W1'],text:'首座娜迦农夫从开始建造时为玩家注册15%击杀额外获得1金币的概率，每新增一座再加0.5个百分点；该概率影响玩家的击杀结算，农夫本身没有对战技能。升级完成后注销该农夫的注册；出售按原脚本不会注销已注册概率。'},
+  master:{name:'压榨（回合经济）',rawcodes:['n084','h0W0'],text:'回合结算时，每座存活的娜迦农场主获得3×本波农夫数量的金币。原脚本条件会把原型h0W1的尸体也计入农夫数，皮肤农夫则要求存活；经济模块按这一源逻辑结算。'},
+};
+export function compileSkills(def) {const scale=def.distanceScale??1,version=versionOf(def);return [...new Set(def.abilityIds??def.sourceAbilityIds??(def.sourceAbilities??[]).map(a=>a.rawcode??a.id))].filter(Boolean).map(id=>compile(id,version)).map(s=>({...s,...Object.fromEntries(['range','radius','length','width','inner','outer','outerRadius','deathRadius','pull'].filter(k=>s[k]!==undefined).map(k=>[k,s[k]*scale]))}));}
+export function describeSkills(def) {const list=compileSkills(def).map(s=>({id:s.id,name:s.name,description:s.description,status:s.status,effectText:s.effectText,cooldown:s.cooldown,manaCost:s.manaCost,duration:s.duration,range:s.range,radius:s.radius}));const r=raw(def),descriptions=isV14(def)?V14_TRIGGER_DESCRIPTIONS:TRIGGER_DESCRIPTIONS;if(descriptions[r])list.push({id:'trigger:'+r,name:'脚本机制',description:descriptions[r],effectText:descriptions[r],status:'implemented',cooldown:0,manaCost:0});if(isV14(def))for(const [key,rule] of Object.entries(V14_ECONOMY_DESCRIPTIONS))if(rule.rawcodes.includes(r))list.push({id:'economy:'+key,name:rule.name,description:rule.text,effectText:rule.text,status:'implemented',cooldown:0,manaCost:0});return list;}
 export function skillCoverage(def) {const list=describeSkills(def);return {implemented:list.filter(s=>s.status==='implemented').length,markers:list.filter(s=>s.status==='marker').length,unresolved:list.filter(s=>s.status==='unresolved').length};}
 export function attachSkills(e,def) {
-  e.skillVersion=versionOf(def);e.sourceVersion=def.sourceVersion??e.sourceVersion;e.combatRawcode=raw(def);e.skillSpecs=compileSkills(def);e.skillStates={};e.buffs=[];e.skillSource=!!def.abilityIds;e.weapon1=def.weapon1??{};e.weapon2=def.weapon2??{};e.sourceRawFields=def.sourceRawFields??{};e.sourceArmorTypeRaw=def.sourceArmorTypeRaw??e.sourceRawFields.defType??e.sourceArmorTypeRaw;e.distanceScale=def.distanceScale??1;
+  e.skillVersion=versionOf(def);e.skillImplementationRevision=SKILL_IMPLEMENTATION_REVISION;e.sourceVersion=def.sourceVersion??e.sourceVersion;e.combatRawcode=raw(def);e.skillSpecs=compileSkills(def);e.skillStates={};e.buffs=[];e.skillSource=!!def.abilityIds;e.weapon1=def.weapon1??{};e.weapon2=def.weapon2??{};e.sourceRawFields=def.sourceRawFields??{};e.sourceArmorTypeRaw=def.sourceArmorTypeRaw??e.sourceRawFields.defType??e.sourceArmorTypeRaw;e.distanceScale=def.distanceScale??1;
   const f=e.sourceRawFields;e.isHero=!!(e.isHero||def.hero||def.isHero||['STR','AGI','INT'].includes(f.Primary));e.maxMana=num(def.maxMana??def.mana??f.manaN);e.mana=clamp(num(def.initialMana??def.manaStart??f.mana0,e.maxMana),0,e.maxMana);e.manaRegen=num(def.manaRegen??f.regenMana);e.hpRegen=num(def.hpRegen??f.regenHP);e.targetType=def.targetType??f.targType??(f.movetp==='fly'?'air':'ground');e.traits=String(def.traits??def.unitType??f.type??'').split(',');e.isBuilding=!!(e.isBuilding||def.isBuilding||num(f.isbldg));e.nativeInvulnerable=e.skillSpecs.some(s=>s.status==='implemented'&&s.kind==='invulnerability');e.invulnerable=e.nativeInvulnerable;e.isStaticObstacle=!!(isV14(def)&&e.isBuilding&&f.pathTex&&!num(f.spd));if(e.isStaticObstacle)e.moveSpeed=0;
   // Altar heroes are giant units in the source, with a separate UI category.
   if(isV14(def)&&def.heroFamily)e.isNativeHero=['STR','AGI','INT'].includes(f.Primary);
   for(const s of e.skillSpecs)e.skillStates[s.id]={readyAt:0,casts:0,...(s.kind==='x9_sapper'&&Number.isFinite(e.createdAt)?{nextPulseAt:e.createdAt+1}:{})};
+}
+export function refreshSourceSkills(e,def) {
+  if(e.skillImplementationRevision===SKILL_IMPLEMENTATION_REVISION)return false;
+  // Recompile the saved runtime ability set. Rebuilding from the template's
+  // abilityIds would lose injected abilities and give mirror images skills.
+  const abilityIds=Array.isArray(e.skillSpecs)?e.skillSpecs.map(s=>s.id).filter(Boolean):def.abilityIds;
+  e.skillSpecs=compileSkills({...def,abilityIds});
+  // Runtime state belongs to the save: preserve cooldowns, counters, buffs,
+  // resources and HP. New skill state is initialized by state() on first use.
+  e.skillStates??={};e.skillImplementationRevision=SKILL_IMPLEMENTATION_REVISION;
+  return true;
 }
 export function matchesTargets(s,source,target) {
   if(source.side!==target.side&&scriptInvulnerable(target))return false;
@@ -206,6 +237,7 @@ export function sourceAuraEffects(game,target,auras) {
     if(s.kind==='aura_thorns')effects[s.flat?'thornsFlat':'thorns']+=s.fraction;
   }
   for(const s of active(target))if(s.kind==='carapace')effects.armor+=s.armor;
+  for(const s of active(target))if(s.kind==='passive_stats'){effects.armor+=s.armor??0;effects.haste+=s.haste??0;}
   for(const b of target.buffs??[])if(b.expiresAt>game.state.time){effects.damage+=b.damage??0;effects.armor+=b.armor??0;effects.haste+=b.haste??0;effects.move+=b.move??0;effects.healRate+=b.regen??0;}
   return effects;
 }
@@ -307,6 +339,15 @@ export function sourceAttackStart(game,e,target) {
 }
 export function sourceOnHit(game,e,target,battle,dealt,procs=[],rawDamage=dealt) {
   const now=game.state.time,aura=sourceAuraEffects(game,e,battle.auras??[]);if(aura.lifesteal>0)e.hp=Math.min(e.maxHp,e.hp+dealt*aura.lifesteal);
+  if(isV14(e)&&dealt>0&&e.side!==target.side){
+    for(const s of active(e)){
+      if(s.kind==='stacking_bite'){const st=state(e,s);st.targets??={};st.targets[target.id]=(st.targets[target.id]??0)+s.damage;universalDamage(game,target,st.targets[target.id],e);}
+      if(s.kind==='blood_boil'&&e.hp>e.maxHp*.1){e.hp-=e.hp*.06;universalDamage(game,target,e.maxHp*.04,e);}
+      if(s.kind==='azure_fire')universalDamage(game,target,s.damage,e);
+      if(s.kind==='anchor_smash'&&game._random()>=1-s.chance){e.status.stunUntil=Math.max(e.status.stunUntil??0,now+1);for(const t of scriptTargets(game,e,e,s.radius,false))universalDamage(game,t,s.damage,e);}
+      if(s.kind==='dragon_soul'&&game._random()<s.chance)universalDamage(game,target,isNativeHero(target)?target.maxHp*.3:99999,e);
+    }
+  }
   for(const s of procs){
     if(s.kind==='bash'){if(target.hp>0)sourceDamage(game,target,s.damage,e,true);buff(target,s,e,now,{stun:true,damage:0});}
     if(s.kind==='orb'&&s.duration)buff(target,s,e,now,{damage:0});
@@ -363,6 +404,13 @@ export function afterSourceDamage(game,target,actual,attacker,options={}) {
   applyYseraCorrosion(game,attacker,target);
   if(!options.spell&&attacker.hp>0&&attacker.range<=1.28){const selfThorns=active(target).filter(s=>s.kind==='carapace').reduce((v,s)=>v+s.fraction,0);const aura=sourceAuraEffects(game,target,game._battleAuras?.[target.battleTeam]??[]);if(aura.thorns||aura.thornsFlat||selfThorns)game._hurt(attacker,actual*(aura.thorns+selfThorns)+aura.thornsFlat,target,{spell:true,reflected:true});}
   if(options.scripted||options.reflected)return;
+  if(target.side!==attacker.side){
+    // The source script tests the damaged unit before the damage source. Only
+    // one chieftain and one shaman may auto-cast for this damage event.
+    if(isV14(target)||isV14(attacker))triggerNagaDamageSkills(game,target,attacker);
+    if(isV14(attacker))for(const s of active(attacker))if(s.kind==='damage_mana')attacker.mana=Math.min(attacker.maxMana,attacker.mana+s.manaGain);
+    if(!options.spell)triggerNagaBoon(game,target);
+  }
   if(isV14(attacker)){
     if(active(attacker).some(s=>s.id==='A01I')&&actual>=100&&target.hp>0)universalDamage(game,target,attacker.mana*3,attacker);
     if(attacker.combatRawcode==='n0S4'&&target.hp>0)universalDamage(game,target,target.hp*.03,attacker);
@@ -412,11 +460,43 @@ function scriptInvulnerable(e){return e.invulnerable||active(e).some(s=>s.kind==
 function scriptSource(e){return {id:e.id,ownerId:e.ownerId,side:e.side,team:e.team,battleTeam:e.battleTeam,combatRawcode:e.combatRawcode,skillVersion:e.skillVersion,attackType:'chaos',hp:e.hp};}
 function scriptTargets(game,source,origin,radius,friendly){return game.state.entities.filter(t=>t.hp>0&&t.battleTeam===source.battleTeam&&(friendly?t.side===source.side:t.side!==source.side)&&!scriptInvulnerable(t)&&dist(origin,t)<=radius);}
 function universalDamage(game,target,amount,source){return game._hurt(target,amount,source,{spell:true,scripted:true,universal:true});}
+function triggerNagaDamageSkills(game,damaged,attacker){
+  const now=game.state.time;
+  for(const kind of ['naga_hurricane','naga_ripple'])for(const [caster,other] of [[damaged,attacker],[attacker,damaged]]){
+    const s=active(caster).find(s=>s.kind===kind);if(!s||!isV14(caster)||!cast(game,caster,s,other,game.state.entities))continue;
+    const source=scriptSource(caster);game.state.sourceSkillJobs??=[];
+    if(kind==='naga_hurricane')game.state.sourceSkillJobs.push({type:kind,sourceId:caster.id,source,...pos(other),radius:s.radius,pull:s.pull,damage:s.damage,interval:s.interval,remaining:s.count,nextAt:now+s.interval});
+    else for(const t of scriptTargets(game,caster,other,s.radius,false))game.state.sourceSkillJobs.push({type:'target_pulses',sourceId:caster.id,source,targetId:t.id,damage:s.damage,interval:s.interval,remaining:s.count,nextAt:now+s.interval});
+    break;
+  }
+}
+function triggerNagaBoon(game,target){
+  const s=active(target).find(s=>s.kind==='naga_boon');if(!s||!isV14(target))return;const now=game.state.time,st=state(target,s);
+  if(st.readyAt>now||game._random()>=s.chance)return;st.readyAt=now+s.cooldown;st.casts++;game._event('cast',target,s.name,{skillId:s.id});
+  for(const t of scriptTargets(game,target,target,s.radius,true)){
+    // UnitAddAbilityByTimer refreshes separate timers for these two abilities.
+    buff(t,{...compile('A2Y8','v14.1A5'),duration:3,heroDuration:3},target,now,{key:'A2Y8',damage:0});
+    buff(t,{...compile('A2Y9','v14.1A5'),duration:5,heroDuration:5},target,now,{key:'A2Y9',damage:0});
+  }
+}
 export function tickSourceScriptJobs(game,dt=0){
   const now=game.state.time,remaining=[];
   for(const job of game.state.sourceSkillJobs??[]){
     const live=game.state.entities.find(e=>e.id===job.sourceId),source=live??job.source;
-    if(job.type==='ysera_wake'){
+    if(job.type==='naga_hurricane'){
+      while(job.remaining>0&&job.nextAt<=now+1e-8){
+        for(const t of scriptTargets(game,source,job,job.radius,false)){
+          universalDamage(game,t,job.damage,source);const p=pos(t),distance=Math.hypot(job.x-p.x,job.y-p.y),step=Math.min(job.pull,distance);
+          if(distance>0){const x=p.x+(job.x-p.x)/distance*step,y=p.y+(job.y-p.y)/distance*step;if(t.worldX!==undefined)t.worldX=x;else t.x=x;if(t.worldY!==undefined)t.worldY=y;else t.y=y;game._syncLocal?.(t);}
+        }
+        job.remaining--;job.nextAt+=job.interval;
+      }
+      if(job.remaining>0)remaining.push(job);
+    }else if(job.type==='target_pulses'){
+      const target=game.state.entities.find(e=>e.id===job.targetId);if(!target||target.hp<=0)continue;
+      while(job.remaining>0&&target.hp>0&&job.nextAt<=now+1e-8){universalDamage(game,target,job.damage,source);job.remaining--;job.nextAt+=job.interval;}
+      if(job.remaining>0&&target.hp>0)remaining.push(job);
+    }else if(job.type==='ysera_wake'){
       if(!live||live.hp<=0)continue;
       if(job.at<=now+1e-8){live.hp=Math.min(live.maxHp,live.hp+live.maxHp*.25);live.status.yseraSleepingUntil=0;game._event('heal',live,'翡翠复苏');}else remaining.push(job);
     }else if(job.type==='fixed_totem'){

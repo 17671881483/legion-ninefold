@@ -5,6 +5,7 @@ import { MAP_REFERENCE, MAP_UNITS, MAP_WAVES, MAP_MERCENARIES, MAP_ECONOMY } fro
 import {WORKBOOK_REFERENCE,WORKBOOK_UNITS,WORKBOOK_BUILDERS,WORKBOOK_POOLS,WORKBOOK_ARCHIVE,WORKBOOK_HERO_ENTRIES,WORKBOOK_MERCENARIES,WORKBOOK_WAVES} from './workbook-reference.js';
 import {DOCUMENT_RULES,DOCUMENT_ECONOMY} from './document-rules.js';
 import {V14_REFERENCE,V14_UNITS,V14_BUILDERS,V14_POOLS,V14_ARCHIVE,V14_HERO_ENTRIES,V14_MERCENARIES,V14_WAVES,V14_UNIT_TEMPLATES} from './v14-reference.js';
+export {V14_ITEMS as ITEMS,V14_TECHNOLOGIES as TECHNOLOGIES,V14_SPECIAL_MONSTERS as SPECIAL_MONSTERS,V14_SPECIAL_GOLD_REWARDS as SPECIAL_GOLD_REWARDS,V14_SACRIFICE_REWARDS as SACRIFICE_REWARDS} from './v14-reference.js';
 import {applyDocumentUnitOverlay} from './unit-categories.js';
 export const HISTORICAL_REFERENCE=MAP_REFERENCE;
 export const REFERENCE={...V14_REFERENCE,economyPolicy:DOCUMENT_ECONOMY.sourcePolicy,targetMode:'v14.1A5 九倍怪物模式',bountyPolicy:'系统怪使用v14脚本Ie[Dg]金币；10%替换额外+3；跨线与漏怪按脚本结算，31波起系统怪无赏金。'};
@@ -226,4 +227,5 @@ export const RULES = {
   ggDefaultSource: 'war3map.j:12930-12936默认TriggerExecute(AR)，16799-16801注册Xs，12546-12550将Wo=true。',
   rerollPool: '先知六阶共107候选（18/18/18/18/18/17）；其他建造者使用本版基础兵与来源升级链。',
   heroSourcePolicy: '只开放v14解析包与脚本已确认的英雄入口；5.0dJF英雄不作为本版可建单位。',
+  specialMonsters: V14_REFERENCE.rules.specialMonsters,
 };

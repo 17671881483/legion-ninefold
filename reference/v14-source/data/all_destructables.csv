@@ -1,0 +1,7 @@
+﻿rawcode,DestructableID,armor,colorB,colorG,colorR,deathSnd,file,fixedRot,flyH,HP,lightweight,maxScale,minScale,MMGreen,Name,numVar,occH,pathTex,selcircsize,shadow,showInMM,targType,texFile,texID,useMMColor,fogRadius,portraitmodel,radius
+LTlt,LTlt,Wood,255,255,255,TreeWallDeath,Doodads\Terrain\LordaeronTree\LordaeronTree,270.0,100.0,99999.0,1,1.2,0.8,64,WESTRING_DEST_SUMMER_TREE_WALL,10,230.0,PathTextures\4x4Default.tga,128.0,BuildingShadowSmall,1,tree,ReplaceableTextures\LordaeronTree\LordaeronSummerTree,31,1,,,
+XTmp,XTmp,Stone,255,255,255,MagicalCellDeathSound,war3mapImported\mdx.mdl,-1.0,,250.0,,1.6,1.6,,辅助格,1,,,288.0,none,,debris,_,,,50.0,Doodads\Terrain\Portraits\DalaranMagicalPen_portrait\DalaranMagicalPen_portrait.mdl,50.0
+YTfb,YTfb,Wood,255,255,255,,Doodads\Terrain\LOSBlocker\LOSBlocker,270.0,,9999.0,,1.0,1.0,,WESTRING_DEST_PATHBLOCKER_BOTH,1,,PathTextures\2x2Unflyable.tga,256.0,none,,decoration,_,,,,,
+YTfc,YTfc,Wood,255,255,255,,Doodads\Terrain\LOSBlocker\LOSBlocker,270.0,,9999.0,,1.0,1.0,,WESTRING_DEST_PATHBLOCKER_LARGE_BOTH,1,,PathTextures\4x4Unflyable.tga,256.0,none,,decoration,_,,,,,
+YTpc,YTpc,Wood,255,255,255,,Doodads\Terrain\LOSBlocker\LOSBlocker,270.0,,9999.0,,1.0,1.0,,WESTRING_DEST_PATHBLOCKER_LARGE,1,,PathTextures\4x4Default.tga,256.0,none,,decoration,_,,,,,
+B000,B000,Wood,255,255,255,,Doodads\Terrain\LOSBlocker\LOSBlocker,-1.0,,9999.0,,1.0,1.0,,Pathing Blocker (Both) (Huge),1,,war3mapImported\nothere4x40.tga,256.0,none,,decoration,_,,,,,

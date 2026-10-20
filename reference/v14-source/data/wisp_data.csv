@@ -1,0 +1,2 @@
+﻿rawcode,name,purchase_gold,purchase_lumber,build_time_seconds,repair_or_train_time_seconds,food_used,HP,HP_regeneration,move_speed,x9_non_privileged_max_count,normal_non_privileged_max_count_before_x9_override,technologies,abilities,tip,description,source_lines
+e003,小精灵,50,,12,16,1,120,0.5,270,10,7,"R003(总等级1-7),R00H(总等级8-30)",无敌的,购买 小精灵   W,基本工人，可以伐木，造农场。（最高只能购买7个小精灵）,"12878-12887,13271-13277,24631-24643"

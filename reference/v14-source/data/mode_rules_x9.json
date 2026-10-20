@@ -1,0 +1,47 @@
+{
+  "map_identity": {
+    "platform_name": "军团战争v14.1A5新彩蛋伊瑟拉",
+    "platform_map_id": 20197574,
+    "cache_filename": "qcloud_20197574.w3x",
+    "map_internal_header": "军团战争8.2b",
+    "w3x2lni_data_timestamp": "2026-10-09 16:00:57.209"
+  },
+  "x9_mode": {
+    "flag": "C6=true",
+    "starting_gold": 500,
+    "starting_lumber": 94,
+    "wave_count_rule": "基础数量×3；第20波强制10只/路，第30波强制6只/路",
+    "wave_life_scaling": "非建筑/召唤/巨型的SAPPER单位：第6-10波生命×1.5，第11波起×3；波次表已计算实际生命",
+    "income_rule": "第11波起，发送单位带来的收入增量按单位点数的1/2计算（整数除法）",
+    "king_upgrade_caps": {
+      "health": 60,
+      "attack": 80,
+      "regeneration": 60
+    },
+    "king_early_caps": {
+      "health": "第17波前最多20级",
+      "attack": "第16波前最多30级",
+      "regeneration": "第16波前最多20级"
+    },
+    "worker_unit_rawcode": "e003",
+    "worker_max_allowed_for_non_privileged_players": 10,
+    "lumber_harvest_upgrade": "R003最多7级；R00H在DB/C6模式最多23级，对应总伐木科技1-30级",
+    "x9_unlock_technology": "R0GK=1",
+    "special_random_wave_mix": "第6-28波中除第10/20波外，每只系统怪独立10%概率替换成下一波怪物",
+    "hero_purchase_exception": "C6下h0BB英雄分支允许数量按2减当前数量；建成后仍受hero_count分支限制",
+    "team_leak_rule_after_wave_10": "任一队员首次漏怪即全队每人-1000木材；回合结束按脚本奖励判定发+100金币/+200木材",
+    "reward_logic_bug": "两支队伍的无漏怪奖励都错误检查队伍1标志键；队伍1未漏时两队都得奖，队伍1漏时两队都不得奖。",
+    "message_bug": "漏怪扣木提示写成‘10倍怪物’，实际条件是九倍怪物标志。",
+    "display_bug": "第20/30波信息文本仍显示7/4只，但实际生成10/6只。",
+    "mode_description_bug": "模式提示仍写‘六倍怪物’且写国王上限60/40/40；实际脚本变量为60/80/60。",
+    "armor_display_bug": "第6/11/17/22/28/30/35波界面宣称城甲，但最终对象数据defType=normal（无甲）；W3U覆盖层不包含这35个波次rawcode。"
+  },
+  "source_lines": {
+    "x9_mode_start": 13279,
+    "wave_count_multiplier": 16247,
+    "next_wave_randomization": 15441,
+    "income_halving": 21679,
+    "leak_penalty": 23830,
+    "unit_creation_hook": 49712
+  }
+}

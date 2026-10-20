@@ -1,0 +1,1753 @@
+﻿unit_rawcode,unit_name,catalog_ability_rawcode,catalog_ability_name,root_ability_rawcode,root_ability_name,breadcrumb_rawcodes,breadcrumb_names,parent_unit_rawcodes,parent_unit_names,requirement_rawcodes,requirement_names,explicit_easter_text,skin_base_rawcode,skin_base_name,barracks_egg_tier,is_registered_building,icon,source_line,gold_cost,lumber_cost,build_time,repair_or_train_time,total_power_points,food_used,HP,HP_regeneration,mana_initial,mana_max,armor,armor_type_raw,armor_type_zh,attack_type_raw,attack_type_zh,damage_min,damage_max,damage_avg,attack_cooldown,average_dps,attack_range,move_speed,unit_type_flags,ability_ids,ability_names,tip,description
+h00M,小兵,A1EH,小兵,A1EF,机甲,A1EF > A1EG > A1EH,机甲 > 小兵 > 小兵,,,,,False,,,,False,replaceabletextures\\commandbuttons\\btnaxethrower.blp,48887,25,,2,1,25,1,125,,,,3.0,medium,中甲,normal,普通,17.0,19.0,18.0,1.3,13.846153846153845,90,,ancient,"A008,A118","出售,移位",建造 <小兵> - [Q],"攻击伤害: 17-19
+攻击速度: 1.3
+攻击距离: 100
+生命值: 125
+攻击类型: 普通 
+防御类型: 中甲 
+技能:  无"
+h00N,轰炸机,A1ER,轰炸机,A1EF,机甲,A1EF > A1EQ > A1ER,机甲 > 轰炸机 > 轰炸机,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNGoblinZeppelin.blp,48907,140,,2,1,140,1,600,,,,3.0,large,重甲,siege,攻城,30.0,44.0,37.0,0.6,61.66666666666667,300,,ancient,"A008,A118","出售,移位",建造 <轰炸机> - [R],"攻击伤害: 30-44
+攻击速度: 0.6
+攻击距离: 300
+生命值: 600
+攻击类型: 攻城
+防御类型: 重甲 
+技能:  无"
+h00O,步枪手,A1EK,步枪手,A1EF,机甲,A1EF > A1EJ > A1EK,机甲 > 步枪手 > 步枪手,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNRifleman.blp,48893,60,,2,1,60,1,160,,,,3.0,small,轻甲,pierce,穿刺,16.0,20.0,18.0,0.6,30.0,600,,ancient,"A008,A118","出售,移位",建造 <步枪手> - [W],"攻击伤害: 16-20
+攻击速度: 0.6
+攻击距离: 600
+生命值: 160
+攻击类型: 穿刺
+防御类型: 轻甲
+技能:  无"
+h00P,队长,A1EO,队长,A1EF,机甲,A1EF > A1EN > A1EO,机甲 > 队长 > 队长,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNSpellBreaker.blp,48901,110,,2,1,110,1,585,,,,3.0,medium,中甲,normal,普通,60.0,72.0,66.0,1.5,44.0,90,,ancient,"A02X,A008,A118","命令光环,出售,移位",建造 <队长> - [E],"攻击伤害: 60-72
+攻击速度: 1.5
+攻击距离: 90
+生命值: 585
+攻击类型: 普通 
+防御类型: 中甲 
+技能:  命令光环"
+h00Q,机甲,A1EU,机甲,A1EF,机甲,A1EF > A1ET > A1EU,机甲 > 机甲 > 机甲,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNArmorGolem.blp,48913,195,,2,1,195,2,1035,,,,3.0,large,重甲,siege,攻城,93.0,107.0,100.0,1.0,100.0,180,,ancient,"A008,A118","出售,移位",建造 <机甲> - [A],"攻击伤害: 93-107
+攻击速度: 1.0
+攻击距离: 180
+生命值: 1035
+攻击类型: 攻城 
+防御类型: 重甲 
+技能:  无"
+h00S,新式坦克,A1EX,新式坦克,A1EF,机甲,A1EF > A1EW > A1EX,机甲 > 新式坦克 > 新式坦克,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNSteamTank.blp,48919,360,,2,1,360,2,1420,,,,3.0,normal,无甲,siege,攻城,143.0,159.0,151.0,0.85,177.64705882352942,450,,ancient,"A008,A118","出售,移位",建造 <新式坦克> - [S],"攻击伤害: 143-159
+攻击速度: 0.85
+攻击距离: 450
+生命值: 1420
+攻击类型: 攻城
+防御类型: 城甲
+技能:  无"
+h00T,老兵,A1EI,老兵,A1EF,机甲,A1EF > A1EG > A1EI,机甲 > 小兵 > 老兵,h00M,小兵,u004,等到战斗结束,False,,,,False,replaceabletextures\\commandbuttons\\btndwarfberserk.blp,48889,125,,2,1,150,1,710,,,,3.0,medium,中甲,normal,普通,83.0,94.0,88.5,1.1,80.45454545454545,90,,ancient,"A113,A008,A118","老练,出售,移位",升级到 <老兵> - [P],"攻击伤害: 83-94
+攻击速度: 1.1
+攻击距离: 100
+生命值: 710
+攻击类型: 普通 
+防御类型: 中甲 
+技能:  老练"
+h00U,飞行堡垒,A1ES,飞行堡垒,A1EF,机甲,A1EF > A1EQ > A1ES,机甲 > 轰炸机 > 飞行堡垒,h00N,轰炸机,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNUndeadAirBarge.blp,48909,265,,2,1,405,3,1500,,,,3.0,normal,无甲,siege,攻城,263.0,305.0,284.0,1.5,189.33333333333334,300,,ancient,"A03W,A008,A118","榴弹,出售,移位",升级到 <飞行堡垒> - [P],"攻击伤害: 263-305
+攻击速度: 1.5
+攻击距离: 300
+生命值: 1500
+攻击类型: 攻城
+防御类型: 城甲
+技能:  榴弹"
+h00V,末日战车,A1EY,末日战车,A1EF,机甲,A1EF > A1EW > A1EY,机甲 > 新式坦克 > 末日战车,h00S,新式坦克,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNSeigeEngineWithMissles.blp,48921,390,,2,1,750,5,3200,,,,3.0,normal,无甲,siege,攻城,261.0,278.0,269.5,0.85,317.05882352941177,450,,ancient,"A0RC,A008,A118","重炮轰击,出售,移位",升级到 <末日战车> - [P],"攻击伤害: 261-278
+攻击速度: 0.7
+攻击距离: 450
+生命值: 3200
+攻击类型: 攻城
+防御类型: 城甲
+技能:  重炮轰击"
+h00W,电锯王,A1EV,电锯王,A1EF,机甲,A1EF > A1ET > A1EV,机甲 > 机甲 > 电锯王,h00Q,机甲,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNb123.blp,48915,240,,2,1,435,3,2200,,,,3.0,large,重甲,siege,攻城,156.0,164.0,160.0,0.7,228.57142857142858,180,,ancient,"A00C,A0LM,A008,A118","电锯,伐木,出售,移位",升级到 <电锯王> - [P],"攻击伤害: 156-164
+攻击速度: 0.7
+攻击距离: 180
+生命值: 2200
+攻击类型: 攻城 
+防御类型: 重甲 
+技能:  电锯 伐木"
+h00X,电枪兵,A1EL,电枪兵,A1EF,机甲,A1EF > A1EJ > A1EL,机甲 > 步枪手 > 电枪兵,h00O,步枪手,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNMarine.blp,48895,140,,2,1,200,2,480,,8,10,3.0,small,轻甲,pierce,穿刺,18.0,20.0,19.0,0.25,76.0,900,,ancient,"A05R,A008,A118","电磁弹,出售,移位",升级到 <电枪兵> - [P],"攻击伤害: 18-20
+攻击速度: 0.25
+攻击距离: 900
+生命值: 480
+攻击类型: 穿刺
+防御类型: 轻甲
+技能:  电磁弹"
+h00Y,喷火兵,A1EM,喷火兵,A1EF,机甲,A1EF > A1EJ > A1EM,机甲 > 步枪手 > 喷火兵,h00O,步枪手,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNChaosSpaceOrc.blp,48897,170,,2,1,230,2,1085,,,,3.0,large,重甲,chaos,混乱,48.0,52.0,50.0,0.5,100.0,225,,ancient,"A008,A118","出售,移位",升级到 <喷火兵> - [R],"攻击伤害: 48-52
+攻击速度: 0.5
+攻击距离: 225
+生命值: 1085
+攻击类型: 混乱
+防御类型: 重甲 
+技能:  无"
+h00Z,上将,A1EP,上将,A1EF,机甲,A1EF > A1EN > A1EP,机甲 > 队长 > 上将,h00P,队长,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNBanditLord.blp,48903,190,,2,1,300,2,1235,,,,3.0,medium,中甲,normal,普通,153.0,173.0,163.0,1.7,95.88235294117648,300,,ancient,"A031,A008,A118","鼓舞光环,出售,移位",升级到 <上将> - [P],"攻击伤害: 153-173
+攻击速度: 1.7
+攻击距离: 300
+生命值: 1235
+攻击类型: 普通 
+防御类型: 中甲 
+技能:  鼓舞光环"
+h010,豺狼战士,A1DV,豺狼战士,A1DT,野兽,A1DT > A1DU > A1DV,野兽 > 豺狼战士 > 豺狼战士,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNGnoll.blp,48844,10,,2,1,10,1,60,,,,3.0,small,轻甲,normal,普通,6.0,8.0,7.0,1.2,5.833333333333334,90,,ancient,"A026,A008,A118","豺狼毒剂,出售,移位",建造 <豺狼战士> - [Q],"攻击伤害: 6-8
+攻击速度: 1.2
+攻击距离: 100
+生命值: 60
+攻击类型: 普通 
+防御类型: 轻甲
+技能:  豺狼毒剂"
+h011,豺狼蛮人,A1DW,豺狼蛮人,A1DT,野兽,A1DT > A1DU > A1DW,野兽 > 豺狼战士 > 豺狼蛮人,h010,豺狼战士,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNGnollArcher.blp,48846,80,,2,1,90,1,430,,,,3.0,small,轻甲,normal,普通,34.0,38.0,36.0,1.0,36.0,90,,ancient,"A027,A008,A118","跗骨毒素,出售,移位",升级到 <豺狼蛮人> - [P],"攻击伤害: 34-38
+攻击速度: 1
+攻击距离: 100
+生命值: 430
+攻击类型: 普通 
+防御类型: 轻甲
+技能:  跗骨毒素"
+h012,食人魔拳手,A1DZ,食人魔拳手,A1DT,野兽,A1DT > A1DY > A1DZ,野兽 > 食人魔拳手 > 食人魔拳手,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNOgre.blp,48852,30,,2,1,30,1,175,,,,3.0,large,重甲,siege,攻城,11.0,13.0,12.0,1.0,12.0,90,,ancient,"A00D,A008,A118","重击,出售,移位",建造 <食人魔拳手> - [W],"攻击伤害: 11-13
+攻击速度: 2
+攻击距离: 100
+生命值: 175
+攻击类型: 攻城
+防御类型: 重甲 
+技能:  重击"
+h013,食人魔粉碎者,A1E0,食人魔粉碎者,A1DT,野兽,A1DT > A1DY > A1E0,野兽 > 食人魔拳手 > 食人魔粉碎者,h012,食人魔拳手,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNOgreLord.blp,48854,105,,2,1,135,1,630,,,,3.0,large,重甲,siege,攻城,41.0,61.0,51.0,1.0,51.0,90,,ancient,"A00E,A008,A118","敲晕,出售,移位",升级到 <食人魔粉碎者> - [P],"攻击伤害: 41-61
+攻击速度: 1
+攻击距离: 100
+生命值: 630
+攻击类型: 攻城
+防御类型: 重甲 
+技能:  敲晕"
+h014,鸟身女妖,A1E3,鸟身女妖,A1DT,野兽,A1DT > A1E2 > A1E3,野兽 > 鸟身女妖 > 鸟身女妖,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNHarpy.blp,48860,70,,2,1,70,1,325,,,,3.0,small,轻甲,magic,魔法,25.0,28.0,26.5,1.1,24.09090909090909,300,,ancient,"A00F,A008,A118","毒毛攻击,出售,移位",建造 <鸟身女妖> - [E],"攻击伤害: 25-28
+攻击速度: 1.1
+攻击距离: 300
+生命值: 325
+攻击类型: 魔法
+防御类型: 轻甲
+技能:  毒毛攻击"
+h015,鹰身女妖,A1E4,鹰身女妖,A1DT,野兽,A1DT > A1E2 > A1E4,野兽 > 鸟身女妖 > 鹰身女妖,h014,鸟身女妖,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNHarpyWitch.blp,48862,125,,2,1,195,1,820,,,,3.0,small,轻甲,magic,魔法,59.0,67.0,63.0,1.0,63.0,300,,ancient,"A00G,A008,A118","魔法毒击,出售,移位",升级到 <鹰身女妖> - [P],"攻击伤害: 59-67
+攻击速度: 1
+攻击距离: 300
+生命值: 820
+攻击类型: 魔法
+防御类型: 轻甲
+技能:  魔法毒击"
+h016,巨魔斗士,A1E7,巨魔斗士,A1DT,野兽,A1DT > A1E6 > A1E7,野兽 > 巨魔斗士 > 巨魔斗士,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNForestTroll.blp,48868,105,,2,1,105,1,470,,,,3.0,medium,中甲,normal,普通,63.0,73.0,68.0,1.5,45.333333333333336,425,,ancient,"A008,A118","出售,移位",建造 <巨魔斗士> - [R],"攻击伤害: 63-73
+攻击速度: 1.5
+攻击距离: 425
+生命值: 470
+攻击类型: 普通 
+防御类型: 中甲 
+技能:  无"
+h017,巨魔头领,A1E8,巨魔头领,A1DT,野兽,A1DT > A1E6 > A1E8,野兽 > 巨魔斗士 > 巨魔头领,h016,巨魔斗士,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNForestTrollTrapper.blp,48870,145,,2,1,250,2,810,,,,3.0,medium,中甲,normal,普通,105.0,117.0,111.0,1.5,74.0,475,,ancient,"S002,A008,A118","热血光环,出售,移位",升级到 <巨魔头领> - [P],"攻击伤害: 105-117
+攻击速度: 1.5
+攻击距离: 475
+生命值: 810
+攻击类型: 普通 
+防御类型: 中甲 
+技能:  热血光环"
+h018,灰熊,A1EA,灰熊,A1DT,野兽,A1DT > A1E9 > A1EA,野兽 > 灰熊 > 灰熊,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNGrizzlyBear.blp,48874,180,,2,1,180,1,925,,,,3.0,large,重甲,siege,攻城,99.0,115.0,107.0,1.2,89.16666666666667,90,,ancient,"A008,A118","出售,移位",建造 <灰熊> - [A],"攻击伤害: 99-115
+攻击速度: 1.2
+攻击距离: 100
+生命值: 925
+攻击类型: 攻城
+防御类型: 重甲 
+技能:  无"
+h019,巨熊,A1EB,巨熊,A1DT,野兽,A1DT > A1E9 > A1EB,野兽 > 灰熊 > 巨熊,h018,灰熊,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNBearForm.blp,48876,205,,2,1,385,2,1585,,25,27,3.0,none,无甲,siege,攻城,142.0,168.0,155.0,0.7,221.42857142857144,100,,ancient,"A00H,A008,A118","Roar,出售,移位",升级到 <巨熊> - [P],"攻击伤害: 142-168
+攻击速度: 0.7
+攻击距离: 115
+生命值: 1585
+攻击类型: 攻城
+防御类型: 无甲 
+技能:  咆哮"
+h01A,龙卵领主,A1ED,龙卵领主,A1DT,野兽,A1DT > A1EC > A1ED,野兽 > 龙卵领主 > 龙卵领主,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNBlueDragonSpawn.blp,48880,265,,2,1,265,2,1360,,,,3.0,large,重甲,normal,普通,141.0,159.0,150.0,1.5,100.0,90,,ancient,"A00I,A008,A118","横扫,出售,移位",建造 <龙卵领主> - [S],"攻击伤害: 141-159
+攻击速度: 1.5
+攻击距离: 100
+生命值: 1360
+攻击类型: 普通 
+防御类型: 重甲 
+技能:  横扫"
+h01B,火龙,A1EE,火龙,A1DT,野兽,A1DT > A1EC > A1EE,野兽 > 龙卵领主 > 火龙,h01A,龙卵领主,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNRedDragon.blp,48882,320,,2,1,585,4,2350,,,,3.0,large,重甲,normal,普通,232.0,247.0,239.5,1.5,159.66666666666666,350,,"ancient,sapper","A00J,A008,A118","火龙息,出售,移位",升级到 <火龙> - [P],"攻击伤害: 232-247
+攻击速度: 1.5
+攻击距离: 350
+生命值: 2350
+攻击类型: 普通 
+防御类型: 重甲 
+技能:  火龙息"
+h01C,树人,A1F1,树人,A1EZ,森林,A1EZ > A1F0 > A1F1,森林 > 树人 > 树人,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNEnt.blp,48926,20,,2,1,20,1,115,1.0,,,3.0,large,重甲,normal,普通,11.0,13.0,12.0,1.4,8.571428571428571,90,,ancient,"A008,A118","出售,移位",建造 <树人> - [Q],"攻击伤害: 11-13
+攻击速度: 1.4
+攻击距离: 100
+生命值: 115
+攻击类型: 普通 
+防御类型: 重甲 
+技能:  无"
+h01D,树人战士,A1F2,树人战士,A1EZ,森林,A1EZ > A1F0 > A1F2,森林 > 树人 > 树人战士,h01C,树人,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNTreant.blp,48928,95,,2,1,115,1,665,1.0,12,14,3.0,large,重甲,normal,普通,53.0,64.0,58.5,1.4,41.78571428571429,90,,ancient,"A06C,A008,A118","缠绕,出售,移位",升级到 <树人战士> - [P],"攻击伤害: 53-64
+攻击速度: 1.4
+攻击距离: 100
+生命值: 665
+攻击类型: 普通 
+防御类型: 重甲 
+技能:  缠绕"
+h01E,射手,A1F5,射手,A1EZ,森林,A1EZ > A1F4 > A1F5,森林 > 射手 > 射手,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNArcher.blp,48934,40,,2,1,40,1,110,1.01,,,3.0,medium,中甲,pierce,穿刺,15.0,18.0,16.5,0.9,18.333333333333332,750,,ancient,"A00K,A008,A118","对空射击,出售,移位",建造 <射手> - [W],"攻击伤害: 15-18
+攻击速度: 0.9
+攻击距离: 750
+生命值: 110
+攻击类型: 穿刺
+防御类型: 中甲 
+技能:  对空射击"
+h01F,树精矛手,A1F6,树精矛手,A1EZ,森林,A1EZ > A1F4 > A1F6,森林 > 射手 > 树精矛手,h01E,射手,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNDryad.blp,48936,115,,2,1,155,1,335,1.0,,,3.0,medium,中甲,pierce,穿刺,40.0,43.0,41.5,0.9,46.11111111111111,750,,ancient,"A05W,A00L,A008,A118","射击标记,精准,出售,移位",升级到 <树精矛手> - [P],"攻击伤害: 40-43
+攻击速度: 0.9
+攻击距离: 750
+生命值: 335
+攻击类型: 穿刺
+防御类型: 中甲 
+技能:  1,精准 2,射击标记"
+h01G,雷鸟,A1F9,雷鸟,A1EZ,森林,A1EZ > A1F7 > A1F9,森林 > 精灵龙 > 雷鸟,h01H,精灵龙,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNChimaera.blp,48942,185,,2,1,265,2,1150,2.0,,,3.0,large,重甲,magic,魔法,120.0,132.0,126.0,1.05,120.0,375,,ancient,"A03U,A0JS,A008,A118","电雷,相位转换,出售,移位",升级到 <雷鸟> - [P],"攻击伤害: 120-132
+攻击速度: 1.05
+攻击距离: 375
+生命值: 1150
+攻击类型: 魔法
+防御类型: 重甲 
+技能:  电雷 相位转移"
+h01H,精灵龙,A1F8,精灵龙,A1EZ,森林,A1EZ > A1F7 > A1F8,森林 > 精灵龙 > 精灵龙,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNFaerieDragon.blp,48940,80,,2,1,80,1,360,1.0,,,3.0,small,轻甲,magic,魔法,22.0,27.0,24.5,0.66,37.12121212121212,300,,ancient,"A00M,A008,A118","相位转换,出售,移位",建造 <精灵龙> - [E],"攻击伤害: 22-27
+攻击速度: 0.66
+攻击距离: 300
+生命值: 360
+攻击类型: 魔法
+防御类型: 轻甲
+技能:  相位转换"
+h01I,速度之树,A1FB,速度之树,A1EZ,森林,A1EZ > A1FA > A1FB,森林 > 速度之树 > 速度之树,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNAncientOfLore.blp,48946,130,,2,1,130,1,750,3.0,,,3.0,medium,中甲,normal,普通,74.0,82.0,78.0,1.5,52.0,180,,ancient,"A032,A008,A118","加速,出售,移位",建造 <速度之树> - [R],"攻击伤害: 74-82
+攻击速度: 1.5
+攻击距离: 100
+生命值: 750
+攻击类型: 普通 
+防御类型: 中甲 
+技能:  加速"
+h01J,时光之树,A1FC,时光之树,A1EZ,森林,A1EZ > A1FA > A1FC,森林 > 速度之树 > 时光之树,h01I,速度之树,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNAncientOfWonders.blp,48948,165,,2,1,295,2,1395,3.0,,,3.0,medium,中甲,normal,普通,138.0,144.0,141.0,1.5,94.0,180,,ancient,"A066,A064,A008,A118","Tree of Time,时空扭曲,出售,移位",升级到 <时光之树> - [P],"攻击伤害: 138-144
+攻击速度: 1.5
+攻击距离: 100
+生命值: 1395
+攻击类型: 普通 
+防御类型: 中甲 
+技能:  时空扭曲"
+h01K,半熊人,A1FE,半熊人,A1EZ,森林,A1EZ > A1FD > A1FE,森林 > 半熊人 > 半熊人,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNDruidOfTheClaw.blp,48952,195,,2,1,195,1,1005,2.0,,,3.0,large,重甲,normal,普通,91.0,95.0,93.0,0.9,103.33333333333333,90,,ancient,"A008,A118","出售,移位",建造 <半熊人> - [A],"攻击伤害: 91-95
+攻击速度: 0.9
+攻击距离: 100
+生命值: 1005
+攻击类型: 普通 
+防御类型: 重甲 
+技能:  无"
+h01L,山岭巨人,A1FF,山岭巨人,A1EZ,森林,A1EZ > A1FD > A1FF,森林 > 半熊人 > 山岭巨人,h01K,半熊人,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNMountainGiant.blp,48954,225,,2,1,420,3,1655,3.0,,,3.0,large,重甲,siege,攻城,258.0,290.0,274.0,1.6,171.25,180,,ancient,"A05J,A00R,A008,A118","支持光环,自然护甲,出售,移位",升级到 <山岭巨人> - [P],"攻击伤害: 258-290
+攻击速度: 1.8
+攻击距离: 180
+生命值: 1655
+攻击类型: 攻城
+防御类型: 重甲 
+技能:  1,自然护甲 2,支持光环"
+h01M,乾坤树,A1FH,乾坤树,A1EZ,森林,A1EZ > A1FG > A1FH,森林 > 乾坤树 > 乾坤树,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNTreeOfLife.blp,48958,290,,2,1,290,2,1250,3.0,,,3.0,normal,无甲,magic,魔法,91.0,101.0,96.0,0.8,120.0,180,,ancient,"A02A,A008,A118,A02F","甘露,出售,移位,Sacred Blessing",建造 <乾坤树> - [S],"攻击伤害: 91-101
+攻击速度: 0.8
+攻击距离: 180
+生命值: 1250
+攻击类型: 魔法
+防御类型: 城甲
+技能:  甘露"
+h01N,生命树,A1FI,生命树,A1EZ,森林,A1EZ > A1FG > A1FI,森林 > 乾坤树 > 生命树,h01M,乾坤树,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNTreeOfEternity.blp,48960,380,,2,1,670,4,2800,5.0,,,3.0,normal,无甲,magic,魔法,273.0,299.0,286.0,0.9,317.77777777777777,180,,ancient,"A01A,A008,A118,A02B,A02G","Tree of Life SFX,出售,移位,生命之水,Water of Life",升级到 <生命树> - [P],"攻击伤害: 273-299
+攻击速度: 0.9
+攻击距离: 180
+生命值: 2900
+攻击类型: 魔法
+防御类型: 城甲
+技能:  生命之水"
+h01O,智慧树,A1FJ,智慧树,A1EZ,森林,A1EZ > A1FG > A1FJ,森林 > 乾坤树 > 智慧树,h01M,乾坤树,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNCorruptedAncientProtector.blp,48962,380,,2,1,670,4,2800,3.37,,,3.0,normal,无甲,chaos,混乱,201.0,221.0,211.0,1.2,175.83333333333334,180,,ancient,"A00N,A008,A118","禁果,出售,移位",升级到 <智慧树> - [R],"攻击伤害: 201-221
+攻击速度: 1
+攻击距离: 180
+生命值: 2800
+攻击类型: 混乱
+防御类型: 城甲
+技能:  禁果"
+h01P,骷髅,A1FM,骷髅,A1FK,黑暗,A1FK > A1FL > A1FM,黑暗 > 骷髅 > 骷髅,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNSkeletonWarrior.blp,48967,15,,2,1,15,1,70,,,,3.0,medium,中甲,normal,普通,4.0,5.0,4.5,0.6,7.5,90,,ancient,"A008,A118,A02K","出售,移位,狂热",建造 <骷髅> - [Q],"攻击伤害: 4-5
+攻击速度: 0.6
+攻击距离: 100
+生命值: 70
+攻击类型: 普通 
+防御类型: 中甲 
+技能:  狂热"
+h01Q,骷髅战士,A1FP,骷髅战士,A1FK,黑暗,A1FK > A1FL > A1FP,黑暗 > 骷髅 > 骷髅战士,h01P,骷髅,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNSkeletalOrc.blp,48973,90,,2,1,105,1,525,,,,3.0,medium,中甲,normal,普通,23.0,29.0,26.0,0.9,28.88888888888889,90,,ancient,"A02K,A02W,A008,A118","狂热,杀戮,出售,移位",升级到 <骷髅战士> - [P],"攻击伤害: 23-29
+攻击速度: 0.9
+攻击距离: 100
+生命值: 525
+攻击类型: 普通 
+防御类型: 中甲 
+技能:  1,狂热 2,杀戮"
+h01R,骷髅弓手,A1FN,骷髅弓手,A1FK,黑暗,A1FK > A1FL > A1FN,黑暗 > 骷髅 > 骷髅弓手,h01P,骷髅,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNSkeletonArcher.blp,48969,90,,2,1,105,1,275,,5,5,3.0,small,轻甲,normal,普通,12.0,14.0,13.0,0.4,32.5,575,,ancient,"A02K,A00W,A008,A118","狂热,火焰箭,出售,移位",升级到 <骷髅弓手> - [P],"攻击伤害: 12-14
+攻击速度: 0.4
+攻击距离: 575
+生命值: 275
+攻击类型: 穿刺
+防御类型: 轻甲
+技能:  1,狂热 2,火焰箭"
+h01S,骷髅法师,A1FO,骷髅法师,A1FK,黑暗,A1FK > A1FL > A1FO,黑暗 > 骷髅 > 骷髅法师,h01P,骷髅,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNSkeletonMage.blp,48971,90,,2,1,105,1,375,,20,22,3.0,small,轻甲,magic,魔法,27.0,31.0,29.0,1.0,29.0,350,,ancient,"A02K,A033,A008,A118","狂热,扭曲意念,出售,移位",升级到 <骷髅法师> - [R],"攻击伤害: 27-31
+攻击速度: 1
+攻击距离: 350
+生命值: 375
+攻击类型: 魔法
+防御类型: 轻甲
+技能:  1,狂热 2,扭曲意念"
+h01T,穴居蜘蛛,A1FR,穴居蜘蛛,A1FK,黑暗,A1FK > A1FQ > A1FR,黑暗 > 穴居蜘蛛 > 穴居蜘蛛,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNCryptFiend.blp,48977,35,,2,1,35,1,115,,,,3.0,medium,中甲,pierce,穿刺,12.0,17.0,14.5,0.8,18.125,500,,ancient,"A008,A118","出售,移位",建造 <穴居蜘蛛> - [W],"攻击伤害: 12-17
+攻击速度: 0.8
+攻击距离: 500
+生命值: 115
+攻击类型: 穿刺
+防御类型: 中甲 
+技能:  无"
+h01U,夜行者,A1FS,夜行者,A1FK,黑暗,A1FK > A1FQ > A1FS,黑暗 > 穴居蜘蛛 > 夜行者,h01T,穴居蜘蛛,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNNerubianQueen.blp,48979,110,,2,1,145,1,450,,,,3.0,medium,中甲,pierce,穿刺,28.0,34.0,31.0,0.45,68.88888888888889,500,,ancient,"A04Z,A008,A118","蛛网,出售,移位",升级到 <夜行者> - [P],"攻击伤害: 28-34
+攻击速度: 0.45
+攻击距离: 500
+生命值: 450
+攻击类型: 穿刺
+防御类型: 中甲 
+技能:  蛛网"
+h01V,黑暗守卫,A1FV,黑暗守卫,A1FK,黑暗,A1FK > A1FU > A1FV,黑暗 > 黑暗守卫 > 黑暗守卫,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNFelGuard.blp,48985,90,,2,1,90,1,275,,60,62,3.0,large,重甲,normal,普通,24.0,37.0,30.5,1.0,30.5,90,,ancient,"A02M,A008,A118","召唤地狱犬,出售,移位",建造 <黑暗守卫> - [E],"攻击伤害: 24-37
+攻击速度: 1
+攻击距离: 100
+生命值: 275
+攻击类型: 普通 
+防御类型: 重甲 
+技能:  召唤地狱犬"
+h01W,先行者,A1FW,先行者,A1FK,黑暗,A1FK > A1FU > A1FW,黑暗 > 黑暗守卫 > 先行者,h01V,黑暗守卫,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNFelGuardBlue.blp,48987,150,,2,1,240,2,700,,60,62,3.0,large,重甲,normal,普通,72.0,96.0,84.0,1.0,84.0,90,,ancient,"A02N,A008,A118","召唤狂犬,出售,移位",升级到 <先行者> - [P],"攻击伤害: 72-96
+攻击速度: 1
+攻击距离: 100
+生命值: 700
+攻击类型: 普通 
+防御类型: 重甲 
+技能:  召唤狂犬"
+h01X,黑曜石像,A1FY,黑曜石像,A1FK,黑暗,A1FK > A1FX > A1FY,黑暗 > 黑曜石像 > 黑曜石像,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNObsidianStatue.blp,48991,130,,2,1,130,1,625,,,,3.0,medium,中甲,magic,魔法,64.0,76.0,70.0,1.5,46.666666666666664,225,,ancient,"A02Y,A008,A118","吸血光环,出售,移位",建造 <黑曜石像> - [R],"攻击伤害: 64-76
+攻击速度: 1.5
+攻击距离: 225
+生命值: 625
+攻击类型: 魔法
+防御类型: 中甲 
+技能:  吸血光环"
+h01Y,摄魂者,A1FZ,摄魂者,A1FK,黑暗,A1FK > A1FX > A1FZ,黑暗 > 黑曜石像 > 摄魂者,h01X,黑曜石像,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNDestroyer.blp,48993,165,,2,1,295,2,1080,,,,3.0,medium,中甲,magic,魔法,120.0,132.0,126.0,1.4,90.0,225,,ancient,"A030,A008,A118","摄魂之音,出售,移位",升级到 <摄魂者> - [P],"攻击伤害: 120-132
+攻击速度: 1.4
+攻击距离: 225
+生命值: 1080
+攻击类型: 魔法
+防御类型: 中甲 
+技能:  摄魂之音"
+h01Z,梦魇,A1G1,梦魇,A1FK,黑暗,A1FK > A1G0 > A1G1,黑暗 > 梦魇 > 梦魇,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNFacelessOne.blp,48997,200,,2,1,200,2,1050,,,,3.0,none,无甲,normal,普通,20.0,40.0,30.0,0.3,100.0,90,,ancient,"A012,A008,A118","黑暗行,出售,移位",建造 <梦魇> - [A],"攻击伤害: 20-40
+攻击速度: 0.3
+攻击距离: 100
+生命值: 1050
+攻击类型: 普通 
+防御类型: 无甲
+技能:  黑暗行"
+h020,噩梦分身,A1G2,噩梦分身,A1FK,黑暗,A1FK > A1G0 > A1G2,黑暗 > 梦魇 > 噩梦分身,"h01Z,n06L","梦魇,梦魇",u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNDoppelganger.blp,48999,400,,2,1,600,5,2500,,,,3.0,none,无甲,chaos,混乱,60.0,84.0,72.0,0.3,240.0,120,,ancient,"A0XM,A013,A007,A008,A118","黑暗之魂,致命,球体,出售,移位",升级到 <噩梦分身> - [P],"攻击伤害: 60-84
+攻击速度: 0.3
+攻击距离: 120
+生命值: 2500
+攻击类型: 混乱 
+防御类型: 无甲
+技能:  致命 黑暗之魂"
+h021,死亡领主,A1G4,死亡领主,A1FK,黑暗,A1FK > A1G3 > A1G4,黑暗 > 死亡领主 > 死亡领主,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNEredarWarlockPurple.blp,49003,300,,2,1,300,2,845,,60,62,3.0,medium,中甲,chaos,混乱,35.0,45.0,40.0,0.5,80.0,400,,ancient,"A02P,A008,A118","地狱使者,出售,移位",建造 <死亡领主> - [S],"攻击伤害: 35-45
+攻击速度: 0.5
+攻击距离: 400
+生命值: 845
+攻击类型: 混乱
+防御类型: 中甲 
+技能:  地狱使者"
+h022,阎王,A1G5,阎王,A1FK,黑暗,A1FK > A1G3 > A1G5,黑暗 > 死亡领主 > 阎王,h021,死亡领主,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNDoomGuard.blp,49005,400,,2,1,700,6,1200,,60,62,3.0,medium,中甲,chaos,混乱,70.0,80.0,75.0,0.5,150.0,500,,ancient,"A02O,A008,A118","破坏神,出售,移位",升级到 <阎王> - [P],"攻击伤害: 70-80
+攻击速度: 0.5
+攻击距离: 500
+生命值: 1200
+攻击类型: 混乱
+防御类型: 中甲 
+技能:  破坏神 
+最大建造数量4"
+h040,质子,A1G8,质子,A1G6,元素,A1G6 > A1G7 > A1G8,元素 > 质子 > 质子,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNWisp.blp,49010,20,,2,1,20,1,100,,40,44,3.0,small,轻甲,chaos,混乱,13.0,13.0,13.0,1.25,10.4,350,,ancient,"A101,A008,A118","量子跃迁,出售,移位",建造 <质子> - [Q],"攻击伤害: 13-13
+攻击速度: 1.25
+攻击距离: 350
+生命值: 100
+攻击类型: 混乱
+防御类型: 轻甲
+技能:  量子跃迁
+特殊:  质子拥有每秒2点的魔法恢复速度。"
+h041,中子,A1G9,中子,A1G6,元素,A1G6 > A1G7 > A1G9,元素 > 质子 > 中子,h040,质子,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNAvengingWatcher.blp,49012,140,,2,1,160,1,560,,40,44,3.0,small,轻甲,chaos,混乱,100.0,100.0,100.0,1.25,80.0,350,,ancient,"A101,A008,A118","量子跃迁,出售,移位",升级到 <中子> - [P],"攻击伤害: 100-100
+攻击速度: 1.25
+攻击距离: 350
+生命值: 560
+攻击类型: 混乱
+防御类型: 轻甲
+技能:  量子跃迁
+特殊:  中子拥有每秒2点的魔法恢复速度。"
+h042,水元素,A1GB,水元素,A1G6,元素,A1G6 > A1GA > A1GB,元素 > 水元素 > 水元素,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNSummonWaterElemental.blp,49016,50,,2,1,50,1,175,,40,44,3.0,medium,中甲,normal,普通,21.0,37.0,29.0,1.5,19.333333333333332,375,,ancient,"A104,A008,A118","海浪,出售,移位",建造 <水元素> - [W],"攻击伤害: 21-37
+攻击速度: 1.5
+攻击距离: 375
+生命值: 175
+攻击类型: 普通 
+防御类型: 中甲 
+技能:  海浪
+特殊:  水元素拥有每秒2点的魔法恢复速度。"
+h043,海元素,A1GC,海元素,A1G6,元素,A1G6 > A1GA > A1GC,元素 > 水元素 > 海元素,h042,水元素,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNSeaElemental.blp,49018,130,,2,1,180,1,575,,30,34,3.0,medium,中甲,normal,普通,109.0,141.0,125.0,1.7,73.52941176470588,375,,ancient,"A105,A008,A118","潮汐,出售,移位",升级到 <海元素> - [P],"攻击伤害: 109-141
+攻击速度: 1.7
+攻击距离: 375
+生命值: 575
+攻击类型: 普通 
+防御类型: 中甲 
+技能:  潮汐
+特殊:  海元素拥有每秒2点的魔法恢复速度。"
+h044,猫头鹰,A1GE,猫头鹰,A1G6,元素,A1G6 > A1GD > A1GE,元素 > 猫头鹰 > 猫头鹰,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNScout.blp,49022,80,,2,1,80,1,335,,,,3.0,small,轻甲,magic,魔法,36.0,42.0,39.0,0.9,43.333333333333336,300,,ancient,"A008,A118","出售,移位",建造 <猫头鹰> - [E],"攻击伤害: 36-42
+攻击速度: 0.9
+攻击距离: 300
+生命值: 335
+攻击类型: 魔法
+防御类型: 轻甲
+技能:  无"
+h045,蓝鸟,A1GF,蓝鸟,A1G6,元素,A1G6 > A1GD > A1GF,元素 > 猫头鹰 > 蓝鸟,h044,猫头鹰,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNRavenForm.blp,49024,120,,2,1,200,2,850,,5,5,3.0,medium,中甲,magic,魔法,43.0,53.0,48.0,0.8,60.0,300,,ancient,"A01J,A05I,A100,A008,A118","青风,青风,蓝化,出售,移位",升级到 <蓝鸟> - [P],"攻击伤害: 43-53
+攻击速度: 0.8
+攻击距离: 300
+生命值: 850
+攻击类型: 魔法
+防御类型: 中甲 
+技能:  1.青风 2.蓝化
+特殊:  蓝鸟拥有每秒2点的魔法恢复速度。"
+h046,泥人,A1GH,泥人,A1G6,元素,A1G6 > A1GG > A1GH,元素 > 泥人 > 泥人,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNRockGolem.blp,49028,130,,2,1,130,2,735,,,,3.0,large,重甲,normal,普通,75.0,81.0,78.0,1.35,57.77777777777777,90,,ancient,"A008,A118","出售,移位",建造 <泥人> - [R],"攻击伤害: 75-81
+攻击速度: 1.35
+攻击距离: 100
+生命值: 735
+攻击类型: 普通 
+防御类型: 重甲 
+技能:  无"
+h047,石傀儡,A1GI,石傀儡,A1G6,元素,A1G6 > A1GG > A1GI,元素 > 泥人 > 石傀儡,h046,泥人,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNFleshGolem.blp,49030,170,,2,1,300,2,1490,,,,3.0,large,重甲,siege,攻城,166.0,180.0,173.0,1.3,133.07692307692307,90,,ancient,"A008,A118","出售,移位",升级到 <石傀儡> - [P],"攻击伤害: 166-180
+攻击速度: 1.3
+攻击距离: 100
+生命值: 1490
+攻击类型: 攻城
+防御类型: 重甲 
+技能:  无"
+h048,信徒,A1GL,信徒,A1G6,元素,A1G6 > A1GK > A1GL,元素 > 信徒 > 信徒,,,,,False,,,,False,replaceabletextures\\commandbuttons\\btndwarfarchmage2.blp,49036,200,,2,1,200,1,700,,9,13,3.0,small,轻甲,pierce,穿刺,57.0,71.0,64.0,0.9,71.11111111111111,550,,ancient,"A008,A118,A02L","出售,移位,魔力爆裂",建造 <信徒> - [A],"攻击伤害: 57-71
+攻击速度: 0.9
+攻击距离: 550
+生命值: 700
+攻击类型: 穿刺
+防御类型: 轻甲
+技能:  魔力爆裂
+特殊:  信徒拥有每秒2点的魔法恢复速度。"
+h049,主教,A1GM,主教,A1G6,元素,A1G6 > A1GK > A1GM,元素 > 信徒 > 主教,h048,信徒,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNGhostMage.blp,49038,220,,2,1,420,3,1100,,9,13,3.0,small,轻甲,magic,魔法,119.0,125.0,122.0,0.8,152.5,550,,ancient,"A02L,A02Z,A008,A118","魔力爆裂,魔法增幅,出售,移位",升级到 <主教> - [P],"攻击伤害: 119-125
+攻击速度: 0.8
+攻击距离: 550
+生命值: 1100
+攻击类型: 魔法
+防御类型: 轻甲
+技能:  1,魔力爆裂 2,魔法增幅
+特殊:  主教拥有每秒2点的魔法恢复速度。"
+h04A,冥龙,A1GO,冥龙,A1G6,元素,A1G6 > A1GN > A1GO,元素 > 冥龙 > 冥龙,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNNetherDragon.blp,49042,395,,2,1,395,2,1000,,40,40,3.0,medium,中甲,magic,魔法,142.0,156.0,149.0,1.0,149.0,400,,ancient,"A0R3,A008,A118","魔法护盾,出售,移位",建造 <冥龙> - [S],"攻击伤害: 142-156
+攻击速度: 1
+攻击距离: 400
+生命值: 1000
+攻击类型: 魔法
+防御类型: 中甲 
+技能:  魔法护盾
+特殊:  冥龙拥有每秒2点的魔法恢复速度。"
+h04B,凤凰,A1GP,凤凰,A1G6,元素,A1G6 > A1GN > A1GP,元素 > 冥龙 > 凤凰,h04A,冥龙,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNMarkOfFire.blp,49044,380,,2,1,775,5,1500,,60,60,3.0,medium,中甲,magic,魔法,195.0,205.0,200.0,0.98,204.08163265306123,300,,ancient,"A01H,A01I,A008,A118,A0JO","能量护盾,能量集中,出售,移位,源泉",升级到 <凤凰> - [P],"攻击伤害: 195-205
+攻击速度: 0.9
+攻击距离: 300
+生命值: 1500
+攻击类型: 魔法
+防御类型: 中甲 
+技能:  1,能量护盾 2,能量集中,3,源泉
+特殊:  凤凰拥有每秒1.5点的魔法恢复速度。"
+h05N,小鬼,A1GS,小鬼,A1GQ,幽魂,A1GQ > A1GR > A1GS,幽魂 > 小鬼 > 小鬼,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNBanshee.blp,49049,25,,2,1,25,1,75,,,,3.0,none,无甲,magic,魔法,4.0,5.0,4.5,0.33,13.636363636363635,500,,ancient,"A044,A008,A118","虚实,出售,移位",建造 <小鬼> - [Q],"攻击伤害: 4-5
+攻击速度: 0.33
+攻击距离: 500
+生命值: 75
+攻击类型: 魔法
+防御类型: 无甲
+技能:  虚实"
+h05O,鬼魂,A1GT,鬼魂,A1GQ,幽魂,A1GQ > A1GR > A1GT,幽魂 > 小鬼 > 鬼魂,h05N,小鬼,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNGhost.blp,49051,90,,2,1,115,1,230,,10,12,3.0,none,无甲,magic,魔法,14.0,20.0,17.0,0.3,56.66666666666667,600,,ancient,"A144,A045,A008,A118","虚魂,扰乱,出售,移位",升级到 <鬼魂> - [P],"攻击伤害: 14-20
+攻击速度: 0.3
+攻击距离: 600
+生命值: 230
+攻击类型: 魔法
+防御类型: 无甲
+技能:  1,虚魂 2,扰乱"
+h05P,黑暗天神,A1GU,黑暗天神,A1GQ,幽魂,A1GQ > A1GR > A1GU,幽魂 > 小鬼 > 黑暗天神,h05O,鬼魂,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNSpiritOfVengeance.blp,49053,150,,2,1,265,2,540,,10,12,3.0,none,无甲,magic,魔法,35.0,40.0,37.5,0.3,125.0,650,,ancient,"A244,A046,A008,A118","闪避,残废,出售,移位",升级到 <黑暗天神> - [P],"攻击伤害: 35-40
+攻击速度: 0.3
+攻击距离: 650
+生命值: 540
+攻击类型: 魔法
+防御类型: 无甲
+技能:  1,虚无之神 2,残废"
+h05R,幻影,A1H0,幻影,A1GQ,幽魂,A1GQ > A1GZ > A1H0,幽魂 > 幻影 > 幻影,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNVoidWalker.blp,49065,125,,2,1,125,1,475,,15,17,3.0,small,轻甲,chaos,混乱,0.0,0.0,0.0,1.6,0.0,250,,ancient,"A04T,A048,A008,A118","无声嚎叫,无声嚎叫,出售,移位",建造 <幻影> - [E],"攻击伤害: 0-0
+攻击速度: 1.6
+攻击距离: 250
+生命值: 475
+攻击类型: 混乱
+防御类型: 轻甲
+技能:  无声嚎叫"
+h05S,漫步者,A1GW,漫步者,A1GQ,幽魂,A1GQ > A1GV > A1GW,幽魂 > 漫步者 > 漫步者,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNShade.blp,49057,50,,2,1,50,1,285,,,,3.0,medium,中甲,normal,普通,16.0,20.0,18.0,0.9,20.0,90,,ancient,"A008,A118","出售,移位",建造 <漫步者> - [W],"攻击伤害: 16-20
+攻击速度: 0.9
+攻击距离: 100
+生命值: 285
+攻击类型: 普通 
+防御类型: 中甲 
+技能:  无"
+h05T,恶魂,A1GY,恶魂,A1GQ,幽魂,A1GQ > A1GV > A1GY,幽魂 > 漫步者 > 恶魂,h05S,漫步者,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNMedivh.blp,49061,80,,2,1,130,1,530,,,,3.0,small,轻甲,magic,魔法,74.0,80.0,77.0,1.2,64.16666666666667,400,,ancient,"A047,A008,A118,A04L","Violate,出售,移位,侵蚀",升级到 <恶魂> - [P],"攻击伤害: 74-80
+攻击速度: 1.2
+攻击距离: 400
+生命值: 530
+攻击类型: 魔法
+防御类型: 轻甲
+技能:  侵蚀"
+h05U,地狱幻影,A1H1,地狱幻影,A1GQ,幽魂,A1GQ > A1GZ > A1H1,幽魂 > 幻影 > 地狱幻影,h05R,幻影,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNHellRaiser.blp,49067,130,,2,1,255,2,580,,15,17,3.0,small,轻甲,chaos,混乱,0.0,0.0,0.0,1.25,0.0,350,,ancient,"A04U,A04A,A008,A118","恐惧嚎叫,恐惧嚎叫,出售,移位",升级到 <地狱幻影> - [P],"攻击伤害: 0-0
+攻击速度: 1.25
+攻击距离: 350
+生命值: 580
+攻击类型: 混乱
+防御类型: 轻甲
+技能:  恐惧嚎叫"
+h05V,流放者,A1H4,流放者,A1GQ,幽魂,A1GQ > A1H3 > A1H4,幽魂 > 流放者 > 流放者,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNDeepLordRevenant.blp,49073,200,,2,1,200,2,1040,,,,3.0,large,重甲,normal,普通,63.0,70.0,66.5,0.75,88.66666666666667,90,,ancient,"A008,A118","出售,移位",建造 <流放者> - [R],"攻击伤害: 63-70
+攻击速度: 0.75
+攻击距离: 100
+生命值: 1040
+攻击类型: 普通 
+防御类型: 重甲 
+技能:  无"
+h05W,遗忘者,A1H5,遗忘者,A1GQ,幽魂,A1GQ > A1H3 > A1H5,幽魂 > 流放者 > 遗忘者,h05V,流放者,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNForsakenOne.blp,49075,210,,2,1,410,3,1705,,,,3.0,large,重甲,siege,攻城,105.0,119.0,112.0,0.65,172.3076923076923,90,,ancient,"A04Q,A04C,A008,A118","球体,精神错乱,出售,移位",升级到 <遗忘者> - [P],"攻击伤害: 105-119
+攻击速度: 0.65
+攻击距离: 90
+生命值: 1705
+攻击类型: 攻城
+防御类型: 重甲 
+技能:  精神错乱"
+h05X,鸟魂,A1H7,鸟魂,A1GQ,幽魂,A1GQ > A1H6 > A1H7,幽魂 > 鸟魂 > 鸟魂,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNSpiritWyvern.blp,49079,200,,2,1,200,1,665,,,,3.0,medium,中甲,pierce,穿刺,118.0,130.0,124.0,1.0,124.0,500,,ancient,"A0AR,A008,A118","虚弱光环,出售,移位",建造 <鸟魂> - [A],"攻击伤害: 118-130
+攻击速度: 1
+攻击距离: 500
+生命值: 665
+攻击类型: 穿刺
+防御类型: 中甲 
+技能:  虚弱光环"
+h05Y,守墓者,A1H8,守墓者,A1GQ,幽魂,A1GQ > A1H6 > A1H8,幽魂 > 鸟魂 > 守墓者,h05X,鸟魂,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNGravekeeper.blp,49081,250,,2,1,450,3,1025,,,,3.0,medium,中甲,pierce,穿刺,209.0,219.0,214.0,1.1,194.54545454545453,500,,ancient,"A04W,A008,A118","绝望光环,出售,移位",升级到 <守墓者> - [P],"攻击伤害: 209-219
+攻击速度: 1.0
+攻击距离: 500
+生命值: 1025
+攻击类型: 穿刺
+防御类型: 中甲 
+技能:  绝望光环"
+h05Z,幽魂法师,A1I2,幽魂法师,A1GQ,幽魂,A1GQ > A1I1 > A1I2,幽魂 > 幽魂法师 > 幽魂法师,,,,,False,,,,False,replaceabletextures\\commandbuttons\\btnswordmag.blp,49085,275,,2,1,275,2,1200,,25,27,3.0,none,无甲,magic,魔法,121.0,135.0,128.0,0.92,139.1304347826087,100,,ancient,"A04P,A04J,A008,A118","球体,闹鬼,出售,移位",建造 <幽魂法师> - [S],"攻击伤害: 121-135
+攻击速度: 0.92
+攻击距离: 100
+生命值: 1200
+攻击类型: 魔法
+防御类型: 无甲
+技能:  闹鬼"
+h060,末日法师,A1I3,末日法师,A1GQ,幽魂,A1GQ > A1I1 > A1I3,幽魂 > 幽魂法师 > 末日法师,h05Z,幽魂法师,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNSpiritWalker.blp,49087,325,,2,1,600,4,1200,,90,90,3.0,none,无甲,magic,魔法,196.0,224.0,210.0,0.82,256.0975609756098,700,,ancient,"A04S,A04K,A008,A118","虚无形态,灾祸,出售,移位",升级到 <末日法师> - [P],"攻击伤害: 196-224
+攻击速度: 0.82
+攻击距离: 700
+生命值: 1200
+攻击类型: 魔法
+防御类型: 无甲
+技能:  1,虚无形态 2,灾祸"
+h062,英魂,A1GX,英魂,A1GQ,幽魂,A1GQ > A1GV > A1GX,幽魂 > 漫步者 > 英魂,h05S,漫步者,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNBanditLord.blp,49059,120,,2,1,170,1,985,,,,3.0,medium,中甲,normal,普通,67.0,71.0,69.0,1.0,69.0,90,,ancient,"A049,A008,A118","攻防转换,出售,移位",升级到 <英魂> - [P],"攻击伤害: 67-71
+攻击速度: 1
+攻击距离: 100
+生命值: 985
+攻击类型: 普通 
+防御类型: 中甲 
+技能:  攻防转换"
+h06I,变种人,A1I8,变种人,A1I4,半人,A1I4 > A1I5 > A1I8,半人 > 地精技师 > 变种人,h078,矮人工程师,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNHeroAlchemist.blp,49096,350,,2,1,420,3,2000,,,,3.0,large,重甲,siege,攻城,231.0,249.0,240.0,1.0,240.0,450,,ancient,"A0UA,A008,A118","不稳定炼金术,出售,移位",升级到 <变种人> - [P],"攻击伤害: 231-249
+攻击速度: 1.0
+攻击距离: 450
+生命值: 2000
+攻击类型: 攻城
+防御类型: 重甲 
+技能:  兴奋剂 不稳定炼金术"
+h06J,地精技师,A1I6,地精技师,A1I4,半人,A1I4 > A1I5 > A1I6,半人 > 地精技师 > 地精技师,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNGoblinSapper.blp,49092,20,,2,1,20,1,95,,,,3.0,small,轻甲,siege,攻城,10.0,11.0,10.5,1.0,10.5,400,,ancient,"A008,A118","出售,移位",建造 <地精技师> - [Q],"攻击伤害: 10-11
+攻击速度: 1
+攻击距离: 400
+生命值: 95
+攻击类型: 攻城
+防御类型: 轻甲
+技能:  无"
+h06K,奴仆,A1IB,奴仆,A1I4,半人,A1I4 > A1IA > A1IB,半人 > 奴仆 > 奴仆,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNPeon.blp,49102,25,,2,1,25,1,150,,,,3.0,fort,城甲,normal,普通,25.0,35.0,30.0,1.5,20.0,90,,ancient,"A0R9,A008,A118","奴隶交易,出售,移位",建造 <奴仆> - [W],"攻击伤害: 25-35
+攻击速度: 1.5
+攻击距离: 100
+生命值: 150
+攻击类型: 普通 
+防御类型: 魂甲 
+技能:  奴隶交易"
+h06L,奴隶主,A1IC,奴隶主,A1I4,半人,A1I4 > A1IA > A1IC,半人 > 奴仆 > 奴隶主,h06K,奴仆,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNRaider.blp,49104,350,,2,1,375,7,2000,,,20,3.0,none,无甲,chaos,混乱,106.0,132.0,119.0,0.6,198.33333333333334,90,,ancient,"A055,A0P8,A008,A118","贩奴,鞭策,出售,移位",升级到 <奴隶主> - [P],"攻击伤害: 106-132
+攻击速度: 0.6
+攻击距离: 220
+生命值: 2000
+攻击类型: 混乱
+防御类型: 无甲 
+技能: 奴隶交易"
+h06M,部落人,A1IE,部落人,A1I4,半人,A1I4 > A1ID > A1IE,半人 > 部落人 > 部落人,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNHeadhunter.blp,49108,80,,2,1,80,1,385,1.01,13,15,3.0,medium,中甲,normal,普通,26.0,35.0,30.5,0.8,38.125,325,,ancient,"A056,A008,A118","掷网,出售,移位",建造 <部落人> - [E],"攻击伤害: 26-35
+攻击速度: 0.8
+攻击距离: 325
+生命值: 385
+攻击类型: 穿刺
+防御类型: 中甲 
+技能:  掷网"
+h06N,部落精英,A1IF,部落精英,A1I4,半人,A1I4 > A1ID > A1IF,半人 > 部落人 > 部落精英,h06M,部落人,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNHeadHunterBerserker.blp,49110,140,,2,1,220,2,900,1.0,13,15,3.0,medium,中甲,pierce,穿刺,56.0,67.0,61.5,0.8,76.875,400,,ancient,"A056,A057,A008,A118","掷网,狂怒,出售,移位",升级到 <部落精英> - [P],"攻击伤害: 56-67
+攻击速度: 0.8
+攻击距离: 400
+生命值: 900
+攻击类型: 穿刺
+防御类型: 中甲 
+技能:  1,掷网 2,狂怒"
+h06O,萨满医师,A1IH,萨满医师,A1I4,半人,A1I4 > A1IG > A1IH,半人 > 萨满医师 > 萨满医师,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNShadowHunter.blp,49114,110,,2,1,110,1,450,,16,18,3.0,small,轻甲,magic,魔法,39.0,55.0,47.0,1.4,33.57142857142858,500,,ancient,"A059,A008,A118","治疗波,出售,移位",建造 <萨满医师> - [R],"攻击伤害: 39-55
+攻击速度: 1.4
+攻击距离: 500
+生命值: 450
+攻击类型: 魔法
+防御类型: 轻甲
+技能:  治疗波"
+h06P,萨满神使,A1II,萨满神使,A1I4,半人,A1I4 > A1IG > A1II,半人 > 萨满医师 > 萨满神使,h06O,萨满医师,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNShaman.blp,49116,160,,2,1,270,2,835,,16,18,3.0,small,轻甲,magic,魔法,78.0,100.0,89.0,1.4,63.57142857142858,500,,ancient,"A059,A05B,A008,A118","治疗波,庇护之灵,出售,移位",升级到 <萨满神使> - [P],"攻击伤害: 87-100
+攻击速度: 1.4
+攻击距离: 500
+生命值: 835
+攻击类型: 魔法
+防御类型: 轻甲
+技能:  庇护之灵， 治疗波"
+h06Q,妖女,A1IK,妖女,A1I4,半人,A1I4 > A1IJ > A1IK,半人 > 妖女 > 妖女,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNDemoness.blp,49120,180,,2,1,180,1,835,,,,3.0,large,重甲,pierce,穿刺,101.0,115.0,108.0,1.05,102.85714285714285,90,,ancient,"A008,A118","出售,移位",建造 <妖女> - [A],"攻击伤害: 101-115
+攻击速度: 1.05
+攻击距离: 100
+生命值: 835
+攻击类型: 穿刺
+防御类型: 重甲 
+技能:  无"
+h06R,魔女,A1IL,魔女,A1I4,半人,A1I4 > A1IJ > A1IL,半人 > 妖女 > 魔女,h06Q,妖女,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNBlueDemoness.blp,49122,180,,2,1,360,2,1680,,20,22,3.0,large,重甲,pierce,穿刺,153.0,174.0,163.5,1.05,155.7142857142857,90,,ancient,"A05C,A008,A118","诱惑,出售,移位",升级到 <魔女> - [P],"攻击伤害: 153-174
+攻击速度: 1.05
+攻击距离: 100
+生命值: 1680
+攻击类型: 穿刺
+防御类型: 重甲 
+技能:  诱惑"
+h06S,牛头人,A1IN,牛头人,A1I4,半人,A1I4 > A1IM > A1IN,半人 > 牛头人 > 牛头人,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNTauren.blp,49126,275,,2,1,275,2,1415,,12,14,3.0,large,重甲,normal,普通,128.0,152.0,140.0,1.2,116.66666666666667,90,,ancient,"A05D,A008,A118","震地,出售,移位",建造 <牛头人> - [S],"攻击伤害: 128-152
+攻击速度: 1.2
+攻击距离: 100
+生命值: 1415
+攻击类型: 普通 
+防御类型: 重甲 
+技能:  震地"
+h06T,大脚怪,A1IO,大脚怪,A1I4,半人,A1I4 > A1IM > A1IO,半人 > 牛头人 > 大脚怪,h06S,牛头人,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNSasquatch.blp,49128,325,,2,1,600,4,2465,,15,17,3.0,large,重甲,normal,普通,233.0,257.0,245.0,1.2,204.16666666666669,90,,ancient,"A05E,A008,A118","战争践踏,出售,移位",升级到 <大脚怪> - [P],"攻击伤害: 233-257
+攻击速度: 1.2
+攻击距离: 90
+生命值: 2465
+攻击类型: 普通 
+防御类型: 重甲 
+技能:  战争践踏"
+h076,变种人 (兴奋),A1I9,变种人 (兴奋),A1I4,半人,A1I4 > A1I5 > A1I9,半人 > 地精技师 > 变种人 (兴奋),h06I,变种人,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNChemicalRage.blp,49098,330,,,1,750,3,2500,20.0,,,5.0,large,重甲,siege,攻城,231.0,249.0,240.0,0.8,300.0,450,,ancient,"A054,A0UA,A18X","兴奋剂,不稳定炼金术,血统融合",兴奋剂,"增加25%攻击力10%攻击速度25%生命值40%弹道速度3 护甲提高20/s的生命恢复速度。
+
+该技能必须在下一波开始前手动激活
+
+购买兴奋剂后，变种人于不可被出售
+攻击对目标半径50/100/150码内的敌人造成40%/25%/10%的溅射伤害"
+h078,矮人工程师,A1I7,矮人工程师,A1I4,半人,A1I4 > A1I5 > A1I7,半人 > 地精技师 > 矮人工程师,h06J,地精技师,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNMortarTeam.blp,49094,50,,2,1,70,1,265,,,,3.0,small,轻甲,siege,攻城,21.0,27.0,24.0,1.0,24.0,400,,ancient,"A069,A008,A118","迫击炮,出售,移位",升级到 <矮人工程师> - [P],"攻击伤害: 21-27
+攻击速度: 1
+攻击距离: 400
+生命值: 265
+攻击类型: 攻城
+防御类型: 轻甲
+技能:  迫击炮"
+h07J,小鱼人,A1IR,小鱼人,A1IP,海洋,A1IP > A1IQ > A1IR,海洋 > 小鱼人 > 小鱼人,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNMurgalSlave.blp,49133,10,,2,1,10,1,55,,,,3.0,none,无甲,normal,普通,9.0,10.0,9.5,1.7,5.588235294117648,90,,ancient,"A008,A118","出售,移位",建造 <小鱼人> - [Q],"攻击伤害: 9-10
+攻击速度: 1.7
+攻击距离: 100
+生命值: 55
+攻击类型: 普通 
+防御类型: 无甲
+技能:  无"
+h07L,两栖鱼人,A1IS,两栖鱼人,A1IP,海洋,A1IP > A1IQ > A1IS,海洋 > 小鱼人 > 两栖鱼人,h07J,小鱼人,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNMurlocMutant.blp,49135,90,,2,1,100,1,480,,,,3.0,none,无甲,normal,普通,24.0,30.0,27.0,0.6,45.0,90,,ancient,"A008,A118","出售,移位",升级到 <两栖鱼人> - [P],"攻击伤害: 24-30
+攻击速度: 0.6
+攻击距离: 100
+生命值: 480
+攻击类型: 普通 
+防御类型: 无甲
+技能:  无"
+h07M,毒牙,A1IU,毒牙,A1IP,海洋,A1IP > A1IQ > A1IU,海洋 > 小鱼人 > 毒牙,h07L,两栖鱼人,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNMurgulBloodGill.blp,49139,300,,2,1,400,3,1820,,4,6,3.0,none,无甲,chaos,混乱,165.0,169.0,167.0,1.1,151.8181818181818,200,,ancient,"A06N,A008,A118","麻痹毒素,出售,移位",升级到 <毒牙> - [R],"攻击伤害: 165-169
+攻击速度: 1.1
+攻击距离: 200
+生命值: 1820
+攻击类型: 混乱 
+防御类型: 无甲
+技能:  麻痹毒素"
+h07N,尖牙,A1IT,尖牙,A1IP,海洋,A1IP > A1IQ > A1IT,海洋 > 小鱼人 > 尖牙,h07L,两栖鱼人,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNMurlocFlesheater.blp,49137,300,,2,1,400,3,1950,,3,3,3.0,none,无甲,chaos,混乱,60.0,66.0,63.0,0.33,190.9090909090909,180,,ancient,"A06O,A0TA,A008,A118","咬食,撕咬,出售,移位",升级到 <尖牙> - [P],"攻击伤害: 60-66
+攻击速度: 0.33
+攻击距离: 180
+生命值: 1950
+攻击类型: 混乱
+防御类型: 无甲
+技能:  撕咬 咬食"
+h07O,蛋壳,A1IW,蛋壳,A1IP,海洋,A1IP > A1IV > A1IW,海洋 > 蛋壳 > 蛋壳,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNPhoenixEgg.blp,49143,50,,2,1,50,1,260,,,,3.0,normal,无甲,magic,魔法,16.0,18.0,17.0,1.0,17.0,400,,ancient,"A06P,A008,A118","缩回,出售,移位",建造 <蛋壳> - [W],"攻击伤害: 16-18
+攻击速度: 1
+攻击距离: 400
+生命值: 260
+攻击类型: 魔法
+防御类型: 城甲
+技能:  缩回"
+h07P,飞蛇,A1IX,飞蛇,A1IP,海洋,A1IP > A1IV > A1IX,海洋 > 蛋壳 > 飞蛇,h07O,蛋壳,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNWindSerpent.blp,49145,120,,2,1,170,1,835,1.37,,,3.0,medium,中甲,magic,魔法,62.0,72.0,67.0,1.0,67.0,400,,ancient,"A06Q,A008,A118","打斗,出售,移位",升级到 <飞蛇> - [P],"攻击伤害: 62-72
+攻击伤害(对空): 85-107
+攻击速度: 1/0.8(对空)
+攻击距离: 500/100(对空)
+生命值: 835
+攻击类型: 魔法/穿刺(对空)
+防御类型: 中甲 
+技能:  打斗"
+h07Q,螯虾,A1IZ,螯虾,A1IP,海洋,A1IP > A1IY > A1IZ,海洋 > 螯虾 > 螯虾,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNLobstrokkRed.blp,49149,85,,2,1,85,1,400,,,,3.0,large,重甲,siege,攻城,41.0,46.0,43.5,1.2,36.25,180,,ancient,"A06R,A008,A118","海鲜,出售,移位",建造 <螯虾> - [E],"攻击伤害: 41-46
+攻击速度: 1.2
+攻击距离: 180
+生命值: 400
+攻击类型: 攻城
+防御类型: 重甲 
+技能:  海鲜"
+h07R,虾皇,A1J0,虾皇,A1IP,海洋,A1IP > A1IY > A1J0,海洋 > 螯虾 > 虾皇,h07Q,螯虾,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNLobstrokkBlue.blp,49151,140,,2,1,225,2,1000,,,,3.0,large,重甲,siege,攻城,102.0,118.0,110.0,1.2,91.66666666666667,180,,ancient,"A06R,A008,A118","海鲜,出售,移位",升级到 <虾皇> - [P],"攻击伤害: 102-118
+攻击速度: 1.2
+攻击距离: 180
+生命值: 1000
+攻击类型: 攻城
+防御类型: 重甲 
+技能:  海鲜"
+h07S,半人鱼,A1J2,半人鱼,A1IP,海洋,A1IP > A1J1 > A1J2,海洋 > 半人鱼 > 半人鱼,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNSeaWitch.blp,49155,130,,2,1,130,1,505,,10,12,3.0,small,轻甲,pierce,穿刺,43.0,54.0,48.5,1.1,44.090909090909086,500,,ancient,"A06S,A008,A118","水甲,出售,移位",建造 <半人鱼> - [R],"攻击伤害: 43-54
+攻击速度: 1.1
+攻击距离: 500
+生命值: 505
+攻击类型: 穿刺
+防御类型: 轻甲
+技能:  水甲"
+h07T,贵族,A1J3,贵族,A1IP,海洋,A1IP > A1J1 > A1J3,海洋 > 半人鱼 > 贵族,h07S,半人鱼,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNNagaSummoner.blp,49157,170,,2,1,300,2,930,,20,22,3.0,small,轻甲,pierce,穿刺,90.0,101.0,95.5,1.1,86.81818181818181,500,,ancient,"A07Y,A06W,A008,A118","水甲,风暴气泉,出售,移位",升级到 <贵族> - [P],"攻击伤害: 90-101
+攻击速度: 1.1
+攻击距离: 500
+生命值: 930
+攻击类型: 穿刺
+防御类型: 轻甲
+技能:  风暴气泉"
+h07U,科摩多,A1J5,科摩多,A1IP,海洋,A1IP > A1J4 > A1J5,海洋 > 科摩多 > 科摩多,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNSnapDragon.blp,49161,180,,2,1,180,1,950,,,,3.0,medium,中甲,normal,普通,63.0,74.0,68.5,0.8,85.625,90,,ancient,"A06Y,A008,A118","潜地,出售,移位",建造 <科摩多> - [A],"攻击伤害: 63-74
+攻击速度: 0.8
+攻击距离: 100
+生命值: 950
+攻击类型: 普通 
+防御类型: 中甲 
+技能:  潜地"
+h07V,三叉戟,A1J6,三叉戟,A1IP,海洋,A1IP > A1J4 > A1J6,海洋 > 科摩多 > 三叉戟,h07U,科摩多,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNNagaMyrmidon.blp,49163,265,,2,1,445,3,2050,,,20,3.0,medium,中甲,normal,普通,210.0,230.0,220.0,0.75,293.3333333333333,100,,ancient,"A070,A0U9,A008,A118","猛击,粉碎,出售,移位",升级到 <三叉戟> - [P],"攻击伤害: 210-230
+攻击速度: 0.75
+攻击距离: 100
+生命值: 2050
+攻击类型: 普通 
+防御类型: 中甲 
+技能: 粉碎 猛击"
+h07W,海巨人,A1J8,海巨人,A1IP,海洋,A1IP > A1J7 > A1J8,海洋 > 海巨人 > 海巨人,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNSeaGiantGreen.blp,49167,275,,2,1,275,2,1380,,,,3.0,large,重甲,normal,普通,119.0,131.0,125.0,0.95,131.57894736842107,180,,ancient,"A008,A118,A0TH","出售,移位,锚击",建造 <海巨人> - [S],"攻击伤害: 119-131
+攻击速度: 0.95
+攻击距离: 180
+生命值: 1380
+攻击类型: 普通 
+防御类型: 重甲 
+技能:  锚击"
+h07X,九头蛇,A1J9,九头蛇,A1IP,海洋,A1IP > A1J7 > A1J9,海洋 > 海巨人 > 九头蛇,"h07W,n06P","海巨人,海巨人",u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNGreenHydra.blp,49169,425,,2,1,700,4,1600,,,,3.0,large,重甲,magic,魔法,254.0,272.0,263.0,0.9,292.22222222222223,300,,"ancient,sapper","A0TB,A072,A008,A118","多重攻击,分裂,出售,移位",升级到 <九头蛇> - [P],"攻击伤害: 254-272
+攻击速度: 0.9
+攻击距离: 300
+生命值: 1600
+攻击类型: 魔法
+防御类型: 重甲 
+技能:  1,多重攻击 2,分裂"
+h08F,角鹰,A1L0,角鹰,A1KY,精灵人,A1KY > A1KZ > A1L0,精灵人 > 角鹰 > 角鹰,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNHippogriff.blp,49291,20,,2,1,20,1,90,1.0,,,3.0,none,无甲,normal,普通,10.0,12.0,11.0,1.0,11.0,90,,ancient,"A008,A118","出售,移位",建造 <角鹰> - [Q],"攻击伤害: 10-12
+攻击速度: 1
+攻击距离: 100
+生命值: 90
+攻击类型: 普通 
+防御类型: 轻甲
+技能:  无"
+h08H,工人,A1L3,工人,A1KY,精灵人,A1KY > A1L2 > A1L3,精灵人 > 工人 > 工人,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNBloodElfPeasant.blp,49297,40,,2,1,40,1,210,,,,3.0,small,轻甲,normal,普通,18.0,20.0,19.0,1.0,19.0,90,,ancient,"A008,A118","出售,移位",建造 <工人> - [W],"攻击伤害: 18-20
+攻击速度: 1
+攻击距离: 100
+生命值: 210
+攻击类型: 普通 
+防御类型: 轻甲
+技能:  无"
+h08I,角鹰骑士,A1L1,角鹰骑士,A1KY,精灵人,A1KY > A1KZ > A1L1,精灵人 > 角鹰 > 角鹰骑士,h08F,角鹰,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNHippogriffRider.blp,49293,80,,2,1,100,1,400,2.0,,,3.0,none,无甲,pierce,穿刺,66.0,70.0,68.0,1.1,61.81818181818181,200,,ancient,"A112,A008,A118","猎鹰射手,出售,移位",升级到 <角鹰骑士> - [P],"攻击伤害: 66-70
+攻击速度: 1.1
+攻击距离: 200
+生命值: 400
+攻击类型: 穿刺
+防御类型: 无甲
+技能:  猎鹰射手"
+h08L,十字军,A1L4,十字军,A1KY,精灵人,A1KY > A1L2 > A1L4,精灵人 > 工人 > 十字军,h08H,工人,u004,等到战斗结束,False,,,,False,replaceabletextures\\commandbuttons\\btncrusander.blp,49299,110,,2,1,150,1,740,20.0,60,62,3.0,large,重甲,normal,普通,52.0,60.0,56.0,0.8,70.0,90,,ancient,"A0R6,A110,A008,A118","远征,魔法之矛,出售,移位",升级到 <十字军> - [P],"攻击伤害: 52-60
+攻击速度: 0.8
+攻击距离: 100
+生命值: 740
+攻击类型: 普通 
+防御类型: 重甲 
+技能:  1,远征 2,魔法之矛"
+h08N,哨兵,A1L6,哨兵,A1KY,精灵人,A1KY > A1L5 > A1L6,精灵人 > 哨兵 > 哨兵,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNHuntress.blp,49303,80,,2,1,80,1,350,1.01,,,3.0,medium,中甲,normal,普通,16.0,24.0,20.0,1.0,20.0,400,,ancient,"A07I,A008,A118","冰弹,出售,移位",建造 <哨兵> - [E],"攻击伤害: 16-24
+攻击速度: 1
+攻击距离: 400
+生命值: 350
+攻击类型: 穿刺
+防御类型: 中甲 
+技能:  冰弹"
+h08P,夜刃,A1L7,夜刃,A1KY,精灵人,A1KY > A1L5 > A1L7,精灵人 > 哨兵 > 夜刃,h08N,哨兵,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNHuntress.blp,49305,160,,2,1,240,2,850,,,,3.0,medium,中甲,pierce,穿刺,68.0,73.0,70.5,0.75,94.0,525,,ancient,"Amgl,A008,A118","月刃,出售,移位",升级到 <夜刃> - [P],"攻击伤害: 68-71
+攻击速度: 0.75
+攻击距离: 525
+生命值: 850
+攻击类型: 穿刺
+防御类型: 中甲 
+技能:  月刃"
+h08Q,囚车,A1L9,囚车,A1KY,精灵人,A1KY > A1L8 > A1L9,精灵人 > 囚车 > 囚车,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNCagedIllidan.blp,49309,125,,2,1,125,1,550,,,,3.0,normal,无甲,chaos,混乱,41.0,47.0,44.0,0.8,55.0,300,,ancient,"A008,A118","出售,移位",建造 <囚车> - [R],"攻击伤害: 41-47
+攻击速度: 0.8
+攻击距离: 300
+生命值: 550
+攻击类型: 混乱
+防御类型: 城甲
+技能:  无"
+h08S,独行侠,A1LA,独行侠,A1KY,精灵人,A1KY > A1L8 > A1LA,精灵人 > 囚车 > 独行侠,h08Q,囚车,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNDragonHawk.blp,49311,170,,2,1,295,2,920,,60,62,3.0,medium,中甲,chaos,混乱,95.0,101.0,98.0,1.0,98.0,300,,ancient,"A08M,A008,A118","镜像,出售,移位",升级到 <独行侠> - [P],"攻击伤害: 95-101
+攻击速度: 1
+攻击距离: 300
+生命值: 920
+攻击类型: 混乱
+防御类型: 中甲 
+技能:  镜像"
+h08V,德鲁伊,A1LC,德鲁伊,A1KY,精灵人,A1KY > A1LB > A1LC,精灵人 > 德鲁伊 > 德鲁伊,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNDruidOfTheTalon.blp,49315,200,,2,1,200,1,815,,10,12,3.0,none,无甲,magic,魔法,76.0,84.0,80.0,1.0,80.0,500,,ancient,"A07X,A008,A118","自然之怒,出售,移位",建造 <德鲁伊> - [A],"攻击伤害: 76-84
+攻击速度: 1
+攻击距离: 500
+生命值: 815
+攻击类型: 魔法
+防御类型: 无甲
+技能:  闪电链"
+h08Y,女巫,A1LD,女巫,A1KY,精灵人,A1KY > A1LB > A1LD,精灵人 > 德鲁伊 > 女巫,h08V,德鲁伊,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNSorceress.blp,49317,220,,2,1,420,3,1450,,,,3.0,none,无甲,magic,魔法,111.0,121.0,116.0,0.8,145.0,500,,ancient,"A02D,A0B1,A008,A118","Faerie Fire,魔焰,出售,移位",升级到 <女巫> - [P],"攻击伤害: 111-121
+攻击速度: 0.8
+攻击距离: 500
+生命值: 1450
+攻击类型: 魔法
+防御类型: 无甲
+技能:  魔焰"
+h08Z,魔剑士,A1LE,魔剑士,A1KY,精灵人,A1KY > A1LB > A1LE,精灵人 > 德鲁伊 > 魔剑士,h08V,德鲁伊,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNSpellBreaker.blp,49319,220,,2,1,420,3,1850,,3,3,3.0,medium,中甲,magic,魔法,90.0,100.0,95.0,0.65,146.15384615384616,180,,ancient,"A081,A008,A118","火刃,出售,移位",升级到 <魔剑士> - [R],"攻击伤害: 90-100
+攻击速度: 0.65
+攻击距离: 180
+生命值: 1850
+攻击类型: 魔法
+防御类型: 中甲 
+技能:  火刃"
+h090,月之守卫,A1LG,月之守卫,A1KY,精灵人,A1KY > A1LF > A1LG,精灵人 > 月之守卫 > 月之守卫,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNAssassin.blp,49323,300,,2,1,300,2,1350,,25,27,3.0,large,重甲,pierce,穿刺,79.0,89.0,84.0,0.55,152.72727272727272,90,,ancient,"A07H,A008,A118","刀阵旋风,出售,移位",建造 <月之守卫> - [S],"攻击伤害: 79-89
+攻击速度: 0.55
+攻击距离: 100
+生命值: 1350
+攻击类型: 穿刺
+防御类型: 重甲
+技能:  刀阵旋风"
+h093,守望者,A1LH,守望者,A1KY,精灵人,A1KY > A1LF > A1LH,精灵人 > 月之守卫 > 守望者,h090,月之守卫,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNHeroWarden.blp,49325,350,,2,1,650,4,2670,,,,3.0,large,重甲,pierce,穿刺,140.0,160.0,150.0,0.45,333.3333333333333,90,,ancient,"A07L,A008,A118","迅捷,出售,移位",升级到 <守望者> - [P],"攻击伤害: 140-160
+攻击速度: 0.45
+攻击距离: 100
+生命值: 2670
+攻击类型: 穿刺 
+防御类型: 重甲 
+技能:  迅捷"
+h09H,民兵,A1KH,民兵,A1KE,骑士,A1KE > A1KF > A1KH,骑士 > 农民 > 民兵,h09L,农民,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNMilitia.blp,49254,60,,2,1,75,1,375,,,,3.0,medium,中甲,normal,普通,28.0,32.0,30.0,1.0,30.0,90,,ancient,"A008,A118","出售,移位",升级到 <民兵> - [P],"攻击伤害: 28-32
+攻击速度: 1
+攻击距离: 100
+生命值: 375
+攻击类型: 普通
+防御类型: 中甲
+技能:  无"
+h09L,农民,A1KG,农民,A1KE,骑士,A1KE > A1KF > A1KG,骑士 > 农民 > 农民,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNPeasant.blp,49252,15,,2,1,15,1,75,,,,3.0,small,轻甲,normal,普通,6.0,9.0,7.5,1.0,7.5,90,,ancient,"A008,A118","出售,移位",建造 <农民> - [Q],"攻击伤害: 6-9
+攻击速度: 1
+攻击距离: 100
+生命值: 75
+攻击类型: 普通
+防御类型: 轻甲
+技能:  无"
+h09M,精英弓箭手,A1KL,精英弓箭手,A1KE,骑士,A1KE > A1KJ > A1KL,骑士 > 弓箭手 > 精英弓箭手,h09W,弓箭手,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNSylvanusWindrunner.blp,49262,155,,2,1,205,2,650,,,,3.0,small,轻甲,pierce,穿刺,18.0,18.0,18.0,0.8,22.5,575,,ancient,"A07M,A008,A118","箭雨,出售,移位",升级到 <精英弓箭手> - [P],"攻击伤害: 18-18
+攻击速度: 0.8
+攻击距离: 600
+生命值: 650
+攻击类型: 穿刺
+防御类型: 轻甲
+技能:  箭雨"
+h09N,步兵,A1KN,步兵,A1KE,骑士,A1KE > A1KM > A1KN,骑士 > 步兵 > 步兵,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNFootman.blp,49266,80,,2,1,80,1,385,,,,3.0,medium,中甲,normal,普通,55.0,59.0,57.0,1.5,38.0,100,,ancient,"A008,A118","出售,移位",建造 <步兵> - [E],"攻击伤害: 55-59
+攻击速度: 1.5
+攻击距离: 100
+生命值: 385
+攻击类型: 普通
+防御类型: 中甲
+技能:  无"
+h09O,近卫兵,A1KO,近卫兵,A1KE,骑士,A1KE > A1KM > A1KO,骑士 > 步兵 > 近卫兵,h09N,步兵,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNTheCaptain.blp,49268,160,,2,1,240,1,1150,,,,3.0,medium,中甲,normal,普通,60.0,66.0,63.0,0.6,105.0,100,,ancient,"A008,A118,A07N","出售,移位,防御",升级到 <近卫兵> - [P],"攻击伤害: 60-66
+攻击速度: 0.6
+攻击距离: 90
+生命值: 1150
+攻击类型: 普通
+防御类型: 中甲
+技能:  防御"
+h09R,牧师,A1KQ,牧师,A1KE,骑士,A1KE > A1KP > A1KQ,骑士 > 牧师 > 牧师,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNPriest.blp,49272,130,,2,1,130,1,420,,10,12,3.0,small,轻甲,magic,魔法,53.0,63.0,58.0,1.0,58.0,400,,ancient,"A07P,A008,A118","疗伤,出售,移位",建造 <牧师> - [R],"攻击伤害: 53-63
+攻击速度: 1
+攻击距离: 500
+生命值: 420
+攻击类型: 魔法
+防御类型: 轻甲
+技能:  疗伤"
+h09S,高级牧师,A1KR,高级牧师,A1KE,骑士,A1KE > A1KP > A1KR,骑士 > 牧师 > 高级牧师,h09R,牧师,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNBanditMage.blp,49274,170,,2,1,300,2,840,,10,12,3.0,small,轻甲,magic,魔法,118.0,136.0,127.0,0.9,141.11111111111111,400,,ancient,"A008,A118,A07O","出售,移位,治愈",升级到 <高级牧师> - [P],"攻击伤害: 118-136
+攻击速度: 0.9
+攻击距离: 500
+生命值: 840
+攻击类型: 魔法
+防御类型: 轻甲
+技能:  治愈"
+h09T,骑兵,A1KT,骑兵,A1KE,骑士,A1KE > A1KS > A1KT,骑士 > 骑兵 > 骑兵,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNKnight.blp,49278,200,,2,1,200,1,880,,,,3.0,large,重甲,normal,普通,70.0,80.0,75.0,0.9,83.33333333333333,180,,ancient,"A008,A118","出售,移位",建造 <骑兵> - [A],"攻击伤害: 70-80
+攻击速度: 0.9
+攻击距离: 180
+生命值: 880
+攻击类型: 普通
+防御类型: 重甲
+技能:  无"
+h09U,骑士,A1KU,骑士,A1KE,骑士,A1KE > A1KS > A1KU,骑士 > 骑兵 > 骑士,h09T,骑兵,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNknightroyal.blp,49280,220,,2,1,420,3,1770,,,,3.0,large,重甲,normal,普通,180.0,191.0,185.5,1.0,185.5,180,,ancient,"A07Q,A008,A118","厚甲,出售,移位",升级到 <骑士> - [P],"攻击伤害: 180-191
+攻击速度: 1
+攻击距离: 180
+生命值: 1770
+攻击类型: 普通
+防御类型: 重甲
+技能:  厚甲"
+h09W,弓箭手,A1KK,弓箭手,A1KE,骑士,A1KE > A1KJ > A1KK,骑士 > 弓箭手 > 弓箭手,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNHighElvenArcher.blp,49260,50,,2,1,50,1,180,,,,3.0,small,轻甲,pierce,穿刺,12.0,13.0,12.5,0.5,25.0,600,,ancient,"A008,A118","出售,移位",建造 <弓箭手> - [W],"攻击伤害: 12-13
+攻击速度: 0.5
+攻击距离: 600
+生命值: 180
+攻击类型: 穿刺
+防御类型: 轻甲
+技能:  无"
+h0A0,狮鹫骑士,A1KX,狮鹫骑士,A1KE,骑士,A1KE > A1KV > A1KX,骑士 > 龙鹰 > 狮鹫骑士,h0A3,龙鹰,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNGryphonRider.blp,49286,360,,2,1,680,4,2750,,,,3.0,medium,中甲,magic,魔法,300.0,300.0,300.0,1.35,222.2222222222222,400,,"ancient,sapper","A0BV,A008,A118","暴风战锤,出售,移位",升级到 <狮鹫骑士> - [P],"攻击伤害: 300-300
+攻击速度: 1.2
+攻击距离: 400
+生命值: 2750
+攻击类型: 魔法
+防御类型: 中甲
+技能:  暴风战锤"
+h0A3,龙鹰,A1KW,龙鹰,A1KE,骑士,A1KE > A1KV > A1KW,骑士 > 龙鹰 > 龙鹰,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNGryphonAviary.blp,49284,320,,2,1,320,2,1480,,,,3.0,medium,中甲,magic,魔法,118.0,145.0,131.5,0.8,164.375,300,,"ancient,sapper","A008,A118","出售,移位",建造 <龙鹰> - [S],"攻击伤害: 118-145
+攻击速度: 0.8
+攻击距离: 300
+生命值: 1480
+攻击类型: 魔法
+防御类型: 中甲
+技能:  无"
+h0A8,小型地雷,A1JW,小型地雷,A1JU,地精,A1JU > A1JV > A1JW,地精 > 小型地雷 > 小型地雷,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNGoblinLandMine.blp,49213,20,,2,1,20,,20,,,,3.0,none,无甲,unknown,unknown,1.0,1.0,1.0,,,,,ancient,"A008,A118,A08H","出售,移位,嘭！",建造 <小型地雷> - [Q],"攻击伤害: 1-1
+攻击速度: 1
+攻击距离: 10
+生命值: 20
+攻击类型: 普通
+防御类型: 无甲
+技能:  嘭！"
+h0AA,自动机炮,A1K1,自动机炮,A1JU,地精,A1JU > A1JZ > A1K1,地精 > 机炮 > 自动机炮,h0AB,机炮,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNGoblinDrillbot.blp,49223,160,,2,1,250,2,900,,,,3.0,small,轻甲,pierce,穿刺,62.0,68.0,65.0,1.0,65.0,500,,ancient,"A008,A118,A18B","出售,移位,自动扫射",升级到 <自动机炮> - [P],"攻击伤害: 62-68
+攻击速度: 1
+攻击距离: 500
+生命值: 900
+攻击类型: 穿刺
+防御类型: 轻甲
+技能: 自动扫射"
+h0AB,机炮,A1K0,机炮,A1JU,地精,A1JU > A1JZ > A1K0,地精 > 机炮 > 机炮,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNTurret.blp,49221,90,,2,1,90,1,380,,,,3.0,small,轻甲,pierce,穿刺,23.0,27.0,25.0,1.0,25.0,500,,ancient,"A008,A118,A08B","出售,移位,扫射",建造 <机炮> - [E],"攻击伤害: 23-27
+攻击速度: 1
+攻击距离: 500
+生命值: 380
+攻击类型: 穿刺
+防御类型: 轻甲
+技能:  扫射"
+h0AE,地精民工,A1K3,地精民工,A1JU,地精,A1JU > A1K2 > A1K3,地精 > 地精民工 > 地精民工,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNKoboldGeomancer.blp,49227,40,,2,1,40,1,200,,,,3.0,medium,中甲,normal,普通,15.0,17.0,16.0,0.8,20.0,100,,ancient,"A008,A118","出售,移位",建造 <地精民工> - [W],"攻击伤害: 15-17
+攻击速度: 0.8
+攻击距离: 90
+生命值: 200
+攻击类型: 普通
+防御类型: 中甲
+技能:  无"
+h0AF,发条地精,A1K4,发条地精,A1JU,地精,A1JU > A1K2 > A1K4,地精 > 地精民工 > 发条地精,h0AE,地精民工,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNClockWerkGoblin.blp,49229,130,,2,1,170,1,770,,20,22,3.0,normal,无甲,normal,普通,76.0,84.0,80.0,1.0,80.0,100,,ancient,"A008,A118,A08F","出售,移位,火箭弹",升级到 <发条地精> - [P],"攻击伤害: 76-84
+攻击速度: 1
+攻击距离: 100
+生命值: 770
+攻击类型: 普通
+防御类型: 城甲
+技能:  火箭弹"
+h0AH,飞行器,A1K6,飞行器,A1JU,地精,A1JU > A1K5 > A1K6,地精 > 飞行器 > 飞行器,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNFlyingMachine.blp,49233,130,,2,1,130,1,600,,,,3.0,medium,中甲,pierce,穿刺,50.0,60.0,55.0,1.0,55.0,350,,ancient,"A09N,A008,A118","瞄准镜,出售,移位",建造 <飞行器> - [R],"攻击伤害: 50-60
+攻击速度: 1
+攻击距离: 350
+生命值: 600
+攻击类型: 穿刺
+防御类型: 中甲
+技能:  瞄准镜"
+h0AJ,直升机,A1K7,直升机,A1JU,地精,A1JU > A1K5 > A1K7,地精 > 飞行器 > 直升机,h0AH,飞行器,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNDwarfCar.blp,49235,170,,2,1,300,2,1200,,,,3.0,medium,中甲,magic,魔法,100.0,140.0,120.0,1.0,120.0,350,,ancient,"A00S,A008,A118","火力指挥,出售,移位",升级到 <直升机> - [P],"攻击伤害: 100-140
+攻击速度: 1
+攻击距离: 350
+生命值: 1200
+攻击类型: 魔法
+防御类型: 中甲
+技能:  火力指挥"
+h0AL,炼金术士,A1K9,炼金术士,A1JU,地精,A1JU > A1K8 > A1K9,地精 > 炼金术士 > 炼金术士,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNHeroAlchemist.blp,49239,180,,2,1,180,1,900,,,,3.0,small,轻甲,normal,普通,45.0,50.0,47.5,1.0,47.5,120,,ancient,"A089,A008,A118","化学狂暴,出售,移位",建造 <炼金术士> - [A],"攻击伤害: 45-50
+攻击速度: 1
+攻击距离: 120
+生命值: 900
+攻击类型: 普通
+防御类型: 轻甲
+技能:  化学狂暴"
+h0AO,地精伐木机,A1KA,地精伐木机,A1JU,地精,A1JU > A1K8 > A1KA,地精 > 炼金术士 > 地精伐木机,h0AL,炼金术士,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNJunkGolem.blp,49241,220,,2,1,400,3,1850,,,,3.0,large,重甲,normal,普通,140.0,160.0,150.0,1.0,150.0,180,,ancient,"A008,A118,A08C","出售,移位,超频",升级到 <地精伐木机> - [P],"攻击伤害: 140-160
+攻击速度: 1
+攻击距离: 180
+生命值: 1850
+攻击类型: 普通
+防御类型: 重甲
+技能:  超频"
+h0AQ,突击坦克,A1KD,突击坦克,A1JU,地精,A1JU > A1KB > A1KD,地精 > 蒸气压路机 > 突击坦克,h0AR,蒸气压路机,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNGoblinAssaultTank.blp,49247,350,,2,1,650,4,2250,,,,3.0,normal,无甲,siege,攻城,236.0,282.0,259.0,1.0,259.0,325,,ancient,"A088,A008,A118","弹射座椅,出售,移位",升级到 <突击坦克> - [P],"攻击伤害: 236-284
+攻击速度: 1
+攻击距离: 325
+生命值: 2250
+攻击类型: 攻城
+防御类型: 城甲
+技能:  弹射座椅"
+h0AR,蒸气压路机,A1KC,蒸气压路机,A1JU,地精,A1JU > A1KB > A1KC,地精 > 蒸气压路机 > 蒸气压路机,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNGoblinSteamroller.blp,49245,300,,2,1,300,2,1350,,,,3.0,normal,无甲,siege,攻城,120.0,160.0,140.0,1.0,140.0,180,,ancient,"A088,A008,A118","弹射座椅,出售,移位",建造 <蒸气压路机> - [S],"攻击伤害: 120-160
+攻击速度: 1
+攻击距离: 180
+生命值: 1350
+攻击类型: 攻城
+防御类型: 城甲
+技能:  弹射座椅"
+h0AT,中型地雷,A1JX,中型地雷,A1JU,地精,A1JU > A1JV > A1JX,地精 > 小型地雷 > 中型地雷,h0A8,小型地雷,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNGoblinLandMine.blp,49215,50,,2,1,70,1,50,,,,3.0,none,无甲,unknown,unknown,1.0,1.0,1.0,,,,,ancient,"A008,A118,A08G","出售,移位,嘭嘭！",升级到 <中型地雷> - [P],"攻击伤害: 1-1
+攻击速度: 1
+攻击距离: 10
+生命值: 50
+攻击类型: 普通
+防御类型: 无甲
+技能:  嘭嘭！"
+h0AU,超级地雷,A1JY,超级地雷,A1JU,地精,A1JU > A1JV > A1JY,地精 > 小型地雷 > 超级地雷,h0AT,中型地雷,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNGoblinLandMine.blp,49217,90,,2,1,160,1,90,,,,3.0,none,无甲,unknown,unknown,1.0,1.0,1.0,,,,,ancient,"A008,A118,A08I","出售,移位,轰隆隆！",升级到 <超级地雷> - [P],"攻击伤害: 1-1
+攻击速度: 1
+攻击距离: 10
+生命值: 90
+攻击类型: 普通
+防御类型: 无甲
+技能:  轰隆隆！"
+h0BC,雪人,A1JC,雪人,A1JA,北极,A1JA > A1JB > A1JC,北极 > 雪人 > 雪人,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNTuskaarBrown.blp,49174,20,,2,1,20,1,95,,,,3.0,medium,中甲,normal,普通,16.0,17.0,16.5,1.4,11.785714285714286,100,,ancient,"A008,A118","出售,移位",建造 <雪人> - [Q],"攻击伤害: 16-17
+攻击速度: 1.4
+攻击距离: 100
+生命值: 95
+攻击类型: 普通
+防御类型: 中甲
+技能:  无"
+h0BD,雪人枪兵,A1JD,雪人枪兵,A1JA,北极,A1JA > A1JB > A1JD,北极 > 雪人 > 雪人枪兵,h0BC,雪人,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNTuskaarGold.blp,49176,70,,2,1,90,1,325,,4,4,3.0,medium,中甲,pierce,穿刺,16.0,17.0,16.5,0.6,27.5,480,,ancient,"A08V,A008,A118","冰枪,出售,移位",升级到 <雪人枪兵> - [P],"攻击伤害: 16-17
+攻击速度: 0.6
+攻击距离: 480
+生命值: 325
+攻击类型: 穿刺
+防御类型: 中甲
+技能:  冰枪"
+h0BE,雪狼,A1JG,雪狼,A1JA,北极,A1JA > A1JF > A1JG,北极 > 雪狼 > 雪狼,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNTimberWolf.blp,49182,45,,2,1,45,1,200,,,,3.0,medium,中甲,normal,普通,21.0,22.0,21.5,1.5,14.333333333333334,100,,ancient,"A09A,A008,A118","流血,出售,移位",建造 <雪狼> - [W],"攻击伤害: 21-22
+攻击速度: 1.5
+攻击距离: 100
+生命值: 200
+攻击类型: 普通
+防御类型: 中甲
+技能:  流血"
+h0BF,兽人战士,A1LK,兽人战士,A1LI,兽人,A1LI > A1LJ > A1LK,兽人 > 兽人战士 > 兽人战士,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNGrunt.blp,49330,20,,2,1,20,1,100,1.0,,,3.0,none,无甲,normal,普通,10.0,10.0,10.0,1.0,10.0,100,,ancient,"A008,A118","出售,移位",建造 <兽人战士> - [Q],"攻击伤害: 10-10
+攻击速度: 1
+攻击距离: 100
+生命值: 100
+攻击类型: 普通 
+防御类型: 无甲
+技能:  无"
+h0BG,熊猫人,A1JH,熊猫人,A1JA,北极,A1JA > A1JF > A1JH,北极 > 雪狼 > 熊猫人,h0BE,雪狼,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNFurbolgPanda.blp,49184,135,,2,1,180,2,800,,20,22,3.0,medium,中甲,normal,普通,49.0,52.0,50.5,0.9,56.11111111111111,100,,ancient,"A099,A008,A118","霜冻新星,出售,移位",升级到 <熊猫人> - [P],"攻击伤害: 49-52
+攻击速度: 0.6
+攻击距离: 100
+生命值: 800
+攻击类型: 普通
+防御类型: 中甲
+技能:  霜冻新星"
+h0BH,冰魔,A1JJ,冰魔,A1JA,北极,A1JA > A1JI > A1JJ,北极 > 冰魔 > 冰魔,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNIceTrollShadowPriest.blp,49188,80,,2,1,80,1,335,,,,3.0,small,轻甲,magic,魔法,36.0,37.0,36.5,0.9,40.55555555555556,300,,ancient,"A008,A118,A09X","出售,移位,霜甲光环",建造 <冰魔> - [E],"攻击伤害: 36-37
+攻击速度: 0.8
+攻击距离: 300
+生命值: 335
+攻击类型: 魔法
+防御类型: 轻甲
+技能:  霜甲光环"
+h0BI,冰魔萨满,A1JK,冰魔萨满,A1JA,北极,A1JA > A1JI > A1JK,北极 > 冰魔 > 冰魔萨满,h0BH,冰魔,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNWitchDoctor.blp,49190,150,,2,1,230,2,850,,,,3.0,medium,中甲,magic,魔法,51.0,53.0,52.0,0.5,104.0,300,,ancient,"A08W,A008,A118,A0AQ","寒冰箭,出售,移位,冰棘光环",升级到 <冰魔萨满> - [P],"攻击伤害: 51-53
+攻击速度: 0.5
+攻击距离: 300
+生命值: 850
+攻击类型: 魔法
+防御类型: 中甲
+技能:  1,冰棘光环 2,寒冰箭"
+h0BJ,北极熊,A1JM,北极熊,A1JA,北极,A1JA > A1JL > A1JM,北极 > 北极熊 > 北极熊,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNFrostBear.blp,49194,130,,2,1,130,1,600,,,,3.0,medium,中甲,siege,攻城,45.0,47.0,46.0,0.7,65.71428571428572,100,,ancient,"A091,A09D,A034,A008,A118","冰封光环,冰封光环,击晕,出售,移位",建造 <北极熊> - [R],"攻击伤害: 45-47
+攻击速度: 0.8
+攻击距离: 100
+生命值: 600
+攻击类型: 攻城
+防御类型: 中甲
+技能:  冰封光环， 击晕"
+h0BK,猛犸,A1JN,猛犸,A1JA,北极,A1JA > A1JL > A1JN,北极 > 北极熊 > 猛犸,h0BJ,北极熊,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNBlueMagnataur.blp,49196,170,,2,1,300,3,1330,,,,3.0,medium,中甲,siege,攻城,115.0,118.0,116.5,1.1,105.9090909090909,180,,ancient,"A091,A09K,A093,A008,A118","冰封光环,冰封光环,矛击,出售,移位",升级到 <猛犸> - [P],"攻击伤害: 115-118
+攻击速度: 1.1
+攻击距离: 180
+生命值: 1330
+攻击类型: 攻城
+防御类型: 中甲
+技能:  冰封光环，矛击"
+h0BL,远古雪怪,A1JQ,远古雪怪,A1JA,北极,A1JA > A1JO > A1JQ,北极 > 雪怪 > 远古雪怪,h0BM,雪怪,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNWendigo.blp,49202,250,,2,1,430,3,2200,,10,10,3.0,hero,英雄甲,chaos,混乱,181.0,193.0,187.0,1.0,187.0,180,,ancient,"A08X,A008,A118","闪避,出售,移位",升级到 <远古雪怪> - [P],"攻击伤害: 181-194
+攻击速度: 0.9
+攻击距离: 130
+生命值: 2200
+攻击类型: 混乱
+防御类型: 王甲
+技能:  闪避"
+h0BM,雪怪,A1JP,雪怪,A1JA,北极,A1JA > A1JO > A1JP,北极 > 雪怪 > 雪怪,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNWendigo.blp,49200,180,,2,1,180,1,850,,,,3.0,large,重甲,normal,普通,91.0,101.0,96.0,1.2,80.0,180,,ancient,"A08Z,A008,A118","闪避,出售,移位",建造 <雪怪> - [A],"攻击伤害: 91-101
+攻击速度: 1
+攻击距离: 160
+生命值: 850
+攻击类型: 普通
+防御类型: 重甲
+技能:  闪避"
+h0BO,小青龙,A1JS,小青龙,A1JA,北极,A1JA > A1JR > A1JS,北极 > 小青龙 > 小青龙,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNBlueDragonRoost.blp,49206,285,,2,1,285,2,1360,,10,12,3.0,none,无甲,magic,魔法,140.0,145.0,142.5,1.2,118.75,300,,ancient,"A096,A008,A118","寒冷吐息,出售,移位",建造 <小青龙> - [S],"攻击伤害: 140-145
+攻击速度: 1.2
+攻击距离: 300
+生命值: 1360
+攻击类型: 魔法
+防御类型: 无甲
+技能:  寒冷吐息"
+h0BP,青龙,A1JT,青龙,A1JA,北极,A1JA > A1JR > A1JT,北极 > 小青龙 > 青龙,h0BO,小青龙,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNAzureDragon.blp,49208,340,,2,1,625,4,2350,,,,3.0,none,无甲,magic,魔法,232.0,247.0,239.5,1.6,149.6875,360,,"ancient,sapper","A095,A09B,A008,A118","青龙吐息,青龙冰甲,出售,移位",升级到 <青龙> - [P],"攻击伤害: 232-247
+攻击速度: 1.6
+攻击距离: 360
+生命值: 2350
+攻击类型: 魔法
+防御类型: 无甲
+技能:  1,青龙吐息 2,青龙冰甲"
+h0BS,沸血兽人战士,A1LL,沸血兽人战士,A1LI,兽人,A1LI > A1LJ > A1LL,兽人 > 兽人战士 > 沸血兽人战士,h0BF,兽人战士,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNChaosPeon.blp,49332,80,,2,1,100,1,500,1.0,10,10,3.0,none,无甲,normal,普通,50.0,50.0,50.0,1.0,50.0,100,,ancient,"A0AP,A008,A118","嗜血狂热,出售,移位",升级到 <沸血兽人战士> - [P],"攻击伤害: 50-50
+攻击速度: 1
+攻击距离: 100
+生命值: 500
+攻击类型: 普通 
+防御类型: 无甲
+技能:  嗜血狂热"
+h0BU,金刚狼,A1LM,金刚狼,A1LI,兽人,A1LI > A1LJ > A1LM,兽人 > 兽人战士 > 金刚狼,h0BS,沸血兽人战士,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNChaosGrunt.blp,49334,150,,2,1,250,2,1050,1.0,,3,3.0,none,无甲,chaos,混乱,54.0,66.0,60.0,0.6,100.0,120,,ancient,"A0A7,A0OE,A0A8,A008,A118","斩首,不败,狂战士,出售,移位",升级到 <金刚狼> - [P],"攻击伤害: 54-66
+攻击速度: 0.6
+攻击距离: 100
+生命值: 1050
+攻击类型: 混乱
+防御类型: 无甲
+技能:  1,狂战士 2,斩首,3不败"
+h0BV,兽人术士,A1LO,兽人术士,A1LI,兽人,A1LI > A1LN > A1LO,兽人 > 兽人术士 > 兽人术士,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNChaosWarlockGreen.blp,49338,60,,2,1,60,1,260,,10,10,3.0,small,轻甲,magic,魔法,42.0,46.0,44.0,1.35,32.59259259259259,350,,ancient,"A019,A008,A118","削弱,出售,移位",建造 <兽人术士> - [W],"攻击伤害: 42-46
+攻击速度: 1.35
+攻击距离: 350
+生命值: 260
+攻击类型: 魔法
+防御类型: 轻甲
+技能:  削弱"
+h0BW,沸血兽人术士,A1LP,沸血兽人术士,A1LI,兽人,A1LI > A1LN > A1LP,兽人 > 兽人术士 > 沸血兽人术士,h0BV,兽人术士,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNChaosWarlock.blp,49340,120,,2,1,180,1,660,,,,3.0,small,轻甲,magic,魔法,116.0,124.0,120.0,1.35,88.88888888888889,350,,ancient,"A0AD,A008,A118","腐蚀,出售,移位",升级到 <沸血兽人术士> - [P],"攻击伤害: 116-124
+攻击速度: 1.35
+攻击距离: 350
+生命值: 660
+攻击类型: 魔法
+防御类型: 轻甲
+技能:  腐蚀"
+h0BX,狼骑士,A1LR,狼骑士,A1LI,兽人,A1LI > A1LQ > A1LR,兽人 > 狼骑士 > 狼骑士,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNChaosWolfRider.blp,49344,90,,2,1,90,1,350,,60,62,3.0,large,重甲,normal,普通,24.0,37.0,30.5,1.0,30.5,90,,ancient,"A0A2,A008,A118","召唤狼,出售,移位",建造 <狼骑士> - [E],"攻击伤害: 24-37
+攻击速度: 1
+攻击距离: 90
+生命值: 350
+攻击类型: 普通 
+防御类型: 重甲
+技能:  召唤狼"
+h0C0,沸血狼骑士,A1LS,沸血狼骑士,A1LI,兽人,A1LI > A1LQ > A1LS,兽人 > 狼骑士 > 沸血狼骑士,h0BX,狼骑士,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNwolfrider.blp,49346,150,,2,1,240,2,740,,60,62,3.0,large,重甲,normal,普通,72.0,96.0,84.0,1.3,64.61538461538461,90,,ancient,"A0A3,A008,A118","召唤血狼,出售,移位",升级到 <沸血狼骑士> - [P],"攻击伤害: 72-96
+攻击速度: 1.3
+攻击距离: 90
+生命值: 740
+攻击类型: 普通 
+防御类型: 重甲
+技能:  召唤血狼"
+h0C2,大巫医,A1LV,大巫医,A1LI,兽人,A1LI > A1LT > A1LV,兽人 > 巫医学徒 > 大巫医,h0C4,巫医学徒,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNGuldan.blp,49352,200,,2,1,300,2,1100,,,,3.0,small,轻甲,magic,魔法,122.0,130.0,126.0,1.15,109.56521739130436,400,,ancient,"A0AF,A008,A118","高级回复光环,出售,移位",升级到 <大巫医> - [P],"攻击伤害: 106-114
+攻击速度: 1
+攻击距离: 400
+生命值: 1100
+攻击类型: 魔法
+防御类型: 轻甲
+技能:  高级回复光环"
+h0C4,巫医学徒,A1LU,巫医学徒,A1LI,兽人,A1LI > A1LT > A1LU,兽人 > 巫医学徒 > 巫医学徒,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNOrcWarlockRed.blp,49350,100,,2,1,100,1,400,,,,3.0,small,轻甲,magic,魔法,40.0,40.0,40.0,1.0,40.0,400,,ancient,"A0AG,A008,A118","回复光环,出售,移位",建造 <巫医学徒> - [R],"攻击伤害: 40-40
+攻击速度: 1
+攻击距离: 400
+生命值: 400
+攻击类型: 魔法
+防御类型: 轻甲
+技能:  回复光环"
+h0C5,风龙,A1LY,风龙,A1LI,兽人,A1LI > A1LX > A1LY,兽人 > 风龙 > 风龙,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNWyvern.blp,49358,180,,2,1,180,1,700,,,,3.0,medium,中甲,pierce,穿刺,82.0,98.0,90.0,1.0,90.0,600,,ancient,"A008,A118","出售,移位",建造 <风龙> - [A],"攻击伤害: 82-98
+攻击速度: 1
+攻击距离: 600
+生命值: 700
+攻击类型: 穿刺
+防御类型: 中甲
+技能:  无"
+h0C8,风龙骑士,A1LZ,风龙骑士,A1LI,兽人,A1LI > A1LX > A1LZ,兽人 > 风龙 > 风龙骑士,h0C5,风龙,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNWyvernRider.blp,49360,200,,2,1,380,2,1200,,,,3.0,medium,中甲,pierce,穿刺,104.0,120.0,112.0,0.7,160.0,500,,ancient,"A008,A118,A09Z","出售,移位,淬毒标枪",升级到 <风龙骑士> - [P],"攻击伤害: 104-120
+攻击速度: 0.7
+攻击距离: 500
+生命值: 1200
+攻击类型: 穿刺
+防御类型: 中甲
+技能:  淬毒标枪"
+h0C9,兽人酋长,A1M1,兽人酋长,A1LI,兽人,A1LI > A1M0 > A1M1,兽人 > 兽人酋长 > 兽人酋长,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNChaosWarlord.blp,49364,300,,2,1,300,2,1400,,,,3.0,large,重甲,normal,普通,190.0,200.0,195.0,1.5,130.0,150,,ancient,"A07K,A008,A118","粉碎击,出售,移位",建造 <兽人酋长> - [S],"攻击伤害: 190-200
+攻击速度: 1.5
+攻击距离: 150
+生命值: 1400
+攻击类型: 普通 
+防御类型: 重甲
+技能:  粉碎击"
+h0CC,兽王萨尔,A1M2,兽王萨尔,A1LI,兽人,A1LI > A1M0 > A1M2,兽人 > 兽人酋长 > 兽王萨尔,h0C9,兽人酋长,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNThrall.blp,49366,360,,2,1,660,4,3000,,15,17,3.0,large,重甲,normal,普通,252.0,268.0,260.0,1.0,260.0,180,,ancient,"A09Y,A0R4,A008,A118","风暴之锤,怒碎击,出售,移位",升级到 <兽王萨尔> - [P],"攻击伤害: 252-268
+攻击速度: 1
+攻击距离: 180
+生命值: 3000
+攻击类型: 普通
+防御类型: 重甲
+技能:  怒碎击, 风暴之锤"
+h0CF,侍僧,A1M5,侍僧,A1M3,不死,A1M3 > A1M4 > A1M5,不死 > 侍僧 > 侍僧,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNAcolyte.blp,49371,20,,2,1,20,1,75,,,,3.0,fort,城甲,magic,魔法,8.0,9.0,8.5,0.8,10.625,350,,ancient,"A008,A118","出售,移位",建造 <侍僧> - [Q],"攻击伤害: 8-9
+攻击速度: 0.8
+攻击距离: 350
+生命值: 100
+攻击类型: 魔法
+防御类型: 魂甲
+技能:  无"
+h0CH,亡魂,A1M6,亡魂,A1M3,不死,A1M3 > A1M4 > A1M6,不死 > 侍僧 > 亡魂,h0CF,侍僧,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNRevenant.blp,49373,80,,2,1,100,1,380,,,,3.0,fort,城甲,magic,魔法,28.0,32.0,30.0,0.6,50.0,350,,ancient,"A008,A118","出售,移位",升级到 <亡魂> - [P],"攻击伤害: 28-32
+攻击速度: 0.6
+攻击距离: 350
+生命值: 380
+攻击类型: 魔法
+防御类型: 魂甲
+技能:  无"
+h0CI,食尸鬼,A1M8,食尸鬼,A1M3,不死,A1M3 > A1M7 > A1M8,不死 > 食尸鬼 > 食尸鬼,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNGhoul.blp,49377,60,,2,1,60,1,260,,,,3.0,none,无甲,normal,普通,24.0,30.0,27.0,0.8,33.75,90,,ancient,"A11N,A008,A118","吞食,出售,移位",建造 <食尸鬼> - [W],"攻击伤害: 24-30
+攻击速度: 0.8
+攻击距离: 100
+生命值: 260
+攻击类型: 普通 
+防御类型: 无甲
+技能:  吸血"
+h0CK,食尸鬼王,A1M9,食尸鬼王,A1M3,不死,A1M3 > A1M7 > A1M9,不死 > 食尸鬼 > 食尸鬼王,"h0CI,n071","食尸鬼,食尸鬼",u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNRedDragonDevour.blp,49379,90,,2,1,150,1,610,,,,3.0,none,无甲,chaos,混乱,51.0,53.0,52.0,0.5,104.0,100,,ancient,"A0R1,A008,A118","鲜血,出售,移位",升级到 <食尸鬼王> - [P],"攻击伤害: 51-53
+攻击速度: 0.5
+攻击距离: 100
+生命值: 550
+攻击类型: 混乱
+防御类型: 无甲
+技能:  鲜血"
+h0CO,绞肉车,A1MB,绞肉车,A1M3,不死,A1M3 > A1MA > A1MB,不死 > 绞肉车 > 绞肉车,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNMeatWagon.blp,49383,70,,2,1,70,1,280,,,,3.0,normal,无甲,siege,攻城,31.0,37.0,34.0,1.0,34.0,500,,ancient,"A0B6,A008,A118","溅射伤害,出售,移位",建造 <绞肉车> - [E],"攻击伤害: 31-37
+攻击速度: 1
+攻击距离: 500
+生命值: 280
+攻击类型: 攻城
+防御类型: 城甲
+技能:  溅射伤害"
+h0CP,战车,A1MC,战车,A1M3,不死,A1M3 > A1MA > A1MC,不死 > 绞肉车 > 战车,h0CO,绞肉车,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNInfernalCannon.blp,49385,140,,2,1,210,2,750,,,,3.0,normal,无甲,siege,攻城,92.0,106.0,99.0,1.0,99.0,500,,ancient,"A0B7,A008,A118","溅射伤害,出售,移位",升级到 <战车> - [P],"攻击伤害: 92-106
+攻击速度: 1
+攻击距离: 500
+生命值: 750
+攻击类型: 攻城
+防御类型: 城甲
+技能:  溅射伤害"
+h0CQ,不死巫师,A1ME,不死巫师,A1M3,不死,A1M3 > A1MD > A1ME,不死 > 不死巫师 > 不死巫师,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNNecromancer.blp,49389,130,,2,1,130,1,300,,60,62,3.0,small,轻甲,pierce,穿刺,31.0,42.0,36.5,1.1,33.18181818181818,400,,ancient,"A0BA,A008,A118","亡灵召唤,出售,移位",建造 <不死巫师> - [R],"攻击伤害: 31-42
+攻击速度: 1.1
+攻击距离: 400
+生命值: 300
+攻击类型: 穿刺
+防御类型: 轻甲
+技能:  亡灵召唤"
+h0CS,大死灵巫师,A1MF,大死灵巫师,A1M3,不死,A1M3 > A1MD > A1MF,不死 > 不死巫师 > 大死灵巫师,h0CQ,不死巫师,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNKelThuzad.blp,49391,170,,2,1,300,2,750,,60,62,3.0,small,轻甲,pierce,穿刺,77.0,88.0,82.5,1.1,75.0,400,,ancient,"A0BD,A008,A118","死灵书,出售,移位",升级到 <大死灵巫师> - [P],"攻击伤害: 77-88
+攻击速度: 1.1
+攻击距离: 400
+生命值: 750
+攻击类型: 穿刺
+防御类型: 轻甲
+技能:  死灵书"
+h0CV,死神信使,A1MG,死神信使,A1M3,不死,A1M3 > A1MD > A1MG,不死 > 不死巫师 > 死神信使,h0CQ,不死巫师,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNGhostOfKelThuzad.blp,49393,170,,2,1,300,2,1000,,,,3.0,small,轻甲,pierce,穿刺,105.0,115.0,110.0,1.1,99.99999999999999,400,,ancient,"A0BE,A008,A118","死神呼唤,出售,移位",升级到 <死神信使 > - [P],"攻击伤害: 105-115
+攻击速度: 1.1
+攻击距离: 400
+生命值: 1000
+攻击类型: 穿刺
+防御类型: 轻甲
+技能:  死神呼唤"
+h0CW,僵尸,A1MI,僵尸,A1M3,不死,A1M3 > A1MH > A1MI,不死 > 僵尸 > 僵尸,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNZombie.blp,49397,190,,2,1,190,1,880,,,,3.0,medium,中甲,normal,普通,59.0,64.0,61.5,0.8,76.875,100,,ancient,"A0BI,A008,A118","疾病云雾,出售,移位",建造 <僵尸> - [A],"攻击伤害: 59-64
+攻击速度: 0.8
+攻击距离: 100
+生命值: 880
+攻击类型: 普通 
+防御类型: 中甲
+技能:  疾病云雾"
+h0CY,僵尸王,A1MJ,僵尸王,A1M3,不死,A1M3 > A1MH > A1MJ,不死 > 僵尸 > 僵尸王,h0CW,僵尸,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNAbomination.blp,49399,220,,2,1,410,3,1770,3.0,,,3.0,medium,中甲,normal,普通,237.0,275.0,256.0,1.6,160.0,120,,ancient,"A0BJ,A0R5,A008,A118","病毒云雾,堆积腐肉,出售,移位",升级到 <僵尸王> - [P],"攻击伤害: 237-275
+攻击速度: 1.5
+攻击距离: 120
+生命值: 1770
+攻击类型: 普通 
+防御类型: 中甲
+技能:  病毒云雾, 堆积腐肉"
+h0D0,深渊领主,A1ML,深渊领主,A1M3,不死,A1M3 > A1MK > A1ML,不死 > 深渊领主 > 深渊领主,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNPitLord.blp,49403,320,,2,1,320,2,1550,,,,3.0,large,重甲,chaos,混乱,129.0,159.0,144.0,1.2,120.0,180,,ancient,"A0B2,A008,A118","分裂攻击,出售,移位",建造 <深渊领主> - [S],"攻击伤害: 129-159
+攻击速度: 1.2
+攻击距离: 180
+生命值: 1550
+攻击类型: 混乱 
+防御类型: 重甲
+技能:  分裂攻击"
+h0D2,冰霜骨龙,A1MM,冰霜骨龙,A1M3,不死,A1M3 > A1MK > A1MM,不死 > 深渊领主 > 冰霜骨龙,"h0D0,h0OM","深渊领主,深渊领主",u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNFrostWyrm.blp,49405,380,,2,1,700,4,2600,,,,3.0,large,重甲,chaos,混乱,313.0,328.0,320.5,1.2,267.08333333333337,350,,"ancient,sapper","A0B4,A008,A118","死亡气息,出售,移位",升级到 <冰霜骨龙> - [P],"攻击伤害: 313-328
+攻击速度: 1.2
+攻击距离: 350
+生命值: 2600
+攻击类型: 混乱 
+防御类型: 重甲
+技能:  死亡气息"
+h0JF,火神,A1N4,火神,A1MN,虚空,A1MN > A1N0 > A1N4,虚空 > 地狱火 > 火神,h0S3,地狱火,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNHeroAvatarOfFlame.blp,49438,300,,2,1,540,4,1800,6.0,,,3.0,small,轻甲,magic,魔法,220.0,249.0,234.5,0.8,293.125,600,,ancient,"A0HW,A0HX,A008,A118","火噬,原罪欲火,出售,移位",升级到 <火神> - [R],"攻击伤害: 220-250
+攻击速度: 0.8
+攻击距离: 600
+生命值: 1800
+攻击类型: 魔法
+防御类型: 轻甲
+技能:  火噬,原罪欲火
+限制只能建造十个"
+h0O6,战争古树,A1F3,战争古树,A1EZ,森林,A1EZ > A1F0 > A1F3,森林 > 树人 > 战争古树,h01D,树人战士,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNAncientOfTheEarth.blp,48930,500,,2,1,615,5,3000,1.0,12,20,3.0,normal,无甲,normal,普通,500.0,514.0,507.0,2.2,230.45454545454544,90,,ancient,"A0T6,A0T5,A008,A118","藤蔓之力,新生,出售,移位",升级到 <战争古树> - [P],"攻击伤害: 500-514
+攻击速度: 2.0
+攻击距离: 90
+生命值: 3000
+攻击类型: 普通 
+防御类型: 城甲
+技能:  新生 缠绕 
+[限制建造2个]"
+h0O8,混沌之影,A1H2,混沌之影,A1GQ,幽魂,A1GQ > A1GZ > A1H2,幽魂 > 幻影 > 混沌之影,h05U,地狱幻影,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNVoidWalker.blp,49069,275,,2,1,530,5,1035,,15,17,3.0,small,轻甲,chaos,混乱,0.0,0.0,0.0,1.25,0.0,350,,ancient,"A0T7,A0T8,A008,A118","混沌嚎叫,混沌嚎叫,出售,移位",升级到 <混沌之影> - [P],"攻击伤害: 0-0
+攻击速度: 1.25
+攻击距离: 350
+生命值: 1035
+攻击类型: 混乱
+防御类型: 轻甲
+技能:  混乱嚎叫
+[限制建造3个]"
+h0OX,食人魔魔法师,A1E1,食人魔魔法师,A1DT,野兽,A1DT > A1DY > A1E1,野兽 > 食人魔拳手 > 食人魔魔法师,h013,食人魔粉碎者,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNOgreMagi.blp,48856,300,,2,1,435,1,1000,,,25,3.0,small,轻甲,magic,魔法,50.0,63.0,56.5,1.0,56.5,300,,ancient,"A0WM,A0WN,A008,A118","嗜血术,点燃,出售,移位",升级到 <食人魔魔法师> - [P],"攻击伤害: 50-63
+攻击速度: 1
+攻击距离: 300
+生命值: 1000
+攻击类型: 魔法
+防御类型: 轻甲 
+技能:  嗜血术 点燃"
+h0PR,利齿沙狐,A1NW,利齿沙狐,A1NT,沙漠,A1NT > A1NU > A1NW,沙漠 > 沙狐 > 利齿沙狐,n05P,沙狐,u004,等到战斗结束,False,,,,False,shicon.blp,49492,130,,2,1,150,2,600,1.0,,,3.0,large,重甲,normal,普通,56.0,64.0,60.0,1.3,46.15384615384615,90,,ancient,"A10F,A008,A118","利爪撕裂,出售,移位",升级到 <利齿沙狐> - [P],"攻击伤害: 56-64
+攻击速度: 1.3
+攻击距离: 90
+生命值: 600
+攻击类型: 普通 
+防御类型: 重甲 
+技能:  利爪撕裂"
+h0QG,科多兽,A1QU,科多兽,A1NT,沙漠,A1NT > A1QT > A1QU,沙漠 > 科多兽 > 科多兽,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNKotoBeast.blp,49520,200,,2,1,200,2,1000,3.0,,,3.0,small,轻甲,pierce,穿刺,101.0,104.0,102.5,1.3,78.84615384615384,300,,ancient,"A14T,A008,A118","吞噬,出售,移位",建造 <科多兽> - [A],"攻击伤害: 101-104
+攻击速度: 1.3
+攻击距离: 300
+生命值: 1000
+攻击类型: 穿刺
+防御类型: 轻甲
+技能:  吞噬"
+h0QH,攻击型科多兽,A1QV,攻击型科多兽,A1NT,沙漠,A1NT > A1QT > A1QV,沙漠 > 科多兽 > 攻击型科多兽,h0QG,科多兽,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNRiderlessKodo.blp,49522,200,,2,1,400,5,1500,3.0,,,3.0,small,轻甲,chaos,混乱,251.0,254.0,252.5,1.3,194.23076923076923,300,,ancient,"A14T,A14U,A008,A118","吞噬,战鼓,出售,移位",升级到 <进攻型科多兽> - [P],"攻击伤害: 251-254
+攻击速度: 1.3
+攻击距离: 300
+生命值: 1500
+攻击类型: 混乱
+防御类型: 轻甲
+技能:  吞噬| 战鼓r"
+h0QI,防御型科多兽,A1QW,防御型科多兽,A1NT,沙漠,A1NT > A1QT > A1QW,沙漠 > 科多兽 > 防御型科多兽,h0QG,科多兽,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNRiderlessKodo.blp,49524,200,,2,1,400,5,2000,3.0,,,3.0,hero,英雄甲,pierce,穿刺,101.0,104.0,102.5,1.3,78.84615384615384,300,,ancient,"A14T,A14V,A008,A118","吞噬,坚固,出售,移位",升级到 <防御型科多兽> - [P],"攻击伤害: 101-104
+攻击速度: 1.3
+攻击距离: 300
+生命值: 2000
+攻击类型: 穿刺
+防御类型: 国王甲
+技能:  吞噬 坚固"
+h0QJ,暴食科多兽,A1QX,暴食科多兽,A1NT,沙漠,A1NT > A1QT > A1QX,沙漠 > 科多兽 > 暴食科多兽,h0QG,科多兽,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNRiderlessKodo.blp,49526,400,,2,1,600,5,3000,3.0,,,3.0,large,重甲,normal,普通,251.0,304.0,277.5,1.0,277.5,90,,ancient,"A14X,A008,A118","暴食,出售,移位",升级到 <暴食科多兽> - [P],"攻击伤害: 251-304
+攻击速度: 1.0
+攻击距离: 90
+生命值: 3000
+攻击类型: 普通
+防御类型: 重甲
+技能:  暴食"
+h0QO,青铜龙探险者,A1QZ,青铜龙探险者,A1NT,沙漠,A1NT > A1QY > A1QZ,沙漠 > 青铜龙探险者 > 青铜龙探险者,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNBronzeDragon.blp,49530,320,,2,1,320,2,1000,3.0,,,3.0,none,无甲,pierce,穿刺,148.0,155.0,151.5,1.1,137.72727272727272,350,,"ancient,sapper","A14Y,A008,A118","时空裂隙,出售,移位",建造到 <青铜龙探险者> - [S],"攻击伤害: 148-156
+攻击速度: 1.1
+攻击距离: 350
+生命值: 1000
+攻击类型: 穿刺
+防御类型: 无甲
+技能:  时空裂隙"
+h0QP,青铜龙守卫,A1R5,青铜龙守卫,A1NT,沙漠,A1NT > A1QY > A1R5,沙漠 > 青铜龙探险者 > 青铜龙守卫,h0QO,青铜龙探险者,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNBronzeDragon.blp,49532,400,,2,1,720,5,2000,3.0,,,3.0,none,无甲,pierce,穿刺,270.0,290.0,280.0,1.1,254.54545454545453,350,,"ancient,sapper","A14Z,A151,A008,A118","虫洞,时间停滞,出售,移位",升级到 <青铜龙守卫> - [P],"攻击伤害: 270-290
+攻击速度: 1.1
+攻击距离: 350
+生命值: 2000
+攻击类型: 穿刺
+防御类型: 无甲
+技能:  虫洞 时间停滞
+
+
+最多可以建造5个"
+h0S1,暗夜恶魔,A1N6,暗夜恶魔,A1MN,虚空,A1MN > A1N5 > A1N6,虚空 > 暗夜恶魔 > 暗夜恶魔,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNHeroDemonHunter.blp,49442,290,,2,1,290,2,1500,,,,3.0,none,无甲,chaos,混乱,180.0,180.0,180.0,0.95,189.47368421052633,120,,ancient,"A008,A118","出售,移位",建造 <暗夜恶魔> - [S],"攻击伤害: 180-180
+攻击速度: 0.95
+攻击距离: 120
+生命值: 1500
+攻击类型: 混乱
+防御类型: 无甲
+技能:  无"
+h0S2,虚空魔王,A1N7,虚空魔王,A1MN,虚空,A1MN > A1N5 > A1N7,虚空 > 暗夜恶魔 > 虚空魔王,h0S1,暗夜恶魔,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNMetamorphosis.blp,49444,380,,2,1,670,6,3500,,,,3.0,none,无甲,chaos,混乱,460.0,460.0,460.0,0.9,511.1111111111111,180,,ancient,"A008,A118,A0JQ","出售,移位,虚空之刃",升级到 <虚空魔王> - [P],"攻击伤害: 460-460
+攻击速度: 0.9
+攻击距离: 180(近战)
+生命值: 3500
+攻击类型: 混乱
+防御类型: 无甲
+技能:  虚空之刃"
+h0S3,地狱火,A1N2,地狱火,A1MN,虚空,A1MN > A1N0 > A1N2,虚空 > 地狱火 > 地狱火,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNInfernal.blp,49434,240,,2,1,240,2,1200,,,,3.0,large,重甲,siege,攻城,120.0,120.0,120.0,1.4,85.71428571428572,120,,ancient,"A0S1,A008,A118","烈火,出售,移位",建造 <地狱火> - [A],"攻击伤害: 120-120
+攻击速度: 1.4
+攻击距离: 120
+生命值: 1200
+攻击类型: 攻城
+防御类型: 重甲
+技能:  烈焰"
+h0S4,地狱冥火,A1N3,地狱冥火,A1MN,虚空,A1MN > A1N0 > A1N3,虚空 > 地狱火 > 地狱冥火,h0S3,地狱火,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNUnit_BA2.blp,49436,300,,2,1,540,5,2400,,,,3.0,normal,无甲,siege,攻城,220.0,220.0,220.0,1.15,191.30434782608697,120,,ancient,"A0S2,A0S3,A008,A118","烈焰,冥火,出售,移位",升级到 <地狱冥火> - [P],"攻击伤害: 220-220
+攻击速度: 1.15
+攻击距离: 120
+生命值: 2400
+攻击类型: 攻城
+防御类型: 城甲
+技能:  烈焰, 冥火"
+h0S5,邪灵,A1MY,邪灵,A1MN,虚空,A1MN > A1MX > A1MY,虚空 > 邪灵 > 邪灵,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNUnit_BR.blp,49428,200,,2,1,200,1,650,,,,3.0,medium,中甲,magic,魔法,70.0,90.0,80.0,0.8,100.0,550,,ancient,"A0SD,A008,A118","精神干扰,出售,移位",建造 <邪灵> - [R],"攻击伤害: 70-90
+攻击速度: 0.8
+攻击距离: 550
+生命值: 650
+攻击类型: 魔法
+防御类型: 中甲
+技能:  精神干扰"
+h0S6,魔灵,A1MZ,魔灵,A1MN,虚空,A1MN > A1MX > A1MZ,虚空 > 邪灵 > 魔灵,h0S5,邪灵,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNUnit_BR2.blp,49430,220,,2,1,420,3,1100,,,,3.0,medium,中甲,magic,魔法,80.0,175.0,127.5,0.7,182.14285714285717,550,,ancient,"A0SE,A0S6,A008,A118","灵魂冻结,霜寒之触,出售,移位",升级到 <魔灵> - [P],"攻击伤害: 85-175
+攻击速度: 0.7
+攻击距离: 550
+生命值: 1100
+攻击类型: 魔法
+防御类型: 中甲
+技能:  灵魂冻结, 寒霜之触"
+h0S7,虚空犬,A1MV,虚空犬,A1MN,虚空,A1MN > A1MU > A1MV,虚空 > 虚空犬 > 虚空犬,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNFelHound.blp,49422,100,,2,1,100,1,370,,,,3.0,medium,中甲,chaos,混乱,26.0,30.0,28.0,0.6,46.66666666666667,435,,ancient,"A0S7,A008,A118","尖刺弹射,出售,移位",建造 <虚空犬> - [E],"攻击伤害: 26-30
+攻击速度: 0.6
+攻击距离: 435
+生命值: 370
+攻击类型: 混乱
+防御类型: 中甲
+技能:  尖刺弹射"
+h0S8,虫族飞龙,A1MW,虫族飞龙,A1MN,虚空,A1MN > A1MU > A1MW,虚空 > 虚空犬 > 虫族飞龙,h0S7,虚空犬,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNVulture.blp,49424,180,,2,1,280,2,1050,,,,3.0,medium,中甲,chaos,混乱,66.0,69.0,67.5,0.55,122.72727272727272,450,,"ancient,sapper","A0S8,A008,A118","飞龙弹射,出售,移位",升级到 <虫族飞龙> - [P],"攻击伤害: 66-69
+攻击速度: 0.55
+攻击距离: 500
+生命值: 1050
+攻击类型: 混乱
+防御类型: 中甲
+技能:  龙刺弹射"
+h0SA,掘地者,A1MS,掘地者,A1MN,虚空,A1MN > A1MR > A1MS,虚空 > 掘地者 > 掘地者,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNArachnathidpurple.blp,49416,60,,2,1,60,1,270,,,,3.0,small,轻甲,magic,魔法,12.0,16.0,14.0,0.5,28.0,330,,ancient,"A008,A118","出售,移位",建造 <掘地者> - [W],"攻击伤害: 12-16
+攻击速度: 0.5
+攻击距离: 330
+生命值: 270
+攻击类型: 魔法
+防御类型: 轻甲
+技能:  无"
+h0SB,刺蛇,A1MT,刺蛇,A1MN,虚空,A1MN > A1MR > A1MT,虚空 > 掘地者 > 刺蛇,h0SA,掘地者,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNHydralisk.blp,49418,120,,2,1,180,2,845,,,,3.0,small,轻甲,magic,魔法,49.0,55.0,52.0,0.8,65.0,370,,ancient,"A0SC,A008,A118","破甲之毒,出售,移位",升级到 <刺蛇> - [P],"攻击伤害: 49-55
+攻击速度: 0.8
+攻击距离: 370
+生命值: 845
+攻击类型: 魔法
+防御类型: 轻甲
+技能:  破甲之毒"
+h0SC,沙丘之虫,A1MP,沙丘之虫,A1MN,虚空,A1MN > A1MO > A1MP,虚空 > 沙丘之虫 > 沙丘之虫,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNDuneWorm.blp,49410,25,,2,1,25,1,80,,,,3.0,large,重甲,chaos,混乱,2.0,2.0,2.0,0.15,13.333333333333334,100,,ancient,"A0SA,A008,A118","自爆,出售,移位",建造 <沙丘之虫> - [Q],"攻击伤害: 2-2
+攻击速度: 0.15
+攻击距离: 100
+生命值: 80
+攻击类型: 混乱
+防御类型: 重甲
+技能:  自爆"
+h0SD,翼族猎手,A1MQ,翼族猎手,A1MN,虚空,A1MN > A1MO > A1MQ,虚空 > 沙丘之虫 > 翼族猎手,h0SC,沙丘之虫,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNUnit_BQ2.blp,49412,80,,2,1,105,1,300,,,,3.0,large,重甲,chaos,混乱,5.0,6.0,5.5,0.1,55.0,140,,ancient,"A0SB,A008,A118","猎手精神,出售,移位",升级到 <翼族猎手> - [P],"攻击伤害: 5-6
+攻击速度: 0.1
+攻击距离: 140
+生命值: 300
+攻击类型: 混乱
+防御类型: 重甲
+技能:  猎手精神"
+h0YM,梦境之主·伊瑟拉,A2YK,A-梦境之主·伊瑟拉,,,A2YK,A-梦境之主·伊瑟拉,h08Y,女巫,"u004,h220,R2YA","等到战斗结束,军团战争超级赞助,11级丛林守护者+智慧树",False,,,,False,yiselalxt.blp,3784,800,60,2,50,1220,11,3750,20.0,40,40,3.0,hero,英雄甲,chaos,混乱,275.0,315.0,295.0,0.5,590.0,600,,"ancient,sapper","A2YA,A2YB,A2YC,A2YD,A2YI,A206,A008,A118","梦境缠绕,沉眠之咒,伊瑟拉苏醒,心智扰乱,翡翠复苏,龙族荣耀,出售,移位",升级到 <梦境之主·伊瑟拉> - [Y],"精灵形态：
+梦境之主·伊瑟拉：
+智慧树+女巫+11级英雄丛林守护者，由女巫升级伊瑟拉
+要求：超级赞助
+
+伤害输出: 275-315
+攻击速度: 0.5
+攻击距离: 600
+生命值: 3750
+攻击类型: 混乱
+防御类型: 国王甲
+
+技能：
+梦境缠绕：随机投放3团梦境能量，缠绕地方单位，造成120点的持续伤害，持续4s。
+沉眠之咒：攻对500码范围的单位生效，造成敌方单位3s沉睡，造成200点伤害。
+伊瑟拉苏醒：在释放梦境能量，击退自身周围450码的敌方单位，造成1.5s的眩晕，250码内造成200点伤害，250-450码造成100点伤害。
+心智扰乱：链接3个敌方单位，造成100点持续伤害，持续3s。"
+h100,豺狼人,A1DX,豺狼人,A1DT,野兽,A1DT > A1DU > A1DX,野兽 > 豺狼战士 > 豺狼人,h011,豺狼蛮人,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNGnollArcher.blp,48848,250,,2,1,340,4,1275,,,,3.0,none,无甲,pierce,穿刺,122.0,132.0,127.0,0.9,141.11111111111111,525,,ancient,"A106,A008,A118","灵魂毒素,出售,移位",升级到 <豺狼人> - [P],"攻击伤害: 126-132
+攻击速度: 0.8
+攻击距离: 525
+生命值: 1275
+攻击类型: 穿刺
+防御类型: 无甲
+技能:  灵魂毒素"
+h1C2,枯骨收集者,A1LW,枯骨收集者,A1LI,兽人,A1LI > A1LT > A1LW,兽人 > 巫医学徒 > 枯骨收集者,h0C4,巫医学徒,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNGuldan.blp,49354,200,,2,1,300,2,1100,,,,3.0,small,轻甲,magic,魔法,122.0,130.0,126.0,1.15,109.56521739130436,400,,ancient,"A0AF,A008,A118","高级回复光环,出售,移位",升级到[VIP] 枯骨收集者 - [P],"攻击伤害: 106-114
+攻击速度: 1
+攻击距离: 400
+生命值: 1100
+攻击类型: 魔法
+防御类型: 轻甲
+技能:  高级回复光环"
+h202,冰之女神,A1JE,冰之女神,A1JA,北极,A1JA > A1JB > A1JE,北极 > 雪人 > 冰之女神,h0BD,雪人枪兵,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNJaina.blp,49178,210,,2,1,300,2,1240,,33,35,3.0,hero,英雄甲,hero,英雄,125.0,139.0,132.0,0.9,146.66666666666666,450,,ancient,"A208,A20A,A008,A118","冰之祝福 - building,冰墙,出售,移位",升级到 <冰之女神> - [P],"攻击伤害: 125-139
+攻击速度: 0.9
+攻击距离: 450
+生命值: 1240
+攻击类型: 国王
+防御类型: 王甲
+技能:  冰墙, 冰之祝福
+
+最多可以建造5个"
+h29H,村长,A1KI,村长,A1KE,骑士,A1KE > A1KF > A1KI,骑士 > 农民 > 村长,h09H,民兵,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNVillagerMan1.blp,49256,275,,2,1,350,4,1200,,,,3.0,medium,中甲,normal,普通,94.0,106.0,100.0,0.8,125.0,120,,ancient,"A29K,A008,A118","号召,出售,移位",升级到 <村长> - [P],"攻击伤害: 94-106
+攻击速度: 0.8
+攻击距离: 120
+生命值: 1200
+攻击类型: 普通
+防御类型: 中甲
+技能:  号召"
+n04B,软浆怪,A1NA,软浆怪,A1N8,大地族,A1N8 > A1N9 > A1NA,大地族 > 软浆怪 > 软浆怪,,,,,False,,,,False,replaceabletextures\\commandbuttons\\BTNdd01.blp,49449,80,,2,1,80,,300,2.0,,,2.0,medium,中甲,normal,普通,60.0,66.0,63.0,0.6,105.0,100,,ancient,"A008,A0PY,A118,Avul","出售,泥潭,移位,无敌的",建造 <软浆怪> - [Q],"生命值: 100
+防御类型: 无敌
+技能:  泥潭
+限制数量为2"
+n04D,石墙,A1NC,石墙,A1N8,大地族,A1N8 > A1NB > A1NC,大地族 > 石墙 > 石墙,,,,,False,,,,False,replaceabletextures\\commandbuttons\\BTNdd02.blp,49453,200,,2,1,200,,300,2.0,,,3.0,medium,中甲,normal,普通,60.0,66.0,63.0,0.6,105.0,100,,ancient,"A008,A118,Avul","出售,移位,无敌的",建造 <石墙> - [W],"生命值: 100
+防御类型: 无敌
+技能:  无
+限制数量为2"
+n04F,陷阱,A1NE,陷阱,A1N8,大地族,A1N8 > A1ND > A1NE,大地族 > 陷阱 > 陷阱,,,,,False,,,,False,replaceabletextures\\commandbuttons\\BTNb93.blp,49457,50,,2,1,50,,350,2.0,,,3.0,medium,中甲,normal,普通,60.0,66.0,63.0,0.6,105.0,100,,ancient,"A008,A118,A0QG,Avul","出售,移位,诱捕,无敌的",建造 <陷阱> - [E],"生命值: 100
+防御类型: 无敌
+技能:  诱捕
+
+限制数量为3"
+n04H,爆炸陷阱,A1NF,爆炸陷阱,A1N8,大地族,A1N8 > A1ND > A1NF,大地族 > 陷阱 > 爆炸陷阱,n04F,陷阱,u004,等到战斗结束,False,,,,False,replaceabletextures\\commandbuttons\\BTNb89.blp,49459,250,,2,1,300,,600,5.0,,,3.0,medium,中甲,normal,普通,60.0,66.0,63.0,0.6,105.0,100,,ancient,"A008,A118,A0QJ,Avul","出售,移位,爆破,无敌的",升级 <爆炸陷阱> - [Q],"生命值: 100
+防御类型: 无敌
+技能:  爆破
+
+限制数量为1"
+n04K,冰冻陷阱,A1NG,冰冻陷阱,A1N8,大地族,A1N8 > A1ND > A1NG,大地族 > 陷阱 > 冰冻陷阱,n04F,陷阱,u004,等到战斗结束,False,,,,False,replaceabletextures\\commandbuttons\\BTNb90.blp,49461,250,,2,1,300,,600,5.0,,,3.0,medium,中甲,normal,普通,60.0,66.0,63.0,0.6,105.0,100,,ancient,"A008,A118,A0QK,Avul","出售,移位,冰冻,无敌的",升级 <冰冻陷阱> - [Q],"生命值: 100
+防御类型: 无敌
+技能:  冰冻
+
+限制数量为1"
+n04L,毒池陷阱,A1NH,毒池陷阱,A1N8,大地族,A1N8 > A1ND > A1NH,大地族 > 陷阱 > 毒池陷阱,n04F,陷阱,u004,等到战斗结束,False,,,,False,replaceabletextures\\commandbuttons\\BTNb91.blp,49463,250,,2,1,300,,600,5.0,,,3.0,medium,中甲,normal,普通,60.0,66.0,63.0,0.6,105.0,100,,ancient,"A008,A118,A0QN,Avul","出售,移位,毒沼,无敌的",升级 <毒池陷阱> - [Q],"生命值: 100
+防御类型: 无敌
+技能:  毒沼
+
+限制数量为1"
+n04N,地窖,A1NJ,地窖,A1N8,大地族,A1N8 > A1NI > A1NJ,大地族 > 地窖 > 地窖,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNPowerGenerator.blp,49467,225,,2,1,225,5,400,2.0,,,3.0,medium,中甲,normal,普通,60.0,66.0,63.0,0.6,105.0,100,,ancient,"A008,A118,A0QT","出售,移位,尸虫召唤",建造 <地窖> - [R],"生命值: 100
+防御类型: 中甲
+技能:  召唤尸虫
+
+限制数量为1"
+n04Q,大地洞穴,A1NK,大地洞穴,A1N8,大地族,A1N8 > A1NI > A1NK,大地族 > 地窖 > 大地洞穴,n04N,地窖,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNPowerGenerator.blp,49469,425,,2,1,650,8,700,5.0,,,3.0,medium,中甲,normal,普通,60.0,66.0,63.0,0.6,105.0,100,,ancient,"A008,A118,Avul,A0QU","出售,移位,无敌的,巨型甲壳虫召唤",升级 <大地洞穴> - [Q],"生命值: 100
+防御类型: 中甲
+技能:  巨型甲壳虫召唤
+
+限制数量为1"
+n04T,雕像,A1NM,雕像,A1N8,大地族,A1N8 > A1NL > A1NM,大地族 > 雕像 > 雕像,,,,,False,,,,False,replaceabletextures\\commandbuttons\\BTNdx01.blp,49473,200,,2,1,200,1,1000,10.0,,,3.0,medium,中甲,magic,魔法,84.0,92.0,88.0,0.9,97.77777777777777,550,,ancient,"A008,A118,Avul","出售,移位,无敌的",建造 <雕像> - [A],"攻击伤害: 84-92
+攻击速度: 0.9
+攻击距离: 550
+生命值: 100
+攻击类型: 魔法
+防御类型: 无敌
+技能:  无
+限制数量为3"
+n04U,审判雕像,A1NN,审判雕像,A1N8,大地族,A1N8 > A1NL > A1NN,大地族 > 雕像 > 审判雕像,n04T,雕像,u004,等到战斗结束,False,,,,False,replaceabletextures\\commandbuttons\\BTNdx03.blp,49475,350,,2,1,550,5,1200,10.0,,,3.0,medium,中甲,normal,普通,60.0,66.0,63.0,0.6,105.0,100,,ancient,"A008,A118,A0QV,Avul","出售,移位,黎明审判,无敌的",升级 <审判雕像> - [Q],"生命值: 100
+防御类型: 无敌
+技能:  黎明审判
+限制数量为1"
+n04V,天使雕像,A1NO,天使雕像,A1N8,大地族,A1N8 > A1NL > A1NO,大地族 > 雕像 > 天使雕像,n04T,雕像,u004,等到战斗结束,False,,,,False,replaceabletextures\\commandbuttons\\BTNdx04.blp,49477,350,,2,1,550,5,1200,10.0,,,3.0,medium,中甲,normal,普通,60.0,66.0,63.0,0.6,105.0,100,,ancient,"A008,A118,A0QW,Avul","出售,移位,祝福,无敌的",升级 <天使雕像> - [W],"生命值: 100
+防御类型: 无敌
+技能:  祝福
+限制数量为1"
+n04W,恶魔雕像,A1NP,恶魔雕像,A1N8,大地族,A1N8 > A1NL > A1NP,大地族 > 雕像 > 恶魔雕像,n04T,雕像,u004,等到战斗结束,False,,,,False,replaceabletextures\\commandbuttons\\BTNdx02.blp,49479,350,,2,1,550,5,1200,10.0,,,3.0,medium,中甲,chaos,混乱,150.0,300.0,225.0,0.6,375.0,100,,ancient,"A008,A0RF,A118,Avul","出售,恶魔重击,移位,无敌的",建造 <恶魔雕像> - [E],"攻击伤害: 150-300
+攻击速度: 0.75
+攻击距离: 550
+生命值: 100
+攻击类型: 混乱
+防御类型: 无敌
+技能:  恶魔重击
+限制数量为3"
+n05C,神龛,A1NR,神龛,A1N8,大地族,A1N8 > A1NQ > A1NR,大地族 > 神龛 > 神龛,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNArcaneVault.blp,49483,270,,2,1,270,2,1000,10.0,,12,3.0,medium,中甲,normal,普通,60.0,66.0,63.0,0.6,105.0,100,,ancient,"A008,A118,A0SS","出售,移位,祝福",建造 <神龛> - [S],"生命值: 100
+防御类型: 中甲
+技能:  祝福
+限制数量为2"
+n05D,复活神龛,A1NS,复活神龛,A1N8,大地族,A1N8 > A1NQ > A1NS,大地族 > 神龛 > 复活神龛,n05C,神龛,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNArcaneVault.blp,49485,480,,2,1,750,13,1200,10.0,,,3.0,medium,中甲,normal,普通,60.0,66.0,63.0,0.6,105.0,100,,ancient,"A008,A118,A0ST","出售,移位,不朽",建造 <复活神龛> - [S],"生命值: 100
+防御类型: 中甲
+技能:  不朽
+限制数量为1"
+n05P,沙狐,A1NV,沙狐,A1NT,沙漠,A1NT > A1NU > A1NV,沙漠 > 沙狐 > 沙狐,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNRacoon.blp,49490,20,,2,1,20,1,100,1.0,,,3.0,large,重甲,normal,普通,20.0,28.0,24.0,1.3,18.46153846153846,90,,ancient,"A008,A118,A10E","出售,移位,割裂",建造 <沙狐> - [Q],"攻击伤害: 20-28
+攻击速度: 1.3
+攻击距离: 90
+生命值: 100
+攻击类型: 普通 
+防御类型: 重甲 
+技能:  无"
+n05Q,毒蝎,A1NY,毒蝎,A1NT,沙漠,A1NT > A1NX > A1NY,沙漠 > 毒蝎 > 毒蝎,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNArachnathid.blp,49496,70,,2,1,70,1,250,,,,3.0,small,轻甲,pierce,穿刺,26.0,28.0,27.0,0.9,30.0,400,,ancient,"A008,A118,A10G","出售,移位,毒素注入",建造 <毒蝎> - [W],"攻击伤害: 26-28
+攻击速度: 0.9
+攻击距离: 400
+生命值: 250
+攻击类型: 穿刺 
+防御类型: 轻甲 
+技能:  注入毒素"
+n05R,大型毒蝎,A1NZ,大型毒蝎,A1NT,沙漠,A1NT > A1NX > A1NZ,沙漠 > 毒蝎 > 大型毒蝎,n05Q,毒蝎,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNArachnathidpurple.blp,49498,125,,2,1,195,2,700,1.0,,10,3.0,small,轻甲,pierce,穿刺,46.0,55.0,50.5,0.9,56.11111111111111,400,,ancient,"A008,A118,A10G,A10H","出售,移位,毒素注入,剧毒飞弹",建造 <大型毒蝎> - [W],"攻击伤害: 46-55
+攻击速度: 0.9
+攻击距离: 400
+生命值: 700
+攻击类型: 穿刺 
+防御类型: 轻甲 
+技能:  注入毒素 剧毒飞弹"
+n05S,翡翠巨蝎,A1O0,翡翠巨蝎,A1NT,沙漠,A1NT > A1NX > A1O0,沙漠 > 毒蝎 > 翡翠巨蝎,n05R,大型毒蝎,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNArachnathidpurple.blp,49500,300,,2,1,495,4,1600,3.0,,20,3.0,normal,无甲,chaos,混乱,156.0,174.0,165.0,0.9,183.33333333333334,400,,ancient,"A008,A118,A10G,A10I,A10J","出售,移位,毒素注入,剧毒新星,剧毒外壳",建造 <翡翠巨蝎> - [W],"攻击伤害: 156-174
+攻击速度: 0.9
+攻击距离: 300
+生命值: 1600
+攻击类型: 混乱 
+防御类型: 城甲 
+技能:  注入毒素 剧毒新星 剧毒外壳"
+n05U,沙漠蜥蜴,A1O2,沙漠蜥蜴,A1NT,沙漠,A1NT > A1O1 > A1O2,沙漠 > 沙漠蜥蜴 > 沙漠蜥蜴,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNSpiritOfVengeance.blp,49504,90,,2,1,90,1,400,,,,3.0,medium,中甲,normal,普通,46.0,62.0,54.0,1.0,54.0,120,,ancient,"A008,A118","出售,移位",建造 <沙漠蜥蜴> - [E],"攻击伤害: 46-57
+攻击速度: 1.0
+攻击距离: 120
+生命值: 400
+攻击类型: 普通 
+防御类型: 中甲 
+技能:  无"
+n05V,荒漠巨蜥,A1QP,荒漠巨蜥,A1NT,沙漠,A1NT > A1O1 > A1QP,沙漠 > 沙漠蜥蜴 > 荒漠巨蜥,n05U,沙漠蜥蜴,u004,等到战斗结束,False,,,,False,hmjxart.blp,49510,150,,2,1,240,2,1100,3.0,,,3.0,medium,中甲,normal,普通,106.0,111.0,108.5,0.9,120.55555555555556,120,,ancient,"A008,A118,A129","出售,移位,狂热",升级到 <荒漠巨蜥> - [P],"攻击伤害: 106-121
+攻击速度: 0.9
+攻击距离: 120
+生命值: 1100
+攻击类型: 普通 
+防御类型: 中甲 
+技能:  狂热"
+n05W,荒漠巨蜥之王,A1QQ,荒漠巨蜥之王,A1NT,沙漠,A1NT > A1O1 > A1QQ,沙漠 > 沙漠蜥蜴 > 荒漠巨蜥之王,n05V,荒漠巨蜥,u004,等到战斗结束,False,,,,False,xyzw.blp,49512,400,,2,1,640,5,2700,3.0,,,3.0,hero,英雄甲,normal,普通,226.0,244.0,235.0,1.0,235.0,120,,"ancient,sapper","A008,A118,A12A,A12C,A12K","出售,移位,嗜热,战斗渴望,厚皮",升级为 <荒漠巨蜥之王> - [P],"攻击伤害: 226-247
+攻击速度: 0.75
+攻击距离: 120
+生命值: 1100
+攻击类型: 普通 
+防御类型: 中甲 
+技能:  嗜血"
+n05X,蜥蜴巫师,A1O3,蜥蜴巫师,A1NT,沙漠,A1NT > A1O1 > A1O3,沙漠 > 沙漠蜥蜴 > 蜥蜴巫师,n05U,沙漠蜥蜴,u004,等到战斗结束,False,,,,False,BTNlizsham.blp,49506,150,,2,1,240,2,800,,,20,3.0,small,轻甲,magic,魔法,80.0,86.0,83.0,1.0,83.0,500,,ancient,"A008,A118,A12E","出售,移位,雷雨",建造 <蜥蜴巫师> - [P],"攻击伤害: 80-86
+攻击速度: 1.0
+攻击距离: 500
+生命值: 800
+攻击类型: 魔法 
+防御类型: 轻甲 
+技能:  雷雨"
+n05Y,风暴蜥蜴,A1O6,风暴蜥蜴,A1NT,沙漠,A1NT > A1O1 > A1O6,沙漠 > 沙漠蜥蜴 > 风暴蜥蜴,n05X,蜥蜴巫师,u004,等到战斗结束,False,,,,False,BTNshaman_portrait.blp,49508,400,,2,1,640,5,1800,,,20,3.0,hero,英雄甲,magic,魔法,156.0,169.0,162.5,1.0,162.5,500,,ancient,"A008,A118,A12F,A12H","出售,移位,落雷,闪电风暴",建造 <风暴蜥蜴> - [P],"攻击伤害: 156-169
+攻击速度: 0.85
+攻击距离: 500
+生命值: 800
+攻击类型: 魔法 
+防御类型: 国王甲 
+技能:  落雷 闪电风暴"
+n061,木乃伊,A1QS,木乃伊,A1NT,沙漠,A1NT > A1QR > A1QS,沙漠 > 木乃伊 > 木乃伊,,,,,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNZombie.blp,49516,150,,2,1,150,1,500,1.0,,,3.0,none,无甲,normal,普通,101.0,101.0,101.0,1.0,101.0,90,,ancient,"A008,A118,A1BL","出售,移位,复生",建造 <木乃伊> - [R],"攻击伤害: 100-101
+攻击速度: 1.0
+攻击距离: 90
+生命值: 400
+攻击类型: 普通 
+防御类型: 无甲 
+技能:  复生"
+n076,鱼人奴隶,A1R8,鱼人奴隶,A1R6,鱼人,A1R6 > A1R7 > A1R8,鱼人 > 鱼人奴隶 > 鱼人奴隶,,,,,False,,,,False,yrnl.blp,49537,20,,2,1,20,1,150,,,,3.0,small,轻甲,normal,普通,10.0,12.0,11.0,0.5,22.0,300,,ancient,"A18A,A008,A118","撕咬,出售,移位",建造 <鱼人奴隶> - [Q],"攻击伤害：10-13
+攻击速度：0.5
+攻击距离：300
+生命值：150
+攻击类型：混乱
+防御类型：中甲
+技能：
+撕咬：每次攻击目标时有15%的几率触发此被动，可对目标造成20点伤害。"
+n077,鱼人掠夺者,A1R9,鱼人掠夺者,A1R6,鱼人,A1R6 > A1R7 > A1R9,鱼人 > 鱼人奴隶 > 鱼人掠夺者,"h2AF,n076","死亡小鱼,鱼人奴隶",u004,等到战斗结束,False,,,,False,yrldz.blp,49539,120,,2,1,140,1,400,,,,3.0,small,轻甲,normal,普通,30.0,44.0,37.0,0.8,46.25,300,,ancient,"A1CO,A008,A118","战吼,出售,移位",建造 <鱼人掠夺者> - [Q],"攻击伤害：30-45
+攻击速度：0.5
+攻击距离：300
+生命值：400
+攻击类型：混乱
+防御类型：3（重甲）
+技能：
+战吼：开局召唤三个鱼人奴隶参与战斗，并为召唤单位附加3%的嗜血效果。"
+n078,鱼人统领,A1RA,鱼人统领,A1R6,鱼人,A1R6 > A1R7 > A1RA,鱼人 > 鱼人奴隶 > 鱼人统领,n077,鱼人掠夺者,u004,等到战斗结束,False,,,,False,yrtl.blp,49541,350,,2,1,490,3,1000,,,,3.0,small,轻甲,normal,普通,105.0,124.0,114.5,0.6,190.83333333333334,300,,ancient,"A1CQ,A1CR,A1CS,A008,A118","鱼人袭击,领军,冲锋,出售,移位",建造 <鱼人统领> - [Q],"攻击伤害：105-125
+攻击速度：0.6
+攻击距离：300
+生命值：1000
+攻击类型：混乱
+防御类型：3（重甲）
+技能：
+冲锋：向出现在攻击范围内的第一个敌方单位发起冲击600码，冲击过程中可对冲击范围内敌方单位造成77点伤害。
+鱼人袭击：消耗75%的生命值，召唤三只鱼人掠夺者参与战斗。
+领军：为所有鱼人单位加成5%的攻击力，海洋族的鱼人同样享受此效果。"
+n079,鱼人生命法师,A1RB,鱼人生命法师,A1R6,鱼人,A1R6 > A1R7 > A1RB,鱼人 > 鱼人奴隶 > 鱼人生命法师,n077,鱼人掠夺者,u004,等到战斗结束,False,,,,False,BTNFlek.blp,49543,350,,2,1,490,3,1000,,,25,3.0,small,轻甲,normal,普通,105.0,124.0,114.5,0.6,190.83333333333334,400,,ancient,"A1CU,A1CT,A008,A118","潮汐之泉,海洋治愈,出售,移位",建造 <鱼人生命法师> - [Q],"攻击伤害：105-125
+攻击速度：0.6
+攻击距离：400
+生命值：1000
+魔法：25
+攻击类型：魔法
+防御类型：3（重甲）
+技能：
+海洋治愈：恢复周围单位99点的生命值，作用范围600码。
+潮汐之泉：消召唤出一个潮汐之泉，每秒恢复附近友军单位的15点生命值，并提高3%的攻击力，持续5s。"
+n07B,毒鳍龙,A1RD,毒鳍龙,A1R6,鱼人,A1R6 > A1RC > A1RD,鱼人 > 毒鳍龙 > 毒鳍龙,,,,,False,,,,False,dql.blp,49547,70,,2,1,70,1,525,,,,3.0,small,轻甲,normal,普通,63.0,79.0,71.0,1.0,71.0,200,,ancient,"A1DB,A008,A118","剧毒之牙,出售,移位",建造 <毒鳍龙> - [E],"生命值：525
+攻击力：63-83
+攻速：1
+护甲：3（轻甲）
+攻击距离：300
+技能：
+剧毒之牙：攻击附带5%的减速效果与5%的毒素攻击，可对敌方单位造成25点伤害，毒素效果持续8s，每秒造成2点伤害"
+n07C,娜迦龙,A1RE,娜迦龙,A1R6,鱼人,A1R6 > A1RC > A1RE,鱼人 > 毒鳍龙 > 娜迦龙,n07B,毒鳍龙,u004,等到战斗结束,False,,,,False,njl.blp,49549,235,,2,1,305,3,1000,,,12,3.0,small,轻甲,normal,普通,102.0,134.0,118.0,0.5,236.0,400,,ancient,"A1DC,A1DD,A008,A118","腐蚀,毒素吐息,出售,移位",升级为<娜迦龙> - [P],"生命值：1000
+攻击力：102-134（普通）
+攻速：0.5
+护甲：3（中甲）
+攻击距离：400
+技能：
+毒素吐息：喷出一道毒素龙息，对100*400范围内的敌方单位造成66点伤害，并附带毒素，毒素效果持续5s，每秒造成5点伤害。
+腐蚀：有18%的几率可触发此效果，对敌方单位额外造成10点伤害，并降低移速13%，持续3s。"
+n07D,娜迦雷蜥,A1RH,娜迦雷蜥,A1R6,鱼人,A1R6 > A1RF > A1RH,鱼人 > 娜迦火蜥 > 娜迦雷蜥,n07E,娜迦火蜥,u004,等到战斗结束,False,,,,False,njlx.blp,49555,165,,2,1,255,2,925,,,10,3.0,small,轻甲,normal,普通,93.0,122.0,107.5,0.6,179.16666666666669,270,,ancient,"A1DG,A1DH,A008,A118","震慑电弧,致命电击,出售,移位",建造 <娜迦雷蜥> - [P],"攻击伤害：93-123
+攻击速度：0.6
+攻击距离：270
+生命值：925
+攻击类型：魔法
+防御类型：重甲
+技能：
+震慑电弧：以自身为中心向275*275范围内释放一圈电弧，对敌方单位造成17点伤害，电弧回收后也可造成17点伤害。
+致命电击：受到致命伤害时，触发此被动，对造成伤害单位反馈200%伤害"
+n07E,娜迦火蜥,A1RG,娜迦火蜥,A1R6,鱼人,A1R6 > A1RF > A1RG,鱼人 > 娜迦火蜥 > 娜迦火蜥,,,,,False,,,,False,njhx.blp,49553,90,,2,1,90,1,515,,,,3.0,small,轻甲,normal,普通,43.0,55.0,49.0,1.0,49.0,120,,ancient,"A1DI,A008,A118","火焰气息,出售,移位",建造 <娜迦火蜥> - [E],"攻击伤害：43-56
+攻击速度：1
+攻击距离：120
+生命值：515
+攻击类型：穿刺
+防御类型：重甲
+技能：
+撕咬：攻击时附带火焰灼伤效果，可灼伤攻击范围内的敌方单位，造成12点伤害，灼烧效果持续3s"
+n07F,娜迦随从,A1RJ,娜迦随从,A1R6,鱼人,A1R6 > A1RI > A1RJ,鱼人 > 娜迦随从 > 娜迦随从,,,,,False,,,,False,njsc.blp,49559,125,,2,1,125,1,625,,,,3.0,small,轻甲,pierce,穿刺,63.0,79.0,71.0,0.7,101.42857142857143,200,,ancient,"A1DO,A008,A118","海妖之歌,出售,移位",建造 <娜迦随从> - [R],"攻击伤害：63-80
+攻击速度：0.7
+攻击距离：120
+生命值：625
+攻击类型：穿刺
+防御类型：3（重甲）
+技能：
+海妖之歌：利用歌声迷糊敌方单位，攻击时有15%的几率可以使被攻击单位陷入睡眠，持续2s"
+n07G,娜迦射手,A1RK,娜迦射手,A1R6,鱼人,A1R6 > A1RI > A1RK,鱼人 > 娜迦随从 > 娜迦射手,n07F,娜迦随从,u004,等到战斗结束,False,,,,False,njgjs.blp,49561,175,,2,1,300,3,825,,,13,3.0,medium,中甲,pierce,穿刺,125.0,145.0,135.0,0.6,225.0,500,,ancient,"A1DP,A008,A118","水晶箭,出售,移位",升级为 <娜迦射手> - [P],"攻击伤害：125-145
+攻击速度：0.6
+攻击距离：500
+生命值：825
+攻击类型：穿刺
+防御类型：3（中甲）
+技能：
+水晶箭：蓄力射出一支强力水箭，对射中单位造成135点伤害。"
+n07H,娜迦海妖战士,A1RL,娜迦海妖战士,A1R6,鱼人,A1R6 > A1RI > A1RL,鱼人 > 娜迦随从 > 娜迦海妖战士,n07F,娜迦随从,u004,等到战斗结束,False,,,,False,njhyzs.blp,49563,275,,2,1,400,3,1325,,,18,3.0,large,重甲,pierce,穿刺,135.0,149.0,142.0,0.8,177.5,100,,ancient,"A1DQ,A1DR,A008,A118","潮汐斩,冰盾,出售,移位",升级为 <娜迦海妖战士> - [R],"攻击伤害：135-150
+攻击速度：0.8
+攻击距离：500
+生命值：1325
+攻击类型：穿刺
+防御类型：3（重甲）
+技能：
+潮汐斩：双刀斩向敌方单位，造成146点伤害，并对300码范围单位造成眩晕1s的效果。
+冰盾：受到伤害时有25%的几率触发此被动，在其周身形成一个冰霜护盾，抵御所受伤害的30%，持续3s。"
+n0JG,雷神,A1E5,雷神,A1DT,野兽,A1DT > A1E2 > A1E5,野兽 > 鸟身女妖 > 雷神,h014,鸟身女妖,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNDestroyer.blp,48864,130,,2,1,200,2,900,,,22,3.0,medium,中甲,magic,魔法,81.0,90.0,85.5,1.0,85.5,300,,ancient,"A0HY,A008,A118,A0I8,A0I9","静电场,出售,移位,Lightning Attack,球体",建造 <雷神> - [R],"攻击伤害: 80-90
+攻击速度: 1
+攻击距离: 300
+生命值: 900
+攻击类型: 魔法
+防御类型: 中甲
+技能:  静电场"
+n0JH,山神,A1GJ,山神,A1G6,元素,A1G6 > A1GG > A1GJ,元素 > 泥人 > 山神,h046,泥人,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNMountainGiant.blp,49032,200,,2,1,330,4,1500,,,,3.0,normal,无甲,siege,攻城,132.0,150.0,141.0,1.0,141.0,100,,ancient,"A0HZ,A008,A118","大地祝福,出售,移位",建造 <山神> - [R],"攻击伤害: 130-150
+攻击速度: 1
+攻击距离: 100
+生命值: 1500
+攻击类型: 攻城
+防御类型: 城甲
+技能:  大地祝福"
+n0JI,孕母蜘蛛,A1FT,孕母蜘蛛,A1FK,黑暗,A1FK > A1FQ > A1FT,黑暗 > 穴居蜘蛛 > 孕母蜘蛛,h01T,穴居蜘蛛,u004,等到战斗结束,False,,,,False,ReplaceableTextures\\CommandButtons\\BTNNerubian.blp,48981,400,,2,1,435,4,1500,,,30,3.0,large,重甲,chaos,混乱,126.0,144.0,135.0,0.75,180.0,180,,ancient,"A0I1,A0I2,A0I5,A008,A118","孕母蛛群,蛛群光环,噬魂毒素,出售,移位",建造 <孕母蜘蛛> - [P],"攻击伤害: 124-156
+攻击速度: 0.75
+攻击距离: 180
+生命值: 1500
+攻击类型: 混乱
+防御类型: 中甲
+技能:  噬魂毒素,孕母蛛群,蛛群光环"

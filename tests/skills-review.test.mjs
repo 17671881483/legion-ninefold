@@ -56,7 +56,7 @@ test('ground-only source splash does not hit nearby air targets',()=>{
 test('native thorns percent flag returns 24 percent rather than 0.24 flat damage',()=>{
   const g=fixture(),attacker=entity(g),tree=entity(g,'h039',{}, {side:'defender',ownerId:0,team:0,worldX:.5});
   g._attack(attacker,tree,battle(g,attacker,tree));
-  near(tree.hp,900);near(attacker.hp,976,'24 percent reflection');
+  near(tree.hp,920,'v14 normal attack against fort applies 0.8 before reflection');near(attacker.hp,980.8,'24 percent of the 80 mitigated damage is reflected');
 });
 
 test('Guardian Spirit grants a passive that actually reduces incoming damage',()=>{

@@ -1,13 +1,15 @@
-/* 5.0dJF workbook configuration. Historical Web definitions are save-compatibility only.
+/* v14.1A5 x9 parsed-map configuration. Historical Web definitions are save-compatibility only.
  * Legacy Web units remain for existing saves. See REFERENCE and reference/map-source.json.
  */
 import { MAP_REFERENCE, MAP_UNITS, MAP_WAVES, MAP_MERCENARIES, MAP_ECONOMY } from './map-reference.js';
 import {WORKBOOK_REFERENCE,WORKBOOK_UNITS,WORKBOOK_BUILDERS,WORKBOOK_POOLS,WORKBOOK_ARCHIVE,WORKBOOK_HERO_ENTRIES,WORKBOOK_MERCENARIES,WORKBOOK_WAVES} from './workbook-reference.js';
 import {DOCUMENT_RULES,DOCUMENT_ECONOMY} from './document-rules.js';
+import {V14_REFERENCE,V14_UNITS,V14_BUILDERS,V14_POOLS,V14_ARCHIVE,V14_HERO_ENTRIES,V14_MERCENARIES,V14_WAVES,V14_UNIT_TEMPLATES} from './v14-reference.js';
 export const HISTORICAL_REFERENCE=MAP_REFERENCE;
-export const REFERENCE={...WORKBOOK_REFERENCE,economyPolicy:DOCUMENT_ECONOMY.sourcePolicy,targetMode:'5.0dJF x3文档配置',bountyPolicy:'GG默认开启，普通漏怪按开波军力与累计漏数的固定系数折扣；木怪和首领不套用，31波后无击杀赏金。'};
+export const REFERENCE={...V14_REFERENCE,economyPolicy:DOCUMENT_ECONOMY.sourcePolicy,targetMode:'v14.1A5 九倍怪物模式',bountyPolicy:'系统怪使用v14脚本Ie[Dg]金币；10%替换额外+3；跨线与漏怪按脚本结算，31波起系统怪无赏金。'};
 export const ECONOMY=DOCUMENT_ECONOMY;
-export const BUILDERS=WORKBOOK_BUILDERS,PROPHET_POOLS=WORKBOOK_POOLS,HERO_ENTRIES=WORKBOOK_HERO_ENTRIES,ARCHIVE_UNITS=WORKBOOK_ARCHIVE;
+export const BUILDERS=V14_BUILDERS,PROPHET_POOLS=V14_POOLS,HERO_ENTRIES=V14_HERO_ENTRIES,ARCHIVE_UNITS=V14_ARCHIVE;
+export const UNIT_TEMPLATES=V14_UNIT_TEMPLATES;
 
 const A = (type, value, name, description, extra = {}) => ({ type, value, name, description, ...extra });
 const unit = (id, name, race, tier, cost, hp, damage, interval, range, armor, attackType, armorType, role, ability, color, shape, upgrades, description, population = 1, randomPool = false) => ({
@@ -86,14 +88,14 @@ const LEGACY_UNITS = [
   unit('infernal', '地狱火', '元素', 6, 460, 4650, 290, 1.55, 60, 13, 'chaos', 'heavy', 'tank', A('stomp', 145, '毁灭践踏', '周期造成范围伤害并击晕。', { radius: 110, cooldown: 4.8, duration: .9 }), '#a5b58b', 'square', [], '岩石傀儡升级，坚固的范围控制单位。', 5),
 ];
 
-export const UNITS = [...WORKBOOK_UNITS, ...MAP_UNITS.map(u=>({...u,legacy:true,randomPool:false,isBase:false,provenance:'legacy-map-subset'})), ...LEGACY_UNITS.map(u => ({...u,legacy:true,randomPool:false,isBase:false,provenance:'legacy-web'}))];
+export const UNITS = [...V14_UNITS,...WORKBOOK_UNITS.map(u=>({...u,legacy:true,randomPool:false,isBase:false,sourceVersion:'5.0dJF'})), ...MAP_UNITS.map(u=>({...u,legacy:true,randomPool:false,isBase:false,provenance:'legacy-map-subset'})), ...LEGACY_UNITS.map(u => ({...u,legacy:true,randomPool:false,isBase:false,provenance:'legacy-web'}))];
 
 const merc = (id, name, wood, income, unlock, hp, damage, interval, range, armor, attackType, armorType, role, ability, color, shape, description) => ({
   ...unit(id, name, '佣兵', 1, 0, hp, damage, interval, range, armor, attackType, armorType, role, ability, color, shape, [], description),
   wood, income, unlock,
 });
 
-export const LEGACY_MERCENARIES = [
+const LEGACY_WEB_MERCENARIES = [
   merc('merc_militia', '民兵', 20, 2, 1, 145, 13, 1.1, 30, 0, 'normal', 'medium', 'frontline', null, '#b7a27d', 'circle', '低价佣兵，用数量分散对手火力。'),
   merc('merc_archer', '雇佣弓手', 40, 4, 1, 125, 23, 1.15, 210, 0, 'pierce', 'light', 'ranged', null, '#cbb48b', 'triangle', '在系统怪后排输出。'),
   merc('merc_orc', '兽人战士', 60, 5, 1, 420, 31, 1.25, 35, 2, 'normal', 'heavy', 'tank', null, '#9fb27d', 'square', '增加敌方前线承伤压力。'),
@@ -105,8 +107,9 @@ export const LEGACY_MERCENARIES = [
   merc('merc_infernal', '深渊地狱火', 400, 22, 11, 2420, 135, 1.45, 52, 9, 'chaos', 'heavy', 'tank', A('stomp', 55, '陨火震击', '周期对周围守军造成范围伤害。', { radius: 80, cooldown: 5, duration: .5 }), '#b4ae90', 'square', '中后期高生命进攻佣兵。'),
 ];
 
-export const MERCENARIES = WORKBOOK_MERCENARIES;
-export const WAVES = WORKBOOK_WAVES;
+export const LEGACY_MERCENARIES=[...LEGACY_WEB_MERCENARIES,...WORKBOOK_MERCENARIES.map(u=>({...u,legacy:true,sourceVersion:'5.0dJF'}))];
+export const MERCENARIES = V14_MERCENARIES;
+export const WAVES = V14_WAVES;
 
 export const HEROES = [
   { id: 'hero_paladin', name: '圣骑士', faction: '人类', race: '人类', cost: 280, population: 3, hp: 1500, damage: 88, interval: 1.1, range: 50, speed: 50, armor: 6, attackType: 'normal', armorType: 'heavy', role: 'support', color: '#e0c99a', shape: 'star', aura: { type: 'armor', value: 3, radius: 200 }, ability: A('aura_armor', 3, '虔诚光环', '提高附近友军护甲。', { radius: 200 }), description: '用护甲光环增强前排生存。', upgrades: [] },
@@ -210,15 +213,16 @@ export const RULES = {
   abilityStacking: '同名同类型光环取最高值；不同类型光环并存。持续伤害同源刷新持续时间。',
   victory: '对方国王生命归零获胜；第35波后双方国王存活则比较国王剩余生命比例，相同则比较总兵力，再相同判平局。',
   ...DOCUMENT_RULES,
-  dataRevision: WORKBOOK_REFERENCE.dataRevision,
+  dataRevision: V14_REFERENCE.dataRevision,
+  defaultBuilderId: V14_REFERENCE.defaultBuilderId,
   ggEnabled: true,
   webFrenzyEnabled: false,
   interfereEnabled: true,
   interfereRadius: 200 / 3 / 100,
-  interfereSource: 'A050防卡兵，T，5秒；war3map.j:10584-10640，ax组内双方怪物，200原始半径，重发attack到各王区；无固定眩晕或攻击CD延后。',
+  interfereSource: 'v14 A050防卡兵，T，5秒；war3map.j:23323—23368，双方怪物200原始半径重发attack到各王区；无固定眩晕或攻击CD延后。',
   webKingSplashEnabled: false,
   victory: '击倒敌方国王获胜；31—35连续进攻，35最终首领持续复活，不按生命比例提前判胜。',
   ggDefaultSource: 'war3map.j:12930-12936默认TriggerExecute(AR)，16799-16801注册Xs，12546-12550将Wo=true。',
-  rerollPool: '先知六阶×15候选；其他建造者使用各自基础兵与完整升级链。',
-  heroSourcePolicy: '原图10种英雄通过祭坛及各自11阶段升级链；旧4名Web英雄仅兼容历史存档。',
+  rerollPool: '先知六阶共107候选（18/18/18/18/18/17）；其他建造者使用本版基础兵与来源升级链。',
+  heroSourcePolicy: '只开放v14解析包与脚本已确认的英雄入口；5.0dJF英雄不作为本版可建单位。',
 };

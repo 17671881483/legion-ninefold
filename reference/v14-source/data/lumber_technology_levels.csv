@@ -1,0 +1,33 @@
+﻿available_in_x9,branch,total_display_level,technology_rawcode,technology_name,local_level,gold_cost,lumber_cost,research_time_seconds,technology_effect_value_at_local_level,harvest_increment_this_level,cumulative_harvest_bonus_in_branch,requirement_rawcode,requirement_name,requirement_kind,requirement_source_line
+True,x9_main,1,R003,提升伐木效率,1,80,40,12,1,1,1,u00N,兵力要求: 450,unit_or_requirement_marker,5323
+True,x9_main,2,R003,提升伐木效率,2,100,50,16,2,1,2,u01E,兵力要求: 900,unit_or_requirement_marker,5324
+True,x9_main,3,R003,提升伐木效率,3,120,60,20,3,1,3,,,,5325
+True,x9_main,4,R003,提升伐木效率,4,140,70,24,4,1,4,,,,5326
+True,x9_main,5,R003,提升伐木效率,5,160,80,28,5,1,5,u012,兵力要求: 1600,unit_or_requirement_marker,5327
+True,x9_main,6,R003,提升伐木效率,6,180,90,32,6,1,6,,,,5328
+True,x9_main,7,R003,提升伐木效率,7,200,100,36,7,1,7,,,,5329
+True,x9_main,8,R00H,提升伐木效率,1,200,200,38,2,2,9,u00S,兵力要求: 2000,unit_or_requirement_marker,5472
+True,x9_main,9,R00H,提升伐木效率,2,200,200,38,4,2,11,u00Y,兵力要求: 2200,unit_or_requirement_marker,5483
+True,x9_main,10,R00H,提升伐木效率,3,200,200,38,6,2,13,,,,5488
+True,x9_main,11,R00H,提升伐木效率,4,200,200,38,8,2,15,,,,5489
+True,x9_main,12,R00H,提升伐木效率,5,200,200,38,10,2,17,,,,5490
+True,x9_main,13,R00H,提升伐木效率,6,200,200,38,12,2,19,,,,5491
+True,x9_main,14,R00H,提升伐木效率,7,200,200,38,14,2,21,,,,5492
+True,x9_main,15,R00H,提升伐木效率,8,200,200,38,16,2,23,,,,5493
+True,x9_main,16,R00H,提升伐木效率,9,200,200,38,18,2,25,,,,5494
+True,x9_main,17,R00H,提升伐木效率,10,200,200,38,20,2,27,,,,5473
+True,x9_main,18,R00H,提升伐木效率,11,200,200,38,22,2,29,,,,5474
+True,x9_main,19,R00H,提升伐木效率,12,200,200,38,24,2,31,,,,5475
+True,x9_main,20,R00H,提升伐木效率,13,200,200,38,26,2,33,,,,5476
+True,x9_main,21,R00H,提升伐木效率,14,200,200,38,28,2,35,,,,5477
+True,x9_main,22,R00H,提升伐木效率,15,200,200,38,30,2,37,,,,5478
+True,x9_main,23,R00H,提升伐木效率,16,200,200,38,32,2,39,,,,5479
+True,x9_main,24,R00H,提升伐木效率,17,200,200,38,34,2,41,,,,5480
+True,x9_main,25,R00H,提升伐木效率,18,200,200,38,36,2,43,,,,5481
+True,x9_main,26,R00H,提升伐木效率,19,200,200,38,38,2,45,,,,5482
+True,x9_main,27,R00H,提升伐木效率,20,200,200,38,40,2,47,,,,5484
+True,x9_main,28,R00H,提升伐木效率,21,200,200,38,42,2,49,,,,5485
+True,x9_main,29,R00H,提升伐木效率,22,200,200,38,44,2,51,,,,5486
+True,x9_main,30,R00H,提升伐木效率,23,200,200,38,46,2,53,,,,5487
+False,other_modes_only,7,R06W,提升伐木效率,1,200,160,36,1,1,7,,,,5601
+False,other_modes_only,8,R06W,提升伐木效率,2,200,180,40,2,1,8,u00S,兵力要求: 2000,unit_or_requirement_marker,5602

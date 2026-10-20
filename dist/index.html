@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#111b18">
-  <meta name="description" content="在浏览器中排兵布阵、发展伐木、发木进攻，与队友一起守住国王。依据5.0dJF兵种怪物技能数据的浏览器模拟。">
-  <title>军团战争 · 5.0dJF</title>
+  <meta name="description" content="在浏览器中排兵布阵、发展伐木、发木进攻，与队友一起守住国王。依据v14.1A5九倍模式解析数据的浏览器模拟。">
+  <title>军团战争 · v14.1A5 九倍</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%23131f1b' d='M0 0h64v64H0z'/%3E%3Cpath fill='%23d7b975' d='M32 4 57 18v26L32 60 7 44V18zm0 7L14 22v18l18 12 18-12V22zM21 25h7v15h15v6H21z'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="./style.css">
 </head>
@@ -28,7 +28,7 @@
   </defs></svg>
   <div class="game-shell">
     <header class="topbar">
-      <a class="brand" href="#" aria-label="军团战争首页"><span class="brand-seal">L</span><span><b>军团战争</b><small>LEGION WARFARE</small></span><em>3×</em></a>
+      <a class="brand" href="#" aria-label="军团战争首页"><span class="brand-seal">L</span><span><b>军团战争</b><small>LEGION WARFARE</small></span><em>9×</em></a>
       <div class="resource-strip" aria-label="我的资源">
         <div class="resource gold" title="金币用于建造、升级和发展科技"><svg><use href="#i-gold"/></svg><span><b id="gold">300</b><small>金币</small></span></div>
         <div class="resource wood" title="小精灵持续伐木，可发木进攻或强化国王"><svg><use href="#i-wood"/></svg><span><b id="wood">97</b><small>木材</small></span></div>
@@ -67,7 +67,7 @@
       <aside class="right-sidebar">
         <div class="panel-tabs" role="tablist"><button data-tab="build" class="active" role="tab" aria-selected="true"><svg><use href="#i-shield"/></svg>建造</button><button data-tab="attack" role="tab" aria-selected="false"><svg><use href="#i-swords"/></svg>进攻</button><button data-tab="king" role="tab" aria-selected="false"><svg><use href="#i-crown"/></svg>国王</button></div>
         <div id="panel-content" class="panel-content"></div>
-        <div class="economy-panel"><div class="section-heading"><span>经济发展</span><small id="wood-rate">+0.2 木/秒</small></div><div class="economy-actions"><button id="worker"><svg><use href="#i-worker"/></svg><span><strong id="worker-label">精灵 1/7</strong><small id="worker-price">50金 · 20s</small></span><i class="economy-progress" role="progressbar" aria-label="小精灵训练进度" aria-valuemin="0" aria-valuemax="100" hidden><em></em></i></button><button id="lumber"><svg><use href="#i-wood"/></svg><span><strong id="lumber-label">伐木 0/15</strong><small id="lumber-price">60金 60木 · 18s</small></span><i class="economy-progress" role="progressbar" aria-label="伐木研究进度" aria-valuemin="0" aria-valuemax="100" hidden><em></em></i></button></div></div>
+        <div class="economy-panel"><div class="section-heading"><span>经济发展</span><small id="wood-rate">+0.2 木/秒</small></div><div class="economy-actions"><button id="worker"><svg><use href="#i-worker"/></svg><span><strong id="worker-label">精灵 1/10</strong><small id="worker-price">50金 · 12s</small></span><i class="economy-progress" role="progressbar" aria-label="小精灵训练进度" aria-valuemin="0" aria-valuemax="100" hidden><em></em></i></button><button id="lumber"><svg><use href="#i-wood"/></svg><span><strong id="lumber-label">伐木 0/30</strong><small id="lumber-price">80金 40木 · 12s</small></span><i class="economy-progress" role="progressbar" aria-label="伐木研究进度" aria-valuemin="0" aria-valuemax="100" hidden><em></em></i></button></div></div>
         <div class="round-action"><span id="ready-subtext">兵力还未部署</span><button id="ready" class="primary-button"><svg><use href="#i-swords"/></svg><b>开始第 1 波</b><kbd>空格</kbd></button></div>
       </aside>
     </main>
@@ -82,10 +82,10 @@
   <div id="welcome" class="modal-backdrop welcome-backdrop">
     <section class="welcome-dialog" aria-label="开始军团战争">
       <div class="welcome-emblem"><svg><use href="#i-crown"/></svg></div><div class="eyebrow">BROWSER EDITION · 4 vs 4</div>
-      <h1>军团战争</h1><div class="welcome-subtitle"><span></span>5.0dJF · 三倍模式<span></span></div>
+      <h1>军团战争</h1><div class="welcome-subtitle"><span></span>v14.1A5 · 九倍怪物<span></span></div>
       <p class="welcome-intro">建造军团，守住怪潮。<br>发展经济，向敌方国王发起进攻。</p>
       <label class="builder-select-label" for="builder-select">选择建造者 <small>AP模式 · 各种族独立兵种</small></label><select id="builder-select" class="builder-select" aria-label="选择建造者"></select><p id="builder-description" class="builder-description"></p>
-      <div class="mode-summary"><span>AP 自由选族</span><span>X3 三倍怪物</span><span>GG 击杀收益</span></div>
+      <div class="mode-summary"><span>AP 自由选族</span><span>X9 九倍怪物</span><span>GG 击杀收益</span></div>
       <button id="start-game" class="primary-button">进入战场 <span>→</span></button><button id="continue-game" class="secondary-button" hidden>继续上次对局</button>
       <div class="welcome-foot">你与 3 名 AI 队友，对抗部落军团 · 对局自动保存在此浏览器</div>
       <button id="welcome-about" class="text-button">玩法与复刻说明</button>

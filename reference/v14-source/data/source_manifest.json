@@ -1,0 +1,28 @@
+{
+  "dataset": "军团战争v14.1A5新彩蛋伊瑟拉 - 9倍怪物模式静态解析",
+  "parser_version": "2.0",
+  "generated_at": "2026-10-20T00:27:31.602169+08:00",
+  "unpacked_script": "C:\\Users\\Administrator\\Documents\\Codex\\2026-10-19\\zh\\work\\v14_1A5_unpacked\\war3map.j",
+  "source_map": {
+    "path": "D:\\Warcraft3-11hf\\Maps\\Download\\qcloud_20197574.w3x",
+    "size_bytes": 306966320,
+    "last_modified": "2026-10-09T16:09:02+08:00",
+    "md5": "00F6B097F578D7F9C83AA5593C0E353A",
+    "sha256": "E079EE0D558552990882FACC4E6F371241A8CA23CFAA272772ABF9B3259FFDB1"
+  },
+  "platform_identity_evidence": {
+    "path": "D:\\5211platform\\yybins\\log\\2026-10-18 18_53_17.964349\\VpnService.log",
+    "matching_lines": [
+      "[2026-10-18 19:02:47,122][INFO][0x00009eb4] VPN mapId: 20197574, MapShowName: 军团战争v14.1A5新彩蛋伊瑟拉",
+      "[2026-10-18 19:30:11,236][INFO][0x00009eb4] VPN mapId: 20197574, MapShowName: 军团战争v14.1A5新彩蛋伊瑟拉",
+      "[2026-10-18 20:03:10,131][INFO][0x00009eb4] VPN mapId: 20197574, MapShowName: 军团战争v14.1A5新彩蛋伊瑟拉",
+      "[2026-10-18 20:06:04,028][INFO][0x00009eb4] VPN mapId: 20197574, MapShowName: 军团战争v14.1A5新彩蛋伊瑟拉",
+      "[2026-10-18 20:22:35,170][INFO][0x00009eb4] VPN mapId: 20197574, MapShowName: 军团战争v14.1A5新彩蛋伊瑟拉",
+      "[2026-10-18 21:12:52,586][INFO][0x00009eb4] VPN mapId: 20197574, MapShowName: 军团战争v14.1A5新彩蛋伊瑟拉",
+      "[2026-10-18 21:14:52,055][INFO][0x00009eb4] VPN mapId: 20197574, MapShowName: 军团战争v14.1A5新彩蛋伊瑟拉",
+      "[2026-10-18 21:37:30,360][INFO][0x00009eb4] VPN mapId: 20197574, MapShowName: 军团战争v14.1A5新彩蛋伊瑟拉",
+      "[2026-10-18 22:38:32,332][INFO][0x00009eb4] VPN mapId: 20197574, MapShowName: 军团战争v14.1A5新彩蛋伊瑟拉",
+      "[2026-10-18 22:40:49,230][INFO][0x00009eb4] VPN mapId: 20197574, MapShowName: 军团战争v14.1A5新彩蛋伊瑟拉"
+    ]
+  }
+}

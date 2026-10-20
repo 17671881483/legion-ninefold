@@ -1,0 +1,185 @@
+{
+  "policy": "Source CSV/JSON plus original JASS and map text; supplied tools and binary objects are not executed or copied.",
+  "files": {
+    "DATA_DICTIONARY.md": {
+      "sha256": "577e1e0f11a4a1819cb65d2348d168b7f88673ded159792b45f29289a68c8683",
+      "bytes": 9537
+    },
+    "README.md": {
+      "sha256": "f2f4ddb8de69adf447365e88a6fd75b977bfbf591386d980699608c48147a850",
+      "bytes": 9937
+    },
+    "data/all_abilities.csv": {
+      "sha256": "e192876a736b6c5d666da7d11663cd8623732902433cb553b18de694e886729c",
+      "bytes": 659992
+    },
+    "data/all_buffs.csv": {
+      "sha256": "c42a1afa603e6afccaf864e63d08fc0260207b68561547c5c1abfb6ac69e30c8",
+      "bytes": 6461
+    },
+    "data/all_destructables.csv": {
+      "sha256": "bd9cb0a2f52427f19168b1e4328dba94fa3df63d4b1909d008ef0291d1b1d198",
+      "bytes": 1496
+    },
+    "data/all_doodads.csv": {
+      "sha256": "31913dbe25fb2fb0007078c76ec1e047eaf498c299c87a701a34e57be5084732",
+      "bytes": 7538
+    },
+    "data/all_items.csv": {
+      "sha256": "c9c18269b765c42ece4bcfd809c7d18d7137d27d9693b2bddb750c1c8a29d2da",
+      "bytes": 28875
+    },
+    "data/all_units.csv": {
+      "sha256": "552f04bfc10e412b8d9b4fec485dd85cfd1f6316487fb4fd4d63d398879e9921",
+      "bytes": 1712332
+    },
+    "data/all_upgrades.csv": {
+      "sha256": "b13bb094bb2c0f4b386847390d072b38440aa9f298298ba849e19829535c7bae",
+      "bytes": 76775
+    },
+    "data/buildable_fighters_candidates.csv": {
+      "sha256": "679bc977ab4bc087e7db61e1fad6c857d9ab337fe56d2bb377f369d5a3dcd7a7",
+      "bytes": 223143
+    },
+    "data/easter_egg_ban_limits.csv": {
+      "sha256": "67f300514e0004940f364db34d8c529bbbb828726e432fea8359bf29121b20f4",
+      "bytes": 2697
+    },
+    "data/easter_egg_build_limits.csv": {
+      "sha256": "f47f477954756e47c1f73437192018453e38c1f40a9b4ae476af09365e8406d0",
+      "bytes": 2982
+    },
+    "data/easter_egg_catalog.csv": {
+      "sha256": "419647dab64b58f68c27370d638619af55a51041a5dba1c0b78d70a2951c7cf4",
+      "bytes": 128170
+    },
+    "data/easter_egg_menu_tree.csv": {
+      "sha256": "3f3ac1f53a8033f5b57e688c8da2969c260d2e589d8f5503796f89b543a13a16",
+      "bytes": 87958
+    },
+    "data/easter_egg_recipes.csv": {
+      "sha256": "f6597b48ce6023499dab21894b9021f4bf161e240a83941d27b080f7120d05bc",
+      "bytes": 17910
+    },
+    "data/easter_egg_sacrifice_rewards.csv": {
+      "sha256": "ded06c56a0382bb61b29de7c7e590714c116b17bdd44c6da3809114b7249c0f3",
+      "bytes": 195
+    },
+    "data/explicit_easter_egg_units.csv": {
+      "sha256": "89c6363e1fa35ab0894ca9c85f6dd0ac1cd0ca463ecb41e3db1f312110198fee",
+      "bytes": 19462
+    },
+    "data/lumber_technology_levels.csv": {
+      "sha256": "afcee41e2e1bc018363fc5ed015a2519a6bbef8dd52f86fb4817801f1e1930a8",
+      "bytes": 2838
+    },
+    "data/mercenaries.csv": {
+      "sha256": "0dc78339b19483eb726be3cfce0455a2d09bb48be77744f5b9071dad7aa07db1",
+      "bytes": 34937
+    },
+    "data/mode_rules_x9.json": {
+      "sha256": "02558f084768e9ca82e436b84b76618eb3190d3325f0f021b0faba8e68867ed9",
+      "bytes": 2528
+    },
+    "data/mpq_extract_report.json": {
+      "sha256": "6825f71300d50ffcd3a4916c979bcbdb1b4de4aa9ff354fe8b8ba5596e4bfa13",
+      "bytes": 15430
+    },
+    "data/parse_summary.json": {
+      "sha256": "fef8352181fd667f779112866af35b5240ca6dba9d47b03b7543cc6945242701",
+      "bytes": 920
+    },
+    "data/player_buildable_units.csv": {
+      "sha256": "09a4bcf8cd482b998abcedb9808bc86f4a51261b0eea4e7a949f437ae74d2401",
+      "bytes": 179475
+    },
+    "data/player_unit_abilities.csv": {
+      "sha256": "7ff669beac8de5a9d452b72566228e92b85f0e20d7f24a57f3fcada0c0604dbe",
+      "bytes": 315070
+    },
+    "data/runtime_literal_data.csv": {
+      "sha256": "af668b2a03c482ab9964cb2cc3e6b88a52fb37b1edc2dc67c0fb258dfc72e5b8",
+      "bytes": 195218
+    },
+    "data/script_evidence.csv": {
+      "sha256": "88ad336ce1f155f0d54d7af25cee23ecf61572f40933f6001b49e4a0915e0656",
+      "bytes": 1123
+    },
+    "data/script_rawcode_usage.csv": {
+      "sha256": "ff5046df76564b01501bf7d6e505c4e01f67a0cc4c8aac73fc9a89f03240a0c9",
+      "bytes": 151137
+    },
+    "data/sent_units.csv": {
+      "sha256": "5a9623198ac7cfbf5ef4850770804285713efbfb47d4f78a22f44b2a09a80e8b",
+      "bytes": 34596
+    },
+    "data/source_manifest.json": {
+      "sha256": "298d61365b2a7fd5103a93c25b392540f4640cb084ed8b966bb8153b412a8c2c",
+      "bytes": 2021
+    },
+    "data/special_gold_rewards.csv": {
+      "sha256": "20110a285627620af07b6c067259243285caefe0bac094a942078449bfab7acd",
+      "bytes": 751
+    },
+    "data/unit_upgrade_edges.csv": {
+      "sha256": "001ac1a0f75d9d171a9e56b512d038d0fec7e3bec60b853d40069e6ee9bd2182",
+      "bytes": 38962
+    },
+    "data/unit_upgrade_requirements.csv": {
+      "sha256": "3ac63538cb89a27a0ce997b29b70cfa3531ce17f17ee93e9f1c4901b6e9a1439",
+      "bytes": 35020
+    },
+    "data/validation_report.json": {
+      "sha256": "c9d0da91c26420df618786ccaaa7a423e2189f0c9a4c6a551c30e868d953327a",
+      "bytes": 4778
+    },
+    "data/war3map_w3a_modifications.csv": {
+      "sha256": "16e07e07a174e804b7a8cdd7cad8771b38c673925538fe94d71944f232aa103c",
+      "bytes": 42666
+    },
+    "data/war3map_w3u_modifications.csv": {
+      "sha256": "8caf5a2855e75e3f5346498f0d53a91a313eff357eabe34d9040545dbfd7e7f0",
+      "bytes": 2859
+    },
+    "data/wave_kill_gold.csv": {
+      "sha256": "8e705f9377615e945079c2e9925ca90dd9f5d621251adad51d7148bc5e184507",
+      "bytes": 9391
+    },
+    "data/waves_x9.csv": {
+      "sha256": "99318129a4de8cdf3fe6349485dcd7eb17ef3529fe5f6b49e88322b699ee148f",
+      "bytes": 9843
+    },
+    "data/waves_x9.json": {
+      "sha256": "d173106281d27da42c1ae6ec8a25ce1ff3b1b65d37d02148c4c9e7e54b1e9229",
+      "bytes": 46180
+    },
+    "data/wisp_data.csv": {
+      "sha256": "d3c788d48ec95791ad6e019282b9494965dac838771d7baa02c0c9de6f488399",
+      "bytes": 501
+    },
+    "data/x9_bonus_abilities.csv": {
+      "sha256": "5f435c495d4823bda619974d518206d25b8d7a256d957d996faedd0dfde8397b",
+      "bytes": 397
+    },
+    "data/x9_scripted_skills.csv": {
+      "sha256": "ad5ca832a8a260794ae19477b81687341a2231fcf13e736131e5a37bca0bc6e2",
+      "bytes": 1037
+    },
+    "raw_extracted/war3map.j": {
+      "sha256": "e66c55b3b25b185c991be5613e21fbf5b2d598f3cc40f2f8cd01c23bcb828250",
+      "bytes": 2011786
+    },
+    "raw_extracted/war3mapMisc.txt": {
+      "sha256": "ca9ba18c4305ac72238ee0abc28fbf424ba3b958d2de3bddec767c980eb8345c",
+      "bytes": 1616
+    },
+    "raw_extracted/war3mapSkin.txt": {
+      "sha256": "45e3ec88a88e48f17943e08b75c028e64a5e793754acf040fca6aaf0758a6125",
+      "bytes": 6635
+    },
+    "开发者速查.md": {
+      "sha256": "298491f77080914d0c00609cbe523bacd84d79f8fc66c2fc90feb958c7196034",
+      "bytes": 3843
+    }
+  }
+}

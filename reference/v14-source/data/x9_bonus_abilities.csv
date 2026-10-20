@@ -1,0 +1,5 @@
+﻿unit_rawcode,unit_name,ability_rawcode,ability_name,condition,ability_description
+h0QA,Level3寒冰巨蝎,A1TN,镜像,所有创建时,"制造出1个幻象来迷惑敌人。同时也会驱逐掉剑圣身上所有的魔法效果。
+持续60秒。"
+h009,德莱尼人酋长,A1TP,召唤图腾柱,所有创建时,每秒恢复100生命
+h03O,龙龟,A1TQ,震荡波,仅第20波创建时,击退敌人

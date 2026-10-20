@@ -1,0 +1,177 @@
+{
+  "status": "PASS",
+  "checks_passed": 34,
+  "checks_total": 34,
+  "checks": [
+    {
+      "check": "35 waves",
+      "passed": true,
+      "detail": "rows=35"
+    },
+    {
+      "check": "unique wave numbers",
+      "passed": true,
+      "detail": "wave numbers must be unique"
+    },
+    {
+      "check": "unique wave rawcodes",
+      "passed": true,
+      "detail": "wave rawcodes must be unique"
+    },
+    {
+      "check": "wave names complete",
+      "passed": true,
+      "detail": "no blank wave names"
+    },
+    {
+      "check": "wave HP complete",
+      "passed": true,
+      "detail": "no blank base HP"
+    },
+    {
+      "check": "wave 20 x9 override",
+      "passed": true,
+      "detail": "actual script count=10"
+    },
+    {
+      "check": "wave 30 x9 override",
+      "passed": true,
+      "detail": "actual script count=6"
+    },
+    {
+      "check": "wave 6 HP scale",
+      "passed": true,
+      "detail": "eligible SAPPER at wave 6"
+    },
+    {
+      "check": "wave 11 HP scale",
+      "passed": true,
+      "detail": "eligible SAPPER at wave 11"
+    },
+    {
+      "check": "wave 31 exclusion",
+      "passed": true,
+      "detail": "mechanical unit is not SAPPER"
+    },
+    {
+      "check": "declared attack types agree with object data",
+      "passed": true,
+      "detail": "35/35 expected"
+    },
+    {
+      "check": "known armor display mismatch isolated",
+      "passed": true,
+      "detail": "mismatch_waves=[6, 11, 17, 22, 28, 30, 35]"
+    },
+    {
+      "check": "CSV/JSON wave parity",
+      "passed": true,
+      "detail": "csv=35, json=35"
+    },
+    {
+      "check": "summary wave count",
+      "passed": true,
+      "detail": "summary=35"
+    },
+    {
+      "check": "source SHA-256",
+      "passed": true,
+      "detail": "E079EE0D558552990882FACC4E6F371241A8CA23CFAA272772ABF9B3259FFDB1"
+    },
+    {
+      "check": "platform identity",
+      "passed": true,
+      "detail": "军团战争v14.1A5新彩蛋伊瑟拉"
+    },
+    {
+      "check": "player roster count",
+      "passed": true,
+      "detail": "rows=374"
+    },
+    {
+      "check": "player roster unique and named",
+      "passed": true,
+      "detail": "registered upgrade/Easter roster only"
+    },
+    {
+      "check": "stock campaign buildings excluded",
+      "passed": true,
+      "detail": "do not infer roster from localized 建造/升级 prefixes alone"
+    },
+    {
+      "check": "player ability links",
+      "passed": true,
+      "detail": "rows=1372"
+    },
+    {
+      "check": "upgrade edge count",
+      "passed": true,
+      "detail": "rows=302"
+    },
+    {
+      "check": "upgrade requirements count",
+      "passed": true,
+      "detail": "rows=461"
+    },
+    {
+      "check": "sent unit roster",
+      "passed": true,
+      "detail": "rows=60"
+    },
+    {
+      "check": "wisp x9 values",
+      "passed": true,
+      "detail": "{'rawcode': 'e003', 'name': '小精灵', 'purchase_gold': '50', 'purchase_lumber': '', 'build_time_seconds': '12', 'repair_or_train_time_seconds': '16', 'food_used': '1', 'HP': '120', 'HP_regeneration': '0.5', 'move_speed': '270', 'x9_non_privileged_max_count': '10', 'normal_non_privileged_max_count_before_x9_override': '7', 'technologies': 'R003(总等级1-7),R00H(总等级8-30)', 'abilities': '无敌的', 'tip': '购买 小精灵   W', 'description': '基本工人，可以伐木，造农场。（最高只能购买7个小精灵）', 'source_lines': '12878-12887,13271-13277,24631-24643'}"
+    },
+    {
+      "check": "x9 lumber technology levels",
+      "passed": true,
+      "detail": "all=32, x9=30, level30_bonus=53"
+    },
+    {
+      "check": "actual kill-gold table",
+      "passed": true,
+      "detail": "Ie[Dg] values and object-bounty distinction"
+    },
+    {
+      "check": "Easter catalogue count",
+      "passed": true,
+      "detail": "rows=248"
+    },
+    {
+      "check": "Easter menu tree",
+      "passed": true,
+      "detail": "rows=372; A2YK is the separately registered Ysera entry"
+    },
+    {
+      "check": "Easter hidden/explicit recipes",
+      "passed": true,
+      "detail": "rows=88"
+    },
+    {
+      "check": "explicit Easter objects",
+      "passed": true,
+      "detail": "rows=39"
+    },
+    {
+      "check": "Easter ban rows",
+      "passed": true,
+      "detail": "rows=44"
+    },
+    {
+      "check": "Easter build limits",
+      "passed": true,
+      "detail": "rows=47"
+    },
+    {
+      "check": "Easter sacrifice rewards",
+      "passed": true,
+      "detail": "three sacrifice tiers"
+    },
+    {
+      "check": "CSV UTF-8 BOM",
+      "passed": true,
+      "detail": "files=33"
+    }
+  ]
+}

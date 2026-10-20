@@ -30,7 +30,7 @@ const begin = g => g._updateEntities(0);
 
 test('source crab waits its 0.5-second attack point, hits once, and keeps its total 1.25-second attack cycle', () => {
   const { g, crab, target, damage } = fixture(), hp = target.hp;
-  assert.equal(crab.weapon1.dmgpt1, .5); assert.equal(crab.weapon1.cool1, 1.25);
+  assert.equal(Number(crab.weapon1.dmgpt1), .5); assert.equal(Number(crab.weapon1.cool1), 1.25);
   const position = [crab.worldX, crab.worldY]; begin(g);
   assert.deepEqual(crab.pendingAttack, { targetId: target.id, targetIsKing: false, startedAt: 1, finishAt: 1.5 }); near(target.hp, hp);
   g.tick(.49); near(target.hp, hp); assert.deepEqual([crab.worldX, crab.worldY], position);

@@ -1,6 +1,5 @@
-import { UNITS, MERCENARIES, LEGACY_MERCENARIES, WAVES, RULES, HEROES } from './data.js';
-import { WORKBOOK_BUILDERS, WORKBOOK_POOLS, WORKBOOK_UNIT_TEMPLATES } from './workbook-reference.js';
-import { attachSkills, compileSkills, sourceAuraEffects, tickSourceSkills, sourceAttackStart, sourceOnHit, modifyIncoming, afterSourceDamage, sourceDeath, sourceMoveFactor, canWeaponTarget, sourceWeapon } from './skills.js';
+import { UNITS, MERCENARIES, LEGACY_MERCENARIES, WAVES, RULES, HEROES, BUILDERS, PROPHET_POOLS, UNIT_TEMPLATES } from './data.js';
+import { attachSkills, compileSkills, sourceAuraEffects, tickSourceSkills, sourceAttackStart, sourceOnHit, modifyIncoming, afterSourceDamage, sourceDeath, sourceMoveFactor, canWeaponTarget, sourceWeapon, tickSourceScriptJobs } from './skills.js';
 import { MAP, laneToWorld, worldToLane, kingWorld, spawnWarpWorld, supportWorld, routePoints, isWalkable, isSegmentWalkable, constrainPoint, closestWalkable, navigationPath } from './layout.js';
 
 const units = Object.fromEntries(UNITS.map(u => [u.id, u]));
@@ -17,11 +16,20 @@ const copy = o => JSON.parse(JSON.stringify(o));
 const abilityOf = u => typeof u?.ability === 'string' ? { type: u.ability, value: .35 } : u?.ability;
 const baseUnits = UNITS.filter(u => !u.legacy && (u.randomPool || u.isBase));
 const rule = (key, fallback) => value(RULES, [key], fallback);
+const isSourceUnit = u => ['5.0dJF-workbook', 'v14.1A5-dataset'].includes(u?.provenance);
+const isV14 = u => u?.sourceVersion === 'v14.1A5' || u?.provenance === 'v14.1A5-dataset';
+const rawcode = u => u?.sourceRawcode ?? u?.combatRawcode ?? u?.rawcode;
+const sourceLimits = Object.fromEntries(UNITS.filter(u=>!u.legacy && u.buildLimit!==undefined && u.buildLimit!==null && Number.isFinite(Number(u.buildLimit)) && Number(u.buildLimit)>=0).map(u=>{
+  const details=u.buildLimitDetails??u.buildLimits??[], list=Array.isArray(details)?details:[details], detail=list.at(-1)??{};
+  return [rawcode(u),{...detail,unitRawcode:rawcode(u),maxAllowed:Number(u.buildLimit),scope:u.buildLimitScope??detail.scope??'type'}];
+}));
+
+
 
 /** Deterministic, DOM-free simulation. tick receives real elapsed seconds; speed is applied here. */
 export class Game {
   constructor(options = {}) {
-    this.options = { seed: options.seed ?? 42, difficulty: options.difficulty ?? 'normal', builderId: options.builderId ?? 'builder_u00T', ggEnabled: options.ggEnabled ?? RULES.ggEnabled ?? true };
+    this.options = { seed: options.seed ?? 42, difficulty: options.difficulty ?? 'normal', builderId: options.builderId ?? RULES.defaultBuilderId ?? BUILDERS[0]?.id, ggEnabled: options.ggEnabled ?? RULES.ggEnabled ?? true };
     this._rng = (Number(this.options.seed) || 42) >>> 0;
     this._id = 0;
     this._spawnQueue = [];
@@ -34,11 +42,11 @@ export class Game {
     const names = ['你', '青岚 · 队友', '铁壁 · 队友', '星火 · 队友', '赤锋 · 对手', '暗潮 · 对手', '霜刃 · 对手', '影木 · 对手'];
     this.state = {
       map: { id: MAP.id, version: MAP.version, topology: '2x2-crossbar-stem' },
-      phase: 'build', wave: 1, timer: this.buildDuration(1), time: 0, dataRevision: RULES.dataRevision ?? '5.0dJF-web9',
+      phase: 'build', wave: 1, timer: this.buildDuration(1), time: 0, sourceVersion: RULES.sourceVersion, dataRevision: RULES.dataRevision ?? '5.0dJF-web9',
       speed: 1, paused: false, winner: null, difficulty: this.options.difficulty, seed: this.options.seed,
       players: names.map((name, id) => ({ id, name, team: id < 4 ? 0 : 1,
         gold: initialGold, wood: rule('initialWood', 40), income: rule('initialIncome', 5),
-        workers: rule('initialWorkers', 1), lumberLevel: 0, economyTasks: { workerQueue: [], lumberTask: null }, buildings: [], builderId: id === 0 ? this.options.builderId : this._pick(WORKBOOK_BUILDERS.filter(b=>b.mode!=='morph'))?.id ?? 'builder_u00T', roster: [],
+        workers: rule('initialWorkers', 1), lumberLevel: 0, technologies: { R0GK: 1 }, entitlements: {}, economyTasks: { workerQueue: [], lumberTask: null }, buildings: [], builderId: id === 0 ? this.options.builderId : this._pick(BUILDERS.filter(b=>b.mode!=='morph'))?.id ?? RULES.defaultBuilderId ?? BUILDERS[0]?.id, roster: [],
         mercStocks: Object.fromEntries(MERCENARIES.map(m => [m.id, { stock: this._mercenaryMaxStock(m), nextReadyAt: null }])),
         populationCap: rule('initialPopulation', 40), popUsed: rule('initialWorkers', 1), heroId: null, healUsed: false, rerolls: 0, stats: { kills: 0, leaks: 0, warps: 0, sent: 0, damage: 0, goldEarned: 0, wavesHeld: 0 }
       })),
@@ -46,12 +54,12 @@ export class Game {
         attack: rule('kingDamage', 135), regen: rule('kingRegen', 4), healCharges: rule('kingHealCharges', 4),
         armor: rule('kingArmor', 8), armorType: 'hero', attackType: 'hero', autoUpgradeCount: 0, healBlockedUntil: 0,
         id:`king-${team}`,unitId:'king',side:'defender',battleTeam:team,laneId:8+team,status:{},targetType:'structure',traits:['mechanical'],isBuilding:true,hpLevel: 0, attackLevel: 0, regenLevel: 0, attackCd: 0, worldX: kingWorld(team).x, worldY: kingWorld(team).y, radius: .8 })),
-      entities: [], events: [], logs: [], pendingSends: [], kingBountyPools: [0, 0],
+      entities: [], sourceSkillJobs: [], events: [], logs: [], pendingSends: [], kingBountyPools: [0, 0], teamLeakFlags: [false, false],
       metrics: { spawned: 0, killed: 0, leaked: 0 },
     };
     for (const p of this.state.players) p.roster = this._roster(p.builderId);
-    this._log('军团战争5.0dJF：按来源建造军团，发展木材，与队友共同守护国王。');
-    this._log('采用文档主配置怪量；技能与机制是静态字段的Web模拟，缺失项在图鉴明确标注。');
+    this._log(`${RULES.title}：按来源建造军团，发展木材，与队友共同守护国王。`);
+    this._log('采用v14.1A5九倍实怪数量和HP；静态数据与Web近似、原脚本冲突均保留来源说明。');
     for (let id = 1; id < 8; id++) this._aiBuild(this.state.players[id], true);
   }
 
@@ -63,17 +71,79 @@ export class Game {
   }
   _uid(prefix = 'e') { return `${prefix}${++this._id}`; }
   _pick(items) { return items.length ? items[Math.floor(this._random() * items.length)] : undefined; }
-  _roster(builderId = this.options?.builderId ?? 'builder_u00T') {
-    const builder=WORKBOOK_BUILDERS.find(b=>b.id===builderId||b.rawcode===builderId)??WORKBOOK_BUILDERS.find(b=>b.mode==='prophet');
-    if(builder?.mode==='prophet')return WORKBOOK_POOLS.map(pool=>this._pick(pool.filter(id=>units[id]))).filter(Boolean);
+  _roster(builderId = this.options?.builderId ?? RULES.defaultBuilderId ?? BUILDERS[0]?.id) {
+    const builder=BUILDERS.find(b=>b.id===builderId||b.rawcode===builderId)??BUILDERS.find(b=>b.mode==='prophet');
+    if(builder?.mode==='prophet')return PROPHET_POOLS.map(pool=>this._pick(pool.filter(id=>units[id]))).filter(Boolean);
     if(builder)return builder.rosterIds.filter(id=>units[id]);
     return baseUnits.slice(0,6).map(u=>u.id);
   }
   _military(p) {return p.buildings.filter(b=>!b.construction).reduce((sum,b)=>sum+value(units[b.unitId],['sourcePoints'],b.totalSpent??b.spent??this._cost(units[b.unitId])),0);}
-  _requirement(p,u){const military={u00Q:350,u00N:600,u00R:1200,u012:1600,u00S:2000,u00Y:4800};for(const id of u.requires??[])if(military[id]&&this._military(p)<military[id])return `需要军力 ${military[id]}`;return ''; }
+  _buildLimitCount(p, limit, excludeBuildingId) {
+    return p.buildings.filter(b=>b.id!==excludeBuildingId && (
+      rawcode(units[b.unitId])===limit.unitRawcode || rawcode(units[b.construction?.targetId])===limit.unitRawcode ||
+      limit.scope==='lineage' && b.limitOrigins?.includes(limit.unitRawcode)
+    )).length;
+  }
+  buildLimitStatus(unitId, playerId = 0, excludeBuildingId) {
+    const u=typeof unitId==='object'?unitId:units[unitId],p=this.state.players[playerId],limit=sourceLimits[rawcode(u)];
+    if(!limit||!p)return {canStart:true,reason:'',current:0,max:null,scope:null};
+    const current=this._buildLimitCount(p,limit,excludeBuildingId),canStart=current<limit.maxAllowed;
+    return {canStart,reason:canStart?'':`${u.name}来源限造${limit.maxAllowed}个（含施工及预留）`,current,max:limit.maxAllowed,scope:limit.scope,rawcode:limit.unitRawcode,source:limit.source};
+  }
+  _recordLimitOrigins(b, def) {
+    const next=sourceLimits[rawcode(def)];b.limitOrigins??=[];
+    // Native base_id keeps a normal lineage through unlimited upgrades; a new
+    // limited branch replaces marker-free base groups (JASS28440—28447).
+    if(next)b.limitOrigins=b.limitOrigins.filter(id=>id===next.unitRawcode || sourceLimits[id]?.counterMarkerRawcode);
+    if(next?.scope==='lineage'&&!b.limitOrigins.includes(next.unitRawcode))b.limitOrigins.push(next.unitRawcode);
+  }
+  /** A missing external entitlement/technology is a locked source condition. */
+  requirementStatus(unitId, playerId = 0) {
+    const u = typeof unitId === 'object' ? unitId : units[unitId], p = this.state.players[playerId];
+    if (!u || !p) return { canStart: false, reason: '兵种或玩家不存在', requirements: [] };
+    let source = u.requiresDetails ?? u.requirements ?? u.requires ?? [];
+    if (typeof source === 'string') source = source.split(',').filter(Boolean);
+    const requirements = source.map(item => {
+      const r = typeof item === 'string' ? { rawcode: item } : item;
+      const id = r.rawcode ?? r.requirement_rawcode ?? r.id, name = r.name ?? r.requirement_name ?? id;
+      const required = Math.max(1, number(r.amount ?? r.required ?? r.level, 1));
+      let kind = r.kind ?? r.requirement_kind ?? 'unit_or_requirement_marker', current = 0, threshold = RULES.militaryRequirements?.[id];
+      if (!threshold && /兵力要求/.test(name)) threshold = Number(name.match(/(\d+)/)?.[1]);
+      const counter=Object.values(sourceLimits).find(limit=>limit.counterMarkerRawcode===id);
+      if(counter){kind='capacity_marker';current=this._buildLimitCount(p,counter)<counter.maxAllowed?1:0;}
+      else if (id === 'u004') { kind = 'battle_end'; current = this.state.phase === 'build' ? 1 : 0; }
+      else if (threshold) { kind = 'military'; current = this._military(p); return { rawcode: id, name, kind, required: threshold, current, met: current >= threshold }; }
+      else if (/赞助|会员|荣誉|道具|皮肤|尊享/.test(name) || ['h200','h210','h220','h230','h240'].includes(id)) { kind = 'entitlement'; current = number(p.entitlements?.[id],0); }
+      else if (kind === 'technology' || /^R/.test(id)) {
+        kind = 'technology';
+        current = id === 'R003' ? Math.min(rule('lumberBasicLevelCap',7),p.lumberLevel) : id === 'R00H' ? Math.max(0,p.lumberLevel-rule('lumberBasicLevelCap',7)) : id === 'R000' ? this.state.kings[p.team].hpLevel : id === 'R001' ? this.state.kings[p.team].attackLevel : id === 'R002' ? this.state.kings[p.team].regenLevel : number(p.technologies?.[id],0);
+      } else { kind = 'owned_unit'; current = p.buildings.filter(b => !b.construction && rawcode(units[b.unitId]) === id).length; }
+      return { rawcode: id, name, kind, required, current, met: current >= required };
+    });
+    const limit=this.buildLimitStatus(u,playerId);
+    if(limit.max!==null)requirements.push({rawcode:limit.rawcode,name:`限造${limit.max}个`,kind:'build_limit',required:limit.max,current:limit.current,met:limit.canStart});
+    const failed = requirements.find(r => !r.met);
+    return { canStart: !failed, reason: failed ? failed.kind === 'build_limit' ? limit.reason : failed.kind === 'capacity_marker' ? `数量限制：${failed.name}` : failed.kind === 'military' ? `需要军力 ${failed.required}` : failed.kind === 'battle_end' ? '等到战斗结束' : `${failed.kind === 'entitlement' ? '来源资格未具备' : '未满足来源条件'}：${failed.name}` : '', requirements };
+  }
+  _requirement(p,u) { return this.requirementStatus(u,p.id).reason; }
+  kingUpgradeCap(stat) {
+    const early = RULES.kingEarlyUpgradeCaps?.[stat], cap = number(RULES.kingUpgradeCaps?.[stat],15);
+    return early && this.state.wave < early.beforeWave ? Math.min(cap,early.cap) : cap;
+  }
+  kingHealAmount(team = 0) {
+    const k = this.state.kings[team];
+    return k ? Number.isFinite(RULES.kingHealFraction) ? k.maxHp * RULES.kingHealFraction : rule('kingHealAmount',10000) : 0;
+  }
+  _sourceLifeScale(def, wave = this.state.wave) {
+    if (!isV14(def) || wave <= 5) return 1;
+    const flags = String(def.unitTypeFlags ?? def.sourceRawFields?.type ?? def.type ?? '').toLowerCase().split(',');
+    const eligible = def.sapperScalingTarget ?? def.sapScalingTarget ?? def.x9SapperScalingApplies ?? (flags.includes('sapper') && !flags.some(f=>['summoned','giant'].includes(f)) && !def.isBuilding && number(def.sourceRawFields?.isbldg,0)!==1);
+    return eligible ? wave <= 10 ? 1.5 : 3 : 1;
+  }
+
   _kingPosition(team){const k=this.state.kings[team];return Number.isFinite(k?.worldX)?{x:k.worldX,y:k.worldY}:kingWorld(team);}
-  _sourceBuilder(p) {return WORKBOOK_BUILDERS.find(b=>b.id===p.builderId||b.rawcode===p.builderId);}
-  _resolveMorph(u) {if(!u?.morphProxy)return u;const choices=(u.morphTargets?.length?u.morphTargets:WORKBOOK_POOLS[Math.max(0,(u.tier??1)-1)]??[]).map(v=>typeof v==='string'?units[v]:units[v.id]).filter(Boolean);return this._pick(choices)??null;}
+  _sourceBuilder(p) {return BUILDERS.find(b=>b.id===p.builderId||b.rawcode===p.builderId);}
+  _resolveMorph(u) {if(!u?.morphProxy)return u;const choices=(u.morphTargets?.length?u.morphTargets:PROPHET_POOLS[Math.max(0,(u.tier??1)-1)]??[]).map(v=>typeof v==='string'?units[v]:units[v.id]).filter(Boolean);return this._pick(choices)??null;}
 
   _log(text) { this.state.logs.push({ time: this.state.time, text }); if (this.state.logs.length > 100) this.state.logs.shift(); }
   _event(type, entity, text, extra = {}) {
@@ -131,7 +201,7 @@ export class Game {
   }
   _woodRate(p) {
     const difficulty = p.team === 1 ? ({ easy: .85, normal: 1, hard: 1.18 }[this.options.difficulty] ?? 1) : 1;
-    const payload=rule('lumberBasePayload',2)+Math.min(8,p.lumberLevel)*rule('lumberBasicPayloadPerLevel',1)+Math.max(0,p.lumberLevel-8)*rule('lumberAdvancedPayloadPerLevel',2);
+    const basicCap=rule('lumberBasicLevelCap',7),payload=rule('lumberBasePayload',2)+Math.min(basicCap,p.lumberLevel)*rule('lumberBasicPayloadPerLevel',1)+Math.max(0,p.lumberLevel-basicCap)*rule('lumberAdvancedPayloadPerLevel',2.5);
     return p.workers * payload / rule('gatheringCycleSeconds',10);
   }
   _taskStatus(task) {
@@ -169,7 +239,7 @@ export class Game {
   }
   _completeConstruction(p, b) {
     if (!b.construction) return;
-    b.unitId = b.construction.targetId; b.construction = null;
+    b.unitId = b.construction.targetId; b.construction = null; this._recordLimitOrigins(b,units[b.unitId]);
     if (p.id === 0) this._event('build', { laneId: p.id, x: b.col + .5, y: b.row + 4.5 }, `${units[b.unitId]?.name ?? ''}施工完成`);
   }
   _completeMilitaryConstruction() {
@@ -207,15 +277,16 @@ export class Game {
   /** Preparation time for the wave about to start. Arena/overtime remain Web rounds. */
   buildDuration(wave = this.state?.wave ?? 1) {
     if (wave === 1) return rule('firstBuildSeconds', 80);
-    if (wave === 31) return 60;
-    if (wave >= 32) return 50;
+    if (wave === rule('overtimeStartWave',31)) return rule('overtimePreparationSeconds',60);
+    if (wave >= 32) return rule('overtimeWaveInterval',50);
     return 40 + Math.floor(wave / 2);
   }
   _mercenaryLocked(m) {
+    if (m.shopPreview || this._mercenaryMaxStock(m) === 0) return true;
     const unlock = value(m, ['unlock', 'unlockWave', 'wave', 'minWave'], 1);
     return this.state.wave < unlock || (this.state.wave === unlock && m.unlockPhase === 'combat' && this.state.phase === 'build');
   }
-  _mercenaryMaxStock(m) { return Math.max(1, Math.floor(value(m, ['stockMax', 'maxStock'], MERCENARY_MAX_STOCK))); }
+  _mercenaryMaxStock(m) { return Math.max(0, Math.floor(value(m, ['stockMax', 'maxStock'], MERCENARY_MAX_STOCK))); }
   _mercenaryCooldown(m) { return Math.max(.001, value(m, ['cooldown', 'stockRegen', 'cd'], 4)); }
   _mercenarySlot(p, m) {
     p.mercStocks ??= {};
@@ -247,12 +318,12 @@ export class Game {
     const remaining = slot.stock >= maxStock ? 0 : Math.max(0, slot.nextReadyAt - this.state.time);
     const locked = this._mercenaryLocked(m);
     return { stock: locked ? 0 : slot.stock, maxStock, cooldown, remaining,
-      progress: slot.stock >= maxStock ? 1 : clamp(1 - remaining / cooldown, 0, 1), locked };
+      progress: slot.stock >= maxStock ? 1 : clamp(1 - remaining / cooldown, 0, 1), locked, reason: m.shopPreview || maxStock === 0 ? '源记录未确认可购买库存，仅供图鉴参考' : locked ? '尚未达到来源解锁波次' : '' };
   }
   _armorFactor(armor) {
     return armor >= 0 ? 1 / (1 + .06 * armor) : 1 + (.06 * Math.abs(armor)) / (1 + .06 * Math.abs(armor));
   }
-  _typeMultiplier(attackType, armorType) { return number(RULES.attackMultipliers?.[attackType]?.[armorType], 1); }
+  _typeMultiplier(attackType, armorType, armorTypeRaw) { const key = armorTypeRaw === 'normal' ? 'normalArmor' : armorTypeRaw === 'none' ? 'unarmored' : armorType; return number(RULES.attackMultipliers?.[attackType]?.[key], 1); }
   /** Per-target strongest effects, shared by lane combat and king combat. */
   _auraEffects(target, auras = []) {
     let damage = 0, speed = 0, slow = 0, armor = 0, healRate = 0;
@@ -302,7 +373,8 @@ export class Game {
         const resultUnit=this._resolveMorph(u);if(!resultUnit)return this._result(false,'变形候选池为空，源数据待核定');
         p.gold -= cost;p.wood-=woodCost;
         const building = { id: this._uid('b'), unitId: resultUnit.id, col, row, spent: cost, totalSpent: cost, sourceProxy: u.morphProxy?u.id:null };
-        if(u.provenance==='5.0dJF-workbook'){const duration=number(u.buildingRawFields?.bldtm,0);if(duration>0)building.construction={startAt:this.state.time,finishAt:this.state.time+duration,duration,targetId:resultUnit.id};building.unitId=u.id;building.builtWave=this.state.wave;if(u.heroEntry)p.heroAltarUsed=true;}
+        if(isSourceUnit(u)){const duration=number(u.buildTime??u.buildingRawFields?.bldtm,0);if(duration>0)building.construction={startAt:this.state.time,finishAt:this.state.time+duration,duration,targetId:resultUnit.id};building.unitId=u.id;building.builtWave=this.state.wave;if(u.heroEntry)p.heroAltarUsed=true;}
+        if(!building.construction)this._recordLimitOrigins(building,resultUnit);
         p.buildings.push(building);
         this._event('build', { laneId: p.id, x: col + .5, y: row + 4.5 }, u.name);
         return this._result(true, `已建造 ${resultUnit.name}${u.morphProxy?'（变形）':''}`);
@@ -320,7 +392,8 @@ export class Game {
         const cost = value(u, ['upgradeCost', 'upgradeGold'], this._cost(u));
         const woodCost=number(u.woodCost,0);
         if (p.gold + 1e-8 < cost || p.wood+1e-8<woodCost) return this._result(false, `升级需要 ${cost} 金币、${woodCost} 木材`);
-        p.gold -= cost;p.wood-=woodCost; const duration=number(u.buildingRawFields?.bldtm,0);if(u.provenance==='5.0dJF-workbook'&&duration>0)b.construction={startAt:this.state.time,finishAt:this.state.time+duration,duration,targetId:u.id};else b.unitId=u.id; b.spent = (b.spent ?? this._cost(old)) + cost; b.totalSpent = b.spent;
+        p.gold -= cost;p.wood-=woodCost; const duration=number(u.buildTime??u.buildingRawFields?.bldtm,0);if(isSourceUnit(u)&&duration>0)b.construction={startAt:this.state.time,finishAt:this.state.time+duration,duration,targetId:u.id};else b.unitId=u.id; b.spent = (b.spent ?? this._cost(old)) + cost; b.totalSpent = b.spent;
+        if(!b.construction)this._recordLimitOrigins(b,u);
         this._event('upgrade', { laneId: p.id, x: b.col + .5, y: b.row + 4.5 }, u.name);
         return this._result(true, `已升级为 ${u.name}`);
       }
@@ -328,7 +401,7 @@ export class Game {
         if (this.state.phase !== 'build') return this._result(false, '战斗中无法出售');
         const found = this._building(payload.buildingId);
         if (!found || found.p.id !== p.id) return this._result(false, '请选择自己的建筑');
-        const def=units[found.b.unitId];if(def.provenance==='5.0dJF-workbook'&&!def.buildingAbilityIds?.includes('A008'))return this._result(false,'该源建筑没有出售指令');
+        const def=units[found.b.unitId];if(isSourceUnit(def)&&!(def.buildingAbilityIds??def.abilityIds??[]).includes('A008'))return this._result(false,'该源建筑没有出售指令');
         const raw=def.sourceRawcode,ratio=found.b.builtWave===this.state.wave?1:['h06K','h06L'].includes(raw)?.75:['h07Q','h07R'].includes(raw)?.9:rule('sellRatio',.5);
         const refund = Math.floor(value(def,['sourcePoints'],found.b.spent??this._cost(def))*ratio);
         p.gold += refund; p.buildings = p.buildings.filter(b => b.id !== found.b.id);
@@ -339,12 +412,12 @@ export class Game {
         if(p.builderChoices?.length)return this._result(false,'请先选择本次候选建造者');
         const index=p.raceChanges??0,costs=RULES.raceChangeCosts??Array.from({length:5},(_,i)=>({gold:RULES.builderChangeGoldCosts?.[i]??50*i,wood:RULES.builderChangeWoodCosts?.[i]??100*(i+1)})),cost=costs[index];if(!cost)return this._result(false,'种族更换次数已用尽');
         if(p.gold<cost.gold||p.wood<cost.wood)return this._result(false,`更换需要 ${cost.gold} 金币、${cost.wood} 木材`);
-        p.gold-=cost.gold;p.wood-=cost.wood;p.raceChanges=index+1;const candidates=[...WORKBOOK_BUILDERS];const first=this._pick(candidates),second=this._pick(candidates.filter(b=>b.id!==first.id));p.builderChoices=[first.id,second.id];return this._result(true,'请选择本次随机的两种建造者之一');
+        p.gold-=cost.gold;p.wood-=cost.wood;p.raceChanges=index+1;const candidates=[...BUILDERS];const first=this._pick(candidates),second=this._pick(candidates.filter(b=>b.id!==first.id));p.builderChoices=[first.id,second.id];return this._result(true,'请选择本次随机的两种建造者之一');
       }
       case 'builder': {
         if(this.state.phase!=='build')return this._result(false,'请在备战期选择建造者');
         if(!p.builderChoices?.includes(payload.builderId))return this._result(false,'请先支付种族更换费用，仅可选择本次两种候选');
-        const builder=WORKBOOK_BUILDERS.find(b=>b.id===payload.builderId||b.rawcode===payload.builderId);if(!builder)return this._result(false,'建造者不存在');
+        const builder=BUILDERS.find(b=>b.id===payload.builderId||b.rawcode===payload.builderId);if(!builder)return this._result(false,'建造者不存在');
         p.builderId=builder.id;p.roster=this._roster(builder.id);p.builderChoices=[];return this._result(true,`已选择${builder.name}`);
       }
       case 'stim':
@@ -352,8 +425,8 @@ export class Game {
         if(this.state.phase!=='build')return this._result(false,'形态指令仅限备战期');
         const found=this._building(payload.buildingId);if(!found||found.p.id!==p.id)return this._result(false,'请选择自己的建筑');
         const b=found.b,u=units[b.unitId];if(b.construction)return this._result(false,'施工完成后才可切换形态');
-        if(u.sourceRawcode==='h06I'){if(p.gold<75)return this._result(false,'兴奋剂需要75金币');p.gold-=75;b.unitId='b_h076';b.temporaryForm='b_h06I';b.stimulatedWave=this.state.wave;return this._result(true,'兴奋剂已激活，本波结束后复原');}
-        const next=u.sourceRawcode==='h062'?'b_h05Q':u.sourceRawcode==='h05Q'?'b_h062':null;if(!next||!units[next])return this._result(false,'该建筑没有原生转换形态');
+        if(u.sourceRawcode==='h06I'){if(p.gold<75)return this._result(false,'兴奋剂需要75金币');p.gold-=75;b.unitId=isV14(u)?'v14_h076':'b_h076';b.temporaryForm=u.id;b.stimulatedWave=this.state.wave;return this._result(true,'兴奋剂已激活，本波结束后复原');}
+        const prefix=isV14(u)?'v14_':'b_',next=u.sourceRawcode==='h062'?`${prefix}h05Q`:u.sourceRawcode==='h05Q'?`${prefix}h062`:null;if(!next||!units[next])return this._result(false,'该建筑没有原生转换形态');
         b.construction={startAt:this.state.time,finishAt:this.state.time+1,duration:1,targetId:next};return this._result(true,'攻防转换中，1秒后完成');
       }
       case 'morph': {
@@ -400,6 +473,7 @@ export class Game {
       }
       case 'merc': {
         const m = mercs[payload.mercId]; if (!m) return this._result(false, '木怪不存在');
+        if(m.shopPreview || this._mercenaryMaxStock(m) === 0)return this._result(false,'此来源记录未确认可购买库存，仅供图鉴参考');
         const unlock = value(m, ['unlock', 'unlockWave', 'wave', 'minWave'], 1);
         if (this._mercenaryLocked(m)) return this._result(false, `第 ${unlock} 波${m.unlockPhase === 'combat' ? '开战时' : ''}解锁`);
         const cost = this._woodCost(m);
@@ -410,11 +484,12 @@ export class Game {
         // Spending another stocked charge must not restart a recharge in flight.
         if (slot.stock === status.maxStock) slot.nextReadyAt = this.state.time + status.cooldown;
         slot.stock--;
-        p.wood -= cost; p.income += value(m, ['income', 'incomeGain'], Math.max(1, Math.floor(cost / 25)));
+        const credit = isV14(m) ? Math.floor(value(m,['sourcePoints','unitPointValue','income'],0)/(this.state.wave >= rule('sentIncomeHalvingFromWave',11)?2:1)) : value(m, ['income', 'incomeGain'], Math.max(1, Math.floor(cost / 25)));
+        p.wood -= cost; p.income += credit;
         const send = { id: this._uid('send'), mercId: m.id, senderId: p.id, laneId: null, dispatch: true, wave: this.state.wave + (this.state.phase === 'combat' ? 1 : 0), count: 1 };
         this.state.pendingSends.push(send); p.stats.sent++;
         if (p.id === 0) this._log(`${p.name} 派出 ${m.name}，将于第 ${send.wave} 波开战时平均分配至敌军各路。`);
-        return this._result(true, `${m.name} 已排队，收入增加`);
+        return this._result(true, `${m.name} 已排队，收入 +${credit}`);
       }
       case 'kingMove': {
         if(this.state.wave<31)return this._result(false,'第31波解除扎根后才可移动国王');
@@ -428,7 +503,7 @@ export class Game {
         const king = this.state.kings[p.team], stat = payload.stat;
         if (!['hp', 'attack', 'regen'].includes(stat)) return this._result(false, '请选择生命、攻击或恢复');
         const cost = rule('kingUpgradeCost', 80), key = `${stat}Level`;
-        const cap = number(RULES.kingUpgradeCaps?.[stat], rule('kingUpgradeMax', 15));
+        const cap = this.kingUpgradeCap(stat);
         if (king[key] >= cap) return this._result(false, '当前阶段已达上限');
         if (p.wood < cost) return this._result(false, `国王强化需要 ${cost} 木材`);
         p.wood -= cost; p.income += rule('kingIncome', 3); king[key]++;
@@ -444,7 +519,7 @@ export class Game {
         if (king.hp >= king.maxHp) return this._result(false, '国王生命已满');
         if ((king.healBlockedUntil ?? 0) > this.state.time) return this._result(false, '队伍治疗间隔中，请稍后再用');
         p.healUsed = true; king.healCharges--;
-        const amount = Math.min(king.maxHp - king.hp, rule('kingHealAmount', 10000)); king.hp += amount;
+        const amount = Math.min(king.maxHp - king.hp, this.kingHealAmount(p.team)); king.hp += amount;
         king.healBlockedUntil = this.state.time + rule('kingHealLockSeconds', 2);
         this._event('heal', { laneId: 8 + p.team, x: 3, y: 11.5 }, `+${amount}`);
         this._log(`${p.name} 治疗国王，队伍剩余 ${king.healCharges} 次。`);
@@ -507,6 +582,7 @@ export class Game {
     while (this._spawnQueue.length && this._spawnQueue[0].at <= this._roundTime) {
       const next = this._spawnQueue.shift(); this._spawnMonster(next);
     }
+    tickSourceScriptJobs(this,dt);
     this._updateEntities(dt);
     if(s.roundMode==='arena'){this._clearDead();s.arenaRemaining=Math.max(0,(s.arenaRemaining??120)-dt);const alive=[0,1].map(team=>s.entities.some(e=>e.team===team&&e.hp>0));if(!alive[0]||!alive[1]||s.arenaRemaining<=0)this._endArena(alive);return;}
     this._updateKings(dt);
@@ -530,23 +606,24 @@ export class Game {
     if (this.state.phase !== 'build') return;
     const s = this.state;
     if(s.roundMode==='arena-prep'){this._startArena();return;}
-    if(s.roundMode==='arena-transition'){s.wave++;s.roundMode='normal';s.timer=30;s.entities=[];return;}
+    if(s.roundMode==='arena-transition'){s.wave++;s.roundMode='normal';s.timer=rule('arenaNextPreparationSeconds',30);s.entities=[];return;}
     this._completeMilitaryConstruction();
     const w = this._waveData();
-    const reference=[250,350,500,650,800,1000,1200,1450,1600,1850,2050,2400,2700,3100,3500,4000,4500,5000,5500,6000,6500,7100,7700,8500,9500,10600,11800,13000,14000,15000,16000,17000,18000,19000,20000][s.wave-1]??1;
+    const reference=value(w,['recommendedPower'],[250,350,500,650,800,1000,1200,1450,1600,1850,2050,2400,2700,3100,3500,4000,4500,5000,5500,6000,6500,7100,7700,8500,9500,10600,11800,13000,14000,15000,16000,17000,18000,19000,20000][s.wave-1]??1);
     for(const p of s.players){const factor=this._military(p)/reference-(p.sourceLeaks??0)/150;p.leakBountyFactor=this.options.ggEnabled?factor>=1?1:factor>=.1?factor:0:0;}
-    s.phase = 'combat'; s.timer = 0; s.entities = []; this._spawnQueue = []; this._roundTime = 0; this._settledLanes = []; this._overtime = false; this._warpTimer = 0; this._battleAuras = [[], []];
+    s.phase = 'combat'; s.timer = 0; s.entities = []; s.sourceSkillJobs = []; s.teamLeakFlags = [false,false]; this._spawnQueue = []; this._roundTime = 0; this._settledLanes = []; this._overtime = false; this._warpTimer = 0; this._battleAuras = [[], []];
     if(s.wave>=31)s.continuousRemaining=s.wave<35?50:null;
     const boss = !!(w.boss ?? w.isBoss ?? this.state.wave % 10 === 0);
     const baseCount = value(w, ['baseCount', 'quantity'], boss ? 1 : 5);
     // New reference waves carry an explicit adapted count. Old data still works.
     const monsterCount = Math.max(0, Math.floor(value(w, ['count'], boss ? value(w, ['bossCount'], baseCount) : baseCount * rule('monsterMultiplier', 9))));
     s.waveInfo = { ...w, baseHp: w.hp, baseDamage: w.damage, hp: w.hp * (boss ? 1 : rule('webMonsterHpScale', .25)), damage: w.damage * (boss ? 1 : rule('webMonsterDamageScale', .20)), isBoss: boss, actualCount: monsterCount };
+    const waveBatches=Array.from({length:monsterCount},()=>{const substitute=s.wave>=rule('nextWaveSubstitutionFrom',6)&&s.wave<=rule('nextWaveSubstitutionThrough',28)&&!boss&&this._random()<rule('nextWaveSubstitutionProbability',.1);return {wave:substitute?(WAVES.find(n=>Number(n.wave??n.id)===s.wave+1)??w):w,substituted:substitute};});
     for (const p of s.players) {
       p.roundLeaks = 0; p.supportAnnounced = false;
       for (const b of p.buildings.filter(b=>!b.construction)) this._spawnDefender(units[b.unitId], p, b.col + .5, b.row + 4.5, b.id);
       if (p.heroId && heroes[p.heroId]) this._spawnDefender(heroes[p.heroId], p, 3, 8.7, `hero-${p.id}`, true);
-      for (let i = 0; i < monsterCount; i++) this._spawnQueue.push({ at: (i + 1) * rule('spawnInterval', .1), laneId: p.id, wave: w, boss,
+      for (let i = 0; i < monsterCount; i++) this._spawnQueue.push({ at: (i + 1) * rule('spawnInterval', .1), laneId: p.id, wave: waveBatches[i].wave, sourceWave:s.wave, substituted:waveBatches[i].substituted, boss: waveBatches[i].substituted ? !!waveBatches[i].wave.boss : boss,
         x: clamp(3 + (i % 6 - 2.5) * (rule('spawnSpreadWidth', 1.8) / 5) + (this._random() - .5) * .04, 3 - rule('spawnSpreadWidth',1.8)/2, 3 + rule('spawnSpreadWidth',1.8)/2), y: .3 });
     }
     const sends = s.pendingSends.filter(v => v.wave <= s.wave);
@@ -572,11 +649,15 @@ export class Game {
     this._event('wave', { laneId: -1, x: 3, y: 4 }, `第 ${s.wave} 波`);
   }
   _entity(def, overrides) {
-    const hp = value(def, ['hp', 'health', 'maxHp'], 180);
+    let hp = value(def, ['hp', 'health', 'maxHp'], 180);
+    // The native creation hook affects every freshly created eligible template,
+    // including death respawns; exported wave HP already contains this multiplier.
+    if(isV14(def) && !Number.isFinite(def.x9HpScale))hp*=this._sourceLifeScale(def);
+    if(isV14(def) && def.x9InjectedSkills?.length){ const added=def.x9InjectedSkills.filter(a=>typeof a==='string'||!a.wave||a.wave===this.state.wave).map(a=>typeof a==='string'?a:a.rawcode??a.abilityRawcode??a.abilityId??a.id);def={...def,abilityIds:[...new Set([...(def.abilityIds??[]),...added])],sourceAbilityIds:[...new Set([...(def.sourceAbilityIds??def.abilityIds??[]),...added])]}; }
     const rawAbility = abilityOf(def);
     const ability = rawAbility ? { ...rawAbility, radius: rawAbility.radius > 10 ? rawAbility.radius / 100 : rawAbility.radius } : null;
     const e = {
-      id: this._uid(), unitId: def.id ?? 'unit', name: def.name ?? '战士',
+      id: this._uid(), unitId: def.id ?? 'unit', name: def.name ?? '战士', createdAt:this.state.time, provenance:def.provenance, sourceVersion:def.sourceVersion, sourceRawFields:def.sourceRawFields, sourceArmorTypeRaw:def.sourceArmorTypeRaw??def.sourceRawFields?.defType,
       x: 3, y: 6, hp, maxHp: hp, damage: value(def, ['damage', 'attack', 'attackDamage'], 18),
       range: value(def, ['range', 'attackRange'], 65) / (value(def, ['range', 'attackRange'], 65) > 12 ? 100 : 1), attackCd: this._random() * .35,
       attackInterval: value(def, ['interval', 'attackInterval', 'attackSpeed', 'cooldown'], 1),
@@ -592,7 +673,7 @@ export class Game {
     return e;
   }
   _spawnDefender(def, player, x, y, buildingId, isHero = false) {
-    if (!def || (def.provenance==='5.0dJF-workbook'&&!def.combatRawcode)) return;
+    if (!def || (isSourceUnit(def)&&!def.combatRawcode)) return;
     const e = this._entity(def, { team: player.team, side: 'defender', laneId: player.id,
       ownerId: player.id, sourceLaneId: player.id, x, y, buildingId, isHero });
     this._ensureWorld(e); e.status.activated = false; e.routeMode = 'guard';
@@ -604,13 +685,13 @@ export class Game {
     const extraScale = Math.pow(1.12, Math.max(0, s.wave - WAVES.length));
     let def = entry.merc ?? entry.wave ?? {};
     const boss = !!entry.boss;
-    let e = this._entity(def, { unitId: entry.merc?.id ?? `wave-${s.wave}`, name: def.name ?? (boss ? '远古首领' : '系统怪'),
+    let e = this._entity(def, { unitId: entry.merc?.id ?? def.id ?? `wave-${s.wave}`, name: def.name ?? (boss ? '远古首领' : '系统怪'),
       side: 'monster', team: 1 - defendingTeam, laneId: entry.laneId, sourceLaneId: entry.laneId,
       x: entry.x, y: entry.y, ownerId: null, senderId: entry.senderId ?? null, isMerc: !!entry.merc, isBoss: boss,
-      reward: value(def, ['reward', 'bounty', 'goldReward'], entry.merc ? 3 : 1), color: def.color ?? (entry.merc ? '#e7a446' : '#e56c78'),
+      sourceWave:entry.sourceWave??s.wave, substituted:!!entry.substituted, reward: value(def, ['reward', 'bounty', 'goldReward'], entry.merc ? 3 : 1), color: def.color ?? (entry.merc ? '#e7a446' : '#e56c78'),
       shape: def.shape ?? (boss ? 'hex' : entry.merc ? 'diamond' : 'circle'), radius: boss ? .42 : value(def, ['radius'], .21) });
     if (!entry.merc) {
-      const hp = value(def, ['hp', 'health', 'monsterHp'], 45 + s.wave * 18) * extraScale * (boss ? 1 : rule('webMonsterHpScale', .25));
+      const hp = (isV14(def)&&entry.substituted ? value(def,['baseHp','baseObjectHp','hpBase'],number(def.sourceRawFields?.HP,def.hp)) * this._sourceLifeScale(def,entry.sourceWave??s.wave) : value(def, ['hp', 'health', 'monsterHp'], 45 + s.wave * 18)) * extraScale * (boss ? 1 : rule('webMonsterHpScale', 1));
       e.hp = hp; e.maxHp = hp; e.damage = value(def, ['damage', 'attack'], 4 + s.wave * 2.2) * extraScale * (boss ? 1 : rule('webMonsterDamageScale', .20));
       e.moveSpeed = value(def, ['moveSpeed', 'speed'], 55) / (Number.isFinite(def.sourceSpeed) ? 100 : 75); e.range = value(def, ['range', 'attackRange'], 55) / 100;
     }
@@ -862,7 +943,7 @@ export class Game {
     if (e.status.frenzy) haste *= 1.6;
     e.attackCd = Math.max(.15, weapon.interval / haste) * (e.side === 'monster' ? (this._monsterPressure?.[e.team] ?? 1) : 1);
     if(sourceAttack.missed){this._event('miss',target,'未命中');return;}
-    const multiplier = this._typeMultiplier(weapon.attackType, target.armorType);
+    const multiplier = this._typeMultiplier(weapon.attackType, target.armorType, target.sourceArmorTypeRaw);
     const armor = this._effectiveArmor(target, targetAuras.armor);
     const armorFactor = this._armorFactor(armor);
     const dealt = damage * multiplier * armorFactor;
@@ -908,16 +989,18 @@ export class Game {
       target.status.deathCounted = true;
       this._sourceDeath(target,attacker);
       if (target.side === 'monster') {
-        const bountyBase=this.state.wave>=31?0:target.isSummon?number(target.sourceRawFields?.level,0):value(this._waveData(),['reward'],target.reward);
-        const bounty=target.status.sourceLeakMarker?Math.floor(bountyBase*(this.state.players[target.sourceLaneId]?.leakBountyFactor??0)):bountyBase;
+        const base = this.state.wave >= 31 ? 0 : target.isMerc || target.isSummon ? number(target.sourceRawFields?.level,target.reward) : number(RULES.waveKillGold?.[this.state.wave-1],target.reward);
+        let bounty = target.status.sourceLeakMarker ? Math.floor(base*(this.state.players[target.sourceLaneId]?.leakBountyFactor??0)) : base;
+        if(this.state.wave<31 && target.substituted)bounty+=rule('nextWaveSubstitutionBounty',3);
+        if(this.state.wave<31 && target.status.sourceLeakMarker && target.status.specialLeakBonus)bounty+=2;
+        const ownerId=attacker?.ownerId, p=this.state.players[ownerId];
+        if(this.state.wave<31 && p && !target.status.sourceLeakMarker && !target.isMerc && !target.isSummon && !target.isBoss && p.id!==target.sourceLaneId)bounty=rule('crossLaneBounty',1);
         target.reward=bounty;
-        const ownerId = attacker?.ownerId ?? target.sourceLaneId;
-        const p = this.state.players[ownerId];
-        if (attacker?.isKing) {
-          // Both king treasuries receive a kill bounty; each is divided at payout.
-          this.state.kingBountyPools ??= [0, 0];
-          for (const team of [0, 1]) this.state.kingBountyPools[team] += target.reward;
-        } else if (p && p.team !== target.team) { p.gold += target.reward; p.stats.kills++; p.stats.goldEarned += target.reward; }
+        if(attacker?.isKing){
+          // Native qC adds the enemy treasury, then the king's user-data treasury.
+          this.state.kingBountyPools??=[0,0];
+          for(const team of [0,1])this.state.kingBountyPools[team]+=bounty;
+        } else if(p && p.team!==target.team){p.gold+=bounty;p.stats.kills++;p.stats.goldEarned+=bounty;}
         this.state.metrics.killed++;
       }
       this._event('death', target, target.side === 'monster' ? `+${target.reward}` : '阵亡', { color: target.color });
@@ -957,7 +1040,8 @@ export class Game {
   _leak(e) {
     const source = this.state.players[e.sourceLaneId];
     if (!source || e.hp <= 0 || e.side !== 'monster' || e.status.leaked) return;
-    if(!e.isMerc&&!e.isSummon&&e.combatRawcode===(this._waveData().combatRawcode??this._waveData().sourceRawcode)&&this.state.wave<30&&![10,20].includes(this.state.wave)&&!e.isBoss){source.sourceLeaks=(source.sourceLeaks??0)+1;e.status.sourceLeakMarker=true;}
+    if(!e.isMerc&&!e.isSummon&&e.combatRawcode===(this._waveData().combatRawcode??this._waveData().sourceRawcode)&&this.state.wave<30&&![10,20].includes(this.state.wave)&&!e.isBoss){source.sourceLeaks=(source.sourceLeaks??0)+1;e.status.sourceLeakMarker=true;
+      if(this.state.wave>=rule('leakPenaltyFromWave',11)){this.state.teamLeakFlags??=[false,false];if(!this.state.teamLeakFlags[source.team]){this.state.teamLeakFlags[source.team]=true;for(const ally of this.state.players.filter(p=>p.team===source.team))ally.wood=Math.max(0,ally.wood-rule('teamLeakWoodPenalty',1000));this._log(`${source.team===0?'蓝方':'红方'}首次漏怪，全队每人扣除1000木材（不足扣至0）。`);}}}
     source.stats.leaks++; source.roundLeaks = (source.roundLeaks ?? 0) + 1;
     this.state.metrics.leaked++; e.status.leaked = true;
     // Crossing the exit records a leak; it never changes physical coordinates.
@@ -1011,10 +1095,10 @@ export class Game {
         if (enemies.length) {
           k.attackCd = rule('kingInterval', .85) / ((1 + (k.autoUpgradeCount ?? 0) * rule('kingAttackSpeedPerFourWaves', .1)) * kingAuras.attackSpeedMultiplier);
           const target = enemies[0], targetAuras = this._auraEffects(target, auras);
-          const dealt = k.attack * kingAuras.damageMultiplier * this._typeMultiplier(k.attackType ?? 'hero', target.armorType) * this._armorFactor(this._effectiveArmor(target, targetAuras.armor));
+          const dealt = k.attack * kingAuras.damageMultiplier * this._typeMultiplier(k.attackType ?? 'hero', target.armorType, target.sourceArmorTypeRaw) * this._armorFactor(this._effectiveArmor(target, targetAuras.armor));
           this._hurt(target, dealt, { side: 'defender', team: k.team, isKing: true });
           this._event('kingAttack', target, `${Math.round(k.attack)}`, { fromWorldX: position.x, fromWorldY: position.y, color: k.team ? '#fb7185' : '#60a5fa' });
-          if (RULES.webKingSplashEnabled===true && this.state.wave >= 7) for (const e of enemies.slice(1, 5)) if (distance(e, target) < 1.4) this._hurt(e, k.attack * kingAuras.damageMultiplier * .35 * this._typeMultiplier(k.attackType ?? 'hero', e.armorType) * this._armorFactor(this._effectiveArmor(e, this._auraEffects(e, auras).armor)), { side: 'defender', team: k.team, isKing: true });
+          if (RULES.webKingSplashEnabled===true && this.state.wave >= 7) for (const e of enemies.slice(1, 5)) if (distance(e, target) < 1.4) this._hurt(e, k.attack * kingAuras.damageMultiplier * .35 * this._typeMultiplier(k.attackType ?? 'hero', e.armorType, e.sourceArmorTypeRaw) * this._armorFactor(this._effectiveArmor(e, this._auraEffects(e, auras).armor)), { side: 'defender', team: k.team, isKing: true });
         }
       }
       if (k.hp < k.maxHp * .16 && k.healCharges > 0) {
@@ -1035,8 +1119,10 @@ export class Game {
   }
   _endCombat() {
     const s = this.state;
+    // A cleared round discards its temporary dummies before preparation/arena.
+    s.sourceSkillJobs = [];
     const listedReward = RULES.waveRewards?.[s.wave - 1];
-    const bonus = Number.isFinite(listedReward) ? listedReward * ([10, 20, 30].includes(s.wave) ? 2 : 1) : rule('incomeBase', 22) + s.wave * rule('incomePerWave', 8);
+    const bonus = Number.isFinite(listedReward) ? listedReward * ((RULES.bossRewardDoubleWaves??[10,20]).includes(s.wave) ? 2 : 1) : rule('incomeBase', 22) + s.wave * rule('incomePerWave', 8);
     for (const p of s.players) {
       for(const b of p.buildings)if(b.temporaryForm){b.unitId=b.temporaryForm;b.temporaryForm=null;b.stimulatedWave=null;}
       const teamSize = s.players.filter(v => v.team === p.team).length;
@@ -1044,20 +1130,25 @@ export class Game {
       const gold = p.income + bonus + kingShare; p.gold += gold; p.stats.goldEarned += gold;
     }
     s.kingBountyPools = [0, 0];
-    if (s.wave % 4 === 0) {
-      for (const k of s.kings) { k.armor = (k.armor ?? rule('kingArmor', 8)) + rule('kingArmorPerFourWaves', 2); k.autoUpgradeCount = (k.autoUpgradeCount ?? 0) + 1; }
-      this._log('国王获得周期强化：护甲 +2，累计攻击速度 +10%。');
+    if(s.wave>=rule('leakPenaltyFromWave',11)){
+      for(const p of s.players){const sourceFlag=RULES.reproduceNoLeakRewardTeamOneBug ? s.teamLeakFlags?.[0] : s.teamLeakFlags?.[p.team];if(!sourceFlag){p.gold+=rule('noLeakGoldReward',100);p.wood+=rule('noLeakWoodReward',200);p.stats.goldEarned+=rule('noLeakGoldReward',100);}}
+      if(!s.teamLeakFlags?.[0])this._log('按原图队伍1标志判定，两队获得100金200木无漏奖励。');
+    }
+    for(const k of s.kings){
+      if(s.wave<=rule('kingRecoveryThroughWave',4)){const gain=rule('kingRecoveryHpPerEarlyWave',1000);k.maxHp+=gain;k.hp=Math.min(k.maxHp,k.hp+gain);}
+      if(s.wave===rule('kingArmorRecoveryWave',4))k.armor+=rule('kingArmorRecoveryGain',8);
+      if(s.wave===rule('kingArmorBonusWave',16))k.armor+=rule('kingArmorBonusGain',2);
     }
     this._log(`第 ${s.wave} 波结束：发放永久收入、${bonus} 金币守护奖励与国王杀敌分红，阵亡军团将在下波复归。`);
     if(s.wave>=WAVES.length){this._log('末波继续战斗，胜负以国王倒下为准。');return;}
-    if([10,20].includes(s.wave)){s.phase='build';s.roundMode='arena-prep';s.timer=30;s.entities=[];this._log('竞技场准备30秒，随后双方军团交战。');return;}
+    if([10,20].includes(s.wave)){s.phase='build';s.roundMode='arena-prep';s.timer=rule('arenaPreparationSeconds',30);s.entities=[];this._log('竞技场准备30秒，随后双方军团交战。');return;}
     s.wave++; s.roundMode='normal';s.phase = 'build'; s.timer = this.buildDuration(s.wave); s.entities = [];
     for (let i = 1; i < 8; i++) this._aiAct(s.players[i]);
   }
 
   _startArena(){
     this._completeMilitaryConstruction();
-    const s=this.state;s.phase='combat';s.roundMode='arena';s.entities=[];s.timer=0;s.arenaRemaining=120;this._spawnQueue=[];this._roundTime=0;
+    const s=this.state;s.phase='combat';s.roundMode='arena';s.entities=[];s.sourceSkillJobs=[];s.timer=0;s.arenaRemaining=rule('arenaBattleLimitSeconds',120);this._spawnQueue=[];this._roundTime=0;
     for(const p of s.players)for(const b of p.buildings.filter(b=>!b.construction)){
       const def=units[b.unitId];if(!def)continue;const point=laneToWorld(0,1.2+(p.id%4)*1.1+(b.col-2.5)*.12,p.team===0?5+(b.row/8):9-(b.row/8));
       const e=this._entity(def,{team:p.team,side:`arena${p.team}`,battleTeam:0,laneId:0,sourceLaneId:p.id,ownerId:p.id,buildingId:b.id,isArena:true,worldX:point.x,worldY:point.y});
@@ -1066,21 +1157,29 @@ export class Game {
     this._log(`第${s.wave}波竞技场开始，限时120秒；Web在同一场地模拟双方军团交战。`);
   }
   _endArena(alive){
-    const s=this.state,winner=alive[0]&&!alive[1]?0:alive[1]&&!alive[0]?1:-1,reward=s.wave*(winner===-1?5:10);
+    const s=this.state,winner=alive[0]&&!alive[1]?0:alive[1]&&!alive[0]?1:-1,reward=s.wave*(winner===-1?rule('arenaDrawGoldPerWave',5):rule('arenaWinnerGoldPerWave',10));
     for(const p of s.players)if(winner===-1||p.team===winner){p.gold+=reward;p.stats.goldEarned+=reward;}
-    s.arenaResult={winner,reward,wave:s.wave};s.entities=[];s.phase='build';s.roundMode='arena-transition';s.timer=20;
+    s.arenaResult={winner,reward,wave:s.wave};s.entities=[];s.sourceSkillJobs=[];s.phase='build';s.roundMode='arena-transition';s.timer=rule('arenaAfterBattleSeconds',20);
     this._log(`竞技场${winner===-1?'平局':winner===0?'蓝方获胜':'红方获胜'}，${winner===-1?'双方':'胜方'}每人奖励${reward}金币；20秒过渡后进入30秒准备。`);
   }
   _advanceContinuous(){
-    const s=this.state;if(s.wave>=35)return;const survivors=s.entities.filter(e=>e.hp>0),oldTime=this._roundTime,queue=this._spawnQueue.map(e=>({...e,at:Math.max(0,e.at-oldTime)}));
-    s.wave++;s.phase='build';this._startCombat();s.entities=[...survivors,...s.entities.filter(e=>e.side==='monster')];this._spawnQueue=[...queue,...this._spawnQueue].sort((a,b)=>a.at-b.at);
+    const s=this.state;if(s.wave>=35)return;const survivors=s.entities.filter(e=>e.hp>0),jobs=s.sourceSkillJobs??[],oldTime=this._roundTime,queue=this._spawnQueue.map(e=>({...e,at:Math.max(0,e.at-oldTime)}));
+    s.wave++;s.phase='build';this._startCombat();s.sourceSkillJobs=jobs;s.entities=[...survivors,...s.entities.filter(e=>e.side==='monster')];this._spawnQueue=[...queue,...this._spawnQueue].sort((a,b)=>a.at-b.at);
     s.continuousRemaining=s.wave<35?50:null;this._log(`连续进攻：第${s.wave}波已加入战场，存活守军与残怪保留。`);
   }
 
-  _isFront(u) { return u && (['tank', 'frontline'].includes(u.role) || value(u, ['range'], 100) < 100); }
+  _isWeaponlessObstacle(u) {
+    const f=u?.sourceRawFields;
+    if(!isV14(u)||!number(f?.isbldg,0)||!f?.pathTex||number(f.spd,0)>0)return false;
+    // Read the same native masks as actual combat; inherited editor damage is
+    // not evidence that a stationary structure has an enabled weapon.
+    const source={...u,side:'defender',skillSource:'v14.1A5',isBuilding:true};
+    return !['ground','air','structure'].some(targetType=>sourceWeapon(source,{side:'monster',targetType,isBuilding:targetType==='structure',traits:[],hp:100,status:{}}));
+  }
+  _isFront(u) { return u && !this._isWeaponlessObstacle(u) && (['tank', 'frontline'].includes(u.role) || value(u, ['range'], 100) < 100); }
   _hasArea(u) { return ['aoe','splash','cleave','chain','multishot','burn','stomp','poison_aura'].includes(u?.ability?.type)||compileSkills(u??{}).some(s=>['stomp','wave','knives','nova','breath','cluster','immolation','barrage','pulverize','phoenix_fire'].includes(s.kind))||['msplash','mbounce','artillery','aline','mline'].includes(u?.weapon1?.weapTp1); }
   _combatPower(u) {
-    if (!u) return 0;
+    if (!u || this._isWeaponlessObstacle(u)) return 0;
     const a = abilityOf(u), type = a?.type;
     let dps = u.damage / Math.max(.2, value(u, ['interval'], 1));
     if (['aoe','splash','cleave'].includes(type)) dps *= 1 + number(a.value,.3) * 4;
@@ -1107,7 +1206,7 @@ export class Game {
       for (const u of options) {
         const cost = this._cost(base) + (u.id===base.id ? 0 : this._cost(u));
         const reserve = this._isFront(u) ? 0 : minimumFront;
-        if (cost + reserve <= p.gold && value(u,['population'],1)+p.workers <= p.populationCap)
+        if (this._combatPower(u)>0 && !this._requirement(p,u) && cost + reserve <= p.gold && value(u,['population'],1)+p.workers <= p.populationCap)
           plans.push({base,u,cost,score:this._combatPower(u)/Math.max(1,cost) * (this._hasArea(u)?4:1) * (!this._isFront(u)?1.1:1)});
       }
     }
@@ -1128,7 +1227,7 @@ export class Game {
       const needFront=frontCount<Math.max(1,Math.ceil(built.length*.35)) || frontHp<damage*2.1;
       const hasArea=built.some(u=>this._hasArea(u)), options=[];
       const reserve=this.state.wave<=2?0:35;
-      for(const id of p.roster){const u=units[id];if(u&&this._cost(u)<=p.gold-reserve&&this._population(p)+u.population<=p.populationCap){
+      for(const id of p.roster){const u=units[id];if(u&&this._combatPower(u)>0&&!this._requirement(p,u)&&this._cost(u)<=p.gold-reserve&&this._population(p)+u.population<=p.populationCap){
         let score=this._combatPower(u)/this._cost(u);
         if(needFront)score*=this._isFront(u)?3:.25;else score*=this._isFront(u)?.8:1.4;
         if(!hasArea&&this._hasArea(u))score*=2.8;
@@ -1136,7 +1235,7 @@ export class Game {
         options.push({type:'build',u,cost:this._cost(u),score});
       }}
       for(const b of p.buildings)for(const id of this._upgradeIds(units[b.unitId])){const u=units[id],old=units[b.unitId];
-        if(this._cost(u)>p.gold-reserve||this._population(p)-old.population+u.population>p.populationCap)continue;
+        if(b.construction||this._combatPower(u)<=0||this._requirement(p,u)||this._cost(u)>p.gold-reserve||this._population(p)-old.population+u.population>p.populationCap)continue;
         let score=(this._combatPower(u)-this._combatPower(old))/this._cost(u)*(built.length>=9?1.9:1.1);
         if(needFront)score*=this._isFront(u)?2.3:.4;else score*=this._isFront(u)?.8:1.4;
         if(!hasArea&&this._hasArea(u))score*=3;
@@ -1181,6 +1280,7 @@ export class Game {
   }
   restore(saved) {
     if (!saved || ![1, 2].includes(saved.version) || !saved.state?.players || saved.state.players.length !== 8 || saved.state.kings?.length !== 2) throw new Error('存档格式不匹配');
+    if(saved.state.sourceVersion!==RULES.sourceVersion)throw new Error('存档来源版本不同；旧版本存档已保留，请新开v14.1A5九倍对局。');
     if (saved.version === 2 && (saved.mapId !== MAP.id || saved.mapVersion !== MAP.version)) throw new Error('存档地图版本不匹配');
     const revisionChanged=saved.state.dataRevision!==RULES.dataRevision;
     const data = copy(saved); this.options = data.options ?? this.options; this.options.ggEnabled??=RULES.ggEnabled??true; this.state = data.state;
@@ -1197,15 +1297,15 @@ export class Game {
       for(const e of this.state.entities){const id=alias(e.unitId),def=units[id];if(id!==e.unitId&&def){const ratio=e.maxHp>0?clamp(e.hp/e.maxHp,0,1):0;e.unitId=id;e.name=def.name;e.maxHp=def.hp;e.hp=def.hp*ratio;e.damage=def.damage;e.attackInterval=def.interval;e.range=def.range/100;e.moveSpeed=def.speed/100;e.armor=def.armor;e.attackType=def.attackType;e.armorType=def.armorType;e.ability=abilityOf(def)??null;attachSkills(e,def);}}
       this.state.dataRevision=RULES.dataRevision;this.state.migrationNotice='旧存档已按文档迁移，原始存档已备份；无法映射的历史Web单位继续标记为兼容单位。';
     }
-    this.state.kingBountyPools ??= [0, 0];
+    this.state.kingBountyPools ??= [0, 0]; this.state.sourceSkillJobs??=[]; this.state.teamLeakFlags??=[false,false];
     for (const p of this.state.players) {
-      p.builderId??='builder_u00T';
-      if(p.workers>rule('maxWorkers',7)||p.lumberLevel>rule('maxLumberLevel',15)){p.workers=Math.min(p.workers,rule('maxWorkers',7));p.lumberLevel=Math.min(p.lumberLevel,rule('maxLumberLevel',15));this.state.migrationNotice='旧存档已按文档改为7小精灵、15级科技；原进度已保留备份。';}
+      p.builderId??=RULES.defaultBuilderId;
+      if(p.workers>rule('maxWorkers',7)||p.lumberLevel>rule('maxLumberLevel',15)){p.workers=Math.min(p.workers,rule('maxWorkers',7));p.lumberLevel=Math.min(p.lumberLevel,rule('maxLumberLevel',15));this.state.migrationNotice=`旧存档已限制为${RULES.maxWorkers}小精灵、${RULES.maxLumberLevel}级科技；原进度已保留备份。`;}
       const tasks=this._economyTasks(p);tasks.workerQueue=tasks.workerQueue.slice(0,Math.max(0,rule('maxWorkers',7)-p.workers));if(tasks.lumberTask?.targetLevel>rule('maxLumberLevel',15))tasks.lumberTask=null;
       p.popUsed = this._population(p);
       for (const m of MERCENARIES) this._mercenarySlot(p, m);
     }
-    for(const e of this.state.entities){if(!e.skillSpecs){const def=units[e.unitId]??mercs[e.unitId]??WORKBOOK_UNIT_TEMPLATES[e.combatRawcode];if(def)attachSkills(e,def);}e.skillStates??={};e.buffs??=[];}
+    for(const e of this.state.entities){if(!e.skillSpecs){const def=units[e.unitId]??mercs[e.unitId]??UNIT_TEMPLATES[e.combatRawcode];if(def)attachSkills(e,def);}e.skillStates??={};e.buffs??=[];}
     if (saved.version === 1) {
       this.state.map = { id: MAP.id, version: MAP.version, topology: '2x2-crossbar-stem' };
       for (const e of this.state.entities) {

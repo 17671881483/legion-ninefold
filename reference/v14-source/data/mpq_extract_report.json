@@ -1,0 +1,523 @@
+{
+  "archive": "D:\\Warcraft3-11hf\\Maps\\Download\\qcloud_20197574.w3x",
+  "header": {
+    "archive_offset": 512,
+    "header_size": 32,
+    "archive_size": 306965808,
+    "format_version": 0,
+    "sector_shift": 7,
+    "hash_table_pos": 306904208,
+    "block_table_pos": 306936976,
+    "hash_table_size": 2048,
+    "block_table_size": 1802
+  },
+  "hash_entries_used": 1802,
+  "block_entries": 1802,
+  "files": [
+    {
+      "name": "war3map.j",
+      "block_index": 238,
+      "file_pos": 45288097,
+      "compressed_size": 314422,
+      "file_size": 2011786,
+      "flags": "0x80000200",
+      "extracted": "work\\v14_1A5_unpacked\\war3map.j",
+      "actual_size": 2011786
+    },
+    {
+      "name": "war3map.w3i",
+      "block_index": 1279,
+      "file_pos": 212040170,
+      "compressed_size": 315,
+      "file_size": 653,
+      "flags": "0x80000200",
+      "extracted": "work\\v14_1A5_unpacked\\war3map.w3i",
+      "actual_size": 653
+    },
+    {
+      "name": "war3map.w3u",
+      "block_index": 523,
+      "file_pos": 92345558,
+      "compressed_size": 596,
+      "file_size": 1663,
+      "flags": "0x80000200",
+      "extracted": "work\\v14_1A5_unpacked\\war3map.w3u",
+      "actual_size": 1663
+    },
+    {
+      "name": "war3map.w3a",
+      "block_index": 291,
+      "file_pos": 51515733,
+      "compressed_size": 3593,
+      "file_size": 20676,
+      "flags": "0x80000200",
+      "extracted": "work\\v14_1A5_unpacked\\war3map.w3a",
+      "actual_size": 20676
+    },
+    {
+      "name": "war3map.doo",
+      "block_index": 1606,
+      "file_pos": 278293119,
+      "compressed_size": 7337,
+      "file_size": 41524,
+      "flags": "0x80000200",
+      "extracted": "work\\v14_1A5_unpacked\\war3map.doo",
+      "actual_size": 41524
+    },
+    {
+      "name": "war3map.mmp",
+      "block_index": 273,
+      "file_pos": 49787961,
+      "compressed_size": 123,
+      "file_size": 184,
+      "flags": "0x80000200",
+      "extracted": "work\\v14_1A5_unpacked\\war3map.mmp",
+      "actual_size": 184
+    },
+    {
+      "name": "war3map.shd",
+      "block_index": 884,
+      "file_pos": 142272594,
+      "compressed_size": 360,
+      "file_size": 262144,
+      "flags": "0x80000200",
+      "extracted": "work\\v14_1A5_unpacked\\war3map.shd",
+      "actual_size": 262144
+    },
+    {
+      "name": "war3map.wpm",
+      "block_index": 183,
+      "file_pos": 32698805,
+      "compressed_size": 3205,
+      "file_size": 262160,
+      "flags": "0x80000200",
+      "extracted": "work\\v14_1A5_unpacked\\war3map.wpm",
+      "actual_size": 262160
+    },
+    {
+      "name": "war3map.w3e",
+      "block_index": 1367,
+      "file_pos": 235518900,
+      "compressed_size": 22555,
+      "file_size": 116580,
+      "flags": "0x80000200",
+      "extracted": "work\\v14_1A5_unpacked\\war3map.w3e",
+      "actual_size": 116580
+    },
+    {
+      "name": "war3mapMap.blp",
+      "block_index": 799,
+      "file_pos": 132096042,
+      "compressed_size": 14663,
+      "file_size": 16799,
+      "flags": "0x80000200",
+      "extracted": "work\\v14_1A5_unpacked\\war3mapMap.blp",
+      "actual_size": 16799
+    },
+    {
+      "name": "war3mapSkin.txt",
+      "block_index": 816,
+      "file_pos": 133325305,
+      "compressed_size": 1637,
+      "file_size": 6635,
+      "flags": "0x80000200",
+      "extracted": "work\\v14_1A5_unpacked\\war3mapSkin.txt",
+      "actual_size": 6635
+    },
+    {
+      "name": "war3mapMisc.txt",
+      "block_index": 1516,
+      "file_pos": 263088573,
+      "compressed_size": 749,
+      "file_size": 1616,
+      "flags": "0x80000200",
+      "extracted": "work\\v14_1A5_unpacked\\war3mapMisc.txt",
+      "actual_size": 1616
+    },
+    {
+      "name": "units\\unitdata.slk",
+      "block_index": 463,
+      "file_pos": 81241640,
+      "compressed_size": 22058,
+      "file_size": 373188,
+      "flags": "0x80000200",
+      "extracted": "work\\v14_1A5_unpacked\\units\\unitdata.slk",
+      "actual_size": 373188
+    },
+    {
+      "name": "units\\unitbalance.slk",
+      "block_index": 518,
+      "file_pos": 91758608,
+      "compressed_size": 44000,
+      "file_size": 687987,
+      "flags": "0x80000200",
+      "extracted": "work\\v14_1A5_unpacked\\units\\unitbalance.slk",
+      "actual_size": 687987
+    },
+    {
+      "name": "units\\unitui.slk",
+      "block_index": 357,
+      "file_pos": 61402055,
+      "compressed_size": 55914,
+      "file_size": 711134,
+      "flags": "0x80000200",
+      "extracted": "work\\v14_1A5_unpacked\\units\\unitui.slk",
+      "actual_size": 711134
+    },
+    {
+      "name": "units\\unitabilities.slk",
+      "block_index": 1257,
+      "file_pos": 208196959,
+      "compressed_size": 20214,
+      "file_size": 122938,
+      "flags": "0x80000200",
+      "extracted": "work\\v14_1A5_unpacked\\units\\unitabilities.slk",
+      "actual_size": 122938
+    },
+    {
+      "name": "units\\unitweapons.slk",
+      "block_index": 110,
+      "file_pos": 17555949,
+      "compressed_size": 40788,
+      "file_size": 623653,
+      "flags": "0x80000200",
+      "extracted": "work\\v14_1A5_unpacked\\units\\unitweapons.slk",
+      "actual_size": 623653
+    },
+    {
+      "name": "units\\abilitydata.slk",
+      "block_index": 1100,
+      "file_pos": 184914819,
+      "compressed_size": 53142,
+      "file_size": 464679,
+      "flags": "0x80000200",
+      "extracted": "work\\v14_1A5_unpacked\\units\\abilitydata.slk",
+      "actual_size": 464679
+    },
+    {
+      "name": "units\\abilitybuffdata.slk",
+      "block_index": 1665,
+      "file_pos": 286511578,
+      "compressed_size": 2137,
+      "file_size": 7284,
+      "flags": "0x80000200",
+      "extracted": "work\\v14_1A5_unpacked\\units\\abilitybuffdata.slk",
+      "actual_size": 7284
+    },
+    {
+      "name": "units\\itemdata.slk",
+      "block_index": 1555,
+      "file_pos": 271970085,
+      "compressed_size": 3244,
+      "file_size": 36597,
+      "flags": "0x80000200",
+      "extracted": "work\\v14_1A5_unpacked\\units\\itemdata.slk",
+      "actual_size": 36597
+    },
+    {
+      "name": "units\\destructabledata.slk",
+      "block_index": 1055,
+      "file_pos": 174164845,
+      "compressed_size": 906,
+      "file_size": 2893,
+      "flags": "0x80000200",
+      "extracted": "work\\v14_1A5_unpacked\\units\\destructabledata.slk",
+      "actual_size": 2893
+    },
+    {
+      "name": "units\\upgradedata.slk",
+      "block_index": 712,
+      "file_pos": 117611765,
+      "compressed_size": 5783,
+      "file_size": 48578,
+      "flags": "0x80000200",
+      "extracted": "work\\v14_1A5_unpacked\\units\\upgradedata.slk",
+      "actual_size": 48578
+    },
+    {
+      "name": "units\\humanunitstrings.txt",
+      "block_index": 192,
+      "file_pos": 34521332,
+      "compressed_size": 0,
+      "file_size": 0,
+      "flags": "0x80000200",
+      "extract_error": "error: unpack requires a buffer of 4 bytes"
+    },
+    {
+      "name": "units\\humanunitfunc.txt",
+      "block_index": 651,
+      "file_pos": 108657078,
+      "compressed_size": 0,
+      "file_size": 0,
+      "flags": "0x80000200",
+      "extract_error": "error: unpack requires a buffer of 4 bytes"
+    },
+    {
+      "name": "units\\orcunitstrings.txt",
+      "block_index": 181,
+      "file_pos": 32691258,
+      "compressed_size": 0,
+      "file_size": 0,
+      "flags": "0x80000200",
+      "extract_error": "error: unpack requires a buffer of 4 bytes"
+    },
+    {
+      "name": "units\\orcunitfunc.txt",
+      "block_index": 237,
+      "file_pos": 45288097,
+      "compressed_size": 0,
+      "file_size": 0,
+      "flags": "0x80000200",
+      "extract_error": "error: unpack requires a buffer of 4 bytes"
+    },
+    {
+      "name": "units\\undeadunitstrings.txt",
+      "block_index": 1272,
+      "file_pos": 210879226,
+      "compressed_size": 0,
+      "file_size": 0,
+      "flags": "0x80000200",
+      "extract_error": "error: unpack requires a buffer of 4 bytes"
+    },
+    {
+      "name": "units\\undeadunitfunc.txt",
+      "block_index": 925,
+      "file_pos": 150751855,
+      "compressed_size": 0,
+      "file_size": 0,
+      "flags": "0x80000200",
+      "extract_error": "error: unpack requires a buffer of 4 bytes"
+    },
+    {
+      "name": "units\\nightelfunitstrings.txt",
+      "block_index": 241,
+      "file_pos": 45806307,
+      "compressed_size": 0,
+      "file_size": 0,
+      "flags": "0x80000200",
+      "extract_error": "error: unpack requires a buffer of 4 bytes"
+    },
+    {
+      "name": "units\\nightelfunitfunc.txt",
+      "block_index": 1280,
+      "file_pos": 212040485,
+      "compressed_size": 0,
+      "file_size": 0,
+      "flags": "0x80000200",
+      "extract_error": "error: unpack requires a buffer of 4 bytes"
+    },
+    {
+      "name": "units\\neutralunitstrings.txt",
+      "block_index": 1701,
+      "file_pos": 290732786,
+      "compressed_size": 0,
+      "file_size": 0,
+      "flags": "0x80000200",
+      "extract_error": "error: unpack requires a buffer of 4 bytes"
+    },
+    {
+      "name": "units\\neutralunitfunc.txt",
+      "block_index": 420,
+      "file_pos": 74157647,
+      "compressed_size": 0,
+      "file_size": 0,
+      "flags": "0x80000200",
+      "extract_error": "error: unpack requires a buffer of 4 bytes"
+    },
+    {
+      "name": "units\\campaignunitstrings.txt",
+      "block_index": 1682,
+      "file_pos": 288831490,
+      "compressed_size": 139873,
+      "file_size": 1293227,
+      "flags": "0x80000200",
+      "extracted": "work\\v14_1A5_unpacked\\units\\campaignunitstrings.txt",
+      "actual_size": 1293227
+    },
+    {
+      "name": "units\\campaignunitfunc.txt",
+      "block_index": 1038,
+      "file_pos": 170161930,
+      "compressed_size": 0,
+      "file_size": 0,
+      "flags": "0x80000200",
+      "extract_error": "error: unpack requires a buffer of 4 bytes"
+    },
+    {
+      "name": "units\\campaignabilitystrings.txt",
+      "block_index": 415,
+      "file_pos": 73693676,
+      "compressed_size": 171405,
+      "file_size": 887113,
+      "flags": "0x80000200",
+      "extracted": "work\\v14_1A5_unpacked\\units\\campaignabilitystrings.txt",
+      "actual_size": 887113
+    },
+    {
+      "name": "units\\campaignabilityfunc.txt",
+      "block_index": 616,
+      "file_pos": 104578014,
+      "compressed_size": 0,
+      "file_size": 0,
+      "flags": "0x80000200",
+      "extract_error": "error: unpack requires a buffer of 4 bytes"
+    },
+    {
+      "name": "units\\campaignupgradestrings.txt",
+      "block_index": 1535,
+      "file_pos": 269020897,
+      "compressed_size": 18918,
+      "file_size": 113486,
+      "flags": "0x80000200",
+      "extracted": "work\\v14_1A5_unpacked\\units\\campaignupgradestrings.txt",
+      "actual_size": 113486
+    },
+    {
+      "name": "units\\campaignupgradefunc.txt",
+      "block_index": 1114,
+      "file_pos": 186744121,
+      "compressed_size": 0,
+      "file_size": 0,
+      "flags": "0x80000200",
+      "extract_error": "error: unpack requires a buffer of 4 bytes"
+    },
+    {
+      "name": "units\\itemstrings.txt",
+      "block_index": 628,
+      "file_pos": 106520484,
+      "compressed_size": 7317,
+      "file_size": 30284,
+      "flags": "0x80000200",
+      "extracted": "work\\v14_1A5_unpacked\\units\\itemstrings.txt",
+      "actual_size": 30284
+    },
+    {
+      "name": "units\\itemfunc.txt",
+      "block_index": 1584,
+      "file_pos": 274854737,
+      "compressed_size": 0,
+      "file_size": 0,
+      "flags": "0x80000200",
+      "extract_error": "error: unpack requires a buffer of 4 bytes"
+    },
+    {
+      "name": "units\\commonabilitystrings.txt",
+      "block_index": 265,
+      "file_pos": 48468819,
+      "compressed_size": 18570,
+      "file_size": 109947,
+      "flags": "0x80000200",
+      "extracted": "work\\v14_1A5_unpacked\\units\\commonabilitystrings.txt",
+      "actual_size": 109947
+    },
+    {
+      "name": "units\\commonabilityfunc.txt",
+      "block_index": 665,
+      "file_pos": 110089884,
+      "compressed_size": 0,
+      "file_size": 0,
+      "flags": "0x80000200",
+      "extract_error": "error: unpack requires a buffer of 4 bytes"
+    },
+    {
+      "name": "units\\humanabilitystrings.txt",
+      "block_index": 1576,
+      "file_pos": 274491251,
+      "compressed_size": 0,
+      "file_size": 0,
+      "flags": "0x80000200",
+      "extract_error": "error: unpack requires a buffer of 4 bytes"
+    },
+    {
+      "name": "units\\humanabilityfunc.txt",
+      "block_index": 289,
+      "file_pos": 51431588,
+      "compressed_size": 0,
+      "file_size": 0,
+      "flags": "0x80000200",
+      "extract_error": "error: unpack requires a buffer of 4 bytes"
+    },
+    {
+      "name": "units\\orcabilitystrings.txt",
+      "block_index": 733,
+      "file_pos": 121245097,
+      "compressed_size": 0,
+      "file_size": 0,
+      "flags": "0x80000200",
+      "extract_error": "error: unpack requires a buffer of 4 bytes"
+    },
+    {
+      "name": "units\\orcabilityfunc.txt",
+      "block_index": 208,
+      "file_pos": 38131659,
+      "compressed_size": 0,
+      "file_size": 0,
+      "flags": "0x80000200",
+      "extract_error": "error: unpack requires a buffer of 4 bytes"
+    },
+    {
+      "name": "units\\undeadabilitystrings.txt",
+      "block_index": 151,
+      "file_pos": 27291682,
+      "compressed_size": 0,
+      "file_size": 0,
+      "flags": "0x80000200",
+      "extract_error": "error: unpack requires a buffer of 4 bytes"
+    },
+    {
+      "name": "units\\undeadabilityfunc.txt",
+      "block_index": 1467,
+      "file_pos": 252570949,
+      "compressed_size": 0,
+      "file_size": 0,
+      "flags": "0x80000200",
+      "extract_error": "error: unpack requires a buffer of 4 bytes"
+    },
+    {
+      "name": "units\\nightelfabilitystrings.txt",
+      "block_index": 1501,
+      "file_pos": 259614391,
+      "compressed_size": 0,
+      "file_size": 0,
+      "flags": "0x80000200",
+      "extract_error": "error: unpack requires a buffer of 4 bytes"
+    },
+    {
+      "name": "units\\nightelfabilityfunc.txt",
+      "block_index": 368,
+      "file_pos": 63796944,
+      "compressed_size": 0,
+      "file_size": 0,
+      "flags": "0x80000200",
+      "extract_error": "error: unpack requires a buffer of 4 bytes"
+    },
+    {
+      "name": "units\\neutralabilitystrings.txt",
+      "block_index": 441,
+      "file_pos": 78139058,
+      "compressed_size": 0,
+      "file_size": 0,
+      "flags": "0x80000200",
+      "extract_error": "error: unpack requires a buffer of 4 bytes"
+    },
+    {
+      "name": "units\\neutralabilityfunc.txt",
+      "block_index": 1000,
+      "file_pos": 166112998,
+      "compressed_size": 0,
+      "file_size": 0,
+      "flags": "0x80000200",
+      "extract_error": "error: unpack requires a buffer of 4 bytes"
+    },
+    {
+      "name": "doodads\\doodads.slk",
+      "block_index": 1160,
+      "file_pos": 191857182,
+      "compressed_size": 2010,
+      "file_size": 12706,
+      "flags": "0x80000200",
+      "extracted": "work\\v14_1A5_unpacked\\doodads\\doodads.slk",
+      "actual_size": 12706
+    }
+  ]
+}

@@ -1,0 +1,156 @@
+﻿rawcode,name,tip,ubertip,itemID,armor,class,colorB,colorG,colorR,cooldownID,droppable,file,goldcost,HP,Level,oldLevel,pawnable,pickRandom,prio,scale,sellable,stockMax,stockRegen,abilList,perishable,uses,usable,powerup,stockStart,morph,lumbercost
+afac,阿利亚之笛,购买阿利亚之笛,"增加附近远程攻击型单位 10%的攻击力。
+不能和强击光环同时使用。",afac,Wood,Permanent,255,255,255,AEar,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,400,75,4,7,1,1,46,1.0,1,15,7,,,,,,,,
+ajen,古之忍耐姜歌,购买古之忍耐姜歌,"增加英雄和附近单位的攻击速度和移动速度。
+不能和耐久光环同时使用。",ajen,Wood,Permanent,255,255,255,AOae,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,500,75,5,7,1,1,118,1.0,1,1,120,AIae,,,,,,,
+ankh,重生十字章,购买重生十字章(A),在英雄死后自动让其复活，并让其拥有500点的生命值。,ankh,Wood,Charged,255,255,255,AIrc,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,800,75,5,6,1,1,142,1.0,1,1,120,AIrc,1,1,,,,,
+belv,奎尔萨拉斯之靴 +6,购买奎尔萨拉斯之靴(E),能增加英雄6点的敏捷度。,belv,Wood,Permanent,255,255,255,AIa6,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,500,75,4,8,1,1,78,1.0,1,1,120,AIa6,,,,,,,
+bgst,巨人力量腰带+6,购买巨人力量腰带(B),能增加英雄6点的力量。,bgst,Wood,Permanent,255,255,255,AIs6,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,500,75,4,8,1,1,106,1.0,1,1,120,AIs6,,,,,,,
+brac,神秘腰带,购买神秘腰带(R),减少33%英雄受到的魔法伤害。,brac,Wood,Permanent,255,255,255,AIsr,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,400,75,4,4,1,1,114,1.0,1,1,120,AIsr,,,,,,,
+bspd,速度之靴,购买速度之靴(S),能增加英雄的移动速度。,bspd,Wood,Permanent,255,255,255,AIms,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,150,75,2,2,1,1,41,1.0,1,1,60,AIms,,,,,,,
+ciri,法师长袍 +6,购买法师长袍(R),增加英雄6点的智力。,ciri,Wood,Permanent,255,255,255,AIi6,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,500,75,4,8,1,1,43,1.0,1,1,120,AIi6,,,,,,,
+ckng,国王之冠 +5,购买国王之冠(K),能增加英雄5点的力量，智力和敏捷度。,ckng,Wood,Artifact,255,255,255,AIx5,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,1000,75,8,10,1,1,126,1.0,1,1,120,AIx5,,,,,,,
+clfm,火焰风衣,火焰风衣,"使得英雄处于火焰的包围之中，每秒对周围的地面单位造成  10 点的伤害。
+不能和献祭一起使用。",clfm,Wood,Permanent,255,255,255,AIcf,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,600,75,5,7,1,1,120,1.0,1,1,120,AIcf,,,,,,,
+clsd,影子风衣,购买影子风衣( C),能在夜间让英雄隐形， 但是当英雄移动，攻击或者使用某种技能的话，隐形效果就会消失。,clsd,Wood,Permanent,255,255,255,Ashm,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,100,75,1,2,1,1,2,1.0,1,1,120,Ashm,,,,,,,
+cnob,贵族圆环,购买贵族圆环(C),增加英雄2点的智力，敏捷度和力量。,cnob,Wood,Permanent,255,255,255,AIx2,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,175,75,2,4,1,1,79,1.0,1,1,120,AIx2,,,,,,,
+crys,水晶球,购买水晶球(C),"驱散一定区域内的战争迷雾，也能看到隐形单位。
+持续10秒。",crys,Wood,Permanent,255,255,255,AIta,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,500,75,5,3,1,1,,1.0,1,1,120,AIta,1,,1,,,,
+desc,科勒恩的逃脱匕首,购买逃脱匕首(E),允许英雄传送一小段距离。,desc,Wood,Artifact,255,255,255,AIbk,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,400,75,7,,1,1,47,1.0,1,1,120,AIbk,,,1,,,,
+dust,尘土之影,购买尘土之影(D),"显示英雄周围的隐形单位。
+一共可以使用2次。
+持续20秒。",dust,Wood,Miscellaneous,255,255,255,AItb,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,75,75,1,,1,,,1.0,1,1,60,AItb,1,2,1,,,,
+evtl,闪避护符,购买闪避护符,"能让英雄有15% 的概率躲避掉敌人的攻击。
+不能和闪避以及醉拳技能一起使用。",evtl,Wood,Permanent,255,255,255,AEev,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,400,75,3,7,1,1,99,1.0,1,1,120,AIev,,,,,,,
+fgdg,恶魔雕像,购买恶魔雕像,"召唤出一毁灭守卫来为你战斗。
+持续180秒。",fgdg,Wood,Charged,255,255,255,AIfu,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,750,75,6,8,1,1,139,1.0,1,1,120,AIfu,1,1,1,,,,
+fgfh,长钉衣领,购买长钉衣领,"召唤一名邪恶漫步者为你作战。
+持续180秒。",fgfh,Wood,Charged,255,255,255,AIfh,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,450,75,4,6,1,1,83,1.0,1,1,120,AIfh,1,1,1,,,,
+fgrd,红龙之卵,购买红龙之卵(E),"召唤强大的红龙来为你战斗。
+持续180秒。",fgrd,Wood,Charged,255,255,255,AIfd,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,450,75,4,6,1,1,77,1.0,1,1,120,AIfd,1,1,1,,,,
+fgrg,岩石印记,购买岩石印记,"召唤岩石傀儡来为你战斗。
+持续180秒。",fgrg,Wood,Charged,255,255,255,AIfr,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,450,75,4,6,1,1,140,1.0,1,1,120,AIfr,1,1,1,,,,
+fgsk,死亡之书,购买死亡之书,"召唤出 4个骷髅战士和4个骷髅弓箭手。
+持续120秒。",fgsk,Wood,Charged,255,255,255,AIfs,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,450,75,4,6,1,1,55,1.0,1,1,120,AIfs,1,1,1,,,,
+gcel,加速手套,购买加速手套,增加英雄15%的攻击速度。,gcel,Wood,Permanent,255,255,255,AIas,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,100,75,2,2,1,1,32,1.0,1,1,120,AIsx,,,,,,,
+hcun,灵巧头巾,购买灵巧头巾,增加英雄4点的敏捷度和智力。,hcun,Wood,Permanent,255,255,255,AIa4,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,500,75,5,9,1,1,62,1.0,1,1,120,"AIa4,AIi4",,,,,,,
+hlst,医疗石,购买医疗石,提高英雄每秒1点的生命值恢复速度。也能一次性地使用掉从而增加500点的生命值。,hlst,Wood,Charged,255,255,255,AIhe,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,450,75,4,4,1,1,122,1.0,1,1,120,"AIh2,Arll",1,1,1,,,,
+hslv,医疗剂,购买医疗剂(H),"非战斗类消耗型物品
+使用后在45秒内恢复目标单位的生命值400点。
+可使用3次。",hslv,Wood,Purchasable,255,255,255,AIrg,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,100,75,1,,1,,82,1.0,1,2,60,AIrl,1,3,1,,,,
+hval,英勇面具,购买英勇面具,增加英雄4点的力量和敏捷度。,hval,Wood,Permanent,255,255,255,AIs4,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,500,75,5,9,1,1,108,1.0,1,1,120,"AIs4,AIa4",,,,,,,
+infs,恶魔岩石,购买恶魔岩石,召唤一个地狱火从天而降，造成50点的伤害，并让敌方地面单位在4秒内处于昏晕状态。地狱火持续180秒。,infs,Wood,Charged,255,255,255,AIin,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,750,75,6,8,1,1,141,1.0,1,1,120,AIin,1,1,1,,,,
+kpin,卡嘉长萧,购买卡嘉长萧,"使得英雄和周围单位的魔法值恢复速度加快 。
+不能和辉煌光环同时使用。",kpin,Wood,Permanent,255,255,255,AHab,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,500,75,5,7,1,1,60,1.0,1,1,120,AIba,,,,,,,
+lgdh,毁灭之角,购买毁灭之角,"增加英雄和附近单位的生命值恢复速度和移动速度。
+不能和邪恶光环同时使用。",lgdh,Wood,Permanent,255,255,255,AUau,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,400,75,4,7,1,1,124,1.0,1,1,120,AIau,,,,,,,
+lhst,风暴狮角,购买风暴狮角,"使得英雄和周围的单位增加1点的护甲。
+不能和专注光环同时使用。",lhst,Wood,Permanent,255,255,255,AHad,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,400,75,4,7,1,1,76,1.0,1,1,120,AIad,,,,,,,
+manh,生命手册,购买生命手册,增加英雄50点的生命值。,manh,Wood,PowerUp,255,255,255,AImi,1,Objects\InventoryItems\tome\tome.mdl,200,75,1,1,1,1,200,1.0,,1,120,AImh,1,1,1,1,,,
+mcou,勇气勋章,购买勇气勋章,增加英雄4点力量和智力。,mcou,Wood,Permanent,255,255,255,AIs4,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,500,75,5,9,1,1,87,1.0,1,1,120,"AIs4,AIi4",,,,,,,
+mcri,机械类的小玩艺,购买机械类的小玩艺(E),能召唤出一个玩家所能控制的小玩艺来进行侦察。,mcri,Wood,Purchasable,255,255,255,Amec,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,50,75,1,,1,,,1.0,1,2,60,Amec,1,1,1,,,,
+mnst,魔法石,购买魔法石,加快英雄25%的魔法恢复速度。也可以一次使用掉来增加300点的魔法。,mnst,Wood,Charged,255,255,255,AIma,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,450,75,4,4,1,1,90,1.0,1,1,120,"AIm2,AIrn",1,1,1,,,,
+modt,死亡面罩,购买死亡面罩,能使英雄的攻击将50%对敌人造成的伤害转换成自己的生命值。,modt,Wood,Artifact,255,255,255,AIva,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,1000,75,8,10,1,1,138,1.0,1,1,120,AIva,,,,,,,
+moon,月亮石,购买月亮石(N),"制造日蚀，阻挡阳光，以创造人造夜晚。
+持续30秒。",moon,Wood,Purchasable,255,255,255,AIct,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,50,75,1,,1,,1,1.0,1,1,90,AIct,1,1,1,,,,
+ocor,腐蚀之球,购买腐蚀之球(B),增加英雄5点的攻击力。英雄的攻击在攻击空中单位的时候也变为远程，而且能在5秒内削弱敌人的护甲。,ocor,Wood,Miscellaneous,255,255,255,AIcb,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,400,75,3,7,1,,93,1.0,1,1,120,AIcb,,,,,,,
+odef,黑暗之球,购买黑暗之球(B),增加英雄6点的攻击力。英雄的攻击也会在攻击空中单位的时候具有远程能力，而且如果一下子就杀死敌方某个单位的话，那么还会出现一个为你作战的黑暗之奴。黑暗之奴持续80秒。,odef,Wood,Permanent,255,255,255,AIdf,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,500,75,6,,1,1,96,1.0,1,1,120,AIdf,,,,,,,
+ofir,火焰之球,购买火焰之球(F),能让英雄的攻击带有5点的火焰伤害，而且英雄的攻击在攻击空中单位的时候会变成远程攻击，还有一定的溅射效果。,ofir,Wood,Miscellaneous,255,255,255,AIfb,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,400,75,3,7,1,,95,1.0,1,1,120,AIfb,,,,,,,
+ofro,霜冻之球,购买霜冻之球(R),能让英雄的攻击带有6点的冷冻伤害。而且这种攻击在攻击空中单位的时候会变成远程攻击，还能在3秒内减慢敌人的进攻和移动速度。,ofro,Wood,Artifact,255,255,255,AIob,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,800,75,7,7,1,1,97,1.0,1,1,120,AIob,,,,,,,
+oli2,闪电之球,购买闪电之球(L),"能增加英雄6点的攻击力。也使得英雄的攻击在攻击空中单位的时候会变为远程攻击，还能驱逐魔法和在3秒内减慢敌人的移动速度。
+对召唤出来的单位能造成 150点的伤害。",oli2,Wood,Miscellaneous,255,255,255,AIll,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,400,75,3,,1,,91,1.0,1,1,120,AIll,,,,,,,
+oven,毒液之球,购买毒液之球(V),增加英雄5点的攻击力。英雄的攻击也会在攻击空中单位的时候具有远程能力并能在8秒内对目标造成中毒效果。,oven,Wood,Miscellaneous,255,255,255,AIpb,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,400,75,3,7,1,,94,1.0,1,1,120,"AIpb,Apo2",,,,,,,
+pams,抗体药水,购买抗体药水(A),使英雄在15秒内对所有的魔法免疫。,pams,Wood,Miscellaneous,255,255,255,Aami,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,100,75,,,1,,56,1.0,1,2,120,AIxs,1,1,1,,,,
+pdiv,神圣药水,购买神圣药水(D),在25秒内让英雄变为无敌。,pdiv,Wood,Charged,255,255,255,AHds,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,600,75,5,,1,1,125,1.0,1,1,120,AIdv,1,1,1,,440,,
+penr,能量垂饰,购买能量垂饰,增加英雄150点的魔法最大值。,penr,Wood,Permanent,255,255,255,AImm,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,400,75,3,4,1,1,50,1.0,1,1,120,AImb,,,,,,,
+pghe,大生命药水,购买大生命药水(R),能恢复500 点的生命值。,pghe,Wood,Charged,255,255,255,AIhe,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,400,75,3,3,1,1,121,1.0,1,1,120,AIh2,1,1,1,,,,
+pgma,大魔法药水,购买大魔法药水(M),恢复300点的魔法值。,pgma,Wood,Charged,255,255,255,AIma,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,400,75,3,3,1,1,68,1.0,1,1,120,AIm2,1,1,1,,,,
+phea,生命药水,购买生命药水(P),恢复250点的生命值。,phea,Wood,Purchasable,255,255,255,AIhe,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,150,75,1,3,1,,74,1.0,1,3,120,AIh1,1,1,1,,440,,
+plcl,小净化药水,购买小净化药水(C),"非战斗类一次性物品
+在30秒内恢复英雄100点的魔法值。",plcl,Wood,Purchasable,255,255,255,AIpr,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,70,75,,,1,,57,1.0,1,2,30,AIpl,1,1,1,,,,
+pman,魔法药水,购买魔法药水(M),恢复150点的魔法值。,pman,Wood,Purchasable,255,255,255,AIma,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,200,75,1,,1,,66,1.0,1,2,120,AIm1,1,1,1,,440,,
+pmna,魔法垂饰,购买魔法垂饰,增加250点的魔法最大值。,pmna,Wood,Permanent,255,255,255,AImm,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,500,75,6,7,1,1,61,1.0,1,1,120,AIbm,,,,,,,
+pnvl,较小的无敌药水,购买较小的无敌药水(N),在7秒内使得英雄无敌。任何魔法都不能攻击一个处于无敌状态的英雄。,pnvl,Wood,Purchasable,255,255,255,AIvu,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,150,75,2,,1,1,40,1.0,1,1,120,AIvl,1,1,1,,440,,
+pnvu,无敌药水,购买无敌药水(I),在15秒内使得英雄无敌。任何魔法都不能攻击一个处于无敌状态的英雄。,pnvu,Wood,Charged,255,255,255,AIvu,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,400,75,3,3,1,1,102,1.0,1,1,120,AIvu,1,1,1,,440,,
+pomn,全知药水,购买全知药水(O),"使用后显示整个地图<Alrv,Dur1>秒。",pomn,Wood,Charged,255,255,255,AIrv,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,400,75,,,1,1,,1.0,1,1,120,AIrv,1,1,1,,440,,
+pres,恢复药水,购买恢复药水(R),能恢复500点生命值和200点的魔法值。,pres,Wood,Charged,255,255,255,AIre,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,600,75,5,6,1,1,132,1.0,1,1,120,AIre,1,1,1,,440,,
+prvt,生命护身符,购买生命护身符(V),增加英雄150点的生命值。,prvt,Wood,Permanent,255,255,255,AIml,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,350,75,3,4,1,1,107,1.0,1,1,120,AIlf,,,,,,,
+rag1,敏捷便鞋  +3,购买敏捷便鞋 +3(A),增加英雄3点的敏捷度。,rag1,Wood,Permanent,255,255,255,AIa3,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,100,75,1,2,1,1,104,1.0,1,1,120,AIa3,,,,,,,
+rat6,攻击之爪 +6,购买攻击之爪 +6,能增加英雄6点的攻击力。,rat6,Wood,Permanent,255,255,255,AIat,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,100,75,2,2,1,1,44,1.0,1,1,120,AIt6,,,,,,,
+rat9,攻击之爪 +9,购买攻击之爪 +9(C),增加英雄9点的攻击力。,rat9,Wood,Permanent,255,255,255,AIat,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,400,75,3,4,1,1,48,1.0,1,1,120,AIt9,,,,,,,
+ratc,攻击之爪 +12,购买攻击之爪 +12,增加英雄12点的攻击力。,ratc,Wood,Permanent,255,255,255,AIat,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,500,75,5,7,1,1,49,1.0,1,1,120,AItc,,,,,,,
+ratf,攻击之爪 +15,购买攻击之爪 +15,增加英雄15点的攻击力。,ratf,Wood,Artifact,255,255,255,AIat,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,800,75,7,9,1,1,53,1.0,1,1,120,AItf,,,,,,,
+rde1,守护指环 +2,购买守护指环 +(2),增加英雄2点的护甲。,rde1,Wood,Permanent,255,255,255,AIde,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,150,75,2,2,1,1,80,1.0,1,1,90,AId2,,,,,,,
+rde2,守护指环 +3,购买守护指环 +(3),增加英雄3点的护甲。,rde2,Wood,Permanent,255,255,255,AIde,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,400,75,3,,1,1,105,1.0,1,1,120,AId3,,,,,,,
+rde3,守护指环 +4,购买守护指环 +(4),增加英雄4点的护甲。,rde3,Wood,Permanent,255,255,255,AIde,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,500,75,6,8,1,1,116,1.0,1,1,120,AId4,,,,,,,
+rde4,守护指环 +5,购买守护指环 +(5),能增加英雄5点的护甲,rde4,Wood,Artifact,255,255,255,AIde,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,800,75,7,9,1,1,117,1.0,1,1,120,AId5,,,,,,,
+rej3,恢复药水,购买恢复药水(R),"非战斗类一次性物品
+在30秒内恢复英雄200点的生命值和75点的魔法值。",rej3,Wood,Charged,255,255,255,AIrg,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,400,75,2,,1,1,75,1.0,1,,120,AIp3,1,1,1,,,1,
+rhth,卡嘉医疗宝石,购买卡嘉医疗宝石(H),增加300点的生命值。,rhth,Wood,Permanent,255,255,255,AIml,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,500,75,6,7,1,1,128,1.0,1,1,120,AIl2,,,,,,,
+rin1,智力斗篷 +3,购买智力斗篷 +3(I),增加英雄3点的智力。,rin1,Wood,Permanent,255,255,255,AIi3,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,100,75,1,2,1,1,23,1.0,1,1,120,AIi3,,,,,,,
+rlif,恢复指环,购买恢复指环(R),提高英雄每秒 2 点的生命值恢复速度。,rlif,Wood,Permanent,255,255,255,Arel,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,200,75,3,4,1,1,42,1.0,1,1,120,Arel,,,,,,,
+rnec,巫术妖棍,购买巫术妖棍(R),"从一具死尸中召唤出两个骷髅战士。
+可使用4次。",rnec,Wood,Purchasable,255,255,255,AIrd,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,150,75,1,,1,,86,1.0,1,2,60,AIrd,1,4,1,,,,
+rst1,食人鬼手套 +3,购买食人鬼手套 +3(S),增加英雄3点的力量。,rst1,Wood,Permanent,255,255,255,AIs3,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,100,75,1,2,1,1,58,1.0,1,1,120,AIs3,,,,,,,
+rwiz,艺人面罩,购买艺人面罩(B),提高英雄 50% 的魔法值恢复速度。,rwiz,Wood,Permanent,255,255,255,AIrm,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,400,75,4,4,1,1,64,1.0,1,1,120,AIrm,,,,,,,
+sand,操作死尸卷轴,购买操作死尸卷轴,复活周围6个单位来为你战斗。持续时间为40秒。,sand,Wood,Charged,255,255,255,AIan,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,750,75,6,8,1,1,133,1.0,1,1,120,AIan,1,1,1,,440,,
+sbch,天灾骨钟,购买天灾骨钟,"使得近战型英雄和附近的近战型单位能将他们自己15%的攻击力转换成生命值。
+不能和吸血光环同时使用。",sbch,Wood,Permanent,255,255,255,AUav,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,450,75,4,7,1,1,71,1.0,1,1,120,AIav,,,,,,,
+shar,冰冻碎片,购买冰冻碎片,召唤出一个冰冻幽灵。冰冻幽灵持续180秒。,shar,Wood,Charged,255,255,255,AIir,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,750,75,6,,1,1,135,1.0,1,1,120,AIir,1,1,1,,,,
+shas,速度卷轴,购买速度卷轴(S),"让英雄和周围的单位拥有最快的移动速度。
+持续10秒。",shas,Wood,Purchasable,255,255,255,AIsp,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,50,75,1,,1,,34,1.0,1,1,60,AIsa,1,1,1,,,,
+shea,医疗卷轴,购买医疗卷轴(H),能恢复英雄周围非机械单位150点的生命值。,shea,Wood,Purchasable,255,255,255,AIha,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,250,75,2,,1,,73,1.0,1,2,120,AIha,1,1,1,,440,,
+skul,献祭头骨,购买献祭头骨(K),在指定的区域创造出一片荒芜之地来。,skul,Wood,Purchasable,255,255,255,Ablp,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,50,75,1,,1,,,1.0,1,2,60,Ablp,1,1,1,,,,
+spre,保存权杖,购买保存权杖(E),将一个目标单位传送到最高等级的主基地。,spre,Wood,Miscellaneous,255,255,255,ANpr,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,200,75,,,1,,4,1.0,1,2,120,ANpr,,,1,,,,
+spsh,魔法护盾护身符,魔法盾护身符(A),每隔40秒就阻止敌人向自己的英雄施放魔法。,spsh,Wood,Permanent,255,255,255,ANss,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,400,75,6,5,1,1,113,1.0,1,1,120,ANss,,,,,,,
+sreg,恢复卷轴,购买恢复卷轴(R),"非战斗类一次性物品
+在45秒内恢复英雄周围所有非机械单位225点的生命值。",sreg,Wood,Purchasable,255,255,255,AIsl,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,100,75,,,1,,70,1.0,1,2,90,AIsl,1,1,1,,,,
+sres,恢复卷轴,购买恢复卷轴(R),能恢复英雄周围非机械单位300点的生命值和150点的魔法值。,sres,Wood,Charged,255,255,255,AIra,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,750,75,5,7,1,1,144,1.0,1,1,120,AIra,1,1,1,,440,,
+sror,野兽卷轴,购买野兽卷轴,在45秒内提高附近友军单位25%的攻击力。,sror,Wood,Charged,255,255,255,Aroa,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,400,75,3,3,1,1,63,1.0,1,1,120,AIrr,1,1,1,,440,,
+srrc,复活卷轴,购买复活卷轴,能复活你6个死去的单位。,srrc,Wood,Charged,255,255,255,AIrs,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,750,75,6,8,1,1,134,1.0,1,1,120,AIrs,1,1,1,,440,,
+ssan,避难权杖,购买避难权杖(N),"T将目标单位传送到你最高等级的主基地,让其处于昏晕状态并以每秒15点的速度来恢复其生命值直到该单位补满生命值为止。",ssan,Wood,Purchasable,255,255,255,ANsa,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,250,75,,,1,,3,1.0,1,1,120,ANsa,,,1,,,,
+ssil,沉默权杖,购买沉默权杖(E),阻止一定区域内所有敌人施放魔法。,ssil,Wood,Permanent,255,255,255,ANsi,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,500,75,6,,1,1,6,1.0,1,1,120,AIse,,,1,,,,
+stwp,回城卷轴,购买回城卷轴(T),将英雄和英雄周围的单位传送到指定的一个己方或者友军城镇。,stwp,Wood,Purchasable,255,255,255,AItp,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,350,75,2,,1,,123,1.0,1,2,120,AItp,1,1,1,,440,,
+tdex,敏捷之书,购买敏捷之书(A),永久性地提高英雄1点的敏捷度。,tdex,Wood,PowerUp,255,255,255,AIam,1,Objects\InventoryItems\tomeGreen\tomeGreen.mdl,150,75,1,1,1,1,200,1.0,,1,120,AIam,1,1,1,1,,,
+tdx2,敏捷之书 +2,购买敏捷之书+2,能永久地增加英雄2点的敏捷度。,tdx2,Wood,PowerUp,255,255,255,AIgm,1,Objects\InventoryItems\tomeGreen\tomeGreen.mdl,300,75,2,5,1,1,200,1.0,,1,120,AIgm,1,1,1,1,,,
+texp,经验之书,购买经验之书(E),给予英雄 150点的经验值。,texp,Wood,PowerUp,255,255,255,AIem,1,Objects\InventoryItems\tomeBrown\tomeBrown.mdl,500,75,2,5,1,1,200,1.0,,1,120,AIem,1,1,1,1,,,
+tgrh,小型的大厅,购买小型的大厅(G),在目标区域创建出一座大厅。对于人族， 暗夜精灵族和不死族来讲则分别会创建出城镇大厅，生命之树和大墓地。,tgrh,Wood,Purchasable,255,255,255,AIbl,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,600,75,3,,1,,,1.0,1,1,120,AIbg,1,1,1,,,,185
+tin2,智力之书 +2,购买智力之书 +2,能永久地增加英雄2点的智力。,tin2,Wood,PowerUp,255,255,255,AItm,1,Objects\InventoryItems\tomeBlue\tomeBlue.mdl,300,75,2,5,1,1,200,1.0,,1,120,AItm,1,1,1,1,,,
+tint,智力之书,购买智力之书(T),能永久地增加英雄1点的智力。,tint,Wood,PowerUp,255,255,255,AIim,1,Objects\InventoryItems\tomeBlue\tomeBlue.mdl,150,75,1,1,1,1,200,1.0,,1,120,AIim,1,1,1,1,,,
+tkno,能量之书,购买能量之书(P),能提高英雄1个等级。,tkno,Wood,Artifact,255,255,255,AIlm,1,Objects\InventoryItems\tomeBrown\tomeBrown.mdl,1250,75,8,9,1,1,200,1.0,,1,120,AIlm,1,1,1,1,,,
+totw,野性护符,购买野性护符,"这块神秘的石头能召唤出一两栖鱼人来为你战斗。
+一共可以召唤3次。
+持续180秒。",totw,Wood,Charged,255,255,255,AIff,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,450,75,4,7,1,1,84,1.0,1,1,120,AIff,1,3,1,,,,
+tpow,知识之书,购买知识之书,增加英雄1点的智力，敏捷度和力量。,tpow,Wood,PowerUp,255,255,255,AIxm,1,Objects\InventoryItems\tome\tome.mdl,300,75,2,5,1,1,200,1.0,,1,120,AIxm,1,1,1,1,,,
+tsct,象牙塔,购买象牙塔(V),能在指定的区域内创建出一座哨塔来。,tsct,Wood,Purchasable,255,255,255,AIbl,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,30,75,1,,1,,,1.0,1,3,30,AIbt,1,1,1,,,,20
+tst2,力量之书 +2,购买力量之书 +2,增加2点的力量。,tst2,Wood,PowerUp,255,255,255,AInm,1,Objects\InventoryItems\tomeRed\tomeRed.mdl,300,75,2,5,1,1,200,1.0,,1,120,AInm,1,1,1,1,,,
+tstr,力量之书,购买力量之书(S),能永久性地提高英雄1点的力量。,tstr,Wood,PowerUp,255,255,255,AIsm,1,Objects\InventoryItems\tomeRed\tomeRed.mdl,150,75,1,1,1,1,200,1.0,,1,120,AIsm,1,1,1,1,,,
+ward,战歌之鼓,购买战歌之鼓(W),"能增加周围单位 10%的攻击力。
+不能和命令光环同时使用。",ward,Wood,Permanent,255,255,255,AOac,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,500,75,5,7,1,1,38,1.0,1,1,120,AIcd,,,,,,,
+wcyc,飓风权杖,购买飓风权杖,"允许英雄施放飓风。飓风将目标单位投掷到空中，使其不能移动，攻击和施放任何的魔法技能。而且其他单位也不能在这期间攻击它。
+持续<Alcy,Dur1>秒。",wcyc,Wood,Charged,255,255,255,Acyc,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,450,75,4,6,1,1,30,1.0,1,1,120,AIcy,1,3,1,,,,
+whwd,治疗守卫,购买治疗守卫,"放置一个守卫来治疗周围的单位持续时间为 30秒。
+一共可以使用3次。",whwd,Wood,Charged,255,255,255,Ahwd,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,600,75,5,6,1,1,85,1.0,1,1,120,AIhw,1,3,1,,,,
+wild,野性护身符,购买野性护身符,召唤出一个熊怪战士。熊怪持续180秒。,wild,Wood,Charged,255,255,255,AIuw,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,750,75,6,,1,1,136,1.0,1,1,120,AIuw,1,1,1,,,,
+will,幻象权杖,购买幻象权杖(I),"能制造目标单位的一个幻象。幻象不具备任何的攻击力，遭受敌人进攻的伤害值也会翻成原有的2 倍。在60秒之后或者生命值达到零之后幻象会自动消失。
+一共可以使用3 次。",will,Wood,Charged,255,255,255,AIil,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,150,75,2,3,1,1,14,1.0,1,1,120,AIil,1,3,1,,,,
+wlsd,闪电护盾权杖,购买闪电护盾权杖,"使得英雄能在某个单位身上施放闪电护盾魔法，围绕在该单位身上的护盾能对周围的单位造成每秒20的伤害。
+一共可以使用3次。
+持续20秒。",wlsd,Wood,Charged,255,255,255,Alsh,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,150,75,2,3,1,1,8,1.0,1,1,90,AIls,1,3,1,,,,
+woms,魔法盗取权杖,购买魔法盗取权杖(W),"盗取目标单位身上的魔法值。
+一共可以使用2次。",woms,Wood,Charged,255,255,255,Aste,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,400,75,3,3,1,1,69,1.0,1,1,120,Aste,1,2,1,,,,
+wshs,影子权杖,购买影子权杖(W),"能让玩家拥有敌方目标单位的视野直到该单位身上的魔法被驱逐。
+可使用2次。",wshs,Wood,Charged,255,255,255,Ashs,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,150,75,,,1,1,,1.0,1,2,60,Ashs,1,2,1,,,,
+wswd,岗哨守卫,购买岗哨守卫,"在300秒内放置一个哨兵守卫来监视一定的区域。
+一共可以使用3次。",wswd,Wood,Charged,255,255,255,Ayeye,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,150,75,2,3,1,1,,1.0,1,1,120,AIsw,1,3,1,,,,
+I000,无敌之剑,无敌之剑,为了让国王一人拯救世界而授予的一把牛的不能再牛的武器，增加150点伤害，30%攻击速度，10000点HP，6点护甲。,I000,Wood,Permanent,255,255,255,AIat,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,500,75,5,7,1,1,49,1.0,1,1,120,"A01Q,A01P,A04I,A01R",,,,,,,
+I001,Unkillable,Unkillable,"This King is unkillable.
+
++1000 hp regen
++100% attack speed
++1000 damage
++100 armor",I001,Wood,Permanent,255,255,255,AIat,1,Objects\InventoryItems\TreasureChest\treasurechest.mdl,500,75,5,7,1,1,49,1.0,1,1,120,"A07A,A078,A077,A079",,,,,,,
+I002,Tome of 400 hp,Purchase Tome of Agility,Permanently increases the Agility of the Hero by 1 when used.,I002,Wood,PowerUp,255,255,255,AIam,1,Objects\InventoryItems\tomeGreen\tomeGreen.mdl,150,75,1,1,1,1,200,1.0,,1,120,A041,1,1,1,1,,,
+I003,敏捷之书,购买敏捷之书(A),永久性地提高英雄1点的敏捷度。,I003,Wood,PowerUp,255,255,255,AIam,1,Objects\InventoryItems\tomeGreen\tomeGreen.mdl,150,75,1,1,1,1,200,1.0,,1,120,A042,1,1,1,1,,,
+I101,生命手册,购买生命手册,增加英雄50点的生命值。,I101,Wood,PowerUp,255,255,255,AImi,1,Objects\InventoryItems\tome\tome.mdl,200,75,1,1,1,1,200,1.0,,1,120,"A401,A402",1,1,1,1,,,
+I102,生命手册,购买生命手册,增加英雄50点的生命值。,I102,Wood,PowerUp,255,255,255,AImi,1,Objects\InventoryItems\tome\tome.mdl,200,75,1,1,1,1,200,1.0,,1,120,"A403,A404",1,1,1,1,,,

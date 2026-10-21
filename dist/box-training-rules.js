@@ -45,6 +45,42 @@ export function boxFarmUpgradeStatus(player,{pendingUpgrade=!!player?.economyTas
     populationDelta:stage.populationDelta,immediate:true,cost:{gold:0,wood:0}};
 }
 
+// Literal KM/FS registrations in Ch, not a derived Web builder/prophet pool.
+const randomGiftPool=(abilityId,tier,arrayName,rawcodes,firstLine,countLine,spellLines)=>Object.freeze({abilityId,tier,arrayName,
+  count:rawcodes.length,rawcodes:Object.freeze(rawcodes),
+  candidates:Object.freeze(rawcodes.map((rawcode,i)=>Object.freeze({index:i+1,rawcode,name:V14_UNIT_TEMPLATES[rawcode]?.name,
+    sourceLine:firstLine+i*2,nativeSource:Object.freeze({...V14_UNIT_TEMPLATES[rawcode]?.source})}))),
+  source:Object.freeze({file:'war3map.j',countLine,countExpression:`I7[${tier}]`,spellLines:Object.freeze(spellLines)})});
+const randomGiftThree=randomGiftPool('A132',3,'KM',[
+  'h014','h06M','h044','h01H','h01V','h00P','h05R','h07Q','h08N',
+  'h09N','h0AB','h0BH','h0BX','h0CO','h0S7','n04F','n05U','n07B',
+],22036,22072,[31083,31102]);
+const randomGiftSix=randomGiftPool('A13N',6,'FS',[
+  'h01A','h06S','h021','h05Z','h04A','h01M','h00S','h07W','h090',
+  'h0A3','h0AR','h0BO','h0C9','h0D0','h0S1','n05C','h0QO',
+],22147,22181,[31103,31122]);
+export const BOX_RANDOM_FIGHTER_RULES=Object.freeze({
+  byAbility:Object.freeze({A132:randomGiftThree,A13N:randomGiftSix}),
+  byTier:Object.freeze({3:randomGiftThree,6:randomGiftSix}),
+  status:'partial',facing:270,cost:Object.freeze({gold:0,wood:0}),immediate:true,
+  placement:Object.freeze({scriptCheck:'RectContainsCoords(building_rect, targetX, targetY)',
+    checkBeforeRandom:true,scriptedPopulationCheck:false,scriptedOccupancyCheck:false,scriptedTerrainCheck:false,
+    source:Object.freeze({file:'war3map.j',rectRegistrationLines:Object.freeze([48609,48616]),rectDefinitionLines:Object.freeze([8597,8604])})}),
+  sourceHooks:Object.freeze({
+    order:Object.freeze(['CreateUnit','GroupAddUnit(Bu)','TriggerExecute(Bv)','if-created-handle-null: retain reward',
+      'EachMonsterSkillTypeForHero + permanent class ability','ExecuteMonsterSkillInit(false)','EggWhite','consume-entire-active-pool']),
+    classModule:'source-class-rules.js',classResolver:'EachMonsterSkillTypeForHero',classInit:'ExecuteMonsterSkillInit',
+    initializePersistentWithRandomClass:false,deploymentRandomClassOnly:'A18X',
+    source:Object.freeze({file:'war3map.j',classResolverLines:Object.freeze([3339,3353]),classInitLines:Object.freeze([3360,3396]),
+      classDeploymentLines:Object.freeze([43856,43860]),eggWhiteLines:Object.freeze([28485,29203]),
+      buildingLimitLine:29182,combatPowerLines:Object.freeze([21502,21530]),combatPowerDisplayLines:Object.freeze([18935,18939]),
+      populationPeakLines:Object.freeze([24895,24905])}),
+    eggWhiteConstructFinish:false,sameWaveFullSaleMarker:false,
+    ordinaryConstructFinishCallbacks:false,limitCheck:'register-created-unit-and-adjust-future-allowance-no-precreation-rejection',
+  }),
+  partial:'已还原脚本区域检查、原始候选顺序、单次随机与成功消费。CreateUnit的原生失败条件及路径/碰撞自动调整在本包中没有定义，不以人口、占位或地形猜测补写。',
+});
+
 const pools = Object.freeze({
   box: Object.freeze(['A131','A132','A133','A134','A135','A136','A13M','A2ZA','A2ZB','A2ZC','A2ZD','A2ZE']),
   box2: Object.freeze(['A140','A13N','A13O','A13P','A13Q','A13R','A13S']),
@@ -53,7 +89,7 @@ const meta = (id, handler, targetKind, description, extra = {}) => Object.freeze
   tier: pools.box.includes(id) ? 'box' : 'box2', handler, targetKind, description, status: 'implemented', ...extra });
 export const BOX_REWARD_RULES = Object.freeze({
   A131: meta('A131','farm','none','按已保存农场原型的原生next链立即免费替换到下一阶；人口增量取fmade差值，未知原型、升级在研或满级时保留奖励。', {status:'partial',partial:'已核定next替换链；旧档无法从总人口反推农场原型，在研原生升级被替换后的退款/取消事件未核定。'}),
-  A132: meta('A132','randomFighter','point','在自己的建造区域按KM[1..I7[3]]随机创建一个三级兵并计算人口；成功后消费整组奖励。', { fighterTier: 3, status: 'partial', partial: '创建、原生人口限制与普通单位附加能力初始化由宿主提供。' }),
+  A132: meta('A132','randomFighter','point','自己的建造区域内点击后，从原始KM十八项候选中随机创建一个三级兵；成功后消费整组奖励。', { fighterTier: 3, status: 'partial', partial: BOX_RANDOM_FIGHTER_RULES.partial }),
   A133: meta('A133','gold','none','获得50金币并消费整组第一阶段奖励。', { gold: 50 }),
   A134: meta('A134','wood','none','获得150木材并消费整组第一阶段奖励。', { wood: 150 }),
   A135: meta('A135','unitAbilities','ancient','向己方ancient单位永久添加A138(+300生命)和A13A(+1甲)。', { abilityIds: ['A138','A13A'] }),
@@ -65,7 +101,7 @@ export const BOX_REWARD_RULES = Object.freeze({
   A2ZD: meta('A2ZD','swap','ancient','选中第一个己方存活ancient单位即消费整组奖励；随后A2ZF选择另一个单位，失败的第二次选择保留换位资格。'),
   A2ZE: meta('A2ZE','demolish','ownedNonTauren','拆除己方存活非TAUREN单位；实际只返还类型point value金币，木材为0，并调用SellHook；不采用文案金木原价。'),
   A140: meta('A140','lumber','none','原生UpLumbering免费升一级，满级不消费。'),
-  A13N: meta('A13N','randomFighter','point','在自己的建造区域按FS[1..I7[6]]随机创建一个六级兵并计算人口。', { fighterTier: 6, status: 'partial', partial: '创建、原生人口限制与普通单位附加能力初始化由宿主提供。' }),
+  A13N: meta('A13N','randomFighter','point','自己的建造区域内点击后，从原始FS十七项候选中随机创建一个六级兵；成功后消费整组奖励。', { fighterTier: 6, status: 'partial', partial: BOX_RANDOM_FIGHTER_RULES.partial }),
   A13O: meta('A13O','gold','none','获得300金币并消费整组第二阶段奖励。', { gold: 300 }),
   A13P: meta('A13P','wood','none','获得800木材并消费整组第二阶段奖励。', { wood: 800 }),
   A13Q: meta('A13Q','unitAbilities','ancient','向己方ancient单位永久添加A13U(+2甲)、A13T(+800生命)、A13V(Arel，每秒40恢复)；不按文案推造每5秒跳200的定时器。', { abilityIds: ['A13U','A13T','A13V'] }),
@@ -102,6 +138,22 @@ function consume(p,id){
   const r=p.boxRewards;
   if(!r||r.consumed||!r.abilityIds?.includes(id))return false;
   r.abilityIds=[];r.consumed=true;r.selectedAbilityId=id;return true;
+}
+
+/** Host creation includes the source post-create hooks and reports explicit success. */
+export function claimBoxRandomFighterReward(game,p,id,payload={},api={}){
+  const rule=BOX_RANDOM_FIGHTER_RULES.byAbility[id],holder=p?.boxRewards,tier=id==='A132'?'box':'box2';
+  if(!rule||!holder||holder.consumed||holder.tier!==tier||!holder.abilityIds?.includes(id))return fail('当前没有此神秘礼物奖励');
+  if(typeof api.isValidPoint!=='function'||typeof api.createFighter!=='function')return fail('随机兵种礼物需要已核定的选点与创建宿主，保留奖励');
+  if(!passed(api.isValidPoint(p,payload,game)))return fail('请在自己的区域建造');
+  // The only script gate precedes this single integer draw. No ordinary
+  // build-menu population, tech, quota, occupancy or terrain gate runs here.
+  const draw=game._random();
+  if(!Number.isFinite(draw)||draw<0||draw>=1)return fail('随机状态无效，保留奖励');
+  const candidate=rule.candidates[Math.floor(draw*rule.count)],selection={...candidate,abilityId:id,tier:rule.tier,arrayName:rule.arrayName,facing:270};
+  const result=api.createFighter(p,selection,payload,game);
+  if(result?.ok!==true||!result.unit||typeof result.unit!=='object')return fail(result?.reason??result?.message??'单位创建失败，原生失败条件尚未核定，保留奖励');
+  consume(p,id);return success({abilityId:id,selection,unit:result.unit,consumed:true,message:`已使用${BOX_REWARD_RULES[id].name}`});
 }
 
 /** Reproduces 20 random retry attempts, then source-order fallback per choice. */
@@ -205,7 +257,10 @@ export function claimBoxReward(game,p,id,payload={},api={}){
   else if(r.handler==='buildFree')p.boxBuildFreeOnce=true;
   else if(r.handler==='farm')result=api.upFarm?.(p,game)??false;
   else if(r.handler==='lumber')result=api.upLumbering?.(p,game)??false;
-  else if(r.handler==='randomFighter')result=api.grantRandomFighter?.(p,r.fighterTier,payload,game)??false;
+  else if(r.handler==='randomFighter'){
+    if(api.createFighter)return claimBoxRandomFighterReward(game,p,id,payload,api);
+    result=api.grantRandomFighter?.(p,r.fighterTier,payload,game)??false;
+  }
   else if(r.handler==='unitAbilities'){
     if(!api.grantAbilities)return fail('此奖励需要单位永久能力宿主，未消费奖励');
     result=api.grantAbilities(p,target,r.abilityIds,game);

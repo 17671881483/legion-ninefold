@@ -1,5 +1,6 @@
 import { UNITS, MERCENARIES, LEGACY_MERCENARIES, WAVES, RULES, HEROES, BUILDERS, PROPHET_POOLS, UNIT_TEMPLATES, TECHNOLOGIES, BOX_TRAINING_RULES } from './data.js';
-import { attachSkills, refreshSourceSkills, initializeSourceSkills, compileSkills, sourceAuraEffects, tickSourceSkills, sourceAttackStart, sourceOnHit, modifyIncoming, beforeSourceDamage, afterSourceDamage, sourceDeath, sourceMoveFactor, canWeaponTarget, sourceWeapon, tickSourceScriptJobs, manualSourceSkills, castManualSourceSkill } from './skills.js';
+import { attachSkills, refreshSourceSkills, initializeSourceSkills, initializeSourceClassCombat, sourceClassAttackDamageEvent, compileSkills, sourceAuraEffects, tickSourceSkills, sourceAttackStart, sourceOnHit, modifyIncoming, beforeSourceDamage, afterSourceDamage, sourceDeath, sourceMoveFactor, canWeaponTarget, sourceWeapon, tickSourceScriptJobs, manualSourceSkills, castManualSourceSkill } from './skills.js';
+import { initializeSourceClassBuilding } from './source-class-rules.js';
 import { MAP, laneToWorld, worldToLane, kingWorld, spawnWarpWorld, supportWorld, routePoints, isWalkable, isSegmentWalkable, constrainPoint, closestWalkable, navigationPath } from './layout.js';
 import { recordEggCompletion, restoreEggHistory, finishEggWave, recordBeastKingKill, eggRequirementStatus, appearanceQualificationStatus } from './egg-rules.js';
 import { queueSpecialMonsters, applySpecialMonsterSpawn, specialMonsterDeath, sourceEconomyBuildStart, sourceEconomyUpgradeFinish, farmerGoldRate, sourceEconomyDeath, applyFarmerRoundReward } from './special-rules.js';
@@ -288,7 +289,31 @@ export class Game {
     const reason=!stage?'农场原型尚未核定，暂时保留这项礼物':p.economyTasks?.farmTask?'农场正在升级，原生取消与返费尚未核定，暂时保留礼物':!stage.nextRawcode?'来源农场已经满级':'';
     return {canStart:!reason,reason,stage};
   }
-  _boxCombatDefinition(def,b) {return b?.permanentAbilityIds?.length?{...def,abilityIds:[...new Set([...(def.abilityIds??[]),...b.permanentAbilityIds])]}:def;}
+  _boxCombatDefinition(def,b) {
+    const derived=new Set(b?.sourceClassGrantedAbilityIds??[]),abilities=(b?.permanentAbilityIds??[]).filter(id=>!derived.has(id));
+    return abilities.length?{...def,abilityIds:[...new Set([...(def.abilityIds??[]),...abilities])]}:def;
+  }
+  _initializeSourceClassBuilding(b){
+    const def=this._boxDefinition(b);
+    if(isV14(units[b?.unitId])&&String(def?.sourceRawFields?.type??'').split(',').includes('ancient'))initializeSourceClassBuilding(this,b);
+  }
+  _boxGiftPoint(p,payload) {
+    if(!Number.isFinite(payload.worldX)||!Number.isFinite(payload.worldY))return null;
+    const point=worldToLane(payload.worldX,payload.worldY,p.id);
+    return point?.laneId===p.id&&point.y>=4&&point.y<=12?point:null;
+  }
+  _createBoxFighter(p,selection,payload) {
+    const point=this._boxGiftPoint(p,payload),def=UNITS.find(u=>!u.legacy&&rawcode(u)===selection.rawcode);
+    if(!point||!def)return {ok:false,reason:'随机兵种模板或放置位置无效，礼物已保留'};
+    // CreateUnit is immediate and the script applies no ordinary build-menu
+    // population, technology, quota, occupancy or construction gate here.
+    const b={id:this._uid('b'),unitId:def.id,col:point.x-.5,row:point.y-4.5,userData:0,spent:0,totalSpent:0,builtWave:null,
+      sourceGift:{abilityId:selection.abilityId,tier:selection.tier,sourceWave:p.boxRewards.sourceWave},facing:selection.facing};
+    p.buildings.push(b);this._recordLimitOrigins(b,def);this._recordSourceCompletion(p,def);this._recordEggCompletion(p,def,b);
+    p.popUsed=this._population(p);
+    this._event('build',{laneId:p.id,worldX:payload.worldX,worldY:payload.worldY},`礼物：${def.name}`);
+    return {ok:true,unit:b};
+  }
   _boxOwnedTargets(p,kind='ownedNotSelf') {
     return p.buildings.filter(b=>{
       const def=this._boxDefinition(b),flags=String(def?.sourceRawFields?.type??'').split(',');
@@ -324,14 +349,13 @@ export class Game {
     const p=this.state.players[playerId],holder=p?.boxRewards;if(!p||!holder)return null;
     const offers=(!holder.consumed?holder.abilityIds??[]:[]).map(id=>{
       const entry=BOX_REWARD_RULES[id];if(!entry)return null;
-      const training=entry.handler==='training',targetKind=training?'training':['ancient','ownedNotSelf','ownedNonTauren'].includes(entry.targetKind)?'building':'none';
-      const targets=targetKind==='none'?[]:this._boxOwnedTargets(p,training?'ownedNonHero':entry.targetKind).map(b=>({buildingId:b.id,name:units[b.unitId]?.name??b.unitId}));
+      const training=entry.handler==='training',targetKind=training?'training':entry.handler==='randomFighter'?'point':['ancient','ownedNotSelf','ownedNonTauren'].includes(entry.targetKind)?'building':'none';
+      const targets=['building','training'].includes(targetKind)?this._boxOwnedTargets(p,training?'ownedNonHero':entry.targetKind).map(b=>({buildingId:b.id,name:units[b.unitId]?.name??b.unitId})):[];
       let reason='';
-      if(entry.handler==='randomFighter')reason='随机兵种礼物尚未接入，可保留礼物或选择其他奖励';
-      else if(entry.handler==='builderAbility')reason='建造者主动施法尚未接入，可保留礼物或选择其他奖励';
+      if(entry.handler==='builderAbility')reason='建造者主动施法尚未接入，可保留礼物或选择其他奖励';
       else if(entry.handler==='farm')reason=this._boxFarmStatus(p).reason;
       else if(entry.handler==='lumber'&&!this._treasureLumberBranch(p))reason='伐木科技已满（含研究中）';
-      else if(targetKind!=='none'&&!targets.length)reason='没有符合条件的己方单位';
+      else if(['building','training'].includes(targetKind)&&!targets.length)reason='没有符合条件的己方单位';
       if(this.state.phase==='ended')reason='本局已结束';
       return {id,name:entry.name,description:BOX_PLAYER_DESCRIPTIONS[id]??entry.description,targetKind,targets,canStart:!reason,reason};
     }).filter(Boolean);
@@ -384,6 +408,7 @@ export class Game {
     if (p.id === 0) this._event('build', { laneId: p.id, x: b.col + .5, y: b.row + 4.5 }, `${units[b.unitId]?.name ?? ''}施工完成`);
   }
   _recordEggCompletion(p, def, building) {
+    this._initializeSourceClassBuilding(building);
     return recordEggCompletion(p,def,{buildingId:building?.id,wave:this.state.wave,buildings:p.buildings,unitsById:units});
   }
   _recordSourceCompletion(p, def) {
@@ -613,6 +638,7 @@ export class Game {
         const offer=this.boxRewardStatus(p.id)?.offers.find(o=>o.id===payload.abilityId);
         if(!offer?.canStart)return this._result(false,offer?.reason??'当前没有此神秘礼物奖励');
         const target=p.buildings.find(b=>b.id===payload.buildingId),api={getDefinition:b=>this._boxDefinition(b),getTarget:()=>target,
+          isValidPoint:(_owner,point)=>!!this._boxGiftPoint(p,point),createFighter:(_owner,selection,point)=>this._createBoxFighter(p,selection,point),
           upFarm:()=>{const farm=this._boxFarmStatus(p);if(!farm.canStart)return false;p.populationCap=Math.min(rule('maxPopulation',300),p.populationCap+farm.stage.populationDelta);p.sourceFarmRawcode=farm.stage.nextRawcode;return true;},
           upLumbering:()=>{const branch=this._treasureLumberBranch(p);if(!branch)return false;const task=p.economyTasks?.lumberTask,levels=this._sourceLumberLevels(p);if(branch==='advanced'&&levels.basic<rule('lumberBasicLevelCap',7))p.lumberAdvancedWhileBasicQueued=number(p.lumberAdvancedWhileBasicQueued,0)+1;p.lumberLevel++;if(task)task.targetLevel++;return true;},
           grantAbilities:(_owner,b,ids)=>{b.permanentAbilityIds=[...new Set([...(b.permanentAbilityIds??[]),...ids])];return true;},
@@ -620,7 +646,7 @@ export class Game {
           swap:(_owner,a,b)=>{[a.col,b.col]=[b.col,a.col];[a.row,b.row]=[b.row,a.row];return true;},
         };
         const result=payload.abilityId==='A2ZF'?completeBoxSwap(this,p,target,api):claimBoxReward(this,p,payload.abilityId,payload,api);
-        return this._result(result.ok,result.message??result.reason);
+        return this._result(result.ok,result.ok&&result.unit?`已获得 ${units[result.unit.unitId]?.name??'随机兵种'}`:result.message??result.reason);
       }
       case 'cast':{
         const e=this.state.entities.find(e=>e.id===payload.entityId),s=this.unitSkillStatus(payload.entityId,p.id).find(s=>s.id===payload.skillId);
@@ -983,6 +1009,7 @@ export class Game {
     def=this._boxCombatDefinition(def,player.buildings.find(b=>b.id===buildingId));
     const e = this._entity(def, { team: player.team, side: 'defender', laneId: player.id,
       ownerId: player.id, sourceLaneId: player.id, x, y, buildingId, isHero });
+    initializeSourceClassCombat(this,player.buildings.find(b=>b.id===buildingId),e);
     // PassiveSkill copies A1PE from the persistent building on every deployment.
     e.armor+=number(player.buildings.find(b=>b.id===buildingId)?.treasureArmor,0);
     const garroshArmor=number(player.buildings.find(b=>b.id===buildingId)?.garroshArmorLevel,0);
@@ -1296,9 +1323,11 @@ export class Game {
     const options=typeof pure==='object'?pure:{spell:!!pure},legacyPure=typeof pure==='boolean'&&pure;
     const revivalCount=target.status.yseraRevivalCount??0;
     let actual = modifyIncoming(this,target,damage,attacker,options);
-    if(actual<=0){if((target.status.yseraRevivalCount??0)>revivalCount)beforeSourceDamage(this,target,0,attacker,options);return 0;}
+    if(actual<=0){if((target.status.yseraRevivalCount??0)>revivalCount)beforeSourceDamage(this,target,0,attacker,options);sourceClassAttackDamageEvent(this,target,attacker,options);return 0;}
     if ((target.status.shield ?? 0) > 0 && !legacyPure) { const absorbed = Math.min(actual, target.status.shield); target.status.shield -= absorbed; actual -= absorbed; }
     beforeSourceDamage(this,target,actual,attacker,options);
+    // Main damage listener was registered before New_UnitAttack in the map.
+    sourceClassAttackDamageEvent(this,target,attacker,options);
     const sourcePreDamageHp=target.hp;
     target.hp -= actual;
     afterSourceDamage(this,target,actual,attacker,{...options,sourcePreDamageHp});
@@ -1491,6 +1520,7 @@ export class Game {
     for(const p of s.players)for(const b of p.buildings.filter(b=>!b.construction)){
       let def=units[b.unitId];if(!def||(isSourceUnit(def)&&!def.combatRawcode))continue;def=this._boxCombatDefinition(def,b);const point=laneToWorld(0,1.2+(p.id%4)*1.1+(b.col-2.5)*.12,p.team===0?5+(b.row/8):9-(b.row/8));
       const e=this._entity(def,{team:p.team,side:`arena${p.team}`,battleTeam:0,laneId:0,sourceLaneId:p.id,ownerId:p.id,buildingId:b.id,isArena:true,worldX:point.x,worldY:point.y});
+      initializeSourceClassCombat(this,b,e);
       e.armor+=number(b.treasureArmor,0);
       if(b.garroshArmorLevel){e.armor+=b.garroshArmorLevel;e.status.garroshArmorLevel=b.garroshArmorLevel;}
       if(b.garroshAttackLevel){e.damage+=b.garroshAttackLevel;e.status.garroshAttackLevel=b.garroshAttackLevel;}
@@ -1655,6 +1685,7 @@ export class Game {
       p.nagaFarmerGoldRate=farmerGoldRate(p,units);
       p.heroAltarCount=this._heroAltarCount(p);
       for(const b of p.buildings.filter(b=>!b.construction))this._recordSourceCompletion(p,units[b.unitId]);
+      for(const b of p.buildings.filter(b=>!b.construction))this._initializeSourceClassBuilding(b);
       restoreEggHistory(p,{wave:this.state.wave,buildings:p.buildings,unitsById:units});
       for(const b of p.buildings)if(!b.construction&&!b.boxLimitTransferred)this._recordLimitOrigins(b,units[b.unitId]);
       if(p.workers>rule('maxWorkers',7)||p.lumberLevel>rule('maxLumberLevel',15)){p.workers=Math.min(p.workers,rule('maxWorkers',7));p.lumberLevel=Math.min(p.lumberLevel,rule('maxLumberLevel',15));this.state.migrationNotice=`旧存档已限制为${RULES.maxWorkers}小精灵、${RULES.maxLumberLevel}级科技；原进度已保留备份。`;}

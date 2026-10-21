@@ -1,6 +1,6 @@
 {
   "sourceVersion": "v14.1A5",
-  "skillImplementationRevision": "v14-content-20261020-v15-1",
+  "skillImplementationRevision": "v14-content-20261021-v16-1",
   "units": 534,
   "mercenaryRecords": 60,
   "mainWaves": 35,
@@ -20,6 +20,37 @@
     "h0CL"
   ],
   "playerRuntimeAbilities": [
+    {
+      "sourceRawcode": "h06J",
+      "abilityIds": [
+        "A18P",
+        "A18S",
+        "A18T",
+        "A18U",
+        "A18V",
+        "A18W",
+        "A18X",
+        "A18Y",
+        "A18Z",
+        "A190",
+        "A191",
+        "A192",
+        "A193",
+        "A194",
+        "A195",
+        "A196",
+        "A197",
+        "A18Q",
+        "A18R",
+        "A198",
+        "A199",
+        "A19A",
+        "A19B",
+        "A19C",
+        "A19D",
+        "A19E"
+      ]
+    },
     {
       "sourceRawcode": "h0UD",
       "abilityIds": [
@@ -102,10 +133,10 @@
   ],
   "playerSkills": {
     "counts": {
-      "implemented": 391,
-      "partial": 34,
+      "implemented": 407,
+      "partial": 42,
       "marker": 34,
-      "unresolved": 139
+      "unresolved": 141
     },
     "abilities": [
       {
@@ -2714,7 +2745,7 @@
       {
         "rawcode": "A0KP",
         "name": "亡者呼唤",
-        "status": "implemented",
+        "status": "unresolved",
         "kind": "aura_regen",
         "unitRawcodes": [
           "n02S"
@@ -2723,7 +2754,7 @@
       {
         "rawcode": "A0KQ",
         "name": "召唤辛达苟萨",
-        "status": "implemented",
+        "status": "unresolved",
         "kind": "debuff",
         "unitRawcodes": [
           "n02S"
@@ -4320,6 +4351,240 @@
         "unitRawcodes": [
           "n068",
           "n069"
+        ]
+      },
+      {
+        "rawcode": "A18P",
+        "name": "不羁蛮力",
+        "status": "implemented",
+        "kind": "source_class",
+        "unitRawcodes": [
+          "h06J"
+        ]
+      },
+      {
+        "rawcode": "A18Q",
+        "name": "不羁蛮力",
+        "status": "implemented",
+        "kind": "aura_damage",
+        "unitRawcodes": [
+          "h06J"
+        ]
+      },
+      {
+        "rawcode": "A18R",
+        "name": "先进装甲",
+        "status": "implemented",
+        "kind": "passive_stats",
+        "unitRawcodes": [
+          "h06J"
+        ]
+      },
+      {
+        "rawcode": "A18S",
+        "name": "先进装甲",
+        "status": "implemented",
+        "kind": "source_class",
+        "unitRawcodes": [
+          "h06J"
+        ]
+      },
+      {
+        "rawcode": "A18T",
+        "name": "再生",
+        "status": "implemented",
+        "kind": "source_class",
+        "unitRawcodes": [
+          "h06J"
+        ]
+      },
+      {
+        "rawcode": "A18U",
+        "name": "暗蚀",
+        "status": "implemented",
+        "kind": "source_class",
+        "unitRawcodes": [
+          "h06J"
+        ]
+      },
+      {
+        "rawcode": "A18V",
+        "name": "法术亲和",
+        "status": "partial",
+        "kind": "source_class",
+        "unitRawcodes": [
+          "h06J"
+        ]
+      },
+      {
+        "rawcode": "A18W",
+        "name": "虚无缥缈",
+        "status": "implemented",
+        "kind": "source_class",
+        "unitRawcodes": [
+          "h06J"
+        ]
+      },
+      {
+        "rawcode": "A18X",
+        "name": "血统融合",
+        "status": "partial",
+        "kind": "source_class",
+        "unitRawcodes": [
+          "h06J"
+        ]
+      },
+      {
+        "rawcode": "A18Y",
+        "name": "逆流冲击",
+        "status": "partial",
+        "kind": "source_class",
+        "unitRawcodes": [
+          "h06J"
+        ]
+      },
+      {
+        "rawcode": "A18Z",
+        "name": "冰之离别",
+        "status": "partial",
+        "kind": "source_class",
+        "unitRawcodes": [
+          "h06J"
+        ]
+      },
+      {
+        "rawcode": "A190",
+        "name": "地精科技",
+        "status": "partial",
+        "kind": "source_class",
+        "unitRawcodes": [
+          "h06J"
+        ]
+      },
+      {
+        "rawcode": "A191",
+        "name": "圣光恩赐",
+        "status": "implemented",
+        "kind": "source_class",
+        "unitRawcodes": [
+          "h06J"
+        ]
+      },
+      {
+        "rawcode": "A192",
+        "name": "艾露恩之赐",
+        "status": "implemented",
+        "kind": "source_class",
+        "unitRawcodes": [
+          "h06J"
+        ]
+      },
+      {
+        "rawcode": "A193",
+        "name": "致命一击",
+        "status": "implemented",
+        "kind": "source_class",
+        "unitRawcodes": [
+          "h06J"
+        ]
+      },
+      {
+        "rawcode": "A194",
+        "name": "灵魂转移",
+        "status": "implemented",
+        "kind": "source_class",
+        "unitRawcodes": [
+          "h06J"
+        ]
+      },
+      {
+        "rawcode": "A195",
+        "name": "虚空体质",
+        "status": "partial",
+        "kind": "source_class",
+        "unitRawcodes": [
+          "h06J"
+        ]
+      },
+      {
+        "rawcode": "A196",
+        "name": "没有天赋",
+        "status": "implemented",
+        "kind": "source_class",
+        "unitRawcodes": [
+          "h06J"
+        ]
+      },
+      {
+        "rawcode": "A197",
+        "name": "沙石冲击",
+        "status": "implemented",
+        "kind": "source_class",
+        "unitRawcodes": [
+          "h06J"
+        ]
+      },
+      {
+        "rawcode": "A198",
+        "name": "森林族生命恢复",
+        "status": "implemented",
+        "kind": "passive_stats",
+        "unitRawcodes": [
+          "h06J"
+        ]
+      },
+      {
+        "rawcode": "A199",
+        "name": "黑暗族",
+        "status": "implemented",
+        "kind": "passive_stats",
+        "unitRawcodes": [
+          "h06J"
+        ]
+      },
+      {
+        "rawcode": "A19A",
+        "name": "元素族",
+        "status": "partial",
+        "kind": "passive_stats",
+        "unitRawcodes": [
+          "h06J"
+        ]
+      },
+      {
+        "rawcode": "A19B",
+        "name": "闪避",
+        "status": "implemented",
+        "kind": "evasion",
+        "unitRawcodes": [
+          "h06J"
+        ]
+      },
+      {
+        "rawcode": "A19C",
+        "name": "减速50%",
+        "status": "partial",
+        "kind": "debuff",
+        "unitRawcodes": [
+          "h06J"
+        ]
+      },
+      {
+        "rawcode": "A19D",
+        "name": "攻速",
+        "status": "implemented",
+        "kind": "passive_stats",
+        "unitRawcodes": [
+          "h06J"
+        ]
+      },
+      {
+        "rawcode": "A19E",
+        "name": "致命一击",
+        "status": "implemented",
+        "kind": "crit",
+        "unitRawcodes": [
+          "h06J"
         ]
       },
       {
@@ -5924,10 +6189,10 @@
   },
   "battleSkills": {
     "counts": {
-      "implemented": 442,
-      "partial": 34,
+      "implemented": 458,
+      "partial": 42,
       "marker": 47,
-      "unresolved": 160
+      "unresolved": 162
     },
     "abilities": [
       {
@@ -8939,7 +9204,7 @@
       {
         "rawcode": "A0KP",
         "name": "亡者呼唤",
-        "status": "implemented",
+        "status": "unresolved",
         "kind": "aura_regen",
         "unitRawcodes": [
           "n02S"
@@ -8948,7 +9213,7 @@
       {
         "rawcode": "A0KQ",
         "name": "召唤辛达苟萨",
-        "status": "implemented",
+        "status": "unresolved",
         "kind": "debuff",
         "unitRawcodes": [
           "n02S"
@@ -10856,6 +11121,240 @@
         ]
       },
       {
+        "rawcode": "A18P",
+        "name": "不羁蛮力",
+        "status": "implemented",
+        "kind": "source_class",
+        "unitRawcodes": [
+          "h06J"
+        ]
+      },
+      {
+        "rawcode": "A18Q",
+        "name": "不羁蛮力",
+        "status": "implemented",
+        "kind": "aura_damage",
+        "unitRawcodes": [
+          "h06J"
+        ]
+      },
+      {
+        "rawcode": "A18R",
+        "name": "先进装甲",
+        "status": "implemented",
+        "kind": "passive_stats",
+        "unitRawcodes": [
+          "h06J"
+        ]
+      },
+      {
+        "rawcode": "A18S",
+        "name": "先进装甲",
+        "status": "implemented",
+        "kind": "source_class",
+        "unitRawcodes": [
+          "h06J"
+        ]
+      },
+      {
+        "rawcode": "A18T",
+        "name": "再生",
+        "status": "implemented",
+        "kind": "source_class",
+        "unitRawcodes": [
+          "h06J"
+        ]
+      },
+      {
+        "rawcode": "A18U",
+        "name": "暗蚀",
+        "status": "implemented",
+        "kind": "source_class",
+        "unitRawcodes": [
+          "h06J"
+        ]
+      },
+      {
+        "rawcode": "A18V",
+        "name": "法术亲和",
+        "status": "partial",
+        "kind": "source_class",
+        "unitRawcodes": [
+          "h06J"
+        ]
+      },
+      {
+        "rawcode": "A18W",
+        "name": "虚无缥缈",
+        "status": "implemented",
+        "kind": "source_class",
+        "unitRawcodes": [
+          "h06J"
+        ]
+      },
+      {
+        "rawcode": "A18X",
+        "name": "血统融合",
+        "status": "partial",
+        "kind": "source_class",
+        "unitRawcodes": [
+          "h06J"
+        ]
+      },
+      {
+        "rawcode": "A18Y",
+        "name": "逆流冲击",
+        "status": "partial",
+        "kind": "source_class",
+        "unitRawcodes": [
+          "h06J"
+        ]
+      },
+      {
+        "rawcode": "A18Z",
+        "name": "冰之离别",
+        "status": "partial",
+        "kind": "source_class",
+        "unitRawcodes": [
+          "h06J"
+        ]
+      },
+      {
+        "rawcode": "A190",
+        "name": "地精科技",
+        "status": "partial",
+        "kind": "source_class",
+        "unitRawcodes": [
+          "h06J"
+        ]
+      },
+      {
+        "rawcode": "A191",
+        "name": "圣光恩赐",
+        "status": "implemented",
+        "kind": "source_class",
+        "unitRawcodes": [
+          "h06J"
+        ]
+      },
+      {
+        "rawcode": "A192",
+        "name": "艾露恩之赐",
+        "status": "implemented",
+        "kind": "source_class",
+        "unitRawcodes": [
+          "h06J"
+        ]
+      },
+      {
+        "rawcode": "A193",
+        "name": "致命一击",
+        "status": "implemented",
+        "kind": "source_class",
+        "unitRawcodes": [
+          "h06J"
+        ]
+      },
+      {
+        "rawcode": "A194",
+        "name": "灵魂转移",
+        "status": "implemented",
+        "kind": "source_class",
+        "unitRawcodes": [
+          "h06J"
+        ]
+      },
+      {
+        "rawcode": "A195",
+        "name": "虚空体质",
+        "status": "partial",
+        "kind": "source_class",
+        "unitRawcodes": [
+          "h06J"
+        ]
+      },
+      {
+        "rawcode": "A196",
+        "name": "没有天赋",
+        "status": "implemented",
+        "kind": "source_class",
+        "unitRawcodes": [
+          "h06J"
+        ]
+      },
+      {
+        "rawcode": "A197",
+        "name": "沙石冲击",
+        "status": "implemented",
+        "kind": "source_class",
+        "unitRawcodes": [
+          "h06J"
+        ]
+      },
+      {
+        "rawcode": "A198",
+        "name": "森林族生命恢复",
+        "status": "implemented",
+        "kind": "passive_stats",
+        "unitRawcodes": [
+          "h06J"
+        ]
+      },
+      {
+        "rawcode": "A199",
+        "name": "黑暗族",
+        "status": "implemented",
+        "kind": "passive_stats",
+        "unitRawcodes": [
+          "h06J"
+        ]
+      },
+      {
+        "rawcode": "A19A",
+        "name": "元素族",
+        "status": "partial",
+        "kind": "passive_stats",
+        "unitRawcodes": [
+          "h06J"
+        ]
+      },
+      {
+        "rawcode": "A19B",
+        "name": "闪避",
+        "status": "implemented",
+        "kind": "evasion",
+        "unitRawcodes": [
+          "h06J"
+        ]
+      },
+      {
+        "rawcode": "A19C",
+        "name": "减速50%",
+        "status": "partial",
+        "kind": "debuff",
+        "unitRawcodes": [
+          "h06J"
+        ]
+      },
+      {
+        "rawcode": "A19D",
+        "name": "攻速",
+        "status": "implemented",
+        "kind": "passive_stats",
+        "unitRawcodes": [
+          "h06J"
+        ]
+      },
+      {
+        "rawcode": "A19E",
+        "name": "致命一击",
+        "status": "implemented",
+        "kind": "crit",
+        "unitRawcodes": [
+          "h06J"
+        ]
+      },
+      {
         "rawcode": "A19O",
         "name": "寒冰碎片",
         "status": "partial",
@@ -12671,7 +13170,9 @@
     "包内未提供完整原生商店/菜单字段，部分商品与单位入口仍待补证。",
     "A1U4/A1U5/A1U6献祭奖励可核定，但没有可证实的携带单位或授予路径。",
     "原始地图模型、贴图、音频和v14地形通行格不在解析包内。",
-    "BoxGift五个隐藏训练叶子及225条训练路径已接入；新增单位的未核定技能仍按实际状态计数。神秘礼物的随机兵种创建、可操纵建造者技能及平台专用Frame科技返费宿主仍待补齐。",
+    "BoxGift五个隐藏训练叶子及225条训练路径已接入；新增单位的未核定技能仍按实际状态计数。随机礼物已接入35个候选；原生CreateUnit路径/碰撞失败、可操纵建造者技能及平台专用Frame科技返费宿主仍待核定。",
+    "17类种族特性与103个精确单位注册已接入；地精修理、虚空体质、原生跳跃/slow命中及多种原生法术抗性叠加仍为部分实现。旧存档中没有出生抽样记录的血统融合战斗体不补抽，新出战体才执行来源随机。",
+    "巫妖王A0KP亡者呼唤/A0KQ召龙此前通用编译不代表专属脚本已还原，两项已纠正为待核定；训练新增五英雄的其余缺口见training-hero-source-audit.json。",
     "A131农场礼物已按显式原型next链计算人口，旧档/付费农场原型未知及原生在研取消退款仍待核定，保留礼物不猜测。",
     "原图训练多分支对话框限时30秒；Web用持久表单重新校验提交，未模拟对话框超时。旧版无礼物历史的存档不会补抽已过波次奖励。"
   ]

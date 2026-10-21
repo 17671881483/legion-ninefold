@@ -16,7 +16,7 @@ const time=n=>`${Math.floor(Math.max(0,n)/60).toString().padStart(2,'0')}:${Math
 let mode='normal',saved=null;
 try{saved=readMatch(localStorage,mode);}catch{}
 let game=new Game({seed:42,difficulty:'normal'}),started=false,tab='build',difficulty='normal',builderId=RULES.defaultBuilderId,selected=null,buildUnit=null,panelKey='',selectionKey='',uiTimer=0,saveTimer=0,lastFrame=0,endShown=false,soundOn=false,audio=null,lastWave=1,lastPhase='build';
-let autoFollowWave=0,autoFollowing=false,kingMoveMode=false,tMonsterMode=false,spellTargetMode=null;
+let autoFollowWave=0,autoFollowing=false,kingMoveMode=false,tMonsterMode=false,spellTargetMode=null,boxPointMode=null;
 let economyDisplayGame=null,economyDisplayWorkers=0,economyDisplayLevel=0;
 let boxGiftDisplayGame=null,boxGiftDisplayKey='',boxGiftSelections=Object.create(null);
 const battlefield=new Battlefield($('battlefield'),handleBattlefieldClick);
@@ -34,7 +34,7 @@ function command(type,payload={}){
 }
 function clearSpellTarget(){
   spellTargetMode=null;battlefield.spellTarget=null;selectionKey='';
-  if(!tMonsterMode&&!kingMoveMode){$('battlefield').classList.remove('targeting');if(!buildUnit)$('build-hint').hidden=true;}
+  if(!tMonsterMode&&!kingMoveMode&&!boxPointMode){$('battlefield').classList.remove('targeting');if(!buildUnit)$('build-hint').hidden=true;}
 }
 function currentSpellTarget(){
   if(!spellTargetMode)return null;
@@ -42,7 +42,7 @@ function currentSpellTarget(){
   return e&&skill?.canStart&&!game.state.paused&&game.state.phase===spellTargetMode.phase&&game.state.wave===spellTargetMode.wave?{entity:e,skill}:null;
 }
 function startSpellTarget(entityId,skill){
-  kingMoveMode=false;tMonsterMode=false;buildUnit=null;battlefield.buildUnit=null;battlefield.targetRadius=null;
+  boxPointMode=null;kingMoveMode=false;tMonsterMode=false;buildUnit=null;battlefield.buildUnit=null;battlefield.targetRadius=null;
   $('battlefield').classList.remove('building');spellTargetMode={entityId,skillId:skill.id,targetKind:skill.targetKind,phase:game.state.phase,wave:game.state.wave};
   battlefield.spellTarget={entityId,targetKind:skill.targetKind,range:skill.range,radius:skill.radius};$('battlefield').classList.add('targeting');
   const r=$('battlefield').getBoundingClientRect();battlefield.pointerPoint??={x:r.width/2,y:r.height*.48};
@@ -87,11 +87,29 @@ function startMatch(resume=false){
   if(resume&&saved){try{const key=MATCH_STORAGE_KEYS[mode];if(saved.state?.dataRevision!==RULES.dataRevision&&!localStorage.getItem(key+'-before-document'))localStorage.setItem(key+'-before-document',JSON.stringify(saved));game=Game.fromSnapshot(saved);}catch{game=new Game({seed:42,difficulty,builderId,mode});toast('存档无法载入，已创建新的'+(mode==='sandbox'?'测试沙盒':'对局'),true);}}
   else game=new Game({seed:Math.floor(Date.now()%2147483647),difficulty,builderId,mode});
   game.state.paused=false;started=true;lastWave=game.state.wave;lastPhase=game.state.phase;selected=null;buildUnit=null;endShown=false;panelKey='';selectionKey='';$('welcome').hidden=true;
-  autoFollowWave=0;autoFollowing=false;kingMoveMode=false;tMonsterMode=false;clearSpellTarget();battlefield.targetRadius=null;$('battlefield').classList.remove('targeting');battlefield.selected=null;battlefield.buildUnit=null;focus(0);updateUI();save();sound('wave');
+  autoFollowWave=0;autoFollowing=false;kingMoveMode=false;tMonsterMode=false;boxPointMode=null;clearSpellTarget();battlefield.targetRadius=null;$('battlefield').classList.remove('targeting');battlefield.selected=null;battlefield.buildUnit=null;focus(0);updateUI();save();sound('wave');
   toast(mode==='sandbox'?'测试沙盒已就绪，点击右上角“测试沙盒”调整波次与资源。':'先选择兵种，再点击自己的建造格。前排与远程搭配更稳。');
+}
+function currentBoxPointOffer(){
+  if(!boxPointMode)return null;
+  const reward=game.boxRewardStatus?.(0);
+  return reward?.providerId===boxPointMode.providerId&&reward?.tier===boxPointMode.tier?reward.offers.find(offer=>offer.id===boxPointMode.abilityId&&offer.targetKind==='point'&&offer.canStart):null;
+}
+function startBoxPointOffer(offer,reward){
+  cancelBuild();focus(0);boxPointMode={abilityId:offer.id,providerId:reward.providerId,tier:reward.tier};
+  $('battlefield').classList.add('targeting');$('build-hint').hidden=false;
+  $('build-hint').textContent=`${offer.name}：点击自己的建造区域放置 · Esc取消`;
+  updateBoxGiftPanel();
 }
 function handleBattlefieldClick(hit,e){
   if(!started)return;
+  if(boxPointMode){
+    const offer=currentBoxPointOffer();if(!offer){cancelBuild();toast('这组礼物已变化，请重新选择',true);return;}
+    const r=$('battlefield').getBoundingClientRect(),point=battlefield.unproject(e.clientX-r.left,e.clientY-r.top);
+    const result=command('boxReward',{abilityId:offer.id,worldX:point.x,worldY:point.y});
+    if(result.ok){cancelBuild();const building=game.state.players[0].buildings.at(-1);if(building)select({type:'building',buildingId:building.id,playerId:0});}
+    return;
+  }
   if(spellTargetMode){
     const pending=spellTargetMode,current=currentSpellTarget();if(!current){clearSpellTarget();updateUI();toast('单位或技能状态已变化，请重新选择技能',true);return;}
     const payload={entityId:pending.entityId,skillId:pending.skillId,playerId:0};
@@ -112,7 +130,7 @@ function handleBattlefieldClick(hit,e){
   else if(!e.shiftKey){cancelBuild();}
 }
 function select(value){if(spellTargetMode&&value?.entityId!==spellTargetMode.entityId)clearSpellTarget();selected=value;battlefield.selected=value;selectionKey='';updateSelection();updateBuildPanel();}
-function cancelBuild(){kingMoveMode=false;tMonsterMode=false;clearSpellTarget();battlefield.targetRadius=null;$('battlefield').classList.remove('targeting');buildUnit=null;battlefield.buildUnit=null;$('battlefield').classList.remove('building');$('build-hint').hidden=true;selected=null;battlefield.selected=null;panelKey='';selectionKey='';updateUI();}
+function cancelBuild(){boxPointMode=null;kingMoveMode=false;tMonsterMode=false;clearSpellTarget();battlefield.targetRadius=null;$('battlefield').classList.remove('targeting');buildUnit=null;battlefield.buildUnit=null;$('battlefield').classList.remove('building');$('build-hint').hidden=true;selected=null;battlefield.selected=null;panelKey='';selectionKey='';updateUI();}
 const unitPopulation=u=>Number(u?.population??1),unitLevel=u=>u?.heroEntry?'':u?.heroLevel>0?`Lv.${u.heroLevel}`:u?.heroStage?`阶段 ${u.heroStage}`:'';
 function population(p){return (p.workers+(p.economyTasks?.workerQueue?.length??0))*(RULES.workerPopulation??1)+p.buildings.reduce((sum,b)=>sum+Math.max(unitPopulation(defs[b.unitId]),b.construction?unitPopulation(defs[b.construction.targetId]):0),0)+(p.heroId?(defs[p.heroId]?.population??3):0);}
 function reservedPopulation(p){return (p.economyTasks?.workerQueue?.length??0)*(RULES.workerPopulation??1)+p.buildings.reduce((sum,b)=>{if(!b.construction)return sum;const current=unitPopulation(defs[b.unitId]),target=unitPopulation(defs[b.construction.targetId]);return sum+(b.unitId===b.construction.targetId?Math.max(current,target):Math.max(0,target-current));},0);}
@@ -186,7 +204,7 @@ function updateBoxGiftPanel(){
   const section=ensureBoxGiftPanel(),reward=game.boxRewardStatus?.(0)??null,offers=reward?.offers??[],key=JSON.stringify([reward?.providerId??null,reward?.tier??null,reward?.sourceWave??null,reward?.pendingSwap??null,offers.map(offer=>[offer.id,offer.targetKind,offer.pendingSwap??null])]);
   if(boxGiftDisplayGame!==game||boxGiftDisplayKey!==key){
     boxGiftDisplayGame=game;boxGiftDisplayKey=key;boxGiftSelections=Object.create(null);
-    section.querySelector('[data-box-offers]').innerHTML=offers.map((offer,index)=>`<article class="box-gift-card" data-box-offer="${esc(offer.id)}"><h4><span class="box-gift-number">${index+1}</span><span data-box-name></span></h4><p class="box-gift-description" data-box-description></p>${offer.targetKind==='none'?'':`<label class="box-gift-field">选择自己的建筑<select data-box-building aria-label="${esc(offer.name)}：选择建筑"></select></label>`}${offer.targetKind==='training'?'<label class="box-gift-field">训练目标分支<select data-box-unit aria-label="兵种训练：选择目标分支"></select></label><p class="box-gift-cost" data-box-cost></p><details class="box-gift-conditions"><summary>查看分支费用与条件</summary><ul data-box-conditions></ul></details><p class="box-gift-training-note">按目标原价40%支付金币和木材，即时训练；训练失败保留本组礼物。</p>':''}<p class="box-gift-reason" data-box-reason role="status" aria-live="polite"></p><button data-box-claim="${esc(offer.id)}">${offer.targetKind==='training'?'支付并训练':'领取此项礼物'}</button></article>`).join('');
+    section.querySelector('[data-box-offers]').innerHTML=offers.map((offer,index)=>`<article class="box-gift-card" data-box-offer="${esc(offer.id)}"><h4><span class="box-gift-number">${index+1}</span><span data-box-name></span></h4><p class="box-gift-description" data-box-description></p>${['building','training'].includes(offer.targetKind)?`<label class="box-gift-field">选择自己的建筑<select data-box-building aria-label="${esc(offer.name)}：选择建筑"></select></label>`:''}${offer.targetKind==='training'?'<label class="box-gift-field">训练目标分支<select data-box-unit aria-label="兵种训练：选择目标分支"></select></label><p class="box-gift-cost" data-box-cost></p><details class="box-gift-conditions"><summary>查看分支费用与条件</summary><ul data-box-conditions></ul></details><p class="box-gift-training-note">按目标原价40%支付金币和木材，即时训练；训练失败保留本组礼物。</p>':''}<p class="box-gift-reason" data-box-reason role="status" aria-live="polite"></p><button data-box-claim="${esc(offer.id)}">${offer.targetKind==='training'?'支付并训练':offer.targetKind==='point'?'选择放置位置':'领取此项礼物'}</button></article>`).join('');
     section.querySelector('[data-box-details]').open=!!offers.length;
   }
   section.classList.toggle('has-reward',!!offers.length);section.querySelector('[data-box-empty]').hidden=!!offers.length;
@@ -213,7 +231,8 @@ function updateBoxGiftPanel(){
     }else if(offer.targetKind==='building'){
       const building=buildings.find(target=>String(target.buildingId)===selection.buildingId);canStart=canStart&&!!building&&building.canStart!==false;reason=reason||building?.reason||(!building?'请选择领取效果的建筑':'');
     }
-    const button=card.querySelector('[data-box-claim]');button.disabled=!canStart;button.title=reason||(offer.targetKind==='training'?'支付所列费用，训练并用完本组礼物':'领取此项并用完本组礼物');
+    if(offer.targetKind==='point'&&boxPointMode?.abilityId===offer.id)reason='点击自己的建造区域放置 · Esc取消';
+    const button=card.querySelector('[data-box-claim]');if(offer.targetKind==='point')setBoxText(button,boxPointMode?.abilityId===offer.id?'正在选点 · 点击地图':'选择放置位置');button.disabled=!canStart;button.title=reason||(offer.targetKind==='training'?'支付所列费用，训练并用完本组礼物':'领取此项并用完本组礼物');
     const reasonElement=card.querySelector('[data-box-reason]');setBoxText(reasonElement,reason||(canStart?'可以领取 · 领取后本组其余选项消失':''));reasonElement.classList.toggle('blocked',!canStart);
   }
 }
@@ -221,6 +240,7 @@ function claimBoxGift(button){
   if(!button.dataset.boxClaim)return false;
   const reward=game.boxRewardStatus?.(0),offer=reward?.offers?.find(offer=>String(offer.id)===button.dataset.boxClaim),selection=boxGiftSelections[button.dataset.boxClaim];
   if(!offer){updateBoxGiftPanel();return true;}
+  if(offer.targetKind==='point'){startBoxPointOffer(offer,reward);return true;}
   const building=offer.targets?.find(target=>String(target.buildingId)===selection?.buildingId);
   if(offer.targetKind==='training')command('boxTrain',{buildingId:building?.buildingId,unitId:selection?.unitId});
   else command('boxReward',{abilityId:offer.id,...(offer.targetKind==='building'?{buildingId:building?.buildingId}:{})});
@@ -328,6 +348,7 @@ function updateSelection(){
 
 function updateUI(){
   const s=game.state,p=s.players[0],wave=waveInfo();
+  if(boxPointMode&&!currentBoxPointOffer()){boxPointMode=null;if(!spellTargetMode&&!tMonsterMode&&!kingMoveMode){$('battlefield').classList.remove('targeting');$('build-hint').hidden=true;}}
   if(spellTargetMode&&!currentSpellTarget())clearSpellTarget();
   $('gold').textContent=num(p.gold);$('wood').textContent=num(p.wood);$('income').textContent=`+${num(p.income)}`;$('tech').textContent=`${p.workers} / ${p.lumberLevel}`;
   const sandbox=matchMode(s)==='sandbox';$('sandbox-tools').hidden=!sandbox;
@@ -358,7 +379,7 @@ function updateUI(){
   if(s.phase!==lastPhase){clearSpellTarget();if(s.phase==='combat'||s.phase==='arena'){if(s.roundMode==='arena'){focus('all');toast('军团竞技开始 · 最长120秒');}buildUnit=null;battlefield.buildUnit=null;$('battlefield').classList.remove('building');$('build-hint').hidden=true;if(selected?.type==='building'){const unit=s.entities.find(e=>e.buildingId===selected.buildingId&&isEntityVisible(e));selected=unit?{type:'entity',entityId:unit.id,laneId:unit.laneId}:null;battlefield.selected=selected;selectionKey='';updateSelection();}sound('wave');}else if(s.phase==='build')save();lastPhase=s.phase;panelKey='';}
   if(s.legacyMatch&&!$('save-label').dataset.legacy){$('save-label').dataset.legacy='true';toast('当前存档包含历史单位；v14.1A5请使用新开局。');}
   if(s.phase==='ended'&&!endShown){endShown=true;showEnd();save();}
-  if(!spellTargetMode&&!tMonsterMode&&!kingMoveMode&&s.phase==='combat'&&s.timer>5&&battlefield.focusLane===0&&autoFollowWave!==s.wave&&!s.entities.some(e=>isEntityVisible(e)&&e.laneId===0)&&s.entities.some(e=>isEntityVisible(e)&&e.side==='monster'&&e.laneId===8)){autoFollowWave=s.wave;focus(8);autoFollowing=true;toast('战斗转入国王防线，镜头已跟随。');}
+  if(!boxPointMode&&!spellTargetMode&&!tMonsterMode&&!kingMoveMode&&s.phase==='combat'&&s.timer>5&&battlefield.focusLane===0&&autoFollowWave!==s.wave&&!s.entities.some(e=>isEntityVisible(e)&&e.laneId===0)&&s.entities.some(e=>isEntityVisible(e)&&e.side==='monster'&&e.laneId===8)){autoFollowWave=s.wave;focus(8);autoFollowing=true;toast('战斗转入国王防线，镜头已跟随。');}
   if(s.phase==='build'&&autoFollowing){focus(0);autoFollowing=false;}
 }
 function showEnd(){$('sandbox-end-reset').hidden=matchMode(game.state)!=='sandbox';const s=game.state,p=s.players[0],win=s.winner===0,draw=s.winner===-1||s.winner===null||s.winner==='draw';$('end-title').textContent=draw?'战局平分秋色':win?'联盟军团获胜':'部落军团获胜';$('end-eyebrow').textContent=draw?'势均力敌':win?'VICTORY':'DEFEAT';$('end-description').textContent=draw?'双方军团战至最后，国王生命与兵力未能分出胜负。':win?'你的军团守住了国王。攻守与经济，共同决定这一局的胜负。':'国王的防线已经失守。尝试调整造位、升级前排，并及时强化国王。';$('end-stats').innerHTML=`<span><b>${s.wave}</b>抵达波次</span><span><b>${num(p.stats.kills)}</b>击杀</span><span><b>${num(p.stats.sent)}</b>派出木怪</span>`;$('end-dialog').showModal();sound(win?'win':'error');}

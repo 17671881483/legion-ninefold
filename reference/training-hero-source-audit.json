@@ -1,0 +1,2439 @@
+{
+  "schemaVersion": 1,
+  "sourceVersion": "军团战争 v14.1A5 九倍怪物",
+  "scope": "Read-only source audit of five newly imported BoxGift-only heroes; no skill or engine behavior is changed by this file.",
+  "authority": "Literal source facts and resolved native object fields; runtimeStatus is a snapshot of the current generic/compiler classification, not a claim that all source scripts are implemented.",
+  "source": {
+    "path": "reference/v14-source/raw_extracted/war3map.j",
+    "sha256": "e66c55b3b25b185c991be5613e21fbf5b2d598f3cc40f2f8cd01c23bcb828250",
+    "linePolicy": "Latin-1 reversible byte decoding; split only on LF, never Python splitlines().",
+    "abilityPath": "reference/v14-source/data/all_abilities.csv"
+  },
+  "counts": {
+    "trainingHeroes": 5,
+    "staticSkills": 24,
+    "runtimeImplemented": 5,
+    "runtimeUnresolved": 19
+  },
+  "recommendation": {
+    "buildingRawcode": "n07I",
+    "combatRawcode": "h0UQ",
+    "priority": 1,
+    "reason": "Two complete channel bodies, an independent attack passive, native AHwe plus a complete summon callback, and one 0-second global alliance registration. All caster/target timing paths are available; native order/collision/event identity boundaries remain explicit.",
+    "implementationEntrypoints": [
+      "spellEffect(A1O5/A1O7)",
+      "mainDamage native orders with victim priority (A1O5/A1O7/A1O8)",
+      "independent attack-damage listener A1N1",
+      "native summon callback for n07J",
+      "PassiveSkill A1OC birth registration"
+    ],
+    "reusableExisting": [
+      {
+        "path": "dist/naga-active-rules.js",
+        "what": "Existing shared native-order/cooldown/mana bridge and VertigoTarget host interface; existing Naga family API patterns, not Vashj bodies."
+      },
+      {
+        "path": "dist/skills.js",
+        "what": "AHwe template n07J/count2/duration13, universalDamage, VertigoTarget bridge, source ability-effect depth guard, generic A1OE stats and A1CK level1 aura."
+      },
+      {
+        "path": "dist/kelthuzad-rules.js",
+        "what": "n02S dynamic Kel alliance is already implemented and must not be counted as a new Vashj or Lich deficit."
+      }
+    ],
+    "mustPreserve": [
+      "different projectile/cloud/phantom death lifetimes",
+      "zero-second timer first callbacks where registered",
+      "main damage reentry vs independent native attack trigger scopes",
+      "shared native mana and cooldown for manual/auto orders",
+      "source A1CK 2/3/4 level transition, no local-radius or ongoing refresh invention",
+      "serialization of source/target handles and jobs"
+    ]
+  },
+  "describeSkillsCorrections": {
+    "reason": "Seven generic implemented static entries include incomplete carrier-associated scripts. Current describeSkills appends V14_TRIGGER_DESCRIPTIONS with hardcoded implemented, so a text-only partial label will still overcount.",
+    "recommendedStatus": "partial",
+    "appendByCombatRawcode": {
+      "h0M0": {
+        "skillIds": [
+          "A0KP",
+          "A0KQ"
+        ],
+        "text": "邪恶光环原生35%移速与20HP/s可用；亡者呼唤和召唤辛达苟萨的Arthas死亡/施法注册脚本尚未接入。护命匣联盟另由既有模块处理。"
+      },
+      "h0OV": {
+        "skillIds": [
+          "A0VY"
+        ],
+        "text": "原生魔法护盾吸收已近似；源开关状态、附加回复、近战反制与关闭返魔冷却尚未接入。"
+      },
+      "h0UQ": {
+        "skillIds": [
+          "A1O8"
+        ],
+        "text": "双子召唤原生2只13秒幻影已可用；每只幻影为母体独立回复生命/魔法的源注册尚未接入。"
+      }
+    },
+    "doNotDowngrade": [
+      "A0KO exact native object effect (20HP/s, not tooltip25)",
+      "A0VW native field-based effect without inventing absent tooltip script",
+      "A0W1 native aura"
+    ],
+    "doNotCountMissing": [
+      "n02S KelThuzad A0ZV/A0ZW/A0ZY alliance"
+    ],
+    "appliedCombatRawcodes": [
+      "h0M0"
+    ],
+    "pendingCombatRawcodes": [
+      "h0OV",
+      "h0UQ"
+    ]
+  },
+  "sourceRegistrations": [
+    {
+      "id": "lich-normal-type",
+      "file": "war3map.j",
+      "line": 21377,
+      "required": "if GetUnitTypeId(i)==$68304D30 then",
+      "function": "oldcodefn_Bg"
+    },
+    {
+      "id": "lich-normal-action",
+      "file": "war3map.j",
+      "line": 21380,
+      "required": "call TriggerAddAction(t,function Arthas)",
+      "function": "oldcodefn_Bg"
+    },
+    {
+      "id": "lich-normal-death",
+      "file": "war3map.j",
+      "line": 21385,
+      "required": "call TriggerRegisterAnyUnitEventBJ(t,EVENT_PLAYER_UNIT_DEATH)",
+      "function": "oldcodefn_Bg"
+    },
+    {
+      "id": "lich-arena-ability",
+      "file": "war3map.j",
+      "line": 20194,
+      "required": "if GetUnitAbilityLevel(Kc,$41304B51)>0 then",
+      "function": "vf"
+    },
+    {
+      "id": "lich-arena-action",
+      "file": "war3map.j",
+      "line": 20196,
+      "required": "call TriggerAddAction(t,function Arthas)",
+      "function": "vf"
+    },
+    {
+      "id": "vashj-lightning-effect",
+      "file": "war3map.j",
+      "line": 39363,
+      "required": "if BF==$41314F35 then",
+      "function": "Trig_allabilityActions"
+    },
+    {
+      "id": "vashj-lightning-action",
+      "file": "war3map.j",
+      "line": 39364,
+      "required": "call VashjLightningArrow(i,FF,FG)",
+      "function": "Trig_allabilityActions"
+    },
+    {
+      "id": "vashj-spore-effect",
+      "file": "war3map.j",
+      "line": 39360,
+      "required": "if BF==$41314F37 then",
+      "function": "Trig_allabilityActions"
+    },
+    {
+      "id": "vashj-spore-action",
+      "file": "war3map.j",
+      "line": 39361,
+      "required": "call VashJspore(i)",
+      "function": "Trig_allabilityActions"
+    },
+    {
+      "id": "vashj-cold-arrow-effect",
+      "file": "war3map.j",
+      "line": 42324,
+      "required": "if GetUnitAbilityLevel(i,$41314E31)>0 then",
+      "function": "Trig_New_UnitAttackActions"
+    },
+    {
+      "id": "vashj-cold-arrow-action",
+      "file": "war3map.j",
+      "line": 42325,
+      "required": "call VashjArrowOfColdIce(i,Qf)",
+      "function": "Trig_New_UnitAttackActions"
+    },
+    {
+      "id": "vashj-phantom-type",
+      "file": "war3map.j",
+      "line": 41583,
+      "required": "if x==$6E30374A then",
+      "function": "Trig_UnitSummonActions"
+    },
+    {
+      "id": "vashj-phantom-action",
+      "file": "war3map.j",
+      "line": 41584,
+      "required": "call VashjSummon(Pf,i)",
+      "function": "Trig_UnitSummonActions"
+    },
+    {
+      "id": "vashj-alliance-ability",
+      "file": "war3map.j",
+      "line": 43809,
+      "required": "if GetUnitAbilityLevel(Pf,$41314F43)>0 then",
+      "function": "PassiveSkill"
+    },
+    {
+      "id": "vashj-alliance-action",
+      "file": "war3map.j",
+      "line": 43810,
+      "required": "call VashjSwap(Bc)",
+      "function": "PassiveSkill"
+    },
+    {
+      "id": "bright-alliance-ability",
+      "file": "war3map.j",
+      "line": 43839,
+      "required": "if GetUnitAbilityLevel(Pf,$41315659)>0 then",
+      "function": "PassiveSkill"
+    },
+    {
+      "id": "bright-alliance-action",
+      "file": "war3map.j",
+      "line": 43840,
+      "required": "call ArthasHolyLight(Bc)",
+      "function": "PassiveSkill"
+    },
+    {
+      "id": "dark-army-effect",
+      "file": "war3map.j",
+      "line": 39294,
+      "required": "if BF==$41315656 and IsUnitType(i,UNIT_TYPE_GIANT) then",
+      "function": "Trig_allabilityActions"
+    },
+    {
+      "id": "bright-protection-damage",
+      "file": "war3map.j",
+      "line": 41166,
+      "required": "if GetUnitAbilityLevel(i,$41315732)>0 then",
+      "function": "Trig_UnitDamageActions"
+    }
+  ],
+  "heroes": [
+    {
+      "buildingRawcode": "n02S",
+      "combatRawcode": "h0M0",
+      "name": "巫妖王-阿尔萨斯·米奈希尔",
+      "heroFamily": "h0DE",
+      "mappingSource": {
+        "file": "war3map.j",
+        "line": 17508,
+        "endLine": 17509,
+        "function": "oldcodefn_PB",
+        "role": "Mk combat to Ml building"
+      },
+      "priority": 2,
+      "summary": "通用邪恶光环可用；亡者呼唤与召龙的完整专用触发未接。现有Kel联盟已接，不能计作缺失。",
+      "mechanisms": [
+        {
+          "id": "lich-death-call",
+          "skillIds": [
+            "A0KP"
+          ],
+          "status": "source-script-missing",
+          "triggerCarrier": "Ordinary h0M0 type; arena A0KQ ability. The death handler does not test A0KP itself.",
+          "behavior": "任意单位死亡时，尸体距施法者不超过1200且GetRandomReal(1,101)<=5、触发单位不在Ju、非原生英雄且不是e00E，复制死亡类型，保留施法者userData，标summoned并存活4秒；无敌我/是否召唤物排除。",
+          "evidence": [
+            {
+              "file": "war3map.j",
+              "line": 20084,
+              "endLine": 20094,
+              "function": "Arthas",
+              "role": "death event and source filters"
+            },
+            {
+              "file": "war3map.j",
+              "line": 21377,
+              "endLine": 21385,
+              "function": "oldcodefn_Bg",
+              "role": "ordinary deployment registration"
+            },
+            {
+              "file": "war3map.j",
+              "line": 20194,
+              "endLine": 20201,
+              "function": "vf",
+              "role": "arena registration"
+            }
+          ],
+          "runtimeDifference": "Before correction A0KP compiled as implemented AUau/aura_regen despite absent DataA/DataB; it is now unresolved. Generic zero-valued aura does not implement the registered resurrection."
+        },
+        {
+          "id": "lich-sindragosa",
+          "skillIds": [
+            "A0KQ"
+          ],
+          "status": "source-script-missing",
+          "behavior": "Aslo施法效果创建e00E；.04秒一次，沿最初目标方向移动80；计数由0每次加100，D1==1200时清理，所以12次移动共960距离。每次300范围敌人按本次龙命中集合去重，造成50+50*玩家Bone_Dragon计数的通用伤害，再用A0KR同等级thunderbolt。未注册caster death来提前结束此timer。",
+          "evidence": [
+            {
+              "file": "war3map.j",
+              "function": "Arthas",
+              "line": 20073,
+              "endLine": 20120
+            },
+            {
+              "file": "war3map.j",
+              "function": "A0KQ_Action",
+              "line": 20015,
+              "endLine": 20072
+            },
+            {
+              "file": "war3map.j",
+              "line": 21386,
+              "endLine": 21388,
+              "function": "oldcodefn_Bg",
+              "role": "Bone_Dragon increments for h0D3/h2A2"
+            },
+            {
+              "file": "war3map.j",
+              "line": 42126,
+              "endLine": 42128,
+              "function": "Trig_UnitDeathActions",
+              "role": "Bone_Dragon decrements"
+            }
+          ],
+          "runtimeDifference": "Before correction A0KQ compiled as implemented Aslo/debuff, Cost18 Rng600 Dur0.001; it is now unresolved. The proxy does not create/move the dragon or call custom damage/stun. Cool1 is absent and must remain unknown unless native inheritance is verified."
+        },
+        {
+          "id": "lich-kelthuzad-alliance",
+          "skillIds": [
+            "A0ZV",
+            "A0ZW",
+            "A0ZY"
+          ],
+          "status": "already-implemented-dynamic",
+          "behavior": "与护命匣的原玩家h0M0/n02S检索联动，授予+10甲/+100平攻及标记；不额外制造30%攻速。",
+          "evidence": [
+            {
+              "file": "war3map.j",
+              "line": 43207,
+              "endLine": 43238,
+              "function": "KelThuzadsAmuletBoxGroup",
+              "role": "KelThuzadsAmuletBox and group grants"
+            },
+            {
+              "file": "war3map.j",
+              "line": 28649,
+              "endLine": 28658,
+              "function": "EggWhiteEx",
+              "role": "exact raw combat completion path"
+            },
+            {
+              "file": "war3map.j",
+              "line": 43650,
+              "endLine": 43654,
+              "function": "PassiveSkill",
+              "role": "building marker copied to combat body"
+            }
+          ],
+          "runtimeFiles": [
+            "dist/kelthuzad-rules.js:64",
+            "dist/kelthuzad-rules.js:88",
+            "dist/kelthuzad-rules.js:96",
+            "dist/kelthuzad-rules.js:103"
+          ],
+          "coverageNote": "These are dynamically granted and absent from n02S static abilityIds. Do not reimplement or list as missing."
+        }
+      ],
+      "staticSkills": [
+        {
+          "id": "A0KO",
+          "name": "邪恶光环",
+          "baseCode": "AUau",
+          "runtimeStatus": "implemented",
+          "runtimeKind": "aura_regen",
+          "runtimeEffectText": "生命恢复光环；移速35%；每秒恢复20",
+          "abilitySource": {
+            "table": "all_abilities.csv",
+            "row": 1048,
+            "rawcode": "A0KO"
+          },
+          "resolvedFields": {
+            "rawcode": "A0KO",
+            "name": "邪恶光环",
+            "tip": "强化邪恶光环",
+            "ubertip": "增加附近友方单位的35%移动速度和25hp/s的生命回复速度。",
+            "alias": "A0KO",
+            "code": "AUau",
+            "Area1": "550.0",
+            "BuffID1": "BUau",
+            "DataA1": "0.35",
+            "DataB1": "20.0",
+            "levels": "1",
+            "targs1": "air,friend,ground,invulnerable,self,structure,vulnerable",
+            "checkDep": "1",
+            "reqLevel": "1"
+          },
+          "jassRawcodeReferences": [],
+          "initialRuntimeStatus": "implemented",
+          "initialRuntimeKind": "aura_regen"
+        },
+        {
+          "id": "A0KP",
+          "name": "亡者呼唤",
+          "baseCode": "AUau",
+          "runtimeStatus": "unresolved",
+          "runtimeKind": "aura_regen",
+          "runtimeEffectText": "AUau对象未提供DataA/DataB原生效果数值；亡者呼唤实际由h0M0出生注册的Arthas死亡监听处理（war3map.j:20084—20094、21377—21385），该脚本尚未接入，不以零数值光环代替复生",
+          "abilitySource": {
+            "table": "all_abilities.csv",
+            "row": 1049,
+            "rawcode": "A0KP"
+          },
+          "resolvedFields": {
+            "rawcode": "A0KP",
+            "name": "亡者呼唤",
+            "tip": "亡者呼唤",
+            "alias": "A0KP",
+            "code": "AUau",
+            "Area1": "1200.0",
+            "BuffID1": "B05M",
+            "levels": "1",
+            "targs1": "enemies,terrain,nonhero,structure,vulnerable,invulnerable,friend",
+            "checkDep": "1",
+            "reqLevel": "1"
+          },
+          "jassRawcodeReferences": [],
+          "initialRuntimeStatus": "implemented",
+          "initialRuntimeKind": "aura_regen"
+        },
+        {
+          "id": "A0KQ",
+          "name": "召唤辛达苟萨",
+          "baseCode": "Aslo",
+          "runtimeStatus": "unresolved",
+          "runtimeKind": "debuff",
+          "runtimeEffectText": "Aslo为召龙施法代理（18魔法、600射程、0.001秒原生持续）；真正的龙dummy、骨龙计数伤害与眩晕由Arthas/A0KQ_Action处理（war3map.j:20015—20120），该脚本尚未接入，不以无数值减速代替召龙",
+          "abilitySource": {
+            "table": "all_abilities.csv",
+            "row": 1050,
+            "rawcode": "A0KQ"
+          },
+          "resolvedFields": {
+            "rawcode": "A0KQ",
+            "name": "召唤辛达苟萨",
+            "tip": "召唤辛达苟萨",
+            "ubertip": "冲鸭",
+            "alias": "A0KQ",
+            "code": "Aslo",
+            "BuffID1": "Bslo",
+            "DataC1": "1",
+            "levels": "1",
+            "targs1": "enemies,ground,vulnerable,air,ward,tree,invulnerable",
+            "untip": "点击右键激活自动施法",
+            "unubertip": "点击右键取消自动施法",
+            "Cost1": "18",
+            "Dur1": "0.001",
+            "HeroDur1": "0.001",
+            "Rng1": "600.0",
+            "priority": "3"
+          },
+          "jassRawcodeReferences": [
+            {
+              "file": "war3map.j",
+              "line": 20098,
+              "function": "Arthas"
+            },
+            {
+              "file": "war3map.j",
+              "line": 20194,
+              "function": "vf"
+            }
+          ],
+          "initialRuntimeStatus": "implemented",
+          "initialRuntimeKind": "debuff"
+        }
+      ]
+    },
+    {
+      "buildingRawcode": "n05H",
+      "combatRawcode": "h0OV",
+      "name": "艾萨拉女王",
+      "heroFamily": "h0HC",
+      "mappingSource": {
+        "file": "war3map.j",
+        "line": 17883,
+        "endLine": 17884,
+        "function": "oldcodefn_PB",
+        "role": "Mk combat to Ml building"
+      },
+      "priority": 5,
+      "summary": "秘术异蛇完整弹射/回程/幻象，以及魔盾开关/回复/反制未接；原生AIdd减伤仍未核定。",
+      "mechanisms": [
+        {
+          "id": "aesara-mystic-snake",
+          "skillIds": [
+            "A0VX"
+          ],
+          "status": "source-script-missing",
+          "behavior": ".02秒追踪移动9，进入10距离或目标低于.9HP后处理。每目标325点normal attack/normal damage，最多8次命中、800范围选择未命中非建筑活敌；之后返回施法者。击杀且计数!=2时经共享dummy A0W0制作幻象；回程再发2次幻象指令，源显式移主单位位置用于该原生施法。",
+          "evidence": [
+            {
+              "file": "war3map.j",
+              "line": 40171,
+              "endLine": 40172,
+              "function": "Trig_miShuYiSheFunc004Func003Func009Func008Func009Func012005",
+              "role": "bounce filter"
+            },
+            {
+              "file": "war3map.j",
+              "function": "Trig_miShuYiSheFunc004Func003Func009T",
+              "line": 40174,
+              "endLine": 40238
+            },
+            {
+              "file": "war3map.j",
+              "function": "Trig_miShuYiSheActions",
+              "line": 40239,
+              "endLine": 40297
+            }
+          ],
+          "boundary": "AIil native illusion creation/order lifecycle and shared dummy order semantics require an explicit host. Do not turn this into ordinary magic chain damage."
+        },
+        {
+          "id": "aesara-mana-shield-state",
+          "skillIds": [
+            "A0VY",
+            "A0W2",
+            "A0W3"
+          ],
+          "status": "source-script-missing-around-generic-native-effect",
+          "behavior": "A0VY原生mana shield的90%/60伤害每mana已由generic近似；source另有启用状态、附加A0W2每秒25回复，近战攻击者触发A0W3慢速，关闭/失buff时5秒原生CD且返还10mana并移除A0W2。",
+          "evidence": [
+            {
+              "file": "war3map.j",
+              "line": 40245,
+              "endLine": 40248,
+              "function": "Trig_miShuYiSheActions",
+              "role": "shield-on spell"
+            },
+            {
+              "file": "war3map.j",
+              "line": 40281,
+              "endLine": 40285,
+              "function": "Trig_miShuYiSheActions",
+              "role": "issued off order cleanup"
+            },
+            {
+              "file": "war3map.j",
+              "line": 41207,
+              "endLine": 41214,
+              "function": "Trig_UnitDamageActions",
+              "role": "melee counter-slow and automatic shield-on"
+            },
+            {
+              "file": "war3map.j",
+              "line": 41493,
+              "endLine": 41497,
+              "function": "Trig_UnitDamageActions",
+              "role": "lost-buff cleanup"
+            }
+          ],
+          "boundary": "Do not assume native shield activation cancels the in-flight triggering damage. Native toggle/buff host timing remains distinct from the script state."
+        },
+        {
+          "id": "aesara-native-damage-reduction",
+          "skillIds": [
+            "A0VZ"
+          ],
+          "status": "unresolved-native-effect",
+          "behavior": "AIdd对象原始DataA1=1、DataB1=.5、DataE/G/H1=1；该rawcode无JASS直引。须核定native字段含义/类型后实现，不能从“减少伤害50%”标题推导所有伤害统一乘.5。",
+          "evidence": [],
+          "abilityObject": "A0VZ"
+        },
+        {
+          "id": "aesara-native-barrage-and-slow-aura",
+          "skillIds": [
+            "A0VW",
+            "A0W1"
+          ],
+          "status": "generic-implemented",
+          "behavior": "保留本版原始Aroc DataA999999/DataB99999/DataC2及Aasl减速字段；JASS只对A0VW改弹道模型，无新分裂箭伤害脚本可按tooltip补造。",
+          "evidence": [
+            {
+              "file": "war3map.j",
+              "line": 43842,
+              "endLine": 43846,
+              "function": "PassiveSkill",
+              "role": "missile art only"
+            }
+          ],
+          "coverageNote": "Native Aroc field interpretation remains a host/model question; no 4-target/50%/20% knockback script was found for this rawcode."
+        }
+      ],
+      "staticSkills": [
+        {
+          "id": "A0VW",
+          "name": "分裂箭",
+          "baseCode": "Aroc",
+          "runtimeStatus": "implemented",
+          "runtimeKind": "barrage",
+          "runtimeEffectText": "至多2个目标，每个额外目标999999伤害，总额上限99999",
+          "abilitySource": {
+            "table": "all_abilities.csv",
+            "row": 1431,
+            "rawcode": "A0VW"
+          },
+          "resolvedFields": {
+            "rawcode": "A0VW",
+            "name": "分裂箭",
+            "tip": "分裂箭",
+            "ubertip": "美杜沙运用魔法将她的箭矢分开，并且注入水流的力量。美杜莎的每次攻击能额外攻击4个目标，造成较少的50%伤害，但是每枚箭矢都有20%的几率造成250点额外伤害同时将目标朝其身后击退75码。",
+            "alias": "A0VW",
+            "code": "Aroc",
+            "Area1": "500.0",
+            "DataA1": "999999.0",
+            "DataB1": "99999.0",
+            "DataC1": "2",
+            "levels": "1",
+            "targs1": "enemies",
+            "Dur1": "1.0",
+            "HeroDur1": "1.0"
+          },
+          "jassRawcodeReferences": [
+            {
+              "file": "war3map.j",
+              "line": 43842,
+              "function": "PassiveSkill"
+            },
+            {
+              "file": "war3map.j",
+              "line": 43844,
+              "function": "PassiveSkill"
+            },
+            {
+              "file": "war3map.j",
+              "line": 43846,
+              "function": "PassiveSkill"
+            }
+          ],
+          "initialRuntimeStatus": "implemented",
+          "initialRuntimeKind": "barrage"
+        },
+        {
+          "id": "A0W1",
+          "name": "减速光环",
+          "baseCode": "Aasl",
+          "runtimeStatus": "implemented",
+          "runtimeKind": "aura_slow",
+          "runtimeEffectText": "攻速与移速削弱光环；移速-55%",
+          "abilitySource": {
+            "table": "all_abilities.csv",
+            "row": 1436,
+            "rawcode": "A0W1"
+          },
+          "resolvedFields": {
+            "rawcode": "A0W1",
+            "name": "减速光环",
+            "tip": "石化光环",
+            "ubertip": "降低附近敌方单位50%移动速度。",
+            "alias": "A0W1",
+            "code": "Aasl",
+            "Area1": "600.0",
+            "BuffID1": "B06R",
+            "DataA1": "-0.55",
+            "levels": "1",
+            "targs1": "enemies"
+          },
+          "jassRawcodeReferences": [],
+          "initialRuntimeStatus": "implemented",
+          "initialRuntimeKind": "aura_slow"
+        },
+        {
+          "id": "A0VX",
+          "name": "秘术异蛇",
+          "baseCode": "ANfd",
+          "runtimeStatus": "unresolved",
+          "runtimeKind": "pending",
+          "runtimeEffectText": "原生基码尚无已核定模拟规则",
+          "abilitySource": {
+            "table": "all_abilities.csv",
+            "row": 1432,
+            "rawcode": "A0VX"
+          },
+          "resolvedFields": {
+            "rawcode": "A0VX",
+            "name": "秘术异蛇",
+            "tip": "秘术异蛇",
+            "ubertip": "蛇发女妖放出一条由能量构成的秘术异蛇，秘术异蛇在敌方单位之间游串最多8次后回归本体，造成325点伤害，如果秘术异蛇击杀目标则于目标原地召唤一个美杜莎的分身，秘术异蛇击杀目标召唤的分身最多只能召唤2个（美杜莎的分身只继承分裂箭技能，造成50%的伤害，受到500%的伤害，最多持续3s）回归本体后美杜莎也会于自身处召唤2个分身",
+            "alias": "A0VX",
+            "code": "ANfd",
+            "DataB1": "0.01",
+            "levels": "1",
+            "Cost1": "18",
+            "Rng1": "800.0",
+            "Cool1": "10.0",
+            "checkDep": "1"
+          },
+          "jassRawcodeReferences": [
+            {
+              "file": "war3map.j",
+              "line": 40251,
+              "function": "Trig_miShuYiSheActions"
+            }
+          ],
+          "initialRuntimeStatus": "unresolved",
+          "initialRuntimeKind": "pending"
+        },
+        {
+          "id": "A0VY",
+          "name": "魔法护盾",
+          "baseCode": "ANms",
+          "runtimeStatus": "implemented",
+          "runtimeKind": "shield",
+          "runtimeEffectText": "吸收90%伤害，每点魔法吸收60伤害",
+          "abilitySource": {
+            "table": "all_abilities.csv",
+            "row": 1433,
+            "rawcode": "A0VY"
+          },
+          "resolvedFields": {
+            "rawcode": "A0VY",
+            "name": "魔法护盾",
+            "tip": "魔法护盾",
+            "ubertip": "美杜莎用魔法制造一个护盾，护盾可以为自己吸收90%的伤害，每点魔法值可以吸收60点伤害。护盾开启期间攻击美杜莎的近战单位会被减速，减少攻击速度30%持续3s。护盾开启期间美杜莎每秒额外恢复25点生命值。",
+            "alias": "A0VY",
+            "code": "ANms",
+            "BuffID1": "B06S",
+            "DataA1": "60.0",
+            "DataB1": "0.9",
+            "levels": "1",
+            "targs1": "self",
+            "untip": "关闭魔法护盾",
+            "Rng1": "128.0",
+            "Cool1": "999.0",
+            "checkDep": "1"
+          },
+          "jassRawcodeReferences": [
+            {
+              "file": "war3map.j",
+              "line": 40246,
+              "function": "Trig_miShuYiSheActions"
+            },
+            {
+              "file": "war3map.j",
+              "line": 40283,
+              "function": "Trig_miShuYiSheActions"
+            },
+            {
+              "file": "war3map.j",
+              "line": 41207,
+              "function": "Trig_UnitDamageActions"
+            },
+            {
+              "file": "war3map.j",
+              "line": 41212,
+              "function": "Trig_UnitDamageActions"
+            },
+            {
+              "file": "war3map.j",
+              "line": 41493,
+              "function": "Trig_UnitDamageActions"
+            },
+            {
+              "file": "war3map.j",
+              "line": 41495,
+              "function": "Trig_UnitDamageActions"
+            }
+          ],
+          "initialRuntimeStatus": "implemented",
+          "initialRuntimeKind": "shield"
+        },
+        {
+          "id": "A0VZ",
+          "name": "减少伤害50%",
+          "baseCode": "AIdd",
+          "runtimeStatus": "unresolved",
+          "runtimeKind": "pending",
+          "runtimeEffectText": "原生基码尚无已核定模拟规则",
+          "abilitySource": {
+            "table": "all_abilities.csv",
+            "row": 1434,
+            "rawcode": "A0VZ"
+          },
+          "resolvedFields": {
+            "rawcode": "A0VZ",
+            "name": "减少伤害50%",
+            "tip": "减少伤害50%",
+            "ubertip": "减少来自穿刺攻击的伤害到原来的65%，并减少来自魔法攻击的伤害到原来的80%。",
+            "alias": "A0VZ",
+            "code": "AIdd",
+            "DataA1": "1.0",
+            "DataB1": "0.5",
+            "levels": "1",
+            "targs1": "vuln,invu",
+            "checkDep": "1",
+            "DataE1": "1.0",
+            "DataH1": "1.0",
+            "DataG1": "1.0"
+          },
+          "jassRawcodeReferences": [],
+          "initialRuntimeStatus": "unresolved",
+          "initialRuntimeKind": "pending"
+        }
+      ]
+    },
+    {
+      "buildingRawcode": "n07I",
+      "combatRawcode": "h0UQ",
+      "name": "女皇·瓦斯琪女士",
+      "heroFamily": "h0U3",
+      "mappingSource": {
+        "file": "war3map.j",
+        "line": 18456,
+        "endLine": 18457,
+        "function": "oldcodefn_PB",
+        "role": "Mk combat to Ml building"
+      },
+      "priority": 1,
+      "summary": "推荐下轮完整家族：2个主动+命中被动+原生双召唤附加回复+0秒出生阵营授予，入口与数值均有完整源证据。",
+      "mechanisms": [
+        {
+          "id": "vashj-lightning-arrow",
+          "skillIds": [
+            "A1O5"
+          ],
+          "status": "source-script-missing",
+          "behavior": "非ancient caster沿目标方向-45/0/+45度发3个dummy，ChargeDistance500/.4，步长50，0秒首轮与.04秒后续；遇敌200半径则提前结束飞行。落点各建300半径101通用伤害区，0秒首跳、之后每秒，共7跳；落点区注册caster death后清理。",
+          "evidence": [
+            {
+              "file": "war3map.j",
+              "line": 32753,
+              "endLine": 32832,
+              "function": "VashjLightningArrowChargeAoeAction",
+              "role": "full projectile and impact-pool functions"
+            },
+            {
+              "file": "war3map.j",
+              "line": 39363,
+              "endLine": 39364,
+              "function": "Trig_allabilityActions",
+              "role": "spell-effect dispatch"
+            },
+            {
+              "file": "war3map.j",
+              "line": 40856,
+              "endLine": 40859,
+              "function": "Trig_UnitDamageActions",
+              "role": "victim-priority native order"
+            },
+            {
+              "file": "war3map.j",
+              "function": "ChargeDistanceCondition",
+              "line": 30160,
+              "endLine": 30198
+            },
+            {
+              "file": "war3map.j",
+              "function": "ChargeDistance",
+              "line": 30199,
+              "endLine": 30220
+            }
+          ],
+          "nativeEnvelope": {
+            "mana": 15,
+            "cooldown": 8,
+            "range": 500,
+            "order": "unloadall"
+          },
+          "boundary": "Flight registers dummy death only, not caster death; the impact-pool registers caster death. Retain these different lifetimes. SetUnitPosition/collision and native order eligibility use the existing explicit host boundary."
+        },
+        {
+          "id": "vashj-poison-spore",
+          "skillIds": [
+            "A1O7"
+          ],
+          "status": "source-script-missing",
+          "behavior": "非ancient caster面向±90度、距离0..500随机建3个固定孢子；1秒首跳，随后每秒200半径99通用伤害，共10跳。Action虽检查death事件，但创建函数没有注册death；不可自行因caster死清空。",
+          "evidence": [
+            {
+              "file": "war3map.j",
+              "line": 32842,
+              "endLine": 32892,
+              "function": "VashJsporeAction",
+              "role": "fixed clouds and exact timer lifetime"
+            },
+            {
+              "file": "war3map.j",
+              "line": 39360,
+              "endLine": 39361,
+              "function": "Trig_allabilityActions",
+              "role": "spell dispatch"
+            },
+            {
+              "file": "war3map.j",
+              "line": 40861,
+              "endLine": 40864,
+              "function": "Trig_UnitDamageActions",
+              "role": "victim-priority native immediate order"
+            }
+          ],
+          "nativeEnvelope": {
+            "mana": 15,
+            "cooldown": 20,
+            "range": 500,
+            "order": "unloadallcorpses"
+          }
+        },
+        {
+          "id": "vashj-cold-arrow",
+          "skillIds": [
+            "A1N1"
+          ],
+          "status": "source-script-missing",
+          "behavior": "独立实际攻击伤害监听：GetRandomPercentageBJ<=20时追加96通用伤害，VertigoTarget等级4（A0I7普通4秒/原生英雄2秒），不等同于任意伤害10%几率。",
+          "evidence": [
+            {
+              "file": "war3map.j",
+              "line": 32833,
+              "endLine": 32841,
+              "function": "VashjArrowOfColdIce",
+              "role": "hit effect"
+            },
+            {
+              "file": "war3map.j",
+              "line": 42270,
+              "endLine": 42271,
+              "function": "Trig_New_UnitAttackActions",
+              "role": "native attack and per-entity reentry guard"
+            },
+            {
+              "file": "war3map.j",
+              "line": 42324,
+              "endLine": 42325,
+              "function": "Trig_New_UnitAttackActions",
+              "role": "attack hook dispatch"
+            },
+            {
+              "file": "war3map.j",
+              "function": "VertigoTarget",
+              "line": 29669,
+              "endLine": 29677
+            }
+          ]
+        },
+        {
+          "id": "vashj-twin-summon",
+          "skillIds": [
+            "A1O8"
+          ],
+          "status": "native-summon-generic-implemented-script-addition-missing",
+          "behavior": "原生AHwe召2只n07J存活13秒、Cost16/Cool8已存在。每只n07J召唤事件另注册0秒首跳+每秒给summoner+5HP/+1.5mana，任一方death停止；还在执行次数>=floor(summoner maxHP)时结束。双幻影独立叠加回复。",
+          "evidence": [
+            {
+              "file": "war3map.j",
+              "line": 41579,
+              "endLine": 41591,
+              "function": "Trig_UnitSummonActions",
+              "role": "summon registration action"
+            },
+            {
+              "file": "war3map.j",
+              "line": 32893,
+              "endLine": 32921,
+              "function": "VashjSummonAction",
+              "role": "per-phantom heal/mana trigger"
+            }
+          ],
+          "templateRawcode": "n07J",
+          "boundary": "Preserve the source EVENT_PLAYER_UNIT_SUMMON/GetTriggerUnit/GetSummoningUnit host semantics; do not silently substitute a different summoned-unit identity if the native wrapper is not verified."
+        },
+        {
+          "id": "vashj-queen-alliance",
+          "skillIds": [
+            "A1OC",
+            "A1CK",
+            "A1OE"
+          ],
+          "status": "source-grant-missing-dynamic-generic-objects-exist",
+          "behavior": "出生0秒一次，全图枚举实际h0OV战斗体；同盟女王使A1CK从无变2，敌对女王使无变3，双方均有变4；敌对再永久授A1OE(-8%攻速)。A1CK本版4级DataA分别.10/.15/-.11/.04；无生命、距离或后续刷新条件。",
+          "evidence": [
+            {
+              "file": "war3map.j",
+              "line": 32922,
+              "endLine": 32968,
+              "function": "VashjSwapTimer",
+              "role": "0-second one-shot global queen scan"
+            },
+            {
+              "file": "war3map.j",
+              "line": 43809,
+              "endLine": 43810,
+              "function": "PassiveSkill",
+              "role": "source building A1OC registration"
+            }
+          ],
+          "reuse": {
+            "A1CK": "generic aura_damage exists at level1, dynamic level2/3/4 is not currently interpreted",
+            "A1OE": "generic passive_stats -0.08 haste already exists"
+          },
+          "boundary": "Do not count undeployed n05H building as h0OV. Exact native aura target/allegiance behavior must honor targs and shared-buff rules rather than inventing ally-only behavior."
+        }
+      ],
+      "staticSkills": [
+        {
+          "id": "A1O5",
+          "name": "闪电箭",
+          "baseCode": "ANcl",
+          "runtimeStatus": "unresolved",
+          "runtimeKind": "pending",
+          "runtimeEffectText": "v14.1A5通道或脚本指令：待核定对应运行脚本",
+          "abilitySource": {
+            "table": "all_abilities.csv",
+            "row": 2429,
+            "rawcode": "A1O5"
+          },
+          "resolvedFields": {
+            "rawcode": "A1O5",
+            "name": "闪电箭",
+            "tip": "闪电箭",
+            "ubertip": "射出3箭落地后，对300范围内敌方单位造成79点的持续伤害，伤害持续5s",
+            "alias": "A1O5",
+            "code": "ANcl",
+            "DataB1": "3",
+            "DataC1": "1",
+            "levels": "1",
+            "Cost1": "15",
+            "Rng1": "500.0",
+            "Cool1": "8.0",
+            "checkDep": "1",
+            "reqLevel": "1",
+            "DataE1": "1",
+            "DataF1": "unloadall"
+          },
+          "jassRawcodeReferences": [
+            {
+              "file": "war3map.j",
+              "line": 39363,
+              "function": "Trig_allabilityActions"
+            },
+            {
+              "file": "war3map.j",
+              "line": 40856,
+              "function": "Trig_UnitDamageActions"
+            },
+            {
+              "file": "war3map.j",
+              "line": 40858,
+              "function": "Trig_UnitDamageActions"
+            }
+          ],
+          "initialRuntimeStatus": "unresolved",
+          "initialRuntimeKind": "pending"
+        },
+        {
+          "id": "A1N1",
+          "name": "寒冰之箭",
+          "baseCode": "Asth",
+          "runtimeStatus": "unresolved",
+          "runtimeKind": "pending",
+          "runtimeEffectText": "v14.1A5脚本标记：尚未逐项核定对应JASS，不沿用5.0dJF同ID效果",
+          "abilitySource": {
+            "table": "all_abilities.csv",
+            "row": 2389,
+            "rawcode": "A1N1"
+          },
+          "resolvedFields": {
+            "rawcode": "A1N1",
+            "name": "寒冰之箭",
+            "tip": "寒冰之箭",
+            "ubertip": "攻击时有20%的几率对敌方造成冰冻效果并造成96点的伤害，且可减缓中招单位范围200码的单位减速10%的效果。3秒",
+            "alias": "A1N1",
+            "code": "Asth",
+            "levels": "1",
+            "checkDep": "1"
+          },
+          "jassRawcodeReferences": [
+            {
+              "file": "war3map.j",
+              "line": 42324,
+              "function": "Trig_New_UnitAttackActions"
+            }
+          ],
+          "initialRuntimeStatus": "unresolved",
+          "initialRuntimeKind": "pending"
+        },
+        {
+          "id": "A1O7",
+          "name": "毒性孢子",
+          "baseCode": "ANcl",
+          "runtimeStatus": "unresolved",
+          "runtimeKind": "pending",
+          "runtimeEffectText": "v14.1A5通道或脚本指令：待核定对应运行脚本",
+          "abilitySource": {
+            "table": "all_abilities.csv",
+            "row": 2431,
+            "rawcode": "A1O7"
+          },
+          "resolvedFields": {
+            "rawcode": "A1O7",
+            "name": "毒性孢子",
+            "tip": "毒性孢子",
+            "ubertip": "以自身为起点的100*500码范围内随机释放3颗毒菇，释放后1s爆炸，造成附近400码的敌方单位受到99点伤害，并释放毒性孢子，在孢子释放范围内敌方单位将受到15点每秒的伤害，效果持续10s",
+            "alias": "A1O7",
+            "code": "ANcl",
+            "DataC1": "1",
+            "levels": "1",
+            "Cost1": "15",
+            "Rng1": "500.0",
+            "Cool1": "20.0",
+            "checkDep": "1",
+            "reqLevel": "1",
+            "DataE1": "1",
+            "DataF1": "unloadallcorpses"
+          },
+          "jassRawcodeReferences": [
+            {
+              "file": "war3map.j",
+              "line": 39360,
+              "function": "Trig_allabilityActions"
+            },
+            {
+              "file": "war3map.j",
+              "line": 40861,
+              "function": "Trig_UnitDamageActions"
+            },
+            {
+              "file": "war3map.j",
+              "line": 40863,
+              "function": "Trig_UnitDamageActions"
+            }
+          ],
+          "initialRuntimeStatus": "unresolved",
+          "initialRuntimeKind": "pending"
+        },
+        {
+          "id": "A1O8",
+          "name": "双子召唤",
+          "baseCode": "AHwe",
+          "runtimeStatus": "implemented",
+          "runtimeKind": "summon",
+          "runtimeEffectText": "召唤2个娜迦幻影，存活13秒",
+          "abilitySource": {
+            "table": "all_abilities.csv",
+            "row": 2432,
+            "rawcode": "A1O8"
+          },
+          "resolvedFields": {
+            "rawcode": "A1O8",
+            "name": "双子召唤",
+            "tip": "双子召唤",
+            "alias": "A1O8",
+            "code": "AHwe",
+            "Area1": "1.0",
+            "BuffID1": "BHwe",
+            "DataA1": "2",
+            "levels": "1",
+            "Cost1": "16",
+            "Dur1": "13.0",
+            "HeroDur1": "13.0",
+            "Cool1": "8.0",
+            "checkDep": "1",
+            "reqLevel": "1",
+            "UnitID1": "n07J"
+          },
+          "jassRawcodeReferences": [
+            {
+              "file": "war3map.j",
+              "line": 40866,
+              "function": "Trig_UnitDamageActions"
+            },
+            {
+              "file": "war3map.j",
+              "line": 40868,
+              "function": "Trig_UnitDamageActions"
+            }
+          ],
+          "initialRuntimeStatus": "implemented",
+          "initialRuntimeKind": "summon"
+        },
+        {
+          "id": "A1OC",
+          "name": "女王的祝福与惩戒2",
+          "baseCode": "Asth",
+          "runtimeStatus": "unresolved",
+          "runtimeKind": "pending",
+          "runtimeEffectText": "v14.1A5脚本标记：尚未逐项核定对应JASS，不沿用5.0dJF同ID效果",
+          "abilitySource": {
+            "table": "all_abilities.csv",
+            "row": 2435,
+            "rawcode": "A1OC"
+          },
+          "resolvedFields": {
+            "rawcode": "A1OC",
+            "name": "女王的祝福与惩戒2",
+            "tip": "女王的祝福与惩戒",
+            "ubertip": "若友军中有艾萨拉女王，则可对瓦斯琪进行增幅，提升其15%的攻击力，增加15%的攻速。\n若敌方中有艾萨拉女王，则对瓦斯琪进行削落，减免其11%的攻击力，并且降低其攻速10%",
+            "alias": "A1OC",
+            "code": "Asth",
+            "levels": "1",
+            "checkDep": "1"
+          },
+          "jassRawcodeReferences": [
+            {
+              "file": "war3map.j",
+              "line": 43809,
+              "function": "PassiveSkill"
+            }
+          ],
+          "initialRuntimeStatus": "unresolved",
+          "initialRuntimeKind": "pending"
+        }
+      ]
+    },
+    {
+      "buildingRawcode": "n08Y",
+      "combatRawcode": "h0X9",
+      "name": "霜之哀伤·阿尔萨斯",
+      "heroFamily": "h0DE",
+      "mappingSource": {
+        "file": "war3map.j",
+        "line": 18582,
+        "endLine": 18583,
+        "function": "oldcodefn_PB",
+        "role": "Mk combat to Ml building"
+      },
+      "priority": 3,
+      "summary": "6项均未接；法术主体完整但范围更大，须保留双监听累计、召军自移除及各投射物的不同死亡处理。",
+      "mechanisms": [
+        {
+          "id": "dark-arthas-hunger",
+          "skillIds": [
+            "A1VR"
+          ],
+          "status": "source-script-missing",
+          "behavior": "攻击者main damage先把P8加进累计；实际攻击伤害监听先消费ready使自身生命百分比+15，再把同次GetEventDamage再次加累计。达到自身maxHP*.4时累计清0并设置ready；普攻可能被两入口累计，不能合并去重。",
+          "evidence": [
+            {
+              "file": "war3map.j",
+              "line": 36179,
+              "endLine": 36196,
+              "function": "ArthasReadyAttack",
+              "role": "ready/attack ordering"
+            },
+            {
+              "file": "war3map.j",
+              "line": 40597,
+              "endLine": 40598,
+              "function": "Trig_UnitDamageActions",
+              "role": "main damage accumulation"
+            },
+            {
+              "file": "war3map.j",
+              "line": 42275,
+              "endLine": 42277,
+              "function": "Trig_New_UnitAttackActions",
+              "role": "attack listener consumes before accumulating again"
+            }
+          ]
+        },
+        {
+          "id": "dark-arthas-soaring-wind",
+          "skillIds": [
+            "A1VS"
+          ],
+          "status": "source-script-missing",
+          "behavior": "以目标施法时位置固定中心，在600随机方向/半径落点对300范围造成78通用伤害；0秒及.2秒timer，execCount*.2>=6后结束。death callback先执行伤害再检查退出，不能当通用death-cleanup-only。",
+          "evidence": [
+            {
+              "file": "war3map.j",
+              "line": 36251,
+              "endLine": 36290,
+              "function": "ArthasSoaringWindImpactAction",
+              "role": "full timer and death registration"
+            },
+            {
+              "file": "war3map.j",
+              "line": 39285,
+              "endLine": 39286,
+              "function": "Trig_allabilityActions",
+              "role": "spell dispatch"
+            },
+            {
+              "file": "war3map.j",
+              "line": 40664,
+              "endLine": 40667,
+              "function": "Trig_UnitDamageActions",
+              "role": "victim-priority auto order"
+            }
+          ]
+        },
+        {
+          "id": "dark-arthas-death-coil",
+          "skillIds": [
+            "A1VT"
+          ],
+          "status": "source-script-missing",
+          "behavior": "必选主目标，400范围最多额外5个SelectRange敌人，每人追踪dummy命中201通用伤害；ChargeDistanceTarget的QN入参99999实际未使用，保存的是初始源目标距离，不能按99999飞行距离实现。",
+          "evidence": [
+            {
+              "file": "war3map.j",
+              "line": 36197,
+              "endLine": 36243,
+              "function": "ArthasDeathCoilFinish",
+              "role": "all coil bodies"
+            },
+            {
+              "file": "war3map.j",
+              "line": 30289,
+              "endLine": 30299,
+              "function": "ChargeDistanceTarget",
+              "role": "actual target-charge input storage"
+            },
+            {
+              "file": "war3map.j",
+              "line": 39288,
+              "endLine": 39289,
+              "function": "Trig_allabilityActions",
+              "role": "spell dispatch"
+            }
+          ]
+        },
+        {
+          "id": "dark-arthas-ice-storm",
+          "skillIds": [
+            "A1VU"
+          ],
+          "status": "source-script-missing",
+          "behavior": "目标当前位置300半径235通用伤害。",
+          "evidence": [
+            {
+              "file": "war3map.j",
+              "line": 36291,
+              "endLine": 36305,
+              "function": "ArthasIceStorm",
+              "role": "immediate area damage"
+            },
+            {
+              "file": "war3map.j",
+              "line": 39291,
+              "endLine": 39292,
+              "function": "Trig_allabilityActions",
+              "role": "spell dispatch"
+            }
+          ]
+        },
+        {
+          "id": "dark-arthas-army",
+          "skillIds": [
+            "A1VV"
+          ],
+          "status": "source-script-missing",
+          "behavior": "仅GIANT施法者调用；一次8只h0CL。各随从监听summoner受伤，若事件时HP%<=20则按随从HP%+5个百分点治疗summoner并杀该随从；随从死清理自己的listener。source cast计数+5后判断>=3，所以第一次施法立即移除A1VV，不能照文案允许3次。",
+          "evidence": [
+            {
+              "file": "war3map.j",
+              "line": 36306,
+              "endLine": 36349,
+              "function": "ArthasSummonAction",
+              "role": "summon listeners and literal removal bug"
+            },
+            {
+              "file": "war3map.j",
+              "line": 39294,
+              "endLine": 39295,
+              "function": "Trig_allabilityActions",
+              "role": "giant gating"
+            },
+            {
+              "file": "war3map.j",
+              "line": 40679,
+              "endLine": 40682,
+              "function": "Trig_UnitDamageActions",
+              "role": "native immediate auto order"
+            }
+          ],
+          "templateRawcode": "h0CL"
+        },
+        {
+          "id": "dark-arthas-sindragosa",
+          "skillIds": [
+            "A1VW"
+          ],
+          "status": "source-script-missing",
+          "behavior": "定向1500距离/5秒ChargeDistance；每次移动callback对dummy周围300敌人203通用伤害，不是每目标一次。finish移除dummy。",
+          "evidence": [
+            {
+              "file": "war3map.j",
+              "line": 36350,
+              "endLine": 36391,
+              "function": "ArthasSindragosaCallback",
+              "role": "flight callbacks and cleanup"
+            },
+            {
+              "file": "war3map.j",
+              "line": 39297,
+              "endLine": 39298,
+              "function": "Trig_allabilityActions",
+              "role": "spell dispatch"
+            }
+          ]
+        }
+      ],
+      "staticSkills": [
+        {
+          "id": "A1VR",
+          "name": "霜之哀伤的饥渴",
+          "baseCode": "Asth",
+          "runtimeStatus": "unresolved",
+          "runtimeKind": "pending",
+          "runtimeEffectText": "v14.1A5脚本标记：尚未逐项核定对应JASS，不沿用5.0dJF同ID效果",
+          "abilitySource": {
+            "table": "all_abilities.csv",
+            "row": 2697,
+            "rawcode": "A1VR"
+          },
+          "resolvedFields": {
+            "rawcode": "A1VR",
+            "name": "霜之哀伤的饥渴",
+            "tip": "霜之哀伤的饥渴",
+            "ubertip": "阿尔萨斯的血量每降低30%触发一次该被动，额外造成100%的伤害，并且附带15%的吸血效果",
+            "alias": "A1VR",
+            "code": "Asth",
+            "levels": "1"
+          },
+          "jassRawcodeReferences": [
+            {
+              "file": "war3map.j",
+              "line": 40597,
+              "function": "Trig_UnitDamageActions"
+            },
+            {
+              "file": "war3map.j",
+              "line": 42275,
+              "function": "Trig_New_UnitAttackActions"
+            }
+          ],
+          "initialRuntimeStatus": "unresolved",
+          "initialRuntimeKind": "pending"
+        },
+        {
+          "id": "A1VS",
+          "name": "凛风冲击",
+          "baseCode": "ANcl",
+          "runtimeStatus": "unresolved",
+          "runtimeKind": "pending",
+          "runtimeEffectText": "v14.1A5通道或脚本指令：待核定对应运行脚本",
+          "abilitySource": {
+            "table": "all_abilities.csv",
+            "row": 2698,
+            "rawcode": "A1VS"
+          },
+          "resolvedFields": {
+            "rawcode": "A1VS",
+            "name": "凛风冲击",
+            "tip": "凛风冲击",
+            "ubertip": "释放一道冰风，范围200*600码，对范围内的单位造成20%的减速效果，并且冰风到末尾后将冰冻200码范围的敌方单位造成78点每秒的持续伤害，持续6s",
+            "alias": "A1VS",
+            "code": "ANcl",
+            "DataB1": "1",
+            "DataC1": "1",
+            "levels": "1",
+            "targs1": "enemies",
+            "Cost1": "18",
+            "Rng1": "500.0",
+            "Cool1": "11.0",
+            "checkDep": "1",
+            "reqLevel": "1",
+            "DataE1": "1",
+            "DataF1": "unloadall"
+          },
+          "jassRawcodeReferences": [
+            {
+              "file": "war3map.j",
+              "line": 39285,
+              "function": "Trig_allabilityActions"
+            },
+            {
+              "file": "war3map.j",
+              "line": 40664,
+              "function": "Trig_UnitDamageActions"
+            },
+            {
+              "file": "war3map.j",
+              "line": 40666,
+              "function": "Trig_UnitDamageActions"
+            }
+          ],
+          "initialRuntimeStatus": "unresolved",
+          "initialRuntimeKind": "pending"
+        },
+        {
+          "id": "A1VT",
+          "name": "死亡缠绕",
+          "baseCode": "ANcl",
+          "runtimeStatus": "unresolved",
+          "runtimeKind": "pending",
+          "runtimeEffectText": "v14.1A5通道或脚本指令：待核定对应运行脚本",
+          "abilitySource": {
+            "table": "all_abilities.csv",
+            "row": 2699,
+            "rawcode": "A1VT"
+          },
+          "resolvedFields": {
+            "rawcode": "A1VT",
+            "name": "死亡缠绕",
+            "tip": "死亡缠绕",
+            "ubertip": "发出六道能量，随机缠绕六个敌方单位，造成88点每秒的伤害，持续8s",
+            "alias": "A1VT",
+            "code": "ANcl",
+            "DataB1": "1",
+            "DataC1": "1",
+            "levels": "1",
+            "targs1": "enemies",
+            "Cost1": "9",
+            "Rng1": "500.0",
+            "Cool1": "7.0",
+            "checkDep": "1",
+            "reqLevel": "1",
+            "DataE1": "1",
+            "DataF1": "unloadallcorpses"
+          },
+          "jassRawcodeReferences": [
+            {
+              "file": "war3map.j",
+              "line": 39288,
+              "function": "Trig_allabilityActions"
+            },
+            {
+              "file": "war3map.j",
+              "line": 40669,
+              "function": "Trig_UnitDamageActions"
+            },
+            {
+              "file": "war3map.j",
+              "line": 40671,
+              "function": "Trig_UnitDamageActions"
+            }
+          ],
+          "initialRuntimeStatus": "unresolved",
+          "initialRuntimeKind": "pending"
+        },
+        {
+          "id": "A1VU",
+          "name": "寒冰风暴",
+          "baseCode": "ANcl",
+          "runtimeStatus": "unresolved",
+          "runtimeKind": "pending",
+          "runtimeEffectText": "v14.1A5通道或脚本指令：待核定对应运行脚本",
+          "abilitySource": {
+            "table": "all_abilities.csv",
+            "row": 2700,
+            "rawcode": "A1VU"
+          },
+          "resolvedFields": {
+            "rawcode": "A1VU",
+            "name": "寒冰风暴",
+            "tip": "寒冰风暴",
+            "ubertip": "在攻击范围半径形成一道冰封斩击，被斩击到的敌方单位受到235点的伤害，并且有20%的概率随机冰封住3个未被击杀的敌方单位，且对受攻击的敌方单位附加15%的减速效果",
+            "alias": "A1VU",
+            "code": "ANcl",
+            "DataB1": "1",
+            "DataC1": "1",
+            "levels": "1",
+            "targs1": "enemies",
+            "Cost1": "16",
+            "Rng1": "500.0",
+            "Cool1": "14.0",
+            "checkDep": "1",
+            "reqLevel": "1",
+            "DataE1": "1",
+            "DataF1": "unpoisonarrows"
+          },
+          "jassRawcodeReferences": [
+            {
+              "file": "war3map.j",
+              "line": 39291,
+              "function": "Trig_allabilityActions"
+            },
+            {
+              "file": "war3map.j",
+              "line": 40674,
+              "function": "Trig_UnitDamageActions"
+            },
+            {
+              "file": "war3map.j",
+              "line": 40676,
+              "function": "Trig_UnitDamageActions"
+            }
+          ],
+          "initialRuntimeStatus": "unresolved",
+          "initialRuntimeKind": "pending"
+        },
+        {
+          "id": "A1VV",
+          "name": "王者大军",
+          "baseCode": "ANcl",
+          "runtimeStatus": "unresolved",
+          "runtimeKind": "pending",
+          "runtimeEffectText": "v14.1A5通道或脚本指令：待核定对应运行脚本",
+          "abilitySource": {
+            "table": "all_abilities.csv",
+            "row": 2701,
+            "rawcode": "A1VV"
+          },
+          "resolvedFields": {
+            "rawcode": "A1VV",
+            "name": "王者大军",
+            "tip": "王者大军",
+            "ubertip": "召唤8个食尸鬼王，当食尸鬼王生命值低于20%后牺牲自己为阿尔萨斯回复牺牲时的血量。",
+            "alias": "A1VV",
+            "code": "ANcl",
+            "DataC1": "1",
+            "levels": "1",
+            "Cost1": "14",
+            "Rng1": "500.0",
+            "Cool1": "12.0",
+            "checkDep": "1",
+            "reqLevel": "1",
+            "DataE1": "1",
+            "DataF1": "unravenform"
+          },
+          "jassRawcodeReferences": [
+            {
+              "file": "war3map.j",
+              "line": 36342,
+              "function": "ArthasSummon"
+            },
+            {
+              "file": "war3map.j",
+              "line": 36343,
+              "function": "ArthasSummon"
+            },
+            {
+              "file": "war3map.j",
+              "line": 36344,
+              "function": "ArthasSummon"
+            },
+            {
+              "file": "war3map.j",
+              "line": 39294,
+              "function": "Trig_allabilityActions"
+            },
+            {
+              "file": "war3map.j",
+              "line": 40679,
+              "function": "Trig_UnitDamageActions"
+            },
+            {
+              "file": "war3map.j",
+              "line": 40681,
+              "function": "Trig_UnitDamageActions"
+            }
+          ],
+          "initialRuntimeStatus": "unresolved",
+          "initialRuntimeKind": "pending"
+        },
+        {
+          "id": "A1VW",
+          "name": "召唤辛达苟萨",
+          "baseCode": "ANcl",
+          "runtimeStatus": "unresolved",
+          "runtimeKind": "pending",
+          "runtimeEffectText": "v14.1A5通道或脚本指令：待核定对应运行脚本",
+          "abilitySource": {
+            "table": "all_abilities.csv",
+            "row": 2702,
+            "rawcode": "A1VW"
+          },
+          "resolvedFields": {
+            "rawcode": "A1VW",
+            "name": "召唤辛达苟萨",
+            "tip": "召唤辛达苟萨",
+            "ubertip": "随机选择600码范围内的一个敌方单位，以阿尔萨斯为起点，召唤辛达苟萨，辛达苟萨将按照选定的敌方单位飞行1500码距离，每秒飞行300码，辛达苟萨的吐息宽距为300码，造成203的冲击伤害，并且有30%的几率冰封（3s）范围内的单位，被冰封单位无法进行任何行动。",
+            "alias": "A1VW",
+            "code": "ANcl",
+            "DataB1": "1",
+            "DataC1": "1",
+            "levels": "1",
+            "targs1": "enemies",
+            "Cost1": "15",
+            "Rng1": "500.0",
+            "Cool1": "22.0",
+            "checkDep": "1",
+            "reqLevel": "1",
+            "DataE1": "1",
+            "DataF1": "unroot"
+          },
+          "jassRawcodeReferences": [
+            {
+              "file": "war3map.j",
+              "line": 39297,
+              "function": "Trig_allabilityActions"
+            },
+            {
+              "file": "war3map.j",
+              "line": 40684,
+              "function": "Trig_UnitDamageActions"
+            },
+            {
+              "file": "war3map.j",
+              "line": 40686,
+              "function": "Trig_UnitDamageActions"
+            }
+          ],
+          "initialRuntimeStatus": "unresolved",
+          "initialRuntimeKind": "pending"
+        }
+      ]
+    },
+    {
+      "buildingRawcode": "n08Z",
+      "combatRawcode": "h0XA",
+      "name": "圣光圣骑·阿尔萨斯",
+      "heroFamily": "h0DE",
+      "mappingSource": {
+        "file": "war3map.j",
+        "line": 17451,
+        "endLine": 17452,
+        "function": "OC5F_MB",
+        "role": "Mk combat to Ml building"
+      },
+      "priority": 4,
+      "summary": "4个主动与派生能力可读完整；圣光之怒实际登记/分支存在确定源bug，不能按tooltip补20杀buff。",
+      "mechanisms": [
+        {
+          "id": "bright-arthas-light",
+          "skillIds": [
+            "A1VX"
+          ],
+          "status": "source-script-missing",
+          "behavior": "3个环绕dummy分别给caster+10护甲；每.04秒各旋转7度、距caster200，当前位置300范围存活非无敌友军+40HP，6秒杀dummy；各自death清理减10甲。",
+          "evidence": [
+            {
+              "file": "war3map.j",
+              "line": 36392,
+              "endLine": 36462,
+              "function": "ArthasTheLightOfTheKingAction",
+              "role": "3 independent orbit/heal/armor triggers"
+            },
+            {
+              "file": "war3map.j",
+              "line": 39276,
+              "endLine": 39277,
+              "function": "Trig_allabilityActions",
+              "role": "spell dispatch"
+            }
+          ]
+        },
+        {
+          "id": "bright-arthas-shield",
+          "skillIds": [
+            "A1VY",
+            "A1W2"
+          ],
+          "status": "source-script-missing",
+          "behavior": "先给自己A1W2三秒且UnitRemoveBuffs(true,false)，再SelectRangeAlly500取最多2个FirstOfGroup对象。source没有先排除自己，可能重复命中自己刷新而未覆盖两个额外友军；A1W2在主事件直接把P8设为*.8。",
+          "evidence": [
+            {
+              "file": "war3map.j",
+              "line": 36463,
+              "endLine": 36487,
+              "function": "ArthasShider",
+              "role": "self-first then group selection"
+            },
+            {
+              "file": "war3map.j",
+              "line": 41166,
+              "endLine": 41167,
+              "function": "Trig_UnitDamageActions",
+              "role": "event-damage multiplier"
+            },
+            {
+              "file": "war3map.j",
+              "line": 29735,
+              "endLine": 29772,
+              "function": "UnitAddAbilityByTimerTimer",
+              "role": "refreshable ability lifetime"
+            }
+          ]
+        },
+        {
+          "id": "bright-arthas-fury",
+          "skillIds": [
+            "A1VZ",
+            "A10C",
+            "A1W3"
+          ],
+          "status": "source-registration-bug-preserve-not-tooltip",
+          "behavior": "实际按出生时拥有A1VY注册ArthasHolyLight，不检查A1VZ。listener先判断EVENT_PLAYER_UNIT_DEATH即销毁自身；kill-count逻辑置于elseif GetKillingUnit()==Bc，因此正常任意unit death先清理，不能直接宣称20杀增益运行。若有native可达该else分支，20计数后600范围授6秒A10C(level20)与A1W3；A10C物编仅1级DataA=.5，不应从tooltip推20%攻速或15甲。",
+          "evidence": [
+            {
+              "file": "war3map.j",
+              "line": 43839,
+              "endLine": 43840,
+              "function": "PassiveSkill",
+              "role": "actual carrier A1VY"
+            },
+            {
+              "file": "war3map.j",
+              "line": 36488,
+              "endLine": 36532,
+              "function": "ArthasAddAtkSpd",
+              "role": "ability grants and event branch ordering"
+            }
+          ],
+          "reuse": {
+            "A10C": "generic AIas +50% exists, native single-level clamping needs explicit host evidence",
+            "A1W3": "generic Aakb +10% aura exists"
+          },
+          "boundary": "Report the literal event-order source bug and retain it. Do not repair it to intended tooltip behavior in a faithful implementation."
+        },
+        {
+          "id": "bright-arthas-judgment",
+          "skillIds": [
+            "A1W0"
+          ],
+          "status": "source-script-missing",
+          "behavior": "施法点400范围敌人逐个设移速0；3秒后恢复原始默认移速并造成311通用伤害。timer未注册caster/target death取消，不可套用统一死即删。",
+          "evidence": [
+            {
+              "file": "war3map.j",
+              "line": 36533,
+              "endLine": 36569,
+              "function": "ArthasHolyLightJudgmentTargetAction",
+              "role": "delayed movement reset/damage"
+            },
+            {
+              "file": "war3map.j",
+              "line": 39280,
+              "endLine": 39281,
+              "function": "Trig_allabilityActions",
+              "role": "spell dispatch"
+            }
+          ]
+        },
+        {
+          "id": "bright-arthas-hammer",
+          "skillIds": [
+            "A1W1"
+          ],
+          "status": "source-script-missing",
+          "behavior": "面向目标方向飞行dummy600距离/.2秒，结束点300范围266通用伤害及VertigoTarget等级3；不跟踪目标，不是单体风暴锤。",
+          "evidence": [
+            {
+              "file": "war3map.j",
+              "line": 36570,
+              "endLine": 36601,
+              "function": "ArthasHammerOfTheHolyLightFinish",
+              "role": "flight/finish bodies"
+            },
+            {
+              "file": "war3map.j",
+              "line": 39282,
+              "endLine": 39283,
+              "function": "Trig_allabilityActions",
+              "role": "spell dispatch"
+            }
+          ]
+        }
+      ],
+      "staticSkills": [
+        {
+          "id": "A1VX",
+          "name": "王者之光",
+          "baseCode": "ANcl",
+          "runtimeStatus": "unresolved",
+          "runtimeKind": "pending",
+          "runtimeEffectText": "v14.1A5通道或脚本指令：待核定对应运行脚本",
+          "abilitySource": {
+            "table": "all_abilities.csv",
+            "row": 2703,
+            "rawcode": "A1VX"
+          },
+          "resolvedFields": {
+            "rawcode": "A1VX",
+            "name": "王者之光",
+            "tip": "王者之光",
+            "ubertip": "召唤三个环绕自身的光球，每个光球可以使阿尔萨斯增加10点护甲，光球可对敌方单位造成66点伤害，并且恢复阿尔萨斯生命值，对400码范围内单位恢复生命值，每秒恢复66点生命，持续6s。",
+            "alias": "A1VX",
+            "code": "ANcl",
+            "DataC1": "1",
+            "levels": "1",
+            "Cost1": "16",
+            "Rng1": "500.0",
+            "Cool1": "12.0",
+            "checkDep": "1",
+            "reqLevel": "1",
+            "DataE1": "1",
+            "DataF1": "unloadall"
+          },
+          "jassRawcodeReferences": [
+            {
+              "file": "war3map.j",
+              "line": 39276,
+              "function": "Trig_allabilityActions"
+            },
+            {
+              "file": "war3map.j",
+              "line": 40689,
+              "function": "Trig_UnitDamageActions"
+            },
+            {
+              "file": "war3map.j",
+              "line": 40691,
+              "function": "Trig_UnitDamageActions"
+            }
+          ],
+          "initialRuntimeStatus": "unresolved",
+          "initialRuntimeKind": "pending"
+        },
+        {
+          "id": "A1VY",
+          "name": "神圣壁垒",
+          "baseCode": "ANcl",
+          "runtimeStatus": "unresolved",
+          "runtimeKind": "pending",
+          "runtimeEffectText": "v14.1A5通道或脚本指令：待核定对应运行脚本",
+          "abilitySource": {
+            "table": "all_abilities.csv",
+            "row": 2704,
+            "rawcode": "A1VY"
+          },
+          "resolvedFields": {
+            "rawcode": "A1VY",
+            "name": "神圣壁垒",
+            "tip": "神圣壁垒",
+            "ubertip": "在攻击范围内随机选择3个单位给予护盾，免疫80%的伤害并且驱除身上所有负面效果",
+            "alias": "A1VY",
+            "code": "ANcl",
+            "DataC1": "1",
+            "levels": "1",
+            "Cost1": "14",
+            "Rng1": "500.0",
+            "Cool1": "9.0",
+            "checkDep": "1",
+            "reqLevel": "1",
+            "DataE1": "1",
+            "DataF1": "unloadallcorpses"
+          },
+          "jassRawcodeReferences": [
+            {
+              "file": "war3map.j",
+              "line": 39278,
+              "function": "Trig_allabilityActions"
+            },
+            {
+              "file": "war3map.j",
+              "line": 40694,
+              "function": "Trig_UnitDamageActions"
+            },
+            {
+              "file": "war3map.j",
+              "line": 40696,
+              "function": "Trig_UnitDamageActions"
+            },
+            {
+              "file": "war3map.j",
+              "line": 43839,
+              "function": "PassiveSkill"
+            }
+          ],
+          "initialRuntimeStatus": "unresolved",
+          "initialRuntimeKind": "pending"
+        },
+        {
+          "id": "A1VZ",
+          "name": "圣光之怒",
+          "baseCode": "Asth",
+          "runtimeStatus": "unresolved",
+          "runtimeKind": "pending",
+          "runtimeEffectText": "v14.1A5脚本标记：尚未逐项核定对应JASS，不沿用5.0dJF同ID效果",
+          "abilitySource": {
+            "table": "all_abilities.csv",
+            "row": 2705,
+            "rawcode": "A1VZ"
+          },
+          "resolvedFields": {
+            "rawcode": "A1VZ",
+            "name": "圣光之怒",
+            "tip": "圣光之怒",
+            "ubertip": "每普攻击杀20个单位可触发一次该被动，提升攻击范围内友军单位10%攻击力20%攻速，持续时间6s;获得15点护甲加成",
+            "alias": "A1VZ",
+            "code": "Asth",
+            "levels": "1"
+          },
+          "jassRawcodeReferences": [],
+          "initialRuntimeStatus": "unresolved",
+          "initialRuntimeKind": "pending"
+        },
+        {
+          "id": "A1W0",
+          "name": "圣光审判",
+          "baseCode": "ANcl",
+          "runtimeStatus": "unresolved",
+          "runtimeKind": "pending",
+          "runtimeEffectText": "v14.1A5通道或脚本指令：待核定对应运行脚本",
+          "abilitySource": {
+            "table": "all_abilities.csv",
+            "row": 2706,
+            "rawcode": "A1W0"
+          },
+          "resolvedFields": {
+            "rawcode": "A1W0",
+            "name": "圣光审判",
+            "tip": "圣光审判",
+            "ubertip": "敌方单位下形成审判圈，在圈内单位将无法进行任何行动，3s后对圈内敌方单位进行审判惩戒，造成311点的伤害",
+            "alias": "A1W0",
+            "code": "ANcl",
+            "DataB1": "1",
+            "DataC1": "1",
+            "levels": "1",
+            "targs1": "enemies",
+            "Cost1": "17",
+            "Rng1": "400.0",
+            "Cool1": "14.0",
+            "checkDep": "1",
+            "reqLevel": "1",
+            "DataE1": "1",
+            "DataF1": "unloadallinstant"
+          },
+          "jassRawcodeReferences": [
+            {
+              "file": "war3map.j",
+              "line": 39280,
+              "function": "Trig_allabilityActions"
+            },
+            {
+              "file": "war3map.j",
+              "line": 40699,
+              "function": "Trig_UnitDamageActions"
+            },
+            {
+              "file": "war3map.j",
+              "line": 40701,
+              "function": "Trig_UnitDamageActions"
+            }
+          ],
+          "initialRuntimeStatus": "unresolved",
+          "initialRuntimeKind": "pending"
+        },
+        {
+          "id": "A1W1",
+          "name": "圣光之锤",
+          "baseCode": "ANcl",
+          "runtimeStatus": "unresolved",
+          "runtimeKind": "pending",
+          "runtimeEffectText": "v14.1A5通道或脚本指令：待核定对应运行脚本",
+          "abilitySource": {
+            "table": "all_abilities.csv",
+            "row": 2707,
+            "rawcode": "A1W1"
+          },
+          "resolvedFields": {
+            "rawcode": "A1W1",
+            "name": "圣光之锤",
+            "tip": "圣光之锤",
+            "ubertip": "阿尔萨斯将手中的圣光之锤掷出500码范围，在该范围内形成一个200*200码的伤害范围，该范围内的敌方单位将受到266点的伤害，并且造成3s的眩晕效果",
+            "alias": "A1W1",
+            "code": "ANcl",
+            "Area1": "400.0",
+            "DataB1": "1",
+            "DataC1": "1",
+            "levels": "1",
+            "targs1": "enemies",
+            "Cost1": "13",
+            "Rng1": "400.0",
+            "Cool1": "20.0",
+            "checkDep": "1",
+            "reqLevel": "1",
+            "DataE1": "1",
+            "DataF1": "unpoisonarrows"
+          },
+          "jassRawcodeReferences": [
+            {
+              "file": "war3map.j",
+              "line": 39282,
+              "function": "Trig_allabilityActions"
+            },
+            {
+              "file": "war3map.j",
+              "line": 40704,
+              "function": "Trig_UnitDamageActions"
+            },
+            {
+              "file": "war3map.j",
+              "line": 40706,
+              "function": "Trig_UnitDamageActions"
+            }
+          ],
+          "initialRuntimeStatus": "unresolved",
+          "initialRuntimeKind": "pending"
+        }
+      ]
+    }
+  ],
+  "initialRuntimeCounts": {
+    "trainingHeroes": 5,
+    "staticSkills": 24,
+    "runtimeImplemented": 7,
+    "runtimeUnresolved": 17
+  },
+  "runtimeStatusCorrection": {
+    "revision": "v14-content-20261021-lich-status-audit-v1",
+    "changedAbilities": [
+      "A0KP",
+      "A0KQ"
+    ],
+    "scope": "Status/effect explanation only; no Arthas implementation is invented. A0KO and existing KelThuzad alliance stay implemented.",
+    "sourceTrigger": {
+      "combatRawcode": "h0M0",
+      "status": "partial"
+    },
+    "reason": "AUau with missing native values and an Aslo spell proxy cannot stand in for the missing dedicated registered scripts."
+  },
+  "dynamicAbilityObjects": {
+    "A0ZV": {
+      "name": "克尔苏加德防御",
+      "baseCode": "AIde",
+      "abilitySource": {
+        "table": "all_abilities.csv",
+        "row": 1571,
+        "rawcode": "A0ZV"
+      },
+      "resolvedFields": {
+        "rawcode": "A0ZV",
+        "name": "克尔苏加德防御",
+        "alias": "A0ZV",
+        "code": "AIde",
+        "DataA1": "10.0",
+        "levels": "1"
+      },
+      "currentGenericStatus": "implemented",
+      "currentGenericKind": "passive_stats",
+      "coverageCaution": "Generic object support does not imply the carrier-specific grant or source callback has been integrated."
+    },
+    "A0ZW": {
+      "name": "克尔苏加德攻击力",
+      "baseCode": "AIat",
+      "abilitySource": {
+        "table": "all_abilities.csv",
+        "row": 1572,
+        "rawcode": "A0ZW"
+      },
+      "resolvedFields": {
+        "rawcode": "A0ZW",
+        "name": "克尔苏加德攻击力",
+        "alias": "A0ZW",
+        "code": "AIat",
+        "DataA1": "100",
+        "levels": "1"
+      },
+      "currentGenericStatus": "implemented",
+      "currentGenericKind": "kelthuzad_source",
+      "coverageCaution": "Generic object support does not imply the carrier-specific grant or source callback has been integrated."
+    },
+    "A0ZY": {
+      "name": "球体",
+      "baseCode": "Asph",
+      "abilitySource": {
+        "table": "all_abilities.csv",
+        "row": 1574,
+        "rawcode": "A0ZY"
+      },
+      "resolvedFields": {
+        "rawcode": "A0ZY",
+        "name": "球体",
+        "alias": "A0ZY",
+        "code": "Asph",
+        "levels": "1",
+        "Dur1": "0.01",
+        "HeroDur1": "0.01",
+        "Cool1": "1.0",
+        "checkDep": "1"
+      },
+      "currentGenericStatus": "marker",
+      "currentGenericKind": "pending",
+      "coverageCaution": "Generic object support does not imply the carrier-specific grant or source callback has been integrated."
+    },
+    "A1CK": {
+      "name": "女王的祝福与惩戒",
+      "baseCode": "AEar",
+      "abilitySource": {
+        "table": "all_abilities.csv",
+        "row": 2015,
+        "rawcode": "A1CK"
+      },
+      "resolvedFields": {
+        "rawcode": "A1CK",
+        "name": "女王的祝福与惩戒",
+        "tip": ",",
+        "alias": "A1CK",
+        "code": "AEar",
+        "Area1": "900.0",
+        "BuffID1": "B07W",
+        "DataA1": "0.1",
+        "DataB1": "1",
+        "DataC1": "1",
+        "levels": "4",
+        "targs1": "ground,vulnerable,air,invulnerable,self",
+        "targs2": "ground,vulnerable,air,invulnerable,self",
+        "targs3": "ground,vulnerable,air,invulnerable,self",
+        "targs4": "ground,vulnerable,air,invulnerable,self",
+        "checkDep": "1",
+        "BuffID2": "B07W",
+        "BuffID3": "B07W",
+        "DataA2": "0.15",
+        "DataA3": "-0.11",
+        "DataB2": "1",
+        "DataB3": "1",
+        "reqLevel": "1",
+        "DataC2": "1",
+        "DataC3": "1",
+        "DataA4": "0.04",
+        "BuffID4": "B07W",
+        "DataB4": "1",
+        "DataC4": "1"
+      },
+      "currentGenericStatus": "implemented",
+      "currentGenericKind": "aura_damage",
+      "coverageCaution": "Generic object support does not imply the carrier-specific grant or source callback has been integrated."
+    },
+    "A1OE": {
+      "name": "攻速",
+      "baseCode": "AIas",
+      "abilitySource": {
+        "table": "all_abilities.csv",
+        "row": 2436,
+        "rawcode": "A1OE"
+      },
+      "resolvedFields": {
+        "rawcode": "A1OE",
+        "name": "攻速",
+        "alias": "A1OE",
+        "code": "AIas",
+        "DataA1": "-0.08",
+        "levels": "1"
+      },
+      "currentGenericStatus": "implemented",
+      "currentGenericKind": "passive_stats",
+      "coverageCaution": "Generic object support does not imply the carrier-specific grant or source callback has been integrated."
+    },
+    "A1W2": {
+      "name": "圣骑减伤",
+      "baseCode": "Asth",
+      "abilitySource": {
+        "table": "all_abilities.csv",
+        "row": 2708,
+        "rawcode": "A1W2"
+      },
+      "resolvedFields": {
+        "rawcode": "A1W2",
+        "name": "圣骑减伤",
+        "tip": "圣骑减伤",
+        "alias": "A1W2",
+        "code": "Asth",
+        "levels": "1"
+      },
+      "currentGenericStatus": "unresolved",
+      "currentGenericKind": "pending",
+      "coverageCaution": "Generic object support does not imply the carrier-specific grant or source callback has been integrated."
+    },
+    "A1W3": {
+      "name": "圣骑",
+      "baseCode": "Aakb",
+      "abilitySource": {
+        "table": "all_abilities.csv",
+        "row": 2709,
+        "rawcode": "A1W3"
+      },
+      "resolvedFields": {
+        "rawcode": "A1W3",
+        "name": "圣骑",
+        "tip": "War Drums",
+        "ubertip": "Adds a damage increase to the attacks of nearby friendly units.",
+        "alias": "A1W3",
+        "code": "Aakb",
+        "Area1": "900.0",
+        "BuffID1": "B07O",
+        "DataA1": "0.1",
+        "DataB1": "1",
+        "DataC1": "1",
+        "levels": "1",
+        "targs1": "ground,vulnerable,air,invulnerable,self",
+        "checkDep": "1"
+      },
+      "currentGenericStatus": "implemented",
+      "currentGenericKind": "aura_damage",
+      "coverageCaution": "Generic object support does not imply the carrier-specific grant or source callback has been integrated."
+    },
+    "A10C": {
+      "name": "攻速",
+      "baseCode": "AIas",
+      "abilitySource": {
+        "table": "all_abilities.csv",
+        "row": 1586,
+        "rawcode": "A10C"
+      },
+      "resolvedFields": {
+        "rawcode": "A10C",
+        "name": "攻速",
+        "alias": "A10C",
+        "code": "AIas",
+        "DataA1": "0.5",
+        "levels": "1"
+      },
+      "currentGenericStatus": "implemented",
+      "currentGenericKind": "passive_stats",
+      "coverageCaution": "Generic object support does not imply the carrier-specific grant or source callback has been integrated."
+    },
+    "A0KR": {
+      "name": "阿尔塞斯眩晕",
+      "baseCode": "AHtb",
+      "abilitySource": {
+        "table": "all_abilities.csv",
+        "row": 1051,
+        "rawcode": "A0KR"
+      },
+      "resolvedFields": {
+        "rawcode": "A0KR",
+        "name": "阿尔塞斯眩晕",
+        "tip": "风暴之锤(T) - [等级 1], 风暴之锤(T) - [等级 2], 风暴之锤(T) - [等级 3]",
+        "ubertip": "向目标投掷一巨大的魔法锤，对其造成100点伤害并使其5秒内处于眩晕状态。,向目标投掷一巨大的魔法锤，对其造成225 点伤害并使其5秒内处于眩晕状态。,向目标投掷一巨大的魔法锤，对其造成350点伤害并使其5秒内处于眩晕状态。",
+        "alias": "A0KR",
+        "code": "AHtb",
+        "BuffID1": "B04X",
+        "levels": "30",
+        "targs1": "air,ground,debris,enemy,neutral,organic",
+        "targs2": "air,ground,debris,enemy,neutral,organic",
+        "targs3": "air,ground,debris,enemy,neutral,organic",
+        "targs4": "air,ground,debris,enemy,neutral,organic",
+        "Dur1": "1.3",
+        "HeroDur1": "1.0",
+        "Rng1": "1000000000.0",
+        "checkDep": "1",
+        "BuffID2": "B04X",
+        "BuffID3": "B04X",
+        "reqLevel": "1",
+        "Dur2": "1.6",
+        "Dur3": "1.9",
+        "Rng2": "1000000000.0",
+        "Rng3": "1000000000.0",
+        "HeroDur2": "1.0",
+        "HeroDur3": "1.0",
+        "BuffID4": "B04X",
+        "Dur4": "2.2",
+        "HeroDur4": "1.0",
+        "Rng4": "1000000000.0",
+        "Dur5": "2.5",
+        "Dur6": "2.799999952316284",
+        "Dur7": "3.0999999046325684",
+        "Dur8": "3.4000000953674316",
+        "Dur9": "3.700000047683716",
+        "Dur10": "4.0",
+        "Dur11": "4.300000190734863",
+        "Dur12": "4.599999904632568",
+        "Dur13": "4.900000095367432",
+        "Dur14": "5.199999809265137",
+        "Dur15": "5.5",
+        "Dur16": "5.800000190734863",
+        "Dur17": "6.099999904632568",
+        "Dur18": "6.400000095367432",
+        "Dur19": "6.699999809265137",
+        "Dur20": "7.0",
+        "Dur21": "7.300000190734863",
+        "Dur22": "7.599999904632568",
+        "Dur23": "7.900000095367432",
+        "Dur24": "8.199999809265137",
+        "Dur25": "8.5",
+        "Dur26": "8.800000190734863",
+        "Dur27": "9.100000381469727",
+        "Dur28": "9.399999618530273",
+        "Dur29": "9.699999809265137",
+        "Dur30": "10.0"
+      },
+      "currentGenericStatus": "unresolved",
+      "currentGenericKind": "bolt",
+      "coverageCaution": "Generic object support does not imply the carrier-specific grant or source callback has been integrated."
+    },
+    "A0W0": {
+      "name": "幻象物品",
+      "baseCode": "AIil",
+      "abilitySource": {
+        "table": "all_abilities.csv",
+        "row": 1435,
+        "rawcode": "A0W0"
+      },
+      "resolvedFields": {
+        "rawcode": "A0W0",
+        "name": "幻象物品",
+        "alias": "A0W0",
+        "code": "AIil",
+        "BuffID1": "BIil",
+        "DataA1": "0.5",
+        "DataB1": "5.0",
+        "levels": "1",
+        "Dur1": "3.0",
+        "HeroDur1": "3.0",
+        "Rng1": "9999999.0"
+      },
+      "currentGenericStatus": "unresolved",
+      "currentGenericKind": "pending",
+      "coverageCaution": "Generic object support does not imply the carrier-specific grant or source callback has been integrated."
+    },
+    "A0W2": {
+      "name": "魔法护盾生命恢复",
+      "baseCode": "Arel",
+      "abilitySource": {
+        "table": "all_abilities.csv",
+        "row": 1437,
+        "rawcode": "A0W2"
+      },
+      "resolvedFields": {
+        "rawcode": "A0W2",
+        "name": "魔法护盾生命恢复",
+        "alias": "A0W2",
+        "code": "Arel",
+        "DataA1": "25",
+        "levels": "1"
+      },
+      "currentGenericStatus": "unresolved",
+      "currentGenericKind": "pending",
+      "coverageCaution": "Generic object support does not imply the carrier-specific grant or source callback has been integrated."
+    },
+    "A0W3": {
+      "name": "Slow",
+      "baseCode": "Aslo",
+      "abilitySource": {
+        "table": "all_abilities.csv",
+        "row": 1438,
+        "rawcode": "A0W3"
+      },
+      "resolvedFields": {
+        "rawcode": "A0W3",
+        "name": "Slow",
+        "tip": ",",
+        "alias": "A0W3",
+        "code": "Aslo",
+        "BuffID1": "Bslo",
+        "DataB1": "0.3",
+        "levels": "1",
+        "Dur1": "3.0",
+        "HeroDur1": "3.0",
+        "Rng1": "1000000000.0",
+        "checkDep": "1",
+        "priority": "3"
+      },
+      "currentGenericStatus": "implemented",
+      "currentGenericKind": "debuff",
+      "coverageCaution": "Generic object support does not imply the carrier-specific grant or source callback has been integrated."
+    }
+  }
+}

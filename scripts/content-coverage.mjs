@@ -1,5 +1,6 @@
 import { writeFile } from 'node:fs/promises';
 import { UNITS, MERCENARIES, WAVES, ITEMS, TECHNOLOGIES, SPECIAL_MONSTERS, UNIT_TEMPLATES } from '../dist/data.js';
+import {SOURCE_CLASS_RULES} from '../dist/source-class-rules.js';
 import { compileSkills, SKILL_IMPLEMENTATION_REVISION } from '../dist/skills.js';
 
 // Coverage records describe implementation, not just object-table presence.
@@ -10,6 +11,9 @@ const playerRuntimeForms=['h0YO','h0UD','h0UE','h2AE','n06V','n06W','h0CZ','h0CL
 // Source callbacks inject these exact auxiliary abilities. Keep them visible
 // in coverage even though they are absent from the build-menu ability lists.
 const playerRuntimeAbilities=[
+  // Blood fusion can select all other registered classes; include their
+  // dynamically granted child abilities and source-trigger dummy requests.
+  {sourceRawcode:'h06J',abilityIds:Object.keys(SOURCE_CLASS_RULES)},
   {sourceRawcode:'h0UD',abilityIds:['A1CP']},
   {sourceRawcode:'h2AE',abilityIds:['A1CP']},
   {sourceRawcode:'e008',abilityIds:['A1CV','A1CW']},
@@ -47,7 +51,9 @@ const result={
     '包内未提供完整原生商店/菜单字段，部分商品与单位入口仍待补证。',
     'A1U4/A1U5/A1U6献祭奖励可核定，但没有可证实的携带单位或授予路径。',
     '原始地图模型、贴图、音频和v14地形通行格不在解析包内。',
-    'BoxGift五个隐藏训练叶子及225条训练路径已接入；新增单位的未核定技能仍按实际状态计数。神秘礼物的随机兵种创建、可操纵建造者技能及平台专用Frame科技返费宿主仍待补齐。',
+    'BoxGift五个隐藏训练叶子及225条训练路径已接入；新增单位的未核定技能仍按实际状态计数。随机礼物已接入35个候选；原生CreateUnit路径/碰撞失败、可操纵建造者技能及平台专用Frame科技返费宿主仍待核定。',
+    '17类种族特性与103个精确单位注册已接入；地精修理、虚空体质、原生跳跃/slow命中及多种原生法术抗性叠加仍为部分实现。旧存档中没有出生抽样记录的血统融合战斗体不补抽，新出战体才执行来源随机。',
+    '巫妖王A0KP亡者呼唤/A0KQ召龙此前通用编译不代表专属脚本已还原，两项已纠正为待核定；训练新增五英雄的其余缺口见training-hero-source-audit.json。',
     'A131农场礼物已按显式原型next链计算人口，旧档/付费农场原型未知及原生在研取消退款仍待核定，保留礼物不猜测。',
     '原图训练多分支对话框限时30秒；Web用持久表单重新校验提交，未模拟对话框超时。旧版无礼物历史的存档不会补抽已过波次奖励。',
   ],

@@ -78,13 +78,15 @@ test('free lumber at the basic boundary preserves a separately queued basic upgr
 
 test('all eleven permanent unit grants survive actual normal and arena deployment and JSON restoration',()=>{
   const g=fixture('normal'),p=g.state.players[0],b=complete(g),baseline=complete(g);b.col=0;baseline.col=2;
+  const sourceClass=['A18P','A18Q'];assert.deepEqual([...b.permanentAbilityIds].sort(),sourceClass);assert.deepEqual(b.sourceClassGrantedAbilityIds,['A18Q']);
   for(const id of ['A135','A136','A13Q','A13R','A2ZC']){gift(g,id);ok(claim(g,id,b));consumed(p,id);}
-  const expected=['A138','A13A','A139','A13B','A13U','A13T','A13V','A13W','A13X','A13Y','A2ZG'];assert.deepEqual([...b.permanentAbilityIds].sort(),[...expected].sort());
+  const expected=['A138','A13A','A139','A13B','A13U','A13T','A13V','A13W','A13X','A13Y','A2ZG'],allPermanent=[...expected,...sourceClass].sort();assert.deepEqual([...b.permanentAbilityIds].sort(),allPermanent);
   // Re-granting an item ability follows UnitAddAbility's non-stacking result.
-  gift(g,'A135');ok(claim(g,'A135',b));assert.equal(b.permanentAbilityIds.length,11);
+  gift(g,'A135');ok(claim(g,'A135',b));assert.deepEqual([...b.permanentAbilityIds].sort(),allPermanent);
   const check=game=>{
     const body=game.state.entities.find(e=>e.buildingId===b.id),plain=game.state.entities.find(e=>e.buildingId===baseline.id);assert.ok(body&&plain);
-    assert.ok(expected.every(id=>body.skillSpecs.some(s=>s.id===id&&s.status==='implemented')));
+    assert.deepEqual(body.skillSpecs.filter(s=>expected.includes(s.id)&&s.status==='implemented').map(s=>s.id).sort(),[...expected].sort());
+    assert.deepEqual(body.skillSpecs.filter(s=>sourceClass.includes(s.id)&&s.status==='implemented').map(s=>s.id).sort(),sourceClass);assert.equal(body.status.sourceClassDeployment.classId,'A18P');assert.equal(body.status.sourceClassDeployment.effectiveClassId,'A18P');
     near(body.maxHp,plain.maxHp+1100);near(body.damage,plain.damage+110);
     const aura=sourceAuraEffects(game,body,[body]),baseAura=sourceAuraEffects(game,plain,[plain]);near(aura.armor-baseAura.armor,3);near(aura.haste-baseAura.haste,.3);near(aura.healRate-baseAura.healRate,40);
     const crit=body.skillSpecs.find(s=>s.id==='A13Y');near(crit.chance,.4);assert.equal(crit.multiplier,2);
@@ -93,7 +95,8 @@ test('all eleven permanent unit grants survive actual normal and arena deploymen
     return body;
   };
   g._startCombat();let body=check(g);const resources={hp:body.hp,maxHp:body.maxHp,damage:body.damage};
-  const restored=Game.fromSnapshot(clone(g.snapshot())),saved=restored.state.entities.find(e=>e.id===body.id);assert.deepEqual({hp:saved.hp,maxHp:saved.maxHp,damage:saved.damage},resources);assert.deepEqual(restored.state.players[0].buildings.find(x=>x.id===b.id).permanentAbilityIds,b.permanentAbilityIds);
+  const restored=Game.fromSnapshot(clone(g.snapshot())),saved=restored.state.entities.find(e=>e.id===body.id);assert.deepEqual({hp:saved.hp,maxHp:saved.maxHp,damage:saved.damage},resources);assert.deepEqual([...restored.state.players[0].buildings.find(x=>x.id===b.id).permanentAbilityIds].sort(),allPermanent);
+  assert.deepEqual(saved.skillSpecs.filter(s=>expected.includes(s.id)&&s.status==='implemented').map(s=>s.id).sort(),[...expected].sort());assert.deepEqual(saved.skillSpecs.filter(s=>sourceClass.includes(s.id)&&s.status==='implemented').map(s=>s.id).sort(),sourceClass);
   g._startArena();body=check(g);assert.equal(body.isArena,true);assert.equal(body.side,'arena0');
 });
 
@@ -139,8 +142,8 @@ test('ordinary lumber research pays its real fee and leaves the coupon for a pro
   near(p.gold,before.gold-status.cost.gold);near(p.wood,before.wood-status.cost.wood);assert.equal(p.boxBuildFreeOnce,true);
 });
 
-test('unavailable builder and random-fighter choices remain unconsumed so a supported alternative can be selected',()=>{
-  for(const id of ['A132','A13N','A13M','A13S']){
+test('unavailable builder choices remain unconsumed so a supported alternative can be selected',()=>{
+  for(const id of ['A13M','A13S']){
     const g=fixture(),p=g.state.players[0];complete(g);gift(g,id);const offer=g.boxRewardStatus().offers.find(o=>o.id===id);assert.equal(offer.canStart,false);assert.ok(offer.reason);rejectUnchanged(g,()=>claim(g,id));
     const alternative=p.boxRewards.tier==='box'?'A133':'A13O',before=p.gold;ok(claim(g,alternative));near(p.gold,before+(alternative==='A133'?50:300));consumed(p,alternative);
   }

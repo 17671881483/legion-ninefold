@@ -2,6 +2,7 @@ import {ICE_HERO_RULES,canIceHeroCastAbility,castIceHeroAbility,tryIceHeroAutoCa
 import {TROLL_RULES,TROLL_ACTIVE_RULES,initializeTrollUnit,canTrollCastAbility,castTrollAbility,tryTrollAutoCast,trollOnHit,trollIncomingDamage,sourceTrollDeath,tickTrollJob,isTrollJobType,trollHaste} from './troll-rules.js';
 import {KELTHUZAD_RULES,KELTHUZAD_ACTIVE_RULES,registerKelthuzadSource,applyKelthuzadBuildingAlliance,kelthuzadBeforeDamage,kelthuzadOnAttackDamage,canKelthuzadCastAbility,castKelthuzadAbility,tryKelthuzadAutoCast,kelthuzadNativeSpellEffect,sourceKelthuzadDeath,tickKelthuzadJob,isKelthuzadJobType} from './kelthuzad-rules.js';
 import {SOURCE_AURA_RULES,tickSourceAuraRules} from './source-aura-rules.js';
+import {SOURCE_CLASS_RULES,initializeSourceClassDeployment,sourceClassBeforeDamage,sourceClassOnAttackDamage,sourceClassDeath,tickSourceClassJob,isSourceClassJobType} from './source-class-rules.js';
 import { RULES } from './data.js';
 import { WORKBOOK_ABILITIES, WORKBOOK_UNIT_TEMPLATES } from './workbook-reference.js';
 import { V14_ABILITIES, V14_UNIT_TEMPLATES } from './v14-reference.js';
@@ -13,7 +14,7 @@ import { closestWalkable, isWalkable } from './layout.js';
 import { GARROSH_ACTIVE_RULES, GARROSH_PASSIVE_RULES, canGarroshCastAbility, castGarroshAbility, tryGarroshAutoCast, garroshActiveAfterDamage, sourceGarroshActiveDeath, tickGarroshActiveJob } from './garrosh-active-rules.js';
 import { ILLIDAN_RULES, ILLIDAN_ACTIVE_RULES, canIllidanCastAbility, castIllidanAbility, registerIllidanSource, tickIllidanSource, illidanOnAttackHit, tryIllidanAutoCast, illidanAfterDamage, sourceIllidanDeath, tickIllidanJob, isIllidanJobType } from './illidan-rules.js';
 
-export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261020-v15-1';
+export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261021-v16-1';
 
 // Values come from resolved object fields. Empty fields remain empty: a missing
 // native default is reported, rather than replacing it with tooltip numbers.
@@ -153,10 +154,12 @@ function compile(id,version='5.0dJF') {
     if(id==='A1Q0'){s.kind='azure_fire';s.status='implemented';s.damage=20;s.effectText='实际普攻命中追加20点混乱攻击/通用伤害，可伤害魔免单位；不采用文案的魔法伤害类型';}
     if(id==='A0TH'){s.kind='anchor_smash';s.status='implemented';s.damage=10;s.radius=1.5;s.chance=.33;s.effectText='实际普攻命中时按JASS GetRandomReal(1,101)≥68判定（33%）；自身暂停1秒，对自身150范围目标阵营单位造成10点混乱攻击/通用伤害';}
     if(id==='A0YD'){s.kind='dragon_soul';s.status='implemented';s.chance=29/99;s.effectText='实际普攻命中时按JASS GetRandomReal(1,100)<30判定（约29.29%，非文案40%）；原生英雄受到最大生命30%的混乱攻击/通用伤害，其他单位受到99999点同类伤害，并非直接设置死亡';}
+    if(id==='A0KP'){s.status='unresolved';s.effectText='AUau对象未提供DataA/DataB原生效果数值；亡者呼唤实际由h0M0出生注册的Arthas死亡监听处理（war3map.j:20084—20094、21377—21385），该脚本尚未接入，不以零数值光环代替复生';}
+    if(id==='A0KQ'){s.status='unresolved';s.effectText='Aslo为召龙施法代理（18魔法、600射程、0.001秒原生持续）；真正的龙dummy、骨龙计数伤害与眩晕由Arthas/A0KQ_Action处理（war3map.j:20015—20120），该脚本尚未接入，不以无数值减速代替召龙';}
     if(['AIde','AIas'].includes(a.base_code)&&has('DataA')){s.kind='passive_stats';s.status='implemented';if(a.base_code==='AIde'){s.armor=A;s.effectText=`原生物品能力：自身护甲+${A}`;}else{s.haste=A;s.effectText=`原生物品能力：自身攻速+${A*100}%`;}}
     if(['A138','A13T'].includes(id)){s.kind='passive_stats';s.status='implemented';s.bonusHp=A;s.effectText=`神秘礼物原生AIml：自身最大生命+${A}；部署时应用一次，不随存档刷新重复增加`;}
     if(['A139','A13X'].includes(id)){s.kind='passive_stats';s.status='implemented';s.flatDamage=A;s.effectText=`神秘礼物原生AIat：两组普通武器攻击力各+${A}，不增加法术固定伤害`;}
-    if(id==='A13V'){s.kind='passive_stats';s.status='implemented';s.selfRegen=A;s.effectText=`神秘礼物原生Arel：自身每秒恢复${A}生命，不是范围光环或最大生命百分比恢复`;}
+    if(['A13V','A198'].includes(id)){s.kind='passive_stats';s.status='implemented';s.selfRegen=A;s.effectText=`原生Arel：自身每秒恢复${A}生命，不是范围光环或最大生命百分比恢复`;}
     if(id==='A2ZG'){s.kind='box_damage_shield';s.status='implemented';s.damageFactor=.85;s.sourceLines=[40524,40574];s.effectText='单位护盾按主伤害事件将正敌对伤害乘以0.85，包括通用与法术伤害；排除空来源、自伤、盟友及带A2Y7的来源，主监听内部追加伤害不重复触发。先于翡翠复苏判断（JASS 40551–40585）';}
   }
   if(s.kind==='summon'&&!TEMPLATES[s.summonId]){s.status='unresolved';s.effectText=`召唤模板${s.summonId??'未指定'}缺失`;}
@@ -171,6 +174,7 @@ function compile(id,version='5.0dJF') {
   if(familyRule){const r=familyRule;Object.assign(s,{kind:ILLIDAN_RULES[id]?'illidan_source':'garrosh_source',status:r.status,manaCost:r.manaCost??0,cooldown:r.cooldown??0,effectText:r.description+(r.partial?`【待核定：${r.partial}】`:'')});if(r.range!==undefined)s.range=r.range/100;if(r.radius!==undefined)s.radius=r.radius/100;}
   const extendedRule=version==='v14.1A5'&&(ICE_HERO_RULES[id]??TROLL_RULES[id]??KELTHUZAD_RULES[id]);
   if(extendedRule){const r=extendedRule;Object.assign(s,{...(!r.preserveNativeKind?{kind:ICE_HERO_RULES[id]?'ice_source':TROLL_RULES[id]?'troll_source':'kelthuzad_source'}:{}),status:r.status,manaCost:r.manaCost??s.manaCost,cooldown:r.cooldown??s.cooldown,effectText:r.description+(r.partial?`【待核定：${r.partial}】`:'')});if(r.range!==undefined)s.range=r.range/100;if(r.radius!==undefined)s.radius=r.radius/100;}
+  if(version==='v14.1A5'&&SOURCE_CLASS_RULES[id]){const r=SOURCE_CLASS_RULES[id];Object.assign(s,{...(!r.preserveNativeKind?{kind:'source_class'}:{}),...(r.compiled??{}),status:r.status,effectText:r.description+(r.partial?`【待核定：${r.partial}】`:'')});}
   cache.set(key,s);return s;
 }
 function effectSummary(s){
@@ -205,12 +209,15 @@ function effectSummary(s){
 }
 const TRIGGER_DESCRIPTIONS={n0S4:'每次伤害事件追加受害者当前生命3%的伤害',n0S6:'每次伤害事件追加受害者最大生命1%的魔法伤害',n0SC:'死亡时300范围敌军受到8伤害',n0SD:'死亡时300范围敌军受到26伤害',h0CZ:'击杀时回复死者最大生命60%',h08B:'潜地1.5秒无敌，结束追加5秒攻速25%与移速5%',h03B:'攻击启动30%概率自施2秒狂热与2秒增益',H08U:'死亡后原位置重新生成同类型单位'};
 const V14_TRIGGER_DESCRIPTIONS={n0S4:'伤害事件>0时追加受害者当前生命3%的法术攻击/通用伤害（两倍模式分支为2%，不用于九倍）',n0S6:'伤害事件>40时，对英雄追加当前生命1%、其他单位追加最大生命1%的法术攻击/普通伤害',n0SC:'死亡时300范围敌军受到8点普通攻击/火焰伤害',h0CZ:'击杀时回复死者最大生命50%',h03B:'攻击启动30%概率自施2秒狂热与增益，击杀时追加增益',h0OC:'攻击启动30%概率自施2秒狂热与增益，击杀时追加增益',H08U:'死亡后原位置重新生成同类型单位'};
+const V14_PARTIAL_TRIGGER_DESCRIPTIONS={
+  h0M0:{status:'partial',text:'邪恶光环按原生字段提供35%移速与每秒20生命恢复。亡者呼唤和召唤辛达苟萨的Arthas死亡/施法注册脚本尚未接入（war3map.j:20015—20120、20194—20201、21377—21385）；护命匣联盟仍由既有克尔苏加德模块处理，不据此宣称整套巫妖王已还原。'},
+};
 const V14_ECONOMY_DESCRIPTIONS={
   farmer:{name:'淘金（玩家级经济）',rawcodes:['n085','h0W1'],text:'首座娜迦农夫从开始建造时为玩家注册15%击杀额外获得1金币的概率，每新增一座再加0.5个百分点；该概率影响玩家的击杀结算，农夫本身没有对战技能。升级完成后注销该农夫的注册；出售按原脚本不会注销已注册概率。'},
   master:{name:'压榨（回合经济）',rawcodes:['n084','h0W0'],text:'回合结算时，每座存活的娜迦农场主获得3×本波农夫数量的金币。原脚本条件会把原型h0W1的尸体也计入农夫数，皮肤农夫则要求存活；经济模块按这一源逻辑结算。'},
 };
 export function compileSkills(def) {const scale=def.distanceScale??1,version=versionOf(def);return [...new Set(def.abilityIds??def.sourceAbilityIds??(def.sourceAbilities??[]).map(a=>a.rawcode??a.id))].filter(Boolean).map(id=>compile(id,version)).map(s=>({...s,...Object.fromEntries(['range','radius','length','width','inner','outer','outerRadius','deathRadius','pull'].filter(k=>s[k]!==undefined).map(k=>[k,s[k]*scale]))}));}
-export function describeSkills(def) {const list=compileSkills(def).map(s=>({id:s.id,name:s.name,description:s.description,status:s.status,effectText:s.effectText,cooldown:s.cooldown,manaCost:s.manaCost,duration:s.duration,range:s.range,radius:s.radius}));const r=raw(def),descriptions=isV14(def)?V14_TRIGGER_DESCRIPTIONS:TRIGGER_DESCRIPTIONS;if(descriptions[r])list.push({id:'trigger:'+r,name:'脚本机制',description:descriptions[r],effectText:descriptions[r],status:'implemented',cooldown:0,manaCost:0});if(isV14(def))for(const [key,rule] of Object.entries(V14_ECONOMY_DESCRIPTIONS))if(rule.rawcodes.includes(r))list.push({id:'economy:'+key,name:rule.name,description:rule.text,effectText:rule.text,status:'implemented',cooldown:0,manaCost:0});return list;}
+export function describeSkills(def) {const list=compileSkills(def).map(s=>({id:s.id,name:s.name,description:s.description,status:s.status,effectText:s.effectText,cooldown:s.cooldown,manaCost:s.manaCost,duration:s.duration,range:s.range,radius:s.radius}));const r=raw(def),descriptions=isV14(def)?V14_TRIGGER_DESCRIPTIONS:TRIGGER_DESCRIPTIONS;if(descriptions[r])list.push({id:'trigger:'+r,name:'脚本机制',description:descriptions[r],effectText:descriptions[r],status:'implemented',cooldown:0,manaCost:0});const sourceGap=isV14(def)&&V14_PARTIAL_TRIGGER_DESCRIPTIONS[r];if(sourceGap)list.push({id:'trigger:'+r,name:'脚本机制（部分实现）',description:sourceGap.text,effectText:sourceGap.text,status:sourceGap.status,cooldown:0,manaCost:0});if(isV14(def))for(const [key,rule] of Object.entries(V14_ECONOMY_DESCRIPTIONS))if(rule.rawcodes.includes(r))list.push({id:'economy:'+key,name:rule.name,description:rule.text,effectText:rule.text,status:'implemented',cooldown:0,manaCost:0});return list;}
 export function skillCoverage(def) {const list=describeSkills(def);return {implemented:list.filter(s=>s.status==='implemented').length,partial:list.filter(s=>s.status==='partial').length,markers:list.filter(s=>s.status==='marker').length,unresolved:list.filter(s=>s.status==='unresolved').length};}
 export function attachSkills(e,def) {
   e.skillVersion=versionOf(def);e.skillImplementationRevision=SKILL_IMPLEMENTATION_REVISION;e.sourceVersion=def.sourceVersion??e.sourceVersion;e.combatRawcode=raw(def);e.skillSpecs=compileSkills(def);e.skillStates={};e.buffs=[];e.skillSource=!!def.abilityIds;e.weapon1=def.weapon1??{};e.weapon2=def.weapon2??{};e.sourceRawFields=def.sourceRawFields??{};e.sourceArmorTypeRaw=def.sourceArmorTypeRaw??e.sourceRawFields.defType??e.sourceArmorTypeRaw;e.distanceScale=def.distanceScale??1;
@@ -443,6 +450,13 @@ export function modifyIncoming(game,target,damage,attacker,options={}) {
   }
   for(const b of target.buffs??[])if(b.expiresAt>game.state.time)result*=1+(b.incoming??0);
   result*=target.status?.incomingMultiplier??1;
+  // A19A is an AIsr native resistance, not a reduction to magic weapons or
+  // universal script damage. Mixed native resistance stacking is unresolved;
+  // keep the existing A1CG host authoritative rather than invent a stack rule.
+  if(isV14(target)&&(target.skillSpecs??[]).some(s=>s.id==='A19A')&&!options.universal&&(options.magic&&options.spell||options.nativeDamageType==='magic'||options.attackType==='spells')){
+    if(target.status?.nagaSpellResistance)target.status.sourceClassResistanceOverlapUnresolved=true;
+    else result*=.6;
+  }
   // Trig_UnitDamageActions 40551–40574: QC changes this main listener's
   // event damage before YseraOnDamage. Universal damage is not exempt, but
   // its own nested damage runs while this trigger is disabled. UB and other
@@ -461,6 +475,12 @@ export function modifyIncoming(game,target,damage,attacker,options={}) {
     }
   }
   return isV14(target)?trollIncomingDamage(game,target,nagaIncomingDamage(game,target,result,attacker,options),attacker,heroScriptApi):result;
+}
+export function sourceClassAttackDamageEvent(game,target,attacker,options={}){
+  if(isV14(attacker)&&(!options.spell||options.weapon))sourceClassOnAttackDamage(game,attacker,target,heroScriptApi);
+}
+export function initializeSourceClassCombat(game,building,entity){
+  if(isV14(entity))return initializeSourceClassDeployment(game,building,entity,heroScriptApi);
 }
 export function beforeSourceDamage(game,target,actual,attacker,options={}){
   if(isV14(target))kelthuzadBeforeDamage(game,target,actual,attacker,heroScriptApi);
@@ -483,6 +503,7 @@ export function beforeSourceDamage(game,target,actual,attacker,options={}){
       tryIceHeroAutoCast(game,target,attacker,heroScriptApi);
       tryTrollAutoCast(game,target,attacker,heroScriptApi);
     }
+    if(isV14(target)&&!(attacker.skillSpecs??[]).some(s=>s.id==='A2Y7'))sourceClassBeforeDamage(game,target,actual,attacker,heroScriptApi);
   }finally{game._sourceDamageTriggerDepth--;}
 }
 export function afterSourceDamage(game,target,actual,attacker,options={}) {
@@ -527,6 +548,7 @@ export function afterSourceDamage(game,target,actual,attacker,options={}) {
 }
 export function sourceDeath(game,target,killer) {
   if(target.status?.sourceDeathHandled)return;target.status.sourceDeathHandled=true;
+  if(isV14(target))sourceClassDeath(game,target,killer,heroScriptApi);
   // JSON restoration breaks live-object aliases. Rebind the retained script
   // handle before corpse cleanup so its final mana/cooldowns remain authoritative.
   if(game.state.nagaScriptCasters?.[target.id])game.state.nagaScriptCasters[target.id]=target;
@@ -595,6 +617,7 @@ function nativeDamage(game,target,amount,source,{attackType='normal',damageType=
 function setUnitPosition(game,e,point){const safe=closestWalkable(point,e.battleTeam,e.radius??.2)??pos(e);e.worldX=safe.x;e.worldY=safe.y;game._syncLocal?.(e);}
 function compileAbility(game,e,id){return compileSkills({abilityIds:[id],skillVersion:e.skillVersion??'v14.1A5',distanceScale:e.distanceScale??1/3})[0];}
 function addAbility(game,e,id){if((e.skillSpecs??[]).some(s=>s.id===id))return;e.skillSpecs??=[];e.skillSpecs.push(compileAbility(game,e,id));e.skillStates??={};e.skillStates[id]??={readyAt:0,casts:0};}
+function removeAbility(game,e,id){e.skillSpecs=(e.skillSpecs??[]).filter(s=>s.id!==id);if(e.skillStates)delete e.skillStates[id];}
 function getBuilding(game,e){return game.state.players?.find(p=>p.id===e.ownerId)?.buildings?.find(b=>b.id===e.buildingId);}
 function applyAttackLevel(game,e,id,oldLevel,newLevel){
   if(!Number.isFinite(e.damage))return;
@@ -637,7 +660,8 @@ function castNativeNova(game,e,id,target){
   kelthuzadNativeSpellEffect(game,e,id,heroScriptApi);
   return {ok:true,skillId:id};
 }
-const heroScriptApi={getOwnedUnitsOfRawcode:(g,e,code)=>[...g.state.entities.filter(u=>u.ownerId===e.ownerId&&raw(u)===code),...(g.state.players[e.ownerId]?.buildings??[]).filter(b=>(b.sourceRawcode??b.unitId?.replace(/^v14_/, ''))===code)],castNativeNova:(g,e,id,target)=>castNativeNova(g,e,id,target),applyCyclone:(g,s,t,id,seconds)=>applyNativeControl(g,s,t,id,'cycloneUntil',seconds),applyEnsnare:(g,s,t,id)=>applyNativeControl(g,s,t,id,'rootUntil'),universalDamage,nativeDamage,sourceDamage,applyCorrosion:applyYseraCorrosion,scriptInvulnerable,pauseUnitEx,compileAbility,addAbility,getBuilding,applyAttackLevel,setUnitPosition,moveUnit:setUnitPosition,
+const heroScriptApi={getOwnedUnitsOfRawcode:(g,e,code)=>[...g.state.entities.filter(u=>u.ownerId===e.ownerId&&raw(u)===code),...(g.state.players[e.ownerId]?.buildings??[]).filter(b=>(b.sourceRawcode??b.unitId?.replace(/^v14_/, ''))===code)],castNativeNova:(g,e,id,target)=>castNativeNova(g,e,id,target),applyCyclone:(g,s,t,id,seconds)=>applyNativeControl(g,s,t,id,'cycloneUntil',seconds),applyEnsnare:(g,s,t,id)=>applyNativeControl(g,s,t,id,'rootUntil'),universalDamage,nativeDamage,sourceDamage,applyCorrosion:applyYseraCorrosion,scriptInvulnerable,pauseUnitEx,compileAbility,addAbility,removeAbility,getBuilding,applyAttackLevel,setUnitPosition,moveUnit:setUnitPosition,
+  applyNativeSlow:(game,source,target,id,descriptor)=>{target.status??={};target.status.sourceClassNativeSlowPending={abilityId:id,sourceId:source.id,at:game.state.time,descriptor:{...descriptor},reason:'原生Aslo默认目标许可未核定'};},
   vertigoTarget:(game,source,target,level)=>{const frozen=target.status?.sourceAnimationFrozenUntil;pauseUnitEx(game,source,target,level);if(frozen===undefined)delete target.status.sourceAnimationFrozenUntil;else target.status.sourceAnimationFrozenUntil=frozen;},
   pauseUnit:(game,e,value)=>{e.status??={};e.status.sourcePaused=!!value;if(value)e.pendingAttack=null;},
   isTerrainBlocked:(game,point,source)=>!isWalkable(point.x,point.y,source?.battleTeam??0,0),
@@ -695,6 +719,7 @@ export function tickSourceScriptJobs(game,dt=0){
   tickSourceAuraRules(game,{matchesTargets});
   const now=game.state.time,remaining=[];
   for(const job of game.state.sourceSkillJobs??[]){
+    if(isSourceClassJobType(job.type)){tickSourceClassJob(game,job,heroScriptApi);if(!job.done)remaining.push(job);continue;}
     if(isIceHeroJobType(job.type)){if(tickIceHeroJob(game,job,heroScriptApi))remaining.push(job);continue;}
     if(isTrollJobType(job.type)){if(tickTrollJob(game,job,heroScriptApi))remaining.push(job);continue;}
     if(isKelthuzadJobType(job.type)){if(tickKelthuzadJob(game,job,heroScriptApi))remaining.push(job);continue;}

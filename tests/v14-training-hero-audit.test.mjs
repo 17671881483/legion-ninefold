@@ -13,7 +13,7 @@ const unit=raw=>V14_UNITS.find(u=>u.sourceRawcode===raw);
 test('training hero audit keeps all 24 current object statuses and the original seven generic labels without miscounting existing alliance',()=>{
   assert.deepEqual(report.heroes.map(h=>h.buildingRawcode),['n02S','n05H','n07I','n08Y','n08Z']);
   assert.equal(report.initialRuntimeCounts.runtimeImplemented,7);assert.equal(report.initialRuntimeCounts.runtimeUnresolved,17);
-  assert.equal(report.counts.staticSkills,24);assert.equal(report.counts.runtimePartial,14);assert.equal(report.initialRecommendation.buildingRawcode,'n07I');assert.equal(report.counts.runtimeImplemented,8);assert.equal(report.counts.runtimeUnresolved,2);
+  assert.equal(report.counts.staticSkills,24);assert.equal(report.counts.runtimePartial,16);assert.equal(report.initialRecommendation.buildingRawcode,'n07I');assert.equal(report.counts.runtimeImplemented,7);assert.equal(report.counts.runtimeUnresolved,1);
   for(const hero of report.heroes){
     const def=unit(hero.buildingRawcode);assert.equal(def.combatRawcode,hero.combatRawcode);
     assert.deepEqual(hero.staticSkills.map(s=>s.id),def.abilityIds);

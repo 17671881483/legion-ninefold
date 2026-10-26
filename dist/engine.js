@@ -77,7 +77,7 @@ export class Game {
         attack: rule('kingDamage', 135), regen: rule('kingRegen', 4), healCharges: rule('kingHealCharges', 4),
         armor: rule('kingArmor', 8), armorType: 'hero', attackType: 'hero', autoUpgradeCount: 0, healBlockedUntil: 0,
         id:`king-${team}`,unitId:'king',side:'defender',isKing:true,battleTeam:team,laneId:8+team,status:{},targetType:'structure',traits:['mechanical'],isBuilding:true,hpLevel: 0, attackLevel: 0, regenLevel: 0, attackCd: 0, worldX: kingWorld(team).x, worldY: kingWorld(team).y, radius: .8 })),
-      entities: [], sourceSkillJobs: [], nagaScriptCasters: {}, darkArthasCasters: {}, brightArthasHandles: {}, events: [], logs: [], pendingSends: [], kingBountyPools: [0, 0], teamLeakFlags: [false, false],
+      entities: [], sourceSkillJobs: [], nagaScriptCasters: {}, darkArthasCasters: {}, brightArthasHandles: {}, aesaraHandles: {}, events: [], logs: [], pendingSends: [], kingBountyPools: [0, 0], teamLeakFlags: [false, false],
       metrics: { spawned: 0, killed: 0, leaked: 0 }, boxRewardProgress: { firstGranted:false, secondGranted:false },
     };
     for (const p of this.state.players) {
@@ -537,7 +537,7 @@ export class Game {
   _resetSandboxWave(wave = this.state.wave) {
     const s = this.state;
     s.wave = wave; s.phase = 'build'; s.roundMode = 'normal'; s.timer = this.buildDuration(wave);
-    s.paused = false; s.winner = null; s.entities = []; s.sourceSkillJobs = []; s.nagaScriptCasters = {}; s.darkArthasCasters = {}; s.brightArthasHandles = {}; s.sourceAuraNextAt=Math.floor(s.time)+1; s.events = []; s.pendingSends = [];
+    s.paused = false; s.winner = null; s.entities = []; s.sourceSkillJobs = []; s.nagaScriptCasters = {}; s.darkArthasCasters = {}; s.brightArthasHandles = {}; s.aesaraHandles = {}; s.sourceAuraNextAt=Math.floor(s.time)+1; s.events = []; s.pendingSends = [];
     s.kingBountyPools = [0, 0]; s.teamLeakFlags = [false, false]; s.specialMonsters = {};
     for (const key of ['waveInfo', 'arenaRemaining', 'arenaResult', 'continuousRemaining', 'congestion']) delete s[key];
     this._spawnQueue = []; this._roundTime = 0; this._settledLanes = []; this._overtime = false; this._warpTimer = 0;
@@ -943,7 +943,7 @@ export class Game {
     const reference=value(w,['recommendedPower'],[250,350,500,650,800,1000,1200,1450,1600,1850,2050,2400,2700,3100,3500,4000,4500,5000,5500,6000,6500,7100,7700,8500,9500,10600,11800,13000,14000,15000,16000,17000,18000,19000,20000][s.wave-1]??1);
     for(const p of s.players){const factor=this._military(p)/reference-(p.sourceLeaks??0)/150;p.leakBountyFactor=this.options.ggEnabled?factor>=1?1:factor>=.1?factor:0:0;}
     resetLichKingRound(this);
-    s.phase = 'combat'; s.timer = 0; s.entities = []; s.sourceSkillJobs = []; s.nagaScriptCasters = {}; s.darkArthasCasters = {}; s.brightArthasHandles = {}; s.sourceAuraNextAt=Math.floor(s.time)+1; s.teamLeakFlags = [false,false]; this._spawnQueue = []; this._roundTime = 0; this._settledLanes = []; this._overtime = false; this._warpTimer = 0; this._battleAuras = [[], []];
+    s.phase = 'combat'; s.timer = 0; s.entities = []; s.sourceSkillJobs = []; s.nagaScriptCasters = {}; s.darkArthasCasters = {}; s.brightArthasHandles = {}; s.aesaraHandles = {}; s.sourceAuraNextAt=Math.floor(s.time)+1; s.teamLeakFlags = [false,false]; this._spawnQueue = []; this._roundTime = 0; this._settledLanes = []; this._overtime = false; this._warpTimer = 0; this._battleAuras = [[], []];
     if(s.mode !== 'sandbox' && s.wave>=31)s.continuousRemaining=s.wave<35?50:null;
     const boss = !!(w.boss ?? w.isBoss ?? this.state.wave % 10 === 0);
     const baseCount = value(w, ['baseCount', 'quantity'], boss ? 1 : 5);
@@ -1321,7 +1321,7 @@ export class Game {
     }
   }
   _hurt(target, damage, attacker, pure = false) {
-    if (target.hp <= 0 || damage <= 0 || (target.status?.cycloneUntil??0)>(this._brightArthasEventAt??this._arthasEventAt??this._lichEventAt??this._vashjEventAt??this._iceEventAt??this._trollEventAt??this._kelthuzadEventAt??this.state.time)) return 0;
+    if (target.hp <= 0 || damage <= 0 || (target.status?.cycloneUntil??0)>(this._aesaraEventAt??this._brightArthasEventAt??this._arthasEventAt??this._lichEventAt??this._vashjEventAt??this._iceEventAt??this._trollEventAt??this._kelthuzadEventAt??this.state.time)) return 0;
     const options=typeof pure==='object'?pure:{spell:!!pure},legacyPure=typeof pure==='boolean'&&pure;
     const registeredDamageListeners=darkArthasDamageListeners(this,target);
     const revivalCount=target.status.yseraRevivalCount??0;
@@ -1492,7 +1492,7 @@ export class Game {
     const boxGrants=advanceBoxRewards(this,s.wave);
     if(boxGrants.some(g=>g.playerId===0))this._log(`神秘礼物：第${s.wave>=13?13:6}波礼物已开放，三项中任选一项。`);
     // A cleared round discards its temporary dummies before preparation/arena.
-    s.sourceSkillJobs = []; s.nagaScriptCasters = {}; s.darkArthasCasters = {}; s.brightArthasHandles = {}; s.sourceAuraNextAt=Math.floor(s.time)+1;
+    s.sourceSkillJobs = []; s.nagaScriptCasters = {}; s.darkArthasCasters = {}; s.brightArthasHandles = {}; s.aesaraHandles = {}; s.sourceAuraNextAt=Math.floor(s.time)+1;
     const listedReward = RULES.waveRewards?.[s.wave - 1];
     const bonus = Number.isFinite(listedReward) ? listedReward * ((RULES.bossRewardDoubleWaves??[10,20]).includes(s.wave) ? 2 : 1) : rule('incomeBase', 22) + s.wave * rule('incomePerWave', 8);
     for (const p of s.players) {
@@ -1521,7 +1521,7 @@ export class Game {
 
   _startArena(){
     this._completeMilitaryConstruction();
-    const s=this.state;s.phase='combat';s.roundMode='arena';s.entities=[];s.sourceSkillJobs=[];s.nagaScriptCasters={};s.darkArthasCasters={};s.brightArthasHandles={};s.sourceAuraNextAt=Math.floor(s.time)+1;s.timer=0;s.arenaRemaining=rule('arenaBattleLimitSeconds',120);this._spawnQueue=[];this._roundTime=0;
+    const s=this.state;s.phase='combat';s.roundMode='arena';s.entities=[];s.sourceSkillJobs=[];s.nagaScriptCasters={};s.darkArthasCasters={};s.brightArthasHandles={};s.aesaraHandles={};s.sourceAuraNextAt=Math.floor(s.time)+1;s.timer=0;s.arenaRemaining=rule('arenaBattleLimitSeconds',120);this._spawnQueue=[];this._roundTime=0;
     for(const p of s.players)for(const b of p.buildings.filter(b=>!b.construction)){
       let def=units[b.unitId];if(!def||(isSourceUnit(def)&&!def.combatRawcode))continue;def=this._boxCombatDefinition(def,b);const point=laneToWorld(0,1.2+(p.id%4)*1.1+(b.col-2.5)*.12,p.team===0?5+(b.row/8):9-(b.row/8));
       const e=this._entity(def,{team:p.team,side:`arena${p.team}`,battleTeam:0,laneId:0,sourceLaneId:p.id,ownerId:p.id,buildingId:b.id,isArena:true,worldX:point.x,worldY:point.y});
@@ -1538,13 +1538,13 @@ export class Game {
     if (this.state.mode === 'sandbox') { this._resetSandboxWave(); return; }
     const s=this.state,winner=alive[0]&&!alive[1]?0:alive[1]&&!alive[0]?1:-1,reward=s.wave*(winner===-1?rule('arenaDrawGoldPerWave',5):rule('arenaWinnerGoldPerWave',10));
     for(const p of s.players)if(winner===-1||p.team===winner){p.gold+=reward;p.stats.goldEarned+=reward;}
-    s.arenaResult={winner,reward,wave:s.wave};s.entities=[];s.sourceSkillJobs=[];s.nagaScriptCasters={};s.darkArthasCasters={};s.brightArthasHandles={};s.sourceAuraNextAt=Math.floor(s.time)+1;s.phase='build';s.roundMode='arena-transition';s.timer=rule('arenaAfterBattleSeconds',20);
+    s.arenaResult={winner,reward,wave:s.wave};s.entities=[];s.sourceSkillJobs=[];s.nagaScriptCasters={};s.darkArthasCasters={};s.brightArthasHandles={};s.aesaraHandles={};s.sourceAuraNextAt=Math.floor(s.time)+1;s.phase='build';s.roundMode='arena-transition';s.timer=rule('arenaAfterBattleSeconds',20);
     this._log(`竞技场${winner===-1?'平局':winner===0?'蓝方获胜':'红方获胜'}，${winner===-1?'双方':'胜方'}每人奖励${reward}金币；20秒过渡后进入30秒准备。`);
   }
   _advanceContinuous(){
     if (this.state.mode === 'sandbox') return;
-    const s=this.state;if(s.wave>=35)return;const survivors=s.entities.filter(e=>e.hp>0),jobs=s.sourceSkillJobs??[],nagaCasters=s.nagaScriptCasters??{},arthasCasters=s.darkArthasCasters??{},brightHandles=s.brightArthasHandles??{},oldTime=this._roundTime,queue=this._spawnQueue.map(e=>({...e,at:Math.max(0,e.at-oldTime)}));
-    s.wave++;s.phase='build';this._startCombat();s.sourceSkillJobs=jobs;s.nagaScriptCasters=nagaCasters;s.darkArthasCasters=arthasCasters;s.brightArthasHandles=brightHandles;s.entities=[...survivors,...s.entities.filter(e=>e.side==='monster')];this._spawnQueue=[...queue,...this._spawnQueue].sort((a,b)=>a.at-b.at);
+    const s=this.state;if(s.wave>=35)return;const survivors=s.entities.filter(e=>e.hp>0),jobs=s.sourceSkillJobs??[],nagaCasters=s.nagaScriptCasters??{},arthasCasters=s.darkArthasCasters??{},brightHandles=s.brightArthasHandles??{},aesaraHandles=s.aesaraHandles??{},oldTime=this._roundTime,queue=this._spawnQueue.map(e=>({...e,at:Math.max(0,e.at-oldTime)}));
+    s.wave++;s.phase='build';this._startCombat();s.sourceSkillJobs=jobs;s.nagaScriptCasters=nagaCasters;s.darkArthasCasters=arthasCasters;s.brightArthasHandles=brightHandles;s.aesaraHandles=aesaraHandles;s.entities=[...survivors,...s.entities.filter(e=>e.side==='monster')];this._spawnQueue=[...queue,...this._spawnQueue].sort((a,b)=>a.at-b.at);
     s.continuousRemaining=s.wave<35?50:null;this._log(`连续进攻：第${s.wave}波已加入战场，存活守军与残怪保留。`);
   }
 
@@ -1682,7 +1682,7 @@ export class Game {
       for(const e of this.state.entities){const id=alias(e.unitId),def=units[id];if(id!==e.unitId&&def){const ratio=e.maxHp>0?clamp(e.hp/e.maxHp,0,1):0;e.unitId=id;e.name=def.name;e.maxHp=def.hp;e.hp=def.hp*ratio;e.damage=def.damage;e.attackInterval=def.interval;e.range=def.range/100;e.moveSpeed=def.speed/100;e.armor=def.armor;e.attackType=def.attackType;e.armorType=def.armorType;e.ability=abilityOf(def)??null;attachSkills(e,def);}}
       this.state.dataRevision=RULES.dataRevision;this.state.migrationNotice='旧存档已按文档迁移，原始存档已备份；无法映射的历史Web单位继续标记为兼容单位。';
     }
-    this.state.kingBountyPools ??= [0, 0]; this.state.sourceSkillJobs??=[]; this.state.nagaScriptCasters??={}; this.state.darkArthasCasters??={}; this.state.brightArthasHandles??={}; this.state.teamLeakFlags??=[false,false];
+    this.state.kingBountyPools ??= [0, 0]; this.state.sourceSkillJobs??=[]; this.state.nagaScriptCasters??={}; this.state.darkArthasCasters??={}; this.state.brightArthasHandles??={}; this.state.aesaraHandles??={}; this.state.teamLeakFlags??=[false,false];
     migrateBoxRewardProgress(this,{legacySnapshot:true});
     for (const p of this.state.players) {
       p.builderId??=RULES.defaultBuilderId;
@@ -1708,6 +1708,7 @@ export class Game {
     // JSON stores retained handles separately; surviving units must share the
     // live object again so later healing, movement and death update one handle.
     for(const e of [...this.state.entities,...this.state.kings])if(this.state.brightArthasHandles[e.id])this.state.brightArthasHandles[e.id]=e;
+    for(const e of [...this.state.entities,...this.state.kings])if(this.state.aesaraHandles[e.id])this.state.aesaraHandles[e.id]=e;
     if (saved.version === 1) {
       this.state.map = { id: MAP.id, version: MAP.version, topology: '2x2-crossbar-stem' };
       for (const e of this.state.entities) {

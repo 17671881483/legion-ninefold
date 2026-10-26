@@ -15,6 +15,7 @@ const playerRuntimeAbilities=[
   // dynamically granted child abilities and source-trigger dummy requests.
   {sourceRawcode:'h06J',abilityIds:Object.keys(SOURCE_CLASS_RULES)},
   {sourceRawcode:'h0XA',abilityIds:['A1W2']},
+  {sourceRawcode:'h0OV',abilityIds:['A0W0','A0W2','A0W3']},
   {sourceRawcode:'h0UQ',abilityIds:['A1CK','A1OE']},
   {sourceRawcode:'h0UD',abilityIds:['A1CP']},
   {sourceRawcode:'h2AE',abilityIds:['A1CP']},

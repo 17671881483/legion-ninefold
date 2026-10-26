@@ -1,6 +1,6 @@
 {
   "sourceVersion": "v14.1A5",
-  "skillImplementationRevision": "v14-content-20261026-v20-1",
+  "skillImplementationRevision": "v14-content-20261026-v21-1",
   "units": 534,
   "mercenaryRecords": 60,
   "mainWaves": 35,
@@ -56,6 +56,14 @@
       "sourceRawcode": "h0XA",
       "abilityIds": [
         "A1W2"
+      ]
+    },
+    {
+      "sourceRawcode": "h0OV",
+      "abilityIds": [
+        "A0W0",
+        "A0W2",
+        "A0W3"
       ]
     },
     {
@@ -149,9 +157,9 @@
   "playerSkills": {
     "counts": {
       "implemented": 413,
-      "partial": 57,
+      "partial": 61,
       "marker": 34,
-      "unresolved": 124
+      "unresolved": 123
     },
     "abilities": [
       {
@@ -3421,8 +3429,8 @@
       {
         "rawcode": "A0VX",
         "name": "秘术异蛇",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "aesara_source",
         "unitRawcodes": [
           "n05H"
         ]
@@ -3430,8 +3438,8 @@
       {
         "rawcode": "A0VY",
         "name": "魔法护盾",
-        "status": "implemented",
-        "kind": "shield",
+        "status": "partial",
+        "kind": "aesara_source",
         "unitRawcodes": [
           "n05H"
         ]
@@ -3446,12 +3454,39 @@
         ]
       },
       {
+        "rawcode": "A0W0",
+        "name": "幻象物品",
+        "status": "partial",
+        "kind": "aesara_native_request",
+        "unitRawcodes": [
+          "h0OV"
+        ]
+      },
+      {
         "rawcode": "A0W1",
         "name": "减速光环",
         "status": "implemented",
         "kind": "aura_slow",
         "unitRawcodes": [
           "n05H"
+        ]
+      },
+      {
+        "rawcode": "A0W2",
+        "name": "魔法护盾生命恢复",
+        "status": "implemented",
+        "kind": "passive_stats",
+        "unitRawcodes": [
+          "h0OV"
+        ]
+      },
+      {
+        "rawcode": "A0W3",
+        "name": "Slow",
+        "status": "partial",
+        "kind": "aesara_native_request",
+        "unitRawcodes": [
+          "h0OV"
         ]
       },
       {
@@ -6241,9 +6276,9 @@
   "battleSkills": {
     "counts": {
       "implemented": 464,
-      "partial": 57,
+      "partial": 61,
       "marker": 47,
-      "unresolved": 145
+      "unresolved": 144
     },
     "abilities": [
       {
@@ -9986,8 +10021,8 @@
       {
         "rawcode": "A0VX",
         "name": "秘术异蛇",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "aesara_source",
         "unitRawcodes": [
           "n05H"
         ]
@@ -9995,8 +10030,8 @@
       {
         "rawcode": "A0VY",
         "name": "魔法护盾",
-        "status": "implemented",
-        "kind": "shield",
+        "status": "partial",
+        "kind": "aesara_source",
         "unitRawcodes": [
           "n05H"
         ]
@@ -10011,12 +10046,39 @@
         ]
       },
       {
+        "rawcode": "A0W0",
+        "name": "幻象物品",
+        "status": "partial",
+        "kind": "aesara_native_request",
+        "unitRawcodes": [
+          "h0OV"
+        ]
+      },
+      {
         "rawcode": "A0W1",
         "name": "减速光环",
         "status": "implemented",
         "kind": "aura_slow",
         "unitRawcodes": [
           "n05H"
+        ]
+      },
+      {
+        "rawcode": "A0W2",
+        "name": "魔法护盾生命恢复",
+        "status": "implemented",
+        "kind": "passive_stats",
+        "unitRawcodes": [
+          "h0OV"
+        ]
+      },
+      {
+        "rawcode": "A0W3",
+        "name": "Slow",
+        "status": "partial",
+        "kind": "aesara_native_request",
+        "unitRawcodes": [
+          "h0OV"
         ]
       },
       {

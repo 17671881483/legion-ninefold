@@ -12,15 +12,15 @@
   "counts": {
     "trainingHeroes": 5,
     "staticSkills": 24,
-    "runtimeImplemented": 8,
-    "runtimeUnresolved": 2,
-    "runtimePartial": 14
+    "runtimeImplemented": 7,
+    "runtimeUnresolved": 1,
+    "runtimePartial": 16
   },
   "recommendation": {
     "buildingRawcode": "n05H",
     "combatRawcode": "h0OV",
     "priority": 1,
-    "reason": "五个训练英雄静态技能尚余艾萨拉女王两项待核定；继续补魔法护盾开关、附加回复、近战反制及关闭返魔冷却，并保留各已接入英雄的原生边界。"
+    "reason": "训练英雄尚余A0VZ原生AIdd未核定；继续验证Aroc有效伤害与AIil/共享施法dummy命令完成，以及各英雄明确保留的原生边界。"
   },
   "describeSkillsCorrections": {
     "reason": "Seven generic implemented static entries include incomplete carrier-associated scripts. Current describeSkills appends V14_TRIGGER_DESCRIPTIONS with hardcoded implemented, so a text-only partial label will still overcount.",
@@ -58,7 +58,6 @@
       "h0M0"
     ],
     "pendingCombatRawcodes": [
-      "h0OV",
       "h0UQ"
     ]
   },
@@ -461,15 +460,15 @@
         "role": "Mk combat to Ml building"
       },
       "priority": 5,
-      "summary": "秘术异蛇完整弹射/回程/幻象，以及魔盾开关/回复/反制未接；原生AIdd减伤仍未核定。",
+      "summary": "异蛇追踪/八次命中/回程、护盾开关与A0W2回复已接入。AIil幻象、共享dummy近战反制及部分失buff前置分支保留原生边界；AIdd尚待核定。",
       "mechanisms": [
         {
           "id": "aesara-mystic-snake",
           "skillIds": [
             "A0VX"
           ],
-          "status": "source-script-missing",
-          "behavior": ".02秒追踪移动9，进入10距离或目标低于.9HP后处理。每目标325点normal attack/normal damage，最多8次命中、800范围选择未命中非建筑活敌；之后返回施法者。击杀且计数!=2时经共享dummy A0W0制作幻象；回程再发2次幻象指令，源显式移主单位位置用于该原生施法。",
+          "status": "script-implemented-native-boundary-partial",
+          "behavior": "每0.02秒向当前目标移动9码；距目标不超过10或目标生命不大于0.9时处理，造成325普通攻击类型/普通伤害。800范围按登记顺序选择未命中、非建筑、生命大于0.65的敌人，最多8次后回程。低生命命中最多2次、回程2次请求A0W0幻象；施法者死亡不取消。",
           "evidence": [
             {
               "file": "war3map.j",
@@ -491,7 +490,14 @@
               "endLine": 40297
             }
           ],
-          "boundary": "AIil native illusion creation/order lifecycle and shared dummy order semantics require an explicit host. Do not turn this into ordinary magic chain damage."
+          "boundary": "AIil native illusion creation/order lifecycle and shared dummy order semantics require an explicit host. Do not turn this into ordinary magic chain damage.",
+          "initialMechanismStatus": "source-script-missing",
+          "initialBehavior": ".02秒追踪移动9，进入10距离或目标低于.9HP后处理。每目标325点normal attack/normal damage，最多8次命中、800范围选择未命中非建筑活敌；之后返回施法者。击杀且计数!=2时经共享dummy A0W0制作幻象；回程再发2次幻象指令，源显式移主单位位置用于该原生施法。",
+          "runtimeEvidence": {
+            "revision": "v14-content-20261026-v21-1",
+            "implementation": "dist/aesara-rules.js",
+            "tests": "tests/v14-aesara.test.mjs"
+          }
         },
         {
           "id": "aesara-mana-shield-state",
@@ -500,8 +506,8 @@
             "A0W2",
             "A0W3"
           ],
-          "status": "source-script-missing-around-generic-native-effect",
-          "behavior": "A0VY原生mana shield的90%/60伤害每mana已由generic近似；source另有启用状态、附加A0W2每秒25回复，近战攻击者触发A0W3慢速，关闭/失buff时5秒原生CD且返还10mana并移除A0W2。",
+          "status": "script-implemented-native-boundary-partial",
+          "behavior": "显式开关B06S护盾，已开启时吸收90%伤害，每点魔法吸收60。开盾添加A0W2每秒25生命；主伤害监听只对受害者尝试自动开启，首个触发伤害不追溯吸收。原生关盾后返还10魔法、移除回复并设5秒冷却。近战来源触发A0W3 slow请求，非仅普通攻击。",
           "evidence": [
             {
               "file": "war3map.j",
@@ -532,7 +538,14 @@
               "role": "lost-buff cleanup"
             }
           ],
-          "boundary": "Do not assume native shield activation cancels the in-flight triggering damage. Native toggle/buff host timing remains distinct from the script state."
+          "boundary": "Do not assume native shield activation cancels the in-flight triggering damage. Native toggle/buff host timing remains distinct from the script state.",
+          "initialMechanismStatus": "source-script-missing-around-generic-native-effect",
+          "initialBehavior": "A0VY原生mana shield的90%/60伤害每mana已由generic近似；source另有启用状态、附加A0W2每秒25回复，近战攻击者触发A0W3慢速，关闭/失buff时5秒原生CD且返还10mana并移除A0W2。",
+          "runtimeEvidence": {
+            "revision": "v14-content-20261026-v21-1",
+            "implementation": "dist/aesara-rules.js",
+            "tests": "tests/v14-aesara.test.mjs"
+          }
         },
         {
           "id": "aesara-native-damage-reduction",
@@ -646,9 +659,9 @@
           "id": "A0VX",
           "name": "秘术异蛇",
           "baseCode": "ANfd",
-          "runtimeStatus": "unresolved",
-          "runtimeKind": "pending",
-          "runtimeEffectText": "原生基码尚无已核定模拟规则",
+          "runtimeStatus": "partial",
+          "runtimeKind": "aesara_source",
+          "runtimeEffectText": "每0.02秒向当前目标移动9码；距目标不超过10或目标生命不大于0.9时处理，造成325普通攻击类型/普通伤害。800范围按登记顺序选择未命中、非建筑、生命大于0.65的敌人，最多8次后回程。低生命命中最多2次、回程2次请求A0W0幻象；施法者死亡不取消。【待核定：ANfd缺失原生继承字段、命令前摇/仲裁、AIil幻象创建与共享e00O施法后立即移除能力的完成时机未核定；保留原生命令请求，不伪造幻象或反制命中。】",
           "abilitySource": {
             "table": "all_abilities.csv",
             "row": 1432,
@@ -682,9 +695,9 @@
           "id": "A0VY",
           "name": "魔法护盾",
           "baseCode": "ANms",
-          "runtimeStatus": "implemented",
-          "runtimeKind": "shield",
-          "runtimeEffectText": "吸收90%伤害，每点魔法吸收60伤害",
+          "runtimeStatus": "partial",
+          "runtimeKind": "aesara_source",
+          "runtimeEffectText": "显式开关B06S护盾，已开启时吸收90%伤害，每点魔法吸收60。开盾添加A0W2每秒25生命；主伤害监听只对受害者尝试自动开启，首个触发伤害不追溯吸收。原生关盾后返还10魔法、移除回复并设5秒冷却。近战来源触发A0W3 slow请求，非仅普通攻击。【待核定：ANfd缺失原生继承字段、命令前摇/仲裁、AIil幻象创建与共享e00O施法后立即移除能力的完成时机未核定；保留原生命令请求，不伪造幻象或反制命中。开关事件/B06S移除时序、耗尽与抗性叠加、无Cost字段的原生继承待验证；Web开关不额外收费。失buff清理属于长elseif链，未移植的前置分支重叠明确保留待核定。】",
           "abilitySource": {
             "table": "all_abilities.csv",
             "row": 1433,
@@ -2449,9 +2462,12 @@
         "HeroDur1": "3.0",
         "Rng1": "9999999.0"
       },
-      "currentGenericStatus": "unresolved",
-      "currentGenericKind": "pending",
-      "coverageCaution": "Generic object support does not imply the carrier-specific grant or source callback has been integrated."
+      "currentGenericStatus": "partial",
+      "currentGenericKind": "aesara_native_request",
+      "coverageCaution": "Generic object support does not imply the carrier-specific grant or source callback has been integrated.",
+      "initialGenericStatus": "unresolved",
+      "initialGenericKind": "pending",
+      "runtimeEffectText": "秘术异蛇通过共享e00O发852274幻象命令后立即移除A0W0；物编为50%输出、5倍承伤、3秒。原生创建/继承未核定，保存请求，不虚构分身。"
     },
     "A0W2": {
       "name": "魔法护盾生命恢复",
@@ -2469,9 +2485,12 @@
         "DataA1": "25",
         "levels": "1"
       },
-      "currentGenericStatus": "unresolved",
-      "currentGenericKind": "pending",
-      "coverageCaution": "Generic object support does not imply the carrier-specific grant or source callback has been integrated."
+      "currentGenericStatus": "implemented",
+      "currentGenericKind": "passive_stats",
+      "coverageCaution": "Generic object support does not imply the carrier-specific grant or source callback has been integrated.",
+      "initialGenericStatus": "unresolved",
+      "initialGenericKind": "pending",
+      "runtimeEffectText": "原生Arel：自身每秒恢复25生命，不是范围光环或最大生命百分比恢复"
     },
     "A0W3": {
       "name": "Slow",
@@ -2496,9 +2515,12 @@
         "checkDep": "1",
         "priority": "3"
       },
-      "currentGenericStatus": "implemented",
-      "currentGenericKind": "debuff",
-      "coverageCaution": "Generic object support does not imply the carrier-specific grant or source callback has been integrated."
+      "currentGenericStatus": "partial",
+      "currentGenericKind": "aesara_native_request",
+      "coverageCaution": "Generic object support does not imply the carrier-specific grant or source callback has been integrated.",
+      "initialGenericStatus": "implemented",
+      "initialGenericKind": "debuff",
+      "runtimeEffectText": "魔法护盾对近战伤害来源通过共享e00O发slow后立即移除A0W3。显式攻速降低30%、普通/英雄3秒，移速字段缺失；原生施法完成未核定，保留请求。"
     }
   },
   "initialRecommendation": {
@@ -2601,6 +2623,21 @@
       ],
       "nativeFieldReference": "https://wc3jass.com/jassdoc.php?file=common.j&line=3041",
       "nativeBoundary": "IssueOrder arbitration/cast point, e008 collision/death dispatch, FirstOfGroup ordering, positive native buff removability/aura reapplication and native speed limits remain partial. Restored live units rebind retained handles."
+    },
+    {
+      "revision": "v14-content-20261026-v21-1",
+      "buildingRawcode": "n05H",
+      "staticImplemented": [],
+      "staticPartial": [
+        "A0VX",
+        "A0VY"
+      ],
+      "dynamicAbilities": [
+        "A0W0",
+        "A0W2",
+        "A0W3"
+      ],
+      "nativeBoundary": "ANfd inherited fields, native mana-shield toggle/exhaustion timing, shared e00O immediate ability removal and AIil creation/inheritance remain partial; no unverified illusions or counter slow are fabricated. Lost-buff cleanup defers through unhosted earlier elseif branches."
     }
   ]
 }

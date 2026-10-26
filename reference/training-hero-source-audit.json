@@ -12,15 +12,15 @@
   "counts": {
     "trainingHeroes": 5,
     "staticSkills": 24,
-    "runtimeImplemented": 6,
-    "runtimeUnresolved": 13,
-    "runtimePartial": 5
+    "runtimeImplemented": 7,
+    "runtimeUnresolved": 7,
+    "runtimePartial": 10
   },
   "recommendation": {
-    "buildingRawcode": "n08Y",
-    "combatRawcode": "h0X9",
+    "buildingRawcode": "n08Z",
+    "combatRawcode": "h0XA",
     "priority": 1,
-    "reason": "继续核对光明圣骑的独立攻击、伤害与死亡注册；巫妖王已接入脚本主体，原生边界保留。"
+    "reason": "继续核对圣光圣骑五项技能及实际A1VY出生注册；n08Y为霜之哀伤而非圣光形态，六项主体已接入。"
   },
   "describeSkillsCorrections": {
     "reason": "Seven generic implemented static entries include incomplete carrier-associated scripts. Current describeSkills appends V14_TRIGGER_DESCRIPTIONS with hardcoded implemented, so a text-only partial label will still overcount.",
@@ -1227,14 +1227,14 @@
         "role": "Mk combat to Ml building"
       },
       "priority": 3,
-      "summary": "6项均未接；法术主体完整但范围更大，须保留双监听累计、召军自移除及各投射物的不同死亡处理。",
+      "summary": "六项脚本主体已接入；饥渴双监听累计完整，五项主动保留原生命令/虚体/事件排序边界。王者大军按首次+5达到>=3移除，未修成文案预期。",
       "mechanisms": [
         {
           "id": "dark-arthas-hunger",
           "skillIds": [
             "A1VR"
           ],
-          "status": "source-script-missing",
+          "status": "script-implemented",
           "behavior": "攻击者main damage先把P8加进累计；实际攻击伤害监听先消费ready使自身生命百分比+15，再把同次GetEventDamage再次加累计。达到自身maxHP*.4时累计清0并设置ready；普攻可能被两入口累计，不能合并去重。",
           "evidence": [
             {
@@ -1258,14 +1258,16 @@
               "function": "Trig_New_UnitAttackActions",
               "role": "attack listener consumes before accumulating again"
             }
-          ]
+          ],
+          "initialMechanismStatus": "source-script-missing",
+          "runtimeDifference": "造成敌对正伤害时累计事件伤害；独立普攻监听先消费就绪，恢复自身最大生命15%，再累计同次伤害。累计达到自身最大生命40%即清零并就绪，溢出不保留。普攻可累计两次，不增加攻击伤害。"
         },
         {
           "id": "dark-arthas-soaring-wind",
           "skillIds": [
             "A1VS"
           ],
-          "status": "source-script-missing",
+          "status": "script-implemented-native-boundary-partial",
           "behavior": "以目标施法时位置固定中心，在600随机方向/半径落点对300范围造成78通用伤害；0秒及.2秒timer，execCount*.2>=6后结束。death callback先执行伤害再检查退出，不能当通用death-cleanup-only。",
           "evidence": [
             {
@@ -1289,14 +1291,16 @@
               "function": "Trig_UnitDamageActions",
               "role": "victim-priority auto order"
             }
-          ]
+          ],
+          "initialMechanismStatus": "source-script-missing",
+          "runtimeDifference": "固定施法时目标位置，每0.2秒在600范围随机落点，对落点300范围敌人造成78通用伤害；0秒首跳，共30跳。施法者死亡时再执行一次落点伤害后结束，没有额外减速。【待核定：原生命令连续派发的仲裁、施法前摇、虚体碰撞及原生事件分发顺序仍待原图运行核定；当前Web同步执行。】"
         },
         {
           "id": "dark-arthas-death-coil",
           "skillIds": [
             "A1VT"
           ],
-          "status": "source-script-missing",
+          "status": "script-implemented-native-boundary-partial",
           "behavior": "必选主目标，400范围最多额外5个SelectRange敌人，每人追踪dummy命中201通用伤害；ChargeDistanceTarget的QN入参99999实际未使用，保存的是初始源目标距离，不能按99999飞行距离实现。",
           "evidence": [
             {
@@ -1320,14 +1324,16 @@
               "function": "Trig_allabilityActions",
               "role": "spell dispatch"
             }
-          ]
+          ],
+          "initialMechanismStatus": "source-script-missing",
+          "runtimeDifference": "主目标及其400范围最多另外5名敌人分别获得追踪弹。按初始距离/1秒每0.04秒移动，0秒首步；到达或末步前结束时各造成201通用伤害。目标或虚体死亡也执行结束回调，施法者死亡不取消。【待核定：原生命令连续派发的仲裁、施法前摇、虚体碰撞及原生事件分发顺序仍待原图运行核定；当前Web同步执行。原生FirstOfGroup顺序未核定，Web采用实体登记顺序。】"
         },
         {
           "id": "dark-arthas-ice-storm",
           "skillIds": [
             "A1VU"
           ],
-          "status": "source-script-missing",
+          "status": "script-implemented-native-boundary-partial",
           "behavior": "目标当前位置300半径235通用伤害。",
           "evidence": [
             {
@@ -1344,14 +1350,16 @@
               "function": "Trig_allabilityActions",
               "role": "spell dispatch"
             }
-          ]
+          ],
+          "initialMechanismStatus": "source-script-missing",
+          "runtimeDifference": "对目标施法时位置300范围存活、非Avul敌人立即造成235通用伤害，不附带文案中的减速或随机冰封。【待核定：原生命令连续派发的仲裁、施法前摇、虚体碰撞及原生事件分发顺序仍待原图运行核定；当前Web同步执行。】"
         },
         {
           "id": "dark-arthas-army",
           "skillIds": [
             "A1VV"
           ],
-          "status": "source-script-missing",
+          "status": "script-implemented-native-boundary-partial",
           "behavior": "仅GIANT施法者调用；一次8只h0CL。各随从监听summoner受伤，若事件时HP%<=20则按随从HP%+5个百分点治疗summoner并杀该随从；随从死清理自己的listener。source cast计数+5后判断>=3，所以第一次施法立即移除A1VV，不能照文案允许3次。",
           "evidence": [
             {
@@ -1376,14 +1384,16 @@
               "role": "native immediate auto order"
             }
           ],
-          "templateRawcode": "h0CL"
+          "templateRawcode": "h0CL",
+          "initialMechanismStatus": "source-script-missing",
+          "runtimeDifference": "GIANT施法者创建8只食尸鬼王h0CL，无脚本限时且未添加SUMMONED。每只独立监听召唤者受伤：事件时召唤者生命≤20%则按随从当时生命百分比＋5个百分点治疗，再杀死该随从。首次计数加5已达到移除阈值3，技能立即移除。【待核定：原生命令连续派发的仲裁、施法前摇、虚体碰撞及原生事件分发顺序仍待原图运行核定；当前Web同步执行。本次伤害事件开始后才注册的随从监听由后续伤害触发；该原生注册时序待核定。】"
         },
         {
           "id": "dark-arthas-sindragosa",
           "skillIds": [
             "A1VW"
           ],
-          "status": "source-script-missing",
+          "status": "script-implemented-native-boundary-partial",
           "behavior": "定向1500距离/5秒ChargeDistance；每次移动callback对dummy周围300敌人203通用伤害，不是每目标一次。finish移除dummy。",
           "evidence": [
             {
@@ -1400,7 +1410,9 @@
               "function": "Trig_allabilityActions",
               "role": "spell dispatch"
             }
-          ]
+          ],
+          "initialMechanismStatus": "source-script-missing",
+          "runtimeDifference": "朝初始目标方向配置1500码/5秒飞行；0秒起每0.04秒移动12码，每步对300范围敌人造成203通用伤害，可重复命中。末步前1488码处结束，无文案中的随机冰封；施法者死亡不取消。【待核定：原生命令连续派发的仲裁、施法前摇、虚体碰撞及原生事件分发顺序仍待原图运行核定；当前Web同步执行。】"
         }
       ],
       "staticSkills": [
@@ -1408,9 +1420,9 @@
           "id": "A1VR",
           "name": "霜之哀伤的饥渴",
           "baseCode": "Asth",
-          "runtimeStatus": "unresolved",
-          "runtimeKind": "pending",
-          "runtimeEffectText": "v14.1A5脚本标记：尚未逐项核定对应JASS，不沿用5.0dJF同ID效果",
+          "runtimeStatus": "implemented",
+          "runtimeKind": "dark_arthas_source",
+          "runtimeEffectText": "造成敌对正伤害时累计事件伤害；独立普攻监听先消费就绪，恢复自身最大生命15%，再累计同次伤害。累计达到自身最大生命40%即清零并就绪，溢出不保留。普攻可累计两次，不增加攻击伤害。",
           "abilitySource": {
             "table": "all_abilities.csv",
             "row": 2697,
@@ -1444,9 +1456,9 @@
           "id": "A1VS",
           "name": "凛风冲击",
           "baseCode": "ANcl",
-          "runtimeStatus": "unresolved",
-          "runtimeKind": "pending",
-          "runtimeEffectText": "v14.1A5通道或脚本指令：待核定对应运行脚本",
+          "runtimeStatus": "partial",
+          "runtimeKind": "dark_arthas_source",
+          "runtimeEffectText": "固定施法时目标位置，每0.2秒在600范围随机落点，对落点300范围敌人造成78通用伤害；0秒首跳，共30跳。施法者死亡时再执行一次落点伤害后结束，没有额外减速。【待核定：原生命令连续派发的仲裁、施法前摇、虚体碰撞及原生事件分发顺序仍待原图运行核定；当前Web同步执行。】",
           "abilitySource": {
             "table": "all_abilities.csv",
             "row": 2698,
@@ -1495,9 +1507,9 @@
           "id": "A1VT",
           "name": "死亡缠绕",
           "baseCode": "ANcl",
-          "runtimeStatus": "unresolved",
-          "runtimeKind": "pending",
-          "runtimeEffectText": "v14.1A5通道或脚本指令：待核定对应运行脚本",
+          "runtimeStatus": "partial",
+          "runtimeKind": "dark_arthas_source",
+          "runtimeEffectText": "主目标及其400范围最多另外5名敌人分别获得追踪弹。按初始距离/1秒每0.04秒移动，0秒首步；到达或末步前结束时各造成201通用伤害。目标或虚体死亡也执行结束回调，施法者死亡不取消。【待核定：原生命令连续派发的仲裁、施法前摇、虚体碰撞及原生事件分发顺序仍待原图运行核定；当前Web同步执行。原生FirstOfGroup顺序未核定，Web采用实体登记顺序。】",
           "abilitySource": {
             "table": "all_abilities.csv",
             "row": 2699,
@@ -1546,9 +1558,9 @@
           "id": "A1VU",
           "name": "寒冰风暴",
           "baseCode": "ANcl",
-          "runtimeStatus": "unresolved",
-          "runtimeKind": "pending",
-          "runtimeEffectText": "v14.1A5通道或脚本指令：待核定对应运行脚本",
+          "runtimeStatus": "partial",
+          "runtimeKind": "dark_arthas_source",
+          "runtimeEffectText": "对目标施法时位置300范围存活、非Avul敌人立即造成235通用伤害，不附带文案中的减速或随机冰封。【待核定：原生命令连续派发的仲裁、施法前摇、虚体碰撞及原生事件分发顺序仍待原图运行核定；当前Web同步执行。】",
           "abilitySource": {
             "table": "all_abilities.csv",
             "row": 2700,
@@ -1597,9 +1609,9 @@
           "id": "A1VV",
           "name": "王者大军",
           "baseCode": "ANcl",
-          "runtimeStatus": "unresolved",
-          "runtimeKind": "pending",
-          "runtimeEffectText": "v14.1A5通道或脚本指令：待核定对应运行脚本",
+          "runtimeStatus": "partial",
+          "runtimeKind": "dark_arthas_source",
+          "runtimeEffectText": "GIANT施法者创建8只食尸鬼王h0CL，无脚本限时且未添加SUMMONED。每只独立监听召唤者受伤：事件时召唤者生命≤20%则按随从当时生命百分比＋5个百分点治疗，再杀死该随从。首次计数加5已达到移除阈值3，技能立即移除。【待核定：原生命令连续派发的仲裁、施法前摇、虚体碰撞及原生事件分发顺序仍待原图运行核定；当前Web同步执行。本次伤害事件开始后才注册的随从监听由后续伤害触发；该原生注册时序待核定。】",
           "abilitySource": {
             "table": "all_abilities.csv",
             "row": 2701,
@@ -1661,9 +1673,9 @@
           "id": "A1VW",
           "name": "召唤辛达苟萨",
           "baseCode": "ANcl",
-          "runtimeStatus": "unresolved",
-          "runtimeKind": "pending",
-          "runtimeEffectText": "v14.1A5通道或脚本指令：待核定对应运行脚本",
+          "runtimeStatus": "partial",
+          "runtimeKind": "dark_arthas_source",
+          "runtimeEffectText": "朝初始目标方向配置1500码/5秒飞行；0秒起每0.04秒移动12码，每步对300范围敌人造成203通用伤害，可重复命中。末步前1488码处结束，无文案中的随机冰封；施法者死亡不取消。【待核定：原生命令连续派发的仲裁、施法前摇、虚体碰撞及原生事件分发顺序仍待原图运行核定；当前Web同步执行。】",
           "abilitySource": {
             "table": "all_abilities.csv",
             "row": 2702,
@@ -2519,6 +2531,21 @@
         "A0KR"
       ],
       "nativeBoundary": "CreateUnit/life-death order, Aslo missing/inherited fields and autocast, single thunderbolt caster per step removed immediately; unverified control not fabricated."
+    },
+    {
+      "revision": "v14-content-20261026-v19-1",
+      "buildingRawcode": "n08Y",
+      "staticImplemented": [
+        "A1VR"
+      ],
+      "staticPartial": [
+        "A1VS",
+        "A1VT",
+        "A1VU",
+        "A1VV",
+        "A1VW"
+      ],
+      "nativeBoundary": "IssueOrder arbitration/cast point, virtual e008 pathing/death delivery, FirstOfGroup ordering and damage-listener registration during an event remain partial. Web keeps shared retained caster handles and uses pre-event listener snapshots."
     }
   ]
 }

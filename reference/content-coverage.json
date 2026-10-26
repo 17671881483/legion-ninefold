@@ -1,6 +1,6 @@
 {
   "sourceVersion": "v14.1A5",
-  "skillImplementationRevision": "v14-content-20261026-v18-1",
+  "skillImplementationRevision": "v14-content-20261026-v19-1",
   "units": 534,
   "mercenaryRecords": 60,
   "mainWaves": 35,
@@ -142,10 +142,10 @@
   ],
   "playerSkills": {
     "counts": {
-      "implemented": 410,
-      "partial": 48,
+      "implemented": 411,
+      "partial": 53,
       "marker": 34,
-      "unresolved": 135
+      "unresolved": 129
     },
     "abilities": [
       {
@@ -5514,8 +5514,8 @@
       {
         "rawcode": "A1VR",
         "name": "霜之哀伤的饥渴",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "implemented",
+        "kind": "dark_arthas_source",
         "unitRawcodes": [
           "n08Y"
         ]
@@ -5523,8 +5523,8 @@
       {
         "rawcode": "A1VS",
         "name": "凛风冲击",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "dark_arthas_source",
         "unitRawcodes": [
           "n08Y"
         ]
@@ -5532,8 +5532,8 @@
       {
         "rawcode": "A1VT",
         "name": "死亡缠绕",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "dark_arthas_source",
         "unitRawcodes": [
           "n08Y"
         ]
@@ -5541,8 +5541,8 @@
       {
         "rawcode": "A1VU",
         "name": "寒冰风暴",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "dark_arthas_source",
         "unitRawcodes": [
           "n08Y"
         ]
@@ -5550,8 +5550,8 @@
       {
         "rawcode": "A1VV",
         "name": "王者大军",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "dark_arthas_source",
         "unitRawcodes": [
           "n08Y"
         ]
@@ -5559,8 +5559,8 @@
       {
         "rawcode": "A1VW",
         "name": "召唤辛达苟萨",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "dark_arthas_source",
         "unitRawcodes": [
           "n08Y"
         ]
@@ -6225,10 +6225,10 @@
   },
   "battleSkills": {
     "counts": {
-      "implemented": 461,
-      "partial": 48,
+      "implemented": 462,
+      "partial": 53,
       "marker": 47,
-      "unresolved": 156
+      "unresolved": 150
     },
     "abilities": [
       {
@@ -12423,8 +12423,8 @@
       {
         "rawcode": "A1VR",
         "name": "霜之哀伤的饥渴",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "implemented",
+        "kind": "dark_arthas_source",
         "unitRawcodes": [
           "n08Y"
         ]
@@ -12432,8 +12432,8 @@
       {
         "rawcode": "A1VS",
         "name": "凛风冲击",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "dark_arthas_source",
         "unitRawcodes": [
           "n08Y"
         ]
@@ -12441,8 +12441,8 @@
       {
         "rawcode": "A1VT",
         "name": "死亡缠绕",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "dark_arthas_source",
         "unitRawcodes": [
           "n08Y"
         ]
@@ -12450,8 +12450,8 @@
       {
         "rawcode": "A1VU",
         "name": "寒冰风暴",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "dark_arthas_source",
         "unitRawcodes": [
           "n08Y"
         ]
@@ -12459,8 +12459,8 @@
       {
         "rawcode": "A1VV",
         "name": "王者大军",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "dark_arthas_source",
         "unitRawcodes": [
           "n08Y"
         ]
@@ -12468,8 +12468,8 @@
       {
         "rawcode": "A1VW",
         "name": "召唤辛达苟萨",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "dark_arthas_source",
         "unitRawcodes": [
           "n08Y"
         ]

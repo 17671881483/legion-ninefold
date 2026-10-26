@@ -1319,7 +1319,7 @@ export class Game {
     }
   }
   _hurt(target, damage, attacker, pure = false) {
-    if (target.hp <= 0 || damage <= 0 || (target.status?.cycloneUntil??0)>(this._iceEventAt??this._trollEventAt??this._kelthuzadEventAt??this.state.time)) return 0;
+    if (target.hp <= 0 || damage <= 0 || (target.status?.cycloneUntil??0)>(this._vashjEventAt??this._iceEventAt??this._trollEventAt??this._kelthuzadEventAt??this.state.time)) return 0;
     const options=typeof pure==='object'?pure:{spell:!!pure},legacyPure=typeof pure==='boolean'&&pure;
     const revivalCount=target.status.yseraRevivalCount??0;
     let actual = modifyIncoming(this,target,damage,attacker,options);

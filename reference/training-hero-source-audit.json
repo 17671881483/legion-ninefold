@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "sourceVersion": "军团战争 v14.1A5 九倍怪物",
-  "scope": "Read-only source audit of five newly imported BoxGift-only heroes; no skill or engine behavior is changed by this file.",
-  "authority": "Literal source facts and resolved native object fields; runtimeStatus is a snapshot of the current generic/compiler classification, not a claim that all source scripts are implemented.",
+  "scope": "Source audit and current runtime status of five BoxGift-only heroes; original audit classifications are retained in initialRuntimeStatus/initialMechanismStatus.",
+  "authority": "Literal source and resolved object fields; runtimeStatus tracks the current compiler. Partial status retains native boundaries and is not full fidelity.",
   "source": {
     "path": "reference/v14-source/raw_extracted/war3map.j",
     "sha256": "e66c55b3b25b185c991be5613e21fbf5b2d598f3cc40f2f8cd01c23bcb828250",
@@ -12,43 +12,15 @@
   "counts": {
     "trainingHeroes": 5,
     "staticSkills": 24,
-    "runtimeImplemented": 5,
-    "runtimeUnresolved": 19
+    "runtimeImplemented": 6,
+    "runtimeUnresolved": 15,
+    "runtimePartial": 3
   },
   "recommendation": {
-    "buildingRawcode": "n07I",
-    "combatRawcode": "h0UQ",
+    "buildingRawcode": "n02S",
+    "combatRawcode": "h0M0",
     "priority": 1,
-    "reason": "Two complete channel bodies, an independent attack passive, native AHwe plus a complete summon callback, and one 0-second global alliance registration. All caster/target timing paths are available; native order/collision/event identity boundaries remain explicit.",
-    "implementationEntrypoints": [
-      "spellEffect(A1O5/A1O7)",
-      "mainDamage native orders with victim priority (A1O5/A1O7/A1O8)",
-      "independent attack-damage listener A1N1",
-      "native summon callback for n07J",
-      "PassiveSkill A1OC birth registration"
-    ],
-    "reusableExisting": [
-      {
-        "path": "dist/naga-active-rules.js",
-        "what": "Existing shared native-order/cooldown/mana bridge and VertigoTarget host interface; existing Naga family API patterns, not Vashj bodies."
-      },
-      {
-        "path": "dist/skills.js",
-        "what": "AHwe template n07J/count2/duration13, universalDamage, VertigoTarget bridge, source ability-effect depth guard, generic A1OE stats and A1CK level1 aura."
-      },
-      {
-        "path": "dist/kelthuzad-rules.js",
-        "what": "n02S dynamic Kel alliance is already implemented and must not be counted as a new Vashj or Lich deficit."
-      }
-    ],
-    "mustPreserve": [
-      "different projectile/cloud/phantom death lifetimes",
-      "zero-second timer first callbacks where registered",
-      "main damage reentry vs independent native attack trigger scopes",
-      "shared native mana and cooldown for manual/auto orders",
-      "source A1CK 2/3/4 level transition, no local-radius or ongoing refresh invention",
-      "serialization of source/target handles and jobs"
-    ]
+    "reason": "Vashj script bodies are now connected with explicit native boundaries; next implement Arthas resurrection and Sindragosa source registrations."
   },
   "describeSkillsCorrections": {
     "reason": "Seven generic implemented static entries include incomplete carrier-associated scripts. Current describeSkills appends V14_TRIGGER_DESCRIPTIONS with hardcoded implemented, so a text-only partial label will still overcount.",
@@ -803,14 +775,14 @@
         "role": "Mk combat to Ml building"
       },
       "priority": 1,
-      "summary": "推荐下轮完整家族：2个主动+命中被动+原生双召唤附加回复+0秒出生阵营授予，入口与数值均有完整源证据。",
+      "summary": "v17已接入闪电箭、寒冰之箭、毒性孢子、双子召唤回调和女王联盟；原生命令、碰撞及召唤事件身份仍为明确部分实现边界。",
       "mechanisms": [
         {
           "id": "vashj-lightning-arrow",
           "skillIds": [
             "A1O5"
           ],
-          "status": "source-script-missing",
+          "status": "script-implemented-native-boundary-partial",
           "behavior": "非ancient caster沿目标方向-45/0/+45度发3个dummy，ChargeDistance500/.4，步长50，0秒首轮与.04秒后续；遇敌200半径则提前结束飞行。落点各建300半径101通用伤害区，0秒首跳、之后每秒，共7跳；落点区注册caster death后清理。",
           "evidence": [
             {
@@ -853,14 +825,20 @@
             "range": 500,
             "order": "unloadall"
           },
-          "boundary": "Flight registers dummy death only, not caster death; the impact-pool registers caster death. Retain these different lifetimes. SetUnitPosition/collision and native order eligibility use the existing explicit host boundary."
+          "boundary": "Flight registers dummy death only, not caster death; the impact-pool registers caster death. Retain these different lifetimes. SetUnitPosition/collision and native order eligibility use the existing explicit host boundary.",
+          "initialMechanismStatus": "source-script-missing",
+          "runtimeEvidence": {
+            "revision": "v14-content-20261026-v17-1",
+            "implementation": "dist/vashj-rules.js",
+            "tests": "tests/v14-vashj.test.mjs"
+          }
         },
         {
           "id": "vashj-poison-spore",
           "skillIds": [
             "A1O7"
           ],
-          "status": "source-script-missing",
+          "status": "script-implemented-native-boundary-partial",
           "behavior": "非ancient caster面向±90度、距离0..500随机建3个固定孢子；1秒首跳，随后每秒200半径99通用伤害，共10跳。Action虽检查death事件，但创建函数没有注册death；不可自行因caster死清空。",
           "evidence": [
             {
@@ -890,6 +868,12 @@
             "cooldown": 20,
             "range": 500,
             "order": "unloadallcorpses"
+          },
+          "initialMechanismStatus": "source-script-missing",
+          "runtimeEvidence": {
+            "revision": "v14-content-20261026-v17-1",
+            "implementation": "dist/vashj-rules.js",
+            "tests": "tests/v14-vashj.test.mjs"
           }
         },
         {
@@ -897,7 +881,7 @@
           "skillIds": [
             "A1N1"
           ],
-          "status": "source-script-missing",
+          "status": "implemented",
           "behavior": "独立实际攻击伤害监听：GetRandomPercentageBJ<=20时追加96通用伤害，VertigoTarget等级4（A0I7普通4秒/原生英雄2秒），不等同于任意伤害10%几率。",
           "evidence": [
             {
@@ -927,14 +911,20 @@
               "line": 29669,
               "endLine": 29677
             }
-          ]
+          ],
+          "initialMechanismStatus": "source-script-missing",
+          "runtimeEvidence": {
+            "revision": "v14-content-20261026-v17-1",
+            "implementation": "dist/vashj-rules.js",
+            "tests": "tests/v14-vashj.test.mjs"
+          }
         },
         {
           "id": "vashj-twin-summon",
           "skillIds": [
             "A1O8"
           ],
-          "status": "native-summon-generic-implemented-script-addition-missing",
+          "status": "script-implemented-native-boundary-partial",
           "behavior": "原生AHwe召2只n07J存活13秒、Cost16/Cool8已存在。每只n07J召唤事件另注册0秒首跳+每秒给summoner+5HP/+1.5mana，任一方death停止；还在执行次数>=floor(summoner maxHP)时结束。双幻影独立叠加回复。",
           "evidence": [
             {
@@ -953,7 +943,13 @@
             }
           ],
           "templateRawcode": "n07J",
-          "boundary": "Preserve the source EVENT_PLAYER_UNIT_SUMMON/GetTriggerUnit/GetSummoningUnit host semantics; do not silently substitute a different summoned-unit identity if the native wrapper is not verified."
+          "boundary": "Preserve the source EVENT_PLAYER_UNIT_SUMMON/GetTriggerUnit/GetSummoningUnit host semantics; do not silently substitute a different summoned-unit identity if the native wrapper is not verified.",
+          "initialMechanismStatus": "native-summon-generic-implemented-script-addition-missing",
+          "runtimeEvidence": {
+            "revision": "v14-content-20261026-v17-1",
+            "implementation": "dist/vashj-rules.js",
+            "tests": "tests/v14-vashj.test.mjs"
+          }
         },
         {
           "id": "vashj-queen-alliance",
@@ -962,7 +958,7 @@
             "A1CK",
             "A1OE"
           ],
-          "status": "source-grant-missing-dynamic-generic-objects-exist",
+          "status": "implemented",
           "behavior": "出生0秒一次，全图枚举实际h0OV战斗体；同盟女王使A1CK从无变2，敌对女王使无变3，双方均有变4；敌对再永久授A1OE(-8%攻速)。A1CK本版4级DataA分别.10/.15/-.11/.04；无生命、距离或后续刷新条件。",
           "evidence": [
             {
@@ -981,10 +977,16 @@
             }
           ],
           "reuse": {
-            "A1CK": "generic aura_damage exists at level1, dynamic level2/3/4 is not currently interpreted",
+            "A1CK": "Explicit dynamic level2/3/4 values and self mask are interpreted and survive saved skill refresh.",
             "A1OE": "generic passive_stats -0.08 haste already exists"
           },
-          "boundary": "Do not count undeployed n05H building as h0OV. Exact native aura target/allegiance behavior must honor targs and shared-buff rules rather than inventing ally-only behavior."
+          "boundary": "Do not count undeployed n05H building as h0OV. Exact native aura target/allegiance behavior must honor targs and shared-buff rules rather than inventing ally-only behavior.",
+          "initialMechanismStatus": "source-grant-missing-dynamic-generic-objects-exist",
+          "runtimeEvidence": {
+            "revision": "v14-content-20261026-v17-1",
+            "implementation": "dist/vashj-rules.js",
+            "tests": "tests/v14-vashj.test.mjs"
+          }
         }
       ],
       "staticSkills": [
@@ -992,8 +994,8 @@
           "id": "A1O5",
           "name": "闪电箭",
           "baseCode": "ANcl",
-          "runtimeStatus": "unresolved",
-          "runtimeKind": "pending",
+          "runtimeStatus": "partial",
+          "runtimeKind": "vashj_source",
           "runtimeEffectText": "v14.1A5通道或脚本指令：待核定对应运行脚本",
           "abilitySource": {
             "table": "all_abilities.csv",
@@ -1042,8 +1044,8 @@
           "id": "A1N1",
           "name": "寒冰之箭",
           "baseCode": "Asth",
-          "runtimeStatus": "unresolved",
-          "runtimeKind": "pending",
+          "runtimeStatus": "implemented",
+          "runtimeKind": "vashj_source",
           "runtimeEffectText": "v14.1A5脚本标记：尚未逐项核定对应JASS，不沿用5.0dJF同ID效果",
           "abilitySource": {
             "table": "all_abilities.csv",
@@ -1074,8 +1076,8 @@
           "id": "A1O7",
           "name": "毒性孢子",
           "baseCode": "ANcl",
-          "runtimeStatus": "unresolved",
-          "runtimeKind": "pending",
+          "runtimeStatus": "partial",
+          "runtimeKind": "vashj_source",
           "runtimeEffectText": "v14.1A5通道或脚本指令：待核定对应运行脚本",
           "abilitySource": {
             "table": "all_abilities.csv",
@@ -1123,8 +1125,8 @@
           "id": "A1O8",
           "name": "双子召唤",
           "baseCode": "AHwe",
-          "runtimeStatus": "implemented",
-          "runtimeKind": "summon",
+          "runtimeStatus": "partial",
+          "runtimeKind": "vashj_source",
           "runtimeEffectText": "召唤2个娜迦幻影，存活13秒",
           "abilitySource": {
             "table": "all_abilities.csv",
@@ -1168,8 +1170,8 @@
           "id": "A1OC",
           "name": "女王的祝福与惩戒2",
           "baseCode": "Asth",
-          "runtimeStatus": "unresolved",
-          "runtimeKind": "pending",
+          "runtimeStatus": "implemented",
+          "runtimeKind": "vashj_source",
           "runtimeEffectText": "v14.1A5脚本标记：尚未逐项核定对应JASS，不沿用5.0dJF同ID效果",
           "abilitySource": {
             "table": "all_abilities.csv",
@@ -2435,5 +2437,61 @@
       "currentGenericKind": "debuff",
       "coverageCaution": "Generic object support does not imply the carrier-specific grant or source callback has been integrated."
     }
-  }
+  },
+  "initialRecommendation": {
+    "buildingRawcode": "n07I",
+    "combatRawcode": "h0UQ",
+    "priority": 1,
+    "reason": "Two complete channel bodies, an independent attack passive, native AHwe plus a complete summon callback, and one 0-second global alliance registration. All caster/target timing paths are available; native order/collision/event identity boundaries remain explicit.",
+    "implementationEntrypoints": [
+      "spellEffect(A1O5/A1O7)",
+      "mainDamage native orders with victim priority (A1O5/A1O7/A1O8)",
+      "independent attack-damage listener A1N1",
+      "native summon callback for n07J",
+      "PassiveSkill A1OC birth registration"
+    ],
+    "reusableExisting": [
+      {
+        "path": "dist/naga-active-rules.js",
+        "what": "Existing shared native-order/cooldown/mana bridge and VertigoTarget host interface; existing Naga family API patterns, not Vashj bodies."
+      },
+      {
+        "path": "dist/skills.js",
+        "what": "AHwe template n07J/count2/duration13, universalDamage, VertigoTarget bridge, source ability-effect depth guard, generic A1OE stats and A1CK level1 aura."
+      },
+      {
+        "path": "dist/kelthuzad-rules.js",
+        "what": "n02S dynamic Kel alliance is already implemented and must not be counted as a new Vashj or Lich deficit."
+      }
+    ],
+    "mustPreserve": [
+      "different projectile/cloud/phantom death lifetimes",
+      "zero-second timer first callbacks where registered",
+      "main damage reentry vs independent native attack trigger scopes",
+      "shared native mana and cooldown for manual/auto orders",
+      "source A1CK 2/3/4 level transition, no local-radius or ongoing refresh invention",
+      "serialization of source/target handles and jobs"
+    ]
+  },
+  "runtimeUpdates": [
+    {
+      "revision": "v14-content-20261026-v17-1",
+      "buildingRawcode": "n07I",
+      "staticImplemented": [
+        "A1N1",
+        "A1OC"
+      ],
+      "staticPartial": [
+        "A1O5",
+        "A1O7",
+        "A1O8"
+      ],
+      "dynamicAbilities": [
+        "A1CK",
+        "A1OE"
+      ],
+      "nativeFieldReference": "https://wc3jass.com/jassdoc.php?file=common.j&line=1883",
+      "nativeBoundary": "IssueOrder arbitration/cast point, collision, and GetTriggerUnit identity under SUMMON remain explicitly partial."
+    }
+  ]
 }

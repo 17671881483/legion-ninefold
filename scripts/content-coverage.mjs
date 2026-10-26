@@ -7,13 +7,14 @@ import { compileSkills, SKILL_IMPLEMENTATION_REVISION } from '../dist/skills.js'
 const current=UNITS.filter(u=>!u.legacy);
 // This form is created by YseraAwakening at runtime, so it is not a separate
 // build-menu record. Its skills still belong to the player's combat coverage.
-const playerRuntimeForms=['h0YO','h0UD','h0UE','h2AE','n06V','n06W','h0CZ','h0CL'].map(code=>UNIT_TEMPLATES[code]);
+const playerRuntimeForms=['h0YO','h0UD','h0UE','h2AE','n06V','n06W','h0CZ','h0CL','n07J'].map(code=>UNIT_TEMPLATES[code]);
 // Source callbacks inject these exact auxiliary abilities. Keep them visible
 // in coverage even though they are absent from the build-menu ability lists.
 const playerRuntimeAbilities=[
   // Blood fusion can select all other registered classes; include their
   // dynamically granted child abilities and source-trigger dummy requests.
   {sourceRawcode:'h06J',abilityIds:Object.keys(SOURCE_CLASS_RULES)},
+  {sourceRawcode:'h0UQ',abilityIds:['A1CK','A1OE']},
   {sourceRawcode:'h0UD',abilityIds:['A1CP']},
   {sourceRawcode:'h2AE',abilityIds:['A1CP']},
   {sourceRawcode:'e008',abilityIds:['A1CV','A1CW']},
@@ -53,6 +54,7 @@ const result={
     '原始地图模型、贴图、音频和v14地形通行格不在解析包内。',
     'BoxGift五个隐藏训练叶子及225条训练路径已接入；新增单位的未核定技能仍按实际状态计数。随机礼物已接入35个候选；原生CreateUnit路径/碰撞失败、可操纵建造者技能及平台专用Frame科技返费宿主仍待核定。',
     '17类种族特性与103个精确单位注册已接入；地精修理、虚空体质、原生跳跃/slow命中及多种原生法术抗性叠加仍为部分实现。旧存档中没有出生抽样记录的血统融合战斗体不补抽，新出战体才执行来源随机。',
+    '瓦斯琪已接入五项脚本主体与A1CK动态等级；A1O5/A1O7/A1O8的原生命令仲裁、落点碰撞及召唤事件身份仍为部分实现。',
     '巫妖王A0KP亡者呼唤/A0KQ召龙此前通用编译不代表专属脚本已还原，两项已纠正为待核定；训练新增五英雄的其余缺口见training-hero-source-audit.json。',
     'A131农场礼物已按显式原型next链计算人口，旧档/付费农场原型未知及原生在研取消退款仍待核定，保留礼物不猜测。',
     '原图训练多分支对话框限时30秒；Web用持久表单重新校验提交，未模拟对话框超时。旧版无礼物历史的存档不会补抽已过波次奖励。',

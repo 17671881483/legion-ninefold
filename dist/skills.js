@@ -1,3 +1,4 @@
+import {VASHJ_RULES,canVashjCastAbility,castVashjAbility,tryVashjAutoCast,vashjOnAttackDamage,initializeVashjDeployment,tickVashjJob,isVashjJobType,sourceVashjDeath} from './vashj-rules.js';
 import {ICE_HERO_RULES,canIceHeroCastAbility,castIceHeroAbility,tryIceHeroAutoCast,tickIceHeroJob,sourceIceHeroDeath,isIceHeroJobType} from './ice-hero-rules.js';
 import {TROLL_RULES,TROLL_ACTIVE_RULES,initializeTrollUnit,canTrollCastAbility,castTrollAbility,tryTrollAutoCast,trollOnHit,trollIncomingDamage,sourceTrollDeath,tickTrollJob,isTrollJobType,trollHaste} from './troll-rules.js';
 import {KELTHUZAD_RULES,KELTHUZAD_ACTIVE_RULES,registerKelthuzadSource,applyKelthuzadBuildingAlliance,kelthuzadBeforeDamage,kelthuzadOnAttackDamage,canKelthuzadCastAbility,castKelthuzadAbility,tryKelthuzadAutoCast,kelthuzadNativeSpellEffect,sourceKelthuzadDeath,tickKelthuzadJob,isKelthuzadJobType} from './kelthuzad-rules.js';
@@ -14,7 +15,7 @@ import { closestWalkable, isWalkable } from './layout.js';
 import { GARROSH_ACTIVE_RULES, GARROSH_PASSIVE_RULES, canGarroshCastAbility, castGarroshAbility, tryGarroshAutoCast, garroshActiveAfterDamage, sourceGarroshActiveDeath, tickGarroshActiveJob } from './garrosh-active-rules.js';
 import { ILLIDAN_RULES, ILLIDAN_ACTIVE_RULES, canIllidanCastAbility, castIllidanAbility, registerIllidanSource, tickIllidanSource, illidanOnAttackHit, tryIllidanAutoCast, illidanAfterDamage, sourceIllidanDeath, tickIllidanJob, isIllidanJobType } from './illidan-rules.js';
 
-export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261021-v16-1';
+export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261026-v17-1';
 
 // Values come from resolved object fields. Empty fields remain empty: a missing
 // native default is reported, rather than replacing it with tooltip numbers.
@@ -168,6 +169,8 @@ function compile(id,version='5.0dJF') {
   s.effectText??=effectSummary(s);
   if(version==='v14.1A5'&&YSERA_ACTIVE_RULES[id]){const r=YSERA_ACTIVE_RULES[id];Object.assign(s,{kind:'ysera_active',status:r.status,effectText:r.description,manaCost:r.manaCost,cooldown:r.cooldown});}
   if(version==='v14.1A5'&&ALCHEMIST_ACTIVE_RULES[id]){const r=ALCHEMIST_ACTIVE_RULES[id];Object.assign(s,{kind:'alchemist_active',status:'implemented',manaCost:r.manaCost,cooldown:r.cooldown,effectText:id==='A2Z0'?'医疗气雾自动选择范围内生命比例最低的友军，跟随中心每秒治疗10/10/20，共5/15/15跳；中心死亡变为固定8秒云雾，每0.2秒治疗与通用伤害2/2/3。原生手动冷却与受伤自动冷却独立。':'随机选择1000范围最多两名不同敌人，每秒10/20/30通用伤害共5跳；目标死亡或第5跳后形成固定325范围酸池，立即及随后每秒15/25/35伤害共7跳，减甲2/3/3持续2秒且期间不刷新。'});}
+  if(version==='v14.1A5'&&id==='A1CK')s.rangedOnly=false; // Ear2/Ear3 both explicitly enabled for this self aura.
+  if(version==='v14.1A5'&&VASHJ_RULES[id]){const r=VASHJ_RULES[id];Object.assign(s,{kind:'vashj_source',status:r.status,manaCost:r.manaCost??0,cooldown:r.cooldown??0,effectText:r.description+(r.partial?`【待核定：${r.partial}】`:'')});if(r.range!==undefined)s.range=r.range/100;}
   if(version==='v14.1A5'&&NAGA_ACTIVE_RULES[id]){const r=NAGA_ACTIVE_RULES[id];Object.assign(s,{kind:'naga_source',status:r.status??'implemented',manaCost:r.manaCost??0,cooldown:r.cooldown??0,effectText:(r.effectText??r.description??`${r.name}由本版JASS专属规则处理，手动与自动共享原生冷却。`)+(r.partial?`【待核定：${r.partial}】`:'')});if(r.range!==undefined)s.range=r.range/100;if(r.radius!==undefined)s.radius=r.radius/100;}
   if(version==='v14.1A5'&&SOURCE_AURA_RULES[id]){const r=SOURCE_AURA_RULES[id];Object.assign(s,{kind:r.kind,status:r.status,effectText:r.description+`【待核定：${r.partial}】`});}
   const familyRule=version==='v14.1A5'&&(GARROSH_ACTIVE_RULES[id]??GARROSH_PASSIVE_RULES[id]??ILLIDAN_RULES[id]);
@@ -216,7 +219,7 @@ const V14_ECONOMY_DESCRIPTIONS={
   farmer:{name:'淘金（玩家级经济）',rawcodes:['n085','h0W1'],text:'首座娜迦农夫从开始建造时为玩家注册15%击杀额外获得1金币的概率，每新增一座再加0.5个百分点；该概率影响玩家的击杀结算，农夫本身没有对战技能。升级完成后注销该农夫的注册；出售按原脚本不会注销已注册概率。'},
   master:{name:'压榨（回合经济）',rawcodes:['n084','h0W0'],text:'回合结算时，每座存活的娜迦农场主获得3×本波农夫数量的金币。原脚本条件会把原型h0W1的尸体也计入农夫数，皮肤农夫则要求存活；经济模块按这一源逻辑结算。'},
 };
-export function compileSkills(def) {const scale=def.distanceScale??1,version=versionOf(def);return [...new Set(def.abilityIds??def.sourceAbilityIds??(def.sourceAbilities??[]).map(a=>a.rawcode??a.id))].filter(Boolean).map(id=>compile(id,version)).map(s=>({...s,...Object.fromEntries(['range','radius','length','width','inner','outer','outerRadius','deathRadius','pull'].filter(k=>s[k]!==undefined).map(k=>[k,s[k]*scale]))}));}
+export function compileSkills(def) {const scale=def.distanceScale??1,version=versionOf(def);return [...new Set(def.abilityIds??def.sourceAbilityIds??(def.sourceAbilities??[]).map(a=>a.rawcode??a.id))].filter(Boolean).map(id=>compile(id,version)).map(s=>({...s,...(version==='v14.1A5'&&s.id==='A1CK'?{damage:num(s.fields['DataA'+(def.abilityLevels?.A1CK??1)])}:{}),...Object.fromEntries(['range','radius','length','width','inner','outer','outerRadius','deathRadius','pull'].filter(k=>s[k]!==undefined).map(k=>[k,s[k]*scale]))}));}
 export function describeSkills(def) {const list=compileSkills(def).map(s=>({id:s.id,name:s.name,description:s.description,status:s.status,effectText:s.effectText,cooldown:s.cooldown,manaCost:s.manaCost,duration:s.duration,range:s.range,radius:s.radius}));const r=raw(def),descriptions=isV14(def)?V14_TRIGGER_DESCRIPTIONS:TRIGGER_DESCRIPTIONS;if(descriptions[r])list.push({id:'trigger:'+r,name:'脚本机制',description:descriptions[r],effectText:descriptions[r],status:'implemented',cooldown:0,manaCost:0});const sourceGap=isV14(def)&&V14_PARTIAL_TRIGGER_DESCRIPTIONS[r];if(sourceGap)list.push({id:'trigger:'+r,name:'脚本机制（部分实现）',description:sourceGap.text,effectText:sourceGap.text,status:sourceGap.status,cooldown:0,manaCost:0});if(isV14(def))for(const [key,rule] of Object.entries(V14_ECONOMY_DESCRIPTIONS))if(rule.rawcodes.includes(r))list.push({id:'economy:'+key,name:rule.name,description:rule.text,effectText:rule.text,status:'implemented',cooldown:0,manaCost:0});return list;}
 export function skillCoverage(def) {const list=describeSkills(def);return {implemented:list.filter(s=>s.status==='implemented').length,partial:list.filter(s=>s.status==='partial').length,markers:list.filter(s=>s.status==='marker').length,unresolved:list.filter(s=>s.status==='unresolved').length};}
 export function attachSkills(e,def) {
@@ -242,7 +245,7 @@ export function refreshSourceSkills(e,def) {
   // Recompile the saved runtime ability set. Rebuilding from the template's
   // abilityIds would lose injected abilities and give mirror images skills.
   const abilityIds=Array.isArray(e.skillSpecs)?e.skillSpecs.map(s=>s.id).filter(Boolean):def.abilityIds;
-  e.skillSpecs=compileSkills({...def,abilityIds});
+  e.skillSpecs=compileSkills({...def,abilityIds,abilityLevels:e.abilityLevels});
   // Runtime state belongs to the save: preserve cooldowns, counters, buffs,
   // resources and HP. New skill state is initialized by state() on first use.
   e.skillStates??={};e.skillImplementationRevision=SKILL_IMPLEMENTATION_REVISION;
@@ -477,10 +480,12 @@ export function modifyIncoming(game,target,damage,attacker,options={}) {
   return isV14(target)?trollIncomingDamage(game,target,nagaIncomingDamage(game,target,result,attacker,options),attacker,heroScriptApi):result;
 }
 export function sourceClassAttackDamageEvent(game,target,attacker,options={}){
-  if(isV14(attacker)&&(!options.spell||options.weapon))sourceClassOnAttackDamage(game,attacker,target,heroScriptApi);
+  if(!isV14(attacker)||options.spell&&!options.weapon||attacker.status?.sourceNativeAttackBusy)return;
+  (attacker.status??={}).sourceNativeAttackBusy=true;
+  try{vashjOnAttackDamage(game,attacker,target,heroScriptApi);sourceClassOnAttackDamage(game,attacker,target,heroScriptApi);}finally{attacker.status.sourceNativeAttackBusy=false;}
 }
 export function initializeSourceClassCombat(game,building,entity){
-  if(isV14(entity))return initializeSourceClassDeployment(game,building,entity,heroScriptApi);
+  if(isV14(entity)){initializeVashjDeployment(game,building,entity);return initializeSourceClassDeployment(game,building,entity,heroScriptApi);}
 }
 export function beforeSourceDamage(game,target,actual,attacker,options={}){
   if(isV14(target))kelthuzadBeforeDamage(game,target,actual,attacker,heroScriptApi);
@@ -491,6 +496,7 @@ export function beforeSourceDamage(game,target,actual,attacker,options={}){
   if(!attacker||target.id===attacker.id||target.side===attacker.side||game._sourceDamageTriggerDepth)return;
   game._sourceDamageTriggerDepth=(game._sourceDamageTriggerDepth??0)+1;
   try{
+    if(isV14(target)||isV14(attacker))tryVashjAutoCast(game,target,attacker,heroScriptApi);
     if(isV14(target)||isV14(attacker))nagaBeforeDamage(game,target,actual,attacker,heroScriptApi);
     if(isV14(target))alchemistAfterDamage(game,target,actual,{preDamageHp:target.hp});
     if(isV14(target))tryAlchemistAutoCast(game,target,{universalDamage});
@@ -552,6 +558,7 @@ export function sourceDeath(game,target,killer) {
   // JSON restoration breaks live-object aliases. Rebind the retained script
   // handle before corpse cleanup so its final mana/cooldowns remain authoritative.
   if(game.state.nagaScriptCasters?.[target.id])game.state.nagaScriptCasters[target.id]=target;
+  sourceVashjDeath(game,target);
   sourceIceHeroDeath(game,target,killer,heroScriptApi);
   sourceTrollDeath(game,target,killer,heroScriptApi);
   sourceKelthuzadDeath(game,target,killer,heroScriptApi);
@@ -636,7 +643,7 @@ function pauseUnitEx(game,source,target,seconds){
   if(duration>0)target.status.stunUntil=Math.max(target.status.stunUntil??0,now+duration);
 }
 function applyNativeControl(game,source,target,id,kind,seconds){
-  const now=game._iceEventAt??game._trollEventAt??game._kelthuzadEventAt??game.state.time,skill=compileSkills({abilityIds:[id],skillVersion:'v14.1A5',distanceScale:source.distanceScale??1/3})[0];
+  const now=game._vashjEventAt??game._iceEventAt??game._trollEventAt??game._kelthuzadEventAt??game.state.time,skill=compileSkills({abilityIds:[id],skillVersion:'v14.1A5',distanceScale:source.distanceScale??1/3})[0];
   if(!target||target.hp<=.405||target.isBuilding||target.side===source.side||source.battleTeam!==target.battleTeam||scriptInvulnerable(target)||id!=='A15I'&&active(target).some(s=>s.kind==='immunity')||target.status?.cycloneUntil>now||!matchesTargets(skill,source,target))return false;
   const duration=seconds??(isNativeHero(target)?skill.heroDuration:skill.duration);
   target.status??={};target.status[kind]=Math.max(target.status[kind]??0,now+duration);
@@ -646,7 +653,7 @@ function applyNativeControl(game,source,target,id,kind,seconds){
   return true;
 }
 function castNativeNova(game,e,id,target){
-  const now=game._iceEventAt??game._trollEventAt??game._kelthuzadEventAt??game.state.time,s=e.skillSpecs?.find(s=>s.id===id),fail=message=>({ok:false,message});
+  const now=game._vashjEventAt??game._iceEventAt??game._trollEventAt??game._kelthuzadEventAt??game.state.time,s=e.skillSpecs?.find(s=>s.id===id),fail=message=>({ok:false,message});
   if(!s||e.hp<=.405||e.status?.sourcePaused||e.status?.illidanPaused||e.status?.yseraPaused||e.status?.yseraHidden||e.status?.stunUntil>now||e.status?.cycloneUntil>now)return fail('单位当前无法施法');
   if(!target||target.hp<=.405||e.side===target.side||target.battleTeam!==e.battleTeam||scriptInvulnerable(target)||target.status?.cycloneUntil>now||active(target).some(a=>a.kind==='immunity')||!matchesTargets(s,e,target))return fail('请选择可施法的敌人');
   if(dist(e,target)>s.range+1e-8)return fail('超出施法范围');
@@ -672,8 +679,8 @@ const heroScriptApi={getOwnedUnitsOfRawcode:(g,e,code)=>[...g.state.entities.fil
 };
 export function manualSourceSkills(game,e){
   if(!e||!isV14(e))return [];
-  return (e.skillSpecs??[]).filter(s=>ALCHEMIST_ACTIVE_RULES[s.id]||canYseraCastAbility(e,s.id)||NAGA_ACTIVE_RULES[s.id]?.active||canGarroshCastAbility(e,s.id)||canIllidanCastAbility(e,s.id)||canIceHeroCastAbility(e,s.id)||canTrollCastAbility(e,s.id)||canKelthuzadCastAbility(e,s.id)).map(s=>{
-    const alchemy=!!ALCHEMIST_ACTIVE_RULES[s.id],family=NAGA_ACTIVE_RULES[s.id]?.active?NAGA_ACTIVE_RULES[s.id]:GARROSH_ACTIVE_RULES[s.id]??ILLIDAN_ACTIVE_RULES[s.id]??ICE_HERO_RULES[s.id]??TROLL_ACTIVE_RULES[s.id]??KELTHUZAD_ACTIVE_RULES[s.id]??(s.id==='A0ZO'?KELTHUZAD_RULES.A0ZO:null),shared=!!family,st=e.skillStates?.[s.id]??{},remaining=Math.max(0,(st[alchemy?'manualReadyAt':'readyAt']??0)-game.state.time),autoRemaining=shared?Math.max(0,(st.readyAt??0)-game.state.time):Math.max(0,(st[alchemy?'readyAt':'yseraAutoReadyAt']??0)-game.state.time);
+  return (e.skillSpecs??[]).filter(s=>ALCHEMIST_ACTIVE_RULES[s.id]||canYseraCastAbility(e,s.id)||NAGA_ACTIVE_RULES[s.id]?.active||canVashjCastAbility(e,s.id)||canGarroshCastAbility(e,s.id)||canIllidanCastAbility(e,s.id)||canIceHeroCastAbility(e,s.id)||canTrollCastAbility(e,s.id)||canKelthuzadCastAbility(e,s.id)).map(s=>{
+    const alchemy=!!ALCHEMIST_ACTIVE_RULES[s.id],family=NAGA_ACTIVE_RULES[s.id]?.active?NAGA_ACTIVE_RULES[s.id]:VASHJ_RULES[s.id]??GARROSH_ACTIVE_RULES[s.id]??ILLIDAN_ACTIVE_RULES[s.id]??ICE_HERO_RULES[s.id]??TROLL_ACTIVE_RULES[s.id]??KELTHUZAD_ACTIVE_RULES[s.id]??(s.id==='A0ZO'?KELTHUZAD_RULES.A0ZO:null),shared=!!family,st=e.skillStates?.[s.id]??{},remaining=Math.max(0,(st[alchemy?'manualReadyAt':'readyAt']??0)-game.state.time),autoRemaining=shared?Math.max(0,(st.readyAt??0)-game.state.time):Math.max(0,(st[alchemy?'readyAt':'yseraAutoReadyAt']??0)-game.state.time);
     const reason=e.hp<=.405?'单位已阵亡':e.status?.yseraHidden||e.status?.yseraPaused||e.status?.sourcePaused||e.status?.illidanPaused||e.status?.stunUntil>game.state.time||e.status?.cycloneUntil>game.state.time?'单位当前无法施法':remaining>1e-8?'技能冷却中':e.mana<s.manaCost?'魔法不足':'';
     return {id:s.id,name:s.name,status:s.status,manaCost:s.manaCost,cooldown:s.cooldown,remaining,autoRemaining,cooldownMode:shared?'shared_native':'independent',targetKind:family?family.targetKind:s.id==='A2YA'?'point':s.id==='A2YD'?'enemy':'none',range:s.range,radius:s.radius,canStart:!reason,reason};
   });
@@ -685,6 +692,7 @@ export function castManualSourceSkill(game,e,id,params={}){
   if(s.targetKind==='enemy'&&(!params.target||params.target.hp<=0||params.target.side===e.side||params.target.battleTeam!==e.battleTeam||scriptInvulnerable(params.target)))return {ok:false,message:'请选择可攻击的敌人'};
   if(s.targetKind==='unit'&&(!params.target||params.target.hp<=0||params.target.battleTeam!==e.battleTeam))return {ok:false,message:'请选择有效单位目标'};
   if(params.point&&s.targetKind==='point'||params.target&&s.targetKind==='enemy'){const p=params.point??pos(params.target),v=pos(e);if(dist(v,p)>1e-8)e.facing=Math.atan2(p.y-v.y,p.x-v.x)*180/Math.PI;}
+  if(VASHJ_RULES[id]?.active)return castVashjAbility(game,e,id,{mode:'manual',...params},heroScriptApi);
   if(ICE_HERO_RULES[id])return castIceHeroAbility(game,e,id,{mode:'manual',...params},heroScriptApi);
   if(TROLL_ACTIVE_RULES[id])return castTrollAbility(game,e,id,{mode:'manual',...params},heroScriptApi);
   if(KELTHUZAD_ACTIVE_RULES[id]||id==='A0ZO')return castKelthuzadAbility(game,e,id,{mode:'manual',...params},heroScriptApi);
@@ -719,6 +727,7 @@ export function tickSourceScriptJobs(game,dt=0){
   tickSourceAuraRules(game,{matchesTargets});
   const now=game.state.time,remaining=[];
   for(const job of game.state.sourceSkillJobs??[]){
+    if(isVashjJobType(job.type)){if(tickVashjJob(game,job,heroScriptApi))remaining.push(job);continue;}
     if(isSourceClassJobType(job.type)){tickSourceClassJob(game,job,heroScriptApi);if(!job.done)remaining.push(job);continue;}
     if(isIceHeroJobType(job.type)){if(tickIceHeroJob(game,job,heroScriptApi))remaining.push(job);continue;}
     if(isTrollJobType(job.type)){if(tickTrollJob(game,job,heroScriptApi))remaining.push(job);continue;}

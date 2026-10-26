@@ -13,14 +13,14 @@
     "trainingHeroes": 5,
     "staticSkills": 24,
     "runtimeImplemented": 6,
-    "runtimeUnresolved": 15,
-    "runtimePartial": 3
+    "runtimeUnresolved": 13,
+    "runtimePartial": 5
   },
   "recommendation": {
-    "buildingRawcode": "n02S",
-    "combatRawcode": "h0M0",
+    "buildingRawcode": "n08Y",
+    "combatRawcode": "h0X9",
     "priority": 1,
-    "reason": "Vashj script bodies are now connected with explicit native boundaries; next implement Arthas resurrection and Sindragosa source registrations."
+    "reason": "继续核对光明圣骑的独立攻击、伤害与死亡注册；巫妖王已接入脚本主体，原生边界保留。"
   },
   "describeSkillsCorrections": {
     "reason": "Seven generic implemented static entries include incomplete carrier-associated scripts. Current describeSkills appends V14_TRIGGER_DESCRIPTIONS with hardcoded implemented, so a text-only partial label will still overcount.",
@@ -211,14 +211,14 @@
         "role": "Mk combat to Ml building"
       },
       "priority": 2,
-      "summary": "通用邪恶光环可用；亡者呼唤与召龙的完整专用触发未接。现有Kel联盟已接，不能计作缺失。",
+      "summary": "亡者呼唤与辛达苟萨专属脚本已接入，保留原生创建/Aslo/眩晕命令仲裁边界。邪恶光环及原有护命匣联盟继续运行。",
       "mechanisms": [
         {
           "id": "lich-death-call",
           "skillIds": [
             "A0KP"
           ],
-          "status": "source-script-missing",
+          "status": "script-implemented-native-boundary-partial",
           "triggerCarrier": "Ordinary h0M0 type; arena A0KQ ability. The death handler does not test A0KP itself.",
           "behavior": "任意单位死亡时，尸体距施法者不超过1200且GetRandomReal(1,101)<=5、触发单位不在Ju、非原生英雄且不是e00E，复制死亡类型，保留施法者userData，标summoned并存活4秒；无敌我/是否召唤物排除。",
           "evidence": [
@@ -244,14 +244,21 @@
               "role": "arena registration"
             }
           ],
-          "runtimeDifference": "Before correction A0KP compiled as implemented AUau/aura_regen despite absent DataA/DataB; it is now unresolved. Generic zero-valued aura does not implement the registered resurrection."
+          "runtimeDifference": "已注册真实死亡监听与4秒复制；1..101<=5的连续阈值约4%，不是0..100上的5%。",
+          "initialMechanismStatus": "source-script-missing",
+          "initialRuntimeDifference": "Before correction A0KP compiled as implemented AUau/aura_regen despite absent DataA/DataB; it is now unresolved. Generic zero-valued aura does not implement the registered resurrection.",
+          "runtimeEvidence": {
+            "revision": "v14-content-20261026-v18-1",
+            "implementation": "dist/lich-king-rules.js",
+            "tests": "tests/v14-lich-king.test.mjs"
+          }
         },
         {
           "id": "lich-sindragosa",
           "skillIds": [
             "A0KQ"
           ],
-          "status": "source-script-missing",
+          "status": "script-implemented-native-boundary-partial",
           "behavior": "Aslo施法效果创建e00E；.04秒一次，沿最初目标方向移动80；计数由0每次加100，D1==1200时清理，所以12次移动共960距离。每次300范围敌人按本次龙命中集合去重，造成50+50*玩家Bone_Dragon计数的通用伤害，再用A0KR同等级thunderbolt。未注册caster death来提前结束此timer。",
           "evidence": [
             {
@@ -281,7 +288,14 @@
               "role": "Bone_Dragon decrements"
             }
           ],
-          "runtimeDifference": "Before correction A0KQ compiled as implemented Aslo/debuff, Cost18 Rng600 Dur0.001; it is now unresolved. The proxy does not create/move the dragon or call custom damage/stun. Cool1 is absent and must remain unknown unless native inheritance is verified."
+          "runtimeDifference": "12次80步移动、960终点、逐目标去重与动态骨龙计数可运行；A0KR单dummy连续下令后立即移除的命中未证实，保留请求而未伪造眩晕。",
+          "initialMechanismStatus": "source-script-missing",
+          "initialRuntimeDifference": "Before correction A0KQ compiled as implemented Aslo/debuff, Cost18 Rng600 Dur0.001; it is now unresolved. The proxy does not create/move the dragon or call custom damage/stun. Cool1 is absent and must remain unknown unless native inheritance is verified.",
+          "runtimeEvidence": {
+            "revision": "v14-content-20261026-v18-1",
+            "implementation": "dist/lich-king-rules.js",
+            "tests": "tests/v14-lich-king.test.mjs"
+          }
         },
         {
           "id": "lich-kelthuzad-alliance",
@@ -361,9 +375,9 @@
           "id": "A0KP",
           "name": "亡者呼唤",
           "baseCode": "AUau",
-          "runtimeStatus": "unresolved",
-          "runtimeKind": "aura_regen",
-          "runtimeEffectText": "AUau对象未提供DataA/DataB原生效果数值；亡者呼唤实际由h0M0出生注册的Arthas死亡监听处理（war3map.j:20084—20094、21377—21385），该脚本尚未接入，不以零数值光环代替复生",
+          "runtimeStatus": "partial",
+          "runtimeKind": "lich_king_source",
+          "runtimeEffectText": "普通战h0M0、竞技场携带A0KQ的出战体注册独立死亡监听。1200范围内死亡时先抽1至101随机数，≤5才继续检查（连续均匀分布约4%）；排除Ju组、原生英雄及e00E，不区分敌友或召唤物。复制死亡类型并继承召唤者路线，标为召唤物、存活4秒。施法者生命归零注销。【待核定：CreateUnit的原生碰撞、出生钩子完整顺序以及生命事件与死亡事件的同帧顺序仍待原图验证。】",
           "abilitySource": {
             "table": "all_abilities.csv",
             "row": 1049,
@@ -390,9 +404,9 @@
           "id": "A0KQ",
           "name": "召唤辛达苟萨",
           "baseCode": "Aslo",
-          "runtimeStatus": "unresolved",
-          "runtimeKind": "debuff",
-          "runtimeEffectText": "Aslo为召龙施法代理（18魔法、600射程、0.001秒原生持续）；真正的龙dummy、骨龙计数伤害与眩晕由Arthas/A0KQ_Action处理（war3map.j:20015—20120），该脚本尚未接入，不以无数值减速代替召龙",
+          "runtimeStatus": "partial",
+          "runtimeKind": "lich_king_source",
+          "runtimeEffectText": "对600范围敌人释放：龙沿初始方向每0.04秒移动80码，共12次、960码，第13次回调结束。每次300范围敌人按本次飞行去重，造成50＋50×玩家当时骨龙计数的通用伤害；施法者死亡不取消。【待核定：物编没有Cool1，Web不添加猜测冷却；Aslo原生自动施法/命令资格及继承字段未核定。每步同一个dummy连续发A0KR thunderbolt后立即RemoveUnit，命中仲裁未证实：保留全部原生命令请求与等级，不伪造全部目标已眩晕。】",
           "abilitySource": {
             "table": "all_abilities.csv",
             "row": 1050,
@@ -996,7 +1010,7 @@
           "baseCode": "ANcl",
           "runtimeStatus": "partial",
           "runtimeKind": "vashj_source",
-          "runtimeEffectText": "v14.1A5通道或脚本指令：待核定对应运行脚本",
+          "runtimeEffectText": "向目标方向−45°、0°、+45°发出3箭；每0.04秒移动50码，首次在200内遇敌或末步前450码落地。每个落点300范围立即及每秒造成101点通用伤害，共7次。落地后施法者死亡才取消该落点，飞行仍继续。【待核定：原生IssueOrder连续命令仲裁、施法前摇及虚体/召唤物碰撞落点尚缺原图运行证据；Web同步派发并共享魔法与冷却。】",
           "abilitySource": {
             "table": "all_abilities.csv",
             "row": 2429,
@@ -1046,7 +1060,7 @@
           "baseCode": "Asth",
           "runtimeStatus": "implemented",
           "runtimeKind": "vashj_source",
-          "runtimeEffectText": "v14.1A5脚本标记：尚未逐项核定对应JASS，不沿用5.0dJF同ID效果",
+          "runtimeEffectText": "实际攻击伤害事件独立20%概率对当前目标追加96点通用伤害，再发A0I7第4级眩晕：普通单位4秒、原生英雄2秒。没有周边减速。",
           "abilitySource": {
             "table": "all_abilities.csv",
             "row": 2389,
@@ -1078,7 +1092,7 @@
           "baseCode": "ANcl",
           "runtimeStatus": "partial",
           "runtimeKind": "vashj_source",
-          "runtimeEffectText": "v14.1A5通道或脚本指令：待核定对应运行脚本",
+          "runtimeEffectText": "面向前方±90°、距离0至500码随机生成3个固定孢子；各自第1至10秒在200范围造成99点通用伤害，第11秒销毁。施法者死亡不取消，没有额外15点毒伤。【待核定：原生IssueOrder连续命令仲裁、施法前摇及虚体/召唤物碰撞落点尚缺原图运行证据；Web同步派发并共享魔法与冷却。】",
           "abilitySource": {
             "table": "all_abilities.csv",
             "row": 2431,
@@ -1127,7 +1141,7 @@
           "baseCode": "AHwe",
           "runtimeStatus": "partial",
           "runtimeKind": "vashj_source",
-          "runtimeEffectText": "召唤2个娜迦幻影，存活13秒",
+          "runtimeEffectText": "召唤2只持续13秒的娜迦幻影n07J。召唤回调各自从第0秒起每秒为召唤者恢复5生命、1.5魔法；任一绑定单位死亡结束对应回调。执行次数达到召唤者当前最大生命整数值时先结束，不再回复。【待核定：原生IssueOrder连续命令仲裁、施法前摇及虚体/召唤物碰撞落点尚缺原图运行证据；Web同步派发并共享魔法与冷却。召唤回调采用EVENT_PLAYER_UNIT_SUMMON的GetTriggerUnit为幻影的Web映射，仍需原生事件身份验证。】",
           "abilitySource": {
             "table": "all_abilities.csv",
             "row": 2432,
@@ -1172,7 +1186,7 @@
           "baseCode": "Asth",
           "runtimeStatus": "implemented",
           "runtimeKind": "vashj_source",
-          "runtimeEffectText": "v14.1A5脚本标记：尚未逐项核定对应JASS，不沿用5.0dJF同ID效果",
+          "runtimeEffectText": "建筑部署后0秒仅扫描一次全图h0OV女王：友方给予A1CK第2级（自身攻击+15%），敌方第3级（−11%）并附加A1OE攻速−8%，双方都有则第4级（+4%）。重复同阵营不叠加，友方分支没有攻速奖励。",
           "abilitySource": {
             "table": "all_abilities.csv",
             "row": 2435,
@@ -2492,6 +2506,19 @@
       ],
       "nativeFieldReference": "https://wc3jass.com/jassdoc.php?file=common.j&line=1883",
       "nativeBoundary": "IssueOrder arbitration/cast point, collision, and GetTriggerUnit identity under SUMMON remain explicitly partial."
+    },
+    {
+      "revision": "v14-content-20261026-v18-1",
+      "buildingRawcode": "n02S",
+      "staticImplemented": [],
+      "staticPartial": [
+        "A0KP",
+        "A0KQ"
+      ],
+      "dynamicAbilities": [
+        "A0KR"
+      ],
+      "nativeBoundary": "CreateUnit/life-death order, Aslo missing/inherited fields and autocast, single thunderbolt caster per step removed immediately; unverified control not fabricated."
     }
   ]
 }

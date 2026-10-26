@@ -1,6 +1,6 @@
 {
   "sourceVersion": "v14.1A5",
-  "skillImplementationRevision": "v14-content-20261026-v17-1",
+  "skillImplementationRevision": "v14-content-20261026-v18-1",
   "units": 534,
   "mercenaryRecords": 60,
   "mainWaves": 35,
@@ -119,7 +119,8 @@
       "sourceRawcode": "h0M0",
       "abilityIds": [
         "A0ZV",
-        "A0ZW"
+        "A0ZW",
+        "A0KR"
       ]
     },
     {
@@ -142,9 +143,9 @@
   "playerSkills": {
     "counts": {
       "implemented": 410,
-      "partial": 45,
+      "partial": 48,
       "marker": 34,
-      "unresolved": 137
+      "unresolved": 135
     },
     "abilities": [
       {
@@ -2753,8 +2754,8 @@
       {
         "rawcode": "A0KP",
         "name": "亡者呼唤",
-        "status": "unresolved",
-        "kind": "aura_regen",
+        "status": "partial",
+        "kind": "lich_king_source",
         "unitRawcodes": [
           "n02S"
         ]
@@ -2762,10 +2763,19 @@
       {
         "rawcode": "A0KQ",
         "name": "召唤辛达苟萨",
-        "status": "unresolved",
-        "kind": "debuff",
+        "status": "partial",
+        "kind": "lich_king_source",
         "unitRawcodes": [
           "n02S"
+        ]
+      },
+      {
+        "rawcode": "A0KR",
+        "name": "阿尔塞斯眩晕",
+        "status": "partial",
+        "kind": "lich_native_request",
+        "unitRawcodes": [
+          "h0M0"
         ]
       },
       {
@@ -6216,9 +6226,9 @@
   "battleSkills": {
     "counts": {
       "implemented": 461,
-      "partial": 45,
+      "partial": 48,
       "marker": 47,
-      "unresolved": 158
+      "unresolved": 156
     },
     "abilities": [
       {
@@ -9230,8 +9240,8 @@
       {
         "rawcode": "A0KP",
         "name": "亡者呼唤",
-        "status": "unresolved",
-        "kind": "aura_regen",
+        "status": "partial",
+        "kind": "lich_king_source",
         "unitRawcodes": [
           "n02S"
         ]
@@ -9239,10 +9249,19 @@
       {
         "rawcode": "A0KQ",
         "name": "召唤辛达苟萨",
-        "status": "unresolved",
-        "kind": "debuff",
+        "status": "partial",
+        "kind": "lich_king_source",
         "unitRawcodes": [
           "n02S"
+        ]
+      },
+      {
+        "rawcode": "A0KR",
+        "name": "阿尔塞斯眩晕",
+        "status": "partial",
+        "kind": "lich_native_request",
+        "unitRawcodes": [
+          "h0M0"
         ]
       },
       {
@@ -13217,7 +13236,7 @@
     "BoxGift五个隐藏训练叶子及225条训练路径已接入；新增单位的未核定技能仍按实际状态计数。随机礼物已接入35个候选；原生CreateUnit路径/碰撞失败、可操纵建造者技能及平台专用Frame科技返费宿主仍待核定。",
     "17类种族特性与103个精确单位注册已接入；地精修理、虚空体质、原生跳跃/slow命中及多种原生法术抗性叠加仍为部分实现。旧存档中没有出生抽样记录的血统融合战斗体不补抽，新出战体才执行来源随机。",
     "瓦斯琪已接入五项脚本主体与A1CK动态等级；A1O5/A1O7/A1O8的原生命令仲裁、落点碰撞及召唤事件身份仍为部分实现。",
-    "巫妖王A0KP亡者呼唤/A0KQ召龙此前通用编译不代表专属脚本已还原，两项已纠正为待核定；训练新增五英雄的其余缺口见training-hero-source-audit.json。",
+    "巫妖王已接入亡者呼唤监听、4秒原型复制、辛达苟萨12次移动/逐目标去重及动态骨龙计数；原生Aslo继承/自动施法和每步单dummy连续眩晕后立即移除的仲裁仍未核定。训练其余缺口见training-hero-source-audit.json。",
     "A131农场礼物已按显式原型next链计算人口，旧档/付费农场原型未知及原生在研取消退款仍待核定，保留礼物不猜测。",
     "原图训练多分支对话框限时30秒；Web用持久表单重新校验提交，未模拟对话框超时。旧版无礼物历史的存档不会补抽已过波次奖励。"
   ]

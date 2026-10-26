@@ -1,3 +1,4 @@
+import {resetLichKingRound} from './lich-king-rules.js';
 import { UNITS, MERCENARIES, LEGACY_MERCENARIES, WAVES, RULES, HEROES, BUILDERS, PROPHET_POOLS, UNIT_TEMPLATES, TECHNOLOGIES, BOX_TRAINING_RULES } from './data.js';
 import { attachSkills, refreshSourceSkills, initializeSourceSkills, initializeSourceClassCombat, sourceClassAttackDamageEvent, compileSkills, sourceAuraEffects, tickSourceSkills, sourceAttackStart, sourceOnHit, modifyIncoming, beforeSourceDamage, afterSourceDamage, sourceDeath, sourceMoveFactor, canWeaponTarget, sourceWeapon, tickSourceScriptJobs, manualSourceSkills, castManualSourceSkill } from './skills.js';
 import { initializeSourceClassBuilding } from './source-class-rules.js';
@@ -941,6 +942,7 @@ export class Game {
     const w = this._waveData();
     const reference=value(w,['recommendedPower'],[250,350,500,650,800,1000,1200,1450,1600,1850,2050,2400,2700,3100,3500,4000,4500,5000,5500,6000,6500,7100,7700,8500,9500,10600,11800,13000,14000,15000,16000,17000,18000,19000,20000][s.wave-1]??1);
     for(const p of s.players){const factor=this._military(p)/reference-(p.sourceLeaks??0)/150;p.leakBountyFactor=this.options.ggEnabled?factor>=1?1:factor>=.1?factor:0:0;}
+    resetLichKingRound(this);
     s.phase = 'combat'; s.timer = 0; s.entities = []; s.sourceSkillJobs = []; s.nagaScriptCasters = {}; s.sourceAuraNextAt=Math.floor(s.time)+1; s.teamLeakFlags = [false,false]; this._spawnQueue = []; this._roundTime = 0; this._settledLanes = []; this._overtime = false; this._warpTimer = 0; this._battleAuras = [[], []];
     if(s.mode !== 'sandbox' && s.wave>=31)s.continuousRemaining=s.wave<35?50:null;
     const boss = !!(w.boss ?? w.isBoss ?? this.state.wave % 10 === 0);
@@ -1319,7 +1321,7 @@ export class Game {
     }
   }
   _hurt(target, damage, attacker, pure = false) {
-    if (target.hp <= 0 || damage <= 0 || (target.status?.cycloneUntil??0)>(this._vashjEventAt??this._iceEventAt??this._trollEventAt??this._kelthuzadEventAt??this.state.time)) return 0;
+    if (target.hp <= 0 || damage <= 0 || (target.status?.cycloneUntil??0)>(this._lichEventAt??this._vashjEventAt??this._iceEventAt??this._trollEventAt??this._kelthuzadEventAt??this.state.time)) return 0;
     const options=typeof pure==='object'?pure:{spell:!!pure},legacyPure=typeof pure==='boolean'&&pure;
     const revivalCount=target.status.yseraRevivalCount??0;
     let actual = modifyIncoming(this,target,damage,attacker,options);
@@ -1474,7 +1476,7 @@ export class Game {
     }
   }
   _clearDead() {
-    for (const e of this.state.entities) if (e.expiresAt && e.expiresAt <= this.state.time) {e.hp = 0;e.status.sourceDeathHandled=true;}
+    for (const e of this.state.entities) if (e.expiresAt && e.expiresAt <= this.state.time) {e.hp = 0;this._sourceDeath(e,null);}
     this.state.entities = this.state.entities.filter(e => e.hp > 0);
   }
   _endCombat() {

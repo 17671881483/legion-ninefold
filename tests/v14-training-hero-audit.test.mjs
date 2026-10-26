@@ -13,7 +13,7 @@ const unit=raw=>V14_UNITS.find(u=>u.sourceRawcode===raw);
 test('training hero audit keeps all 24 current object statuses and the original seven generic labels without miscounting existing alliance',()=>{
   assert.deepEqual(report.heroes.map(h=>h.buildingRawcode),['n02S','n05H','n07I','n08Y','n08Z']);
   assert.equal(report.initialRuntimeCounts.runtimeImplemented,7);assert.equal(report.initialRuntimeCounts.runtimeUnresolved,17);
-  assert.equal(report.counts.staticSkills,24);assert.equal(report.counts.runtimePartial,3);assert.equal(report.initialRecommendation.buildingRawcode,'n07I');assert.equal(report.counts.runtimeImplemented,6);assert.equal(report.counts.runtimeUnresolved,15);
+  assert.equal(report.counts.staticSkills,24);assert.equal(report.counts.runtimePartial,5);assert.equal(report.initialRecommendation.buildingRawcode,'n07I');assert.equal(report.counts.runtimeImplemented,6);assert.equal(report.counts.runtimeUnresolved,13);
   for(const hero of report.heroes){
     const def=unit(hero.buildingRawcode);assert.equal(def.combatRawcode,hero.combatRawcode);
     assert.deepEqual(hero.staticSkills.map(s=>s.id),def.abilityIds);
@@ -27,7 +27,7 @@ test('training hero audit keeps all 24 current object statuses and the original 
   const alliance=report.heroes[0].mechanisms.find(m=>m.id==='lich-kelthuzad-alliance');
   assert.equal(alliance.status,'already-implemented-dynamic');
   assert.deepEqual(alliance.skillIds,['A0ZV','A0ZW','A0ZY']);
-  assert.equal(report.recommendation.buildingRawcode,'n02S');
+  assert.equal(report.recommendation.buildingRawcode,'n08Y');
 });
 
 test('audit cites literal normal/arena/summon/attack/birth registrations in the unchanged LF-counted JASS',()=>{
@@ -45,18 +45,18 @@ test('audit cites literal normal/arena/summon/attack/birth registrations in the 
   assert.equal(registrations.get('vashj-phantom-action').line,41584);
 });
 
-test('Lich native aura stays implemented while zero-valued AUau and an Aslo proxy do not claim dedicated resurrection or dragon scripts',()=>{
+test('Lich native aura stays implemented while restored source scripts retain explicit native boundaries',()=>{
   const def=unit('n02S'),compiled=new Map(compileSkills(def).map(s=>[s.id,s]));
   const aura=compiled.get('A0KO');assert.equal(aura.status,'implemented');assert.equal(aura.move,.35);assert.equal(aura.regen,20);
   const call=compiled.get('A0KP');assert.equal(V14_ABILITIES.A0KP.base_code,'AUau');
   assert.equal(V14_ABILITIES.A0KP.resolved_fields.DataA1,undefined);assert.equal(V14_ABILITIES.A0KP.resolved_fields.DataB1,undefined);
-  assert.equal(call.status,'unresolved');assert.match(call.effectText,/Arthas.*尚未接入/);
+  assert.equal(call.status,'partial');assert.match(call.effectText,/1200.*随机数/);
   const dragon=compiled.get('A0KQ');assert.equal(V14_ABILITIES.A0KQ.base_code,'Aslo');
   assert.equal(dragon.manaCost,18);assert.equal(dragon.fields.Rng1,'600.0');assert.equal(dragon.duration,.001);
-  assert.equal(dragon.status,'unresolved');assert.match(dragon.effectText,/A0KQ_Action.*尚未接入/);
+  assert.equal(dragon.status,'partial');assert.match(dragon.effectText,/960.*骨龙计数/);
   const trigger=describeSkills(def).find(s=>s.id==='trigger:h0M0');
   assert.equal(trigger.status,'partial');assert.match(trigger.effectText,/护命匣联盟仍由既有/);
-  assert.deepEqual(skillCoverage(def),{implemented:1,partial:1,markers:0,unresolved:2});
+  assert.deepEqual(skillCoverage(def),{implemented:1,partial:3,markers:0,unresolved:0});
   const existing=compileSkills({...def,abilityIds:['A0ZV','A0ZW']});
   assert.ok(existing.every(s=>s.status==='implemented'),'the existing KelThuzad alliance was not downgraded');
 });
@@ -69,6 +69,6 @@ test('saved generic Lich labels refresh to audited statuses without replaying so
   assert.equal(refreshSourceSkills(e,def),true);
   assert.equal(e.skillImplementationRevision,SKILL_IMPLEMENTATION_REVISION);
   assert.deepEqual([e.hp,e.maxHp,e.damage,e.mana],[123,999,555,31]);
-  assert.ok(e.skillSpecs.filter(s=>['A0KP','A0KQ'].includes(s.id)).every(s=>s.status==='unresolved'));
+  assert.ok(e.skillSpecs.filter(s=>['A0KP','A0KQ'].includes(s.id)).every(s=>s.status==='partial'));
   assert.equal(refreshSourceSkills(e,def),false);
 });

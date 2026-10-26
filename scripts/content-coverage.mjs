@@ -23,7 +23,7 @@ const playerRuntimeAbilities=[
   {sourceRawcode:'h0SN',abilityIds:['A19Z']},
   {sourceRawcode:'h0QU',abilityIds:['A15D','A15F','A15I']},
   {sourceRawcode:'h0PI',abilityIds:['A0ZS','A0ZU','A0ZY']},
-  {sourceRawcode:'h0M0',abilityIds:['A0ZV','A0ZW']},
+  {sourceRawcode:'h0M0',abilityIds:['A0ZV','A0ZW','A0KR']},
   {sourceRawcode:'h011',abilityIds:['A138','A13A','A139','A13B','A13T','A13U','A13V','A13W','A13X','A13Y','A2ZG']},
 ].map(def=>({...def,skillVersion:'v14.1A5',distanceScale:1/3}));
 const specialCodes=[SPECIAL_MONSTERS.waveFive.rawcode,...SPECIAL_MONSTERS.treasure.byWave.map(e=>e.rawcode)];
@@ -55,7 +55,7 @@ const result={
     'BoxGift五个隐藏训练叶子及225条训练路径已接入；新增单位的未核定技能仍按实际状态计数。随机礼物已接入35个候选；原生CreateUnit路径/碰撞失败、可操纵建造者技能及平台专用Frame科技返费宿主仍待核定。',
     '17类种族特性与103个精确单位注册已接入；地精修理、虚空体质、原生跳跃/slow命中及多种原生法术抗性叠加仍为部分实现。旧存档中没有出生抽样记录的血统融合战斗体不补抽，新出战体才执行来源随机。',
     '瓦斯琪已接入五项脚本主体与A1CK动态等级；A1O5/A1O7/A1O8的原生命令仲裁、落点碰撞及召唤事件身份仍为部分实现。',
-    '巫妖王A0KP亡者呼唤/A0KQ召龙此前通用编译不代表专属脚本已还原，两项已纠正为待核定；训练新增五英雄的其余缺口见training-hero-source-audit.json。',
+    '巫妖王已接入亡者呼唤监听、4秒原型复制、辛达苟萨12次移动/逐目标去重及动态骨龙计数；原生Aslo继承/自动施法和每步单dummy连续眩晕后立即移除的仲裁仍未核定。训练其余缺口见training-hero-source-audit.json。',
     'A131农场礼物已按显式原型next链计算人口，旧档/付费农场原型未知及原生在研取消退款仍待核定，保留礼物不猜测。',
     '原图训练多分支对话框限时30秒；Web用持久表单重新校验提交，未模拟对话框超时。旧版无礼物历史的存档不会补抽已过波次奖励。',
   ],

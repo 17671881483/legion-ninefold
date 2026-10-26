@@ -1,3 +1,4 @@
+import {LICH_KING_RULES,canLichKingCastAbility,castLichKingAbility,initializeLichKingDeployment,lichKingDeath,tickLichKingJob,isLichKingJobType} from './lich-king-rules.js';
 import {VASHJ_RULES,canVashjCastAbility,castVashjAbility,tryVashjAutoCast,vashjOnAttackDamage,initializeVashjDeployment,tickVashjJob,isVashjJobType,sourceVashjDeath} from './vashj-rules.js';
 import {ICE_HERO_RULES,canIceHeroCastAbility,castIceHeroAbility,tryIceHeroAutoCast,tickIceHeroJob,sourceIceHeroDeath,isIceHeroJobType} from './ice-hero-rules.js';
 import {TROLL_RULES,TROLL_ACTIVE_RULES,initializeTrollUnit,canTrollCastAbility,castTrollAbility,tryTrollAutoCast,trollOnHit,trollIncomingDamage,sourceTrollDeath,tickTrollJob,isTrollJobType,trollHaste} from './troll-rules.js';
@@ -15,7 +16,7 @@ import { closestWalkable, isWalkable } from './layout.js';
 import { GARROSH_ACTIVE_RULES, GARROSH_PASSIVE_RULES, canGarroshCastAbility, castGarroshAbility, tryGarroshAutoCast, garroshActiveAfterDamage, sourceGarroshActiveDeath, tickGarroshActiveJob } from './garrosh-active-rules.js';
 import { ILLIDAN_RULES, ILLIDAN_ACTIVE_RULES, canIllidanCastAbility, castIllidanAbility, registerIllidanSource, tickIllidanSource, illidanOnAttackHit, tryIllidanAutoCast, illidanAfterDamage, sourceIllidanDeath, tickIllidanJob, isIllidanJobType } from './illidan-rules.js';
 
-export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261026-v17-1';
+export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261026-v18-1';
 
 // Values come from resolved object fields. Empty fields remain empty: a missing
 // native default is reported, rather than replacing it with tooltip numbers.
@@ -155,8 +156,6 @@ function compile(id,version='5.0dJF') {
     if(id==='A1Q0'){s.kind='azure_fire';s.status='implemented';s.damage=20;s.effectText='实际普攻命中追加20点混乱攻击/通用伤害，可伤害魔免单位；不采用文案的魔法伤害类型';}
     if(id==='A0TH'){s.kind='anchor_smash';s.status='implemented';s.damage=10;s.radius=1.5;s.chance=.33;s.effectText='实际普攻命中时按JASS GetRandomReal(1,101)≥68判定（33%）；自身暂停1秒，对自身150范围目标阵营单位造成10点混乱攻击/通用伤害';}
     if(id==='A0YD'){s.kind='dragon_soul';s.status='implemented';s.chance=29/99;s.effectText='实际普攻命中时按JASS GetRandomReal(1,100)<30判定（约29.29%，非文案40%）；原生英雄受到最大生命30%的混乱攻击/通用伤害，其他单位受到99999点同类伤害，并非直接设置死亡';}
-    if(id==='A0KP'){s.status='unresolved';s.effectText='AUau对象未提供DataA/DataB原生效果数值；亡者呼唤实际由h0M0出生注册的Arthas死亡监听处理（war3map.j:20084—20094、21377—21385），该脚本尚未接入，不以零数值光环代替复生';}
-    if(id==='A0KQ'){s.status='unresolved';s.effectText='Aslo为召龙施法代理（18魔法、600射程、0.001秒原生持续）；真正的龙dummy、骨龙计数伤害与眩晕由Arthas/A0KQ_Action处理（war3map.j:20015—20120），该脚本尚未接入，不以无数值减速代替召龙';}
     if(['AIde','AIas'].includes(a.base_code)&&has('DataA')){s.kind='passive_stats';s.status='implemented';if(a.base_code==='AIde'){s.armor=A;s.effectText=`原生物品能力：自身护甲+${A}`;}else{s.haste=A;s.effectText=`原生物品能力：自身攻速+${A*100}%`;}}
     if(['A138','A13T'].includes(id)){s.kind='passive_stats';s.status='implemented';s.bonusHp=A;s.effectText=`神秘礼物原生AIml：自身最大生命+${A}；部署时应用一次，不随存档刷新重复增加`;}
     if(['A139','A13X'].includes(id)){s.kind='passive_stats';s.status='implemented';s.flatDamage=A;s.effectText=`神秘礼物原生AIat：两组普通武器攻击力各+${A}，不增加法术固定伤害`;}
@@ -169,6 +168,8 @@ function compile(id,version='5.0dJF') {
   s.effectText??=effectSummary(s);
   if(version==='v14.1A5'&&YSERA_ACTIVE_RULES[id]){const r=YSERA_ACTIVE_RULES[id];Object.assign(s,{kind:'ysera_active',status:r.status,effectText:r.description,manaCost:r.manaCost,cooldown:r.cooldown});}
   if(version==='v14.1A5'&&ALCHEMIST_ACTIVE_RULES[id]){const r=ALCHEMIST_ACTIVE_RULES[id];Object.assign(s,{kind:'alchemist_active',status:'implemented',manaCost:r.manaCost,cooldown:r.cooldown,effectText:id==='A2Z0'?'医疗气雾自动选择范围内生命比例最低的友军，跟随中心每秒治疗10/10/20，共5/15/15跳；中心死亡变为固定8秒云雾，每0.2秒治疗与通用伤害2/2/3。原生手动冷却与受伤自动冷却独立。':'随机选择1000范围最多两名不同敌人，每秒10/20/30通用伤害共5跳；目标死亡或第5跳后形成固定325范围酸池，立即及随后每秒15/25/35伤害共7跳，减甲2/3/3持续2秒且期间不刷新。'});}
+  if(version==='v14.1A5'&&LICH_KING_RULES[id]){const r=LICH_KING_RULES[id];Object.assign(s,{kind:'lich_king_source',status:r.status,effectText:r.description+`【待核定：${r.partial}】`,manaCost:r.manaCost??0,cooldown:r.cooldown??0});if(r.range!==undefined)s.range=r.range/100;}
+  if(version==='v14.1A5'&&id==='A0KR'){s.kind='lich_native_request';s.status='partial';s.effectText='辛达苟萨每步单个dummy以骨龙计数为等级，向所有当步新命中敌人发thunderbolt后立即RemoveUnit。原生连续命令命中仲裁未核定，当前保留请求，不虚构所有目标已眩晕。';}
   if(version==='v14.1A5'&&id==='A1CK')s.rangedOnly=false; // Ear2/Ear3 both explicitly enabled for this self aura.
   if(version==='v14.1A5'&&VASHJ_RULES[id]){const r=VASHJ_RULES[id];Object.assign(s,{kind:'vashj_source',status:r.status,manaCost:r.manaCost??0,cooldown:r.cooldown??0,effectText:r.description+(r.partial?`【待核定：${r.partial}】`:'')});if(r.range!==undefined)s.range=r.range/100;}
   if(version==='v14.1A5'&&NAGA_ACTIVE_RULES[id]){const r=NAGA_ACTIVE_RULES[id];Object.assign(s,{kind:'naga_source',status:r.status??'implemented',manaCost:r.manaCost??0,cooldown:r.cooldown??0,effectText:(r.effectText??r.description??`${r.name}由本版JASS专属规则处理，手动与自动共享原生冷却。`)+(r.partial?`【待核定：${r.partial}】`:'')});if(r.range!==undefined)s.range=r.range/100;if(r.radius!==undefined)s.radius=r.radius/100;}
@@ -213,7 +214,7 @@ function effectSummary(s){
 const TRIGGER_DESCRIPTIONS={n0S4:'每次伤害事件追加受害者当前生命3%的伤害',n0S6:'每次伤害事件追加受害者最大生命1%的魔法伤害',n0SC:'死亡时300范围敌军受到8伤害',n0SD:'死亡时300范围敌军受到26伤害',h0CZ:'击杀时回复死者最大生命60%',h08B:'潜地1.5秒无敌，结束追加5秒攻速25%与移速5%',h03B:'攻击启动30%概率自施2秒狂热与2秒增益',H08U:'死亡后原位置重新生成同类型单位'};
 const V14_TRIGGER_DESCRIPTIONS={n0S4:'伤害事件>0时追加受害者当前生命3%的法术攻击/通用伤害（两倍模式分支为2%，不用于九倍）',n0S6:'伤害事件>40时，对英雄追加当前生命1%、其他单位追加最大生命1%的法术攻击/普通伤害',n0SC:'死亡时300范围敌军受到8点普通攻击/火焰伤害',h0CZ:'击杀时回复死者最大生命50%',h03B:'攻击启动30%概率自施2秒狂热与增益，击杀时追加增益',h0OC:'攻击启动30%概率自施2秒狂热与增益，击杀时追加增益',H08U:'死亡后原位置重新生成同类型单位'};
 const V14_PARTIAL_TRIGGER_DESCRIPTIONS={
-  h0M0:{status:'partial',text:'邪恶光环按原生字段提供35%移速与每秒20生命恢复。亡者呼唤和召唤辛达苟萨的Arthas死亡/施法注册脚本尚未接入（war3map.j:20015—20120、20194—20201、21377—21385）；护命匣联盟仍由既有克尔苏加德模块处理，不据此宣称整套巫妖王已还原。'},
+  h0M0:{status:'partial',text:'邪恶光环按原生字段提供35%移速与每秒20生命恢复。Arthas死亡/施法监听、4秒复制尸体与辛达苟萨12次推进已接入（war3map.j:20015—20120、20194—20201、21377—21385）。原生Aslo字段继承、自动施法及每步单dummy连续眩晕命中仍未核定；护命匣联盟仍由既有克尔苏加德模块处理。'},
 };
 const V14_ECONOMY_DESCRIPTIONS={
   farmer:{name:'淘金（玩家级经济）',rawcodes:['n085','h0W1'],text:'首座娜迦农夫从开始建造时为玩家注册15%击杀额外获得1金币的概率，每新增一座再加0.5个百分点；该概率影响玩家的击杀结算，农夫本身没有对战技能。升级完成后注销该农夫的注册；出售按原脚本不会注销已注册概率。'},
@@ -485,7 +486,7 @@ export function sourceClassAttackDamageEvent(game,target,attacker,options={}){
   try{vashjOnAttackDamage(game,attacker,target,heroScriptApi);sourceClassOnAttackDamage(game,attacker,target,heroScriptApi);}finally{attacker.status.sourceNativeAttackBusy=false;}
 }
 export function initializeSourceClassCombat(game,building,entity){
-  if(isV14(entity)){initializeVashjDeployment(game,building,entity);return initializeSourceClassDeployment(game,building,entity,heroScriptApi);}
+  if(isV14(entity)){initializeLichKingDeployment(game,entity);initializeVashjDeployment(game,building,entity);return initializeSourceClassDeployment(game,building,entity,heroScriptApi);}
 }
 export function beforeSourceDamage(game,target,actual,attacker,options={}){
   if(isV14(target))kelthuzadBeforeDamage(game,target,actual,attacker,heroScriptApi);
@@ -578,6 +579,7 @@ export function sourceDeath(game,target,killer) {
   if(target.combatRawcode==='H08U'){
     const def=templatesFor(target).H08U;if(def){const n=summon(game,target,def,0,{isSummon:false,reward:target.reward,isBoss:target.isBoss});if(n){n.status={...target.status,sourceDeathHandled:false,deathCounted:false};n.hp=n.maxHp;n.ability=null;game._event('revive',n,'重新生成');}}
   }
+  lichKingDeath(game,target,heroScriptApi);
 }
 function wf(w,key,fallback=0){return num(w[key]??w[key+'1'],fallback);}
 function weaponSecondary(game,e,target,battle,dealt) {
@@ -643,7 +645,7 @@ function pauseUnitEx(game,source,target,seconds){
   if(duration>0)target.status.stunUntil=Math.max(target.status.stunUntil??0,now+duration);
 }
 function applyNativeControl(game,source,target,id,kind,seconds){
-  const now=game._vashjEventAt??game._iceEventAt??game._trollEventAt??game._kelthuzadEventAt??game.state.time,skill=compileSkills({abilityIds:[id],skillVersion:'v14.1A5',distanceScale:source.distanceScale??1/3})[0];
+  const now=game._lichEventAt??game._vashjEventAt??game._iceEventAt??game._trollEventAt??game._kelthuzadEventAt??game.state.time,skill=compileSkills({abilityIds:[id],skillVersion:'v14.1A5',distanceScale:source.distanceScale??1/3})[0];
   if(!target||target.hp<=.405||target.isBuilding||target.side===source.side||source.battleTeam!==target.battleTeam||scriptInvulnerable(target)||id!=='A15I'&&active(target).some(s=>s.kind==='immunity')||target.status?.cycloneUntil>now||!matchesTargets(skill,source,target))return false;
   const duration=seconds??(isNativeHero(target)?skill.heroDuration:skill.duration);
   target.status??={};target.status[kind]=Math.max(target.status[kind]??0,now+duration);
@@ -653,7 +655,7 @@ function applyNativeControl(game,source,target,id,kind,seconds){
   return true;
 }
 function castNativeNova(game,e,id,target){
-  const now=game._vashjEventAt??game._iceEventAt??game._trollEventAt??game._kelthuzadEventAt??game.state.time,s=e.skillSpecs?.find(s=>s.id===id),fail=message=>({ok:false,message});
+  const now=game._lichEventAt??game._vashjEventAt??game._iceEventAt??game._trollEventAt??game._kelthuzadEventAt??game.state.time,s=e.skillSpecs?.find(s=>s.id===id),fail=message=>({ok:false,message});
   if(!s||e.hp<=.405||e.status?.sourcePaused||e.status?.illidanPaused||e.status?.yseraPaused||e.status?.yseraHidden||e.status?.stunUntil>now||e.status?.cycloneUntil>now)return fail('单位当前无法施法');
   if(!target||target.hp<=.405||e.side===target.side||target.battleTeam!==e.battleTeam||scriptInvulnerable(target)||target.status?.cycloneUntil>now||active(target).some(a=>a.kind==='immunity')||!matchesTargets(s,e,target))return fail('请选择可施法的敌人');
   if(dist(e,target)>s.range+1e-8)return fail('超出施法范围');
@@ -667,7 +669,7 @@ function castNativeNova(game,e,id,target){
   kelthuzadNativeSpellEffect(game,e,id,heroScriptApi);
   return {ok:true,skillId:id};
 }
-const heroScriptApi={getOwnedUnitsOfRawcode:(g,e,code)=>[...g.state.entities.filter(u=>u.ownerId===e.ownerId&&raw(u)===code),...(g.state.players[e.ownerId]?.buildings??[]).filter(b=>(b.sourceRawcode??b.unitId?.replace(/^v14_/, ''))===code)],castNativeNova:(g,e,id,target)=>castNativeNova(g,e,id,target),applyCyclone:(g,s,t,id,seconds)=>applyNativeControl(g,s,t,id,'cycloneUntil',seconds),applyEnsnare:(g,s,t,id)=>applyNativeControl(g,s,t,id,'rootUntil'),universalDamage,nativeDamage,sourceDamage,applyCorrosion:applyYseraCorrosion,scriptInvulnerable,pauseUnitEx,compileAbility,addAbility,removeAbility,getBuilding,applyAttackLevel,setUnitPosition,moveUnit:setUnitPosition,
+const heroScriptApi={sourceDeath,getOwnedUnitsOfRawcode:(g,e,code)=>[...g.state.entities.filter(u=>u.ownerId===e.ownerId&&raw(u)===code),...(g.state.players[e.ownerId]?.buildings??[]).filter(b=>(b.sourceRawcode??b.unitId?.replace(/^v14_/, ''))===code)],castNativeNova:(g,e,id,target)=>castNativeNova(g,e,id,target),applyCyclone:(g,s,t,id,seconds)=>applyNativeControl(g,s,t,id,'cycloneUntil',seconds),applyEnsnare:(g,s,t,id)=>applyNativeControl(g,s,t,id,'rootUntil'),universalDamage,nativeDamage,sourceDamage,applyCorrosion:applyYseraCorrosion,scriptInvulnerable,pauseUnitEx,compileAbility,addAbility,removeAbility,getBuilding,applyAttackLevel,setUnitPosition,moveUnit:setUnitPosition,
   applyNativeSlow:(game,source,target,id,descriptor)=>{target.status??={};target.status.sourceClassNativeSlowPending={abilityId:id,sourceId:source.id,at:game.state.time,descriptor:{...descriptor},reason:'原生Aslo默认目标许可未核定'};},
   vertigoTarget:(game,source,target,level)=>{const frozen=target.status?.sourceAnimationFrozenUntil;pauseUnitEx(game,source,target,level);if(frozen===undefined)delete target.status.sourceAnimationFrozenUntil;else target.status.sourceAnimationFrozenUntil=frozen;},
   pauseUnit:(game,e,value)=>{e.status??={};e.status.sourcePaused=!!value;if(value)e.pendingAttack=null;},
@@ -679,8 +681,8 @@ const heroScriptApi={getOwnedUnitsOfRawcode:(g,e,code)=>[...g.state.entities.fil
 };
 export function manualSourceSkills(game,e){
   if(!e||!isV14(e))return [];
-  return (e.skillSpecs??[]).filter(s=>ALCHEMIST_ACTIVE_RULES[s.id]||canYseraCastAbility(e,s.id)||NAGA_ACTIVE_RULES[s.id]?.active||canVashjCastAbility(e,s.id)||canGarroshCastAbility(e,s.id)||canIllidanCastAbility(e,s.id)||canIceHeroCastAbility(e,s.id)||canTrollCastAbility(e,s.id)||canKelthuzadCastAbility(e,s.id)).map(s=>{
-    const alchemy=!!ALCHEMIST_ACTIVE_RULES[s.id],family=NAGA_ACTIVE_RULES[s.id]?.active?NAGA_ACTIVE_RULES[s.id]:VASHJ_RULES[s.id]??GARROSH_ACTIVE_RULES[s.id]??ILLIDAN_ACTIVE_RULES[s.id]??ICE_HERO_RULES[s.id]??TROLL_ACTIVE_RULES[s.id]??KELTHUZAD_ACTIVE_RULES[s.id]??(s.id==='A0ZO'?KELTHUZAD_RULES.A0ZO:null),shared=!!family,st=e.skillStates?.[s.id]??{},remaining=Math.max(0,(st[alchemy?'manualReadyAt':'readyAt']??0)-game.state.time),autoRemaining=shared?Math.max(0,(st.readyAt??0)-game.state.time):Math.max(0,(st[alchemy?'readyAt':'yseraAutoReadyAt']??0)-game.state.time);
+  return (e.skillSpecs??[]).filter(s=>ALCHEMIST_ACTIVE_RULES[s.id]||canYseraCastAbility(e,s.id)||NAGA_ACTIVE_RULES[s.id]?.active||canVashjCastAbility(e,s.id)||canLichKingCastAbility(e,s.id)||canGarroshCastAbility(e,s.id)||canIllidanCastAbility(e,s.id)||canIceHeroCastAbility(e,s.id)||canTrollCastAbility(e,s.id)||canKelthuzadCastAbility(e,s.id)).map(s=>{
+    const alchemy=!!ALCHEMIST_ACTIVE_RULES[s.id],family=NAGA_ACTIVE_RULES[s.id]?.active?NAGA_ACTIVE_RULES[s.id]:VASHJ_RULES[s.id]??LICH_KING_RULES[s.id]??GARROSH_ACTIVE_RULES[s.id]??ILLIDAN_ACTIVE_RULES[s.id]??ICE_HERO_RULES[s.id]??TROLL_ACTIVE_RULES[s.id]??KELTHUZAD_ACTIVE_RULES[s.id]??(s.id==='A0ZO'?KELTHUZAD_RULES.A0ZO:null),shared=!!family,st=e.skillStates?.[s.id]??{},remaining=Math.max(0,(st[alchemy?'manualReadyAt':'readyAt']??0)-game.state.time),autoRemaining=shared?Math.max(0,(st.readyAt??0)-game.state.time):Math.max(0,(st[alchemy?'readyAt':'yseraAutoReadyAt']??0)-game.state.time);
     const reason=e.hp<=.405?'单位已阵亡':e.status?.yseraHidden||e.status?.yseraPaused||e.status?.sourcePaused||e.status?.illidanPaused||e.status?.stunUntil>game.state.time||e.status?.cycloneUntil>game.state.time?'单位当前无法施法':remaining>1e-8?'技能冷却中':e.mana<s.manaCost?'魔法不足':'';
     return {id:s.id,name:s.name,status:s.status,manaCost:s.manaCost,cooldown:s.cooldown,remaining,autoRemaining,cooldownMode:shared?'shared_native':'independent',targetKind:family?family.targetKind:s.id==='A2YA'?'point':s.id==='A2YD'?'enemy':'none',range:s.range,radius:s.radius,canStart:!reason,reason};
   });
@@ -692,6 +694,7 @@ export function castManualSourceSkill(game,e,id,params={}){
   if(s.targetKind==='enemy'&&(!params.target||params.target.hp<=0||params.target.side===e.side||params.target.battleTeam!==e.battleTeam||scriptInvulnerable(params.target)))return {ok:false,message:'请选择可攻击的敌人'};
   if(s.targetKind==='unit'&&(!params.target||params.target.hp<=0||params.target.battleTeam!==e.battleTeam))return {ok:false,message:'请选择有效单位目标'};
   if(params.point&&s.targetKind==='point'||params.target&&s.targetKind==='enemy'){const p=params.point??pos(params.target),v=pos(e);if(dist(v,p)>1e-8)e.facing=Math.atan2(p.y-v.y,p.x-v.x)*180/Math.PI;}
+  if(LICH_KING_RULES[id]?.active)return castLichKingAbility(game,e,id,{mode:'manual',...params},heroScriptApi);
   if(VASHJ_RULES[id]?.active)return castVashjAbility(game,e,id,{mode:'manual',...params},heroScriptApi);
   if(ICE_HERO_RULES[id])return castIceHeroAbility(game,e,id,{mode:'manual',...params},heroScriptApi);
   if(TROLL_ACTIVE_RULES[id])return castTrollAbility(game,e,id,{mode:'manual',...params},heroScriptApi);
@@ -727,6 +730,7 @@ export function tickSourceScriptJobs(game,dt=0){
   tickSourceAuraRules(game,{matchesTargets});
   const now=game.state.time,remaining=[];
   for(const job of game.state.sourceSkillJobs??[]){
+    if(isLichKingJobType(job.type)){if(tickLichKingJob(game,job,heroScriptApi))remaining.push(job);continue;}
     if(isVashjJobType(job.type)){if(tickVashjJob(game,job,heroScriptApi))remaining.push(job);continue;}
     if(isSourceClassJobType(job.type)){tickSourceClassJob(game,job,heroScriptApi);if(!job.done)remaining.push(job);continue;}
     if(isIceHeroJobType(job.type)){if(tickIceHeroJob(game,job,heroScriptApi))remaining.push(job);continue;}

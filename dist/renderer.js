@@ -149,10 +149,11 @@ export class Battlefield{
       for(const p of state.players)if(p.heroId){const pos=this.world(p.id,3.5,9.5),pt=this.project(pos.x,pos.y);c.save();c.translate(pt.x,pt.y);drawSprite(c,definitions[p.heroId],s*.44,now);c.restore();}
     }else{
       for(const job of state.sourceSkillJobs??[]){
-        if(job.done||!['vashj_flight','vashj_lightning','vashj_spore'].includes(job.type))continue;
+        if(job.done||!['vashj_flight','vashj_lightning','vashj_spore','lich_king_dragon'].includes(job.type))continue;
         const p=this.project(job.x,job.y),scale=(job.source.distanceScale??1/3)/100;
         c.save();
-        if(job.type==='vashj_flight'){c.strokeStyle='#a8e8ff';c.lineWidth=2;c.beginPath();c.moveTo(p.x-Math.cos(job.angle)*s*.3,p.y-Math.sin(job.angle)*s*.3*.78);c.lineTo(p.x,p.y);c.stroke();}
+        if(job.type==='lich_king_dragon'){c.translate(p.x,p.y);drawSprite(c,{name:'辛达苟萨',color:'#a9d8ef',role:'ranged'},s*.6,now);}
+        else if(job.type==='vashj_flight'){c.strokeStyle='#a8e8ff';c.lineWidth=2;c.beginPath();c.moveTo(p.x-Math.cos(job.angle)*s*.3,p.y-Math.sin(job.angle)*s*.3*.78);c.lineTo(p.x,p.y);c.stroke();}
         else {const radius=(job.type==='vashj_spore'?200:300)*scale*s;c.fillStyle=job.type==='vashj_spore'?'#b1cd5630':'#86d8f52b';c.strokeStyle=job.type==='vashj_spore'?'#c8da7899':'#9de6ff99';c.lineWidth=1;c.beginPath();c.ellipse(p.x,p.y,radius,radius*.78,0,0,Math.PI*2);c.fill();c.stroke();}
         c.restore();
       }

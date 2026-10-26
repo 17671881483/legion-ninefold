@@ -149,10 +149,13 @@ export class Battlefield{
       for(const p of state.players)if(p.heroId){const pos=this.world(p.id,3.5,9.5),pt=this.project(pos.x,pos.y);c.save();c.translate(pt.x,pt.y);drawSprite(c,definitions[p.heroId],s*.44,now);c.restore();}
     }else{
       for(const job of state.sourceSkillJobs??[]){
-        if(job.done||!['vashj_flight','vashj_lightning','vashj_spore','lich_king_dragon','dark_arthas_dragon','dark_arthas_coil','dark_arthas_wind'].includes(job.type))continue;
+        if(job.done||!['vashj_flight','vashj_lightning','vashj_spore','lich_king_dragon','dark_arthas_dragon','dark_arthas_coil','dark_arthas_wind','bright_arthas_light','bright_arthas_judgment','bright_arthas_hammer'].includes(job.type))continue;
         const spot=job.type==='dark_arthas_wind'?(job.lastImpact??job):job,p=this.project(spot.x,spot.y),scale=(job.source.distanceScale??1/3)/100;
         c.save();
         if(job.type==='lich_king_dragon'||job.type==='dark_arthas_dragon'){c.translate(p.x,p.y);drawSprite(c,{name:'辛达苟萨',color:'#a9d8ef',role:'ranged'},s*.6,now);}
+        else if(job.type==='bright_arthas_light'){c.fillStyle='#ffe9a0';c.shadowColor='#ffe9a0';c.shadowBlur=9;c.beginPath();c.arc(p.x,p.y,Math.max(3,s*.15),0,Math.PI*2);c.fill();}
+        else if(job.type==='bright_arthas_hammer'){c.translate(p.x,p.y);c.rotate(job.angle);c.fillStyle='#efda94';c.fillRect(-s*.12,-s*.17,s*.24,s*.34);c.fillRect(-s*.03,0,s*.06,s*.3);}
+        else if(job.type==='bright_arthas_judgment'){c.strokeStyle='#ffe89c';c.lineWidth=1.5;c.beginPath();c.ellipse(p.x,p.y,s*.35,s*.18,0,0,Math.PI*2);c.stroke();}
         else if(job.type==='dark_arthas_coil'){c.fillStyle='#8ee6a8';c.beginPath();c.arc(p.x,p.y,Math.max(3,s*.1),0,Math.PI*2);c.fill();}
         else if(job.type==='vashj_flight'){c.strokeStyle='#a8e8ff';c.lineWidth=2;c.beginPath();c.moveTo(p.x-Math.cos(job.angle)*s*.3,p.y-Math.sin(job.angle)*s*.3*.78);c.lineTo(p.x,p.y);c.stroke();}
         else {const radius=(job.type==='vashj_spore'?200:300)*scale*s;c.fillStyle=job.type==='vashj_spore'?'#b1cd5630':'#86d8f52b';c.strokeStyle=job.type==='vashj_spore'?'#c8da7899':'#9de6ff99';c.lineWidth=1;c.beginPath();c.ellipse(p.x,p.y,radius,radius*.78,0,0,Math.PI*2);c.fill();c.stroke();}

@@ -12,15 +12,15 @@
   "counts": {
     "trainingHeroes": 5,
     "staticSkills": 24,
-    "runtimeImplemented": 7,
-    "runtimeUnresolved": 7,
-    "runtimePartial": 10
+    "runtimeImplemented": 8,
+    "runtimeUnresolved": 2,
+    "runtimePartial": 14
   },
   "recommendation": {
-    "buildingRawcode": "n08Z",
-    "combatRawcode": "h0XA",
+    "buildingRawcode": "n05H",
+    "combatRawcode": "h0OV",
     "priority": 1,
-    "reason": "继续核对圣光圣骑五项技能及实际A1VY出生注册；n08Y为霜之哀伤而非圣光形态，六项主体已接入。"
+    "reason": "五个训练英雄静态技能尚余艾萨拉女王两项待核定；继续补魔法护盾开关、附加回复、近战反制及关闭返魔冷却，并保留各已接入英雄的原生边界。"
   },
   "describeSkillsCorrections": {
     "reason": "Seven generic implemented static entries include incomplete carrier-associated scripts. Current describeSkills appends V14_TRIGGER_DESCRIPTIONS with hardcoded implemented, so a text-only partial label will still overcount.",
@@ -1735,15 +1735,15 @@
         "role": "Mk combat to Ml building"
       },
       "priority": 4,
-      "summary": "4个主动与派生能力可读完整；圣光之怒实际登记/分支存在确定源bug，不能按tooltip补20杀buff。",
+      "summary": "四项主动主体及壁垒派生减伤已接入；圣光之怒保留建筑A1VY注册与首次全局死亡销毁的源行为。原生命令、碰撞与增益移除仍明确部分实现。",
       "mechanisms": [
         {
           "id": "bright-arthas-light",
           "skillIds": [
             "A1VX"
           ],
-          "status": "source-script-missing",
-          "behavior": "3个环绕dummy分别给caster+10护甲；每.04秒各旋转7度、距caster200，当前位置300范围存活非无敌友军+40HP，6秒杀dummy；各自death清理减10甲。",
+          "status": "script-implemented-native-boundary-partial",
+          "behavior": "创建3个环绕光球，每个给施法者+10护甲。各自每0.04秒旋转7°、距施法者200码，给当前位置300范围存活非Avul友军恢复40生命。第150次（6秒）治疗后杀光球，死亡清理各减10甲；施法者先死则只清理监听，不杀光球。",
           "evidence": [
             {
               "file": "war3map.j",
@@ -1759,7 +1759,14 @@
               "function": "Trig_allabilityActions",
               "role": "spell dispatch"
             }
-          ]
+          ],
+          "initialMechanismStatus": "source-script-missing",
+          "initialBehavior": "3个环绕dummy分别给caster+10护甲；每.04秒各旋转7度、距caster200，当前位置300范围存活非无敌友军+40HP，6秒杀dummy；各自death清理减10甲。",
+          "runtimeEvidence": {
+            "revision": "v14-content-20261026-v20-1",
+            "implementation": "dist/bright-arthas-rules.js",
+            "tests": "tests/v14-bright-arthas.test.mjs"
+          }
         },
         {
           "id": "bright-arthas-shield",
@@ -1767,8 +1774,8 @@
             "A1VY",
             "A1W2"
           ],
-          "status": "source-script-missing",
-          "behavior": "先给自己A1W2三秒且UnitRemoveBuffs(true,false)，再SelectRangeAlly500取最多2个FirstOfGroup对象。source没有先排除自己，可能重复命中自己刷新而未覆盖两个额外友军；A1W2在主事件直接把P8设为*.8。",
+          "status": "script-implemented-native-boundary-partial",
+          "behavior": "先给自身A1W2三秒，再对500范围友军组的前2个单位施加；组内未排除自身，可能重复命中自身。A1W2令主伤害事件变为80%，即减伤20%。源调用清除正面增益，并不清除负面效果；同名刷新，死亡移除。 主伤害监听在自动施法后检查A1W2，把当前P8的80%写入事件伤害；排除空来源、自伤、盟友、A2Y7来源及主监听重入。同名3秒刷新、死亡移除。",
           "evidence": [
             {
               "file": "war3map.j",
@@ -1791,7 +1798,14 @@
               "function": "UnitAddAbilityByTimerTimer",
               "role": "refreshable ability lifetime"
             }
-          ]
+          ],
+          "initialMechanismStatus": "source-script-missing",
+          "initialBehavior": "先给自己A1W2三秒且UnitRemoveBuffs(true,false)，再SelectRangeAlly500取最多2个FirstOfGroup对象。source没有先排除自己，可能重复命中自己刷新而未覆盖两个额外友军；A1W2在主事件直接把P8设为*.8。",
+          "runtimeEvidence": {
+            "revision": "v14-content-20261026-v20-1",
+            "implementation": "dist/bright-arthas-rules.js",
+            "tests": "tests/v14-bright-arthas.test.mjs"
+          }
         },
         {
           "id": "bright-arthas-fury",
@@ -1800,8 +1814,8 @@
             "A10C",
             "A1W3"
           ],
-          "status": "source-registration-bug-preserve-not-tooltip",
-          "behavior": "实际按出生时拥有A1VY注册ArthasHolyLight，不检查A1VZ。listener先判断EVENT_PLAYER_UNIT_DEATH即销毁自身；kill-count逻辑置于elseif GetKillingUnit()==Bc，因此正常任意unit death先清理，不能直接宣称20杀增益运行。若有native可达该else分支，20计数后600范围授6秒A10C(level20)与A1W3；A10C物编仅1级DataA=.5，不应从tooltip推20%攻速或15甲。",
+          "status": "source-registration-bug-preserved",
+          "behavior": "原图按部署建筑拥有A1VY注册此监听，并不检查A1VZ。首次任意单位的PLAYER_UNIT_DEATH事件先销毁监听，20杀计数分支位于elseif，正常死亡不会累积至奖励。保留源行为，不添加文案的攻速、攻击或护甲增益。",
           "evidence": [
             {
               "file": "war3map.j",
@@ -1822,15 +1836,22 @@
             "A10C": "generic AIas +50% exists, native single-level clamping needs explicit host evidence",
             "A1W3": "generic Aakb +10% aura exists"
           },
-          "boundary": "Report the literal event-order source bug and retain it. Do not repair it to intended tooltip behavior in a faithful implementation."
+          "boundary": "Report the literal event-order source bug and retain it. Do not repair it to intended tooltip behavior in a faithful implementation.",
+          "initialMechanismStatus": "source-registration-bug-preserve-not-tooltip",
+          "initialBehavior": "实际按出生时拥有A1VY注册ArthasHolyLight，不检查A1VZ。listener先判断EVENT_PLAYER_UNIT_DEATH即销毁自身；kill-count逻辑置于elseif GetKillingUnit()==Bc，因此正常任意unit death先清理，不能直接宣称20杀增益运行。若有native可达该else分支，20计数后600范围授6秒A10C(level20)与A1W3；A10C物编仅1级DataA=.5，不应从tooltip推20%攻速或15甲。",
+          "runtimeEvidence": {
+            "revision": "v14-content-20261026-v20-1",
+            "implementation": "dist/bright-arthas-rules.js",
+            "tests": "tests/v14-bright-arthas.test.mjs"
+          }
         },
         {
           "id": "bright-arthas-judgment",
           "skillIds": [
             "A1W0"
           ],
-          "status": "source-script-missing",
-          "behavior": "施法点400范围敌人逐个设移速0；3秒后恢复原始默认移速并造成311通用伤害。timer未注册caster/target death取消，不可套用统一死即删。",
+          "status": "script-implemented-native-boundary-partial",
+          "behavior": "选中400射程敌人，取其施法时位置400范围存活非Avul敌人，分别将移动速度设为0；3秒后先恢复该单位原型默认移动速度，再造成311通用伤害。可以攻击和施法；多次审判独立计时，先到期者即恢复速度，死亡不取消。",
           "evidence": [
             {
               "file": "war3map.j",
@@ -1846,15 +1867,22 @@
               "function": "Trig_allabilityActions",
               "role": "spell dispatch"
             }
-          ]
+          ],
+          "initialMechanismStatus": "source-script-missing",
+          "initialBehavior": "施法点400范围敌人逐个设移速0；3秒后恢复原始默认移速并造成311通用伤害。timer未注册caster/target death取消，不可套用统一死即删。",
+          "runtimeEvidence": {
+            "revision": "v14-content-20261026-v20-1",
+            "implementation": "dist/bright-arthas-rules.js",
+            "tests": "tests/v14-bright-arthas.test.mjs"
+          }
         },
         {
           "id": "bright-arthas-hammer",
           "skillIds": [
             "A1W1"
           ],
-          "status": "source-script-missing",
-          "behavior": "面向目标方向飞行dummy600距离/.2秒，结束点300范围266通用伤害及VertigoTarget等级3；不跟踪目标，不是单体风暴锤。",
+          "status": "script-implemented-native-boundary-partial",
+          "behavior": "朝目标初始方向配置600码/0.2秒投锤，0秒起每0.04秒前进120；末步前480码、0.16秒处结束。终点300范围造成266通用伤害，再调用A0I7第3级眩晕（普通3秒、原生英雄1.5秒）。施法者死亡不取消，虚体死亡会立即触发终点伤害。",
           "evidence": [
             {
               "file": "war3map.j",
@@ -1870,7 +1898,14 @@
               "function": "Trig_allabilityActions",
               "role": "spell dispatch"
             }
-          ]
+          ],
+          "initialMechanismStatus": "source-script-missing",
+          "initialBehavior": "面向目标方向飞行dummy600距离/.2秒，结束点300范围266通用伤害及VertigoTarget等级3；不跟踪目标，不是单体风暴锤。",
+          "runtimeEvidence": {
+            "revision": "v14-content-20261026-v20-1",
+            "implementation": "dist/bright-arthas-rules.js",
+            "tests": "tests/v14-bright-arthas.test.mjs"
+          }
         }
       ],
       "staticSkills": [
@@ -1878,9 +1913,9 @@
           "id": "A1VX",
           "name": "王者之光",
           "baseCode": "ANcl",
-          "runtimeStatus": "unresolved",
-          "runtimeKind": "pending",
-          "runtimeEffectText": "v14.1A5通道或脚本指令：待核定对应运行脚本",
+          "runtimeStatus": "partial",
+          "runtimeKind": "bright_arthas_source",
+          "runtimeEffectText": "创建3个环绕光球，每个给施法者+10护甲。各自每0.04秒旋转7°、距施法者200码，给当前位置300范围存活非Avul友军恢复40生命。第150次（6秒）治疗后杀光球，死亡清理各减10甲；施法者先死则只清理监听，不杀光球。【待核定：原生命令仲裁、前摇、e008虚体碰撞及同帧事件次序尚待原图验证；Web同步派发。】",
           "abilitySource": {
             "table": "all_abilities.csv",
             "row": 2703,
@@ -1927,9 +1962,9 @@
           "id": "A1VY",
           "name": "神圣壁垒",
           "baseCode": "ANcl",
-          "runtimeStatus": "unresolved",
-          "runtimeKind": "pending",
-          "runtimeEffectText": "v14.1A5通道或脚本指令：待核定对应运行脚本",
+          "runtimeStatus": "partial",
+          "runtimeKind": "bright_arthas_source",
+          "runtimeEffectText": "先给自身A1W2三秒，再对500范围友军组的前2个单位施加；组内未排除自身，可能重复命中自身。A1W2令主伤害事件变为80%，即减伤20%。源调用清除正面增益，并不清除负面效果；同名刷新，死亡移除。【待核定：原生命令仲裁、前摇、e008虚体碰撞及同帧事件次序尚待原图验证；Web同步派发。FirstOfGroup顺序、原生增益可移除性与光环重加待核定；仅清除已识别原生正面技能增益，未知项保留并记录。】",
           "abilitySource": {
             "table": "all_abilities.csv",
             "row": 2704,
@@ -1981,9 +2016,9 @@
           "id": "A1VZ",
           "name": "圣光之怒",
           "baseCode": "Asth",
-          "runtimeStatus": "unresolved",
-          "runtimeKind": "pending",
-          "runtimeEffectText": "v14.1A5脚本标记：尚未逐项核定对应JASS，不沿用5.0dJF同ID效果",
+          "runtimeStatus": "implemented",
+          "runtimeKind": "bright_arthas_source",
+          "runtimeEffectText": "原图按部署建筑拥有A1VY注册此监听，并不检查A1VZ。首次任意单位的PLAYER_UNIT_DEATH事件先销毁监听，20杀计数分支位于elseif，正常死亡不会累积至奖励。保留源行为，不添加文案的攻速、攻击或护甲增益。",
           "abilitySource": {
             "table": "all_abilities.csv",
             "row": 2705,
@@ -2006,9 +2041,9 @@
           "id": "A1W0",
           "name": "圣光审判",
           "baseCode": "ANcl",
-          "runtimeStatus": "unresolved",
-          "runtimeKind": "pending",
-          "runtimeEffectText": "v14.1A5通道或脚本指令：待核定对应运行脚本",
+          "runtimeStatus": "partial",
+          "runtimeKind": "bright_arthas_source",
+          "runtimeEffectText": "选中400射程敌人，取其施法时位置400范围存活非Avul敌人，分别将移动速度设为0；3秒后先恢复该单位原型默认移动速度，再造成311通用伤害。可以攻击和施法；多次审判独立计时，先到期者即恢复速度，死亡不取消。【待核定：原生命令仲裁、前摇、e008虚体碰撞及同帧事件次序尚待原图验证；Web同步派发。原生移动速度钳制与ANcl目标许可待核定，Web保留直接速度赋值，不替换成眩晕。】",
           "abilitySource": {
             "table": "all_abilities.csv",
             "row": 2706,
@@ -2057,9 +2092,9 @@
           "id": "A1W1",
           "name": "圣光之锤",
           "baseCode": "ANcl",
-          "runtimeStatus": "unresolved",
-          "runtimeKind": "pending",
-          "runtimeEffectText": "v14.1A5通道或脚本指令：待核定对应运行脚本",
+          "runtimeStatus": "partial",
+          "runtimeKind": "bright_arthas_source",
+          "runtimeEffectText": "朝目标初始方向配置600码/0.2秒投锤，0秒起每0.04秒前进120；末步前480码、0.16秒处结束。终点300范围造成266通用伤害，再调用A0I7第3级眩晕（普通3秒、原生英雄1.5秒）。施法者死亡不取消，虚体死亡会立即触发终点伤害。【待核定：原生命令仲裁、前摇、e008虚体碰撞及同帧事件次序尚待原图验证；Web同步派发。】",
           "abilitySource": {
             "table": "all_abilities.csv",
             "row": 2707,
@@ -2270,9 +2305,11 @@
         "code": "Asth",
         "levels": "1"
       },
-      "currentGenericStatus": "unresolved",
-      "currentGenericKind": "pending",
-      "coverageCaution": "Generic object support does not imply the carrier-specific grant or source callback has been integrated."
+      "currentGenericStatus": "implemented",
+      "currentGenericKind": "bright_arthas_source",
+      "coverageCaution": "The three-second source grant/removal and final main-event damage multiplier are integrated; native buff dispelling remains partial under A1VY.",
+      "initialGenericStatus": "unresolved",
+      "initialGenericKind": "pending"
     },
     "A1W3": {
       "name": "圣骑",
@@ -2546,6 +2583,24 @@
         "A1VW"
       ],
       "nativeBoundary": "IssueOrder arbitration/cast point, virtual e008 pathing/death delivery, FirstOfGroup ordering and damage-listener registration during an event remain partial. Web keeps shared retained caster handles and uses pre-event listener snapshots."
+    },
+    {
+      "revision": "v14-content-20261026-v20-1",
+      "buildingRawcode": "n08Z",
+      "staticImplemented": [
+        "A1VZ"
+      ],
+      "staticPartial": [
+        "A1VX",
+        "A1VY",
+        "A1W0",
+        "A1W1"
+      ],
+      "dynamicAbilities": [
+        "A1W2"
+      ],
+      "nativeFieldReference": "https://wc3jass.com/jassdoc.php?file=common.j&line=3041",
+      "nativeBoundary": "IssueOrder arbitration/cast point, e008 collision/death dispatch, FirstOfGroup ordering, positive native buff removability/aura reapplication and native speed limits remain partial. Restored live units rebind retained handles."
     }
   ]
 }

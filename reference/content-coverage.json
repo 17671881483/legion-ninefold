@@ -1,6 +1,6 @@
 {
   "sourceVersion": "v14.1A5",
-  "skillImplementationRevision": "v14-content-20261026-v19-1",
+  "skillImplementationRevision": "v14-content-20261026-v20-1",
   "units": 534,
   "mercenaryRecords": 60,
   "mainWaves": 35,
@@ -50,6 +50,12 @@
         "A19C",
         "A19D",
         "A19E"
+      ]
+    },
+    {
+      "sourceRawcode": "h0XA",
+      "abilityIds": [
+        "A1W2"
       ]
     },
     {
@@ -142,10 +148,10 @@
   ],
   "playerSkills": {
     "counts": {
-      "implemented": 411,
-      "partial": 53,
+      "implemented": 413,
+      "partial": 57,
       "marker": 34,
-      "unresolved": 129
+      "unresolved": 124
     },
     "abilities": [
       {
@@ -5568,8 +5574,8 @@
       {
         "rawcode": "A1VX",
         "name": "王者之光",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "bright_arthas_source",
         "unitRawcodes": [
           "n08Z"
         ]
@@ -5577,8 +5583,8 @@
       {
         "rawcode": "A1VY",
         "name": "神圣壁垒",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "bright_arthas_source",
         "unitRawcodes": [
           "n08Z"
         ]
@@ -5586,8 +5592,8 @@
       {
         "rawcode": "A1VZ",
         "name": "圣光之怒",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "implemented",
+        "kind": "bright_arthas_source",
         "unitRawcodes": [
           "n08Z"
         ]
@@ -5595,8 +5601,8 @@
       {
         "rawcode": "A1W0",
         "name": "圣光审判",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "bright_arthas_source",
         "unitRawcodes": [
           "n08Z"
         ]
@@ -5604,10 +5610,19 @@
       {
         "rawcode": "A1W1",
         "name": "圣光之锤",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "bright_arthas_source",
         "unitRawcodes": [
           "n08Z"
+        ]
+      },
+      {
+        "rawcode": "A1W2",
+        "name": "圣骑减伤",
+        "status": "implemented",
+        "kind": "bright_arthas_source",
+        "unitRawcodes": [
+          "h0XA"
         ]
       },
       {
@@ -6225,10 +6240,10 @@
   },
   "battleSkills": {
     "counts": {
-      "implemented": 462,
-      "partial": 53,
+      "implemented": 464,
+      "partial": 57,
       "marker": 47,
-      "unresolved": 150
+      "unresolved": 145
     },
     "abilities": [
       {
@@ -12477,8 +12492,8 @@
       {
         "rawcode": "A1VX",
         "name": "王者之光",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "bright_arthas_source",
         "unitRawcodes": [
           "n08Z"
         ]
@@ -12486,8 +12501,8 @@
       {
         "rawcode": "A1VY",
         "name": "神圣壁垒",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "bright_arthas_source",
         "unitRawcodes": [
           "n08Z"
         ]
@@ -12495,8 +12510,8 @@
       {
         "rawcode": "A1VZ",
         "name": "圣光之怒",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "implemented",
+        "kind": "bright_arthas_source",
         "unitRawcodes": [
           "n08Z"
         ]
@@ -12504,8 +12519,8 @@
       {
         "rawcode": "A1W0",
         "name": "圣光审判",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "bright_arthas_source",
         "unitRawcodes": [
           "n08Z"
         ]
@@ -12513,10 +12528,19 @@
       {
         "rawcode": "A1W1",
         "name": "圣光之锤",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "bright_arthas_source",
         "unitRawcodes": [
           "n08Z"
+        ]
+      },
+      {
+        "rawcode": "A1W2",
+        "name": "圣骑减伤",
+        "status": "implemented",
+        "kind": "bright_arthas_source",
+        "unitRawcodes": [
+          "h0XA"
         ]
       },
       {

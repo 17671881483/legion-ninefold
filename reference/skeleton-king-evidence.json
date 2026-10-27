@@ -1,0 +1,1041 @@
+{
+  "source": {
+    "file": "reference/v14-source/raw_extracted/war3map.j",
+    "sha256": "e66c55b3b25b185c991be5613e21fbf5b2d598f3cc40f2f8cd01c23bcb828250",
+    "decoding": "Latin-1; split only on LF; 1-based lines"
+  },
+  "sourceEvidence": [
+    {
+      "line": 700,
+      "text": "boolean K5=true"
+    },
+    {
+      "line": 1094,
+      "text": "boolean LI"
+    },
+    {
+      "line": 1126,
+      "text": "integer Pn=$65303038"
+    },
+    {
+      "line": 9009,
+      "text": "if IsUnitAlly(Om,GetOwningPlayer(Pf)) and IsUnitInRange(Om,Pf,750) and GetUnitState(Om,UNIT_STATE_LIFE)<=100. and not LoadBoolean(O,GetHandleId(Om),StringHash(\"SMYinwei\")) then"
+    },
+    {
+      "line": 9010,
+      "text": "if GetRandomReal(1,101)<=24 then"
+    },
+    {
+      "line": 9011,
+      "text": "call UnitAddAbility(Om,$41305350)"
+    },
+    {
+      "line": 9012,
+      "text": "endif"
+    },
+    {
+      "line": 9013,
+      "text": "call SaveBoolean(O,GetHandleId(Om),StringHash(\"SMYinwei\"),true)"
+    },
+    {
+      "line": 14480,
+      "text": "function yA takes real N9 returns nothing"
+    },
+    {
+      "line": 14481,
+      "text": "local real OC"
+    },
+    {
+      "line": 14482,
+      "text": "local real Kv=TimerGetElapsed(OB)"
+    },
+    {
+      "line": 14483,
+      "text": "if Kv<=0 then"
+    },
+    {
+      "line": 14484,
+      "text": "set OB=CreateTimer()"
+    },
+    {
+      "line": 14485,
+      "text": "call TimerStart(OB,$F4240,false,null)"
+    },
+    {
+      "line": 14486,
+      "text": "endif"
+    },
+    {
+      "line": 14487,
+      "text": "if N9>0 then"
+    },
+    {
+      "line": 14488,
+      "text": "loop"
+    },
+    {
+      "line": 14489,
+      "text": "set OC=N9-TimerGetElapsed(OB)+Kv"
+    },
+    {
+      "line": 14490,
+      "text": "exitwhen OC<=0"
+    },
+    {
+      "line": 14491,
+      "text": "if OC>bj_POLLED_WAIT_SKIP_THRESHOLD then"
+    },
+    {
+      "line": 14492,
+      "text": "call TriggerSleepAction(.1*OC)"
+    },
+    {
+      "line": 14493,
+      "text": "else"
+    },
+    {
+      "line": 14494,
+      "text": "call TriggerSleepAction(bj_POLLED_WAIT_INTERVAL)"
+    },
+    {
+      "line": 14495,
+      "text": "endif"
+    },
+    {
+      "line": 14496,
+      "text": "endloop"
+    },
+    {
+      "line": 14497,
+      "text": "endif"
+    },
+    {
+      "line": 14498,
+      "text": "endfunction"
+    },
+    {
+      "line": 15709,
+      "text": "function mbb takes nothing returns nothing"
+    },
+    {
+      "line": 15710,
+      "text": "if K5 then"
+    },
+    {
+      "line": 15711,
+      "text": "call TriggerExecute(K6)"
+    },
+    {
+      "line": 15712,
+      "text": "endif"
+    },
+    {
+      "line": 15768,
+      "text": "set LI=true"
+    },
+    {
+      "line": 15769,
+      "text": "set h=null"
+    },
+    {
+      "line": 15770,
+      "text": "endfunction"
+    },
+    {
+      "line": 15771,
+      "text": "function tb takes nothing returns nothing"
+    },
+    {
+      "line": 15772,
+      "text": "call ForForce(Jc,function sb)"
+    },
+    {
+      "line": 15895,
+      "text": "call ForceAddPlayer(Jc,GetEnumPlayer())"
+    },
+    {
+      "line": 18870,
+      "text": "if CountUnitsInGroup(JQ[1])==0 and CountUnitsInGroup(JQ[2])==0 and Nj and Nh and Nk==false then"
+    },
+    {
+      "line": 18871,
+      "text": "call TriggerExecute(Nl)"
+    },
+    {
+      "line": 18872,
+      "text": "endif"
+    },
+    {
+      "line": 18888,
+      "text": "if CountUnitsInGroup(Jx)==0 or CountUnitsInGroup(Jw)==0 then"
+    },
+    {
+      "line": 18889,
+      "text": "call TriggerExecute(Nn)"
+    },
+    {
+      "line": 18890,
+      "text": "set Nh=false"
+    },
+    {
+      "line": 18891,
+      "text": "call PauseTimer(JU)"
+    },
+    {
+      "line": 18892,
+      "text": "endif"
+    },
+    {
+      "line": 19328,
+      "text": "function oldcodefn_cd takes nothing returns nothing"
+    },
+    {
+      "line": 19329,
+      "text": "call DisableTrigger(GetTriggeringTrigger())"
+    },
+    {
+      "line": 19330,
+      "text": "set Nj=false"
+    },
+    {
+      "line": 19331,
+      "text": "set Oa=false"
+    },
+    {
+      "line": 19332,
+      "text": "set Ob=false"
+    },
+    {
+      "line": 19333,
+      "text": "set Nh=false"
+    },
+    {
+      "line": 19334,
+      "text": "set Nv=false"
+    },
+    {
+      "line": 19335,
+      "text": "call TriggerExecute(Oc)"
+    },
+    {
+      "line": 19336,
+      "text": "call yA(1.)"
+    },
+    {
+      "line": 19337,
+      "text": "call TriggerExecute(Od)"
+    },
+    {
+      "line": 19338,
+      "text": "call TriggerExecute(Oe)"
+    },
+    {
+      "line": 19373,
+      "text": "call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,7.,YDWETranslate(\"|cff33BB33æ¬æ³¢ææç»æ|r\"))"
+    },
+    {
+      "line": 19374,
+      "text": "call ExecuteFunc(\"FightFinish\")"
+    },
+    {
+      "line": 19375,
+      "text": "set LI=false"
+    },
+    {
+      "line": 19376,
+      "text": "call PlaySoundBJ(Ff)"
+    },
+    {
+      "line": 19377,
+      "text": "call yA(2.)"
+    },
+    {
+      "line": 19467,
+      "text": "if Dg==16 then"
+    },
+    {
+      "line": 19468,
+      "text": "call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,15.,YDWETranslate(\"::: å½çè·å¾äºå¥å±|cFF6AFF72æ¤ç²+2|rã\"))"
+    },
+    {
+      "line": 19469,
+      "text": "call UnitAddAbility(Bd,$416B6131)"
+    },
+    {
+      "line": 19470,
+      "text": "call UnitAddAbility(Bh,$416B6131)"
+    },
+    {
+      "line": 19471,
+      "text": "call yA(8.)"
+    },
+    {
+      "line": 19472,
+      "text": "call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,15.,YDWETranslate(\"|cff33AA33æç¤º:|r  ä»ç°å¨å¼å§æªç©ä¼è¶æ¥è¶é¾ï¼è¯·æ³¨æå¯¹æ¯åµåå¼ã\"))"
+    },
+    {
+      "line": 19473,
+      "text": "else"
+    },
+    {
+      "line": 19474,
+      "text": "if Dg==24 then"
+    },
+    {
+      "line": 19475,
+      "text": "call yA(8.)"
+    },
+    {
+      "line": 19476,
+      "text": "call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,15.,YDWETranslate(\"|cff33AA33æç¤º:|r  æªç©ä»è¿ä¸ååå¼å§æ°éåå°ï¼ä½å´ä¼åå¾æä¸ºå¼ºå¤§ã\"))"
+    },
+    {
+      "line": 19485,
+      "text": "if Dg==10 or Dg==20 then"
+    },
+    {
+      "line": 19486,
+      "text": "set Ni=true"
+    },
+    {
+      "line": 19487,
+      "text": "set bj_forLoopAIndex=1"
+    },
+    {
+      "line": 19488,
+      "text": "set bj_forLoopAIndexEnd=8"
+    },
+    {
+      "line": 19489,
+      "text": "loop"
+    },
+    {
+      "line": 19490,
+      "text": "exitwhen bj_forLoopAIndex>bj_forLoopAIndexEnd"
+    },
+    {
+      "line": 19491,
+      "text": "call SetPlayerAbilityAvailable(ConvertedPlayer(bj_forLoopAIndex),$41313138,false)"
+    },
+    {
+      "line": 19492,
+      "text": "set bj_forLoopAIndex=bj_forLoopAIndex+1"
+    },
+    {
+      "line": 19493,
+      "text": "endloop"
+    },
+    {
+      "line": 19494,
+      "text": "call TriggerExecute(Lf)"
+    },
+    {
+      "line": 19495,
+      "text": "call TriggerExecute(Lg)"
+    },
+    {
+      "line": 19496,
+      "text": "call TriggerExecute(Lh)"
+    },
+    {
+      "line": 19497,
+      "text": "call TriggerExecute(DU)"
+    },
+    {
+      "line": 19498,
+      "text": "call StartTimerBJ(JT,false,30.)"
+    },
+    {
+      "line": 19499,
+      "text": "call TimerDialogSetTitle(Ld,YDWETranslate(\"ç«æåºå¯¹æåè®¡æ¶:\"))"
+    },
+    {
+      "line": 19500,
+      "text": "call TimerDialogDisplay(Ld,true)"
+    },
+    {
+      "line": 19501,
+      "text": "call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,7.,YDWETranslate(\"::: ä½ æ |CFFFF0000\")+YDWETranslate(\"30|r ç§çæ¶é´åå¤ç«æåºå¯¹æã\"))"
+    },
+    {
+      "line": 19518,
+      "text": "call TimerDialogDisplay(Ld,true)"
+    },
+    {
+      "line": 19519,
+      "text": "call EnableTrigger(GetTriggeringTrigger())"
+    },
+    {
+      "line": 19520,
+      "text": "if Dg==4 or Dg==6 or Dg==15 or Dg==21 or Dg==24 then"
+    },
+    {
+      "line": 19521,
+      "text": "call TriggerExecute(Ox)"
+    },
+    {
+      "line": 19522,
+      "text": "call TriggerExecute(Oy)"
+    },
+    {
+      "line": 19523,
+      "text": "endif"
+    },
+    {
+      "line": 19524,
+      "text": "if ModuloInteger(Dg+1,5)==0 then"
+    },
+    {
+      "line": 19525,
+      "text": "call TriggerExecute(Oz)"
+    },
+    {
+      "line": 19526,
+      "text": "endif"
+    },
+    {
+      "line": 19527,
+      "text": "call TriggerExecute(O0)"
+    },
+    {
+      "line": 19528,
+      "text": "call StartTimerBJ(J4,false,6.)"
+    },
+    {
+      "line": 19529,
+      "text": "if Ni==false then"
+    },
+    {
+      "line": 19530,
+      "text": "call yA(2.)"
+    },
+    {
+      "line": 19531,
+      "text": "call TriggerExecute(O1)"
+    },
+    {
+      "line": 19532,
+      "text": "call yA(4.)"
+    },
+    {
+      "line": 19563,
+      "text": "function hd takes nothing returns nothing"
+    },
+    {
+      "line": 19564,
+      "text": "if Dg>=30 or Nz then"
+    },
+    {
+      "line": 19565,
+      "text": "if true then"
+    },
+    {
+      "line": 19566,
+      "text": "if Nz==false then"
+    },
+    {
+      "line": 19567,
+      "text": "call TriggerExecute(O6)"
+    },
+    {
+      "line": 19568,
+      "text": "else"
+    },
+    {
+      "line": 19569,
+      "text": "if O7 then"
+    },
+    {
+      "line": 19570,
+      "text": "call TriggerExecute(O8)"
+    },
+    {
+      "line": 19571,
+      "text": "endif"
+    },
+    {
+      "line": 19572,
+      "text": "endif"
+    },
+    {
+      "line": 19573,
+      "text": "else"
+    },
+    {
+      "line": 19574,
+      "text": "call TriggerExecute(O9)"
+    },
+    {
+      "line": 19575,
+      "text": "endif"
+    },
+    {
+      "line": 19576,
+      "text": "else"
+    },
+    {
+      "line": 19577,
+      "text": "call TriggerExecute(OZ)"
+    },
+    {
+      "line": 19578,
+      "text": "call ConditionalTriggerExecute(PB)"
+    },
+    {
+      "line": 19579,
+      "text": "endif"
+    },
+    {
+      "line": 20173,
+      "text": "set Kc=CreateUnit(Pc,Mk[Bi],GetLocationX(Pb),GetLocationY(Pb),bj_UNIT_FACING)"
+    },
+    {
+      "line": 20174,
+      "text": "call SetUnitUserData(Kc,1+GetPlayerId(GetOwningPlayer(Nr)))"
+    },
+    {
+      "line": 20175,
+      "text": "call ExecuteFunc(\"PassiveSkillNoArgJJC\")"
+    },
+    {
+      "line": 21355,
+      "text": "set i=CreateUnit(Pc,Bi,GetUnitX(i),GetUnitY(i),MP[GetPlayerId(BF)])"
+    },
+    {
+      "line": 21356,
+      "text": "set UT=i"
+    },
+    {
+      "line": 21357,
+      "text": "call SetUnitUserData(i,GetPlayerId(BF)+1)"
+    },
+    {
+      "line": 21358,
+      "text": "call ExecuteFunc(\"PassiveSkillNoArg\")"
+    },
+    {
+      "line": 21561,
+      "text": "function OC5F_Kg takes nothing returns nothing"
+    },
+    {
+      "line": 21562,
+      "text": "if GetEnumUnit()!=Bh and GetEnumUnit()!=Bd then"
+    },
+    {
+      "line": 21563,
+      "text": "if IsUnitType(GetEnumUnit(),UNIT_TYPE_GIANT) or IsUnitType(GetEnumUnit(),UNIT_TYPE_SUMMONED) then"
+    },
+    {
+      "line": 21564,
+      "text": "call RemoveUnit(GetEnumUnit())"
+    },
+    {
+      "line": 21565,
+      "text": "call FlushChildHashtable(O,GetHandleId(GetEnumUnit()))"
+    },
+    {
+      "line": 26926,
+      "text": "set K4=CreateTrigger()"
+    },
+    {
+      "line": 26927,
+      "text": "call TriggerRegisterTimerExpireEvent(K4,J4)"
+    },
+    {
+      "line": 26928,
+      "text": "call TriggerAddAction(K4,function mbb)"
+    },
+    {
+      "line": 26929,
+      "text": "set K7=CreateTrigger()"
+    },
+    {
+      "line": 26930,
+      "text": "call TriggerAddAction(K7,function qb)"
+    },
+    {
+      "line": 26931,
+      "text": "set K6=CreateTrigger()"
+    },
+    {
+      "line": 26932,
+      "text": "call TriggerAddAction(K6,function tb)"
+    },
+    {
+      "line": 27012,
+      "text": "set OZ=CreateTrigger()"
+    },
+    {
+      "line": 27013,
+      "text": "call TriggerAddCondition(OZ,Condition(function OC5F_TC))"
+    },
+    {
+      "line": 27014,
+      "text": "call TriggerAddAction(OZ,function oldcodefn_cd)"
+    },
+    {
+      "line": 27015,
+      "text": "set Oc=CreateTrigger()"
+    },
+    {
+      "line": 27016,
+      "text": "call TriggerAddAction(Oc,function dd)"
+    },
+    {
+      "line": 27017,
+      "text": "set Nl=CreateTrigger()"
+    },
+    {
+      "line": 27018,
+      "text": "call TriggerAddAction(Nl,function hd)"
+    },
+    {
+      "line": 41642,
+      "text": "function A02ATimer takes nothing returns nothing"
+    },
+    {
+      "line": 41643,
+      "text": "local timer b3=GetExpiredTimer()"
+    },
+    {
+      "line": 41644,
+      "text": "local unit i=LoadUnitHandle(O,GetHandleId(b3),StringHash(\"unit\"))"
+    },
+    {
+      "line": 41645,
+      "text": "call UnitAddAbility(i,$41304941)"
+    },
+    {
+      "line": 41646,
+      "text": "call FlushChildHashtable(O,GetHandleId(b3))"
+    },
+    {
+      "line": 41647,
+      "text": "call DestroyTimer(b3)"
+    },
+    {
+      "line": 41648,
+      "text": "set b3=null"
+    },
+    {
+      "line": 41649,
+      "text": "set i=null"
+    },
+    {
+      "line": 41665,
+      "text": "function A01ATimer takes nothing returns nothing"
+    },
+    {
+      "line": 41666,
+      "text": "local timer t=GetExpiredTimer()"
+    },
+    {
+      "line": 41667,
+      "text": "local timer b3=null"
+    },
+    {
+      "line": 41668,
+      "text": "local unit i=LoadUnitHandle(O,GetHandleId(t),StringHash(\"unit\"))"
+    },
+    {
+      "line": 41669,
+      "text": "local unit Ki=null"
+    },
+    {
+      "line": 41670,
+      "text": "local boolean Cd=true"
+    },
+    {
+      "line": 41671,
+      "text": "if LI==true then"
+    },
+    {
+      "line": 41672,
+      "text": "set b3=CreateTimer()"
+    },
+    {
+      "line": 41673,
+      "text": "set Ki=CreateUnit(GetOwningPlayer(i),Pn,GetUnitX(i),GetUnitY(i),0)"
+    },
+    {
+      "line": 41674,
+      "text": "call SaveUnitHandle(O,GetHandleId(b3),StringHash(\"unit\"),i)"
+    },
+    {
+      "line": 41675,
+      "text": "set bj_lastCreatedUnit=CreateUnit(GetOwningPlayer(i),GetUnitTypeId(i),GetUnitX(i),GetUnitY(i),GetUnitFacing(i))"
+    },
+    {
+      "line": 41676,
+      "text": "if LoadBoolean(O,GetHandleId(t),1) then"
+    },
+    {
+      "line": 41677,
+      "text": "call SaveBoolean(O,GetHandleId(bj_lastCreatedUnit),StringHash(\"SMYinwei\"),true)"
+    },
+    {
+      "line": 41678,
+      "text": "endif"
+    },
+    {
+      "line": 41679,
+      "text": "call SaveBoolean(O,GetHandleId(bj_lastCreatedUnit),StringHash(\"u1\"),Cd)"
+    },
+    {
+      "line": 41680,
+      "text": "call DestroyEffect(AddSpecialEffect(\"Abilities\\\\Spells\\\\Human\\\\ReviveHuman\\\\ReviveHuman.mdl\",GetUnitX(i),GetUnitY(i)))"
+    },
+    {
+      "line": 41681,
+      "text": "call DestroyEffect(AddSpecialEffect(\"Abilities\\\\Spells\\\\Human\\\\ReviveHuman\\\\ReviveHuman.mdl\",GetUnitX(i),GetUnitY(i)))"
+    },
+    {
+      "line": 41682,
+      "text": "call UnitRemoveAbility(i,$41304941)"
+    },
+    {
+      "line": 41683,
+      "text": "call TimerStart(b3,1,false,function A02ATimer)"
+    },
+    {
+      "line": 41684,
+      "text": "call SetUnitPosition(bj_lastCreatedUnit,GetUnitX(i),GetUnitY(i))"
+    },
+    {
+      "line": 41685,
+      "text": "call SetUnitUserData(bj_lastCreatedUnit,GetUnitUserData(i))"
+    },
+    {
+      "line": 41686,
+      "text": "call SetUnitUserData(Ki,GetUnitUserData(i))"
+    },
+    {
+      "line": 41687,
+      "text": "call IssuePointOrder(bj_lastCreatedUnit,\"attack\",GetPlayerStartLocationX(Player(GetUnitUserData(i)-1)),GetPlayerStartLocationY(Player(GetUnitUserData(i)-1)))"
+    },
+    {
+      "line": 41688,
+      "text": "call SetUnitColor(bj_lastCreatedUnit,GetPlayerColor(Player(GetUnitUserData(i)-1)))"
+    },
+    {
+      "line": 41689,
+      "text": "call GroupAddUnit(JH[GetUnitUserData(i)],bj_lastCreatedUnit)"
+    },
+    {
+      "line": 41690,
+      "text": "call GroupAddUnit(JW,bj_lastCreatedUnit)"
+    },
+    {
+      "line": 41691,
+      "text": "call RemoveUnit(i)"
+    },
+    {
+      "line": 41692,
+      "text": "call UnitAddAbility(Ki,$41304942)"
+    },
+    {
+      "line": 41693,
+      "text": "call IssueImmediateOrder(Ki,\"thunderclap\")"
+    },
+    {
+      "line": 41694,
+      "text": "call YDWETimerRemoveUnit(1,Ki)"
+    },
+    {
+      "line": 41695,
+      "text": "endif"
+    },
+    {
+      "line": 41696,
+      "text": "call FlushChildHashtable(O,GetHandleId(t))"
+    },
+    {
+      "line": 41697,
+      "text": "call DestroyTimer(t)"
+    },
+    {
+      "line": 41698,
+      "text": "set Ki=null"
+    },
+    {
+      "line": 41699,
+      "text": "set t=null"
+    },
+    {
+      "line": 41700,
+      "text": "set i=null"
+    },
+    {
+      "line": 41701,
+      "text": "set b3=null"
+    },
+    {
+      "line": 41702,
+      "text": "endfunction"
+    },
+    {
+      "line": 41908,
+      "text": "function gg_trg_UnitDeathCondition takes nothing returns boolean"
+    },
+    {
+      "line": 41909,
+      "text": "return not IsUnitInGroup(GetTriggerUnit(),Ju)"
+    },
+    {
+      "line": 41910,
+      "text": "endfunction"
+    },
+    {
+      "line": 41911,
+      "text": "function Trig_UnitDeathActions takes nothing returns nothing"
+    },
+    {
+      "line": 41912,
+      "text": "local unit i=GetTriggerUnit()"
+    },
+    {
+      "line": 41913,
+      "text": "local unit bv=GetKillingUnit()"
+    },
+    {
+      "line": 41914,
+      "text": "local trigger Eb=GetTriggeringTrigger()"
+    },
+    {
+      "line": 41915,
+      "text": "local real FF=GetUnitX(i)"
+    },
+    {
+      "line": 41916,
+      "text": "local real FG=GetUnitY(i)"
+    },
+    {
+      "line": 41917,
+      "text": "local real P8=0"
+    },
+    {
+      "line": 41918,
+      "text": "local effect DE=null"
+    },
+    {
+      "line": 41919,
+      "text": "local timer t=null"
+    },
+    {
+      "line": 41920,
+      "text": "local group Uz=CreateGroup()"
+    },
+    {
+      "line": 41921,
+      "text": "local unit D6=null"
+    },
+    {
+      "line": 41922,
+      "text": "local unit Ki=null"
+    },
+    {
+      "line": 41923,
+      "text": "local player h"
+    },
+    {
+      "line": 41924,
+      "text": "local boolexpr Cd"
+    },
+    {
+      "line": 41925,
+      "text": "local integer BF"
+    },
+    {
+      "line": 41926,
+      "text": "local integer BU"
+    },
+    {
+      "line": 41927,
+      "text": "local real a5"
+    },
+    {
+      "line": 41928,
+      "text": "call DisableTrigger(Eb)"
+    },
+    {
+      "line": 41929,
+      "text": "call SingedAlchemyGold(bv,i)"
+    },
+    {
+      "line": 41930,
+      "text": "if GetUnitTypeId(i)==$75303444 then"
+    },
+    {
+      "line": 42090,
+      "text": "if GetUnitAbilityLevel(bv,$41304857)>0 then"
+    },
+    {
+      "line": 42091,
+      "text": "set P8=4+GetUnitState(i,UNIT_STATE_MAX_LIFE)*.02"
+    },
+    {
+      "line": 42092,
+      "text": "call DestroyEffect(AddSpecialEffect(\"Abilities\\\\Spells\\\\Other\\\\Volcano\\\\VolcanoMissile.mdl\",FF,FG))"
+    },
+    {
+      "line": 42093,
+      "text": "call DestroyEffect(AddSpecialEffect(\"Abilities\\\\Spells\\\\Other\\\\Incinerate\\\\FireLordDeathExplode.mdl\",FF,FG))"
+    },
+    {
+      "line": 42094,
+      "text": "call DamageAoe(bv,FF,FG,200,P8,ATTACK_TYPE_MELEE,DAMAGE_TYPE_MAGIC)"
+    },
+    {
+      "line": 42095,
+      "text": "elseif GetUnitTypeId(i)==$68304A4A and bv!=null and GetUnitAbilityLevel(i,$41304941)>0 and IsUnitIllusionBJ(i)==false then"
+    },
+    {
+      "line": 42096,
+      "text": "if GetRandomInt(0,1)>0 and LoadBoolean(O,GetHandleId(i),StringHash(\"u1\"))==true then"
+    },
+    {
+      "line": 42097,
+      "text": "call FlushChildHashtable(O,GetHandleId(i))"
+    },
+    {
+      "line": 42098,
+      "text": "else"
+    },
+    {
+      "line": 42099,
+      "text": "set t=CreateTimer()"
+    },
+    {
+      "line": 42100,
+      "text": "call SaveUnitHandle(O,GetHandleId(t),StringHash(\"unit\"),i)"
+    },
+    {
+      "line": 42101,
+      "text": "if LoadBoolean(O,GetHandleId(i),StringHash(\"SMYinwei\")) then"
+    },
+    {
+      "line": 42102,
+      "text": "call SaveBoolean(O,GetHandleId(t),1,true)"
+    },
+    {
+      "line": 42103,
+      "text": "endif"
+    },
+    {
+      "line": 42104,
+      "text": "call TimerStart(t,1,false,function A01ATimer)"
+    },
+    {
+      "line": 42105,
+      "text": "endif"
+    },
+    {
+      "line": 42177,
+      "text": "call EnableTrigger(Eb)"
+    },
+    {
+      "line": 42178,
+      "text": "call DestroyGroup(Uz)"
+    },
+    {
+      "line": 42187,
+      "text": "function InitTrig_UnitDeath takes nothing returns nothing"
+    },
+    {
+      "line": 42188,
+      "text": "set bu=CreateTrigger()"
+    },
+    {
+      "line": 42189,
+      "text": "call TriggerRegisterAnyUnitEventBJ(bu,EVENT_PLAYER_UNIT_DEATH)"
+    },
+    {
+      "line": 42190,
+      "text": "call TriggerAddCondition(bu,Condition(function gg_trg_UnitDeathCondition))"
+    },
+    {
+      "line": 42191,
+      "text": "call TriggerAddAction(bu,function Trig_UnitDeathActions)"
+    },
+    {
+      "line": 42192,
+      "text": "endfunction"
+    }
+  ],
+  "abilities": {
+    "A0IA": {
+      "status": "partial",
+      "timerSeconds": 1,
+      "condition": "exact h0JJ; non-null killer; positive A0IA; non-illusion; after A0HW elseif",
+      "random": "GetRandomInt(0,1) is consumed on every eligible death, including the first; draw 1 fails only if old handle has u1",
+      "inheritance": [
+        "owner",
+        "current position",
+        "facing",
+        "userData",
+        "timer-saved SMYinwei"
+      ],
+      "newIdentity": true,
+      "summoned": false,
+      "oldHandle": "A02ATimer receives old i, then RemoveUnit(i); no new-body cooldown",
+      "source": {
+        "table": "reference/v14-source/data/all_abilities.csv",
+        "record": 965,
+        "rawcode": "A0IA"
+      }
+    },
+    "A0IB": {
+      "status": "partial",
+      "base": "AHtc",
+      "knownFields": {
+        "Area1": "200.0",
+        "DataA1": "30.0",
+        "DataC1": "0.2",
+        "DataD1": "0.2",
+        "Dur1": "2.0",
+        "HeroDur1": "2.0",
+        "BuffID1": "B04V",
+        "targs1": "ground,neutral,organic"
+      },
+      "missingNativeFields": [
+        "Cost1",
+        "Cool1",
+        "Cast1"
+      ],
+      "execution": "add to e008; IssueImmediateOrder thunderclap; RemoveUnit after 1 second; request is preserved, damage/slow not fabricated",
+      "source": {
+        "table": "reference/v14-source/data/all_abilities.csv",
+        "record": 966,
+        "rawcode": "A0IB"
+      }
+    }
+  },
+  "liLifecycle": {
+    "initial": "uninitialized boolean, represented false; no combat-start assignment",
+    "writes": [
+      15768,
+      19375
+    ],
+    "endDispatch": "dc -> Nl/hd -> OZ/oldcodefn_cd only when Dg<30 and not Nz; arena uses separate end chain",
+    "waits": "1 second before LI=false; then 2 seconds; waves 16 and 24 add 8 seconds; J4 then starts for 6 seconds. Later 2/4-second waits occur after J4 start. yA uses timer elapsed and polled waits, so Web uses exact nominal seconds, native resume jitter remains partial.",
+    "open": "J4 expiry -> K4/mbb -> only when K5 -> K6/tb -> ForForce Jc/sb -> LI=true; empty Jc does not open",
+    "continuous": "hd at Dg>=30 routes around OZ; continuous start and arena start/end do not directly write LI",
+    "webHost": "independent serialized skeletonKingGate ticked in build and combat on simulation clock; pauses freeze it; no phase equality check; transitions are recorded and queried at the scheduled callback time, including a close/statistics event later in the same frame",
+    "legacy": "missing lifecycle history remains false with legacyUnknown, not inferred from saved combat phase"
+  },
+  "remainingBoundaries": [
+    "CreateUnit native collision and complete creation-hook ordering are not proven by these callbacks. Fresh Web units use the current original template and existing creation hooks.",
+    "Old removed handle A02ATimer ability-add behavior is retained as a request rather than presumed new-body cooldown.",
+    "A0IB inherited native cost/cooldown/cast timing and neutral target permission are absent. Only raw fields and command request are represented.",
+    "Web normal/arena round disposal clears temporary entities/jobs immediately; source mg removes GIANT/SUMMONED bodies after initial 1-second wait. This task does not extend combat to wait for revival or emulate removed-handle callback behavior across disposal.",
+    "Web mapped player-start goal uses spawnWarpWorld(userData-1); original start-location coordinates and native attack command arbitration remain partial.",
+    "Source SMYinwei granting listener remains outside this task; the explicit pre-saved boolean alone is inherited.",
+    "Source yA polled wait resume and same-timestamp native callback ordering need native validation.",
+    "A corpse explicitly removed before A01ATimer leaves a removed-handle revival request; the Web does not fabricate a still-valid native rawcode/owner after RemoveUnit."
+  ],
+  "timing": {
+    "callbackClock": "Every due skeleton callback temporarily assigns state.time=job.at and restores it in finally. Entity createdAt, events and child timers all use timer-expiry time, including coarse catch-up. Existing outer event timestamp is restored.",
+    "liHistory": "initialLi plus timestamped transitions survive JSON; future frame-end LI transitions cannot affect earlier revival expiry. Exact simultaneous native ordering remains partial."
+  },
+  "dummyHost": "e008 is created through the entity factory and retained in its removal job outside the general target/survival array: it is Aloc and has no JH/JW or arena survival-group registration. It is removed by the 1-second callback without a death event."
+}

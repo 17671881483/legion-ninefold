@@ -19,6 +19,7 @@ const playerRuntimeAbilities=[
   {sourceRawcode:'h0XA',abilityIds:['A1W2']},
   {sourceRawcode:'h0OV',abilityIds:['A0W0','A0W2','A0W3']},
   {sourceRawcode:'h0JL',abilityIds:['A0IF']},
+  {sourceRawcode:'e008',abilityIds:['A0IB']},
   {sourceRawcode:'h0JO',abilityIds:['A0IJ','A0IL']},
   {sourceRawcode:'h0SR',abilityIds:['A0IF']},
   {sourceRawcode:'h0UQ',abilityIds:['A1CK','A1OE']},

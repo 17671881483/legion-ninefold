@@ -37,6 +37,8 @@ export function runMainUnitDeath(g,dead,killer,api){
       const amount=4+dead.maxHp*.02;
       for(const t of enumerate(g,killer,center,200*scale(dead),false))api.nativeDamage(g,t,amount,killer,{attackType:'normal',damageType:'magic'});
       g._event?.('splash',dead,'火噬',{skillId:'A0HW',sourceId:killer.id,radius:200*scale(dead)});
+    }else if(isV14(dead)&&api.skeletonKingDeath(g,dead,killer)){
+      // This is the same final elseif chain, including random-failure cases.
     }else if(isV14(dead))api.boneDragonDeath(g,dead);
     return true;
   }finally{g._sourceUnitDeathTriggerDepth--;}

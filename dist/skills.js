@@ -1,4 +1,5 @@
 import {DEATH_TRIGGER_RULES,runMainUnitDeath} from './death-trigger-rules.js';
+import {SKELETON_KING_RULES,skeletonKingMainDeath,isSkeletonKingJobType,tickSkeletonKingJob} from './skeleton-king-rules.js';
 import {ELEMENTAL_PROC_RULES,elementalDamagePrefix,iceExplosionAttackIssued} from './elemental-proc-rules.js';
 import {HUSKAR_DUEL_RULE,huskarDuelDamage,huskarDuelDeath,tickHuskarDuelJob} from './huskar-duel.js';
 import {RELOCATION_RULES,RELOCATION_BOUNDARY} from './relocation-rules.js';
@@ -206,6 +207,7 @@ function compile(id,version='5.0dJF') {
   if(version==='v14.1A5'&&HUSKAR_RULES[id]){const r=HUSKAR_RULES[id];Object.assign(s,{...(!r.preserveNativeKind?{kind:'huskar_source'}:{}),status:r.status,runtimeImplemented:true,effectText:r.description+(r.partial?`【待核定：${r.partial}】`:'')});}
   if(version==='v14.1A5'&&RELOCATION_RULES[id]){const r=RELOCATION_RULES[id];Object.assign(s,{kind:'building_relocation',status:r.status,effectText:r.description+(r.status==='partial'?`【待核定：${RELOCATION_BOUNDARY}】`:'')});}
   if(version==='v14.1A5'&&DEATH_TRIGGER_RULES[id]){const r=DEATH_TRIGGER_RULES[id];Object.assign(s,{kind:'source_death_trigger',status:r.status,runtimeImplemented:true,effectText:r.description+`【待核定：${r.partial}】`});}
+  if(version==='v14.1A5'&&SKELETON_KING_RULES[id]){const r=SKELETON_KING_RULES[id];Object.assign(s,{kind:id==='A0IA'?'skeleton_king_source':'skeleton_king_native_request',status:r.status,runtimeImplemented:true,effectText:r.description+`【待核定：${r.partial}】`});if(id==='A0IB'){s.manaCost=null;s.cooldown=null;}}
   if(version==='v14.1A5'&&ELEMENTAL_PROC_RULES[id]){const r=ELEMENTAL_PROC_RULES[id];Object.assign(s,{kind:'elemental_source_proc',status:r.status,runtimeImplemented:true,effectText:r.description+(r.partial?`【待核定：${r.partial}】`:'')});}
   if(version==='v14.1A5'&&id==='A0ID')Object.assign(s,{kind:'huskar_duel',status:'partial',effectText:HUSKAR_DUEL_RULE.description+`【待核定：${HUSKAR_DUEL_RULE.partial}】`});
   cache.set(key,s);return s;
@@ -271,7 +273,8 @@ export function attachSkills(e,def) {
   }
 }
 export function refreshSourceSkills(e,def) {
-  if(e.skillImplementationRevision===SKILL_IMPLEMENTATION_REVISION)return false;
+  const staleSkeleton=isV14(e)&&e.skillSpecs?.some(s=>SKELETON_KING_RULES[s.id]&&s.kind!==(s.id==='A0IA'?'skeleton_king_source':'skeleton_king_native_request'));
+  if(e.skillImplementationRevision===SKILL_IMPLEMENTATION_REVISION&&!staleSkeleton)return false;
   // Recompile the saved runtime ability set. Rebuilding from the template's
   // abilityIds would lose injected abilities and give mirror images skills.
   const abilityIds=Array.isArray(e.skillSpecs)?e.skillSpecs.map(s=>s.id).filter(Boolean):def.abilityIds;
@@ -736,6 +739,7 @@ const mainDeathApi={universalDamage,nativeDamage,
   classDeath:(g,dead,killer,enabled)=>sourceClassDeath(g,dead,killer,heroScriptApi,enabled),
   yseraAwakening:(g,dead)=>sourceYseraMainDeath(g,dead),
   boneDragonDeath:lichKingMainDeath,
+  skeletonKingDeath:skeletonKingMainDeath,
 };
 const heroScriptApi={applyNativeStun:(g,s,t,id)=>applyNativeControl(g,s,t,id,'stunUntil'),sourceDeath,killUnit:(g,e)=>g._killUnit(e),getOwnedUnitsOfRawcode:(g,e,code)=>[...g.state.entities.filter(u=>u.ownerId===e.ownerId&&raw(u)===code),...(g.state.players[e.ownerId]?.buildings??[]).filter(b=>(b.sourceRawcode??b.unitId?.replace(/^v14_/, ''))===code)],castNativeNova:(g,e,id,target)=>castNativeNova(g,e,id,target),applyCyclone:(g,s,t,id,seconds)=>applyNativeControl(g,s,t,id,'cycloneUntil',seconds),applyEnsnare:(g,s,t,id)=>applyNativeControl(g,s,t,id,'rootUntil'),universalDamage,nativeDamage,sourceDamage,applyCorrosion:applyYseraCorrosion,scriptInvulnerable,pauseUnitEx,compileAbility,addAbility,removeAbility,getBuilding,applyAttackLevel,setUnitPosition,moveUnit:setUnitPosition,
   applyNativeSlow:(game,source,target,id,descriptor)=>{target.status??={};target.status.sourceClassNativeSlowPending={abilityId:id,sourceId:source.id,at:game.state.time,descriptor:{...descriptor},reason:'原生Aslo默认目标许可未核定'};},
@@ -804,6 +808,7 @@ export function tickSourceScriptJobs(game,dt=0){
   tickSourceAuraRules(game,{matchesTargets});
   const now=game.state.time,remaining=[];
   for(const job of game.state.sourceSkillJobs??[]){
+    if(isSkeletonKingJobType(job.type)){if(tickSkeletonKingJob(game,job,heroScriptApi))remaining.push(job);continue;}
     if(['huskar_duel','huskar_duel_immune'].includes(job.type)){if(tickHuskarDuelJob(game,job))remaining.push(job);continue;}
     if(job.type==='huskar_unyielding'){if(tickHuskarJob(game,job,heroScriptApi))remaining.push(job);continue;}
     if(isAesaraJobType(job.type)){if(tickAesaraJob(game,job,heroScriptApi))remaining.push(job);continue;}

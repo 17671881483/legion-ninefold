@@ -1,3 +1,4 @@
+import {RELOCATION_RULES,RELOCATION_BOUNDARY} from './relocation-rules.js';
 import {HUSKAR_RULES,huskarMainDamage,huskarAttackDamage,tickHuskarJob} from './huskar-rules.js';
 import {AESARA_RULES,canAesaraCastAbility,aesaraManualSkill,castAesaraAbility,aesaraIncomingDamage,aesaraMainDamage,aesaraDamageCleanup,isAesaraJobType,tickAesaraJob,sourceAesaraDeath} from './aesara-rules.js';
 import {BRIGHT_ARTHAS_RULES,canBrightArthasCastAbility,castBrightArthasAbility,tryBrightArthasAutoCast,brightArthasEventDamage,initializeBrightArthasDeployment,tickBrightArthasJob,isBrightArthasJobType,sourceBrightArthasDeath} from './bright-arthas-rules.js';
@@ -20,7 +21,7 @@ import { closestWalkable, isWalkable } from './layout.js';
 import { GARROSH_ACTIVE_RULES, GARROSH_PASSIVE_RULES, canGarroshCastAbility, castGarroshAbility, tryGarroshAutoCast, garroshActiveAfterDamage, sourceGarroshActiveDeath, tickGarroshActiveJob } from './garrosh-active-rules.js';
 import { ILLIDAN_RULES, ILLIDAN_ACTIVE_RULES, canIllidanCastAbility, castIllidanAbility, registerIllidanSource, tickIllidanSource, illidanOnAttackHit, tryIllidanAutoCast, illidanAfterDamage, sourceIllidanDeath, tickIllidanJob, isIllidanJobType } from './illidan-rules.js';
 
-export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261027-v23-1';
+export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261027-v24-1';
 
 // Values come from resolved object fields. Empty fields remain empty: a missing
 // native default is reported, rather than replacing it with tooltip numbers.
@@ -200,6 +201,7 @@ function compile(id,version='5.0dJF') {
   if(extendedRule){const r=extendedRule;Object.assign(s,{...(!r.preserveNativeKind?{kind:ICE_HERO_RULES[id]?'ice_source':TROLL_RULES[id]?'troll_source':'kelthuzad_source'}:{}),status:r.status,manaCost:r.manaCost??s.manaCost,cooldown:r.cooldown??s.cooldown,effectText:r.description+(r.partial?`【待核定：${r.partial}】`:'')});if(r.range!==undefined)s.range=r.range/100;if(r.radius!==undefined)s.radius=r.radius/100;}
   if(version==='v14.1A5'&&SOURCE_CLASS_RULES[id]){const r=SOURCE_CLASS_RULES[id];Object.assign(s,{...(!r.preserveNativeKind?{kind:'source_class'}:{}),...(r.compiled??{}),status:r.status,effectText:r.description+(r.partial?`【待核定：${r.partial}】`:'')});}
   if(version==='v14.1A5'&&HUSKAR_RULES[id]){const r=HUSKAR_RULES[id];Object.assign(s,{...(!r.preserveNativeKind?{kind:'huskar_source'}:{}),status:r.status,runtimeImplemented:true,effectText:r.description+(r.partial?`【待核定：${r.partial}】`:'')});}
+  if(version==='v14.1A5'&&RELOCATION_RULES[id]){const r=RELOCATION_RULES[id];Object.assign(s,{kind:'building_relocation',status:r.status,effectText:r.description+(r.status==='partial'?`【待核定：${RELOCATION_BOUNDARY}】`:'')});}
   cache.set(key,s);return s;
 }
 function effectSummary(s){

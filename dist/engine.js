@@ -1,3 +1,4 @@
+import {relocationStatus,relocationRemaining,completeRelocation} from './relocation-rules.js';
 import {resetLichKingRound} from './lich-king-rules.js';
 import {sourceBarrageTargets,sourceBarrageHit} from './skills.js';
 import { UNITS, MERCENARIES, LEGACY_MERCENARIES, WAVES, RULES, HEROES, BUILDERS, PROPHET_POOLS, UNIT_TEMPLATES, TECHNOLOGIES, BOX_TRAINING_RULES } from './data.js';
@@ -72,7 +73,7 @@ export class Game {
         gold: initialGold, wood: rule('initialWood', 40), income: rule('initialIncome', 5),
         workers: rule('initialWorkers', 1), lumberLevel: 0, technologies: { R0GK: 1 }, entitlements: {}, nagaFarmerGoldRate: 0, economyTasks: { workerQueue: [], lumberTask: null }, buildings: [], builderId: id === 0 ? this.options.builderId : this._pick(BUILDERS.filter(b=>b.mode!=='morph'))?.id ?? RULES.defaultBuilderId ?? BUILDERS[0]?.id, roster: [],
         mercStocks: Object.fromEntries(MERCENARIES.map(m => [m.id, { stock: this._mercenaryMaxStock(m), nextReadyAt: null }])),
-        populationCap: rule('initialPopulation', 40), sourceFarmRawcode:'h024', popUsed: rule('initialWorkers', 1), heroId: null, heroAltarCount: 0, healUsed: false, rerolls: 0, stats: { kills: 0, leaks: 0, warps: 0, sent: 0, damage: 0, goldEarned: 0, wavesHeld: 0 }
+        populationCap: rule('initialPopulation', 40), sourceFarmRawcode:'h024', popUsed: rule('initialWorkers', 1), heroId: null, heroAltarCount: 0, relocationsRemaining:3, healUsed: false, rerolls: 0, stats: { kills: 0, leaks: 0, warps: 0, sent: 0, damage: 0, goldEarned: 0, wavesHeld: 0 }
       })),
       kings: [0, 1].map(team => ({ team, hp: rule('kingInitialHp', 12000), maxHp: rule('kingInitialHp', 12000),
         attack: rule('kingDamage', 135), regen: rule('kingRegen', 4), healCharges: rule('kingHealCharges', 4),
@@ -611,6 +612,11 @@ export class Game {
     const e=this.state.entities.find(e=>e.id===entityId);
     return manualSourceSkills(this,e).map(s=>{const reason=e?.ownerId!==playerId?'只能指挥自己的单位':!['combat','arena'].includes(this.state.phase)?'仅可在战斗中施法':this.state.paused?'请先继续战斗':s.reason;return {...s,canStart:!reason,reason};});
   }
+  relocationStatus(buildingId,playerId=0){
+    const p=this.state.players.find(p=>p.id===playerId),found=this._building(buildingId);
+    const b=found&&found.p===p?found.b:null;
+    return relocationStatus(this.state,p,b,b?units[b.unitId]:null);
+  }
   command(type, payload = {}) {
     if (type === 'restart') { const fresh = new Game({ ...this.options, ...payload }); Object.assign(this, fresh); return this._result(true, '已重新开始'); }
     if (typeof type === 'string' && type.startsWith('sandbox')) return this._sandboxCommand(type, payload);
@@ -703,6 +709,17 @@ export class Game {
         if(!building.construction)this._recordEggCompletion(p,resultUnit,building);
         this._event('build', { laneId: p.id, x: col + .5, y: row + 4.5 }, u.name);
         return this._result(true, `已建造 ${resultUnit.name}${u.morphProxy?'（变形）':''}`);
+      }
+      case 'relocate': {
+        const status=this.relocationStatus(payload.buildingId,p.id);
+        if(!status.canStart)return this._result(false,status.reason);
+        if(payload.targetPlayerId!==undefined&&payload.targetPlayerId!==p.id)return this._result(false,'请选择自己的建造区域');
+        const {b}=this._building(payload.buildingId),def=units[b.unitId],col=payload.col,row=payload.row;
+        if(!Number.isInteger(col)||!Number.isInteger(row)||col<0||col>=6||row<0||row>=8)return this._result(false,'请选择 6 × 8 建造区内的位置');
+        if(p.buildings.some(other=>other.col===col&&other.row===row))return this._result(false,'此位置已有单位，请选择空格');
+        const moved=completeRelocation(p,b,def,col,row);
+        this._event('build',{laneId:p.id,x:col+.5,y:row+4.5},`${def.name} · 移位`);
+        return this._result(true,`${def.name}移位完成${moved.exempt?' · 本次不扣次数':''} · 剩余 ${moved.remaining}/3 次`);
       }
       case 'upgrade': {
         if (this.state.phase !== 'build') return this._result(false, '战斗中无法升级兵种');
@@ -1691,6 +1708,7 @@ export class Game {
     for (const p of this.state.players) {
       p.builderId??=RULES.defaultBuilderId;
       p.sourceFarmRawcode??=null;
+      p.relocationsRemaining=relocationRemaining(p);
       p.nagaFarmerGoldRate=farmerGoldRate(p,units);
       p.heroAltarCount=this._heroAltarCount(p);
       for(const b of p.buildings.filter(b=>!b.construction))this._recordSourceCompletion(p,units[b.unitId]);

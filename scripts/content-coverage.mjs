@@ -5,6 +5,8 @@ import { compileSkills, SKILL_IMPLEMENTATION_REVISION } from '../dist/skills.js'
 
 // Coverage records describe implementation, not just object-table presence.
 const current=UNITS.filter(u=>!u.legacy);
+// Building commands are absent from many combat-form ability lists.
+const playerBuildingCommands=current.filter(u=>u.buildingAbilityIds?.includes('A118')).map(u=>({...u,abilityIds:u.buildingAbilityIds.filter(id=>['A118','A0IH'].includes(id))}));
 // This form is created by YseraAwakening at runtime, so it is not a separate
 // build-menu record. Its skills still belong to the player's combat coverage.
 const playerRuntimeForms=['h0YO','h0UD','h0UE','h2AE','n06V','n06W','h0CZ','h0CL','n07J'].map(code=>UNIT_TEMPLATES[code]);
@@ -49,14 +51,16 @@ const result={
   sourceOnly:{items:Object.keys(ITEMS).length,technologies:Object.keys(TECHNOLOGIES).length},
   playerRuntimeForms:playerRuntimeForms.map(u=>u.sourceRawcode??u.combatRawcode),
   playerRuntimeAbilities:playerRuntimeAbilities.map(({sourceRawcode,abilityIds})=>({sourceRawcode,abilityIds})),
-  playerSkills:collect([...current,...playerRuntimeForms,...playerRuntimeAbilities]),
-  battleSkills:collect([...current,...playerRuntimeForms,...playerRuntimeAbilities,...MERCENARIES,...WAVES,...specialCodes.map(c=>UNIT_TEMPLATES[c])]),
+  playerBuildingCommandCarriers:playerBuildingCommands.length,
+  playerSkills:collect([...current,...playerBuildingCommands,...playerRuntimeForms,...playerRuntimeAbilities]),
+  battleSkills:collect([...current,...playerBuildingCommands,...playerRuntimeForms,...playerRuntimeAbilities,...MERCENARIES,...WAVES,...specialCodes.map(c=>UNIT_TEMPLATES[c])]),
   remainingSourceGaps:[
     '未核定技能逐项保留在abilities中；已实现状态也不代表整套兵种联动已还原。',
     '包内未提供完整原生商店/菜单字段，部分商品与单位入口仍待补证。',
     'A1U4/A1U5/A1U6献祭奖励可核定，但没有可证实的携带单位或授予路径。',
     '原始地图模型、贴图、音频和v14地形通行格不在解析包内。',
-    '神灵武士不屈5秒、狂战1—10级与独立攻击回血已接入；A0IF缺失原生字段、狂战0级请求及决斗/位移完整逻辑仍待核定，见huskar-evidence.json。',
+    '神灵武士不屈5秒、狂战1—10级与独立攻击回血已接入；A0IF缺失原生字段、狂战0级请求及决斗仍待核定，见huskar-evidence.json。',
+    '建筑移位已接入411个A118携带建筑：全局3次、单体移除、神灵武士豁免及耗尽门槛；选点映射现有6×8格，原生代理/占位残留、路径纹理与升级能力重建未核定，见relocation-evidence.json。',
     'BoxGift五个隐藏训练叶子及225条训练路径已接入；新增单位的未核定技能仍按实际状态计数。随机礼物已接入35个候选；原生CreateUnit路径/碰撞失败、可操纵建造者技能及平台专用Frame科技返费宿主仍待核定。',
     '17类种族特性与103个精确单位注册已接入；地精修理、虚空体质、原生跳跃/slow命中及多种原生法术抗性叠加仍为部分实现。旧存档中没有出生抽样记录的血统融合战斗体不补抽，新出战体才执行来源随机。',
     '瓦斯琪已接入五项脚本主体与A1CK动态等级；A1O5/A1O7/A1O8的原生命令仲裁、落点碰撞及召唤事件身份仍为部分实现。',

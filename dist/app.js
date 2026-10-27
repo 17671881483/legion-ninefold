@@ -16,7 +16,7 @@ const time=n=>`${Math.floor(Math.max(0,n)/60).toString().padStart(2,'0')}:${Math
 let mode='normal',saved=null;
 try{saved=readMatch(localStorage,mode);}catch{}
 let game=new Game({seed:42,difficulty:'normal'}),started=false,tab='build',difficulty='normal',builderId=RULES.defaultBuilderId,selected=null,buildUnit=null,panelKey='',selectionKey='',uiTimer=0,saveTimer=0,lastFrame=0,endShown=false,soundOn=false,audio=null,lastWave=1,lastPhase='build';
-let autoFollowWave=0,autoFollowing=false,kingMoveMode=false,tMonsterMode=false,spellTargetMode=null,boxPointMode=null;
+let autoFollowWave=0,autoFollowing=false,kingMoveMode=false,tMonsterMode=false,spellTargetMode=null,boxPointMode=null,relocationMode=null;
 let economyDisplayGame=null,economyDisplayWorkers=0,economyDisplayLevel=0;
 let boxGiftDisplayGame=null,boxGiftDisplayKey='',boxGiftSelections=Object.create(null);
 const battlefield=new Battlefield($('battlefield'),handleBattlefieldClick);
@@ -30,7 +30,7 @@ function sound(kind='click'){
 }
 function command(type,payload={}){
   const res=game.command(type,payload);if(res?.message)toast(res.message,!res.ok);if(res?.ok)sound(type==='build'||type==='upgrade'?'build':type==='ready'?'wave':'click');else sound('error');
-  if(res?.ok&&['race','builder','reroll','sandboxBuilder','sandboxWave','sandboxReset','sandboxClear'].includes(type)){buildUnit=null;battlefield.buildUnit=null;selected=null;battlefield.selected=null;$('battlefield').classList.remove('building');$('build-hint').hidden=true;}if(type!=='merc')panelKey='';selectionKey='';updateUI();if(res?.ok)save();return res;
+  if(res?.ok&&['race','builder','reroll','sandboxBuilder','sandboxWave','sandboxReset','sandboxClear'].includes(type)){clearRelocation();buildUnit=null;battlefield.buildUnit=null;selected=null;battlefield.selected=null;$('battlefield').classList.remove('building');$('build-hint').hidden=true;}if(type!=='merc')panelKey='';selectionKey='';updateUI();if(res?.ok)save();return res;
 }
 function clearSpellTarget(){
   spellTargetMode=null;battlefield.spellTarget=null;selectionKey='';
@@ -87,13 +87,33 @@ function startMatch(resume=false){
   if(resume&&saved){try{const key=MATCH_STORAGE_KEYS[mode];if(saved.state?.dataRevision!==RULES.dataRevision&&!localStorage.getItem(key+'-before-document'))localStorage.setItem(key+'-before-document',JSON.stringify(saved));game=Game.fromSnapshot(saved);}catch{game=new Game({seed:42,difficulty,builderId,mode});toast('存档无法载入，已创建新的'+(mode==='sandbox'?'测试沙盒':'对局'),true);}}
   else game=new Game({seed:Math.floor(Date.now()%2147483647),difficulty,builderId,mode});
   game.state.paused=false;started=true;lastWave=game.state.wave;lastPhase=game.state.phase;selected=null;buildUnit=null;endShown=false;panelKey='';selectionKey='';$('welcome').hidden=true;
-  autoFollowWave=0;autoFollowing=false;kingMoveMode=false;tMonsterMode=false;boxPointMode=null;clearSpellTarget();battlefield.targetRadius=null;$('battlefield').classList.remove('targeting');battlefield.selected=null;battlefield.buildUnit=null;focus(0);updateUI();save();sound('wave');
+  autoFollowWave=0;autoFollowing=false;kingMoveMode=false;tMonsterMode=false;boxPointMode=null;clearRelocation();clearSpellTarget();battlefield.targetRadius=null;$('battlefield').classList.remove('targeting');battlefield.selected=null;battlefield.buildUnit=null;focus(0);updateUI();save();sound('wave');
   toast(mode==='sandbox'?'测试沙盒已就绪，点击右上角“测试沙盒”调整波次与资源。':'先选择兵种，再点击自己的建造格。前排与远程搭配更稳。');
 }
 function currentBoxPointOffer(){
   if(!boxPointMode)return null;
   const reward=game.boxRewardStatus?.(0);
   return reward?.providerId===boxPointMode.providerId&&reward?.tier===boxPointMode.tier?reward.offers.find(offer=>offer.id===boxPointMode.abilityId&&offer.targetKind==='point'&&offer.canStart):null;
+}
+function clearRelocation(){
+  if(!relocationMode)return;
+  relocationMode=null;battlefield.relocationId=null;battlefield.buildUnit=null;
+  $('battlefield').classList.remove('building');$('build-hint').hidden=true;selectionKey='';
+}
+function currentRelocation(){
+  if(!relocationMode)return null;
+  const b=game.state.players[0].buildings.find(b=>b.id===relocationMode.buildingId),status=game.relocationStatus(relocationMode.buildingId);
+  return b&&b.unitId===relocationMode.unitId&&game.state.wave===relocationMode.wave&&status.canStart?{building:b,status}:null;
+}
+function startRelocation(buildingId){
+  const b=game.state.players[0].buildings.find(b=>b.id===buildingId),status=game.relocationStatus(buildingId);
+  if(!b||!status.canStart){toast(status.reason,true);return;}
+  cancelBuild();focus(0);relocationMode={buildingId,unitId:b.unitId,wave:game.state.wave};
+  battlefield.relocationId=buildingId;battlefield.buildUnit=b.unitId;
+  selected={type:'building',buildingId,playerId:0};battlefield.selected=selected;
+  $('battlefield').classList.add('building');$('build-hint').hidden=false;
+  $('build-hint').textContent=`移位 ${defs[b.unitId].name}：点击自己的空格 · 免费${status.exempt?' · 不扣次数':''} · 剩余 ${status.remaining}/3 次 · Esc取消`;
+  selectionKey='';updateUI();
 }
 function startBoxPointOffer(offer,reward){
   cancelBuild();focus(0);boxPointMode={abilityId:offer.id,providerId:reward.providerId,tier:reward.tier};
@@ -103,6 +123,13 @@ function startBoxPointOffer(offer,reward){
 }
 function handleBattlefieldClick(hit,e){
   if(!started)return;
+  if(relocationMode){
+    const current=currentRelocation();if(!current){clearRelocation();updateUI();toast('建筑状态已变化，请重新选择移位',true);return;}
+    if(hit?.type!=='cell'){toast('请选择自己的空格',true);return;}
+    const buildingId=current.building.id,res=command('relocate',{buildingId,targetPlayerId:hit.playerId,col:hit.col,row:hit.row});
+    if(res.ok){clearRelocation();select({type:'building',buildingId,playerId:0});save();}
+    return;
+  }
   if(boxPointMode){
     const offer=currentBoxPointOffer();if(!offer){cancelBuild();toast('这组礼物已变化，请重新选择',true);return;}
     const r=$('battlefield').getBoundingClientRect(),point=battlefield.unproject(e.clientX-r.left,e.clientY-r.top);
@@ -130,7 +157,7 @@ function handleBattlefieldClick(hit,e){
   else if(!e.shiftKey){cancelBuild();}
 }
 function select(value){if(spellTargetMode&&value?.entityId!==spellTargetMode.entityId)clearSpellTarget();selected=value;battlefield.selected=value;selectionKey='';updateSelection();updateBuildPanel();}
-function cancelBuild(){boxPointMode=null;kingMoveMode=false;tMonsterMode=false;clearSpellTarget();battlefield.targetRadius=null;$('battlefield').classList.remove('targeting');buildUnit=null;battlefield.buildUnit=null;$('battlefield').classList.remove('building');$('build-hint').hidden=true;selected=null;battlefield.selected=null;panelKey='';selectionKey='';updateUI();}
+function cancelBuild(){clearRelocation();boxPointMode=null;kingMoveMode=false;tMonsterMode=false;clearSpellTarget();battlefield.targetRadius=null;$('battlefield').classList.remove('targeting');buildUnit=null;battlefield.buildUnit=null;$('battlefield').classList.remove('building');$('build-hint').hidden=true;selected=null;battlefield.selected=null;panelKey='';selectionKey='';updateUI();}
 const unitPopulation=u=>Number(u?.population??1),unitLevel=u=>u?.heroEntry?'':u?.heroLevel>0?`Lv.${u.heroLevel}`:u?.heroStage?`阶段 ${u.heroStage}`:'';
 function population(p){return (p.workers+(p.economyTasks?.workerQueue?.length??0))*(RULES.workerPopulation??1)+p.buildings.reduce((sum,b)=>sum+Math.max(unitPopulation(defs[b.unitId]),b.construction?unitPopulation(defs[b.construction.targetId]):0),0)+(p.heroId?(defs[p.heroId]?.population??3):0);}
 function reservedPopulation(p){return (p.economyTasks?.workerQueue?.length??0)*(RULES.workerPopulation??1)+p.buildings.reduce((sum,b)=>{if(!b.construction)return sum;const current=unitPopulation(defs[b.unitId]),target=unitPopulation(defs[b.construction.targetId]);return sum+(b.unitId===b.construction.targetId?Math.max(current,target):Math.max(0,target-current));},0);}
@@ -320,7 +347,7 @@ function updateSelection(){
   if(selected?.type==='building'){for(const player of s.players){const found=player.buildings.find(v=>v.id===selected.buildingId);if(found){b=found;p=player;u=defs[b.unitId];break;}}if(!b)selected=null;}
   else if(selected?.type==='unit')u=defs[selected.unitId];
   else if(selected?.type==='entity'){e=s.entities.find(v=>v.id===selected.entityId&&isEntityVisible(v));if(e){u={...(defs[e.unitId]||waveInfo()),...e,...(e.skillSpecs?{abilityIds:e.skillSpecs.map(a=>a.id)}:{})};p=s.players[e.ownerId];}else{selected=null;battlefield.selected=null;}}
-  const key=[selected?.type,selected?.buildingId,selected?.entityId,u?.id,u?.unitId,s.phase,s.paused,b?.unitId,b?.construction?Math.ceil(b.construction.finishAt-s.time):'',Math.floor(s.players[0].gold),e?Math.ceil(e.hp):'',e?Math.floor(e.mana??0):'',e?Math.floor(s.time*4):'',e?.routeMode,buildUnit,spellTargetMode?.skillId].join('|');if(key===selectionKey)return;selectionKey=key;
+  const key=[selected?.type,selected?.buildingId,selected?.entityId,u?.id,u?.unitId,s.phase,s.paused,b?.unitId,b?.construction?Math.ceil(b.construction.finishAt-s.time):'',Math.floor(s.players[0].gold),e?Math.ceil(e.hp):'',e?Math.floor(e.mana??0):'',e?Math.floor(s.time*4):'',e?.routeMode,buildUnit,spellTargetMode?.skillId,relocationMode?.buildingId,s.players[0].relocationsRemaining,b?.sourceRemovedBuildingAbilities?.join(','),s.roundMode].join('|');if(key===selectionKey)return;selectionKey=key;
   const manualSkills=e?.ownerId===0?(game.unitSkillStatus?.(e.id,0)??[]):[],manualById=new Map(manualSkills.map(a=>[a.id,a]));
   if(!u){$('selection').innerHTML=`<div class="selection-portrait"><canvas id="unit-portrait" width="100" height="100"></canvas></div><div class="selection-copy"><small>${esc(BUILDERS.find(b=>b.id===game.state.players[0].builderId)?.name||'军团')} · 建造者</small><h2>部署你的军团</h2><p>选择兵种后点击自己的格子布阵。<br>前排承伤，远程输出；多余金币发展经济。</p></div>`;drawPortrait($('unit-portrait'),null);$('selection-actions').innerHTML='';return;}
   const hp=e?`${num(e.hp)} / ${num(e.maxHp)}`:num(u.hp),damage=e?num(e.damage):num(u.damage),range=e?(e.range*100).toFixed(0):u.range;
@@ -339,6 +366,7 @@ function updateSelection(){
   }
   else if(selected?.type==='unit')$('selection-actions').innerHTML=`<button data-cancel="true">取消部署<small>Esc</small></button>`;
   else $('selection-actions').innerHTML='';
+  if(b&&p?.id===0){const move=game.relocationStatus(b.id),active=relocationMode?.buildingId===b.id;if(move.available)$('selection-actions').innerHTML+=`<button data-relocate="${esc(b.id)}" aria-pressed="${active}" ${!active&&!move.canStart?'disabled':''} title="${esc(move.reason||'点击后选择自己的空格，Esc取消')}">${active?'取消移位':'移位'}<small>${esc(move.reason||(move.exempt?'免费 · 不扣次数':'免费 · 每座一次'))}</small><small>全局剩余 ${move.remaining}/3 次</small></button>`;}
   if(b&&(u.hero||u.heroEntry||!u.legacy&&u.buildingAbilityIds&&!u.buildingAbilityIds.includes('A008')))$('selection-actions').querySelector('[data-sell]')?.remove();
   if(b&&p?.id===0&&['h062','h05Q'].includes(u.sourceRawcode))$('selection-actions').innerHTML+=`<button data-form="${b.id}" ${s.phase!=='build'||b.construction?'disabled':''}>切换形态<small>免费 · 1秒</small></button>`;
   if(b&&p?.id===0&&u.sourceRawcode==='h06I')$('selection-actions').innerHTML+=`<button data-stim="${b.id}" ${s.phase!=='build'||b.construction||p.gold<75?'disabled':''}>兴奋剂<small>75金 · 本波有效</small></button>`;
@@ -347,6 +375,7 @@ function updateSelection(){
 }
 
 function updateUI(){
+  if(relocationMode&&!currentRelocation())clearRelocation();
   const s=game.state,p=s.players[0],wave=waveInfo();
   if(boxPointMode&&!currentBoxPointOffer()){boxPointMode=null;if(!spellTargetMode&&!tMonsterMode&&!kingMoveMode){$('battlefield').classList.remove('targeting');$('build-hint').hidden=true;}}
   if(spellTargetMode&&!currentSpellTarget())clearSpellTarget();
@@ -394,7 +423,7 @@ function help(which='play'){
 
 $('panel-content').addEventListener('click',e=>{const target=e.target.closest('button');if(!target||target.disabled)return;if(claimBoxGift(target))return;if(target.dataset.treasure){command('treasure',{treasureId:target.dataset.treasure,reward:target.dataset.reward,buildingId:target.closest('[data-treasure-id]')?.querySelector('[data-treasure-target]')?.value});return;}if(target.dataset.unit){cancelBuild();buildUnit=target.dataset.unit;battlefield.buildUnit=buildUnit;selected={type:'unit',unitId:buildUnit};battlefield.selected=null;$('battlefield').classList.add('building');$('build-hint').textContent=`${defs[buildUnit].heroEntry?'建造':'部署'} ${defs[buildUnit].name} · ${unitPrice(defs[buildUnit])} · 点击自己的空格`; $('build-hint').hidden=false;panelKey='';selectionKey='';renderPanel();updateSelection();updateBuildPanel();sound();}if(target.dataset.heroBuilding){const building=game.state.players[0].buildings.find(b=>b.id===target.dataset.heroBuilding);if(building){cancelBuild();focus(0);select({type:'building',buildingId:building.id,playerId:0});}}if(target.dataset.builder)command('builder',{builderId:target.dataset.builder});if(target.dataset.merc)command('merc',{mercId:target.dataset.merc});if(target.dataset.hero)command('hero',{heroId:target.dataset.hero});if(target.dataset.king)command('king',{stat:target.dataset.king});if(target.dataset.action==='heroes'){const panel=$('panel-content'),section=panel.querySelector('.hero-section');if(section){panel.scrollTop=section.offsetTop-panel.offsetTop;section.querySelector('[data-unit]:not(:disabled)')?.focus({preventScroll:true});}}else if(target.dataset.action==='kingmove'){cancelBuild();kingMoveMode=true;buildUnit=null;battlefield.buildUnit=null;focus(8);$('build-hint').hidden=false;$('build-hint').textContent='点击可行走地面，移动联盟国王 · Esc取消';}else if(target.dataset.action==='catalog')openCatalog();else if(target.dataset.action)command(target.dataset.action);});
 $('panel-content').addEventListener('change',e=>{const field=e.target;if(!field.matches('[data-box-building],[data-box-unit]'))return;const card=field.closest('[data-box-offer]'),selection=boxGiftSelections[card?.dataset.boxOffer];if(!selection)return;if(field.matches('[data-box-building]')){selection.buildingId=field.value;selection.unitId='';}else selection.unitId=field.value;updateBoxGiftPanel();});
-$('selection-actions').addEventListener('click',e=>{const t=e.target.closest('button');if(!t||t.disabled)return;if(t.dataset.castSkill){const entity=game.state.entities.find(v=>String(v.id)===t.dataset.castEntity&&isEntityVisible(v)),skill=entity?game.unitSkillStatus?.(entity.id,0).find(a=>a.id===t.dataset.castSkill):null;if(!skill?.canStart){toast(skill?.reason||'当前技能不可用',true);return;}if(spellTargetMode?.entityId===entity.id&&spellTargetMode.skillId===skill.id){clearSpellTarget();updateUI();return;}if(skill.targetKind==='none'){clearSpellTarget();command('cast',{entityId:entity.id,skillId:skill.id,playerId:0});}else startSpellTarget(entity.id,skill);return;}if(t.dataset.upgrade)command('upgrade',{buildingId:selected?.buildingId,unitId:t.dataset.upgrade});if(t.dataset.sell){command('sell',{buildingId:t.dataset.sell});select(null);}if(t.dataset.cancel)cancelBuild();if(t.dataset.inspect)openCatalog(t.dataset.inspect);if(t.dataset.form)command('form',{buildingId:t.dataset.form});if(t.dataset.stim)command('stim',{buildingId:t.dataset.stim});});
+$('selection-actions').addEventListener('click',e=>{const t=e.target.closest('button');if(!t||t.disabled)return;if(t.dataset.castSkill){const entity=game.state.entities.find(v=>String(v.id)===t.dataset.castEntity&&isEntityVisible(v)),skill=entity?game.unitSkillStatus?.(entity.id,0).find(a=>a.id===t.dataset.castSkill):null;if(!skill?.canStart){toast(skill?.reason||'当前技能不可用',true);return;}if(spellTargetMode?.entityId===entity.id&&spellTargetMode.skillId===skill.id){clearSpellTarget();updateUI();return;}if(skill.targetKind==='none'){clearSpellTarget();command('cast',{entityId:entity.id,skillId:skill.id,playerId:0});}else startSpellTarget(entity.id,skill);return;}if(t.dataset.relocate){if(relocationMode?.buildingId===t.dataset.relocate){clearRelocation();updateUI();}else startRelocation(t.dataset.relocate);return;}if(t.dataset.upgrade)command('upgrade',{buildingId:selected?.buildingId,unitId:t.dataset.upgrade});if(t.dataset.sell){command('sell',{buildingId:t.dataset.sell});select(null);}if(t.dataset.cancel)cancelBuild();if(t.dataset.inspect)openCatalog(t.dataset.inspect);if(t.dataset.form)command('form',{buildingId:t.dataset.form});if(t.dataset.stim)command('stim',{buildingId:t.dataset.stim});});
 document.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click',()=>{tab=b.dataset.tab;document.querySelectorAll('[data-tab]').forEach(x=>{const active=x===b;x.classList.toggle('active',active);x.setAttribute('aria-selected',String(active));});panelKey='';renderPanel();updateBuildPanel();}));
 $('worker').onclick=()=>command('worker');$('lumber').onclick=()=>command('lumber');$('ready').onclick=()=>command('ready');$('pause').onclick=()=>command('pause');$('interfere').onclick=()=>{if(tMonsterMode){cancelBuild();return;}cancelBuild();tMonsterMode=true;battlefield.targetRadius=RULES.interfereRadius;const r=$('battlefield').getBoundingClientRect();battlefield.pointerPoint={x:r.width/2,y:r.height*.48};$('battlefield').classList.add('targeting');$('build-hint').hidden=false;$('build-hint').textContent='T怪：点击圆内怪物位置 · 双方怪物均可 · Esc取消';updateUI();};$('heal').onclick=()=>{const r=command('heal');if(r.ok)focus(8);};
 document.querySelectorAll('[data-speed]').forEach(b=>b.onclick=()=>command('speed',{value:Number(b.dataset.speed)}));

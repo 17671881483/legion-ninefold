@@ -1,0 +1,285 @@
+{
+  "revision": "v14-content-20261027-v24-1",
+  "scope": "A118 建筑移位及 A0IH/原型豁免；A0IG 说明标记",
+  "status": "partial-source-host",
+  "source": {
+    "path": "v14-source/raw_extracted/war3map.j",
+    "sha256": "e66c55b3b25b185c991be5613e21fbf5b2d598f3cc40f2f8cd01c23bcb828250",
+    "lineCounting": "Latin-1 decode, split only LF"
+  },
+  "sourceEvidence": [
+    {
+      "line": 4199,
+      "text": "call SaveInteger(B,$41304948,StringHash(\"Requires\"),$75303034)"
+    },
+    {
+      "line": 4470,
+      "text": "call SaveInteger(B,$41313138,StringHash(\"Requires\"),$75303034)"
+    },
+    {
+      "line": 10426,
+      "text": "function con takes nothing returns nothing"
+    },
+    {
+      "line": 10436,
+      "text": "if IsUnitHidden(i)==true and GetUnitTypeId(i)==$75316D62 or GetUnitTypeId(i)==$75303156 or GetUnitTypeId(i)==$75303155 then"
+    },
+    {
+      "line": 10438,
+      "text": "set FE=LoadUnitHandle(K,StringHash(\"mobilf\"),GetHandleId(i))"
+    },
+    {
+      "line": 10439,
+      "text": "set i=LoadUnitHandle(K,StringHash(\"mobile\"),GetHandleId(i))"
+    },
+    {
+      "line": 10440,
+      "text": "call RemoveUnit(FC)"
+    },
+    {
+      "line": 10441,
+      "text": "call RemoveUnit(FD)"
+    },
+    {
+      "line": 10442,
+      "text": "call RemoveUnit(FE)"
+    },
+    {
+      "line": 10443,
+      "text": "call ShowUnit(i,true)"
+    },
+    {
+      "line": 10444,
+      "text": "call SetUnitPosition(i,D1,BB)"
+    },
+    {
+      "line": 10445,
+      "text": "if GetUnitAbilityLevel(i,$41304948)==0 and GetUnitTypeId(i)!=$68304A4D and GetUnitTypeId(i)!=$68305354 then"
+    },
+    {
+      "line": 10446,
+      "text": "call UnitRemoveAbility(i,$41313138)"
+    },
+    {
+      "line": 10447,
+      "text": "set Bj=LoadInteger(K,StringHash(\"Moving_i\"),BF)-1"
+    },
+    {
+      "line": 10448,
+      "text": "call SaveInteger(K,StringHash(\"Moving_i\"),BF,Bj)"
+    },
+    {
+      "line": 10449,
+      "text": "if Bj>0 then"
+    },
+    {
+      "line": 10450,
+      "text": "call SetPlayerAbilityAvailable(h,$41313138,true)"
+    },
+    {
+      "line": 10453,
+      "text": "call SetPlayerAbilityAvailable(h,$41313138,true)"
+    },
+    {
+      "line": 10465,
+      "text": "function Play_Con takes nothing returns nothing"
+    },
+    {
+      "line": 10467,
+      "text": "if GetUnitTypeId(i)==$75316D74 or GetUnitTypeId(i)==$75303153 or GetUnitTypeId(i)==$75303154 then"
+    },
+    {
+      "line": 10468,
+      "text": "call SaveUnitHandle(K,StringHash(\"mobileT\"),1,i)"
+    },
+    {
+      "line": 10469,
+      "text": "call ForGroup(L,function con)"
+    },
+    {
+      "line": 10473,
+      "text": "function Skills_Con takes nothing returns nothing"
+    },
+    {
+      "line": 10481,
+      "text": "if GetSpellAbilityId()==$41313138 then"
+    },
+    {
+      "line": 10482,
+      "text": "call SetPlayerAbilityAvailable(h,$41313138,false)"
+    },
+    {
+      "line": 10483,
+      "text": "if 0>=LoadInteger(K,StringHash(\"Moving_i\"),Bj+1) then"
+    },
+    {
+      "line": 10486,
+      "text": "call ShowUnit(i,false)"
+    },
+    {
+      "line": 10487,
+      "text": "if GetUnitTypeId(i)==$6E303444 then"
+    },
+    {
+      "line": 10488,
+      "text": "set FC=CreateUnit(h,$75303155,FH[Bj],FI[Bj],270.)"
+    },
+    {
+      "line": 10489,
+      "text": "elseif GetUnitTypeId(i)==$6E30344C or GetUnitTypeId(i)==$6E30344B or GetUnitTypeId(i)==$6E303448 or GetUnitTypeId(i)==$6E303446 or GetUnitTypeId(i)==$6E30344E or GetUnitTypeId(i)==$6E303451 then"
+    },
+    {
+      "line": 10490,
+      "text": "set FC=CreateUnit(h,$75303156,FH[Bj],FI[Bj],270.)"
+    },
+    {
+      "line": 10492,
+      "text": "set FC=CreateUnit(h,$75316D62,FH[Bj],FI[Bj],270.)"
+    },
+    {
+      "line": 10494,
+      "text": "call SaveUnitHandle(K,StringHash(\"mobile\"),GetHandleId(FC),i)"
+    },
+    {
+      "line": 10495,
+      "text": "set FD=CreateUnit(h,$75316D75,FF,FG,270.)"
+    },
+    {
+      "line": 10496,
+      "text": "call SaveUnitHandle(K,StringHash(\"mobilf\"),GetHandleId(FC),FD)"
+    },
+    {
+      "line": 10497,
+      "text": "call GroupAddUnit(L,FC)"
+    },
+    {
+      "line": 10498,
+      "text": "call GroupAddUnit(L,FD)"
+    },
+    {
+      "line": 10499,
+      "text": "call SetUnitPosition(FC,FF,FG)"
+    },
+    {
+      "line": 10500,
+      "text": "call SetUnitPosition(FD,FF,FG)"
+    },
+    {
+      "line": 10505,
+      "text": "if GetSpellAbilityId()==$41314832 then"
+    },
+    {
+      "line": 10506,
+      "text": "call SetPlayerAbilityAvailable(GetOwningPlayer(GetTriggerUnit()),$41313138,true)"
+    },
+    {
+      "line": 10507,
+      "text": "call GroupRemoveUnit(L,i)"
+    },
+    {
+      "line": 10508,
+      "text": "set FC=LoadUnitHandle(K,StringHash(\"mobile\"),GetHandleId(i))"
+    },
+    {
+      "line": 10509,
+      "text": "call RemoveUnit(i)"
+    },
+    {
+      "line": 10510,
+      "text": "call ShowUnit(FC,true)"
+    },
+    {
+      "line": 10945,
+      "text": "function InitRecord takes nothing returns nothing"
+    },
+    {
+      "line": 10997,
+      "text": "call SaveInteger(K,StringHash(\"Moving_i\"),BB,3)"
+    },
+    {
+      "line": 10998,
+      "text": "call TriggerRegisterPlayerUnitEvent(M,Player(BB),EVENT_PLAYER_UNIT_CONSTRUCT_START,null)"
+    },
+    {
+      "line": 11001,
+      "text": "call TriggerAddCondition(M,Condition(function Play_Con))"
+    },
+    {
+      "line": 11005,
+      "text": "call TriggerRegisterPlayerUnitEvent(N,Player(BB),EVENT_PLAYER_UNIT_SPELL_EFFECT,null)"
+    },
+    {
+      "line": 11008,
+      "text": "call TriggerAddCondition(N,Condition(function Skills_Con))"
+    },
+    {
+      "line": 12994,
+      "text": "set TG[bj_forLoopAIndex]=3"
+    },
+    {
+      "line": 12996,
+      "text": "call SetPlayerAbilityAvailable(ConvertedPlayer(bj_forLoopAIndex),$41313138,false)"
+    },
+    {
+      "line": 19485,
+      "text": "if Dg==10 or Dg==20 then"
+    },
+    {
+      "line": 19491,
+      "text": "call SetPlayerAbilityAvailable(ConvertedPlayer(bj_forLoopAIndex),$41313138,false)"
+    },
+    {
+      "line": 19503,
+      "text": "if Ow==false or Dg>=21 then"
+    },
+    {
+      "line": 19508,
+      "text": "call SetPlayerAbilityAvailable(ConvertedPlayer(bj_forLoopAIndex),$41313138,true)"
+    },
+    {
+      "line": 19585,
+      "text": "call CreateNUnitsAtLoc(1,$75303034,GetEnumPlayer(),Ma,bj_UNIT_FACING)"
+    },
+    {
+      "line": 26482,
+      "text": "call InitRecord()"
+    }
+  ],
+  "registeredPath": "main -> InitRecord (26482) -> EVENT_PLAYER_UNIT_SPELL_EFFECT/CONSTRUCT_START -> Skills_Con/Play_Con -> con",
+  "unusedAlternateFunctions": [
+    "C_Moving_Triggering",
+    "A_Moving_Triggering",
+    "C_Moving_Finishing",
+    "A_Moving_Finishing",
+    "C_Moving_Canceling",
+    "A_Moving_Canceling"
+  ],
+  "rules": {
+    "initialPerPlayer": 3,
+    "debitOn": "successful destination construction; ordinary building only",
+    "sameHandle": true,
+    "removedAbility": "A118",
+    "exemptAbility": "A0IH",
+    "exemptRawcodes": [
+      "h0JM",
+      "h0ST"
+    ],
+    "exemptStillRequiresPositiveBudget": true,
+    "A0IG": "description marker; no direct JASS references",
+    "blockedDuring": "battle, arena preparation/transition; Ow competitive prophet mode is not the selected X9 mode"
+  },
+  "webMapping": [
+    "Destination selection is UI-only until commit; Esc/cancel/reload spend nothing. Original cell stays occupied during selection.",
+    "A successful move updates the same building object; gold, wood, population, source completion/egg history and permanent bonuses are retained.",
+    "Older Web saves had no relocation operation; missing counter initializes 3. Existing zero/consumed flags remain.",
+    "Native replacement training creates a new handle; ordinary Web upgrades retain the consumed ability flag."
+  ],
+  "remainingGaps": [
+    "The active con callback has no Ti-zone guard; Web own-lane validation is the existing placement domain, not a claimed source rectangle check.",
+    "6×8 Web cells do not reproduce the v14 native terrain pathing, 4×4/8×8/12×2 footprints, or SetUnitPosition collision displacement.",
+    "Native proxy path selection, hidden-unit predicates and multi-player ForGroup enumeration are not simulated.",
+    "A1H2 cancel removes the proxy but not the saved u1mu occupancy unit in the shown callback; native occupancy residue and lifespan remain unverified.",
+    "Native upgrade ability rebuild behavior after UnitRemoveAbility(A118) is not proved by this script; retained lock follows current same-handle Web implementation and tooltip constraint.",
+    "A0IH itself has no spell-effect handler; implemented only as the explicit exemption predicate of A118."
+  ]
+}

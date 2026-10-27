@@ -4,6 +4,8 @@
 
 在线游戏：[军团战争](https://legion-ninefold-web.creamysage6.chatgpt.site/)。源码位于 `/Users/a1/code/study/legion-ninefold`，GitHub远端为 `github`。无需第三方依赖；Node运行 `npm test`。用任意静态HTTP服务器托管 `dist/`，浏览器打开首页游玩。不能用file协议直接加载ES模块。
 
+当前缺口、三路开发分工及验收要求见[还原待办总表](docs/RESTORATION_TODO.md)；全部待核定与部分实现能力见[逐技能待办](docs/RESTORATION_SKILL_BACKLOG.md)。
+
 修改代码、样式或生成数据后运行 `npm run build`，为入口、样式及全部ES模块生成内容版本，避免浏览器混用旧英雄数据与新界面。`npm run data:rebuild`会自动更新这些版本；`node scripts/stamp-assets.mjs --check`可核对当前版本是否一致。
 
 ## 数据与来源

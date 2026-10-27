@@ -55,7 +55,7 @@ function availableStart(game, predicate = () => true) {
   return unit;
 }
 function regularStart(game) {
-  return availableStart(game, unit => unit.heroLevel === 1 && current.filter(other => other.hero && !other.trainingOnly && family(other) === family(unit)).length === 11);
+  return availableStart(game, unit => unit.heroLevel === 1 && current.filter(other => other.hero && !other.heroEgg && family(other) === family(unit)).length === 11);
 }
 function selectHero(game, building, unit = regularStart(game)) {
   succeed(game.command('upgrade', { buildingId: building.id, unitId: unit.id }));
@@ -74,9 +74,9 @@ test('v14 exposes one real altar and seventeen first-stage choices to source bui
   assert.equal(unit.combatRawcode, null);
   assert.deepEqual(HERO_ENTRIES, [unit.id]);
   assert.equal(starts().length, 17);
-  assert.equal(current.filter(unit => unit.hero && !unit.heroEntry && !unit.trainingOnly).length, 147);
-  assert.equal(current.filter(unit => unit.hero && unit.trainingOnly).length, 5);
-  assert.equal(starts().filter(unit => current.filter(other => other.hero && !other.trainingOnly && family(other) === family(unit)).length === 11).length, 12);
+  assert.equal(current.filter(unit => unit.hero && !unit.heroEntry && !unit.heroEgg).length, 147);
+  assert.equal(current.filter(unit => unit.hero && unit.heroEgg).length, 5);
+  assert.equal(starts().filter(unit => current.filter(other => other.hero && !other.heroEgg && family(other) === family(unit)).length === 11).length, 12);
   assert.ok(BUILDERS.every(builder => builder.heroEntryIds.includes(unit.id)));
   assert.ok(starts().every(unit => unit.heroChoice && altar().upgrades.includes(unit.id)));
 });

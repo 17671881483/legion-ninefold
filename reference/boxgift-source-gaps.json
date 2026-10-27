@@ -1006,5 +1006,7 @@
       "ordinary-farm-native-upgrade-target-and-pending-replacement-refund"
     ],
     "note": "The original audit counts above are retained as the pre-fix snapshot."
-  }
+  },
+  "supersededBy": "reference/hero-egg-upgrades.json",
+  "correction": "Historical training import audit. Its train-only entryKind was an incorrect inference from absent native Upgrade fields. All five imported hero eggs now also support direct upgrades; use hero-egg-upgrades.json for current routes."
 }

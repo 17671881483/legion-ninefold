@@ -94,7 +94,7 @@ const leaves={
 
 test('five training leaves use source combat forms, prices, requirements and native identity while retaining their altar families',()=>{
   assert.deepEqual(TRAINING.importedRawcodes,Object.keys(leaves));
-  assert.deepEqual(V14_UNITS.filter(u=>u.trainingOnly).map(u=>u.sourceRawcode).sort(),Object.keys(leaves));
+  assert.deepEqual(V14_UNITS.filter(u=>u.heroEgg).map(u=>u.sourceRawcode).sort(),Object.keys(leaves));
   for(const [raw,expected] of Object.entries(leaves)){
     const u=byRaw.get(raw),building=rawUnits.get(raw),combat=rawUnits.get(expected.combat),parent=byRaw.get(expected.parent);
     assert.equal(u.combatRawcode,expected.combat);assert.equal(u.heroFamily,expected.family);
@@ -151,33 +151,34 @@ test('training limit helper uses saved count and limitid_ex independently from B
   assert.match(sourceBody(TRAINING.contract.source.countLimits),/if ZD>DJ then\r?\nset DJ=ZD/);
 });
 
-test('new paths remain reward-only and do not add ordinary upgrade edges, pool entries, stage numbers or archived entrypoints',()=>{
+test('five hero egg recipes have direct edges while training remains optional; no new pool entries or archived entrypoints',()=>{
   const trainingIds=new Set(Object.keys(leaves).map(c=>'v14_'+c));
-  assert.equal(V14_UPGRADE_EDGES.length,451);assert.equal(V14_HERO_UPGRADE_EDGES.length,147);
+  assert.equal(V14_UPGRADE_EDGES.length,456);assert.equal(V14_HERO_UPGRADE_EDGES.length,147);
   assert.equal(V14_UPGRADE_EDGES.filter(e=>!e.heroProgression).length,304);
-  assert.equal(TRAINING.ordinaryUpgradeEdgesAdded,0);
+  assert.equal(TRAINING.ordinaryUpgradeEdgesAdded,5);
   assert.deepEqual(V14_SUPPLEMENTAL_UPGRADE_EDGES.map(e=>[e.fromRawcode,e.toRawcode,e.scriptLine]),[['n2YS','n2YR',2600],['n085','n084',2602]]);
-  for(const edge of V14_UPGRADE_EDGES)assert.ok(!trainingIds.has(edge.fromId)&&!trainingIds.has(edge.toId));
+  assert.equal(V14_UPGRADE_EDGES.filter(e=>e.heroEgg).length,5);
+  for(const edge of V14_UPGRADE_EDGES.filter(e=>!e.heroEgg))assert.ok(!trainingIds.has(edge.fromId)&&!trainingIds.has(edge.toId));
   for(const u of V14_UNITS){
-    for(const id of u.upgrades)assert.ok(!trainingIds.has(id),`${u.id}->${id}`);
+    for(const id of u.upgrades.filter(id=>trainingIds.has(id)))assert.ok(V14_UPGRADE_EDGES.some(e=>e.heroEgg&&e.fromId===u.id&&e.toId===id));
     const selection=TRAINING.selections[u.sourceRawcode];
     assert.deepEqual(u.trainTargets,selection?selection.rawTargets.filter(raw=>byRaw.has(raw)).map(raw=>'v14_'+raw):undefined);
   }
   assert.deepEqual(byRaw.get('h0DV').trainTargets,['v14_n08Y','v14_n08Z','v14_n02S']);
-  for(const u of V14_UNITS.filter(u=>u.trainingOnly)){assert.deepEqual(u.upgrades,[]);assert.equal(u.randomPool,false);assert.equal(u.isBase,false);}
+  for(const u of V14_UNITS.filter(u=>u.heroEgg)){assert.deepEqual(u.upgrades,[]);assert.equal(u.randomPool,false);assert.equal(u.isBase,false);}
   for(const id of [...V14_POOLS.flat(),...V14_BUILDERS.flatMap(b=>b.rosterIds)])assert.ok(!trainingIds.has(id));
   assert.deepEqual(TRAINING.selections.n07E.rawTargets,['n07D']);
   assert.ok(!byRaw.has('n07E')&&!byRaw.has('n07D')&&!byRaw.has('n01F'));
   assert.deepEqual(V14_ARCHIVE.map(u=>u.sourceRawcode),['n07D','n07E']);
-  assert.equal(V14_UNITS.filter(u=>u.hero&&!u.heroEntry&&!u.trainingOnly).length,147);
+  assert.equal(V14_UNITS.filter(u=>u.hero&&!u.heroEntry&&!u.heroEgg).length,147);
 });
 
-test('the pre-training 529 objects and existing normal content stay byte-equivalent apart from explicit trainTargets',()=>{
-  const oldUnits=V14_UNITS.filter(u=>!u.trainingOnly).map(({trainTargets,...u})=>u);
+test('the pre-training 529 objects and existing normal content stay byte-equivalent apart from trainTargets and the five reviewed egg edges',()=>{
+  const oldUnits=V14_UNITS.filter(u=>!u.heroEgg).map(({trainTargets,...u})=>({...u,upgrades:u.upgrades.filter(id=>!byRaw.get(id.slice(4))?.heroEgg),sourceUpgradeRawcodes:u.sourceUpgradeRawcodes.filter(code=>!byRaw.get(code)?.heroEgg)}));
   assert.equal(oldUnits.length,529);
   // Baseline is the hydrated generated catalog before this source-backed import.
   assert.equal(digest(oldUnits),'b9cf316570f79d4fa6cd21bcc3eab30b20c728bd9db4b6c9a8669fd93ac821fd');
-  assert.equal(digest(V14_UPGRADE_EDGES),'b5544d02b84b9545f7fcc2dd66542cb837c8f3935178428997821b4dce5dc086');
+  assert.equal(digest(V14_UPGRADE_EDGES.filter(e=>!e.heroEgg)),'b5544d02b84b9545f7fcc2dd66542cb837c8f3935178428997821b4dce5dc086');
   assert.equal(digest(V14_HERO_UPGRADE_EDGES),'6005f00bdbb04abc83ddd1befbc308e50d4fc13c61cb73e68d1feeafef791992');
   assert.equal(digest(V14_UNIT_TEMPLATES),'2a13d0f678d678b7c75e84461cad217051ec26dbf8e1e7c8b9c235774ea06d00');
   assert.equal(digest(V14_BUILDERS),'76b192d2bfd83f36996e39e51100c87adc264bcffda1e9153d87a2d8b0c1d8fe');
@@ -189,10 +190,10 @@ test('generated report and public counts distinguish training leaves from number
   const report=JSON.parse(await readFile(new URL('../reference/v14-import-report.json',import.meta.url),'utf8'));
   assert.equal(V14_REFERENCE.activeUnitCount,534);assert.equal(V14_REFERENCE.counts.units,534);
   assert.equal(V14_REFERENCE.heroStageCount,147);assert.equal(V14_REFERENCE.counts.heroStages,147);
-  assert.equal(V14_REFERENCE.trainingOnlyUnitCount,5);assert.equal(V14_REFERENCE.counts.trainingLeaves,5);
+  assert.equal(V14_REFERENCE.heroEggUnitCount,5);assert.equal(V14_REFERENCE.trainingOnlyUnitCount,0);assert.equal(V14_REFERENCE.counts.trainingLeaves,5);
   assert.equal(V14_REFERENCE.boxTrainingSelectionCount,225);
-  assert.equal(V14_REFERENCE.upgradeEdgeCount,451);
-  assert.equal(TRAINING.ordinaryUnitCount,529);assert.equal(TRAINING.trainingOnlyUnitCount,5);
+  assert.equal(V14_REFERENCE.upgradeEdgeCount,456);
+  assert.equal(TRAINING.ordinaryUnitCount,529);assert.equal(TRAINING.heroEggUnitCount,5);
   assert.equal(report.activeUnitCount,534);
   const {importedUnits,...rules}=report.boxTraining;
   assert.deepEqual(rules,TRAINING);

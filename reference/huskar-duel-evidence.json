@@ -1,0 +1,327 @@
+{
+  "revision": "v14-content-20261027-v25-1",
+  "scope": "A0ID 决斗受伤选敌与动态死亡监听",
+  "status": "partial-source-host",
+  "source": {
+    "path": "v14-source/raw_extracted/war3map.j",
+    "sha256": "e66c55b3b25b185c991be5613e21fbf5b2d598f3cc40f2f8cd01c23bcb828250",
+    "lineCounting": "Latin-1 decode, split only LF"
+  },
+  "sourceEvidence": [
+    {
+      "line": 40322,
+      "text": "function A0IDConditionTimer takes nothing returns nothing"
+    },
+    {
+      "line": 40323,
+      "text": "local timer t=GetExpiredTimer()"
+    },
+    {
+      "line": 40324,
+      "text": "local unit i=LoadUnitHandle(O,H2I(t),StringHash(\"unit\"))"
+    },
+    {
+      "line": 40325,
+      "text": "call RemoveSavedBoolean(O,GetHandleId(i),StringHash(\"immune\"))"
+    },
+    {
+      "line": 40326,
+      "text": "call FlushChildHashtable(O,GetHandleId(t))"
+    },
+    {
+      "line": 40327,
+      "text": "call DestroyTimer(t)"
+    },
+    {
+      "line": 40328,
+      "text": "set i=null"
+    },
+    {
+      "line": 40329,
+      "text": "set t=null"
+    },
+    {
+      "line": 40330,
+      "text": "endfunction"
+    },
+    {
+      "line": 40331,
+      "text": "function A0IDCondition takes nothing returns boolean"
+    },
+    {
+      "line": 40332,
+      "text": "local unit i=GetTriggerUnit()"
+    },
+    {
+      "line": 40333,
+      "text": "local trigger Eb=GetTriggeringTrigger()"
+    },
+    {
+      "line": 40334,
+      "text": "local unit D6=LoadUnitHandle(O,H2I(i),StringHash(\"tag\"))"
+    },
+    {
+      "line": 40335,
+      "text": "local unit Qf=LoadUnitHandle(O,H2I(Eb),StringHash(\"tag\"))"
+    },
+    {
+      "line": 40336,
+      "text": "local timer t=CreateTimer()"
+    },
+    {
+      "line": 40337,
+      "text": "local effect DE=LoadEffectHandle(O,GetHandleId(Eb),StringHash(\"effect\"))"
+    },
+    {
+      "line": 40338,
+      "text": "if i==D6 then"
+    },
+    {
+      "line": 40339,
+      "text": "call SaveUnitHandle(O,GetHandleId(t),StringHash(\"unit\"),i)"
+    },
+    {
+      "line": 40340,
+      "text": "call SaveBoolean(O,GetHandleId(i),StringHash(\"immune\"),true)"
+    },
+    {
+      "line": 40341,
+      "text": "call RemoveSavedHandle(O,H2I(i),StringHash(\"tag\"))"
+    },
+    {
+      "line": 40342,
+      "text": "call TimerStart(t,5,false,function A0IDConditionTimer)"
+    },
+    {
+      "line": 40343,
+      "text": "elseif GetUnitStateSwap(UNIT_STATE_LIFE,i)<=0. then"
+    },
+    {
+      "line": 40344,
+      "text": "call KillUnit(D6)"
+    },
+    {
+      "line": 40345,
+      "text": "endif"
+    },
+    {
+      "line": 40346,
+      "text": "call DestroyEffect(DE)"
+    },
+    {
+      "line": 40347,
+      "text": "call FlushChildHashtable(O,H2I(Eb))"
+    },
+    {
+      "line": 40348,
+      "text": "call DestroyTrigger(Eb)"
+    },
+    {
+      "line": 40349,
+      "text": "set i=null"
+    },
+    {
+      "line": 40350,
+      "text": "set Eb=null"
+    },
+    {
+      "line": 40351,
+      "text": "set D6=null"
+    },
+    {
+      "line": 40352,
+      "text": "set Qf=null"
+    },
+    {
+      "line": 40353,
+      "text": "set t=null"
+    },
+    {
+      "line": 40354,
+      "text": "return false"
+    },
+    {
+      "line": 40375,
+      "text": "function Duel takes nothing returns boolean"
+    },
+    {
+      "line": 40376,
+      "text": "return GetUnitAbilityLevel(GetFilterUnit(),$4176756C)==0"
+    },
+    {
+      "line": 40377,
+      "text": "endfunction"
+    },
+    {
+      "line": 41312,
+      "text": "elseif GetUnitAbilityLevel(i,$41304944)>0 and LoadUnitHandle(O,H2I(i),StringHash(\"tag\"))==null then"
+    },
+    {
+      "line": 41313,
+      "text": "set bs=Condition(function Duel)"
+    },
+    {
+      "line": 41314,
+      "text": "call GroupEnumUnitsInRange(Uz,GetUnitX(bV),GetUnitY(bV),1000,bs)"
+    },
+    {
+      "line": 41315,
+      "text": "call DestroyBoolExpr(bs)"
+    },
+    {
+      "line": 41316,
+      "text": "loop"
+    },
+    {
+      "line": 41317,
+      "text": "set D6=FirstOfGroup(Uz)"
+    },
+    {
+      "line": 41318,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 41319,
+      "text": "call GroupRemoveUnit(Uz,D6)"
+    },
+    {
+      "line": 41320,
+      "text": "if IsPlayerEnemy(GetOwningPlayer(i),GetOwningPlayer(D6)) then"
+    },
+    {
+      "line": 41321,
+      "text": "if GetUnitState(D6,UNIT_STATE_MAX_LIFE)>=1800 then"
+    },
+    {
+      "line": 41322,
+      "text": "call SaveUnitHandle(O,GetHandleId(i),StringHash(\"tag\"),D6)"
+    },
+    {
+      "line": 41323,
+      "text": "call IssueTargetOrder(i,\"attack\",D6)"
+    },
+    {
+      "line": 41324,
+      "text": "call IssueTargetOrder(D6,\"attack\",i)"
+    },
+    {
+      "line": 41325,
+      "text": "call SetUnitPathing(i,false)"
+    },
+    {
+      "line": 41326,
+      "text": "set bn=CreateTrigger()"
+    },
+    {
+      "line": 41327,
+      "text": "call SaveEffectHandle(O,H2I(bn),StringHash(\"effect\"),AddSpecialEffectTarget(\"Abilities\\\\Spells\\\\Orc\\\\Voodoo\\\\VoodooAuraTarget.mdl\",i,\"overhead\"))"
+    },
+    {
+      "line": 41328,
+      "text": "call DestroyEffect(AddSpecialEffect(\"Abilities\\\\Spells\\\\NightElf\\\\BattleRoar\\\\RoarCaster.mdl\",GetUnitX(i),GetUnitY(i)))"
+    },
+    {
+      "line": 41329,
+      "text": "call TriggerRegisterDeathEvent(bn,i)"
+    },
+    {
+      "line": 41330,
+      "text": "call TriggerRegisterDeathEvent(bn,D6)"
+    },
+    {
+      "line": 41331,
+      "text": "call TriggerAddCondition(bn,Condition(function A0IDCondition))"
+    },
+    {
+      "line": 41332,
+      "text": "exitwhen true"
+    },
+    {
+      "line": 41333,
+      "text": "endif"
+    },
+    {
+      "line": 41334,
+      "text": "endif"
+    },
+    {
+      "line": 41335,
+      "text": "endloop"
+    },
+    {
+      "line": 41336,
+      "text": "endif"
+    },
+    {
+      "line": 41337,
+      "text": "if GetUnitAbilityLevel(i,$41304945)>0 and P8>GetUnitState(i,UNIT_STATE_LIFE) then"
+    },
+    {
+      "line": 41260,
+      "text": "if GetUnitAbilityLevel(bV,$41304858)>0 and GetRandomReal(0,100)<5 then"
+    },
+    {
+      "line": 41267,
+      "text": "elseif GetUnitAbilityLevel(bV,$4130494B)>0 and GetRandomPercentageBJ()<=30 then"
+    },
+    {
+      "line": 41282,
+      "text": "elseif UnitHasBuffBJ(i,$42303458) and GetUnitAbilityLevel(bV,$4130494B)>0 then"
+    },
+    {
+      "line": 41284,
+      "text": "elseif LoadBoolean(O,GetHandleId(i),$4130494B) and GetUnitStateSwap(UNIT_STATE_LIFE,i)<=0. then"
+    },
+    {
+      "line": 41288,
+      "text": "elseif GetUnitAbilityLevel(i,$4130584D)>0 and (GetEventDamage()>=GetUnitState(i,UNIT_STATE_LIFE) and LoadInteger(O,GetHandleId(i),StringHash(\"killnum\"))>=6) then"
+    },
+    {
+      "line": 41291,
+      "text": "elseif GetUnitAbilityLevel(i,$41304935)>0 and GetUnitState(i,UNIT_STATE_MANA)>24 then"
+    },
+    {
+      "line": 41293,
+      "text": "elseif GetUnitTypeId(bV)==$6E303530 or GetUnitTypeId(bV)==$6E303652 and bW and not LoadBoolean(O,GetHandleId(bV),StringHash(\"DemonStatueBounceBusy\")) and GetRandomReal(0,100)<30 then"
+    },
+    {
+      "line": 41295,
+      "text": "elseif GetUnitAbilityLevel(bV,$41304931)>0 and UnitHasBuffBJ(i,$42303455) and P8>GetUnitState(i,UNIT_STATE_LIFE) then"
+    },
+    {
+      "line": 41552,
+      "text": "if LoadBoolean(O,GetHandleId(i),StringHash(\"immune\")) then"
+    },
+    {
+      "line": 41554,
+      "text": "call UnitAddAbility(i,$4130494D)"
+    },
+    {
+      "line": 41556,
+      "text": "call TimerStart(t,0,false,function ImmuneTimer)"
+    }
+  ],
+  "nativeReferences": [
+    {
+      "url": "https://www.hiveworkshop.com/threads/making-a-unit-unselectable-with-no-pathing-yet-targetable.261891/",
+      "basis": "Participant explanation: pathing-off unit ignores other units; other units still see its collision, terrain is separate. Web maps to one-way repulsion bypass; exact host remains partial."
+    },
+    {
+      "url": "https://www.hiveworkshop.com/threads/soul-consumption-v1-02.157359/",
+      "basis": "Author implementation enumerates corpses with GroupEnumUnitsInRange. A0ID itself has no alive filter."
+    },
+    {
+      "url": "https://www.hiveworkshop.com/threads/snippet-needs-fix-auralevel.212146/",
+      "basis": "Enumerator review identifies hidden/removed/Locust units as excluded; ordinary undecayed corpses remain enumerable. Web uses active Aloc and its existing hidden/removed flags. Hide/show Locust reset quirks remain native boundary."
+    }
+  ],
+  "remainingGaps": [
+    "FirstOfGroup order is unverified; Web insertion order is deterministic but not claimed native order.",
+    "Corpses can be selected before Web corpse cleanup; native corpse lifetime differs.",
+    "A0HX/A0IK, A0XM killnum, DemonStatueBounce and other prior chain effects are not fully ported. Potential interceptions remain deferred rather than asserting fallthrough.",
+    "Web maps IssueTargetOrder to one cancellable attack order; exact windup reset and king/native order arbitration remain partial.",
+    "Pathing-off bypasses unit repulsion but preserves host terrain constraints; native destructible/footprint and map geometry differ.",
+    "Only A0ID sets a unit tag in this source; it chooses an enemy, so i==own tag is unreachable through this feature. Self-tag immune branch retains timer/flag but does not invent AIml absorb behavior.",
+    "Web death callbacks run through current sourceDeath pipeline; full Warcraft global/per-unit listener ordering remains unverified."
+  ]
+}

@@ -4,7 +4,7 @@ import {DOCUMENT_CATALOG,DOCUMENT_DISPLAY_ALIASES,DOCUMENT_APPEARANCE_GATES} fro
 const rawcodes=unit=>[unit?.sourceRawcode,unit?.rawcode,unit?.combatRawcode,/^v14_([A-Za-z0-9]{4})$/.exec(unit?.id??'')?.[1],unit?.id].filter(code=>/^[A-Za-z0-9]{4}$/.test(code??''));
 export const documentUnit=unit=>rawcodes(unit).map(code=>DOCUMENT_CATALOG[code]).find(Boolean)??null;
 export const unitDisplayName=unit=>rawcodes(unit).map(code=>DOCUMENT_DISPLAY_ALIASES[code]).find(Boolean)??unit?.name??'';
-export const unitCategory=unit=>unit?.trainingOnly?'神秘礼物训练':documentUnit(unit)?.category??(unit?.heroEntry?'英雄入口':unit?.hero?'英雄':unit?.morphProxy?'变形入口':unit?.skinBaseRawcode?'外观款':'');
+export const unitCategory=unit=>unit?.heroEgg?'彩蛋兵种':documentUnit(unit)?.category??(unit?.heroEntry?'英雄入口':unit?.hero?'英雄':unit?.morphProxy?'变形入口':unit?.skinBaseRawcode?'外观款':'');
 export const unitCategoryLabel=unit=>unitCategory(unit)||'未登记分类';
 export const isEntitlementVariant=unit=>unitCategory(unit)==='权益变体';
 // This helper already groups separate appearance actions in the app. Keep its public shape.
@@ -21,7 +21,7 @@ export function appearanceBaseLabel(unit,units=[]){
 export function unitSearchText(unit){
  const record=documentUnit(unit);
  const aliasNames=rawcodes(unit).some(code=>DOCUMENT_DISPLAY_ALIASES[code])?['兽王萨尔','霜狼杜隆坦']:[];
- return [unitDisplayName(unit),unit?.name,...aliasNames,...(record?.aliases??[]),unitCategory(unit),unit?.trainingOnly?'兵种训练 宝箱 神秘礼物':'',...(unit?.requiresDetails??[]).map(r=>r.name??r.rawcode),record?.category,record?.acquisitionText,record?.conditionText,record?.baseRawcode?DOCUMENT_CATALOG[record.baseRawcode]?.name:''].filter(Boolean).join(' ');
+ return [unitDisplayName(unit),unit?.name,...aliasNames,...(record?.aliases??[]),unitCategory(unit),unit?.heroEgg?'英雄彩蛋 升级 兵种训练 四折 宝箱 神秘礼物':'',...(unit?.requiresDetails??[]).map(r=>r.name??r.rawcode),record?.category,record?.acquisitionText,record?.conditionText,record?.baseRawcode?DOCUMENT_CATALOG[record.baseRawcode]?.name:''].filter(Boolean).join(' ');
 }
 export function applyDocumentUnitOverlay(unit){
  const name=unitDisplayName(unit),documentCatalog=documentUnit(unit);

@@ -1154,8 +1154,11 @@ export class Game {
       if (e.hp <= 0 || (st.stunUntil ?? 0) > now || (st.cycloneUntil ?? 0) > now) { e.pendingAttack = null; continue; }
       if (e.side === 'monster' && e.pendingAttack && this._advanceMonsterAttack(e, battle)) continue;
       const aggro = Math.max(e.range, number(e.acquisitionRange, Math.max(4.5, e.range + 1)));
-      let target = this._worldEntities.get(e.targetId);
-      if (target && (target.hp <= 0 || target.battleTeam !== e.battleTeam || target.side === e.side || !canWeaponTarget(e,target,now) || distance(e, target) > aggro * 1.25 || (e.nav?.mode === 'support' && distance(target, e.nav.anchor) > aggro * 1.25))) target = null;
+      let ordered=st.huskarAttackOrder?.targetId===e.targetId&&e.targetId!=null;
+      if(!ordered)delete st.huskarAttackOrder;
+      let target = this._worldEntities.get(e.targetId)??(ordered?this.state.kings.find(k=>k.id===e.targetId):null);
+      if (target && (target.hp <= 0 || target.battleTeam !== e.battleTeam || target.side === e.side || !canWeaponTarget(e,target,now) || (!ordered&&(distance(e, target) > aggro * 1.25 || (e.nav?.mode === 'support' && distance(target, e.nav.anchor) > aggro * 1.25))))) target = null;
+      if(!target){delete st.huskarAttackOrder;ordered=false;}
       if (!target && (st.nextSenseAt ?? 0) <= now) {
         st.nextSenseAt = now + .4;
         let best = Infinity;
@@ -1240,7 +1243,7 @@ export class Game {
     for (const a of battle.auras ?? []) if (a.side !== e.side && a.hp > 0 && a.ability?.type === 'aura_slow' && distance(a, e) <= number(a.ability.radius, 2)) auraSlow = Math.max(auraSlow, number(a.ability.value, .15));
     const step = Math.min(delta, e.moveSpeed * slow * (1 - auraSlow) * sourceMoveFactor(this,e,battle) * dt);
     let repelX = 0, repelY = 0;
-    for (const a of this._nearby(e, 1)) {
+    for (const a of e.status.huskarPathingOff?[]:this._nearby(e, 1)) {
       if (a.id === e.id || a.hp <= 0) continue;
       const ax = e.worldX - a.worldX, ay = e.worldY - a.worldY, separation = Math.hypot(ax, ay), radius = e.radius + a.radius;
       if (separation < radius * .9) {
@@ -1363,6 +1366,16 @@ export class Game {
       target.status.revived = true; target.hp = target.maxHp * clamp(number(target.ability.value, .35), .1, 1);
       target.status.stunUntil = this.state.time + .6; this._event('revive', target, '复生'); return;
     }
+    this._settleDeath(target,attacker);
+    return actual;
+  }
+  _killUnit(target){
+    if(!target||target.hp<=0)return false;
+    target.hp=0;target.pendingAttack=null;
+    this._settleDeath(target,null);
+    return true;
+  }
+  _settleDeath(target,attacker){
     if (target.hp <= 0 && !target.status.deathCounted) {
       target.status.deathCounted = true;
       const alchemy=alchemistDeathReward(this,target,attacker),economicPlayer=this.state.players[attacker?.ownerId];
@@ -1390,7 +1403,6 @@ export class Game {
       }
       this._event('death', target, target.side === 'monster' ? `+${target.reward}` : '阵亡', { color: target.color });
     }
-    return actual;
   }
   _sourceDeath(target,killer){sourceDeath(this,target,killer);}
   _passiveAbility(e, lane, dt) {
@@ -1731,7 +1743,7 @@ export class Game {
     // live object again so later healing, movement and death update one handle.
     for(const e of [...this.state.entities,...this.state.kings])if(this.state.brightArthasHandles[e.id])this.state.brightArthasHandles[e.id]=e;
     for(const e of [...this.state.entities,...this.state.kings])if(this.state.aesaraHandles[e.id])this.state.aesaraHandles[e.id]=e;
-    for(const j of this.state.sourceSkillJobs)if(j.type==='huskar_unyielding'){const e=[...this.state.entities,...this.state.kings].find(e=>e.id===j.sourceId);if(e)j.source=e;}
+    for(const j of this.state.sourceSkillJobs)if(['huskar_unyielding','huskar_duel_immune'].includes(j.type)){const e=[...this.state.entities,...this.state.kings].find(e=>e.id===j.sourceId);if(e)j.source=e;}
     if (saved.version === 1) {
       this.state.map = { id: MAP.id, version: MAP.version, topology: '2x2-crossbar-stem' };
       for (const e of this.state.entities) {

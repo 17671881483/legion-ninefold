@@ -31,7 +31,7 @@ function maxHero(g,family='h0DE'){
   for(let col=0;col<2;col++){ok(g.command('build',{unitId:unit('h0DB').id,col,row:0}));}
   for(const b of p.buildings)g._completeConstruction(p,b);
   const b=p.buildings[0];
-  const stages=current.filter(u=>u.heroFamily===family&&u.heroStage>0&&!u.trainingOnly).sort((a,b)=>a.heroStage-b.heroStage);
+  const stages=current.filter(u=>u.heroFamily===family&&u.heroStage>0&&!u.heroEgg).sort((a,b)=>a.heroStage-b.heroStage);
   assert.equal(stages.length,11);
   for(const def of stages){
     ok(g.command('upgrade',{buildingId:b.id,unitId:def.id}));
@@ -150,7 +150,7 @@ test('training replaces a capped altar-family hero immediately above population 
   assert.equal(p.boxRewards.consumed,true);assert.deepEqual(p.boxRewards.abilityIds,[]);assert.equal(p.boxRewards.selectedAbilityId,'A2ZA');
 });
 
-test('invalid ownership, branch, resource and missing-reward requests are atomic and ordinary upgrade cannot expose the five leaves',()=>{
+test('invalid ownership, branch, resource and missing-reward requests are atomic and direct building cannot expose hero eggs',()=>{
   const g=fixture(),b=maxHero(g),p=g.state.players[0];prerequisites(g);
   assert.equal(g.boxTrainingStatus(b.id).canStart,false);
   rejectsUnchanged(g,()=>train(g,b,'n02S'));
@@ -161,7 +161,6 @@ test('invalid ownership, branch, resource and missing-reward requests are atomic
     {buildingId:b.id,unitId:'v14_N02S'},
     {buildingId:b.id,unitId:unit('n05H').id},
   ])rejectsUnchanged(g,()=>g.command('boxTrain',payload));
-  for(const raw of ['n02S','n08Y','n08Z'])rejectsUnchanged(g,()=>g.command('upgrade',{buildingId:b.id,unitId:unit(raw).id}));
   for(const raw of BOX_TRAINING_RULES.importedRawcodes)rejectsUnchanged(g,()=>g.command('build',{unitId:unit(raw).id,col:5,row:7}));
   p.gold=119;assert.equal(targetStatus(g,b,'n02S').canStart,false);
   rejectsUnchanged(g,()=>train(g,b,'n02S'));

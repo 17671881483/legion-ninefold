@@ -1,3 +1,4 @@
+import {HUSKAR_DUEL_RULE,huskarDuelDamage,huskarDuelDeath,tickHuskarDuelJob} from './huskar-duel.js';
 import {RELOCATION_RULES,RELOCATION_BOUNDARY} from './relocation-rules.js';
 import {HUSKAR_RULES,huskarMainDamage,huskarAttackDamage,tickHuskarJob} from './huskar-rules.js';
 import {AESARA_RULES,canAesaraCastAbility,aesaraManualSkill,castAesaraAbility,aesaraIncomingDamage,aesaraMainDamage,aesaraDamageCleanup,isAesaraJobType,tickAesaraJob,sourceAesaraDeath} from './aesara-rules.js';
@@ -21,7 +22,7 @@ import { closestWalkable, isWalkable } from './layout.js';
 import { GARROSH_ACTIVE_RULES, GARROSH_PASSIVE_RULES, canGarroshCastAbility, castGarroshAbility, tryGarroshAutoCast, garroshActiveAfterDamage, sourceGarroshActiveDeath, tickGarroshActiveJob } from './garrosh-active-rules.js';
 import { ILLIDAN_RULES, ILLIDAN_ACTIVE_RULES, canIllidanCastAbility, castIllidanAbility, registerIllidanSource, tickIllidanSource, illidanOnAttackHit, tryIllidanAutoCast, illidanAfterDamage, sourceIllidanDeath, tickIllidanJob, isIllidanJobType } from './illidan-rules.js';
 
-export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261027-v24-1';
+export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261027-v25-1';
 
 // Values come from resolved object fields. Empty fields remain empty: a missing
 // native default is reported, rather than replacing it with tooltip numbers.
@@ -202,6 +203,7 @@ function compile(id,version='5.0dJF') {
   if(version==='v14.1A5'&&SOURCE_CLASS_RULES[id]){const r=SOURCE_CLASS_RULES[id];Object.assign(s,{...(!r.preserveNativeKind?{kind:'source_class'}:{}),...(r.compiled??{}),status:r.status,effectText:r.description+(r.partial?`【待核定：${r.partial}】`:'')});}
   if(version==='v14.1A5'&&HUSKAR_RULES[id]){const r=HUSKAR_RULES[id];Object.assign(s,{...(!r.preserveNativeKind?{kind:'huskar_source'}:{}),status:r.status,runtimeImplemented:true,effectText:r.description+(r.partial?`【待核定：${r.partial}】`:'')});}
   if(version==='v14.1A5'&&RELOCATION_RULES[id]){const r=RELOCATION_RULES[id];Object.assign(s,{kind:'building_relocation',status:r.status,effectText:r.description+(r.status==='partial'?`【待核定：${RELOCATION_BOUNDARY}】`:'')});}
+  if(version==='v14.1A5'&&id==='A0ID')Object.assign(s,{kind:'huskar_duel',status:'partial',effectText:HUSKAR_DUEL_RULE.description+`【待核定：${HUSKAR_DUEL_RULE.partial}】`});
   cache.set(key,s);return s;
 }
 function effectSummary(s){
@@ -555,6 +557,7 @@ export function beforeSourceDamage(game,target,actual,attacker,options={}){
     }
     if(isV14(target)){
       aesaraMainDamage(game,target,attacker,actual,heroScriptApi);
+      huskarDuelDamage(game,target,attacker,actual);
       const prior=huskarMainDamage(game,target,attacker,actual,heroScriptApi);
       aesaraDamageCleanup(game,target,attacker,actual,heroScriptApi,prior);
     }
@@ -631,6 +634,7 @@ export function sourceDeath(game,target,killer) {
     const def=templatesFor(target).H08U;if(def){const n=summon(game,target,def,0,{isSummon:false,reward:target.reward,isBoss:target.isBoss});if(n){n.status={...target.status,sourceDeathHandled:false,deathCounted:false};n.hp=n.maxHp;n.ability=null;game._event('revive',n,'重新生成');}}
   }
   lichKingDeath(game,target,heroScriptApi);
+  huskarDuelDeath(game,target,heroScriptApi);
 }
 function wf(w,key,fallback=0){return num(w[key]??w[key+'1'],fallback);}
 function weaponSecondary(game,e,target,battle,dealt) {
@@ -720,7 +724,7 @@ function castNativeNova(game,e,id,target){
   kelthuzadNativeSpellEffect(game,e,id,heroScriptApi);
   return {ok:true,skillId:id};
 }
-const heroScriptApi={sourceDeath,getOwnedUnitsOfRawcode:(g,e,code)=>[...g.state.entities.filter(u=>u.ownerId===e.ownerId&&raw(u)===code),...(g.state.players[e.ownerId]?.buildings??[]).filter(b=>(b.sourceRawcode??b.unitId?.replace(/^v14_/, ''))===code)],castNativeNova:(g,e,id,target)=>castNativeNova(g,e,id,target),applyCyclone:(g,s,t,id,seconds)=>applyNativeControl(g,s,t,id,'cycloneUntil',seconds),applyEnsnare:(g,s,t,id)=>applyNativeControl(g,s,t,id,'rootUntil'),universalDamage,nativeDamage,sourceDamage,applyCorrosion:applyYseraCorrosion,scriptInvulnerable,pauseUnitEx,compileAbility,addAbility,removeAbility,getBuilding,applyAttackLevel,setUnitPosition,moveUnit:setUnitPosition,
+const heroScriptApi={sourceDeath,killUnit:(g,e)=>g._killUnit(e),getOwnedUnitsOfRawcode:(g,e,code)=>[...g.state.entities.filter(u=>u.ownerId===e.ownerId&&raw(u)===code),...(g.state.players[e.ownerId]?.buildings??[]).filter(b=>(b.sourceRawcode??b.unitId?.replace(/^v14_/, ''))===code)],castNativeNova:(g,e,id,target)=>castNativeNova(g,e,id,target),applyCyclone:(g,s,t,id,seconds)=>applyNativeControl(g,s,t,id,'cycloneUntil',seconds),applyEnsnare:(g,s,t,id)=>applyNativeControl(g,s,t,id,'rootUntil'),universalDamage,nativeDamage,sourceDamage,applyCorrosion:applyYseraCorrosion,scriptInvulnerable,pauseUnitEx,compileAbility,addAbility,removeAbility,getBuilding,applyAttackLevel,setUnitPosition,moveUnit:setUnitPosition,
   applyNativeSlow:(game,source,target,id,descriptor)=>{target.status??={};target.status.sourceClassNativeSlowPending={abilityId:id,sourceId:source.id,at:game.state.time,descriptor:{...descriptor},reason:'原生Aslo默认目标许可未核定'};},
   vertigoTarget:(game,source,target,level)=>{const frozen=target.status?.sourceAnimationFrozenUntil;pauseUnitEx(game,source,target,level);if(frozen===undefined)delete target.status.sourceAnimationFrozenUntil;else target.status.sourceAnimationFrozenUntil=frozen;},
   pauseUnit:(game,e,value)=>{e.status??={};e.status.sourcePaused=!!value;if(value)e.pendingAttack=null;},
@@ -787,6 +791,7 @@ export function tickSourceScriptJobs(game,dt=0){
   tickSourceAuraRules(game,{matchesTargets});
   const now=game.state.time,remaining=[];
   for(const job of game.state.sourceSkillJobs??[]){
+    if(['huskar_duel','huskar_duel_immune'].includes(job.type)){if(tickHuskarDuelJob(game,job))remaining.push(job);continue;}
     if(job.type==='huskar_unyielding'){if(tickHuskarJob(game,job,heroScriptApi))remaining.push(job);continue;}
     if(isAesaraJobType(job.type)){if(tickAesaraJob(game,job,heroScriptApi))remaining.push(job);continue;}
     if(isBrightArthasJobType(job.type)){if(tickBrightArthasJob(game,job,heroScriptApi))remaining.push(job);continue;}

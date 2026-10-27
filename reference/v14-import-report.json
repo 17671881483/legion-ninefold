@@ -8108,8 +8108,9 @@
       "n08Z"
     ],
     "ordinaryUnitCount": 529,
-    "trainingOnlyUnitCount": 5,
-    "ordinaryUpgradeEdgesAdded": 0,
+    "trainingOnlyUnitCount": 0,
+    "ordinaryUpgradeEdgesAdded": 5,
+    "heroEggUnitCount": 5,
     "importedUnits": [
       {
         "id": "v14_n05H",
@@ -8118,7 +8119,7 @@
         "heroFamily": "h0HC",
         "hero": true,
         "isNativeHero": false,
-        "trainingOnly": true,
+        "heroEgg": true,
         "trainingSources": [
           "h0H4",
           "n01F"
@@ -8249,12 +8250,18 @@
               "line": 79
             }
           },
-          "progressionPolicy": "BoxGift literal training leaf, separate from the Web numbered-stage reconstruction and ordinary Upgrade edges.",
+          "progressionPolicy": "Direct hero egg route reviewed against source recipe and user correction; BoxGift provides optional discounted training.",
           "nativeHeroClassification": "Primary of the mapped combat object; Web altar-family identity does not imply UNIT_TYPE_HERO.",
           "missingNativeFields": [
             "lumbercost"
           ],
-          "pricingPolicy": "Normal numeric catalog adapters retain their existing empty-field fallback; original missing fields remain absent in buildingRawFields."
+          "pricingPolicy": "Normal numeric catalog adapters retain their existing empty-field fallback; original missing fields remain absent in buildingRawFields.",
+          "directUpgrade": {
+            "file": "reference/hero-egg-upgrades.json",
+            "recipeAbility": "A0W4",
+            "selectionLine": 2590,
+            "policy": "Hero eggs are direct upgrades from their completed hero. BoxGift is an optional 40% price route, not an unlock requirement. Native Upgrade fields are absent from the CSV packet; these five routes combine the user's correction, source recipe descriptions and exact BoxGift target IDs. Do not turn every training selection into an ordinary upgrade."
+          }
         }
       },
       {
@@ -8264,7 +8271,7 @@
         "heroFamily": "h0DE",
         "hero": true,
         "isNativeHero": false,
-        "trainingOnly": true,
+        "heroEgg": true,
         "trainingSources": [
           "h0DV"
         ],
@@ -8434,12 +8441,18 @@
               "line": 79
             }
           },
-          "progressionPolicy": "BoxGift literal training leaf, separate from the Web numbered-stage reconstruction and ordinary Upgrade edges.",
+          "progressionPolicy": "Direct hero egg route reviewed against source recipe and user correction; BoxGift provides optional discounted training.",
           "nativeHeroClassification": "Primary of the mapped combat object; Web altar-family identity does not imply UNIT_TYPE_HERO.",
           "missingNativeFields": [
             "lumbercost"
           ],
-          "pricingPolicy": "Normal numeric catalog adapters retain their existing empty-field fallback; original missing fields remain absent in buildingRawFields."
+          "pricingPolicy": "Normal numeric catalog adapters retain their existing empty-field fallback; original missing fields remain absent in buildingRawFields.",
+          "directUpgrade": {
+            "file": "reference/hero-egg-upgrades.json",
+            "recipeAbility": "A1W4",
+            "selectionLine": 2594,
+            "policy": "Hero eggs are direct upgrades from their completed hero. BoxGift is an optional 40% price route, not an unlock requirement. Native Upgrade fields are absent from the CSV packet; these five routes combine the user's correction, source recipe descriptions and exact BoxGift target IDs. Do not turn every training selection into an ordinary upgrade."
+          }
         }
       },
       {
@@ -8449,7 +8462,7 @@
         "heroFamily": "h0DE",
         "hero": true,
         "isNativeHero": false,
-        "trainingOnly": true,
+        "heroEgg": true,
         "trainingSources": [
           "h0DV"
         ],
@@ -8619,12 +8632,18 @@
               "line": 79
             }
           },
-          "progressionPolicy": "BoxGift literal training leaf, separate from the Web numbered-stage reconstruction and ordinary Upgrade edges.",
+          "progressionPolicy": "Direct hero egg route reviewed against source recipe and user correction; BoxGift provides optional discounted training.",
           "nativeHeroClassification": "Primary of the mapped combat object; Web altar-family identity does not imply UNIT_TYPE_HERO.",
           "missingNativeFields": [
             "lumbercost"
           ],
-          "pricingPolicy": "Normal numeric catalog adapters retain their existing empty-field fallback; original missing fields remain absent in buildingRawFields."
+          "pricingPolicy": "Normal numeric catalog adapters retain their existing empty-field fallback; original missing fields remain absent in buildingRawFields.",
+          "directUpgrade": {
+            "file": "reference/hero-egg-upgrades.json",
+            "recipeAbility": "A1W5",
+            "selectionLine": 2595,
+            "policy": "Hero eggs are direct upgrades from their completed hero. BoxGift is an optional 40% price route, not an unlock requirement. Native Upgrade fields are absent from the CSV packet; these five routes combine the user's correction, source recipe descriptions and exact BoxGift target IDs. Do not turn every training selection into an ordinary upgrade."
+          }
         }
       },
       {
@@ -8634,7 +8653,7 @@
         "heroFamily": "h0DE",
         "hero": true,
         "isNativeHero": false,
-        "trainingOnly": true,
+        "heroEgg": true,
         "trainingSources": [
           "h0DV"
         ],
@@ -8747,12 +8766,18 @@
               "line": 79
             }
           },
-          "progressionPolicy": "BoxGift literal training leaf, separate from the Web numbered-stage reconstruction and ordinary Upgrade edges.",
+          "progressionPolicy": "Direct hero egg route reviewed against source recipe and user correction; BoxGift provides optional discounted training.",
           "nativeHeroClassification": "Primary of the mapped combat object; Web altar-family identity does not imply UNIT_TYPE_HERO.",
           "missingNativeFields": [
             "lumbercost"
           ],
-          "pricingPolicy": "Normal numeric catalog adapters retain their existing empty-field fallback; original missing fields remain absent in buildingRawFields."
+          "pricingPolicy": "Normal numeric catalog adapters retain their existing empty-field fallback; original missing fields remain absent in buildingRawFields.",
+          "directUpgrade": {
+            "file": "reference/hero-egg-upgrades.json",
+            "recipeAbility": "A0OA",
+            "selectionLine": 2596,
+            "policy": "Hero eggs are direct upgrades from their completed hero. BoxGift is an optional 40% price route, not an unlock requirement. Native Upgrade fields are absent from the CSV packet; these five routes combine the user's correction, source recipe descriptions and exact BoxGift target IDs. Do not turn every training selection into an ordinary upgrade."
+          }
         }
       },
       {
@@ -8762,7 +8787,7 @@
         "heroFamily": "h0U3",
         "hero": true,
         "isNativeHero": false,
-        "trainingOnly": true,
+        "heroEgg": true,
         "trainingSources": [
           "h0U2"
         ],
@@ -8875,12 +8900,18 @@
               "line": 79
             }
           },
-          "progressionPolicy": "BoxGift literal training leaf, separate from the Web numbered-stage reconstruction and ordinary Upgrade edges.",
+          "progressionPolicy": "Direct hero egg route reviewed against source recipe and user correction; BoxGift provides optional discounted training.",
           "nativeHeroClassification": "Primary of the mapped combat object; Web altar-family identity does not imply UNIT_TYPE_HERO.",
           "missingNativeFields": [
             "lumbercost"
           ],
-          "pricingPolicy": "Normal numeric catalog adapters retain their existing empty-field fallback; original missing fields remain absent in buildingRawFields."
+          "pricingPolicy": "Normal numeric catalog adapters retain their existing empty-field fallback; original missing fields remain absent in buildingRawFields.",
+          "directUpgrade": {
+            "file": "reference/hero-egg-upgrades.json",
+            "recipeAbility": "A1OA",
+            "selectionLine": 2598,
+            "policy": "Hero eggs are direct upgrades from their completed hero. BoxGift is an optional 40% price route, not an unlock requirement. Native Upgrade fields are absent from the CSV packet; these five routes combine the user's correction, source recipe descriptions and exact BoxGift target IDs. Do not turn every training selection into an ordinary upgrade."
+          }
         }
       }
     ]

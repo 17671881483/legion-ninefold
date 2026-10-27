@@ -2,7 +2,7 @@
 const boundary='ANfd缺失原生继承字段、命令前摇/仲裁、AIil幻象创建与共享e00O施法后立即移除能力的完成时机未核定；保留原生命令请求，不伪造幻象或反制命中。';
 export const AESARA_RULES=Object.freeze({
   A0VX:{name:'秘术异蛇',active:true,status:'partial',targetKind:'enemy',range:800,manaCost:18,cooldown:10,
-    description:'每0.02秒向当前目标移动9码；距目标不超过10或目标生命不大于0.9时处理，造成325普通攻击类型/普通伤害。800范围按登记顺序选择未命中、非建筑、生命大于0.65的敌人，最多8次后回程。低生命命中最多2次、回程2次请求A0W0幻象；施法者死亡不取消。',partial:boundary},
+    description:'每0.02秒向当前目标移动9码；距目标不超过10或目标生命不大于0.9时处理，造成325法术攻击类型/普通伤害。800范围按登记顺序选择未命中、非建筑、生命大于0.65的敌人，最多8次后回程。低生命命中最多2次、回程2次请求A0W0幻象；施法者死亡不取消。',partial:boundary},
   A0VY:{name:'魔法护盾',active:true,status:'partial',targetKind:'none',manaCost:0,cooldown:999,
     description:'显式开关B06S护盾，已开启时吸收90%伤害，每点魔法吸收60。开盾添加A0W2每秒25生命；主伤害监听只对受害者尝试自动开启，首个触发伤害不追溯吸收。原生关盾后返还10魔法、移除回复并设5秒冷却。近战来源触发A0W3 slow请求，非仅普通攻击。',partial:boundary+'开关事件/B06S移除时序、耗尽与抗性叠加、无Cost字段的原生继承待验证；Web开关不额外收费。失buff清理属于长elseif链，未移植的前置分支重叠明确保留待核定。'},
 });
@@ -102,7 +102,7 @@ export function tickAesaraJob(g,j,api){
     }else if(j.targetId===j.sourceId){
       j.done=true;if(j.dummy.hp>0){j.dummy.hp=0;api.sourceDeath(g,j.dummy,null);}illusionRequest(g,e,j,'return');illusionRequest(g,e,j,'return');
     }else{
-      if(t)api.nativeDamage(g,t,325,e,{attackType:'normal',damageType:'normal'});
+      if(t)api.nativeDamage(g,t,325,e,{attackType:'spells',damageType:'normal'});
       if((t?.hp??0)<.9&&j.killIllusionRequests!==2){illusionRequest(g,e,j,'low-life-hit');j.killIllusionRequests++;}
       j.hits++;j.hitIds.push(j.targetId);
       const next=all(g).find(u=>!u.isBuilding&&!j.hitIds.includes(u.id)&&u.team!==e.team&&(u.battleTeam===undefined||e.battleTeam===undefined||u.battleTeam===e.battleTeam)&&u.hp>.65&&Math.hypot(pos(u).x-j.x,pos(u).y-j.y)<=800*scale(e)+1e-8);

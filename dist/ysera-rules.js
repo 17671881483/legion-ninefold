@@ -185,15 +185,20 @@ export function tryYseraAutoCast(game, e, api) {
   return null;
 }
 
-export function sourceYseraDeath(game, e, api) {
+export function sourceYseraDeath(game, e, api, mainDeathEnabled = true) {
   if (![YSERA_FORMS.human, YSERA_FORMS.dragon].includes(raw(e))) return false;
   e.status ??= {}; if (e.status.yseraDeathHandled) return false; e.status.yseraDeathHandled = true;
   for (const job of game.state.sourceSkillJobs ?? []) {
     if (job.sourceId === e.id && job.type.startsWith('ysera_')) job.source = snapshot(e);
     if (job.type === 'ysera_dragon_return' && job.dragonId === e.id) { job.dragon = snapshot(e); returnDragon(game, job, api); }
   }
-  if (raw(e) === YSERA_FORMS.human && has(e, 'A2YC') && !e.status.yseraDragonActive && !e.isIllusion) addJob(game, { type: 'ysera_death_awaken', sourceId: e.id, source: snapshot(e), at: game.state.time + 3 });
+  if (mainDeathEnabled) sourceYseraMainDeath(game,e);
   return true;
+}
+
+// Trig_UnitDeathActions; independent handle/dragon cleanup stays above.
+export function sourceYseraMainDeath(game,e){
+  if (raw(e) === YSERA_FORMS.human && has(e, 'A2YC') && !e.status.yseraDragonActive && !e.isIllusion) addJob(game, { type: 'ysera_death_awaken', sourceId: e.id, source: snapshot(e), at: game.state.time + 3 });
 }
 
 export function tickYseraJob(game, job, api) {

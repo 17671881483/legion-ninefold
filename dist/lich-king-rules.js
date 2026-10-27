@@ -33,9 +33,9 @@ export function initializeLichKingDeployment(g,body){
   }
 }
 
-/** Separate from regular death-trigger suppression; one listener per Arthas. */
-export function lichKingDeath(g,dead,api={}){
-  const st=dead.status??={};if(st.lichDeathObserved)return;st.lichDeathObserved=true;st.lichDeathListener=false;
+// This decrement belongs to Trig_UnitDeathActions' final elseif chain.
+export function lichKingMainDeath(g,dead){
+  const st=dead.status??={};
   if(['h0D3','h2A2'].includes(raw(dead))&&!st.sourceJuMember){
     const owner=st.lichBoneCounterOwner,p=player(g,owner);
     // A copied dragon has no saved P_id handle; it must not decrement its
@@ -43,6 +43,11 @@ export function lichKingDeath(g,dead,api={}){
     if(p)p.sourceBoneDragons=(p.sourceBoneDragons??0)-1;
     else g.state.lichNullOwnerBoneDragons=(g.state.lichNullOwnerBoneDragons??0)-1;
   }
+}
+
+/** Separate from regular death-trigger suppression; one listener per Arthas. */
+export function lichKingDeath(g,dead,api={}){
+  const st=dead.status??={};if(st.lichDeathObserved)return;st.lichDeathObserved=true;st.lichDeathListener=false;
   for(const job of g.state.sourceSkillJobs??[])if(isLichKingJobType(job.type)&&job.sourceId===dead.id)job.source=clone(dead);
   for(const caster of [...g.state.entities]){
     if(!caster.status?.lichDeathListener||!alive(caster)||!sameBattle(caster,dead)||distance(caster,dead)>1200*scale(caster)+1e-8)continue;

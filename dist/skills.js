@@ -1,3 +1,4 @@
+import {DEATH_TRIGGER_RULES,runMainUnitDeath} from './death-trigger-rules.js';
 import {ELEMENTAL_PROC_RULES,elementalDamagePrefix,iceExplosionAttackIssued} from './elemental-proc-rules.js';
 import {HUSKAR_DUEL_RULE,huskarDuelDamage,huskarDuelDeath,tickHuskarDuelJob} from './huskar-duel.js';
 import {RELOCATION_RULES,RELOCATION_BOUNDARY} from './relocation-rules.js';
@@ -5,7 +6,7 @@ import {HUSKAR_RULES,huskarMainDamage,huskarAttackDamage,tickHuskarJob} from './
 import {AESARA_RULES,canAesaraCastAbility,aesaraManualSkill,castAesaraAbility,aesaraIncomingDamage,aesaraMainDamage,aesaraDamageCleanup,isAesaraJobType,tickAesaraJob,sourceAesaraDeath} from './aesara-rules.js';
 import {BRIGHT_ARTHAS_RULES,canBrightArthasCastAbility,castBrightArthasAbility,tryBrightArthasAutoCast,brightArthasEventDamage,initializeBrightArthasDeployment,tickBrightArthasJob,isBrightArthasJobType,sourceBrightArthasDeath} from './bright-arthas-rules.js';
 import {DARK_ARTHAS_RULES,canDarkArthasCastAbility,castDarkArthasAbility,darkArthasMainDamage,darkArthasAttackDamage,darkArthasDamageListeners,darkArthasIncomingEvent,tickDarkArthasJob,isDarkArthasJobType,sourceDarkArthasDeath} from './dark-arthas-rules.js';
-import {LICH_KING_RULES,canLichKingCastAbility,castLichKingAbility,initializeLichKingDeployment,lichKingDeath,tickLichKingJob,isLichKingJobType} from './lich-king-rules.js';
+import {LICH_KING_RULES,canLichKingCastAbility,castLichKingAbility,initializeLichKingDeployment,lichKingMainDeath,lichKingDeath,tickLichKingJob,isLichKingJobType} from './lich-king-rules.js';
 import {VASHJ_RULES,canVashjCastAbility,castVashjAbility,tryVashjAutoCast,vashjOnAttackDamage,initializeVashjDeployment,tickVashjJob,isVashjJobType,sourceVashjDeath} from './vashj-rules.js';
 import {ICE_HERO_RULES,canIceHeroCastAbility,castIceHeroAbility,tryIceHeroAutoCast,tickIceHeroJob,sourceIceHeroDeath,isIceHeroJobType} from './ice-hero-rules.js';
 import {TROLL_RULES,TROLL_ACTIVE_RULES,initializeTrollUnit,canTrollCastAbility,castTrollAbility,tryTrollAutoCast,trollOnHit,trollIncomingDamage,sourceTrollDeath,tickTrollJob,isTrollJobType,trollHaste} from './troll-rules.js';
@@ -15,15 +16,15 @@ import {SOURCE_CLASS_RULES,initializeSourceClassDeployment,sourceClassBeforeDama
 import { RULES } from './data.js';
 import { WORKBOOK_ABILITIES, WORKBOOK_UNIT_TEMPLATES } from './workbook-reference.js';
 import { V14_ABILITIES, V14_UNIT_TEMPLATES } from './v14-reference.js';
-import { ALCHEMIST_ACTIVE_RULES, alchemistAfterDamage, tryAlchemistAutoCast, castAlchemistAbility, tickAlchemistJob, sourceAlchemistDeath } from './alchemist-rules.js';
+import { ALCHEMIST_ACTIVE_RULES, alchemistAfterDamage, tryAlchemistAutoCast, castAlchemistAbility, tickAlchemistJob, sourceAlchemistDeath, alchemistDeathReward } from './alchemist-rules.js';
 import { garroshAfterDamage, garroshOnHit, tickGarroshJobs } from './garrosh-rules.js';
-import { YSERA_ACTIVE_RULES, canYseraCastAbility, tryYseraAutoCast, castYseraAbility, tickYseraJob, sourceYseraDeath } from './ysera-rules.js';
+import { YSERA_ACTIVE_RULES, canYseraCastAbility, tryYseraAutoCast, castYseraAbility, tickYseraJob, sourceYseraMainDeath, sourceYseraDeath } from './ysera-rules.js';
 import { NAGA_ACTIVE_RULES, initializeNagaUnit, nagaBeforeDamage, nagaIncomingDamage, nagaOnHit, tickNagaUnit, castNagaAbility, tickNagaJob, sourceNagaDeath } from './naga-active-rules.js';
 import { closestWalkable, isWalkable } from './layout.js';
 import { GARROSH_ACTIVE_RULES, GARROSH_PASSIVE_RULES, canGarroshCastAbility, castGarroshAbility, tryGarroshAutoCast, garroshActiveAfterDamage, sourceGarroshActiveDeath, tickGarroshActiveJob } from './garrosh-active-rules.js';
 import { ILLIDAN_RULES, ILLIDAN_ACTIVE_RULES, canIllidanCastAbility, castIllidanAbility, registerIllidanSource, tickIllidanSource, illidanOnAttackHit, tryIllidanAutoCast, illidanAfterDamage, sourceIllidanDeath, tickIllidanJob, isIllidanJobType } from './illidan-rules.js';
 
-export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261027-v26-1';
+export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261027-v27-1';
 
 // Values come from resolved object fields. Empty fields remain empty: a missing
 // native default is reported, rather than replacing it with tooltip numbers.
@@ -204,6 +205,7 @@ function compile(id,version='5.0dJF') {
   if(version==='v14.1A5'&&SOURCE_CLASS_RULES[id]){const r=SOURCE_CLASS_RULES[id];Object.assign(s,{...(!r.preserveNativeKind?{kind:'source_class'}:{}),...(r.compiled??{}),status:r.status,effectText:r.description+(r.partial?`【待核定：${r.partial}】`:'')});}
   if(version==='v14.1A5'&&HUSKAR_RULES[id]){const r=HUSKAR_RULES[id];Object.assign(s,{...(!r.preserveNativeKind?{kind:'huskar_source'}:{}),status:r.status,runtimeImplemented:true,effectText:r.description+(r.partial?`【待核定：${r.partial}】`:'')});}
   if(version==='v14.1A5'&&RELOCATION_RULES[id]){const r=RELOCATION_RULES[id];Object.assign(s,{kind:'building_relocation',status:r.status,effectText:r.description+(r.status==='partial'?`【待核定：${RELOCATION_BOUNDARY}】`:'')});}
+  if(version==='v14.1A5'&&DEATH_TRIGGER_RULES[id]){const r=DEATH_TRIGGER_RULES[id];Object.assign(s,{kind:'source_death_trigger',status:r.status,runtimeImplemented:true,effectText:r.description+`【待核定：${r.partial}】`});}
   if(version==='v14.1A5'&&ELEMENTAL_PROC_RULES[id]){const r=ELEMENTAL_PROC_RULES[id];Object.assign(s,{kind:'elemental_source_proc',status:r.status,runtimeImplemented:true,effectText:r.description+(r.partial?`【待核定：${r.partial}】`:'')});}
   if(version==='v14.1A5'&&id==='A0ID')Object.assign(s,{kind:'huskar_duel',status:'partial',effectText:HUSKAR_DUEL_RULE.description+`【待核定：${HUSKAR_DUEL_RULE.partial}】`});
   cache.set(key,s);return s;
@@ -610,7 +612,8 @@ export function afterSourceDamage(game,target,actual,attacker,options={}) {
 }
 export function sourceDeath(game,target,killer) {
   if(target.status?.sourceDeathHandled)return;target.status.sourceDeathHandled=true;
-  if(isV14(target))sourceClassDeath(game,target,killer,heroScriptApi);
+  const mainDeathRan=runMainUnitDeath(game,target,killer,mainDeathApi);
+  if(isV14(target)&&!mainDeathRan)sourceClassDeath(game,target,killer,heroScriptApi,false);
   // JSON restoration breaks live-object aliases. Rebind the retained script
   // handle before corpse cleanup so its final mana/cooldowns remain authoritative.
   if(game.state.nagaScriptCasters?.[target.id])game.state.nagaScriptCasters[target.id]=target;
@@ -625,7 +628,7 @@ export function sourceDeath(game,target,killer) {
   sourceIllidanDeath(game,target,killer,heroScriptApi);
   sourceAlchemistDeath(game,target,killer,{universalDamage});
   sourceNagaDeath(game,target,killer,heroScriptApi);
-  if(isV14(target))sourceYseraDeath(game,target,heroScriptApi);
+  if(isV14(target))sourceYseraDeath(game,target,heroScriptApi,false);
   if(killer?.combatRawcode==='h0CZ')killer.hp=Math.min(killer.maxHp,killer.hp+target.maxHp*(isV14(killer)?.5:.6));
   if(killer?.combatRawcode==='h03B'||isV14(killer)&&killer?.combatRawcode==='h0OC')buff(killer,{...compile('A02V',killer.skillVersion),buffKey:'skeleton-buff'},killer,game.state.time);
   if(isV14(target)){
@@ -728,6 +731,12 @@ function castNativeNova(game,e,id,target){
   kelthuzadNativeSpellEffect(game,e,id,heroScriptApi);
   return {ok:true,skillId:id};
 }
+const mainDeathApi={universalDamage,nativeDamage,
+  alchemyGold:(g,dead,killer)=>{const reward=alchemistDeathReward(g,dead,killer),p=g.state.players?.[killer?.ownerId];if(p&&reward.bonusGold){p.gold+=reward.bonusGold;p.stats.goldEarned+=reward.bonusGold;g._event('gold',killer,`点金+${reward.bonusGold}`);}},
+  classDeath:(g,dead,killer,enabled)=>sourceClassDeath(g,dead,killer,heroScriptApi,enabled),
+  yseraAwakening:(g,dead)=>sourceYseraMainDeath(g,dead),
+  boneDragonDeath:lichKingMainDeath,
+};
 const heroScriptApi={applyNativeStun:(g,s,t,id)=>applyNativeControl(g,s,t,id,'stunUntil'),sourceDeath,killUnit:(g,e)=>g._killUnit(e),getOwnedUnitsOfRawcode:(g,e,code)=>[...g.state.entities.filter(u=>u.ownerId===e.ownerId&&raw(u)===code),...(g.state.players[e.ownerId]?.buildings??[]).filter(b=>(b.sourceRawcode??b.unitId?.replace(/^v14_/, ''))===code)],castNativeNova:(g,e,id,target)=>castNativeNova(g,e,id,target),applyCyclone:(g,s,t,id,seconds)=>applyNativeControl(g,s,t,id,'cycloneUntil',seconds),applyEnsnare:(g,s,t,id)=>applyNativeControl(g,s,t,id,'rootUntil'),universalDamage,nativeDamage,sourceDamage,applyCorrosion:applyYseraCorrosion,scriptInvulnerable,pauseUnitEx,compileAbility,addAbility,removeAbility,getBuilding,applyAttackLevel,setUnitPosition,moveUnit:setUnitPosition,
   applyNativeSlow:(game,source,target,id,descriptor)=>{target.status??={};target.status.sourceClassNativeSlowPending={abilityId:id,sourceId:source.id,at:game.state.time,descriptor:{...descriptor},reason:'原生Aslo默认目标许可未核定'};},
   vertigoTarget:(game,source,target,level)=>{const frozen=target.status?.sourceAnimationFrozenUntil;pauseUnitEx(game,source,target,level);if(frozen===undefined)delete target.status.sourceAnimationFrozenUntil;else target.status.sourceAnimationFrozenUntil=frozen;},

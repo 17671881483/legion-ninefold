@@ -16,7 +16,7 @@ const tick=(g,at)=>{g.state.time=at;tickSourceScriptJobs(g);};
 const jobs=g=>g.state.sourceSkillJobs.filter(j=>j.type==='aesara_snake'&&!j.done);
 const has=(e,id)=>e.skillSpecs.some(s=>s.id===id);
 const requests=(e,id)=>e.status.aesaraNativeRequests?.filter(r=>r.abilityId===id)??[];
-const damage=(g,t)=>325*g._typeMultiplier('normal',t.armorType,t.sourceArmorTypeRaw)*g._armorFactor(t.armor);
+const damage=(g,t)=>325*g._typeMultiplier('spells',t.armorType,t.sourceArmorTypeRaw)*g._armorFactor(t.armor);
 
 test('snake manual command has exact known cost/cooldown/range and shield exposes a toggle',()=>{
  const {g,e}=fixture(),s=manualSourceSkills(g,e);assert.deepEqual(s.map(s=>[s.id,s.manaCost,s.cooldown,s.targetKind]),[['A0VX',18,10,'enemy'],['A0VY',0,999,'none']]);assert.ok(s.every(s=>s.status==='partial'));
@@ -66,7 +66,7 @@ test('snake applies normal/normal damage with armor, even to magic-immune target
  const {g,e}=fixture(),t=other(g,e,{x:0}),expected=damage(g,t);t.skillSpecs=[{id:'Amim',kind:'immunity',status:'implemented'}];cast(g,e,'A0VX',t);tick(g,.02);near(t.hp,100000-expected);assert.ok(expected!==325);assert.equal(jobs(g)[0].hits,1);
 });
 test('eight unique hits then return; no random choice, no repeat, and no ninth enemy hit',()=>{
- const {g,e}=fixture(),targets=Array.from({length:9},()=>other(g,e,{x:0}));let draws=0;g._random=()=>{draws++;return .9;};cast(g,e,'A0VX',targets[0]);const j=jobs(g)[0];tick(g,.16);assert.equal(j.hits,8);assert.equal(new Set(j.hitIds).size,8);assert.equal(j.targetId,e.id);assert.equal(targets[8].hp,100000);tick(g,.18);assert.equal(j.done,true);assert.equal(draws,0);assert.equal(requests(e,'A0W0').length,2);assert.equal(g.state.entities.filter(u=>u.isIllusion).length,0);
+ const {g,e}=fixture(),targets=Array.from({length:9},()=>other(g,e,{x:0}));let draws=0;g._random=()=>{draws++;return .9;};cast(g,e,'A0VX',targets[0]);const j=jobs(g)[0];tick(g,.16);assert.equal(j.hits,8);assert.equal(new Set(j.hitIds).size,8);assert.equal(j.targetId,e.id);assert.equal(targets[8].hp,100000);assert.equal(draws,0,'snake targeting does not draw');tick(g,.18);assert.equal(j.done,true);assert.equal(draws,1,'return kills dummy: main death alchemy initializer draws once');assert.equal(requests(e,'A0W0').length,2);assert.equal(g.state.entities.filter(u=>u.isIllusion).length,0);
 });
 test('bounce selects from projectile position, excludes buildings/allies/low HP, but does not exclude Avul',()=>{
  const {g,e}=fixture(),first=other(g,e,{x:0}),structure=other(g,e,{x:0,isBuilding:true}),ally=other(g,e,{x:0,team:0}),low=other(g,e,{x:0}),inv=other(g,e,{x:0});low.hp=.65;inv.skillSpecs=[{id:'Avul',status:'implemented',kind:'invulnerability'}];cast(g,e,'A0VX',first);tick(g,.02);const j=jobs(g)[0];assert.equal(j.targetId,inv.id);tick(g,.04);near(inv.hp,100000);assert.ok(j.hitIds.includes(inv.id));for(const t of [structure,ally])near(t.hp,100000);
@@ -91,4 +91,8 @@ test('round reset clears snake handles and jobs; old saves do not invent an acti
 });
 test('coarse snake processing gives other hero autocasts the actual impact time and restores the outer clock',()=>{
  const {g,e}=fixture(),t=other(g,e,{code:'h0XA',x:0});t.skillSpecs=compileSkills({abilityIds:['A1VY'],skillVersion:'v14.1A5'});t.mana=100;cast(g,e,'A0VX',t);tick(g,1);near(g.state.time,1);near(t.skillStates.A1VY.readyAt,9.02);assert.ok(g.state.sourceSkillJobs.some(j=>j.type==='bright_arthas_shield'&&Math.abs(j.nextAt-3.02)<1e-7));
+});
+
+test('source ATTACK_TYPE_NORMAL means Spells; snake uses the fortified row and native spell resistance',()=>{
+ for(const resistant of [false,true]){const {g,e}=fixture(),t=other(g,e,{x:0});t.armor=0;t.armorType='fortified';t.sourceArmorTypeRaw='fort';if(resistant)t.skillSpecs=compileSkills({abilityIds:['A19A'],skillVersion:'v14.1A5',distanceScale:1/3});cast(g,e,'A0VX',t);tick(g,.02);near(t.hp,100000-(resistant?585:975));}
 });

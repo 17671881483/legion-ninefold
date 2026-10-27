@@ -1,0 +1,623 @@
+{
+  "revision": "v14-content-20261027-v27-1",
+  "source": {
+    "path": "v14-source/raw_extracted/war3map.j",
+    "sha256": "e66c55b3b25b185c991be5613e21fbf5b2d598f3cc40f2f8cd01c23bcb828250",
+    "lineCounting": "Latin-1 decode; split LF only"
+  },
+  "scope": "A0HW fire-on-kill, A20D death blast, Trig_UnitDeathActions suppression and existing effect ordering",
+  "sourceEvidence": [
+    {
+      "line": 29645,
+      "text": "function DamageAoe takes unit i,real FF,real FG,real P7,real P8,attacktype P9,damagetype QB returns nothing"
+    },
+    {
+      "line": 29646,
+      "text": "local group DG=CreateGroup()"
+    },
+    {
+      "line": 29647,
+      "text": "local unit D6=null"
+    },
+    {
+      "line": 29648,
+      "text": "local player h=GetOwningPlayer(i)"
+    },
+    {
+      "line": 29649,
+      "text": "call GroupEnumUnitsInRange(DG,FF,FG,P7,null)"
+    },
+    {
+      "line": 29650,
+      "text": "loop"
+    },
+    {
+      "line": 29651,
+      "text": "set D6=FirstOfGroup(DG)"
+    },
+    {
+      "line": 29652,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 29653,
+      "text": "call GroupRemoveUnit(DG,D6)"
+    },
+    {
+      "line": 29654,
+      "text": "if IsUnitEnemy(D6,h) then"
+    },
+    {
+      "line": 29655,
+      "text": "call UnitDamageTarget(i,D6,P8,false,false,P9,QB,WEAPON_TYPE_WHOKNOWS)"
+    },
+    {
+      "line": 29656,
+      "text": "endif"
+    },
+    {
+      "line": 29657,
+      "text": "endloop"
+    },
+    {
+      "line": 29658,
+      "text": "call GroupClear(DG)"
+    },
+    {
+      "line": 29659,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 29660,
+      "text": "set DG=null"
+    },
+    {
+      "line": 29661,
+      "text": "set D6=null"
+    },
+    {
+      "line": 29662,
+      "text": "set h=null"
+    },
+    {
+      "line": 29663,
+      "text": "set i=null"
+    },
+    {
+      "line": 29664,
+      "text": "endfunction"
+    },
+    {
+      "line": 29786,
+      "text": "function SelectRange takes unit Pf,real FF,real FG,real Px returns group"
+    },
+    {
+      "line": 29787,
+      "text": "local group DG=CreateGroup()"
+    },
+    {
+      "line": 29788,
+      "text": "local group Om=CreateGroup()"
+    },
+    {
+      "line": 29789,
+      "text": "local unit D6=null"
+    },
+    {
+      "line": 29790,
+      "text": "call GroupEnumUnitsInRange(DG,FF,FG,Px,null)"
+    },
+    {
+      "line": 29791,
+      "text": "loop"
+    },
+    {
+      "line": 29792,
+      "text": "set D6=FirstOfGroup(DG)"
+    },
+    {
+      "line": 29793,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 29794,
+      "text": "if IsUnitEnemy(D6,GetOwningPlayer(Pf)) and not IsUnitType(D6,UNIT_TYPE_DEAD) and GetUnitAbilityLevel(D6,$4176756C)==0 then"
+    },
+    {
+      "line": 29795,
+      "text": "call GroupAddUnit(Om,D6)"
+    },
+    {
+      "line": 29796,
+      "text": "endif"
+    },
+    {
+      "line": 29797,
+      "text": "call GroupRemoveUnit(DG,D6)"
+    },
+    {
+      "line": 29798,
+      "text": "endloop"
+    },
+    {
+      "line": 29799,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 29800,
+      "text": "set DG=null"
+    },
+    {
+      "line": 29801,
+      "text": "set D6=null"
+    },
+    {
+      "line": 29802,
+      "text": "set Pf=null"
+    },
+    {
+      "line": 29803,
+      "text": "set Py=Om"
+    },
+    {
+      "line": 29804,
+      "text": "set Om=null"
+    },
+    {
+      "line": 29805,
+      "text": "return Py"
+    },
+    {
+      "line": 37078,
+      "text": "function SingedAlchemyGold takes unit Bc,unit Om returns nothing"
+    },
+    {
+      "line": 37079,
+      "text": "local integer CC=1"
+    },
+    {
+      "line": 37080,
+      "text": "local integer bw=GetRandomInt(1,100)"
+    },
+    {
+      "line": 37081,
+      "text": "local integer BU=0"
+    },
+    {
+      "line": 37082,
+      "text": "local integer bx=2"
+    },
+    {
+      "line": 37083,
+      "text": "local integer by=5"
+    },
+    {
+      "line": 37084,
+      "text": "local integer bz=10"
+    },
+    {
+      "line": 37085,
+      "text": "local integer BF=0"
+    },
+    {
+      "line": 37086,
+      "text": "local player h=null"
+    },
+    {
+      "line": 37087,
+      "text": "if not SingedIsHero(Bc) or Om==null then"
+    },
+    {
+      "line": 37088,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 37089,
+      "text": "set Om=null"
+    },
+    {
+      "line": 37090,
+      "text": "return"
+    },
+    {
+      "line": 37091,
+      "text": "endif"
+    },
+    {
+      "line": 37092,
+      "text": "if not IsUnitEnemy(Om,GetOwningPlayer(Bc)) then"
+    },
+    {
+      "line": 37093,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 37094,
+      "text": "set Om=null"
+    },
+    {
+      "line": 37095,
+      "text": "return"
+    },
+    {
+      "line": 41908,
+      "text": "function gg_trg_UnitDeathCondition takes nothing returns boolean"
+    },
+    {
+      "line": 41909,
+      "text": "return not IsUnitInGroup(GetTriggerUnit(),Ju)"
+    },
+    {
+      "line": 41910,
+      "text": "endfunction"
+    },
+    {
+      "line": 41911,
+      "text": "function Trig_UnitDeathActions takes nothing returns nothing"
+    },
+    {
+      "line": 41912,
+      "text": "local unit i=GetTriggerUnit()"
+    },
+    {
+      "line": 41913,
+      "text": "local unit bv=GetKillingUnit()"
+    },
+    {
+      "line": 41914,
+      "text": "local trigger Eb=GetTriggeringTrigger()"
+    },
+    {
+      "line": 41915,
+      "text": "local real FF=GetUnitX(i)"
+    },
+    {
+      "line": 41916,
+      "text": "local real FG=GetUnitY(i)"
+    },
+    {
+      "line": 41917,
+      "text": "local real P8=0"
+    },
+    {
+      "line": 41918,
+      "text": "local effect DE=null"
+    },
+    {
+      "line": 41919,
+      "text": "local timer t=null"
+    },
+    {
+      "line": 41920,
+      "text": "local group Uz=CreateGroup()"
+    },
+    {
+      "line": 41921,
+      "text": "local unit D6=null"
+    },
+    {
+      "line": 41922,
+      "text": "local unit Ki=null"
+    },
+    {
+      "line": 41923,
+      "text": "local player h"
+    },
+    {
+      "line": 41924,
+      "text": "local boolexpr Cd"
+    },
+    {
+      "line": 41925,
+      "text": "local integer BF"
+    },
+    {
+      "line": 41926,
+      "text": "local integer BU"
+    },
+    {
+      "line": 41927,
+      "text": "local real a5"
+    },
+    {
+      "line": 41928,
+      "text": "call DisableTrigger(Eb)"
+    },
+    {
+      "line": 41929,
+      "text": "call SingedAlchemyGold(bv,i)"
+    },
+    {
+      "line": 41930,
+      "text": "if GetUnitTypeId(i)==$75303444 then"
+    },
+    {
+      "line": 41931,
+      "text": "call NazuoOmenOfSummonDeath(i)"
+    },
+    {
+      "line": 41932,
+      "text": "endif"
+    },
+    {
+      "line": 41933,
+      "text": "if GetUnitAbilityLevel(i,$41323044)>0 then"
+    },
+    {
+      "line": 41934,
+      "text": "call DestroyEffect(AddSpecialEffect(\"Objects\\\\Spawnmodels\\\\Other\\\\NeutralBuildingExplosion\\\\NeutralBuildingExplosion.mdl\",FF,FG))"
+    },
+    {
+      "line": 41935,
+      "text": "call DestroyGroup(Uz)"
+    },
+    {
+      "line": 41936,
+      "text": "set Uz=SelectRange(i,FF,FG,400)"
+    },
+    {
+      "line": 41937,
+      "text": "loop"
+    },
+    {
+      "line": 41938,
+      "text": "set D6=FirstOfGroup(Uz)"
+    },
+    {
+      "line": 41939,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 41940,
+      "text": "call GroupRemoveUnit(Uz,D6)"
+    },
+    {
+      "line": 41941,
+      "text": "call UnitDamageTargetBJ(i,D6,200,ATTACK_TYPE_CHAOS,DAMAGE_TYPE_UNIVERSAL)"
+    },
+    {
+      "line": 41942,
+      "text": "endloop"
+    },
+    {
+      "line": 41943,
+      "text": "call DestroyGroup(Uz)"
+    },
+    {
+      "line": 41944,
+      "text": "set Uz=CreateGroup()"
+    },
+    {
+      "line": 41945,
+      "text": "endif"
+    },
+    {
+      "line": 41952,
+      "text": "if GetUnitAbilityLevel(i,$4131385A)>0 then"
+    },
+    {
+      "line": 41953,
+      "text": "call DestroyEffect(AddSpecialEffect(\"Abilities\\\\Weapons\\\\LichMissile\\\\LichMissile.mdl\",GetUnitX(bv),GetUnitY(bv)))"
+    },
+    {
+      "line": 41954,
+      "text": "set Ki=CreateUnit(GetOwningPlayer(i),Pn,GetUnitX(bv),GetUnitY(bv),270)"
+    },
+    {
+      "line": 41955,
+      "text": "call UnitAddAbility(Ki,$41313943)"
+    },
+    {
+      "line": 41956,
+      "text": "call IssueTargetOrder(Ki,\"slow\",bv)"
+    },
+    {
+      "line": 41957,
+      "text": "call UnitApplyTimedLife(Ki,$42487765,1)"
+    },
+    {
+      "line": 41958,
+      "text": "endif"
+    },
+    {
+      "line": 41959,
+      "text": "if GetUnitAbilityLevel(i,$41313934)>0 then"
+    },
+    {
+      "line": 41960,
+      "text": "call DestroyEffect(AddSpecialEffect(\"Abilities\\\\Spells\\\\Undead\\\\DeathCoil\\\\DeathCoilSpecialArt.mdl\",GetUnitX(i),GetUnitY(i)))"
+    },
+    {
+      "line": 41961,
+      "text": "set a5=GetRandomPercentageBJ()"
+    },
+    {
+      "line": 41962,
+      "text": "if a5<=5 then"
+    },
+    {
+      "line": 42054,
+      "text": "if GetUnitTypeId(i)==Zm and GetUnitAbilityLevel(i,Yk)>0 and not LoadBoolean(O,GetHandleId(i),StringHash(\"YseraDragonActive\")) and IsUnitIllusionBJ(i)==false then"
+    },
+    {
+      "line": 42055,
+      "text": "set t=CreateTimer()"
+    },
+    {
+      "line": 42056,
+      "text": "call SaveUnitHandle(O,GetHandleId(t),0,i)"
+    },
+    {
+      "line": 42057,
+      "text": "call TimerStart(t,3.,false,function YseraDeathAwakening)"
+    },
+    {
+      "line": 42058,
+      "text": "endif"
+    },
+    {
+      "line": 42090,
+      "text": "if GetUnitAbilityLevel(bv,$41304857)>0 then"
+    },
+    {
+      "line": 42091,
+      "text": "set P8=4+GetUnitState(i,UNIT_STATE_MAX_LIFE)*.02"
+    },
+    {
+      "line": 42092,
+      "text": "call DestroyEffect(AddSpecialEffect(\"Abilities\\\\Spells\\\\Other\\\\Volcano\\\\VolcanoMissile.mdl\",FF,FG))"
+    },
+    {
+      "line": 42093,
+      "text": "call DestroyEffect(AddSpecialEffect(\"Abilities\\\\Spells\\\\Other\\\\Incinerate\\\\FireLordDeathExplode.mdl\",FF,FG))"
+    },
+    {
+      "line": 42094,
+      "text": "call DamageAoe(bv,FF,FG,200,P8,ATTACK_TYPE_MELEE,DAMAGE_TYPE_MAGIC)"
+    },
+    {
+      "line": 42095,
+      "text": "elseif GetUnitTypeId(i)==$68304A4A and bv!=null and GetUnitAbilityLevel(i,$41304941)>0 and IsUnitIllusionBJ(i)==false then"
+    },
+    {
+      "line": 42096,
+      "text": "if GetRandomInt(0,1)>0 and LoadBoolean(O,GetHandleId(i),StringHash(\"u1\"))==true then"
+    },
+    {
+      "line": 42097,
+      "text": "call FlushChildHashtable(O,GetHandleId(i))"
+    },
+    {
+      "line": 42098,
+      "text": "else"
+    },
+    {
+      "line": 42099,
+      "text": "set t=CreateTimer()"
+    },
+    {
+      "line": 42100,
+      "text": "call SaveUnitHandle(O,GetHandleId(t),StringHash(\"unit\"),i)"
+    },
+    {
+      "line": 42101,
+      "text": "if LoadBoolean(O,GetHandleId(i),StringHash(\"SMYinwei\")) then"
+    },
+    {
+      "line": 42102,
+      "text": "call SaveBoolean(O,GetHandleId(t),1,true)"
+    },
+    {
+      "line": 42103,
+      "text": "endif"
+    },
+    {
+      "line": 42104,
+      "text": "call TimerStart(t,1,false,function A01ATimer)"
+    },
+    {
+      "line": 42105,
+      "text": "endif"
+    },
+    {
+      "line": 42106,
+      "text": "elseif GetUnitTypeId(i)==$68305043 then"
+    },
+    {
+      "line": 42107,
+      "text": "elseif LoadInteger(O,H2I(i),StringHash(\"7\"))!=0 then"
+    },
+    {
+      "line": 42126,
+      "text": "elseif GetUnitTypeId(i)==$68304433 or GetUnitTypeId(i)==$68324132 then"
+    },
+    {
+      "line": 42127,
+      "text": "set h=LoadPlayerHandle(O,GetHandleId(i),StringHash(\"P_id\"))"
+    },
+    {
+      "line": 42128,
+      "text": "call SaveInteger(O,GetHandleId(h),StringHash(\"Bone_Dragon\"),LoadInteger(O,GetHandleId(h),StringHash(\"Bone_Dragon\"))-1)"
+    },
+    {
+      "line": 42129,
+      "text": "set h=null"
+    },
+    {
+      "line": 42177,
+      "text": "call EnableTrigger(Eb)"
+    },
+    {
+      "line": 42178,
+      "text": "call DestroyGroup(Uz)"
+    },
+    {
+      "line": 42179,
+      "text": "set DE=null"
+    },
+    {
+      "line": 42180,
+      "text": "set i=null"
+    },
+    {
+      "line": 42181,
+      "text": "set Ki=null"
+    },
+    {
+      "line": 42182,
+      "text": "set bv=null"
+    },
+    {
+      "line": 42183,
+      "text": "set Eb=null"
+    },
+    {
+      "line": 42184,
+      "text": "set t=null"
+    },
+    {
+      "line": 42185,
+      "text": "set Uz=null"
+    },
+    {
+      "line": 42186,
+      "text": "endfunction"
+    },
+    {
+      "line": 42187,
+      "text": "function InitTrig_UnitDeath takes nothing returns nothing"
+    },
+    {
+      "line": 42188,
+      "text": "set bu=CreateTrigger()"
+    },
+    {
+      "line": 42189,
+      "text": "call TriggerRegisterAnyUnitEventBJ(bu,EVENT_PLAYER_UNIT_DEATH)"
+    },
+    {
+      "line": 42190,
+      "text": "call TriggerAddCondition(bu,Condition(function gg_trg_UnitDeathCondition))"
+    },
+    {
+      "line": 42191,
+      "text": "call TriggerAddAction(bu,function Trig_UnitDeathActions)"
+    }
+  ],
+  "boundaries": [
+    "Web entity order substitutes for FirstOfGroup; native exact group iteration and registration order not replay-verified.",
+    "Only already sourced portions of Trig_UnitDeathActions run; its other unresolved branches remain unimplemented.",
+    "A0HW is in the final elseif chain before bone-dragon decrement. Independent Lich/duel/economy/death callbacks are not disabled with this trigger.",
+    "Range scans include kings and use a snapshot; hidden/Locust/removed bodies are omitted at enumeration. Exact native host filtering remains unverified.",
+    "A20D SelectRange excludes dead and Avul; A0HW DamageAoe filters only enemy after enumeration, damage handles immunity/dead targets.",
+    "Existing direct sourceDeath callbacks now execute the same alchemy entry draw as damage deaths, including dummy/timed-life events."
+  ],
+  "aesaraCorrection": {
+    "line": 40205,
+    "text": "call UnitDamageTarget(LoadUnitHandle(CE,GetHandleId(GetExpiredTimer()),$C303079D),LoadUnitHandle(CE,GetHandleId(GetExpiredTimer()),$BA15D64D),325.,false,false,ATTACK_TYPE_NORMAL,DAMAGE_TYPE_NORMAL,WEAPON_TYPE_WHOKNOWS)",
+    "attackType": "spells",
+    "damageType": "normal",
+    "note": "ATTACK_TYPE_NORMAL is Spells, not ATTACK_TYPE_MELEE; fixes the v21 interpretation.",
+    "primaryReference": "https://alanfox2000software.github.io/war3-diy/doc/JassManual/api/common_j-variables.shtml"
+  }
+}

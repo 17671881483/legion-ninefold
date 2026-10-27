@@ -166,13 +166,14 @@ export function sourceClassOnAttackDamage(game,attacker,target,api={}){
   }finally{st.sourceClassAttackBusy=false;}
   return triggered;
 }
-export function sourceClassDeath(game,victim,killer,api={}){
+export function sourceClassDeath(game,victim,killer,api={},mainDeathEnabled=true){
   if(!victim)return false;const st=status(victim);if(st.sourceClassDeathHandled)return false;st.sourceClassDeathHandled=true;
   for(const job of game.state.sourceSkillJobs??[]){
     if(!isSourceClassJobType(job.type)||job.done)continue;
     if(job.type==='source_class_ability_expire'&&job.targetId===victim.id){removeAbility(game,victim,job.abilityId,api);delete st.sourceClassTemporaryAbilities?.[job.abilityId];job.done=true;}
     if(job.type==='source_class_desert_rearm'&&job.sourceId===victim.id)job.source=snapshot(victim);
   }
+  if(!mainDeathEnabled)return true;
   if(has(victim,'A18Z')&&killer)api.applyNativeSlow?.(game,victim,killer,'A19C',SOURCE_CLASS_RULES.A19C.native);
   if(has(victim,'A194')){
     const draw=game._random()*100,count=draw<=5?3:draw<=10?2:draw<=15?1:0;

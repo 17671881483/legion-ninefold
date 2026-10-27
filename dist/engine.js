@@ -7,7 +7,6 @@ import { initializeSourceClassBuilding } from './source-class-rules.js';
 import { MAP, laneToWorld, worldToLane, kingWorld, spawnWarpWorld, supportWorld, routePoints, isWalkable, isSegmentWalkable, constrainPoint, closestWalkable, navigationPath } from './layout.js';
 import { recordEggCompletion, restoreEggHistory, finishEggWave, recordBeastKingKill, eggRequirementStatus, appearanceQualificationStatus } from './egg-rules.js';
 import { queueSpecialMonsters, applySpecialMonsterSpawn, specialMonsterDeath, sourceEconomyBuildStart, sourceEconomyUpgradeFinish, farmerGoldRate, sourceEconomyDeath, applyFarmerRoundReward } from './special-rules.js';
-import { alchemistDeathReward } from './alchemist-rules.js';
 import { applySandboxQualification } from './sandbox-qualifications.js';
 import { BOX_REWARD_RULES, BOX_FARM_RULES, advanceBoxRewards, migrateBoxRewardProgress, boxTrainingRewardStatus, boxTrainingTargetStatus, boxTrainingCost, boxTrainingReplacementState, consumeBoxTrainingReward, claimBoxReward, completeBoxSwap, boxBuildFreeRefund } from './box-training-rules.js';
 
@@ -1380,8 +1379,7 @@ export class Game {
   _settleDeath(target,attacker){
     if (target.hp <= 0 && !target.status.deathCounted) {
       target.status.deathCounted = true;
-      const alchemy=alchemistDeathReward(this,target,attacker),economicPlayer=this.state.players[attacker?.ownerId];
-      if(economicPlayer&&alchemy.bonusGold){economicPlayer.gold+=alchemy.bonusGold;economicPlayer.stats.goldEarned+=alchemy.bonusGold;this._event('gold',attacker,`点金+${alchemy.bonusGold}`);}
+      const economicPlayer=this.state.players[attacker?.ownerId];
       this._sourceDeath(target,attacker);
       const economic=sourceEconomyDeath(this,target,attacker,units);
       if(economicPlayer){economicPlayer.gold+=economic.bonusGold;economicPlayer.wood+=economic.bonusWood;economicPlayer.stats.goldEarned+=economic.bonusGold;}

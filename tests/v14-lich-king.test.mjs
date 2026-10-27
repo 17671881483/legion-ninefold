@@ -37,9 +37,9 @@ test('death listener copies friendly, enemy and summoned raw types with fresh te
 
 test('range short-circuits RNG, but native-hero, Ju and e00E exclusions consume their prior roll',()=>{
  const {g,e}=fixture(),outside=other(g,e,{x:4.001}),excluded=[{isNativeHero:true},{status:{sourceJuMember:true}},{code:'e00E'}].map(extra=>other(g,e,extra));let draws=0;g._random=()=>{draws++;return 0;};
- outside.hp=0;g._sourceDeath(outside,e);assert.equal(draws,0);
+ outside.hp=0;g._sourceDeath(outside,e);assert.equal(draws,1,'main death alchemy initializer still draws outside Lich range');
  for(const target of excluded){target.hp=0;g._sourceDeath(target,e);}
- assert.equal(draws,3);assert.equal(copies(g).length,0);
+ assert.equal(draws,6,'three Lich rolls plus three unsuppressed main-death draws; Ju skips main');assert.equal(copies(g).length,0);
  const giant=other(g,e,{x:4,isHero:true,isNativeHero:false});kill(g,giant,e);assert.equal(copies(g).length,1,'visual/build-menu hero is not a native UNIT_TYPE_HERO');
 });
 
@@ -80,7 +80,7 @@ test('Aslo proxy without registered source listener spends mana but does not inv
 test('dragon starts at .04, advances twelve 80 steps and cleans at .52 with an excluded e00E death event',()=>{
  const {g,e}=fixture(),t=other(g,e,{x:2});let draws=0;g._random=()=>{draws++;return .99;};cast(g,e,t);const j=g.state.sourceSkillJobs[0];tick(g,.039);assert.equal(j.steps,0);tick(g,.04);assert.equal(j.steps,1);near(j.x-e.worldX,80/300);
  tick(g,.48);assert.equal(j.steps,12);near(j.x-e.worldX,960/300);assert.equal(g.state.sourceSkillJobs.length,1);assert.equal(draws,0);
- tick(g,.52);assert.equal(g.state.sourceSkillJobs.length,0);assert.equal(draws,1);assert.equal(copies(g).length,0);
+ tick(g,.52);assert.equal(g.state.sourceSkillJobs.length,0);assert.equal(draws,2,'dummy death dispatches both the main alchemy initializer and independent Lich roll');assert.equal(copies(g).length,0);
 });
 
 test('dragon fixed direction follows no moving target and deduplicates each flight independently',()=>{

@@ -16,16 +16,24 @@
 
 - [x] 五条英雄彩蛋直接升级路径已接入；兵种训练是可选四折入口，不是必需前置。不得在其他改动中退回“只能训练”。见[来源和修正](../reference/hero-egg-upgrades.json)。
 - [x] 沙盒可单独启用超级赞助；普通对局不伪造平台账号资格。
-- [ ] 本清单先提交 GitHub，然后创建 3 个独立开发聊天。聊天启动和分支状态记录在下方。
+- [x] 本清单已先以 `d17affb54754d4d78573837dd2948a90154d3751` 提交到 GitHub，再创建 3 个独立开发聊天；启动快照确认三者均为 active/inProgress。
 - [ ] 三路成果经主聊天合并、全量回归和浏览器验收后，同步 GitHub 与现有网站。子聊天的单项完成不能直接勾选整个还原目标。
 
 ## 首批三个开发上下文
 
 | 编号 | 首批负责内容 | 独立模块和证据 | 状态 |
 | --- | --- | --- | --- |
-| A | 骷髅王 A0IA 复活及 A0IB 请求、旧/新句柄、主死亡链、LI 门槛 | `skeleton-king-rules.js`；[任务 A](parallel-development/A-skeleton-king.md) | 待创建聊天 |
-| B | 噩梦分身 A0XM 黑暗之魂：积累、属性、召唤、致命伤害分支 | `nightmare-rules.js`；[任务 B](parallel-development/B-nightmare.md) | 待创建聊天 |
-| C | 噬魂毒素 A0I5：受伤施法、范围施加、计时伤害及结束效果 | `soul-toxin-rules.js`；[任务 C](parallel-development/C-soul-toxin.md) | 待创建聊天 |
+| A | 骷髅王 A0IA 复活及 A0IB 请求、旧/新句柄、主死亡链、LI 门槛 | `skeleton-king-rules.js`；[任务 A](parallel-development/A-skeleton-king.md) | 已启动，开发中 |
+| B | 噩梦分身 A0XM 黑暗之魂：积累、属性、召唤、致命伤害分支 | `nightmare-rules.js`；[任务 B](parallel-development/B-nightmare.md) | 已启动，开发中 |
+| C | 噬魂毒素 A0I5：受伤施法、范围施加、计时伤害及结束效果 | `soul-toxin-rules.js`；[任务 C](parallel-development/C-soul-toxin.md) | 已启动，开发中 |
+
+聊天运行在 local 主机，均从上述文档提交建立隔离工作树：
+
+- A：`01a17c19-8a9c-7b42-945a-b5f3ab7859da`，分支计划 `codex/skeleton-king-revival`。
+- B：`01a17c19-aeca-7fb3-bd7c-01b3645fc9f2`，分支计划 `codex/nightmare-souls`。
+- C：`01a17c19-d1ba-7f31-93ed-781fe4f922c7`，分支计划 `codex/soul-toxin`。
+
+启动不等于功能完成；独立提交、验收和合并状态由主聊天根据实际结果更新。
 
 A0I5 当前被通用原生 Acri 编译器标成已实现，但对应 JASS 分支尚未完整接入，因此单独纳入首批纠错；它不包含在上述 213 项未闭合能力里。A0IB 是 A0IA 动态授予马甲的能力，接入时必须补入覆盖统计，不能遗漏。
 

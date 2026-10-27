@@ -1,0 +1,33 @@
+{
+  "revision": "v14-content-20261027-v22-1",
+  "scope": "v14.1A5 Aroc weapon damage and A0VZ AIdd outgoing factor",
+  "status": "partial-native-host",
+  "packetEvidence": {
+    "table": "all_abilities.csv",
+    "A0VW": {"row": 1431, "DataA1": 999999, "DataB1": 99999, "DataC1": 2, "Area1": 500},
+    "A0VZ": {"row": 1434, "DataA1": 1, "DataB1": 0.5, "DataE1": 1, "DataG1": 1, "DataH1": 1},
+    "JASS": {"path": "v14-source/raw_extracted/war3map.j", "sha256": "e66c55b3b25b185c991be5613e21fbf5b2d598f3cc40f2f8cd01c23bcb828250", "A0VWReferences": [43842,43844,43846], "A0VZReferences": []},
+    "interpretation": "A0VW的直接JASS引用只改弹道外观，没有文案中4额外目标、20%附伤或击退的直接实现。A0VZ只有造成伤害字段DataB为0.5，不能从名称推导承伤减半。"
+  },
+  "nativeEvidence": [
+    {"url": "https://www.hiveworkshop.com/threads/multiple-shots-abbility-with-barrage-bug.330079/", "author": "22FrosT22", "date": "2021-01-19", "kind": "first-person native experiment", "supports": "修改Damage per target仍观察到各目标受到普通攻击伤害。"},
+    {"url": "https://www.hiveworkshop.com/threads/auto-attack-hit-2-enemies.349620/", "author": "UndeadImmortal", "date": "2023-06-19", "kind": "author demo map and user reproduction", "supports": "附带multishot.w3m；DataC1=1通常合计3目标，DataC逐一增加相应目标；DataC1=1/DataB1=2合计2目标。"},
+    {"url": "https://www.hiveworkshop.com/threads/a-bug-with-activable-barrage.302255/", "author": "axleion", "date": "2018-01-16", "kind": "author's split-shot implementation and testing", "supports": "Def2表示造成伤害倍率，用于普通攻击、暴击及Barrage，不是承受伤害倍率。AIdd的同字段映射与Aegr/Adef族语义结合用于A0VZ，保留待同版原生验证。"},
+    {"url": "https://www.hiveworkshop.com/threads/too-op-for-a-flying-unit.303624/", "author": "Lord Aiden", "date": "2018-03-18", "kind": "first-person two-weapon update", "supports": "主目标决定本次使用的武器攻击类型，分裂箭沿用该类型，即使次级目标不在该武器直接目标表内。"},
+    {"url": "https://github.com/Cokemonkey11/wc3-ability-doc/blob/main/sources/screwthetrees-wc3-editor-ability-insight-document/2023-11-14.md", "kind": "archived attributed native experiment notes", "reportedVersion": "Barrage 1.28.5.7680; Aegr 1.36", "supports": "Barrage范围字段与暴击抑制；Aegr输出倍率作用于自动攻击。不是v14地图同版原生验收。"}
+  ],
+  "implemented": [
+    "已具明确DataC/DataB/Area的Aroc使用武器本次攻击力和类型，逐目标防御与攻击事件，不再以DataA作固定附伤或DataB作伤害预算。",
+    "正DataC且DataB为0或不构成小数量边界时，额外目标DataC+1；DataC1=1/DataB1=2额外1。缺少数量字段的能力保持unresolved。",
+    "仅missile武器；暴击触发时抑制分裂。释放时快照目标，主目标伤害为零或反击杀死攻击者不会抹掉其余已释放箭。",
+    "A0VZ对普通攻击与分裂箭输出乘0.5；不修改面板基础攻击，不减少承伤，不修改秘术异蛇等固定脚本伤害。"
+  ],
+  "remaining": [
+    "没有同一Warcraft运行版本的直接回放；外部原生实验可纠正明确错误，不足以证明原生逐帧等价。",
+    "Web仍在攻击释放时同步处理命中；弹道飞行、命中排序、消失和原生随机伤害骰待还原。",
+    "法球、吸血、溅射与多个Barrage的原生竞争，以及AIdd与其他攻击修正的完整叠加待核定。次级箭仅派发脚本攻击监听，不复制原生法球/溅射。",
+    "极小DataB、DataC=0及缺失继承字段没有完整通式，当前未支持对象保持unresolved。",
+    "整体目标尚未完成，见content-coverage.json与training-hero-source-audit.json。"
+  ],
+  "tests": "tests/v14-native-barrage.test.mjs"
+}

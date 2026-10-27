@@ -12,15 +12,15 @@
   "counts": {
     "trainingHeroes": 5,
     "staticSkills": 24,
-    "runtimeImplemented": 7,
-    "runtimeUnresolved": 1,
-    "runtimePartial": 16
+    "runtimeImplemented": 6,
+    "runtimeUnresolved": 0,
+    "runtimePartial": 18
   },
   "recommendation": {
     "buildingRawcode": "n05H",
     "combatRawcode": "h0OV",
     "priority": 1,
-    "reason": "训练英雄尚余A0VZ原生AIdd未核定；继续验证Aroc有效伤害与AIil/共享施法dummy命令完成，以及各英雄明确保留的原生边界。"
+    "reason": "训练英雄静态技能已无完全未接入项，但18项仍为部分实现：继续核对原生弹道、幻象与共享dummy命令，以及其余英雄的原生边界。不能以静态待核定数为零宣称完整还原。"
   },
   "describeSkillsCorrections": {
     "reason": "Seven generic implemented static entries include incomplete carrier-associated scripts. Current describeSkills appends V14_TRIGGER_DESCRIPTIONS with hardcoded implemented, so a text-only partial label will still overcount.",
@@ -460,7 +460,7 @@
         "role": "Mk combat to Ml building"
       },
       "priority": 5,
-      "summary": "异蛇追踪/八次命中/回程、护盾开关与A0W2回复已接入。AIil幻象、共享dummy近战反制及部分失buff前置分支保留原生边界；AIdd尚待核定。",
+      "summary": "异蛇/护盾脚本、分裂箭武器伤害与A0VZ输出倍率已接入。原生弹道、幻象、共享dummy与部分事件边界仍待核定。",
       "mechanisms": [
         {
           "id": "aesara-mystic-snake",
@@ -552,10 +552,15 @@
           "skillIds": [
             "A0VZ"
           ],
-          "status": "unresolved-native-effect",
-          "behavior": "AIdd对象原始DataA1=1、DataB1=.5、DataE/G/H1=1；该rawcode无JASS直引。须核定native字段含义/类型后实现，不能从“减少伤害50%”标题推导所有伤害统一乘.5。",
+          "status": "native-field-partial",
+          "behavior": "AIdd DataB1=.5应用到普通攻击及分裂箭输出；DataA/E/G/H=1不提供额外承伤减免。固定脚本伤害不减半。原生字段及行为证据见native-barrage-evidence.json，仍需同版原生运行验证。",
           "evidence": [],
-          "abilityObject": "A0VZ"
+          "abilityObject": "A0VZ",
+          "runtimeEvidence": {
+            "revision": "v14-content-20261027-v22-1",
+            "implementation": "dist/skills.js",
+            "tests": "tests/v14-native-barrage.test.mjs"
+          }
         },
         {
           "id": "aesara-native-barrage-and-slow-aura",
@@ -563,8 +568,8 @@
             "A0VW",
             "A0W1"
           ],
-          "status": "generic-implemented",
-          "behavior": "保留本版原始Aroc DataA999999/DataB99999/DataC2及Aasl减速字段；JASS只对A0VW改弹道模型，无新分裂箭伤害脚本可按tooltip补造。",
+          "status": "native-barrage-partial-aura-implemented",
+          "behavior": "分裂箭沿用本次武器伤害，按原生实验计DataC2额外3目标，各自计算护甲，经过攻击事件。暴击抑制分裂箭；A0VZ将整次攻击输出减半。不按文案追加击退、250附伤或4额外目标。",
           "evidence": [
             {
               "file": "war3map.j",
@@ -574,7 +579,7 @@
               "role": "missile art only"
             }
           ],
-          "coverageNote": "Native Aroc field interpretation remains a host/model question; no 4-target/50%/20% knockback script was found for this rawcode."
+          "coverageNote": "弹道时间、原生版本差异与同类/法球组合待验证；此前固定99999附伤与implemented标签均已纠正。"
         }
       ],
       "staticSkills": [
@@ -582,9 +587,9 @@
           "id": "A0VW",
           "name": "分裂箭",
           "baseCode": "Aroc",
-          "runtimeStatus": "implemented",
-          "runtimeKind": "barrage",
-          "runtimeEffectText": "至多2个目标，每个额外目标999999伤害，总额上限99999",
+          "runtimeStatus": "partial",
+          "runtimeKind": "native_barrage",
+          "runtimeEffectText": "分裂箭沿用本次武器的攻击力与攻击类型，额外攻击至多3个目标，各自计算护甲；不是DataA的固定伤害。暴击触发时不发分裂箭。【待核定：原生版本差异、弹道时序、同类技能/法球叠加及目标枚举顺序】",
           "abilitySource": {
             "table": "all_abilities.csv",
             "row": 1431,
@@ -759,9 +764,9 @@
           "id": "A0VZ",
           "name": "减少伤害50%",
           "baseCode": "AIdd",
-          "runtimeStatus": "unresolved",
-          "runtimeKind": "pending",
-          "runtimeEffectText": "原生基码尚无已核定模拟规则",
+          "runtimeStatus": "partial",
+          "runtimeKind": "native_attack_factor",
+          "runtimeEffectText": "原生AIdd的DataB为造成伤害倍率：普通攻击及分裂箭输出×0.5，固定脚本伤害不减半。DataA/E/G/H均为1，不额外减免承伤。【待核定：原生版本与其他攻击修正叠加】",
           "abilitySource": {
             "table": "all_abilities.csv",
             "row": 1434,
@@ -2638,6 +2643,12 @@
         "A0W3"
       ],
       "nativeBoundary": "ANfd inherited fields, native mana-shield toggle/exhaustion timing, shared e00O immediate ability removal and AIil creation/inheritance remain partial; no unverified illusions or counter slow are fabricated. Lost-buff cleanup defers through unhosted earlier elseif branches."
+    },
+    {
+      "revision": "v14-content-20261027-v22-1",
+      "description": "修正Aroc固定巨额附伤及目标数，接入A0VZ的攻击输出倍率；保留原生实验与宿主版本边界。",
+      "evidence": "reference/native-barrage-evidence.json",
+      "tests": "tests/v14-native-barrage.test.mjs"
     }
   ]
 }

@@ -1,4 +1,5 @@
 import {resetLichKingRound} from './lich-king-rules.js';
+import {sourceBarrageTargets,sourceBarrageHit} from './skills.js';
 import { UNITS, MERCENARIES, LEGACY_MERCENARIES, WAVES, RULES, HEROES, BUILDERS, PROPHET_POOLS, UNIT_TEMPLATES, TECHNOLOGIES, BOX_TRAINING_RULES } from './data.js';
 import { attachSkills, refreshSourceSkills, initializeSourceSkills, initializeSourceClassCombat, sourceClassAttackDamageEvent, darkArthasDamageListeners, sourceRegisteredDamageEvent, brightArthasEventDamage, compileSkills, sourceAuraEffects, tickSourceSkills, sourceAttackStart, sourceOnHit, modifyIncoming, beforeSourceDamage, afterSourceDamage, sourceDeath, sourceMoveFactor, canWeaponTarget, sourceWeapon, tickSourceScriptJobs, manualSourceSkills, castManualSourceSkill } from './skills.js';
 import { initializeSourceClassBuilding } from './source-class-rules.js';
@@ -1286,19 +1287,22 @@ export class Game {
     const weapon=sourceWeapon(e,target,this.state.time);if(!weapon)return;
     const sourceAttack=sourceAttackStart(this,e,target);
     const attackAuras = this._auraEffects(e, lane.auras), targetAuras = this._auraEffects(target, lane.auras);
-    let damage = weapon.damage * sourceAttack.multiplier+sourceAttack.bonus, haste = attackAuras.attackSpeedMultiplier;
-    if (type === 'crit' && this._random() < number(ability.chance, .2)) damage *= number(ability.value, 2);
+    let damage = (weapon.damage * sourceAttack.multiplier+sourceAttack.bonus)*sourceAttack.outgoingFactor, haste = attackAuras.attackSpeedMultiplier;
+    if (type === 'crit' && this._random() < number(ability.chance, .2)){damage *= number(ability.value, 2);sourceAttack.critical=true;}
     if (type === 'swarm') damage *= 1 + Math.min(4, lane.filter(a => a.side === e.side && a.race === e.race && a.id !== e.id && a.hp > 0 && distance(a, e) <= number(ability.radius, 1.5)).length) * number(ability.value, .08);
     if (e.status.frenzy) haste *= 1.6;
     e.attackCd = Math.max(.15, weapon.interval / haste) * (e.side === 'monster' ? (this._monsterPressure?.[e.team] ?? 1) : 1);
     if(sourceAttack.missed){this._event('miss',target,'未命中');return;}
+    const barrageTargets=sourceBarrageTargets(e,target,lane,weapon,sourceAttack.critical,this.state.time);
+    const barrageDamage=weapon.damage*sourceAttack.baseMultiplier*sourceAttack.outgoingFactor;
     const multiplier = this._typeMultiplier(weapon.attackType, target.armorType, target.sourceArmorTypeRaw);
     const armor = this._effectiveArmor(target, targetAuras.armor);
     const armorFactor = this._armorFactor(armor);
     const dealt = damage * multiplier * armorFactor;
-    const actual=this._hurt(target,dealt,e,{magic:weapon.attackType==='magic'});
+    const actual=this._hurt(target,dealt,e,{magic:weapon.attackType==='magic',attackType:weapon.attackType});
     if(actual>0&&e.hp>0)sourceOnHit(this,e,target,lane,actual,sourceAttack.procs,damage);
     this._event(e.range > 1 ? 'projectile' : 'hit', target, `${Math.round(dealt)}`, { fromX: e.x, fromY: e.y, fromWorldX: e.worldX, fromWorldY: e.worldY, color: e.color });
+    for(const other of barrageTargets)sourceBarrageHit(this,e,other,lane,weapon,barrageDamage);
     if (e.hp <= 0) return;
     if (!ability || type === 'crit' || this._random() > number(ability.chance, 1)) return;
     const v = number(ability.value, .35), factor = v > 2 ? v / Math.max(1, e.damage) : v;

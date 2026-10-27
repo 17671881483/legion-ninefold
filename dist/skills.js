@@ -19,7 +19,7 @@ import { closestWalkable, isWalkable } from './layout.js';
 import { GARROSH_ACTIVE_RULES, GARROSH_PASSIVE_RULES, canGarroshCastAbility, castGarroshAbility, tryGarroshAutoCast, garroshActiveAfterDamage, sourceGarroshActiveDeath, tickGarroshActiveJob } from './garrosh-active-rules.js';
 import { ILLIDAN_RULES, ILLIDAN_ACTIVE_RULES, canIllidanCastAbility, castIllidanAbility, registerIllidanSource, tickIllidanSource, illidanOnAttackHit, tryIllidanAutoCast, illidanAfterDamage, sourceIllidanDeath, tickIllidanJob, isIllidanJobType } from './illidan-rules.js';
 
-export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261026-v21-1';
+export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261027-v22-1';
 
 // Values come from resolved object fields. Empty fields remain empty: a missing
 // native default is reported, rather than replacing it with tooltip numbers.
@@ -167,6 +167,19 @@ function compile(id,version='5.0dJF') {
   }
   if(s.kind==='summon'&&!TEMPLATES[s.summonId]){s.status='unresolved';s.effectText=`召唤模板${s.summonId??'未指定'}缺失`;}
   if(['crit','evasion','hardened','demolish','orb','barrage','pulverize'].includes(s.kind)&&!has('DataA')&&!has('DataB')){s.status='unresolved';s.effectText='缺少原生效果数据，不应用空值默认';}
+  if(version==='v14.1A5'&&a.base_code==='Aroc'){
+    // Native experiments (reference/native-barrage-evidence.json) contradict
+    // treating Efk1/Efk2 as flat damage. Preserve all fields for unresolved cases.
+    s.kind='native_barrage';delete s.damage;delete s.damageCap;
+    const knownCount=has('DataC')&&has('DataB')&&(C<0||C>=1&&(B===0||B>=C+2||C===1&&B===2));
+    s.extraTargets=knownCount?(C<0?0:C===1&&B===2?1:C+1):null;
+    s.runtimeImplemented=knownCount&&has('Area');s.status=s.runtimeImplemented?'partial':'unresolved';
+    s.effectText=s.runtimeImplemented?`分裂箭沿用本次武器的攻击力与攻击类型，额外攻击至多${s.extraTargets}个目标，各自计算护甲；不是DataA的固定伤害。暴击触发时不发分裂箭。【待核定：原生版本差异、弹道时序、同类技能/法球叠加及目标枚举顺序】`:'原生分裂箭沿用武器伤害；目标数/范围所需原生继承字段未齐，保留待核定，不把DataA当作固定伤害';
+  }
+  if(version==='v14.1A5'&&id==='A0VZ'){
+    s.kind='native_attack_factor';s.status='partial';s.runtimeImplemented=true;s.attackFactor=B;
+    s.effectText='原生AIdd的DataB为造成伤害倍率：普通攻击及分裂箭输出×0.5，固定脚本伤害不减半。DataA/E/G/H均为1，不额外减免承伤。【待核定：原生版本与其他攻击修正叠加】';
+  }
   if(s.kind==='spell_orb'&&compile(s.spellId,version).status!=='implemented'){s.status='unresolved';s.effectText=`触发子技能${s.spellId}未核定，未计入已实现`; }
   s.effectText??=effectSummary(s);
   if(version==='v14.1A5'&&YSERA_ACTIVE_RULES[id]){const r=YSERA_ACTIVE_RULES[id];Object.assign(s,{kind:'ysera_active',status:r.status,effectText:r.description,manaCost:r.manaCost,cooldown:r.cooldown});}
@@ -396,18 +409,37 @@ export function sourceAttackStart(game,e,target) {
   if(!isV14(e)&&e.combatRawcode==='h04N'){e.status.pendingStrikes??=[];e.status.pendingStrikes.push({at:game.state.time+.633,targetId:target.id,damage:Math.trunc(e.mana*3)});}
   if((!isV14(e)&&e.combatRawcode==='h081')||(isV14(e)&&active(e).some(s=>s.id==='A06O'))){if(e.mana>=e.maxMana){e.hp=Math.min(e.maxHp,e.hp+(isV14(e)?80:25));e.mana=0;}else e.mana=Math.min(e.maxMana,e.mana+1);}
   if((e.combatRawcode==='h03B'||isV14(e)&&e.combatRawcode==='h0OC')&&!(e.buffs??[]).some(b=>b.key==='skeleton-frenzy')&&game._random()<.3){buff(e,{...compile('A0RA',e.skillVersion),buffKey:'skeleton-frenzy'},e,game.state.time);buff(e,{...compile('A02V',e.skillVersion),buffKey:'skeleton-buff'},e,game.state.time);}
-  const auras=game._auraEffects(e,game._battleAuras?.[e.battleTeam]??[]);let multiplier=1+auras.damageMultiplier-1,bonus=0;const procs=[];const missChance=clamp((e.buffs??[]).filter(b=>b.expiresAt>game.state.time).reduce((n,b)=>n+(b.miss??0),0),0,1);const missed=missChance>0&&game._random()<missChance;
+  const auras=game._auraEffects(e,game._battleAuras?.[e.battleTeam]??[]);let multiplier=auras.damageMultiplier,bonus=0,critical=false;const procs=[];const missChance=clamp((e.buffs??[]).filter(b=>b.expiresAt>game.state.time).reduce((n,b)=>n+(b.miss??0),0),0,1);const missed=missChance>0&&game._random()<missChance;
   for(const s of active(e))if(matchesTargets(s,e,target)){
-    if(s.kind==='crit'&&game._random()<s.chance)multiplier*=s.multiplier;
-    if(s.kind==='brawler'&&game._random()<s.chance)multiplier*=s.multiplier;
+    if(s.kind==='crit'&&game._random()<s.chance){multiplier*=s.multiplier;critical=true;}
+    if(s.kind==='brawler'&&game._random()<s.chance){multiplier*=s.multiplier;critical=true;}
     if(s.kind==='bash'&&game._random()<s.chance)procs.push(s);
     if(s.kind==='orb'&&e.mana>=s.manaCost&&state(e,s).readyAt<=game.state.time){e.mana-=s.manaCost;state(e,s).readyAt=game.state.time+s.cooldown;bonus+=s.damage;procs.push(s);}
     if(['poison','cold','corruption','lifesteal','pulverize','barrage','spell_orb'].includes(s.kind))procs.push(s);
   }
-  return {multiplier,bonus,procs,missed};
+  const outgoingFactor=(e.skillSpecs??[]).filter(s=>s.kind==='native_attack_factor'&&s.runtimeImplemented).reduce((n,s)=>n*Math.max(0,s.attackFactor),1);
+  return {multiplier,baseMultiplier:auras.damageMultiplier,outgoingFactor,critical,bonus,procs,missed};
 }
-export function sourceOnHit(game,e,target,battle,dealt,procs=[],rawDamage=dealt) {
-  const now=game.state.time,aura=sourceAuraEffects(game,e,battle.auras??[]);if(aura.lifesteal>0)e.hp=Math.min(e.maxHp,e.hp+dealt*aura.lifesteal);
+export function sourceBarrageTargets(e,target,battle,weapon,critical=false,now=0){
+  if(!isV14(e)||critical||weapon.type!=='missile')return [];
+  const s=(e.skillSpecs??[]).find(s=>s.kind==='native_barrage'&&s.runtimeImplemented);
+  if(!s||s.radius<=0||!matchesTargets(s,e,target))return [];
+  // Snapshot at attack release, before the primary damage listener can kill,
+  // move, or create units. Native group order is not established by the packet.
+  return battle.filter(t=>t.hp>0&&t.battleTeam===e.battleTeam&&t.side!==e.side&&t.team!==e.team&&t.id!==target.id&&(t.status?.cycloneUntil??0)<=now&&dist(e,t)<=s.radius&&matchesTargets(s,e,t)).slice(0,s.extraTargets);
+}
+export function sourceBarrageHit(game,e,target,battle,weapon,damage){
+  if(target.hp<=0)return;
+  const armor=game._effectiveArmor(target,game._auraEffects(target,battle.auras??[]).armor);
+  const dealt=damage*game._typeMultiplier(weapon.attackType,target.armorType,target.sourceArmorTypeRaw)*game._armorFactor(armor);
+  const actual=game._hurt(target,dealt,e,{spell:false,weapon:true,attackType:weapon.attackType,magic:weapon.attackType==='magic',barrage:true});
+  // Script attack-damage listeners apply to every arrow; native orb/buff
+  // placers and another barrage/splash are not recursively copied here.
+  if(actual>0&&e.hp>0)sourceOnHit(game,e,target,battle,actual,[],damage,{secondary:true});
+  game._event('projectile',target,`${Math.round(actual??0)}`,{fromX:e.x,fromY:e.y,fromWorldX:e.worldX,fromWorldY:e.worldY,color:e.color});
+}
+export function sourceOnHit(game,e,target,battle,dealt,procs=[],rawDamage=dealt,{secondary=false}={}) {
+  const now=game.state.time,aura=sourceAuraEffects(game,e,battle.auras??[]);if(!secondary&&aura.lifesteal>0)e.hp=Math.min(e.maxHp,e.hp+dealt*aura.lifesteal);
   if(isV14(e)&&dealt>0&&e.side!==target.side){
     garroshOnHit(game,e,target,{universalDamage});
     nagaOnHit(game,e,target,heroScriptApi);
@@ -431,7 +463,7 @@ export function sourceOnHit(game,e,target,battle,dealt,procs=[],rawDamage=dealt)
     if(s.kind==='barrage'){let budget=s.damageCap||Infinity;for(const t of battle.filter(t=>t.hp>0&&t.side!==e.side&&t.id!==target.id&&dist(e,t)<=s.radius&&matchesTargets(s,e,t)).slice(0,Math.max(0,s.count-1))){const d=Math.min(s.damage,budget);sourceDamage(game,t,d,e,false);budget-=d;}}
     if(s.kind==='spell_orb'&&game._random()<s.chance){const child=compileSkills({abilityIds:[s.spellId],distanceScale:e.distanceScale,skillVersion:e.skillVersion})[0];if(child.status==='implemented'&&(!isV14(e)||cast(game,e,child,target,battle)))executeTriggeredSpell(game,e,child,target,battle);}
   }
-  weaponSecondary(game,e,target,battle,rawDamage);
+  if(!secondary)weaponSecondary(game,e,target,battle,rawDamage);
 }
 function lineTargets(e,s,target,battle){
   const origin=pos(e),p=pos(target),len=Math.max(s.length,s.range),vx=(p.x-origin.x)/(dist(e,target)||1),vy=(p.y-origin.y)/(dist(e,target)||1);
@@ -455,7 +487,7 @@ export function modifyIncoming(game,target,damage,attacker,options={}) {
     if(!options.spell&&s.kind==='evasion'&&game._random()<s.chance)return 0;
     if(!options.spell&&s.kind==='brawler'&&game._random()<s.evasion)return 0;
     if(!options.spell&&s.kind==='hardened'&&game._random()<s.chance)result=Math.max(s.minimum,result-s.reduction);
-    if(s.kind==='defend'&&(!isV14(target)||target.skillStates?.[s.id]?.active)){if(!options.spell&&attacker?.attackType==='pierce')result*=s.pierceFactor;if(isV14(target)&&(options.magic||attacker?.attackType==='magic')&&s.magicFactor>0)result*=s.magicFactor;}
+    if(s.kind==='defend'&&(!isV14(target)||target.skillStates?.[s.id]?.active)){if(!options.spell&&(options.attackType??attacker?.attackType)==='pierce')result*=s.pierceFactor;if(isV14(target)&&(options.magic||(options.attackType??attacker?.attackType)==='magic')&&s.magicFactor>0)result*=s.magicFactor;}
     if(s.kind==='carapace'&&s.incomingFactor>0)result*=s.incomingFactor;
     if(s.kind==='shield'&&s.damagePerMana>0){const absorb=Math.min(result*s.absorb,target.mana*s.damagePerMana);target.mana-=absorb/s.damagePerMana;result-=absorb;}
   }

@@ -1,6 +1,6 @@
 {
   "sourceVersion": "v14.1A5",
-  "skillImplementationRevision": "v14-content-20261026-v21-1",
+  "skillImplementationRevision": "v14-content-20261027-v22-1",
   "units": 534,
   "mercenaryRecords": 60,
   "mainWaves": 35,
@@ -156,10 +156,10 @@
   ],
   "playerSkills": {
     "counts": {
-      "implemented": 413,
-      "partial": 61,
+      "implemented": 410,
+      "partial": 65,
       "marker": 34,
-      "unresolved": 123
+      "unresolved": 122
     },
     "abilities": [
       {
@@ -1026,8 +1026,8 @@
       {
         "rawcode": "A07M",
         "name": "箭雨",
-        "status": "implemented",
-        "kind": "barrage",
+        "status": "partial",
+        "kind": "native_barrage",
         "unitRawcodes": [
           "h09M"
         ]
@@ -3420,8 +3420,8 @@
       {
         "rawcode": "A0VW",
         "name": "分裂箭",
-        "status": "implemented",
-        "kind": "barrage",
+        "status": "partial",
+        "kind": "native_barrage",
         "unitRawcodes": [
           "n05H"
         ]
@@ -3447,8 +3447,8 @@
       {
         "rawcode": "A0VZ",
         "name": "减少伤害50%",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "native_attack_factor",
         "unitRawcodes": [
           "n05H"
         ]
@@ -3631,7 +3631,7 @@
         "rawcode": "A0YV",
         "name": "圣龙之威",
         "status": "unresolved",
-        "kind": "barrage",
+        "kind": "native_barrage",
         "unitRawcodes": [
           "h0PD",
           "h0UZ",
@@ -4396,8 +4396,8 @@
       {
         "rawcode": "A17M",
         "name": "月箭雨",
-        "status": "implemented",
-        "kind": "barrage",
+        "status": "partial",
+        "kind": "native_barrage",
         "unitRawcodes": [
           "h19M"
         ]
@@ -5708,7 +5708,7 @@
         "rawcode": "A205",
         "name": "圣龙之威",
         "status": "unresolved",
-        "kind": "barrage",
+        "kind": "native_barrage",
         "unitRawcodes": [
           "h201",
           "h204"
@@ -6275,10 +6275,10 @@
   },
   "battleSkills": {
     "counts": {
-      "implemented": 464,
-      "partial": 61,
+      "implemented": 460,
+      "partial": 66,
       "marker": 47,
-      "unresolved": 144
+      "unresolved": 143
     },
     "abilities": [
       {
@@ -7446,8 +7446,8 @@
       {
         "rawcode": "A07M",
         "name": "箭雨",
-        "status": "implemented",
-        "kind": "barrage",
+        "status": "partial",
+        "kind": "native_barrage",
         "unitRawcodes": [
           "h09M"
         ]
@@ -7928,8 +7928,8 @@
       {
         "rawcode": "A0BY",
         "name": "弹幕攻击",
-        "status": "implemented",
-        "kind": "barrage",
+        "status": "partial",
+        "kind": "native_barrage",
         "unitRawcodes": [
           "H05G"
         ]
@@ -10012,8 +10012,8 @@
       {
         "rawcode": "A0VW",
         "name": "分裂箭",
-        "status": "implemented",
-        "kind": "barrage",
+        "status": "partial",
+        "kind": "native_barrage",
         "unitRawcodes": [
           "n05H"
         ]
@@ -10039,8 +10039,8 @@
       {
         "rawcode": "A0VZ",
         "name": "减少伤害50%",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "native_attack_factor",
         "unitRawcodes": [
           "n05H"
         ]
@@ -10223,7 +10223,7 @@
         "rawcode": "A0YV",
         "name": "圣龙之威",
         "status": "unresolved",
-        "kind": "barrage",
+        "kind": "native_barrage",
         "unitRawcodes": [
           "h0PD",
           "h0UZ",
@@ -11157,8 +11157,8 @@
       {
         "rawcode": "A17M",
         "name": "月箭雨",
-        "status": "implemented",
-        "kind": "barrage",
+        "status": "partial",
+        "kind": "native_barrage",
         "unitRawcodes": [
           "h19M"
         ]
@@ -12653,7 +12653,7 @@
         "rawcode": "A205",
         "name": "圣龙之威",
         "status": "unresolved",
-        "kind": "barrage",
+        "kind": "native_barrage",
         "unitRawcodes": [
           "h201",
           "h204"

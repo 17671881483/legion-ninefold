@@ -1,0 +1,1469 @@
+{
+  "source": {
+    "path": "v14-source/raw_extracted/war3map.j",
+    "sha256": "e66c55b3b25b185c991be5613e21fbf5b2d598f3cc40f2f8cd01c23bcb828250",
+    "lineCounting": "Latin-1; split LF only"
+  },
+  "sourceEvidence": [
+    {
+      "line": 1126,
+      "text": "integer Pn=$65303038"
+    },
+    {
+      "line": 26613,
+      "text": "set HD=Rect(-4000.,1920.,-3552.,2368.)"
+    },
+    {
+      "line": 26614,
+      "text": "set HE=Rect(-3552.,1920.,-3104.,2368.)"
+    },
+    {
+      "line": 26623,
+      "text": "set HN=Rect(3072.,1920.,3520.,2368.)"
+    },
+    {
+      "line": 26624,
+      "text": "set HO=Rect(3520.,1920.,3968.,2368.)"
+    },
+    {
+      "line": 29669,
+      "text": "function VertigoTarget takes unit Pf,unit Om,integer CC returns nothing"
+    },
+    {
+      "line": 29670,
+      "text": "set bj_lastCreatedUnit=CreateUnit(GetOwningPlayer(Pf),Pn,GetUnitX(Om),GetUnitY(Om),0)"
+    },
+    {
+      "line": 29671,
+      "text": "call UnitAddAbility(bj_lastCreatedUnit,$41304937)"
+    },
+    {
+      "line": 29672,
+      "text": "call UnitApplyTimedLife(bj_lastCreatedUnit,$42487765,1.)"
+    },
+    {
+      "line": 29673,
+      "text": "call SetUnitAbilityLevel(bj_lastCreatedUnit,$41304937,CC)"
+    },
+    {
+      "line": 29674,
+      "text": "call IssueTargetOrder(bj_lastCreatedUnit,\"thunderbolt\",Om)"
+    },
+    {
+      "line": 29675,
+      "text": "set Pf=null"
+    },
+    {
+      "line": 29676,
+      "text": "set Om=null"
+    },
+    {
+      "line": 29677,
+      "text": "endfunction"
+    },
+    {
+      "line": 29786,
+      "text": "function SelectRange takes unit Pf,real FF,real FG,real Px returns group"
+    },
+    {
+      "line": 29787,
+      "text": "local group DG=CreateGroup()"
+    },
+    {
+      "line": 29788,
+      "text": "local group Om=CreateGroup()"
+    },
+    {
+      "line": 29789,
+      "text": "local unit D6=null"
+    },
+    {
+      "line": 29790,
+      "text": "call GroupEnumUnitsInRange(DG,FF,FG,Px,null)"
+    },
+    {
+      "line": 29791,
+      "text": "loop"
+    },
+    {
+      "line": 29792,
+      "text": "set D6=FirstOfGroup(DG)"
+    },
+    {
+      "line": 29793,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 29794,
+      "text": "if IsUnitEnemy(D6,GetOwningPlayer(Pf)) and not IsUnitType(D6,UNIT_TYPE_DEAD) and GetUnitAbilityLevel(D6,$4176756C)==0 then"
+    },
+    {
+      "line": 29795,
+      "text": "call GroupAddUnit(Om,D6)"
+    },
+    {
+      "line": 29796,
+      "text": "endif"
+    },
+    {
+      "line": 29797,
+      "text": "call GroupRemoveUnit(DG,D6)"
+    },
+    {
+      "line": 29798,
+      "text": "endloop"
+    },
+    {
+      "line": 29799,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 29800,
+      "text": "set DG=null"
+    },
+    {
+      "line": 29801,
+      "text": "set D6=null"
+    },
+    {
+      "line": 29802,
+      "text": "set Pf=null"
+    },
+    {
+      "line": 29803,
+      "text": "set Py=Om"
+    },
+    {
+      "line": 29804,
+      "text": "set Om=null"
+    },
+    {
+      "line": 29805,
+      "text": "return Py"
+    },
+    {
+      "line": 30160,
+      "text": "function ChargeDistanceCondition takes nothing returns boolean"
+    },
+    {
+      "line": 30161,
+      "text": "local trigger t=GetTriggeringTrigger()"
+    },
+    {
+      "line": 30162,
+      "text": "local integer Pr=GetHandleId(t)"
+    },
+    {
+      "line": 30163,
+      "text": "local real DK=LoadReal(O,Pr,3)"
+    },
+    {
+      "line": 30164,
+      "text": "local real QS=LoadReal(O,Pr,1)"
+    },
+    {
+      "line": 30165,
+      "text": "local real QN=LoadReal(O,Pr,2)"
+    },
+    {
+      "line": 30166,
+      "text": "local string QP=LoadStr(O,Pr,4)"
+    },
+    {
+      "line": 30167,
+      "text": "local string QQ=LoadStr(O,Pr,5)"
+    },
+    {
+      "line": 30168,
+      "text": "local unit Ki=LoadUnitHandle(O,Pr,6)"
+    },
+    {
+      "line": 30169,
+      "text": "local real Pm=LoadReal(O,Pr,7)"
+    },
+    {
+      "line": 30170,
+      "text": "local real QT=QS/DK*.04"
+    },
+    {
+      "line": 30171,
+      "text": "call SaveReal(O,Pr,10,QT)"
+    },
+    {
+      "line": 30172,
+      "text": "if GetTriggerEventId()==EVENT_WIDGET_DEATH then"
+    },
+    {
+      "line": 30173,
+      "text": "if QQ!=null then"
+    },
+    {
+      "line": 30174,
+      "text": "call ExecuteFunc(QQ)"
+    },
+    {
+      "line": 30175,
+      "text": "endif"
+    },
+    {
+      "line": 30176,
+      "text": "call FlushChildHashtable(O,Pr)"
+    },
+    {
+      "line": 30177,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 30178,
+      "text": "elseif GetTriggerEventId()==EVENT_GAME_TIMER_EXPIRED then"
+    },
+    {
+      "line": 30179,
+      "text": "if QN+QT>=QS then"
+    },
+    {
+      "line": 30180,
+      "text": "if QQ!=null then"
+    },
+    {
+      "line": 30181,
+      "text": "call ExecuteFunc(QQ)"
+    },
+    {
+      "line": 30182,
+      "text": "endif"
+    },
+    {
+      "line": 30183,
+      "text": "call FlushChildHashtable(O,Pr)"
+    },
+    {
+      "line": 30184,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 30185,
+      "text": "else"
+    },
+    {
+      "line": 30186,
+      "text": "call SaveReal(O,Pr,2,QN+QT)"
+    },
+    {
+      "line": 30187,
+      "text": "call SetUnitPosition(Ki,GetUnitX(Ki)+CosBJ(Pm)*QT,GetUnitY(Ki)+SinBJ(Pm)*QT)"
+    },
+    {
+      "line": 30188,
+      "text": "if QP!=null then"
+    },
+    {
+      "line": 30189,
+      "text": "call ExecuteFunc(QP)"
+    },
+    {
+      "line": 30190,
+      "text": "endif"
+    },
+    {
+      "line": 30191,
+      "text": "endif"
+    },
+    {
+      "line": 30192,
+      "text": "endif"
+    },
+    {
+      "line": 30193,
+      "text": "set t=null"
+    },
+    {
+      "line": 30194,
+      "text": "set Ki=null"
+    },
+    {
+      "line": 30195,
+      "text": "set QP=null"
+    },
+    {
+      "line": 30196,
+      "text": "set QQ=null"
+    },
+    {
+      "line": 30197,
+      "text": "return false"
+    },
+    {
+      "line": 30198,
+      "text": "endfunction"
+    },
+    {
+      "line": 30199,
+      "text": "function ChargeDistance takes unit Pf,unit Ki,real Pm,real QN,real QO,string QP,string QQ returns trigger"
+    },
+    {
+      "line": 30200,
+      "text": "local trigger t=CreateTrigger()"
+    },
+    {
+      "line": 30201,
+      "text": "local integer Pr=GetHandleId(t)"
+    },
+    {
+      "line": 30202,
+      "text": "call SaveReal(O,Pr,1,QN)"
+    },
+    {
+      "line": 30203,
+      "text": "call SaveReal(O,Pr,3,QO)"
+    },
+    {
+      "line": 30204,
+      "text": "call SaveStr(O,Pr,4,QP)"
+    },
+    {
+      "line": 30205,
+      "text": "call SaveStr(O,Pr,5,QQ)"
+    },
+    {
+      "line": 30206,
+      "text": "call SaveAgentHandle(O,Pr,6,Ki)"
+    },
+    {
+      "line": 30207,
+      "text": "call SaveReal(O,Pr,7,Pm)"
+    },
+    {
+      "line": 30208,
+      "text": "call SaveAgentHandle(O,Pr,9,Pf)"
+    },
+    {
+      "line": 30209,
+      "text": "call TriggerRegisterDeathEvent(t,Ki)"
+    },
+    {
+      "line": 30210,
+      "text": "call TriggerRegisterTimerEvent(t,0,false)"
+    },
+    {
+      "line": 30211,
+      "text": "call TriggerRegisterTimerEvent(t,.04,true)"
+    },
+    {
+      "line": 30212,
+      "text": "call TriggerAddCondition(t,Condition(function ChargeDistanceCondition))"
+    },
+    {
+      "line": 30213,
+      "text": "set QU=t"
+    },
+    {
+      "line": 30214,
+      "text": "set t=null"
+    },
+    {
+      "line": 30215,
+      "text": "set Ki=null"
+    },
+    {
+      "line": 30216,
+      "text": "set Pf=null"
+    },
+    {
+      "line": 30217,
+      "text": "set QP=null"
+    },
+    {
+      "line": 30218,
+      "text": "set QQ=null"
+    },
+    {
+      "line": 30219,
+      "text": "return QU"
+    },
+    {
+      "line": 33840,
+      "text": "function BanditLordDivineShieldAction takes nothing returns nothing"
+    },
+    {
+      "line": 33841,
+      "text": "local trigger t=GetTriggeringTrigger()"
+    },
+    {
+      "line": 33842,
+      "text": "local integer QK=80"
+    },
+    {
+      "line": 33843,
+      "text": "local integer y=LoadInteger(O,GetHandleId(t),0)"
+    },
+    {
+      "line": 33844,
+      "text": "if GetTriggerEventId()==EVENT_UNIT_DAMAGED then"
+    },
+    {
+      "line": 33845,
+      "text": "call SaveInteger(O,GetHandleId(t),0,y+1)"
+    },
+    {
+      "line": 33846,
+      "text": "if y<=QK then"
+    },
+    {
+      "line": 33847,
+      "text": "call YDWESetEventDamage(0)"
+    },
+    {
+      "line": 33848,
+      "text": "else"
+    },
+    {
+      "line": 33849,
+      "text": "call FlushChildHashtable(O,GetHandleId(t))"
+    },
+    {
+      "line": 33850,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 33851,
+      "text": "endif"
+    },
+    {
+      "line": 33852,
+      "text": "else"
+    },
+    {
+      "line": 33853,
+      "text": "call FlushChildHashtable(O,GetHandleId(t))"
+    },
+    {
+      "line": 33854,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 33855,
+      "text": "endif"
+    },
+    {
+      "line": 33856,
+      "text": "set t=null"
+    },
+    {
+      "line": 33857,
+      "text": "endfunction"
+    },
+    {
+      "line": 33858,
+      "text": "function BanditLordDivineShield takes unit Bc returns nothing"
+    },
+    {
+      "line": 33859,
+      "text": "local trigger t=CreateTrigger()"
+    },
+    {
+      "line": 33860,
+      "text": "call YDWETimerDestroyEffect(2,AddSpecialEffectTarget(\"Abilities\\\\Spells\\\\Human\\\\DivineShield\\\\DivineShieldTarget.mdl\",Bc,\"chest\"))"
+    },
+    {
+      "line": 33861,
+      "text": "call TriggerRegisterUnitEvent(t,Bc,EVENT_UNIT_DAMAGED)"
+    },
+    {
+      "line": 33862,
+      "text": "call TriggerRegisterDeathEvent(t,Bc)"
+    },
+    {
+      "line": 33863,
+      "text": "call TriggerRegisterTimerEvent(t,2,false)"
+    },
+    {
+      "line": 33864,
+      "text": "call TriggerAddAction(t,function BanditLordDivineShieldAction)"
+    },
+    {
+      "line": 33865,
+      "text": "set t=null"
+    },
+    {
+      "line": 33866,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 33867,
+      "text": "endfunction"
+    },
+    {
+      "line": 33868,
+      "text": "function BanditLordEarthShockSpell takes unit Bc returns nothing"
+    },
+    {
+      "line": 33869,
+      "text": "local group DG=SelectRange(Bc,GetUnitX(Bc),GetUnitY(Bc),300)"
+    },
+    {
+      "line": 33870,
+      "text": "local unit D6"
+    },
+    {
+      "line": 33871,
+      "text": "call YDWETimerDestroyEffect(2,AddSpecialEffect(\"Abilities\\\\Spells\\\\Orc\\\\EarthQuake\\\\EarthQuakeTarget.mdl\",GetUnitX(Bc),GetUnitY(Bc)))"
+    },
+    {
+      "line": 33872,
+      "text": "loop"
+    },
+    {
+      "line": 33873,
+      "text": "set D6=FirstOfGroup(DG)"
+    },
+    {
+      "line": 33874,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 33875,
+      "text": "call GroupRemoveUnit(DG,D6)"
+    },
+    {
+      "line": 33876,
+      "text": "call UnitDamageTargetBJ(Bc,D6,115,ATTACK_TYPE_CHAOS,DAMAGE_TYPE_UNIVERSAL)"
+    },
+    {
+      "line": 33877,
+      "text": "call VertigoTarget(Bc,D6,2)"
+    },
+    {
+      "line": 33878,
+      "text": "endloop"
+    },
+    {
+      "line": 33879,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 33880,
+      "text": "set DG=null"
+    },
+    {
+      "line": 33881,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 33882,
+      "text": "set D6=null"
+    },
+    {
+      "line": 33883,
+      "text": "endfunction"
+    },
+    {
+      "line": 33884,
+      "text": "function BanditLordResentmentAttackCallBack takes nothing returns nothing"
+    },
+    {
+      "line": 33885,
+      "text": "local trigger t=GetTriggeringTrigger()"
+    },
+    {
+      "line": 33886,
+      "text": "local unit Ki=GetChargeDummy()"
+    },
+    {
+      "line": 33887,
+      "text": "local unit Bc=GetChargeSource()"
+    },
+    {
+      "line": 33888,
+      "text": "local group DG=LoadGroupHandle(O,GetHandleId(t),StringHash(\"group\"))"
+    },
+    {
+      "line": 33889,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 33890,
+      "text": "call RemoveUnit(Ki)"
+    },
+    {
+      "line": 33891,
+      "text": "set t=null"
+    },
+    {
+      "line": 33892,
+      "text": "set Ki=null"
+    },
+    {
+      "line": 33893,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 33894,
+      "text": "set DG=null"
+    },
+    {
+      "line": 33895,
+      "text": "endfunction"
+    },
+    {
+      "line": 33896,
+      "text": "function BanditLordResentmentAttackHook takes nothing returns nothing"
+    },
+    {
+      "line": 33897,
+      "text": "local trigger t=GetTriggeringTrigger()"
+    },
+    {
+      "line": 33898,
+      "text": "local unit Ki=GetChargeDummy()"
+    },
+    {
+      "line": 33899,
+      "text": "local unit Bc=GetChargeSource()"
+    },
+    {
+      "line": 33900,
+      "text": "local group DG=LoadGroupHandle(O,GetHandleId(t),StringHash(\"group\"))"
+    },
+    {
+      "line": 33901,
+      "text": "local group Uz=SelectRange(Bc,GetUnitX(Ki),GetUnitY(Ki),200)"
+    },
+    {
+      "line": 33902,
+      "text": "local unit D6"
+    },
+    {
+      "line": 33903,
+      "text": "call DestroyEffect(AddSpecialEffect(\"Objects\\\\Spawnmodels\\\\Undead\\\\UndeadDissipate\\\\UndeadDissipate.mdl\",GetUnitX(Ki),GetUnitY(Ki)))"
+    },
+    {
+      "line": 33904,
+      "text": "if DG==null then"
+    },
+    {
+      "line": 33905,
+      "text": "set DG=CreateGroup()"
+    },
+    {
+      "line": 33906,
+      "text": "call SaveAgentHandle(O,GetHandleId(t),StringHash(\"group\"),DG)"
+    },
+    {
+      "line": 33907,
+      "text": "endif"
+    },
+    {
+      "line": 33908,
+      "text": "loop"
+    },
+    {
+      "line": 33909,
+      "text": "set D6=FirstOfGroup(Uz)"
+    },
+    {
+      "line": 33910,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 33911,
+      "text": "call GroupRemoveUnit(Uz,D6)"
+    },
+    {
+      "line": 33912,
+      "text": "if not IsUnitInGroup(D6,DG) then"
+    },
+    {
+      "line": 33913,
+      "text": "call GroupAddUnit(DG,D6)"
+    },
+    {
+      "line": 33914,
+      "text": "call UnitDamageTargetBJ(Bc,D6,125,ATTACK_TYPE_CHAOS,DAMAGE_TYPE_UNIVERSAL)"
+    },
+    {
+      "line": 33915,
+      "text": "endif"
+    },
+    {
+      "line": 33916,
+      "text": "endloop"
+    },
+    {
+      "line": 33917,
+      "text": "call DestroyGroup(Uz)"
+    },
+    {
+      "line": 33918,
+      "text": "set t=null"
+    },
+    {
+      "line": 33919,
+      "text": "set Ki=null"
+    },
+    {
+      "line": 33920,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 33921,
+      "text": "set DG=null"
+    },
+    {
+      "line": 33922,
+      "text": "set Uz=null"
+    },
+    {
+      "line": 33923,
+      "text": "set D6=null"
+    },
+    {
+      "line": 33924,
+      "text": "endfunction"
+    },
+    {
+      "line": 33925,
+      "text": "function BanditLordResentmentAttack takes unit Bc,real FF,real FG returns nothing"
+    },
+    {
+      "line": 33926,
+      "text": "local real Pm=Atan2BJ(FG-GetUnitY(Bc),FF-GetUnitX(Bc))"
+    },
+    {
+      "line": 33927,
+      "text": "local real DK=.2"
+    },
+    {
+      "line": 33928,
+      "text": "local unit Ki=CreateUnit(GetOwningPlayer(Bc),Pn,FF,FG,Pm)"
+    },
+    {
+      "line": 33929,
+      "text": "call YDWEFlyEnable(Ki)"
+    },
+    {
+      "line": 33930,
+      "text": "call SetUnitFlyHeight(Ki,100,10000)"
+    },
+    {
+      "line": 33931,
+      "text": "call YDWETimerDestroyEffect(DK,AddSpecialEffectTarget(\"Abilities\\\\Spells\\\\Undead\\\\DeathCoil\\\\DeathCoilMissile.mdl\",Ki,\"chest\"))"
+    },
+    {
+      "line": 33932,
+      "text": "call ChargeDistance(Bc,Ki,Pm,600,.2,\"BanditLordResentmentAttackHook\",\"BanditLordResentmentAttackCallBack\")"
+    },
+    {
+      "line": 33933,
+      "text": "set Ki=CreateUnit(GetOwningPlayer(Bc),Pn,FF,FG,Pm+45)"
+    },
+    {
+      "line": 33934,
+      "text": "call YDWEFlyEnable(Ki)"
+    },
+    {
+      "line": 33935,
+      "text": "call SetUnitFlyHeight(Ki,100,10000)"
+    },
+    {
+      "line": 33936,
+      "text": "call YDWETimerDestroyEffect(DK,AddSpecialEffectTarget(\"Abilities\\\\Spells\\\\Undead\\\\DeathCoil\\\\DeathCoilMissile.mdl\",Ki,\"chest\"))"
+    },
+    {
+      "line": 33937,
+      "text": "call ChargeDistance(Bc,Ki,Pm+45,600,.2,\"BanditLordResentmentAttackHook\",\"BanditLordResentmentAttackCallBack\")"
+    },
+    {
+      "line": 33938,
+      "text": "set Ki=CreateUnit(GetOwningPlayer(Bc),Pn,FF,FG,Pm-45)"
+    },
+    {
+      "line": 33939,
+      "text": "call YDWEFlyEnable(Ki)"
+    },
+    {
+      "line": 33940,
+      "text": "call SetUnitFlyHeight(Ki,100,10000)"
+    },
+    {
+      "line": 33941,
+      "text": "call YDWETimerDestroyEffect(DK,AddSpecialEffectTarget(\"Abilities\\\\Spells\\\\Undead\\\\DeathCoil\\\\DeathCoilMissile.mdl\",Ki,\"chest\"))"
+    },
+    {
+      "line": 33942,
+      "text": "call ChargeDistance(Bc,Ki,Pm-45,600,.2,\"BanditLordResentmentAttackHook\",\"BanditLordResentmentAttackCallBack\")"
+    },
+    {
+      "line": 33943,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 33944,
+      "text": "set Ki=null"
+    },
+    {
+      "line": 33945,
+      "text": "endfunction"
+    },
+    {
+      "line": 33946,
+      "text": "function BanditLordDeathDamage takes unit Bc returns nothing"
+    },
+    {
+      "line": 33947,
+      "text": "local group DG=SelectRange(Bc,GetUnitX(Bc),GetUnitY(Bc),600)"
+    },
+    {
+      "line": 33948,
+      "text": "local unit D6"
+    },
+    {
+      "line": 33949,
+      "text": "call DestroyEffect(AddSpecialEffect(\"Objects\\\\Spawnmodels\\\\Undead\\\\UndeadDissipate\\\\UndeadDissipate.mdl\",GetUnitX(Bc),GetUnitY(Bc)))"
+    },
+    {
+      "line": 33950,
+      "text": "call DestroyEffect(AddSpecialEffect(\"Abilities\\\\Spells\\\\Other\\\\HowlOfTerror\\\\HowlCaster.mdl\",GetUnitX(Bc),GetUnitY(Bc)))"
+    },
+    {
+      "line": 33951,
+      "text": "loop"
+    },
+    {
+      "line": 33952,
+      "text": "set D6=FirstOfGroup(DG)"
+    },
+    {
+      "line": 33953,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 33954,
+      "text": "call GroupRemoveUnit(DG,D6)"
+    },
+    {
+      "line": 33955,
+      "text": "call UnitDamageTargetBJ(Bc,D6,75,ATTACK_TYPE_CHAOS,DAMAGE_TYPE_UNIVERSAL)"
+    },
+    {
+      "line": 33956,
+      "text": "endloop"
+    },
+    {
+      "line": 33957,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 33958,
+      "text": "set DG=null"
+    },
+    {
+      "line": 33959,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 33960,
+      "text": "set D6=null"
+    },
+    {
+      "line": 33961,
+      "text": "endfunction"
+    },
+    {
+      "line": 33962,
+      "text": "function BanditLoadHideSkillAction takes nothing returns nothing"
+    },
+    {
+      "line": 33963,
+      "text": "local unit Bc=GetTriggerUnit()"
+    },
+    {
+      "line": 33964,
+      "text": "if GetUnitAbilityLevel(Bc,$41313846)>0 then"
+    },
+    {
+      "line": 33965,
+      "text": "call UnitRemoveAbility(Bc,$41313846)"
+    },
+    {
+      "line": 33966,
+      "text": "endif"
+    },
+    {
+      "line": 33967,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 33968,
+      "text": "endfunction"
+    },
+    {
+      "line": 33969,
+      "text": "function BanditLoadHideSkill takes nothing returns nothing"
+    },
+    {
+      "line": 33970,
+      "text": "local trigger t=CreateTrigger()"
+    },
+    {
+      "line": 33971,
+      "text": "local region D2=CreateRegion()"
+    },
+    {
+      "line": 33972,
+      "text": "call RegionAddRect(D2,HD)"
+    },
+    {
+      "line": 33973,
+      "text": "call RegionAddRect(D2,HE)"
+    },
+    {
+      "line": 33974,
+      "text": "call RegionAddRect(D2,HN)"
+    },
+    {
+      "line": 33975,
+      "text": "call RegionAddRect(D2,HO)"
+    },
+    {
+      "line": 33976,
+      "text": "call TriggerRegisterEnterRegion(t,D2,null)"
+    },
+    {
+      "line": 33977,
+      "text": "call TriggerAddAction(t,function BanditLoadHideSkillAction)"
+    },
+    {
+      "line": 33978,
+      "text": "set t=null"
+    },
+    {
+      "line": 33979,
+      "text": "set D2=null"
+    },
+    {
+      "line": 33980,
+      "text": "endfunction"
+    },
+    {
+      "line": 39218,
+      "text": "function Trig_allabilityActions takes nothing returns nothing"
+    },
+    {
+      "line": 39219,
+      "text": "local integer BF=GetSpellAbilityId()"
+    },
+    {
+      "line": 39220,
+      "text": "local player h=GetTriggerPlayer()"
+    },
+    {
+      "line": 39221,
+      "text": "local unit i=GetTriggerUnit()"
+    },
+    {
+      "line": 39222,
+      "text": "local real FF=GetSpellTargetX()"
+    },
+    {
+      "line": 39223,
+      "text": "local real FG=GetSpellTargetY()"
+    },
+    {
+      "line": 39224,
+      "text": "local unit Qf=GetSpellTargetUnit()"
+    },
+    {
+      "line": 39239,
+      "text": "call DisableTrigger(Eb)"
+    },
+    {
+      "line": 39441,
+      "text": "if BF==$41313847 then"
+    },
+    {
+      "line": 39442,
+      "text": "call BanditLordResentmentAttack(i,FF,FG)"
+    },
+    {
+      "line": 39443,
+      "text": "endif"
+    },
+    {
+      "line": 39444,
+      "text": "if BF==$41313845 then"
+    },
+    {
+      "line": 39445,
+      "text": "call BanditLordEarthShockSpell(i)"
+    },
+    {
+      "line": 39446,
+      "text": "endif"
+    },
+    {
+      "line": 40553,
+      "text": "if P8<=0 or bV==i or bV==null or IsUnitAlly(bV,GetOwningPlayer(i)) then"
+    },
+    {
+      "line": 40554,
+      "text": "set i=null"
+    },
+    {
+      "line": 40555,
+      "text": "set bV=null"
+    },
+    {
+      "line": 40556,
+      "text": "set Eb=null"
+    },
+    {
+      "line": 40557,
+      "text": "set h=null"
+    },
+    {
+      "line": 40558,
+      "text": "set Uz=null"
+    },
+    {
+      "line": 40559,
+      "text": "return"
+    },
+    {
+      "line": 40560,
+      "text": "endif"
+    },
+    {
+      "line": 40561,
+      "text": "if GetUnitAbilityLevel(bV,$41325937)>0 then"
+    },
+    {
+      "line": 40562,
+      "text": "set i=null"
+    },
+    {
+      "line": 40563,
+      "text": "set bV=null"
+    },
+    {
+      "line": 40564,
+      "text": "set Eb=null"
+    },
+    {
+      "line": 40565,
+      "text": "set h=null"
+    },
+    {
+      "line": 40566,
+      "text": "set Uz=null"
+    },
+    {
+      "line": 40567,
+      "text": "return"
+    },
+    {
+      "line": 40568,
+      "text": "endif"
+    },
+    {
+      "line": 40569,
+      "text": "if GetUnitAbilityLevel(i,QC)>0 then"
+    },
+    {
+      "line": 41548,
+      "text": "if GetUnitAbilityLevel(i,$41313844)>0 then"
+    },
+    {
+      "line": 41549,
+      "text": "call UnitRemoveAbility(i,$41313844)"
+    },
+    {
+      "line": 41550,
+      "text": "call BanditLordDivineShield(i)"
+    },
+    {
+      "line": 41551,
+      "text": "endif"
+    },
+    {
+      "line": 41911,
+      "text": "function Trig_UnitDeathActions takes nothing returns nothing"
+    },
+    {
+      "line": 41912,
+      "text": "local unit i=GetTriggerUnit()"
+    },
+    {
+      "line": 41913,
+      "text": "local unit bv=GetKillingUnit()"
+    },
+    {
+      "line": 41914,
+      "text": "local trigger Eb=GetTriggeringTrigger()"
+    },
+    {
+      "line": 41915,
+      "text": "local real FF=GetUnitX(i)"
+    },
+    {
+      "line": 41916,
+      "text": "local real FG=GetUnitY(i)"
+    },
+    {
+      "line": 41917,
+      "text": "local real P8=0"
+    },
+    {
+      "line": 41918,
+      "text": "local effect DE=null"
+    },
+    {
+      "line": 41919,
+      "text": "local timer t=null"
+    },
+    {
+      "line": 41920,
+      "text": "local group Uz=CreateGroup()"
+    },
+    {
+      "line": 41921,
+      "text": "local unit D6=null"
+    },
+    {
+      "line": 41922,
+      "text": "local unit Ki=null"
+    },
+    {
+      "line": 42006,
+      "text": "if GetUnitAbilityLevel(bv,$4130584D)>0 and LoadInteger(O,GetHandleId(GetKillingUnit()),StringHash(\"killnum\"))<15 and GetUnitState(GetKillingUnit(),UNIT_STATE_MANA)<15. and GetRandomReal(1,101)<=20 then"
+    },
+    {
+      "line": 42007,
+      "text": "call h03L_data(bv,true,false)"
+    },
+    {
+      "line": 42008,
+      "text": "endif"
+    },
+    {
+      "line": 42009,
+      "text": "if GetUnitAbilityLevel(bv,$4130594A)>0 then"
+    },
+    {
+      "line": 42010,
+      "text": "call SetUnitState(bv,UNIT_STATE_LIFE,GetUnitState(bv,UNIT_STATE_LIFE)+100.)"
+    },
+    {
+      "line": 42011,
+      "text": "if LoadInteger(O,GetHandleId(bv),StringHash(\"killnum\"))!=25 then"
+    },
+    {
+      "line": 42012,
+      "text": "call SetUnitState(bv,ConvertUnitState(81),GetUnitState(bv,ConvertUnitState(81))+.06)"
+    },
+    {
+      "line": 42013,
+      "text": "call SaveInteger(O,GetHandleId(bv),StringHash(\"killnum\"),LoadInteger(O,GetHandleId(bv),StringHash(\"killnum\"))+1)"
+    },
+    {
+      "line": 42014,
+      "text": "endif"
+    },
+    {
+      "line": 42015,
+      "text": "endif"
+    },
+    {
+      "line": 42016,
+      "text": "if GetUnitAbilityLevel(i,$41313848)>0 then"
+    },
+    {
+      "line": 42017,
+      "text": "call BanditLordDeathDamage(i)"
+    },
+    {
+      "line": 42018,
+      "text": "endif"
+    },
+    {
+      "line": 42252,
+      "text": "function Trig_New_UnitAttackActions takes nothing returns boolean"
+    },
+    {
+      "line": 42253,
+      "text": "local unit Qf=GetTriggerUnit()"
+    },
+    {
+      "line": 42254,
+      "text": "local unit i=GetEventDamageSource()"
+    },
+    {
+      "line": 42255,
+      "text": "local integer BF=GetUnitTypeId(i)"
+    },
+    {
+      "line": 42256,
+      "text": "local integer b9=$6E305344"
+    },
+    {
+      "line": 42257,
+      "text": "local integer YY=0"
+    },
+    {
+      "line": 42258,
+      "text": "local unit Ki=null"
+    },
+    {
+      "line": 42259,
+      "text": "local unit D6=null"
+    },
+    {
+      "line": 42260,
+      "text": "local group Uz=null"
+    },
+    {
+      "line": 42261,
+      "text": "local real P8=0"
+    },
+    {
+      "line": 42262,
+      "text": "local unit cB=null"
+    },
+    {
+      "line": 42263,
+      "text": "local boolexpr Cd"
+    },
+    {
+      "line": 42264,
+      "text": "local timer DK"
+    },
+    {
+      "line": 42265,
+      "text": "local real FF"
+    },
+    {
+      "line": 42266,
+      "text": "local real FG"
+    },
+    {
+      "line": 42267,
+      "text": "local integer y=0"
+    },
+    {
+      "line": 42268,
+      "text": "local player h"
+    },
+    {
+      "line": 42269,
+      "text": "local effect DE"
+    },
+    {
+      "line": 42270,
+      "text": "if YDWEIsEventAttackDamage() and not LoadBoolean(O,GetHandleId(i),StringHash(\"Attack\")) then"
+    },
+    {
+      "line": 42271,
+      "text": "call SaveBoolean(O,GetHandleId(i),StringHash(\"Attack\"),true)"
+    },
+    {
+      "line": 42406,
+      "text": "if GetUnitAbilityLevel(i,$41313845)>0 then"
+    },
+    {
+      "line": 42407,
+      "text": "call IssueImmediateOrder(i,\"wateryminion\")"
+    },
+    {
+      "line": 42408,
+      "text": "elseif GetUnitAbilityLevel(Qf,$41313845)>0 then"
+    },
+    {
+      "line": 42409,
+      "text": "call IssueImmediateOrder(Qf,\"wateryminion\")"
+    },
+    {
+      "line": 42410,
+      "text": "endif"
+    },
+    {
+      "line": 42411,
+      "text": "if GetUnitAbilityLevel(i,$41313847)>0 then"
+    },
+    {
+      "line": 42412,
+      "text": "call IssuePointOrder(i,\"unloadallcorpses\",GetUnitX(Qf),GetUnitY(Qf))"
+    },
+    {
+      "line": 42413,
+      "text": "elseif GetUnitAbilityLevel(Qf,$41313847)>0 then"
+    },
+    {
+      "line": 42414,
+      "text": "call IssuePointOrder(Qf,\"unloadallcorpses\",GetUnitX(i),GetUnitY(i))"
+    },
+    {
+      "line": 42415,
+      "text": "endif"
+    },
+    {
+      "line": 44843,
+      "text": "call ExecuteFunc(\"BanditLoadHideSkill\")"
+    }
+  ],
+  "abilities": {
+    "A0I7": {
+      "csvRow": 962,
+      "fields": {
+        "rawcode": "A0I7",
+        "name": "眩晕",
+        "tip": "风暴之锤(T) - [等级 1],风暴之锤(T) - [等级 2],风暴之锤(T) - [等级 3],风暴之锤(T) - [等级 4]",
+        "ubertip": "向目标投掷一巨大的魔法斧，对其造成100点伤害并使其5秒内处于眩晕状态。,向目标投掷一巨大的魔法斧，对其造成200 点伤害并使其7秒内处于眩晕状态。,向目标投掷一巨大的魔法斧，对其造成300点伤害并使其9秒内处于眩晕状态。,向目标投掷一巨大的魔法斧，对其造成450点伤害并使其12秒内处于眩晕状态。",
+        "alias": "A0I7",
+        "code": "AHtb",
+        "BuffID1": "BPSE",
+        "levels": "10",
+        "targs1": "air,ground,debris,enemy,neutral,organic",
+        "targs2": "air,ground,debris,enemy,neutral,organic",
+        "targs3": "air,ground,debris,enemy,neutral,organic",
+        "targs4": "air,ground,debris,enemy,neutral,organic",
+        "Dur1": "1.0",
+        "HeroDur1": "0.5",
+        "Rng1": "100000.0",
+        "checkDep": "1",
+        "BuffID2": "BPSE",
+        "BuffID3": "BPSE",
+        "reqLevel": "1",
+        "Dur2": "2.0",
+        "Dur3": "3.0",
+        "Rng2": "100000.0",
+        "Rng3": "100000.0",
+        "HeroDur2": "1.0",
+        "HeroDur3": "1.5",
+        "BuffID4": "BPSE",
+        "Dur4": "4.0",
+        "HeroDur4": "2.0",
+        "Rng4": "100000.0"
+      }
+    },
+    "A18D": {
+      "csvRow": 1866,
+      "fields": {
+        "rawcode": "A18D",
+        "name": "圣盾术",
+        "tip": "圣盾术",
+        "ubertip": "强盗头子进入伤害免疫状态，免疫所有的攻击和魔法伤害，在回合中受到伤害后将会触发该技能（持续2s）",
+        "alias": "A18D",
+        "code": "Asth",
+        "levels": "1",
+        "targs1": "_",
+        "targs2": "_",
+        "targs3": "_",
+        "targs4": "_",
+        "checkDep": "1"
+      }
+    },
+    "A18E": {
+      "csvRow": 1867,
+      "fields": {
+        "rawcode": "A18E",
+        "name": "裂地",
+        "tip": "裂地",
+        "ubertip": "对其周身300范围内的敌方单位造成115点伤害，并附带眩晕效果，眩晕效果持续2s",
+        "alias": "A18E",
+        "code": "ANcl",
+        "DataC1": "1",
+        "levels": "1",
+        "targs1": "_",
+        "targs2": "_",
+        "targs3": "_",
+        "targs4": "_",
+        "Rng1": "500.0",
+        "Cool1": "15.0",
+        "checkDep": "1",
+        "reqLevel": "1",
+        "DataE1": "1",
+        "DataF1": "wateryminion"
+      }
+    },
+    "A18F": {
+      "csvRow": 1868,
+      "fields": {
+        "rawcode": "A18F",
+        "name": "永久的隐形",
+        "alias": "A18F",
+        "code": "Apiv",
+        "DataA1": "1",
+        "levels": "1",
+        "targs1": "_",
+        "targs2": "_",
+        "targs3": "_",
+        "targs4": "_",
+        "Dur1": "0.5",
+        "HeroDur1": "0.5",
+        "checkDep": "1"
+      }
+    },
+    "A18G": {
+      "csvRow": 1869,
+      "fields": {
+        "rawcode": "A18G",
+        "name": "怨魂攻击",
+        "tip": "怨魂攻击",
+        "ubertip": "扇形方式释放三道怨魂，对200*600范围内的敌方单位造成125点的持续伤害，伤害持续时间5s，并对敌方单位造成攻速减少20%，移速减少25%的效果",
+        "alias": "A18G",
+        "code": "ANcl",
+        "DataB1": "3",
+        "DataC1": "1",
+        "levels": "1",
+        "targs1": "_",
+        "targs2": "_",
+        "targs3": "_",
+        "targs4": "_",
+        "Rng1": "500.0",
+        "Cool1": "20.0",
+        "checkDep": "1",
+        "reqLevel": "1",
+        "DataE1": "1",
+        "DataF1": "unloadallcorpses"
+      }
+    },
+    "A18H": {
+      "csvRow": 1870,
+      "fields": {
+        "rawcode": "A18H",
+        "name": "不甘",
+        "tip": "不甘",
+        "ubertip": "强盗头子临死前发出一声哀嚎，对600码范围内的敌方单位造成75点伤害",
+        "alias": "A18H",
+        "code": "Asth",
+        "levels": "1",
+        "targs1": "_",
+        "targs2": "_",
+        "targs3": "_",
+        "targs4": "_",
+        "checkDep": "1"
+      }
+    }
+  },
+  "runtimeContract": [
+    "A18D is removed on first valid main damage event. Listener y starts 0, increments before testing old y<=80: 81 events zero, 82nd destroys without zeroing. Death or two-second timer destroys. Web snapshots listeners before main callback; first-hit native registration semantics remain partial.",
+    "A18E SelectRange 300, Chaos/Universal 115 then VertigoTarget level2. A18H main death SelectRange600 Chaos/Universal75. UnitDamageTargetBJ passes attack=true.",
+    "A18G starts all three e008 at spell TARGET POINT, facing bearing and +/-45 degrees. Each owns a separate group. ChargeDistance registers zero timer and .04 recurring, moves120; four checks at120,240,360,480 then destroys before600 at .16. Each enemy once per projectile for125. No damage-over-time or slow statements.",
+    "New_UnitAttack requires attack damage and per-attacker Attack lock. Each of E and G independently chooses attacker ability before victim ability, even if order fails. E immediate then G point. Existing host instant-command adapter explicitly cannot prove native same-frame cancellation or cast-point success.",
+    "Allability disables itself during its effect body. Main death similarly disables itself; independent death registrations still run.",
+    "A18F native Apiv and four-rect entry removal confirmed, including ExecuteFunc initialization. Runtime stealth/detection and coordinate mapping not implemented: remains unresolved."
+  ],
+  "partialBoundaries": [
+    "Native current-event registration and timer ordering, group enumeration order and unimplemented adjacent branches.",
+    "ANcl Cost1 absent, h0SF/h0SG castpt .3. Host instant adapter records requests, pays no unverified cost and labels cost unknown; not a claim of zero native mana or successful simultaneous native orders.",
+    "Virtual e008 projectiles have no native collision, attackable handle, group/region interaction. Straight motion adapts Web geometry. Explicit RemoveUnit retained-source behavior unverified.",
+    "Source sourceHP/armor/attack-type object fields override conflicting unit purchase tooltip. h0SF and h0SG preserved with sapper versus mechanical type.",
+    "Invisibility and detection remain entirely unresolved; do not confuse visibility hiding with permanent invisibility."
+  ],
+  "nativeHelper": {
+    "url": "https://jass.sourceforge.net/doc/api/Blizzard_j-source.shtml",
+    "symbol": "UnitDamageTargetBJ",
+    "argumentSummary": "forwards attack=true, ranged=false, supplied attack/damage types and WEAPON_TYPE_WHOKNOWS",
+    "scope": "Published Blizzard.j helper reference, not a captured native run of this map"
+  }
+}

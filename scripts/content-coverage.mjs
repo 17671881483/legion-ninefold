@@ -63,6 +63,7 @@ const result={
   playerSkills:collect([...current,...playerBuildingCommands,...playerBuildingRuleCarriers,...playerRuntimeForms,...playerRuntimeAbilities]),
   battleSkills:collect([...current,...playerBuildingCommands,...playerBuildingRuleCarriers,...playerRuntimeForms,...playerRuntimeAbilities,...MERCENARIES,...WAVES,...specialCodes.map(c=>UNIT_TEMPLATES[c])]),
   remainingSourceGaps:[
+    '强盗头子A18D/E/G/H已接入圣盾事件计数、裂地、三路怨魂与死亡范围伤害，保留原生注册、施法/耗魔、碰撞边界。A18F隐形和原图入口区域映射仍unresolved，见bandit-lord-evidence.json。',
     '玛法里奥宁静手动施法/6秒光环、0.9秒星火/8秒独立冷却、结算前10%生命的一次暮光分支与5秒光环已接入。原生直接治疗、AOws施法/伤害仲裁、醉酒云雾、虚拟马甲句柄和绝对坐标转换仍partial，见malfurion-evidence.json。',
     '恶魔雕像n050/n06R的精确分支、550范围随机单目标弹射、局部伤害和共享k等级2眩晕请求已接入。A0RF建筑说明、A0OZ动态命令纳入覆盖，不向战斗体伪造技能；原生随机流/枚举及马甲伤害、冷却、耗魔和命令仲裁仍partial，见demon-statue-evidence.json。',
     'A0IA骷髅王已接入精确原型死亡分支、1秒复活、新旧句柄和LI波末统计生命周期；A0IB动态马甲命令纳入覆盖，缺失原生默认字段、碰撞、重击命中和移除句柄边界仍为partial，见skeleton-king-evidence.json。',

@@ -1,3 +1,4 @@
+import {BANDIT_LORD_RULES,canBanditCast,castBanditAbility,banditMainDamage,banditShieldEvent,banditDeath,banditIndependentDeath,banditAttackOrders,tickBanditJob} from './bandit-lord-rules.js';
 import {MALFURION_RULES,canMalfurionCast,castMalfurionAbility,malfurionMainDamage,malfurionAuraSources,tickMalfurionJob} from './malfurion-rules.js';
 import {DEMON_STATUE_RULES,DEMON_STATUE_TEXT,DEMON_STATUE_BOUNDARY,demonStatueDamageBranch} from './demon-statue-rules.js';
 import {BROODMOTHER_RULES,broodmotherDamageBranch,tickBroodmotherJob} from './broodmother-rules.js';
@@ -30,7 +31,7 @@ import { closestWalkable, isWalkable } from './layout.js';
 import { GARROSH_ACTIVE_RULES, GARROSH_PASSIVE_RULES, canGarroshCastAbility, castGarroshAbility, tryGarroshAutoCast, garroshActiveAfterDamage, sourceGarroshActiveDeath, tickGarroshActiveJob } from './garrosh-active-rules.js';
 import { ILLIDAN_RULES, ILLIDAN_ACTIVE_RULES, canIllidanCastAbility, castIllidanAbility, registerIllidanSource, tickIllidanSource, illidanOnAttackHit, tryIllidanAutoCast, illidanAfterDamage, sourceIllidanDeath, tickIllidanJob, isIllidanJobType } from './illidan-rules.js';
 
-export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261027-v30-1';
+export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261027-v31-1';
 
 // Values come from resolved object fields. Empty fields remain empty: a missing
 // native default is reported, rather than replacing it with tooltip numbers.
@@ -211,6 +212,7 @@ function compile(id,version='5.0dJF') {
   if(version==='v14.1A5'&&SOURCE_CLASS_RULES[id]){const r=SOURCE_CLASS_RULES[id];Object.assign(s,{...(!r.preserveNativeKind?{kind:'source_class'}:{}),...(r.compiled??{}),status:r.status,effectText:r.description+(r.partial?`【待核定：${r.partial}】`:'')});}
   if(version==='v14.1A5'&&HUSKAR_RULES[id]){const r=HUSKAR_RULES[id];Object.assign(s,{...(!r.preserveNativeKind?{kind:'huskar_source'}:{}),status:r.status,runtimeImplemented:true,effectText:r.description+(r.partial?`【待核定：${r.partial}】`:'')});}
   if(version==='v14.1A5'&&RELOCATION_RULES[id]){const r=RELOCATION_RULES[id];Object.assign(s,{kind:'building_relocation',status:r.status,effectText:r.description+(r.status==='partial'?`【待核定：${RELOCATION_BOUNDARY}】`:'')});}
+  if(version==='v14.1A5'&&BANDIT_LORD_RULES[id]){const r=BANDIT_LORD_RULES[id];Object.assign(s,{kind:'bandit_source',status:r.status,runtimeImplemented:r.status==='partial',effectText:r.description+`【待核定：${r.partial}】`});}
   if(version==='v14.1A5'&&MALFURION_RULES[id]){const r=MALFURION_RULES[id];Object.assign(s,{kind:r.preserveNativeKind?s.kind:'malfurion_source',status:r.status,runtimeImplemented:true,effectText:r.description+`【待核定：${r.partial}】`});}
   if(version==='v14.1A5'&&DEMON_STATUE_RULES[id]){const r=DEMON_STATUE_RULES[id];Object.assign(s,{kind:'demon_statue_source',status:r.status,runtimeImplemented:true,cooldown:has('Cool')?n('Cool'):null,manaCost:has('Cost')?n('Cost'):null,effectText:r.description+`【待核定：${r.partial}】`});}
   if(version==='v14.1A5'&&BROODMOTHER_RULES[id]){const r=BROODMOTHER_RULES[id];Object.assign(s,{kind:r.preserveNativeKind?s.kind:'source_broodmother',status:r.status,runtimeImplemented:true,effectText:r.description+`【待核定：${r.partial}】`});}
@@ -549,7 +551,7 @@ export function modifyIncoming(game,target,damage,attacker,options={}) {
 export function sourceClassAttackDamageEvent(game,target,attacker,options={},amount=0){
   if(!isV14(attacker)||options.spell&&!options.weapon||attacker.status?.sourceNativeAttackBusy)return;
   (attacker.status??={}).sourceNativeAttackBusy=true;
-  try{darkArthasAttackDamage(attacker,amount);vashjOnAttackDamage(game,attacker,target,heroScriptApi);sourceClassOnAttackDamage(game,attacker,target,heroScriptApi);huskarAttackDamage(game,attacker,target,amount,heroScriptApi);}finally{attacker.status.sourceNativeAttackBusy=false;}
+  try{darkArthasAttackDamage(attacker,amount);vashjOnAttackDamage(game,attacker,target,heroScriptApi);sourceClassOnAttackDamage(game,attacker,target,heroScriptApi);huskarAttackDamage(game,attacker,target,amount,heroScriptApi);banditAttackOrders(game,attacker,target,heroScriptApi);}finally{attacker.status.sourceNativeAttackBusy=false;}
 }
 export function initializeSourceClassCombat(game,building,entity){
   if(isV14(entity)){initializeNightmareDeployment(game,entity);initializeBrightArthasDeployment(game,building,entity);initializeLichKingDeployment(game,entity);initializeVashjDeployment(game,building,entity);return initializeSourceClassDeployment(game,building,entity,heroScriptApi);}
@@ -591,6 +593,7 @@ export function beforeSourceDamage(game,target,actual,attacker,options={}){
       prior=malfurionMainDamage(game,target,attacker,prefix.localDamage,heroScriptApi,prior);
       aesaraDamageCleanup(game,target,attacker,prefix.localDamage,heroScriptApi,prior);
     }
+    if(isV14(target))banditMainDamage(game,target,attacker,actual,heroScriptApi);
     if(isV14(target)&&!(attacker.skillSpecs??[]).some(s=>s.id==='A2Y7'))sourceClassBeforeDamage(game,target,actual,attacker,heroScriptApi);
   }finally{game._sourceDamageTriggerDepth--;}
   return eventDamage;
@@ -642,6 +645,7 @@ export function sourceDeath(game,target,killer) {
   // JSON restoration breaks live-object aliases. Rebind the retained script
   // handle before corpse cleanup so its final mana/cooldowns remain authoritative.
   if(game.state.nagaScriptCasters?.[target.id])game.state.nagaScriptCasters[target.id]=target;
+  banditIndependentDeath(game,target);
   sourceAesaraDeath(game,target);
   sourceBrightArthasDeath(game,target,heroScriptApi);
   sourceDarkArthasDeath(game,target,heroScriptApi);
@@ -763,6 +767,7 @@ const mainDeathApi={universalDamage,nativeDamage,
   boneDragonDeath:lichKingMainDeath,
   nightmareKill:(g,killer)=>nightmareMainDeath(g,killer,heroScriptApi),
   skeletonKingDeath:skeletonKingMainDeath,
+  banditDeath:(g,e)=>banditDeath(g,e,heroScriptApi),
 };
 const heroScriptApi={matchesTargets,magicImmune:e=>active(e).some(s=>s.kind==='immunity'),initializeUnit:initializeSourceSkills,applyNativeStun:(g,s,t,id,seconds)=>applyNativeControl(g,s,t,id,'stunUntil',seconds),sourceDeath,killUnit:(g,e)=>g._killUnit(e),getOwnedUnitsOfRawcode:(g,e,code)=>[...g.state.entities.filter(u=>u.ownerId===e.ownerId&&raw(u)===code),...(g.state.players[e.ownerId]?.buildings??[]).filter(b=>(b.sourceRawcode??b.unitId?.replace(/^v14_/, ''))===code)],castNativeNova:(g,e,id,target)=>castNativeNova(g,e,id,target),applyCyclone:(g,s,t,id,seconds)=>applyNativeControl(g,s,t,id,'cycloneUntil',seconds),applyEnsnare:(g,s,t,id)=>applyNativeControl(g,s,t,id,'rootUntil'),universalDamage,nativeDamage,sourceDamage,applyCorrosion:applyYseraCorrosion,scriptInvulnerable,pauseUnitEx,compileAbility,addAbility,removeAbility,getBuilding,applyAttackLevel,setUnitPosition,moveUnit:setUnitPosition,
   applyNativeSlow:(game,source,target,id,descriptor)=>{target.status??={};target.status.sourceClassNativeSlowPending={abilityId:id,sourceId:source.id,at:game.state.time,descriptor:{...descriptor},reason:'原生Aslo默认目标许可未核定'};},
@@ -775,14 +780,20 @@ const heroScriptApi={matchesTargets,magicImmune:e=>active(e).some(s=>s.kind==='i
   isLivingOwner:(game,source)=>!game.state.players[source.ownerId]?.eliminated,
 };
 export {darkArthasDamageListeners,brightArthasEventDamage};
-export function sourceRegisteredDamageEvent(game,target,listeners){darkArthasIncomingEvent(game,target,listeners,heroScriptApi);}
+export function sourceDamageListeners(game,target){
+  return (game.state.sourceSkillJobs??[]).filter(j=>!j.done&&j.sourceId===target.id&&['dark_arthas_army','bandit_shield'].includes(j.type));
+}
+export function sourceRegisteredDamageEvent(game,target,listeners,amount=0){
+  for(const j of listeners)if(j.type==='bandit_shield')amount=banditShieldEvent(game,target,j,amount);else darkArthasIncomingEvent(game,target,[j],heroScriptApi);
+  return amount;
+}
 export function manualSourceSkills(game,e){
   if(!e||!isV14(e))return [];
-  return (e.skillSpecs??[]).filter(s=>canMalfurionCast(e,s.id)||ALCHEMIST_ACTIVE_RULES[s.id]||canYseraCastAbility(e,s.id)||NAGA_ACTIVE_RULES[s.id]?.active||canVashjCastAbility(e,s.id)||canAesaraCastAbility(e,s.id)||canBrightArthasCastAbility(e,s.id)||canDarkArthasCastAbility(e,s.id)||canLichKingCastAbility(e,s.id)||canGarroshCastAbility(e,s.id)||canIllidanCastAbility(e,s.id)||canIceHeroCastAbility(e,s.id)||canTrollCastAbility(e,s.id)||canKelthuzadCastAbility(e,s.id)).map(s=>{
+  return (e.skillSpecs??[]).filter(s=>canBanditCast(e,s.id)||canMalfurionCast(e,s.id)||ALCHEMIST_ACTIVE_RULES[s.id]||canYseraCastAbility(e,s.id)||NAGA_ACTIVE_RULES[s.id]?.active||canVashjCastAbility(e,s.id)||canAesaraCastAbility(e,s.id)||canBrightArthasCastAbility(e,s.id)||canDarkArthasCastAbility(e,s.id)||canLichKingCastAbility(e,s.id)||canGarroshCastAbility(e,s.id)||canIllidanCastAbility(e,s.id)||canIceHeroCastAbility(e,s.id)||canTrollCastAbility(e,s.id)||canKelthuzadCastAbility(e,s.id)).map(s=>{
     if(AESARA_RULES[s.id])return aesaraManualSkill(game,e,s);
-    const alchemy=!!ALCHEMIST_ACTIVE_RULES[s.id],family=NAGA_ACTIVE_RULES[s.id]?.active?NAGA_ACTIVE_RULES[s.id]:MALFURION_RULES[s.id]??BRIGHT_ARTHAS_RULES[s.id]??DARK_ARTHAS_RULES[s.id]??VASHJ_RULES[s.id]??LICH_KING_RULES[s.id]??GARROSH_ACTIVE_RULES[s.id]??ILLIDAN_ACTIVE_RULES[s.id]??ICE_HERO_RULES[s.id]??TROLL_ACTIVE_RULES[s.id]??KELTHUZAD_ACTIVE_RULES[s.id]??(s.id==='A0ZO'?KELTHUZAD_RULES.A0ZO:null),shared=!!family,st=e.skillStates?.[s.id]??{},remaining=Math.max(0,(st[alchemy?'manualReadyAt':'readyAt']??0)-game.state.time),autoRemaining=shared?Math.max(0,(st.readyAt??0)-game.state.time):Math.max(0,(st[alchemy?'readyAt':'yseraAutoReadyAt']??0)-game.state.time);
+    const alchemy=!!ALCHEMIST_ACTIVE_RULES[s.id],family=NAGA_ACTIVE_RULES[s.id]?.active?NAGA_ACTIVE_RULES[s.id]:BANDIT_LORD_RULES[s.id]??MALFURION_RULES[s.id]??BRIGHT_ARTHAS_RULES[s.id]??DARK_ARTHAS_RULES[s.id]??VASHJ_RULES[s.id]??LICH_KING_RULES[s.id]??GARROSH_ACTIVE_RULES[s.id]??ILLIDAN_ACTIVE_RULES[s.id]??ICE_HERO_RULES[s.id]??TROLL_ACTIVE_RULES[s.id]??KELTHUZAD_ACTIVE_RULES[s.id]??(s.id==='A0ZO'?KELTHUZAD_RULES.A0ZO:null),shared=!!family,st=e.skillStates?.[s.id]??{},remaining=Math.max(0,(st[alchemy?'manualReadyAt':'readyAt']??0)-game.state.time),autoRemaining=shared?Math.max(0,(st.readyAt??0)-game.state.time):Math.max(0,(st[alchemy?'readyAt':'yseraAutoReadyAt']??0)-game.state.time);
     const reason=e.hp<=.405?'单位已阵亡':e.status?.yseraHidden||e.status?.yseraPaused||e.status?.sourcePaused||e.status?.illidanPaused||e.status?.stunUntil>game.state.time||e.status?.cycloneUntil>game.state.time?'单位当前无法施法':remaining>1e-8?'技能冷却中':e.mana<s.manaCost?'魔法不足':'';
-    return {id:s.id,name:s.name,status:s.status,manaCost:s.manaCost,cooldown:s.cooldown,remaining,autoRemaining,cooldownMode:shared?'shared_native':'independent',targetKind:family?family.targetKind:s.id==='A2YA'?'point':s.id==='A2YD'?'enemy':'none',range:s.range,radius:s.radius,canStart:!reason,reason};
+    return {id:s.id,name:s.name,status:s.status,manaCost:s.manaCost,manaCostKnown:!BANDIT_LORD_RULES[s.id]?.active,cooldown:s.cooldown,remaining,autoRemaining,cooldownMode:shared?'shared_native':'independent',targetKind:family?family.targetKind:s.id==='A2YA'?'point':s.id==='A2YD'?'enemy':'none',range:s.range,radius:s.radius,canStart:!reason,reason};
   });
 }
 export function castManualSourceSkill(game,e,id,params={}){
@@ -792,6 +803,7 @@ export function castManualSourceSkill(game,e,id,params={}){
   if(s.targetKind==='enemy'&&(!params.target||params.target.hp<=0||params.target.side===e.side||params.target.battleTeam!==e.battleTeam||scriptInvulnerable(params.target)))return {ok:false,message:'请选择可攻击的敌人'};
   if(s.targetKind==='unit'&&(!params.target||params.target.hp<=0||params.target.battleTeam!==e.battleTeam))return {ok:false,message:'请选择有效单位目标'};
   if(params.point&&s.targetKind==='point'||params.target&&s.targetKind==='enemy'){const p=params.point??pos(params.target),v=pos(e);if(dist(v,p)>1e-8)e.facing=Math.atan2(p.y-v.y,p.x-v.x)*180/Math.PI;}
+  if(canBanditCast(e,id))return castBanditAbility(game,e,id,params,heroScriptApi);
   if(canMalfurionCast(e,id))return castMalfurionAbility(game,e,id,params,heroScriptApi);
   if(AESARA_RULES[id]?.active)return castAesaraAbility(game,e,id,params,heroScriptApi);
   if(BRIGHT_ARTHAS_RULES[id]?.active)return castBrightArthasAbility(game,e,id,{mode:'manual',...params},heroScriptApi);
@@ -832,6 +844,7 @@ export function tickSourceScriptJobs(game,dt=0){
   tickSourceAuraRules(game,{matchesTargets});
   const now=game.state.time,remaining=[];
   for(const job of game.state.sourceSkillJobs??[]){
+    if(job.type.startsWith('bandit_')){if(tickBanditJob(game,job,heroScriptApi))remaining.push(job);continue;}
     if(job.type.startsWith('malfurion_')){if(tickMalfurionJob(game,job,heroScriptApi))remaining.push(job);continue;}
     if(job.type==='broodmother_alliance'){if(tickBroodmotherJob(game,job,heroScriptApi))remaining.push(job);continue;}
     if(job.type==='nightmare_souls'){if(tickNightmareJob(game,job,heroScriptApi))remaining.push(job);continue;}

@@ -4,7 +4,7 @@ import {resetLichKingRound} from './lich-king-rules.js';
 import {skeletonKingGate,beginSkeletonKingRoundFinish,tickSkeletonKingLifecycle,isSkeletonKingJobType} from './skeleton-king-rules.js';
 import {sourceBarrageTargets,sourceBarrageHit} from './skills.js';
 import { UNITS, MERCENARIES, LEGACY_MERCENARIES, WAVES, RULES, HEROES, BUILDERS, PROPHET_POOLS, UNIT_TEMPLATES, TECHNOLOGIES, BOX_TRAINING_RULES } from './data.js';
-import { attachSkills, refreshSourceSkills, initializeSourceSkills, initializeSourceClassCombat, sourceClassAttackDamageEvent, darkArthasDamageListeners, sourceRegisteredDamageEvent, brightArthasEventDamage, compileSkills, sourceAuraEffects, hasSourceAura, tickSourceSkills, sourceAttackIssued, sourceAttackStart, sourceOnHit, modifyIncoming, beforeSourceDamage, afterSourceDamage, sourceDeath, sourceMoveFactor, canWeaponTarget, sourceWeapon, tickSourceScriptJobs, manualSourceSkills, castManualSourceSkill } from './skills.js';
+import { attachSkills, refreshSourceSkills, initializeSourceSkills, initializeSourceClassCombat, sourceClassAttackDamageEvent, sourceDamageListeners, sourceRegisteredDamageEvent, brightArthasEventDamage, compileSkills, sourceAuraEffects, hasSourceAura, tickSourceSkills, sourceAttackIssued, sourceAttackStart, sourceOnHit, modifyIncoming, beforeSourceDamage, afterSourceDamage, sourceDeath, sourceMoveFactor, canWeaponTarget, sourceWeapon, tickSourceScriptJobs, manualSourceSkills, castManualSourceSkill } from './skills.js';
 import { initializeSourceClassBuilding } from './source-class-rules.js';
 import { MAP, laneToWorld, worldToLane, kingWorld, spawnWarpWorld, supportWorld, routePoints, isWalkable, isSegmentWalkable, constrainPoint, closestWalkable, navigationPath } from './layout.js';
 import { recordEggCompletion, restoreEggHistory, finishEggWave, recordBeastKingKill, eggRequirementStatus, appearanceQualificationStatus } from './egg-rules.js';
@@ -1353,7 +1353,7 @@ export class Game {
   _hurt(target, damage, attacker, pure = false) {
     if (target.hp <= 0 || damage <= 0 || (target.status?.cycloneUntil??0)>(this._aesaraEventAt??this._brightArthasEventAt??this._arthasEventAt??this._lichEventAt??this._vashjEventAt??this._iceEventAt??this._trollEventAt??this._kelthuzadEventAt??this.state.time)) return 0;
     const options=typeof pure==='object'?pure:{spell:!!pure},legacyPure=typeof pure==='boolean'&&pure;
-    const registeredDamageListeners=darkArthasDamageListeners(this,target);
+    const registeredDamageListeners=sourceDamageListeners(this,target);
     const revivalCount=target.status.yseraRevivalCount??0;
     let actual = modifyIncoming(this,target,damage,attacker,options);
     if(actual<=0){if((target.status.yseraRevivalCount??0)>revivalCount)beforeSourceDamage(this,target,0,attacker,options);sourceClassAttackDamageEvent(this,target,attacker,options,0);sourceRegisteredDamageEvent(this,target,registeredDamageListeners);return 0;}
@@ -1362,7 +1362,7 @@ export class Game {
     actual=brightArthasEventDamage(this,target,actual,attacker);
     // Main damage listener was registered before New_UnitAttack in the map.
     sourceClassAttackDamageEvent(this,target,attacker,options,actual);
-    sourceRegisteredDamageEvent(this,target,registeredDamageListeners);
+    actual=sourceRegisteredDamageEvent(this,target,registeredDamageListeners,actual);
     const sourcePreDamageHp=target.hp;
     target.hp -= actual;
     afterSourceDamage(this,target,actual,attacker,{...options,sourcePreDamageHp});

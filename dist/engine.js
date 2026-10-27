@@ -1,6 +1,7 @@
 import {queueBroodmotherAlliance,retainBroodmotherAlliance} from './broodmother-rules.js';
 import {relocationStatus,relocationRemaining,completeRelocation} from './relocation-rules.js';
 import {resetLichKingRound} from './lich-king-rules.js';
+import {skeletonKingGate,beginSkeletonKingRoundFinish,tickSkeletonKingLifecycle,isSkeletonKingJobType} from './skeleton-king-rules.js';
 import {sourceBarrageTargets,sourceBarrageHit} from './skills.js';
 import { UNITS, MERCENARIES, LEGACY_MERCENARIES, WAVES, RULES, HEROES, BUILDERS, PROPHET_POOLS, UNIT_TEMPLATES, TECHNOLOGIES, BOX_TRAINING_RULES } from './data.js';
 import { attachSkills, refreshSourceSkills, initializeSourceSkills, initializeSourceClassCombat, sourceClassAttackDamageEvent, darkArthasDamageListeners, sourceRegisteredDamageEvent, brightArthasEventDamage, compileSkills, sourceAuraEffects, hasSourceAura, tickSourceSkills, sourceAttackIssued, sourceAttackStart, sourceOnHit, modifyIncoming, beforeSourceDamage, afterSourceDamage, sourceDeath, sourceMoveFactor, canWeaponTarget, sourceWeapon, tickSourceScriptJobs, manualSourceSkills, castManualSourceSkill } from './skills.js';
@@ -79,7 +80,7 @@ export class Game {
         attack: rule('kingDamage', 135), regen: rule('kingRegen', 4), healCharges: rule('kingHealCharges', 4),
         armor: rule('kingArmor', 8), armorType: 'hero', attackType: 'hero', autoUpgradeCount: 0, healBlockedUntil: 0,
         id:`king-${team}`,unitId:'king',side:'defender',isKing:true,battleTeam:team,laneId:8+team,status:{},targetType:'structure',traits:['mechanical'],isBuilding:true,hpLevel: 0, attackLevel: 0, regenLevel: 0, attackCd: 0, worldX: kingWorld(team).x, worldY: kingWorld(team).y, radius: .8 })),
-      entities: [], sourceSkillJobs: [], nagaScriptCasters: {}, darkArthasCasters: {}, brightArthasHandles: {}, aesaraHandles: {}, soulToxinHandles: {}, events: [], logs: [], pendingSends: [], kingBountyPools: [0, 0], teamLeakFlags: [false, false],
+      entities: [], sourceSkillJobs: [], nagaScriptCasters: {}, darkArthasCasters: {}, brightArthasHandles: {}, aesaraHandles: {}, soulToxinHandles: {}, skeletonKingGate: {li:false,statisticsEnabled:true}, events: [], logs: [], pendingSends: [], kingBountyPools: [0, 0], teamLeakFlags: [false, false],
       metrics: { spawned: 0, killed: 0, leaked: 0 }, boxRewardProgress: { firstGranted:false, secondGranted:false },
     };
     for (const p of this.state.players) {
@@ -912,6 +913,7 @@ export class Game {
   }
   _step(dt) {
     const s = this.state; s.time += dt;
+    tickSkeletonKingLifecycle(this);
     s.events = s.events.filter(e => s.time - e.time < 2.5);
     for (const p of s.players) {
       for (const m of MERCENARIES) this._mercenarySlot(p, m);
@@ -1031,6 +1033,7 @@ export class Game {
     const e = this._entity(def, { team: player.team, side: 'defender', laneId: player.id,
       ownerId: player.id, sourceLaneId: player.id, x, y, buildingId, isHero });
     initializeSourceClassCombat(this,player.buildings.find(b=>b.id===buildingId),e);
+    if(e.combatRawcode==='h0JJ')e.userData=player.id+1;
     // PassiveSkill copies A1PE from the persistent building on every deployment.
     e.armor+=number(player.buildings.find(b=>b.id===buildingId)?.treasureArmor,0);
     const garroshArmor=number(player.buildings.find(b=>b.id===buildingId)?.garroshArmorLevel,0);
@@ -1184,7 +1187,7 @@ export class Game {
         if (distance(e, position) <= e.range + e.radius + (king.radius ?? .8) && this._canSegment(worldPoint(e), position, e.battleTeam, 0)) {
           if (e.attackCd <= 1e-8) this._beginMonsterAttack(e, king, battle);
         } else {if(this.state.wave>=31&&e.nav?.path?.length&&distance(e.nav.path.at(-1),position)>.4)this._planMonsterRoute(e);this._followNav(e, battle, dt);}
-      } else if (e.side === 'defender') {
+      } else if (e.side === 'defender'||e.status.skeletonKingAttackOrder) {
         if (e.nav?.mode === 'return') {
           e.routeMode = 'return'; this._followNav(e, battle, dt);
           if (distance(e, e.nav.goal) <= .55) e.routeMode = 'warp_wait';
@@ -1520,6 +1523,7 @@ export class Game {
   }
   _endCombat() {
     const s = this.state;
+    beginSkeletonKingRoundFinish(this);
     for(const p of s.players)finishEggWave(p,s.wave);
     if (s.mode === 'sandbox') {
       this._resetSandboxWave(); this._log(`测试沙盒：第 ${s.wave} 波测试完成，回到备战；未结算过波奖励，可再次手动出兵。`);
@@ -1562,6 +1566,7 @@ export class Game {
       let def=units[b.unitId];if(!def||(isSourceUnit(def)&&!def.combatRawcode))continue;def=this._boxCombatDefinition(def,b);const point=laneToWorld(0,1.2+(p.id%4)*1.1+(b.col-2.5)*.12,p.team===0?5+(b.row/8):9-(b.row/8));
       const e=this._entity(def,{team:p.team,side:`arena${p.team}`,battleTeam:0,laneId:0,sourceLaneId:p.id,ownerId:p.id,buildingId:b.id,isArena:true,worldX:point.x,worldY:point.y});
       initializeSourceClassCombat(this,b,e);
+      if(e.combatRawcode==='h0JJ')e.userData=p.id+1;
       e.armor+=number(b.treasureArmor,0);
       if(b.garroshArmorLevel){e.armor+=b.garroshArmorLevel;e.status.garroshArmorLevel=b.garroshArmorLevel;}
       if(b.garroshAttackLevel){e.damage+=b.garroshAttackLevel;e.status.garroshAttackLevel=b.garroshAttackLevel;}
@@ -1719,6 +1724,7 @@ export class Game {
       this.state.dataRevision=RULES.dataRevision;this.state.migrationNotice='旧存档已按文档迁移，原始存档已备份；无法映射的历史Web单位继续标记为兼容单位。';
     }
     this.state.kingBountyPools ??= [0, 0]; this.state.sourceSkillJobs??=[]; this.state.nagaScriptCasters??={}; this.state.darkArthasCasters??={}; this.state.brightArthasHandles??={}; this.state.aesaraHandles??={}; this.state.soulToxinHandles??={}; this.state.teamLeakFlags??=[false,false];
+    if(!this.state.skeletonKingGate)skeletonKingGate(this).legacyUnknown=true;
     migrateBoxRewardProgress(this,{legacySnapshot:true});
     for (const p of this.state.players) {
       p.builderId??=RULES.defaultBuilderId;
@@ -1748,6 +1754,7 @@ export class Game {
     for(const e of [...this.state.entities,...this.state.kings])if(this.state.aesaraHandles[e.id])this.state.aesaraHandles[e.id]=e;
     for(const e of [...this.state.entities,...this.state.kings])if(this.state.soulToxinHandles[e.id])this.state.soulToxinHandles[e.id]=e;
     for(const j of this.state.sourceSkillJobs)if(['huskar_unyielding','huskar_duel_immune'].includes(j.type)){const e=[...this.state.entities,...this.state.kings].find(e=>e.id===j.sourceId);if(e)j.source=e;}
+    for(const j of this.state.sourceSkillJobs)if(isSkeletonKingJobType(j.type)){const e=this.state.entities.find(e=>e.id===j.sourceId);if(e)j.source=e;}
     if (saved.version === 1) {
       this.state.map = { id: MAP.id, version: MAP.version, topology: '2x2-crossbar-stem' };
       for (const e of this.state.entities) {

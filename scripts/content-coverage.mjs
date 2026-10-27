@@ -27,7 +27,7 @@ const playerRuntimeAbilities=[
   {sourceRawcode:'h0UQ',abilityIds:['A1CK','A1OE']},
   {sourceRawcode:'h0UD',abilityIds:['A1CP']},
   {sourceRawcode:'h2AE',abilityIds:['A1CP']},
-  {sourceRawcode:'e008',abilityIds:['A1CV','A1CW','A0I5','A0I7']},
+  {sourceRawcode:'e008',abilityIds:['A1CV','A1CW','A0IB','A0I5','A0I7']},
   {sourceRawcode:'h0UG',abilityIds:['A1CG']},
   {sourceRawcode:'h0SY',abilityIds:['A1BD','A1BE','A1BF','A1BH']},
   {sourceRawcode:'h0SN',abilityIds:['A19Z']},
@@ -59,6 +59,7 @@ const result={
   playerSkills:collect([...current,...playerBuildingCommands,...playerRuntimeForms,...playerRuntimeAbilities]),
   battleSkills:collect([...current,...playerBuildingCommands,...playerRuntimeForms,...playerRuntimeAbilities,...MERCENARIES,...WAVES,...specialCodes.map(c=>UNIT_TEMPLATES[c])]),
   remainingSourceGaps:[
+    'A0IA骷髅王已接入精确原型死亡分支、1秒复活、新旧句柄和LI波末统计生命周期；A0IB动态马甲命令纳入覆盖，缺失原生默认字段、碰撞、重击命中和移除句柄边界仍为partial，见skeleton-king-evidence.json。',
     'A0I1孕母蛛群的伤害前生成、精确变体、召唤身份及动态属性已接入；FightStart全图原型枚举与尸体引用保留，原生命令、光环驻留、碰撞与调度仍部分核定，见broodmother-evidence.json。',
     'A0XM黑暗之魂已接入5秒积累、主死亡链的实数抽样、10魂单次召唤、6魂致命伤害清零与属性增减；A0XN动态等级纳入覆盖。缺失原生魔法上限、AOae默认字段、AIml生命副作用和CreateUnit碰撞/句柄仍为partial，见nightmare-evidence.json。',
     '未核定技能逐项保留在abilities中；已实现状态也不代表整套兵种联动已还原。',

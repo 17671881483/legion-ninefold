@@ -29,16 +29,16 @@ export function runMainUnitDeath(g,dead,killer,api){
       for(const t of enumerate(g,dead,center,400*scale(dead),true))api.universalDamage(g,t,200,dead);
       g._event?.('splash',dead,'死亡爆发',{skillId:'A20D',radius:400*scale(dead)});
     }
-    if(isV14(dead)){
-      api.classDeath(g,dead,killer,true);
-      api.yseraAwakening(g,dead);
-    }
+    if(isV14(dead))api.classDeath(g,dead,killer,true);
     // Independent if at 42006 precedes the fire/bone-dragon elseif chain.
     if(isV14(killer))api.nightmareKill?.(g,killer);
+    if(isV14(dead))api.yseraAwakening(g,dead);
     if(isV14(killer)&&has(killer,'A0HW')){
       const amount=4+dead.maxHp*.02;
       for(const t of enumerate(g,killer,center,200*scale(dead),false))api.nativeDamage(g,t,amount,killer,{attackType:'normal',damageType:'magic'});
       g._event?.('splash',dead,'火噬',{skillId:'A0HW',sourceId:killer.id,radius:200*scale(dead)});
+    }else if(isV14(dead)&&api.skeletonKingDeath(g,dead,killer)){
+      // This is the same final elseif chain, including random-failure cases.
     }else if(isV14(dead))api.boneDragonDeath(g,dead);
     return true;
   }finally{g._sourceUnitDeathTriggerDepth--;}

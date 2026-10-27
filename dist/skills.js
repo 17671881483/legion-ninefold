@@ -1,6 +1,7 @@
 import {BROODMOTHER_RULES,broodmotherDamageBranch,tickBroodmotherJob} from './broodmother-rules.js';
 import {NIGHTMARE_RULES,initializeNightmareDeployment,tickNightmareJob,nightmareMainDeath,nightmareDamagePrefix} from './nightmare-rules.js';
 import {DEATH_TRIGGER_RULES,runMainUnitDeath} from './death-trigger-rules.js';
+import {SKELETON_KING_RULES,skeletonKingMainDeath,isSkeletonKingJobType,tickSkeletonKingJob} from './skeleton-king-rules.js';
 import {ELEMENTAL_PROC_RULES,elementalDamagePrefix,iceExplosionAttackIssued} from './elemental-proc-rules.js';
 import {SOUL_TOXIN_RULES,soulToxinDamageBranch,tickSoulToxinJob,pruneSoulToxinHandles} from './soul-toxin-rules.js';
 import {HUSKAR_DUEL_RULE,huskarDuelDamage,huskarDuelDeath,tickHuskarDuelJob} from './huskar-duel.js';
@@ -27,7 +28,7 @@ import { closestWalkable, isWalkable } from './layout.js';
 import { GARROSH_ACTIVE_RULES, GARROSH_PASSIVE_RULES, canGarroshCastAbility, castGarroshAbility, tryGarroshAutoCast, garroshActiveAfterDamage, sourceGarroshActiveDeath, tickGarroshActiveJob } from './garrosh-active-rules.js';
 import { ILLIDAN_RULES, ILLIDAN_ACTIVE_RULES, canIllidanCastAbility, castIllidanAbility, registerIllidanSource, tickIllidanSource, illidanOnAttackHit, tryIllidanAutoCast, illidanAfterDamage, sourceIllidanDeath, tickIllidanJob, isIllidanJobType } from './illidan-rules.js';
 
-export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261027-v27-1';
+export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261027-v28-1';
 
 // Values come from resolved object fields. Empty fields remain empty: a missing
 // native default is reported, rather than replacing it with tooltip numbers.
@@ -210,6 +211,7 @@ function compile(id,version='5.0dJF') {
   if(version==='v14.1A5'&&RELOCATION_RULES[id]){const r=RELOCATION_RULES[id];Object.assign(s,{kind:'building_relocation',status:r.status,effectText:r.description+(r.status==='partial'?`【待核定：${RELOCATION_BOUNDARY}】`:'')});}
   if(version==='v14.1A5'&&BROODMOTHER_RULES[id]){const r=BROODMOTHER_RULES[id];Object.assign(s,{kind:r.preserveNativeKind?s.kind:'source_broodmother',status:r.status,runtimeImplemented:true,effectText:r.description+`【待核定：${r.partial}】`});}
   if(version==='v14.1A5'&&DEATH_TRIGGER_RULES[id]){const r=DEATH_TRIGGER_RULES[id];Object.assign(s,{kind:'source_death_trigger',status:r.status,runtimeImplemented:true,effectText:r.description+`【待核定：${r.partial}】`});}
+  if(version==='v14.1A5'&&SKELETON_KING_RULES[id]){const r=SKELETON_KING_RULES[id];Object.assign(s,{kind:id==='A0IA'?'skeleton_king_source':'skeleton_king_native_request',status:r.status,runtimeImplemented:true,effectText:r.description+`【待核定：${r.partial}】`});if(id==='A0IB'){s.manaCost=null;s.cooldown=null;}}
   if(version==='v14.1A5'&&ELEMENTAL_PROC_RULES[id]){const r=ELEMENTAL_PROC_RULES[id];Object.assign(s,{kind:'elemental_source_proc',status:r.status,runtimeImplemented:true,effectText:r.description+(r.partial?`【待核定：${r.partial}】`:'')});}
   if(version==='v14.1A5'&&NIGHTMARE_RULES[id]){const r=NIGHTMARE_RULES[id];Object.assign(s,{kind:'nightmare_source',status:r.status,runtimeImplemented:true,effectText:r.description+`【待核定：${r.partial}】`});}
   if(version==='v14.1A5'&&SOUL_TOXIN_RULES[id]){const r=SOUL_TOXIN_RULES[id];Object.assign(s,{kind:'soul_toxin_source',status:r.status,runtimeImplemented:true,soulToxinRevision:1,cooldown:has('Cool')?n('Cool'):null,effectText:r.description+`【待核定：${r.partial}】`});}
@@ -278,7 +280,8 @@ export function attachSkills(e,def) {
 }
 export function refreshSourceSkills(e,def) {
   const staleSoulToxin=e.skillSpecs?.some(s=>SOUL_TOXIN_RULES[s.id]&&s.soulToxinRevision!==1);
-  if(e.skillImplementationRevision===SKILL_IMPLEMENTATION_REVISION&&!staleSoulToxin)return false;
+  const staleSkeleton=isV14(e)&&e.skillSpecs?.some(s=>SKELETON_KING_RULES[s.id]&&s.kind!==(s.id==='A0IA'?'skeleton_king_source':'skeleton_king_native_request'));
+  if(e.skillImplementationRevision===SKILL_IMPLEMENTATION_REVISION&&!staleSkeleton&&!staleSoulToxin)return false;
   // Recompile the saved runtime ability set. Rebuilding from the template's
   // abilityIds would lose injected abilities and give mirror images skills.
   const abilityIds=Array.isArray(e.skillSpecs)?e.skillSpecs.map(s=>s.id).filter(Boolean):def.abilityIds;
@@ -546,7 +549,7 @@ export function initializeSourceClassCombat(game,building,entity){
   if(isV14(entity)){initializeNightmareDeployment(game,entity);initializeBrightArthasDeployment(game,building,entity);initializeLichKingDeployment(game,entity);initializeVashjDeployment(game,building,entity);return initializeSourceClassDeployment(game,building,entity,heroScriptApi);}
 }
 // DemonStatueBounce precedes A0I1 and remains unimplemented.
-function hasPendingBroodmotherPrefix(target,attacker,actual){return ['n050','n06R'].includes(raw(attacker));}
+function hasPendingBroodmotherPrefix(attacker){return ['n050','n06R'].includes(raw(attacker));}
 export function beforeSourceDamage(game,target,actual,attacker,options={}){
   const mainEventPosition=pos(target);
   if(isV14(target))kelthuzadBeforeDamage(game,target,actual,attacker,heroScriptApi);
@@ -577,7 +580,7 @@ export function beforeSourceDamage(game,target,actual,attacker,options={}){
     if(!prefix.selected&&isV14(target)&&nightmareDamagePrefix(game,target,attacker,actual,heroScriptApi)){prefix.selected='A0XM';eventDamage=0;}
     if(isV14(target)){
       if(!prefix.selected)prefix.selected=soulToxinDamageBranch(game,target,attacker,actual,heroScriptApi)?.selected??null;
-      const unresolvedPrior=hasPendingBroodmotherPrefix(target,attacker,actual);
+      const unresolvedPrior=hasPendingBroodmotherPrefix(attacker);
       if(!prefix.selected&&!unresolvedPrior&&broodmotherDamageBranch(game,target,attacker,prefix.localDamage,heroScriptApi,mainEventPosition))prefix.selected='A0I1';
       huskarDuelDamage(game,target,attacker,actual,prefix.selected);
       const prior=huskarMainDamage(game,target,attacker,prefix.localDamage,heroScriptApi);
@@ -754,6 +757,7 @@ const mainDeathApi={universalDamage,nativeDamage,
   yseraAwakening:(g,dead)=>sourceYseraMainDeath(g,dead),
   boneDragonDeath:lichKingMainDeath,
   nightmareKill:(g,killer)=>nightmareMainDeath(g,killer,heroScriptApi),
+  skeletonKingDeath:skeletonKingMainDeath,
 };
 const heroScriptApi={matchesTargets,magicImmune:e=>active(e).some(s=>s.kind==='immunity'),initializeUnit:initializeSourceSkills,applyNativeStun:(g,s,t,id)=>applyNativeControl(g,s,t,id,'stunUntil'),sourceDeath,killUnit:(g,e)=>g._killUnit(e),getOwnedUnitsOfRawcode:(g,e,code)=>[...g.state.entities.filter(u=>u.ownerId===e.ownerId&&raw(u)===code),...(g.state.players[e.ownerId]?.buildings??[]).filter(b=>(b.sourceRawcode??b.unitId?.replace(/^v14_/, ''))===code)],castNativeNova:(g,e,id,target)=>castNativeNova(g,e,id,target),applyCyclone:(g,s,t,id,seconds)=>applyNativeControl(g,s,t,id,'cycloneUntil',seconds),applyEnsnare:(g,s,t,id)=>applyNativeControl(g,s,t,id,'rootUntil'),universalDamage,nativeDamage,sourceDamage,applyCorrosion:applyYseraCorrosion,scriptInvulnerable,pauseUnitEx,compileAbility,addAbility,removeAbility,getBuilding,applyAttackLevel,setUnitPosition,moveUnit:setUnitPosition,
   applyNativeSlow:(game,source,target,id,descriptor)=>{target.status??={};target.status.sourceClassNativeSlowPending={abilityId:id,sourceId:source.id,at:game.state.time,descriptor:{...descriptor},reason:'原生Aslo默认目标许可未核定'};},
@@ -825,6 +829,7 @@ export function tickSourceScriptJobs(game,dt=0){
     if(job.type==='broodmother_alliance'){if(tickBroodmotherJob(game,job,heroScriptApi))remaining.push(job);continue;}
     if(job.type==='nightmare_souls'){if(tickNightmareJob(game,job,heroScriptApi))remaining.push(job);continue;}
     if(job.type==='soul_toxin'){if(tickSoulToxinJob(game,job,heroScriptApi))remaining.push(job);continue;}
+    if(isSkeletonKingJobType(job.type)){if(tickSkeletonKingJob(game,job,heroScriptApi))remaining.push(job);continue;}
     if(['huskar_duel','huskar_duel_immune'].includes(job.type)){if(tickHuskarDuelJob(game,job))remaining.push(job);continue;}
     if(job.type==='huskar_unyielding'){if(tickHuskarJob(game,job,heroScriptApi))remaining.push(job);continue;}
     if(isAesaraJobType(job.type)){if(tickAesaraJob(game,job,heroScriptApi))remaining.push(job);continue;}

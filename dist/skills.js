@@ -1,4 +1,5 @@
-import {AESARA_RULES,canAesaraCastAbility,aesaraManualSkill,castAesaraAbility,aesaraIncomingDamage,aesaraMainDamage,isAesaraJobType,tickAesaraJob,sourceAesaraDeath} from './aesara-rules.js';
+import {HUSKAR_RULES,huskarMainDamage,huskarAttackDamage,tickHuskarJob} from './huskar-rules.js';
+import {AESARA_RULES,canAesaraCastAbility,aesaraManualSkill,castAesaraAbility,aesaraIncomingDamage,aesaraMainDamage,aesaraDamageCleanup,isAesaraJobType,tickAesaraJob,sourceAesaraDeath} from './aesara-rules.js';
 import {BRIGHT_ARTHAS_RULES,canBrightArthasCastAbility,castBrightArthasAbility,tryBrightArthasAutoCast,brightArthasEventDamage,initializeBrightArthasDeployment,tickBrightArthasJob,isBrightArthasJobType,sourceBrightArthasDeath} from './bright-arthas-rules.js';
 import {DARK_ARTHAS_RULES,canDarkArthasCastAbility,castDarkArthasAbility,darkArthasMainDamage,darkArthasAttackDamage,darkArthasDamageListeners,darkArthasIncomingEvent,tickDarkArthasJob,isDarkArthasJobType,sourceDarkArthasDeath} from './dark-arthas-rules.js';
 import {LICH_KING_RULES,canLichKingCastAbility,castLichKingAbility,initializeLichKingDeployment,lichKingDeath,tickLichKingJob,isLichKingJobType} from './lich-king-rules.js';
@@ -19,7 +20,7 @@ import { closestWalkable, isWalkable } from './layout.js';
 import { GARROSH_ACTIVE_RULES, GARROSH_PASSIVE_RULES, canGarroshCastAbility, castGarroshAbility, tryGarroshAutoCast, garroshActiveAfterDamage, sourceGarroshActiveDeath, tickGarroshActiveJob } from './garrosh-active-rules.js';
 import { ILLIDAN_RULES, ILLIDAN_ACTIVE_RULES, canIllidanCastAbility, castIllidanAbility, registerIllidanSource, tickIllidanSource, illidanOnAttackHit, tryIllidanAutoCast, illidanAfterDamage, sourceIllidanDeath, tickIllidanJob, isIllidanJobType } from './illidan-rules.js';
 
-export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261027-v22-1';
+export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261027-v23-1';
 
 // Values come from resolved object fields. Empty fields remain empty: a missing
 // native default is reported, rather than replacing it with tooltip numbers.
@@ -155,10 +156,9 @@ function compile(id,version='5.0dJF') {
     if(id==='A2Z3'){s.kind='economic_marker';s.status='implemented';s.effectText='击杀敌人时单次1—100整数抽奖：1级2%得5金/5%得2金/10%得1金，2级2%/8%/12%，3级4%/10%/15%；互斥结算，31波后仍生效';}
     if(id==='A1A5'){s.kind='garrosh_armor';s.status='implemented';s.effectText='首次受伤登记1级护甲；伤害事件前生命比例比上次记录下降至少2个百分点时，本事件最多再升1级。护甲不因治疗撤销，并同步保留在建筑，下次出战恢复；最多100级';}
     if(id==='A1A6'){s.kind='garrosh_bleed';s.status='implemented';s.effectText='实际普攻命中10%概率流血：立即造成10点混乱攻击/通用伤害，此后每秒10点；同一双方组合不叠加，不同攻击者独立，任一方死亡结束';}
-    if(id==='A0IC'){s.kind='blood_boil';s.status='implemented';s.effectText='实际普攻命中且自身生命高于10%时，直接扣除当前生命6%，对目标追加自身最大生命4%的混乱攻击/神圣伤害';}
     if(id==='A1Q0'){s.kind='azure_fire';s.status='implemented';s.damage=20;s.effectText='实际普攻命中追加20点混乱攻击/通用伤害，可伤害魔免单位；不采用文案的魔法伤害类型';}
     if(id==='A0TH'){s.kind='anchor_smash';s.status='implemented';s.damage=10;s.radius=1.5;s.chance=.33;s.effectText='实际普攻命中时按JASS GetRandomReal(1,101)≥68判定（33%）；自身暂停1秒，对自身150范围目标阵营单位造成10点混乱攻击/通用伤害';}
-    if(id==='A0YD'){s.kind='dragon_soul';s.status='implemented';s.chance=29/99;s.effectText='实际普攻命中时按JASS GetRandomReal(1,100)<30判定（约29.29%，非文案40%）；原生英雄受到最大生命30%的混乱攻击/通用伤害，其他单位受到99999点同类伤害，并非直接设置死亡';}
+    if(id==='A0YD'){s.kind='dragon_soul';s.status='implemented';s.chance=29/99;s.effectText='独立普攻伤害监听在沸血之后、狂战回血之前按JASS GetRandomReal(1,100)<30判定（约29.29%，非文案40%）；原生英雄受到最大生命30%的混乱攻击/通用伤害，其他单位受到99999点同类伤害，并非直接设置死亡';}
     if(['AIde','AIas'].includes(a.base_code)&&has('DataA')){s.kind='passive_stats';s.status='implemented';if(a.base_code==='AIde'){s.armor=A;s.effectText=`原生物品能力：自身护甲+${A}`;}else{s.haste=A;s.effectText=`原生物品能力：自身攻速+${A*100}%`;}}
     if(['A138','A13T'].includes(id)){s.kind='passive_stats';s.status='implemented';s.bonusHp=A;s.effectText=`神秘礼物原生AIml：自身最大生命+${A}；部署时应用一次，不随存档刷新重复增加`;}
     if(['A139','A13X'].includes(id)){s.kind='passive_stats';s.status='implemented';s.flatDamage=A;s.effectText=`神秘礼物原生AIat：两组普通武器攻击力各+${A}，不增加法术固定伤害`;}
@@ -199,6 +199,7 @@ function compile(id,version='5.0dJF') {
   const extendedRule=version==='v14.1A5'&&(ICE_HERO_RULES[id]??TROLL_RULES[id]??KELTHUZAD_RULES[id]);
   if(extendedRule){const r=extendedRule;Object.assign(s,{...(!r.preserveNativeKind?{kind:ICE_HERO_RULES[id]?'ice_source':TROLL_RULES[id]?'troll_source':'kelthuzad_source'}:{}),status:r.status,manaCost:r.manaCost??s.manaCost,cooldown:r.cooldown??s.cooldown,effectText:r.description+(r.partial?`【待核定：${r.partial}】`:'')});if(r.range!==undefined)s.range=r.range/100;if(r.radius!==undefined)s.radius=r.radius/100;}
   if(version==='v14.1A5'&&SOURCE_CLASS_RULES[id]){const r=SOURCE_CLASS_RULES[id];Object.assign(s,{...(!r.preserveNativeKind?{kind:'source_class'}:{}),...(r.compiled??{}),status:r.status,effectText:r.description+(r.partial?`【待核定：${r.partial}】`:'')});}
+  if(version==='v14.1A5'&&HUSKAR_RULES[id]){const r=HUSKAR_RULES[id];Object.assign(s,{...(!r.preserveNativeKind?{kind:'huskar_source'}:{}),status:r.status,runtimeImplemented:true,effectText:r.description+(r.partial?`【待核定：${r.partial}】`:'')});}
   cache.set(key,s);return s;
 }
 function effectSummary(s){
@@ -240,7 +241,7 @@ const V14_ECONOMY_DESCRIPTIONS={
   farmer:{name:'淘金（玩家级经济）',rawcodes:['n085','h0W1'],text:'首座娜迦农夫从开始建造时为玩家注册15%击杀额外获得1金币的概率，每新增一座再加0.5个百分点；该概率影响玩家的击杀结算，农夫本身没有对战技能。升级完成后注销该农夫的注册；出售按原脚本不会注销已注册概率。'},
   master:{name:'压榨（回合经济）',rawcodes:['n084','h0W0'],text:'回合结算时，每座存活的娜迦农场主获得3×本波农夫数量的金币。原脚本条件会把原型h0W1的尸体也计入农夫数，皮肤农夫则要求存活；经济模块按这一源逻辑结算。'},
 };
-export function compileSkills(def) {const scale=def.distanceScale??1,version=versionOf(def);return [...new Set(def.abilityIds??def.sourceAbilityIds??(def.sourceAbilities??[]).map(a=>a.rawcode??a.id))].filter(Boolean).map(id=>compile(id,version)).map(s=>({...s,...(version==='v14.1A5'&&s.id==='A1CK'?{damage:num(s.fields['DataA'+(def.abilityLevels?.A1CK??1)])}:{}),...Object.fromEntries(['range','radius','length','width','inner','outer','outerRadius','deathRadius','pull'].filter(k=>s[k]!==undefined).map(k=>[k,s[k]*scale]))}));}
+export function compileSkills(def) {const scale=def.distanceScale??1,version=versionOf(def);return [...new Set(def.abilityIds??def.sourceAbilityIds??(def.sourceAbilities??[]).map(a=>a.rawcode??a.id))].filter(Boolean).map(id=>compile(id,version)).map(s=>({...s,...(version==='v14.1A5'&&s.id==='A0II'?{haste:num(s.fields['DataB'+(def.abilityLevels?.A0II??1)])}:{}),...(version==='v14.1A5'&&s.id==='A1CK'?{damage:num(s.fields['DataA'+(def.abilityLevels?.A1CK??1)])}:{}),...Object.fromEntries(['range','radius','length','width','inner','outer','outerRadius','deathRadius','pull'].filter(k=>s[k]!==undefined).map(k=>[k,s[k]*scale]))}));}
 export function describeSkills(def) {const list=compileSkills(def).map(s=>({id:s.id,name:s.name,description:s.description,status:s.status,effectText:s.effectText,cooldown:s.cooldown,manaCost:s.manaCost,duration:s.duration,range:s.range,radius:s.radius}));const r=raw(def),descriptions=isV14(def)?V14_TRIGGER_DESCRIPTIONS:TRIGGER_DESCRIPTIONS;if(descriptions[r])list.push({id:'trigger:'+r,name:'脚本机制',description:descriptions[r],effectText:descriptions[r],status:'implemented',cooldown:0,manaCost:0});const sourceGap=isV14(def)&&V14_PARTIAL_TRIGGER_DESCRIPTIONS[r];if(sourceGap)list.push({id:'trigger:'+r,name:'脚本机制（部分实现）',description:sourceGap.text,effectText:sourceGap.text,status:sourceGap.status,cooldown:0,manaCost:0});if(isV14(def))for(const [key,rule] of Object.entries(V14_ECONOMY_DESCRIPTIONS))if(rule.rawcodes.includes(r))list.push({id:'economy:'+key,name:rule.name,description:rule.text,effectText:rule.text,status:'implemented',cooldown:0,manaCost:0});return list;}
 export function skillCoverage(def) {const list=describeSkills(def);return {implemented:list.filter(s=>s.status==='implemented').length,partial:list.filter(s=>s.status==='partial').length,markers:list.filter(s=>s.status==='marker').length,unresolved:list.filter(s=>s.status==='unresolved').length};}
 export function attachSkills(e,def) {
@@ -299,7 +300,8 @@ export function sourceWeapon(source,target,now=0){
 }
 export function canWeaponTarget(source,target,now=0){return !!sourceWeapon(source,target,now);}
 
-function active(e){return (e.skillSpecs??[]).filter(s=>s.status==='implemented'||s.status==='partial'&&s.runtimeImplemented&&['A2Y1','A2Y5'].includes(s.id));}
+function active(e){return (e.skillSpecs??[]).filter(s=>s.status==='implemented'||s.status==='partial'&&s.runtimeImplemented&&['A2Y1','A2Y5','A0II'].includes(s.id));}
+export function hasSourceAura(e){return active(e).some(s=>s.kind.startsWith('aura_'));}
 function state(e,s){return (e.skillStates??={})[s.id]??=( {readyAt:0,casts:0});}
 function buff(e,s,source,now,extra={}){if(source.side!==e.side&&active(e).some(a=>a.kind==='immunity')&&(['Aslo','AEer','Acri','ANdh','Auhf','AUfn','ANcs','AHtb','AOcl'].includes(s.base)))return false;e.buffs??=[];const key=extra.key??s.buffKey??s.id;const b={key,skillId:s.id,ownerId:source.ownerId,sourceId:source.id,expiresAt:now+(isNativeHero(e)?s.heroDuration||s.duration:s.duration),damage:s.damage??0,armor:s.armor??0,move:s.move??0,haste:s.haste??0,regen:s.regen??0,dps:s.dps??0,miss:s.miss??0,incoming:s.incoming??0,disarm:s.base==='AEer',...extra};const old=e.buffs.findIndex(v=>v.key===key);if(old>=0)e.buffs[old]=b;else e.buffs.push(b);}
 export function sourceAuraEffects(game,target,auras) {
@@ -447,10 +449,8 @@ export function sourceOnHit(game,e,target,battle,dealt,procs=[],rawDamage=dealt,
     trollOnHit(game,e,target,heroScriptApi);
     for(const s of active(e)){
       if(s.kind==='stacking_bite'){const st=state(e,s);st.targets??={};st.targets[target.id]=(st.targets[target.id]??0)+s.damage;universalDamage(game,target,st.targets[target.id],e);}
-      if(s.kind==='blood_boil'&&e.hp>e.maxHp*.1){e.hp-=e.hp*.06;universalDamage(game,target,e.maxHp*.04,e);}
       if(s.kind==='azure_fire')universalDamage(game,target,s.damage,e);
       if(s.kind==='anchor_smash'&&game._random()>=1-s.chance){e.status.stunUntil=Math.max(e.status.stunUntil??0,now+1);for(const t of scriptTargets(game,e,e,s.radius,false))universalDamage(game,t,s.damage,e);}
-      if(s.kind==='dragon_soul'&&game._random()<s.chance)universalDamage(game,target,isNativeHero(target)?target.maxHp*.3:99999,e);
     }
   }
   for(const s of procs){
@@ -523,7 +523,7 @@ export function modifyIncoming(game,target,damage,attacker,options={}) {
 export function sourceClassAttackDamageEvent(game,target,attacker,options={},amount=0){
   if(!isV14(attacker)||options.spell&&!options.weapon||attacker.status?.sourceNativeAttackBusy)return;
   (attacker.status??={}).sourceNativeAttackBusy=true;
-  try{darkArthasAttackDamage(attacker,amount);vashjOnAttackDamage(game,attacker,target,heroScriptApi);sourceClassOnAttackDamage(game,attacker,target,heroScriptApi);}finally{attacker.status.sourceNativeAttackBusy=false;}
+  try{darkArthasAttackDamage(attacker,amount);vashjOnAttackDamage(game,attacker,target,heroScriptApi);sourceClassOnAttackDamage(game,attacker,target,heroScriptApi);huskarAttackDamage(game,attacker,target,amount,heroScriptApi);}finally{attacker.status.sourceNativeAttackBusy=false;}
 }
 export function initializeSourceClassCombat(game,building,entity){
   if(isV14(entity)){initializeBrightArthasDeployment(game,building,entity);initializeLichKingDeployment(game,entity);initializeVashjDeployment(game,building,entity);return initializeSourceClassDeployment(game,building,entity,heroScriptApi);}
@@ -551,7 +551,11 @@ export function beforeSourceDamage(game,target,actual,attacker,options={}){
       tryIceHeroAutoCast(game,target,attacker,heroScriptApi);
       tryTrollAutoCast(game,target,attacker,heroScriptApi);
     }
-    if(isV14(target))aesaraMainDamage(game,target,attacker,actual,heroScriptApi);
+    if(isV14(target)){
+      aesaraMainDamage(game,target,attacker,actual,heroScriptApi);
+      const prior=huskarMainDamage(game,target,attacker,actual,heroScriptApi);
+      aesaraDamageCleanup(game,target,attacker,actual,heroScriptApi,prior);
+    }
     if(isV14(target)&&!(attacker.skillSpecs??[]).some(s=>s.id==='A2Y7'))sourceClassBeforeDamage(game,target,actual,attacker,heroScriptApi);
   }finally{game._sourceDamageTriggerDepth--;}
 }
@@ -781,6 +785,7 @@ export function tickSourceScriptJobs(game,dt=0){
   tickSourceAuraRules(game,{matchesTargets});
   const now=game.state.time,remaining=[];
   for(const job of game.state.sourceSkillJobs??[]){
+    if(job.type==='huskar_unyielding'){if(tickHuskarJob(game,job,heroScriptApi))remaining.push(job);continue;}
     if(isAesaraJobType(job.type)){if(tickAesaraJob(game,job,heroScriptApi))remaining.push(job);continue;}
     if(isBrightArthasJobType(job.type)){if(tickBrightArthasJob(game,job,heroScriptApi))remaining.push(job);continue;}
     if(isDarkArthasJobType(job.type)){if(tickDarkArthasJob(game,job,heroScriptApi))remaining.push(job);continue;}

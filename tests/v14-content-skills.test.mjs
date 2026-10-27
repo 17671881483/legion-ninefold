@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {SKILL_IMPLEMENTATION_REVISION,attachSkills,refreshSourceSkills,compileSkills,describeSkills,tickSourceSkills,tickSourceScriptJobs,sourceAuraEffects,sourceAttackStart,sourceOnHit,modifyIncoming,afterSourceDamage,sourceDeath} from '../dist/skills.js';
+import {SKILL_IMPLEMENTATION_REVISION,attachSkills,refreshSourceSkills,compileSkills,describeSkills,tickSourceSkills,tickSourceScriptJobs,sourceAuraEffects,sourceAttackStart,sourceClassAttackDamageEvent,sourceOnHit,modifyIncoming,afterSourceDamage,sourceDeath} from '../dist/skills.js';
 import {V14_UNITS} from '../dist/v14-reference.js';
 
 const near=(a,b)=>assert.ok(Math.abs(a-b)<1e-6,`${a} != ${b}`);
@@ -12,7 +12,7 @@ function fixture(){
   _auraEffects:()=>({damageMultiplier:1,armor:0}),_effectiveArmor:(e,a)=>a,_typeMultiplier:()=>1,_armorFactor:()=>1,
   add(d=def(),side='defender',x=0,y=0){const e={id:++id,hp:d.hp??1000,maxHp:d.hp??1000,damage:d.damage??10,attackInterval:1,range:1,acquisitionRange:5,isBoss:!!d.isBoss,side,team:side==='defender'?0:1,battleTeam:0,ownerId:side==='defender'?0:1,status:{},worldX:x,worldY:y,createdAt:this.state.time};attachSkills(e,d);this.state.entities.push(e);return e;},
   battle(){const list=this.state.entities;list.auras=[];this._worldEntities=new Map(list.map(e=>[e.id,e]));return list;},
-  _hurt(t,amount,attacker,options={}){if(t.hp<=0||amount<=0)return 0;const dealt=modifyIncoming(this,t,amount,attacker,options);if(dealt<=0)return 0;t.hp-=dealt;afterSourceDamage(this,t,dealt,attacker,options);if(t.hp<=0)sourceDeath(this,t,attacker);return dealt;},
+  _hurt(t,amount,attacker,options={}){if(t.hp<=0||amount<=0)return 0;const dealt=modifyIncoming(this,t,amount,attacker,options);if(dealt<=0)return 0;sourceClassAttackDamageEvent(this,t,attacker,options,dealt);t.hp-=dealt;afterSourceDamage(this,t,dealt,attacker,options);if(t.hp<=0)sourceDeath(this,t,attacker);return dealt;},
   hit(e,t,amount=10){const attack=sourceAttackStart(this,e,t),dealt=this._hurt(t,amount,e,{});if(dealt>0&&e.hp>0)sourceOnHit(this,e,t,this.battle(),dealt,attack.procs,amount);return dealt;}
  };
 }

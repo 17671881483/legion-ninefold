@@ -1,0 +1,231 @@
+{
+  "revision": "v14-content-20261027-v23-1",
+  "scope": "神灵武士 A0IE/A0II 及 A0IC/A0YD 独立攻击监听顺序",
+  "status": "partial-source-host",
+  "source": {
+    "path": "v14-source/raw_extracted/war3map.j",
+    "sha256": "e66c55b3b25b185c991be5613e21fbf5b2d598f3cc40f2f8cd01c23bcb828250",
+    "lineCounting": "Latin-1 decode, split only LF"
+  },
+  "sourceEvidence": [
+    {
+      "line": 40356,
+      "text": "function A0IETimer takes nothing returns nothing"
+    },
+    {
+      "line": 40359,
+      "text": "call RemoveSavedBoolean(O,GetHandleId(i),$41304945)"
+    },
+    {
+      "line": 40360,
+      "text": "call UnitRemoveAbility(i,$41304946)"
+    },
+    {
+      "line": 40361,
+      "text": "call FlushChildHashtable(O,GetHandleId(t))"
+    },
+    {
+      "line": 40362,
+      "text": "call DestroyTimer(t)"
+    },
+    {
+      "line": 40553,
+      "text": "if P8<=0 or bV==i or bV==null or IsUnitAlly(bV,GetOwningPlayer(i)) then"
+    },
+    {
+      "line": 40561,
+      "text": "if GetUnitAbilityLevel(bV,$41325937)>0 then"
+    },
+    {
+      "line": 40569,
+      "text": "if GetUnitAbilityLevel(i,QC)>0 then"
+    },
+    {
+      "line": 40570,
+      "text": "set P8=P8*.85"
+    },
+    {
+      "line": 40574,
+      "text": "call DisableTrigger(Eb)"
+    },
+    {
+      "line": 41337,
+      "text": "if GetUnitAbilityLevel(i,$41304945)>0 and P8>GetUnitState(i,UNIT_STATE_LIFE) then"
+    },
+    {
+      "line": 41338,
+      "text": "call UnitRemoveAbility(i,$41304945)"
+    },
+    {
+      "line": 41339,
+      "text": "call UnitAddAbility(i,$41304946)"
+    },
+    {
+      "line": 41340,
+      "text": "call SaveBoolean(O,GetHandleId(i),$41304945,true)"
+    },
+    {
+      "line": 41341,
+      "text": "call SetUnitState(i,UNIT_STATE_LIFE,GetUnitState(i,UNIT_STATE_LIFE)+P8)"
+    },
+    {
+      "line": 41344,
+      "text": "call TimerStart(t,5,false,function A0IETimer)"
+    },
+    {
+      "line": 41346,
+      "text": "elseif LoadBoolean(O,GetHandleId(i),$41304945) and P8>GetUnitState(i,UNIT_STATE_LIFE) then"
+    },
+    {
+      "line": 41347,
+      "text": "call SetUnitState(i,UNIT_STATE_LIFE,GetUnitState(i,UNIT_STATE_LIFE)+P8)"
+    },
+    {
+      "line": 41348,
+      "text": "elseif GetUnitAbilityLevel(i,$41304949)>0 then"
+    },
+    {
+      "line": 41349,
+      "text": "set YY=R2I((GetUnitState(i,UNIT_STATE_MAX_LIFE)-GetUnitState(i,UNIT_STATE_LIFE))/GetUnitState(i,UNIT_STATE_MAX_LIFE)*10)"
+    },
+    {
+      "line": 41350,
+      "text": "set YY=IMaxBJ(0,YY)"
+    },
+    {
+      "line": 41351,
+      "text": "set YY=IMinBJ(10,YY)"
+    },
+    {
+      "line": 41352,
+      "text": "call SetUnitAbilityLevel(i,$41304949,YY)"
+    },
+    {
+      "line": 42270,
+      "text": "if YDWEIsEventAttackDamage() and not LoadBoolean(O,GetHandleId(i),StringHash(\"Attack\")) then"
+    },
+    {
+      "line": 42271,
+      "text": "call SaveBoolean(O,GetHandleId(i),StringHash(\"Attack\"),true)"
+    },
+    {
+      "line": 42576,
+      "text": "if GetUnitAbilityLevel(i,$41304943)>0 and GetUnitLifePercent(i)>10 then"
+    },
+    {
+      "line": 42577,
+      "text": "call SetUnitLifeBJ(i,GetUnitState(i,UNIT_STATE_LIFE)-GetUnitState(i,UNIT_STATE_LIFE)*.06)"
+    },
+    {
+      "line": 42578,
+      "text": "call UnitDamageTargetBJ(i,Qf,GetUnitState(i,UNIT_STATE_MAX_LIFE)*.04,ATTACK_TYPE_CHAOS,DAMAGE_TYPE_DIVINE)"
+    },
+    {
+      "line": 42580,
+      "text": "if GetUnitAbilityLevel(i,$41305944)>0 and GetRandomReal(1,100)<30 then"
+    },
+    {
+      "line": 42581,
+      "text": "if IsUnitType(Qf,UNIT_TYPE_HERO) then"
+    },
+    {
+      "line": 42582,
+      "text": "call UnitDamageTarget(i,Qf,GetUnitState(Qf,UNIT_STATE_MAX_LIFE)*.3,false,false,ATTACK_TYPE_CHAOS,DAMAGE_TYPE_UNIVERSAL,WEAPON_TYPE_WHOKNOWS)"
+    },
+    {
+      "line": 42584,
+      "text": "call UnitDamageTarget(i,Qf,99999,false,false,ATTACK_TYPE_CHAOS,DAMAGE_TYPE_UNIVERSAL,WEAPON_TYPE_WHOKNOWS)"
+    },
+    {
+      "line": 42589,
+      "text": "if GetUnitAbilityLevel(i,$41304949)>0 then"
+    },
+    {
+      "line": 42590,
+      "text": "call SetUnitLifeBJ(i,GetUnitState(i,UNIT_STATE_LIFE)+GetEventDamage()*GetUnitAbilityLevel(i,$41304949)*.1)"
+    },
+    {
+      "line": 42591,
+      "text": "set YY=R2I((GetUnitState(i,UNIT_STATE_MAX_LIFE)-GetUnitState(i,UNIT_STATE_LIFE))/GetUnitState(i,UNIT_STATE_MAX_LIFE)*10)"
+    },
+    {
+      "line": 42592,
+      "text": "set YY=IMaxBJ(0,YY)"
+    },
+    {
+      "line": 42593,
+      "text": "set YY=IMinBJ(10,YY)"
+    },
+    {
+      "line": 42594,
+      "text": "call SetUnitAbilityLevel(i,$41304949,YY)"
+    },
+    {
+      "line": 42794,
+      "text": "call SaveBoolean(O,GetHandleId(i),StringHash(\"Attack\"),false)"
+    }
+  ],
+  "objects": {
+    "A0IC": {
+      "table": "all_abilities.csv",
+      "rawcode": "A0IC",
+      "scriptDamage": "ATTACK_TYPE_CHAOS / DAMAGE_TYPE_DIVINE"
+    },
+    "A0IE": {
+      "row": 969,
+      "base": "Asth",
+      "tooltipDifferences": [
+        "不是低于5%触发，而是P8严格大于当前生命",
+        "TimerStart为5秒，不是3秒",
+        "预先回血受最大生命限制，未把事件伤害设为0",
+        "触发后移除A0IE，到期不恢复"
+      ]
+    },
+    "A0II": {
+      "row": 973,
+      "base": "AOae",
+      "levels": 10,
+      "explicitHasteFields": "DataB1–10；5–10来自W3A覆盖",
+      "scriptLifeReturn": "事件伤害 × 当前技能等级 × .1",
+      "tooltipLifeReturn": "每级5%",
+      "rawLevelRequest": "R2I((maxLife-life)/maxLife*10)，clamp 0..10"
+    },
+    "A0IF": {
+      "row": 970,
+      "base": "Aroc",
+      "DataC1": 5,
+      "Area1": 700,
+      "missing": [
+        "DataA1",
+        "DataB1"
+      ],
+      "status": "unresolved"
+    }
+  },
+  "implemented": [
+    "主敌对正伤害事件的严格致命判定、加减能力、先加生命再承伤、5秒一次性清理；计时器不因死亡或清尸取消。",
+    "同一elseif链的A0IE/A0II优先级及艾萨拉失buff清理的后续关系；判断结果不因前序移除能力和回血而丢失。",
+    "A0II主伤害前取整、独立攻击末回血后再次取整；1–10级采用显式DataB，不再永远固定第一档攻速。",
+    "A0IC与位于其后/狂战之前的A0YD移到独立攻击事件；与主监听禁用互不混淆，按原攻击者Attack标志防重入。A0IC改为显式神圣伤害。",
+    "保存死亡句柄；JSON恢复重绑活体计时器句柄，技能版本更新保留已移除/注入能力和现有等级。",
+    "已射出的分裂箭在攻击者死亡后仍可派发攻击事件，狂战回血不将尸体复活。原生设生命与复活操作分开建模。"
+  ],
+  "remaining": [
+    "没有验证同版本原生SetUnitAbilityLevel(0)的结果；记录未核定0级请求并保留最后有效等级，不能声称满血状态与原生逐帧等价。外部检索未找到足以关闭此边界的直接实验，不使用无关例子作为证据。",
+    "A0IF缺少DataB原生默认字段，既不由DataC5推定总5目标，也不猜原生伤害预算。",
+    "A0HX前置分支可能改写P8；与不屈组合的事件已标注未核定，尚未搬入该前置随机分支。",
+    "AOae移动字段、高等级范围/目标/增益字段继承和光环刷新间隔尚未同版原生验证。",
+    "A0ID决斗在41312—41336选1000范围（以攻击者为中心）首个合格对象；40331—40354死亡回调读取死者自身tag，与文案最近强敌/杀敌3秒无敌不等价。尚未实现，不据文案加无敌。",
+    "A0IG/A0IH建筑位移入口和次数语义仍待核定。",
+    "总体仍有未实现能力、原生命令仲裁、原生弹道/伤害骰以及缺失美术音效资产，目标未完成。"
+  ],
+  "tests": "tests/v14-huskar.test.mjs",
+  "nativeEvidence": [
+    {
+      "url": "https://www.hiveworkshop.com/threads/snippet-reviveunit.186696/",
+      "author": "PurgeandFire",
+      "kind": "author implementation and demo",
+      "supports": "普通尸体复活通过原生复活能力完成，保留句柄；不将普通SetUnitLife回血视为复活。不是同版地图逐帧回放。"
+    }
+  ]
+}

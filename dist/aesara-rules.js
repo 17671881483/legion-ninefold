@@ -81,7 +81,10 @@ export function aesaraMainDamage(g,e,attacker,amount,api){
     if(melee)request(e,{at:now(g),abilityId:'A0W3',order:'slow',targetId:attacker.id,dummyRawcode:'e00O',sharedDummy:true,abilityRemovedImmediately:true,duration:3,heroDuration:3,haste:-.3,move:null,status:'native-unverified'});
   }
   if(!e.status?.aesaraShieldScriptOn)castAesaraAbility(g,e,'A0VY',{},api);
-  if(e.status?.aesaraShieldScriptOn&&!e.status.aesaraShieldBuff){const prior=earlierCleanupBranch(e,attacker,amount);if(prior)e.status.aesaraCleanupDeferred=prior;else{delete e.status.aesaraCleanupDeferred;cleanupShield(g,e,api,'lost-buff-damage');}}
+}
+export function aesaraDamageCleanup(g,e,attacker,amount,api,priorDamageBranch){
+  if(!(amount>0)||!has(e,'A0VY')||has(attacker,'A2Y7'))return;
+  if(e.status?.aesaraShieldScriptOn&&!e.status.aesaraShieldBuff){const prior=priorDamageBranch?'prior-elseif':earlierCleanupBranch(e,attacker,amount);if(prior)e.status.aesaraCleanupDeferred=prior;else{delete e.status.aesaraCleanupDeferred;cleanupShield(g,e,api,'lost-buff-damage');}}
 }
 function illusionRequest(g,e,j,reason){
   const original=pos(e);if(reason==='low-life-hit'){e.worldX=j.x;e.worldY=j.y;}

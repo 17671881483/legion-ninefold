@@ -1,6 +1,6 @@
 {
   "sourceVersion": "v14.1A5",
-  "skillImplementationRevision": "v14-content-20261027-v22-1",
+  "skillImplementationRevision": "v14-content-20261027-v23-1",
   "units": 534,
   "mercenaryRecords": 60,
   "mainWaves": 35,
@@ -64,6 +64,18 @@
         "A0W0",
         "A0W2",
         "A0W3"
+      ]
+    },
+    {
+      "sourceRawcode": "h0JL",
+      "abilityIds": [
+        "A0IF"
+      ]
+    },
+    {
+      "sourceRawcode": "h0SR",
+      "abilityIds": [
+        "A0IF"
       ]
     },
     {
@@ -156,8 +168,8 @@
   ],
   "playerSkills": {
     "counts": {
-      "implemented": 410,
-      "partial": 65,
+      "implemented": 409,
+      "partial": 67,
       "marker": 34,
       "unresolved": 122
     },
@@ -2558,7 +2570,7 @@
         "rawcode": "A0IC",
         "name": "沸血",
         "status": "implemented",
-        "kind": "blood_boil",
+        "kind": "huskar_source",
         "unitRawcodes": [
           "h0NP",
           "h0SS"
@@ -2577,11 +2589,21 @@
       {
         "rawcode": "A0IE",
         "name": "不屈意志",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "huskar_source",
         "unitRawcodes": [
           "h0NP",
           "h0SS"
+        ]
+      },
+      {
+        "rawcode": "A0IF",
+        "name": "神灵武士不屈",
+        "status": "unresolved",
+        "kind": "native_barrage",
+        "unitRawcodes": [
+          "h0JL",
+          "h0SR"
         ]
       },
       {
@@ -2597,7 +2619,7 @@
       {
         "rawcode": "A0II",
         "name": "狂战",
-        "status": "implemented",
+        "status": "partial",
         "kind": "aura_speed",
         "unitRawcodes": [
           "h0NP",
@@ -6275,8 +6297,8 @@
   },
   "battleSkills": {
     "counts": {
-      "implemented": 460,
-      "partial": 66,
+      "implemented": 459,
+      "partial": 68,
       "marker": 47,
       "unresolved": 143
     },
@@ -9043,7 +9065,7 @@
         "rawcode": "A0IC",
         "name": "沸血",
         "status": "implemented",
-        "kind": "blood_boil",
+        "kind": "huskar_source",
         "unitRawcodes": [
           "h0NP",
           "h0SS"
@@ -9062,11 +9084,21 @@
       {
         "rawcode": "A0IE",
         "name": "不屈意志",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "huskar_source",
         "unitRawcodes": [
           "h0NP",
           "h0SS"
+        ]
+      },
+      {
+        "rawcode": "A0IF",
+        "name": "神灵武士不屈",
+        "status": "unresolved",
+        "kind": "native_barrage",
+        "unitRawcodes": [
+          "h0JL",
+          "h0SR"
         ]
       },
       {
@@ -9082,7 +9114,7 @@
       {
         "rawcode": "A0II",
         "name": "狂战",
-        "status": "implemented",
+        "status": "partial",
         "kind": "aura_speed",
         "unitRawcodes": [
           "h0NP",
@@ -13319,6 +13351,7 @@
     "包内未提供完整原生商店/菜单字段，部分商品与单位入口仍待补证。",
     "A1U4/A1U5/A1U6献祭奖励可核定，但没有可证实的携带单位或授予路径。",
     "原始地图模型、贴图、音频和v14地形通行格不在解析包内。",
+    "神灵武士不屈5秒、狂战1—10级与独立攻击回血已接入；A0IF缺失原生字段、狂战0级请求及决斗/位移完整逻辑仍待核定，见huskar-evidence.json。",
     "BoxGift五个隐藏训练叶子及225条训练路径已接入；新增单位的未核定技能仍按实际状态计数。随机礼物已接入35个候选；原生CreateUnit路径/碰撞失败、可操纵建造者技能及平台专用Frame科技返费宿主仍待核定。",
     "17类种族特性与103个精确单位注册已接入；地精修理、虚空体质、原生跳跃/slow命中及多种原生法术抗性叠加仍为部分实现。旧存档中没有出生抽样记录的血统融合战斗体不补抽，新出战体才执行来源随机。",
     "瓦斯琪已接入五项脚本主体与A1CK动态等级；A1O5/A1O7/A1O8的原生命令仲裁、落点碰撞及召唤事件身份仍为部分实现。",

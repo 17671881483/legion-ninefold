@@ -36,8 +36,8 @@ test('no eligible target allows retry on a later event; existing tag prevents du
 test('main damage guards reject self, ally, absent source, zero, A2Y7 and recursive events',()=>{
   for(const mode of ['self','ally','null','zero','A2Y7','recursive']){const {g,e,a,make}=fixture();make();if(mode==='ally')a.side=e.side;if(mode==='A2Y7')setSkills(a,['A2Y7']);if(mode==='recursive')g._sourceDamageTriggerDepth=1;hit(g,e,mode==='null'?null:mode==='self'?e:a,mode==='zero'?0:1);assert.equal(jobs(g).length,0,mode);}
 });
-test('unresolved preceding chain branches are recorded rather than falsely falling through',()=>{
-  for(const skill of ['A0HX','A0IK']){const {g,e,a,make}=fixture();make();setSkills(a,[skill]);hit(g,e,a);assert.equal(jobs(g).length,0);assert.match(e.status.huskarDuelDeferred,/前置/);setSkills(a,[]);hit(g,e,a);assert.equal(jobs(g).length,1);assert.equal(e.status.huskarDuelDeferred,undefined);}
+test('resolved prefix branches fall through only on a miss; remaining earlier conditions still block',()=>{
+  for(const skill of ['A0HX','A0IK']){const {g,e,a,make}=fixture();make();setSkills(a,[skill]);g._random=()=>0;hit(g,e,a);assert.equal(jobs(g).length,0);assert.equal(e.status.huskarDuelDeferred,undefined);g._random=()=>.9;g.state.time+=2;hit(g,e,a);assert.equal(jobs(g).length,1);}
   const {g,e,a,make}=fixture();make();setSkills(e,['A0ID','A0I5']);e.mana=25;hit(g,e,a);assert.equal(jobs(g).length,0);e.mana=24;hit(g,e,a);assert.equal(jobs(g).length,1);
 });
 test('duel and unyielding run in separate if chains on the same lethal event',()=>{

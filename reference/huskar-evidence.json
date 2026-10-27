@@ -227,5 +227,6 @@
       "kind": "author implementation and demo",
       "supports": "普通尸体复活通过原生复活能力完成，保留句柄；不将普通SetUnitLife回血视为复活。不是同版地图逐帧回放。"
     }
-  ]
+  ],
+  "v26Correction": "A0HX prefix now executes its random branch and passes changed local P8 into unyielding; see elemental-proc-evidence.json. The earlier A0HX unresolved note is superseded."
 }

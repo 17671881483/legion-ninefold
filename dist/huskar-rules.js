@@ -3,7 +3,7 @@
 // reference/huskar-evidence.json; tooltip values are not executable rules.
 export const HUSKAR_RULES=Object.freeze({
   A0IC:{status:'implemented',description:'独立普攻伤害监听先执行神灵沸血：自身生命严格高于10%时扣除当前生命6%，再对受害者造成自身最大生命4%的混乱攻击/神圣伤害。该监听先于本次普攻扣血，独立于主伤害监听；每个分裂箭分别触发。'},
-  A0IE:{status:'partial',description:'主伤害事件的伤害严格大于当时生命时，移除A0IE、添加A0IF并开启5秒不屈。先将生命加上本次伤害（受最大生命限制），再照常结算伤害；期间重复致命事件同样预先加血，不刷新计时。到期只移除不屈标志与A0IF，不恢复A0IE。',partial:'A0IF缺少DataB原生继承字段，多重箭目标数尚未核定；A0HX前置随机分支对局部P8的改写尚未接入，组合事件保留待核定。'},
+  A0IE:{status:'partial',description:'主伤害事件的伤害严格大于当时生命时，移除A0IE、添加A0IF并开启5秒不屈。先将生命加上本次伤害（受最大生命限制），再照常结算伤害；期间重复致命事件同样预先加血，不刷新计时。到期只移除不屈标志与A0IF，不恢复A0IE。',partial:'A0IF缺少DataB原生继承字段，多重箭目标数尚未核定；已按A0HX前置分支改写后的局部P8判断，不覆盖原始伤害事件。'},
   A0II:{status:'partial',preserveNativeKind:true,description:'狂战在主受伤监听中按扣血前的损失生命比例×10取整，更新技能等级；不屈触发分支优先。独立普攻伤害监听在沸血之后，按本次事件伤害×当前等级×10%回复生命，再重新计算等级。已接入1—10级对象攻速值，非文案每级5%吸血。',partial:'脚本会请求0级；同版原生SetUnitAbilityLevel(0)行为未验证，保留最后有效等级并记录未核定请求，不虚构移除或重置1级。AOae缺失移动加成、部分高等级继承字段和原生光环更新时间仍待核定。'},
 });
 const skill=(e,id)=>e?.skillSpecs?.find(s=>s.id===id);
@@ -33,7 +33,7 @@ function updateBerserkLevel(g,e){
 export function huskarMainDamage(g,e,attacker,amount,api){
   if(!eligible(e,attacker,amount))return null;
   e.status??={};
-  if(skill(attacker,'A0HX')&&(skill(e,'A0IE')||e.status.huskarUnyielding))e.status.huskarDamageLocalUnresolved='A0HX may rewrite P8 before 41337';
+  delete e.status.huskarDamageLocalUnresolved;
   if(skill(e,'A0IE')&&amount>e.hp){
     api.removeAbility(g,e,'A0IE');api.addAbility(g,e,'A0IF');
     e.status.huskarUnyielding=true;e.status.huskarUnyieldingUntil=now(g)+5;

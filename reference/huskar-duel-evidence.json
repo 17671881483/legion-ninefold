@@ -323,5 +323,6 @@
     "Pathing-off bypasses unit repulsion but preserves host terrain constraints; native destructible/footprint and map geometry differ.",
     "Only A0ID sets a unit tag in this source; it chooses an enemy, so i==own tag is unreachable through this feature. Self-tag immune branch retains timer/flag but does not invent AIml absorb behavior.",
     "Web death callbacks run through current sourceDeath pipeline; full Warcraft global/per-unit listener ordering remains unverified."
-  ]
+  ],
+  "v26Correction": "A0HX/A0IK prefix and frozen-mark branches now execute once before duel. Resolved misses fall through, selected branches skip duel. Remaining A0XM/DemonStatueBounce/A0I1 boundaries still apply; see elemental-proc-evidence.json."
 }

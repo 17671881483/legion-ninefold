@@ -2,7 +2,7 @@ import {relocationStatus,relocationRemaining,completeRelocation} from './relocat
 import {resetLichKingRound} from './lich-king-rules.js';
 import {sourceBarrageTargets,sourceBarrageHit} from './skills.js';
 import { UNITS, MERCENARIES, LEGACY_MERCENARIES, WAVES, RULES, HEROES, BUILDERS, PROPHET_POOLS, UNIT_TEMPLATES, TECHNOLOGIES, BOX_TRAINING_RULES } from './data.js';
-import { attachSkills, refreshSourceSkills, initializeSourceSkills, initializeSourceClassCombat, sourceClassAttackDamageEvent, darkArthasDamageListeners, sourceRegisteredDamageEvent, brightArthasEventDamage, compileSkills, sourceAuraEffects, hasSourceAura, tickSourceSkills, sourceAttackStart, sourceOnHit, modifyIncoming, beforeSourceDamage, afterSourceDamage, sourceDeath, sourceMoveFactor, canWeaponTarget, sourceWeapon, tickSourceScriptJobs, manualSourceSkills, castManualSourceSkill } from './skills.js';
+import { attachSkills, refreshSourceSkills, initializeSourceSkills, initializeSourceClassCombat, sourceClassAttackDamageEvent, darkArthasDamageListeners, sourceRegisteredDamageEvent, brightArthasEventDamage, compileSkills, sourceAuraEffects, hasSourceAura, tickSourceSkills, sourceAttackIssued, sourceAttackStart, sourceOnHit, modifyIncoming, beforeSourceDamage, afterSourceDamage, sourceDeath, sourceMoveFactor, canWeaponTarget, sourceWeapon, tickSourceScriptJobs, manualSourceSkills, castManualSourceSkill } from './skills.js';
 import { initializeSourceClassBuilding } from './source-class-rules.js';
 import { MAP, laneToWorld, worldToLane, kingWorld, spawnWarpWorld, supportWorld, routePoints, isWalkable, isSegmentWalkable, constrainPoint, closestWalkable, navigationPath } from './layout.js';
 import { recordEggCompletion, restoreEggHistory, finishEggWave, recordBeastKingKill, eggRequirementStatus, appearanceQualificationStatus } from './egg-rules.js';
@@ -1276,8 +1276,9 @@ export class Game {
     if (e.pendingAttack || e.hp <= 0 || target.hp <= 0 || target.team === e.team || target.battleTeam !== e.battleTeam ||
       e.buffs?.some(b => b.expiresAt > this.state.time && b.disarm)) return;
     const weapon = sourceWeapon(e, target,this.state.time); if (!weapon) return;
+    sourceAttackIssued(this,e);
     const sourceWindup = Math.max(0, number(weapon.raw[`dmgpt${weapon.slot}`], 0));
-    if (!sourceWindup) { this._attack(e, target, battle); return; }
+    if (!sourceWindup) { this._attack(e, target, battle, true); return; }
     let haste = this._auraEffects(e, battle.auras).attackSpeedMultiplier;
     if (e.status.frenzy) haste *= 1.6;
     const duration = sourceWindup / haste * (this._monsterPressure?.[e.team] ?? 1);
@@ -1295,16 +1296,17 @@ export class Game {
     // this order without a hit or an artificial attack-cooldown penalty.
     if (now + 1e-8 < pending.finishAt) return true;
     e.pendingAttack = null;
-    this._attack(e, target, battle);
+    this._attack(e, target, battle, true);
     // _attack starts a full source cycle; its windup has already elapsed.
     e.attackCd = Math.max(0, e.attackCd - Math.max(0, now - pending.startedAt));
     return true;
   }
-  _attack(e, target, lane) {
+  _attack(e, target, lane, alreadyIssued = false) {
     e.facing=Math.atan2(target.worldY-e.worldY,target.worldX-e.worldX)*180/Math.PI;
     const ability = e.ability, type = ability?.type;
     if(e.buffs?.some(b=>b.expiresAt>this.state.time&&b.disarm))return;
     const weapon=sourceWeapon(e,target,this.state.time);if(!weapon)return;
+    if(!alreadyIssued)sourceAttackIssued(this,e);
     const sourceAttack=sourceAttackStart(this,e,target);
     const attackAuras = this._auraEffects(e, lane.auras), targetAuras = this._auraEffects(target, lane.auras);
     let damage = (weapon.damage * sourceAttack.multiplier+sourceAttack.bonus)*sourceAttack.outgoingFactor, haste = attackAuras.attackSpeedMultiplier;

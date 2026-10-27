@@ -9,7 +9,6 @@ const distance=(a,b)=>Math.hypot((a.worldX??a.x)-(b.worldX??b.x),(a.worldY??a.y)
 function precedingBranch(e,a,amount,now){
   // Same elseif chain; unimplemented effects/hashtable state cannot be assumed
   // to fall through. The common A0ID path has none of these preceding abilities.
-  if(has(a,'A0HX')||has(a,'A0IK'))return 'A0HX/A0IK前置随机分支尚未核定';
   if(has(e,'A0XM')&&amount>=e.hp)return 'A0XM前置killnum条件尚未核定';
   if(has(e,'A0I5')&&e.mana>24)return 'A0I5前置cripple命令';
   if(['n050','n06R'].includes(a.combatRawcode))return 'DemonStatueBounce前置分支尚未核定';
@@ -22,9 +21,11 @@ function order(g,e,target){
   // still happen. The engine validates the order before using it.
   e.targetId=target.id;e.pendingAttack=null;e.chase=null;
 }
-export function huskarDuelDamage(g,e,attacker,amount){
+export function huskarDuelDamage(g,e,attacker,amount,selectedPrefix=null){
   if(!(amount>0)||!attacker||attacker.id===e.id||attacker.side===e.side||has(attacker,'A2Y7')||!has(e,'A0ID')||e.status?.huskarDuelTag!=null)return;
-  e.status??={};const blocked=precedingBranch(e,attacker,amount,g.state.time);
+  e.status??={};
+  if(selectedPrefix){delete e.status.huskarDuelDeferred;return;}
+  const blocked=precedingBranch(e,attacker,amount,g.state.time);
   if(blocked){e.status.huskarDuelDeferred=blocked;return;}
   delete e.status.huskarDuelDeferred;
   // No nearest sorting, positive-current-HP check or summon exclusion in JASS.

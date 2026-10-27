@@ -1,0 +1,369 @@
+{
+  "revision": "v14-content-20261027-v26-1",
+  "scope": "A0HX/A0IK shared damage prefix, A0IJ request, A0IL grant and attack initiation consumption",
+  "source": {
+    "path": "v14-source/raw_extracted/war3map.j",
+    "sha256": "e66c55b3b25b185c991be5613e21fbf5b2d598f3cc40f2f8cd01c23bcb828250",
+    "lineCounting": "Latin-1 decode; split LF only"
+  },
+  "sourceEvidence": [
+    {
+      "line": 40306,
+      "text": "function Frost1 takes nothing returns nothing"
+    },
+    {
+      "line": 40307,
+      "text": "local timer UJ=GetExpiredTimer()"
+    },
+    {
+      "line": 40308,
+      "text": "local trigger t=GetTriggeringTrigger()"
+    },
+    {
+      "line": 40309,
+      "text": "local unit i=LoadUnitHandle(O,GetHandleId(UJ),StringHash(\"u\"))"
+    },
+    {
+      "line": 40310,
+      "text": "local unit Kh=LoadUnitHandle(O,GetHandleId(UJ),StringHash(\"u1\"))"
+    },
+    {
+      "line": 40311,
+      "text": "local integer BB=LoadInteger(O,GetHandleId(Kh),StringHash(\"1\"))+3"
+    },
+    {
+      "line": 40312,
+      "text": "if GetUnitStateSwap(UNIT_STATE_LIFE,i)<=0. then"
+    },
+    {
+      "line": 40313,
+      "text": "call UnitAddAbility(Kh,$4130494C)"
+    },
+    {
+      "line": 40314,
+      "text": "call SaveInteger(O,GetHandleId(Kh),StringHash(\"1\"),BB)"
+    },
+    {
+      "line": 40315,
+      "text": "endif"
+    },
+    {
+      "line": 40316,
+      "text": "call DestroyTimer(UJ)"
+    },
+    {
+      "line": 40317,
+      "text": "set UJ=null"
+    },
+    {
+      "line": 40318,
+      "text": "set i=null"
+    },
+    {
+      "line": 40319,
+      "text": "set Kh=null"
+    },
+    {
+      "line": 40320,
+      "text": "call DestroyTrigger(GetTriggeringTrigger())"
+    },
+    {
+      "line": 40321,
+      "text": "endfunction"
+    },
+    {
+      "line": 40553,
+      "text": "if P8<=0 or bV==i or bV==null or IsUnitAlly(bV,GetOwningPlayer(i)) then"
+    },
+    {
+      "line": 40554,
+      "text": "set i=null"
+    },
+    {
+      "line": 40555,
+      "text": "set bV=null"
+    },
+    {
+      "line": 40556,
+      "text": "set Eb=null"
+    },
+    {
+      "line": 40557,
+      "text": "set h=null"
+    },
+    {
+      "line": 40558,
+      "text": "set Uz=null"
+    },
+    {
+      "line": 40559,
+      "text": "return"
+    },
+    {
+      "line": 40560,
+      "text": "endif"
+    },
+    {
+      "line": 40561,
+      "text": "if GetUnitAbilityLevel(bV,$41325937)>0 then"
+    },
+    {
+      "line": 40562,
+      "text": "set i=null"
+    },
+    {
+      "line": 40563,
+      "text": "set bV=null"
+    },
+    {
+      "line": 40564,
+      "text": "set Eb=null"
+    },
+    {
+      "line": 40565,
+      "text": "set h=null"
+    },
+    {
+      "line": 40566,
+      "text": "set Uz=null"
+    },
+    {
+      "line": 40567,
+      "text": "return"
+    },
+    {
+      "line": 40568,
+      "text": "endif"
+    },
+    {
+      "line": 40569,
+      "text": "if GetUnitAbilityLevel(i,QC)>0 then"
+    },
+    {
+      "line": 40570,
+      "text": "set P8=P8*.85"
+    },
+    {
+      "line": 40571,
+      "text": "call YDWESetEventDamage(P8)"
+    },
+    {
+      "line": 40572,
+      "text": "endif"
+    },
+    {
+      "line": 40573,
+      "text": "set Uz=CreateGroup()"
+    },
+    {
+      "line": 40574,
+      "text": "call DisableTrigger(Eb)"
+    },
+    {
+      "line": 41260,
+      "text": "if GetUnitAbilityLevel(bV,$41304858)>0 and GetRandomReal(0,100)<5 then"
+    },
+    {
+      "line": 41261,
+      "text": "set P8=GetUnitState(i,UNIT_STATE_MAX_LIFE)*.7"
+    },
+    {
+      "line": 41262,
+      "text": "set P8=RMinBJ(P8,3000)"
+    },
+    {
+      "line": 41263,
+      "text": "if bV!=i then"
+    },
+    {
+      "line": 41264,
+      "text": "call UnitDamageTargetBJ(bV,i,P8,ATTACK_TYPE_MELEE,DAMAGE_TYPE_MAGIC)"
+    },
+    {
+      "line": 41265,
+      "text": "call DestroyEffect(AddSpecialEffect(\"Abilities\\\\Spells\\\\Other\\\\Doom\\\\DoomDeath.mdl\",FF,FG))"
+    },
+    {
+      "line": 41266,
+      "text": "endif"
+    },
+    {
+      "line": 41267,
+      "text": "elseif GetUnitAbilityLevel(bV,$4130494B)>0 and GetRandomPercentageBJ()<=30 then"
+    },
+    {
+      "line": 41268,
+      "text": "set bj_lastCreatedUnit=CreateUnit(GetOwningPlayer(bV),Pn,FF,FG,0)"
+    },
+    {
+      "line": 41269,
+      "text": "call UnitAddAbility(bj_lastCreatedUnit,$4130494A)"
+    },
+    {
+      "line": 41270,
+      "text": "call UnitApplyTimedLife(bj_lastCreatedUnit,$42487765,1.)"
+    },
+    {
+      "line": 41271,
+      "text": "if GetUnitAbilityLevel(i,$41706878)==0 and GetUnitAbilityLevel(i,$41315344)==0 then"
+    },
+    {
+      "line": 41272,
+      "text": "call IssueTargetOrder(bj_lastCreatedUnit,\"thunderbolt\",i)"
+    },
+    {
+      "line": 41273,
+      "text": "endif"
+    },
+    {
+      "line": 41274,
+      "text": "call DestroyEffect(AddSpecialEffectTarget(\"Abilities\\\\Spells\\\\Undead\\\\FrostNova\\\\FrostNovaTarget.mdl\",i,\"origin\"))"
+    },
+    {
+      "line": 41275,
+      "text": "call UnitDamageTargetBJ(bV,i,125,ATTACK_TYPE_NORMAL,DAMAGE_TYPE_NORMAL)"
+    },
+    {
+      "line": 41276,
+      "text": "if IsUnitType(i,UNIT_TYPE_DEAD) then"
+    },
+    {
+      "line": 41277,
+      "text": "call UnitAddAbility(bV,$4130494C)"
+    },
+    {
+      "line": 41278,
+      "text": "endif"
+    },
+    {
+      "line": 41279,
+      "text": "set t=null"
+    },
+    {
+      "line": 41280,
+      "text": "set bn=null"
+    },
+    {
+      "line": 41281,
+      "text": "set bj_lastCreatedUnit=null"
+    },
+    {
+      "line": 41282,
+      "text": "elseif UnitHasBuffBJ(i,$42303458) and GetUnitAbilityLevel(bV,$4130494B)>0 then"
+    },
+    {
+      "line": 41283,
+      "text": "call SaveBoolean(O,GetHandleId(i),$4130494B,true)"
+    },
+    {
+      "line": 41284,
+      "text": "elseif LoadBoolean(O,GetHandleId(i),$4130494B) and GetUnitStateSwap(UNIT_STATE_LIFE,i)<=0. then"
+    },
+    {
+      "line": 41285,
+      "text": "set YY=LoadInteger(O,GetHandleId(bV),$4130494B)+3"
+    },
+    {
+      "line": 41286,
+      "text": "call SaveInteger(O,GetHandleId(bV),$4130494B,YY)"
+    },
+    {
+      "line": 41287,
+      "text": "call UnitAddAbility(bV,$4130494C)"
+    },
+    {
+      "line": 41337,
+      "text": "if GetUnitAbilityLevel(i,$41304945)>0 and P8>GetUnitState(i,UNIT_STATE_LIFE) then"
+    },
+    {
+      "line": 41338,
+      "text": "call UnitRemoveAbility(i,$41304945)"
+    },
+    {
+      "line": 41339,
+      "text": "call UnitAddAbility(i,$41304946)"
+    },
+    {
+      "line": 41340,
+      "text": "call SaveBoolean(O,GetHandleId(i),$41304945,true)"
+    },
+    {
+      "line": 41341,
+      "text": "call SetUnitState(i,UNIT_STATE_LIFE,GetUnitState(i,UNIT_STATE_LIFE)+P8)"
+    },
+    {
+      "line": 41342,
+      "text": "set t=CreateTimer()"
+    },
+    {
+      "line": 41343,
+      "text": "call SaveUnitHandle(O,GetHandleId(t),StringHash(\"unit\"),i)"
+    },
+    {
+      "line": 41344,
+      "text": "call TimerStart(t,5,false,function A0IETimer)"
+    },
+    {
+      "line": 41345,
+      "text": "call YDWETimerDestroyEffect(2,AddSpecialEffectTarget(\"Abilities\\\\Spells\\\\Items\\\\AIda\\\\AIdaTarget.mdl\",i,\"overhead\"))"
+    },
+    {
+      "line": 41346,
+      "text": "elseif LoadBoolean(O,GetHandleId(i),$41304945) and P8>GetUnitState(i,UNIT_STATE_LIFE) then"
+    },
+    {
+      "line": 41347,
+      "text": "call SetUnitState(i,UNIT_STATE_LIFE,GetUnitState(i,UNIT_STATE_LIFE)+P8)"
+    },
+    {
+      "line": 47590,
+      "text": "if GetUnitAbilityLevel(Pf,$4130494B)>0 and LoadInteger(O,GetHandleId(Pf),$4130494B)>0 then"
+    },
+    {
+      "line": 47591,
+      "text": "set YY=LoadInteger(O,GetHandleId(Pf),$4130494B)-1"
+    },
+    {
+      "line": 47592,
+      "text": "call SaveInteger(O,GetHandleId(Pf),$4130494B,YY)"
+    },
+    {
+      "line": 47593,
+      "text": "if YY==1 then"
+    },
+    {
+      "line": 47594,
+      "text": "call UnitRemoveAbility(Pf,$4130494C)"
+    },
+    {
+      "line": 47595,
+      "text": "endif"
+    },
+    {
+      "line": 47596,
+      "text": "endif"
+    }
+  ],
+  "nativeReference": {
+    "url": "https://jass.sourceforge.net/doc/api/Blizzard_j-source.shtml",
+    "finding": "GetRandomPercentageBJ returns GetRandomReal(0,100), not an integer 1..100 roll."
+  },
+  "decisions": [
+    "A0HX modifies local P8, not the original event damage; feed the changed value to downstream implemented listeners.",
+    "A0IK 125 bonus uses ATTACK_TYPE_NORMAL/DAMAGE_TYPE_NORMAL; A0HX uses ATTACK_TYPE_MELEE/DAMAGE_TYPE_MAGIC.",
+    "A0IJ DataA is absent; do not invent the tooltip 100 damage. Known first-level duration and target conditions use immediate native-control adaptation.",
+    "Immediate ice bonus kill adds A0IL but does not set charges. Frozen ordinary lethal damage is marked before HP subtraction and does not run the later dead-marked branch in the same event.",
+    "Frost1 appears once, as a function definition only; do not invent registration or use its different StringHash(1) counter.",
+    "Native attack event decrements a positive A0IK rawcode counter; only new count==1 removes A0IL. Cancellation does not refund and secondary arrows do not consume more."
+  ],
+  "remaining": [
+    "Native A0IJ projectile/cast delay, DataA damage and default fields are absent.",
+    "A0IL uses existing native barrage adaptation; exact target order/version stacking is still partial.",
+    "Other branches between the prefix and duel (A0XM, A0I5, DemonStatueBounce, A0I1) remain separately deferred where unresolved.",
+    "Native defender attack windup and exact projectile timing remain a host boundary."
+  ],
+  "nativeAttackTypeReference": {
+    "url": "https://jass.sourceforge.net/doc/api/common_j-source.shtml",
+    "finding": "ATTACK_TYPE_NORMAL is Spells (ConvertAttackType 0); ATTACK_TYPE_MELEE is Normal (ConvertAttackType 1). They are distinct from DAMAGE_TYPE_NORMAL."
+  }
+}

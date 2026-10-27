@@ -1,6 +1,6 @@
 {
   "sourceVersion": "v14.1A5",
-  "skillImplementationRevision": "v14-content-20261027-v25-1",
+  "skillImplementationRevision": "v14-content-20261027-v26-1",
   "units": 534,
   "mercenaryRecords": 60,
   "mainWaves": 35,
@@ -70,6 +70,13 @@
       "sourceRawcode": "h0JL",
       "abilityIds": [
         "A0IF"
+      ]
+    },
+    {
+      "sourceRawcode": "h0JO",
+      "abilityIds": [
+        "A0IJ",
+        "A0IL"
       ]
     },
     {
@@ -169,10 +176,10 @@
   "playerBuildingCommandCarriers": 411,
   "playerSkills": {
     "counts": {
-      "implemented": 409,
-      "partial": 70,
+      "implemented": 410,
+      "partial": 73,
       "marker": 34,
-      "unresolved": 120
+      "unresolved": 118
     },
     "abilities": [
       {
@@ -2488,8 +2495,8 @@
       {
         "rawcode": "A0HX",
         "name": "原罪欲火",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "implemented",
+        "kind": "elemental_source_proc",
         "unitRawcodes": [
           "h0JF",
           "h0LT",
@@ -2638,13 +2645,31 @@
         ]
       },
       {
+        "rawcode": "A0IJ",
+        "name": "冰爆马甲",
+        "status": "partial",
+        "kind": "elemental_source_proc",
+        "unitRawcodes": [
+          "h0JO"
+        ]
+      },
+      {
         "rawcode": "A0IK",
         "name": "冰爆",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "elemental_source_proc",
         "unitRawcodes": [
           "h0JO",
           "h0OY"
+        ]
+      },
+      {
+        "rawcode": "A0IL",
+        "name": "冰爆分裂",
+        "status": "partial",
+        "kind": "native_barrage",
+        "unitRawcodes": [
+          "h0JO"
         ]
       },
       {
@@ -6712,10 +6737,10 @@
   },
   "battleSkills": {
     "counts": {
-      "implemented": 459,
-      "partial": 71,
+      "implemented": 460,
+      "partial": 74,
       "marker": 47,
-      "unresolved": 141
+      "unresolved": 139
     },
     "abilities": [
       {
@@ -9397,8 +9422,8 @@
       {
         "rawcode": "A0HX",
         "name": "原罪欲火",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "implemented",
+        "kind": "elemental_source_proc",
         "unitRawcodes": [
           "h0JF",
           "h0LT",
@@ -9547,13 +9572,31 @@
         ]
       },
       {
+        "rawcode": "A0IJ",
+        "name": "冰爆马甲",
+        "status": "partial",
+        "kind": "elemental_source_proc",
+        "unitRawcodes": [
+          "h0JO"
+        ]
+      },
+      {
         "rawcode": "A0IK",
         "name": "冰爆",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "elemental_source_proc",
         "unitRawcodes": [
           "h0JO",
           "h0OY"
+        ]
+      },
+      {
+        "rawcode": "A0IL",
+        "name": "冰爆分裂",
+        "status": "partial",
+        "kind": "native_barrage",
+        "unitRawcodes": [
+          "h0JO"
         ]
       },
       {
@@ -14181,6 +14224,7 @@
     "A1U4/A1U5/A1U6献祭奖励可核定，但没有可证实的携带单位或授予路径。",
     "原始地图模型、贴图、音频和v14地形通行格不在解析包内。",
     "神灵武士不屈5秒、狂战1—10级与独立攻击回血已接入；A0IF缺失原生字段、狂战0级请求仍待核定，见huskar-evidence.json。",
+    "A0HX原罪欲火与A0IK冰爆共享前置链、局部P8、不屈/决斗优先级、冰爆分裂箭获得/发起消耗已接入；A0IJ缺失伤害/弹道和A0IL原生仲裁仍部分核定，见elemental-proc-evidence.json。",
     "A0ID决斗已接入受伤选敌、一次攻击命令和死者自身tag驱动的死亡联动；原生枚举顺序、尸体寿命、命令仲裁、前置混合技能分支与AIml仍未完整核定，见huskar-duel-evidence.json。",
     "建筑移位已接入411个A118携带建筑：全局3次、单体移除、神灵武士豁免及耗尽门槛；选点映射现有6×8格，原生代理/占位残留、路径纹理与升级能力重建未核定，见relocation-evidence.json。",
     "五个英雄彩蛋直接升级与225条可选四折训练路径已接入；新增单位的未核定技能仍按实际状态计数。随机礼物已接入35个候选；原生CreateUnit路径/碰撞失败、可操纵建造者技能及平台专用Frame科技返费宿主仍待核定。",

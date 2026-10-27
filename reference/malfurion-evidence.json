@@ -1,0 +1,820 @@
+{
+  "source": {
+    "path": "v14-source/raw_extracted/war3map.j",
+    "sha256": "e66c55b3b25b185c991be5613e21fbf5b2d598f3cc40f2f8cd01c23bcb828250",
+    "lineCounting": "Latin-1; split LF only"
+  },
+  "sourceEvidence": [
+    {
+      "line": 1126,
+      "text": "integer Pn=$65303038"
+    },
+    {
+      "line": 17266,
+      "text": "set Mk[Bi]=$68304A55"
+    },
+    {
+      "line": 17267,
+      "text": "set Ml[Bi]=$68304A56"
+    },
+    {
+      "line": 39218,
+      "text": "function Trig_allabilityActions takes nothing returns nothing"
+    },
+    {
+      "line": 39219,
+      "text": "local integer BF=GetSpellAbilityId()"
+    },
+    {
+      "line": 39220,
+      "text": "local player h=GetTriggerPlayer()"
+    },
+    {
+      "line": 39221,
+      "text": "local unit i=GetTriggerUnit()"
+    },
+    {
+      "line": 39222,
+      "text": "local real FF=GetSpellTargetX()"
+    },
+    {
+      "line": 39223,
+      "text": "local real FG=GetSpellTargetY()"
+    },
+    {
+      "line": 39224,
+      "text": "local unit Qf=GetSpellTargetUnit()"
+    },
+    {
+      "line": 39225,
+      "text": "local group Uz=null"
+    },
+    {
+      "line": 39226,
+      "text": "local timer t"
+    },
+    {
+      "line": 39227,
+      "text": "local effect DE=null"
+    },
+    {
+      "line": 39228,
+      "text": "local unit D6=null"
+    },
+    {
+      "line": 39229,
+      "text": "local integer BB=0"
+    },
+    {
+      "line": 39230,
+      "text": "local string a4=\"\""
+    },
+    {
+      "line": 39231,
+      "text": "local trigger Eb=GetTriggeringTrigger()"
+    },
+    {
+      "line": 39232,
+      "text": "local trigger RL=null"
+    },
+    {
+      "line": 39233,
+      "text": "local unit Ki"
+    },
+    {
+      "line": 39234,
+      "text": "local real Pm=0"
+    },
+    {
+      "line": 39235,
+      "text": "local real P8=0"
+    },
+    {
+      "line": 39236,
+      "text": "local real Qv"
+    },
+    {
+      "line": 39237,
+      "text": "local real Qw"
+    },
+    {
+      "line": 39238,
+      "text": "local location a7=null"
+    },
+    {
+      "line": 39239,
+      "text": "call DisableTrigger(Eb)"
+    },
+    {
+      "line": 39882,
+      "text": "elseif BF==$41304A41 then"
+    },
+    {
+      "line": 39883,
+      "text": "set bj_lastCreatedUnit=CreateUnit(GetOwningPlayer(i),Pn,GetUnitX(i),GetUnitY(i),0)"
+    },
+    {
+      "line": 39884,
+      "text": "call GroupAddUnit(JW,bj_lastCreatedUnit)"
+    },
+    {
+      "line": 39885,
+      "text": "call SetUnitUserData(bj_lastCreatedUnit,GetUnitUserData(i))"
+    },
+    {
+      "line": 39886,
+      "text": "call GroupAddUnit(JH[GetUnitUserData(i)],bj_lastCreatedUnit)"
+    },
+    {
+      "line": 39887,
+      "text": "call UnitAddType(bj_lastCreatedUnit,UNIT_TYPE_SUMMONED)"
+    },
+    {
+      "line": 39888,
+      "text": "call IssueImmediateOrder(i,\"stop\")"
+    },
+    {
+      "line": 39889,
+      "text": "call YDWETimerDestroyEffect(9.,AddSpecialEffect(\"Abilities\\\\Spells\\\\NightElf\\\\Tranquility\\\\Tranquility.mdl\",GetUnitX(i),GetUnitY(i)))"
+    },
+    {
+      "line": 39890,
+      "text": "call YDWETimerRemoveUnit(6,bj_lastCreatedUnit)"
+    },
+    {
+      "line": 39891,
+      "text": "call UnitAddAbility(bj_lastCreatedUnit,$41304A38)"
+    },
+    {
+      "line": 39892,
+      "text": "call UnitAddAbility(bj_lastCreatedUnit,$41304A39)"
+    },
+    {
+      "line": 39958,
+      "text": "function InitTrig_allability takes nothing returns nothing"
+    },
+    {
+      "line": 39959,
+      "text": "set Yp=CreateTrigger()"
+    },
+    {
+      "line": 39960,
+      "text": "call TriggerRegisterAnyUnitEventBJ(Yp,EVENT_PLAYER_UNIT_SPELL_EFFECT)"
+    },
+    {
+      "line": 39961,
+      "text": "call TriggerAddAction(Yp,function Trig_allabilityActions)"
+    },
+    {
+      "line": 39962,
+      "text": "endfunction"
+    },
+    {
+      "line": 40378,
+      "text": "function TimerA0JC takes nothing returns nothing"
+    },
+    {
+      "line": 40379,
+      "text": "local timer t=GetExpiredTimer()"
+    },
+    {
+      "line": 40380,
+      "text": "local unit i=LoadUnitHandle(O,H2I(t),StringHash(\"u\"))"
+    },
+    {
+      "line": 40381,
+      "text": "local real FF=LoadReal(O,H2I(t),StringHash(\"x\"))"
+    },
+    {
+      "line": 40382,
+      "text": "local real FG=LoadReal(O,H2I(t),StringHash(\"y\"))"
+    },
+    {
+      "line": 40383,
+      "text": "local unit Ki=CreateUnit(GetOwningPlayer(i),Pn,FF,FG,0)"
+    },
+    {
+      "line": 40384,
+      "text": "call GroupAddUnit(JW,Ki)"
+    },
+    {
+      "line": 40385,
+      "text": "call SetUnitUserData(Ki,GetUnitUserData(i))"
+    },
+    {
+      "line": 40386,
+      "text": "call GroupAddUnit(JH[GetUnitUserData(i)],Ki)"
+    },
+    {
+      "line": 40387,
+      "text": "call UnitAddType(Ki,UNIT_TYPE_SUMMONED)"
+    },
+    {
+      "line": 40388,
+      "text": "call YDWETimerRemoveUnit(1.,Ki)"
+    },
+    {
+      "line": 40389,
+      "text": "call UnitAddAbility(Ki,$41304A43)"
+    },
+    {
+      "line": 40390,
+      "text": "call IssueImmediateOrder(Ki,\"stomp\")"
+    },
+    {
+      "line": 40391,
+      "text": "call DestroyTimer(t)"
+    },
+    {
+      "line": 40392,
+      "text": "call FlushChildHashtable(O,GetHandleId(t))"
+    },
+    {
+      "line": 40393,
+      "text": "set t=null"
+    },
+    {
+      "line": 40394,
+      "text": "set i=null"
+    },
+    {
+      "line": 40395,
+      "text": "set Ki=null"
+    },
+    {
+      "line": 40396,
+      "text": "endfunction"
+    },
+    {
+      "line": 40397,
+      "text": "function TimerA0JC_cd takes nothing returns nothing"
+    },
+    {
+      "line": 40398,
+      "text": "local timer t=GetExpiredTimer()"
+    },
+    {
+      "line": 40399,
+      "text": "local unit i=LoadUnitHandle(O,H2I(t),StringHash(\"u\"))"
+    },
+    {
+      "line": 40400,
+      "text": "call SaveBoolean(O,GetHandleId(i),StringHash(\"cd\"),false)"
+    },
+    {
+      "line": 40401,
+      "text": "call DestroyTimer(t)"
+    },
+    {
+      "line": 40402,
+      "text": "call FlushChildHashtable(O,GetHandleId(t))"
+    },
+    {
+      "line": 40403,
+      "text": "set t=null"
+    },
+    {
+      "line": 40404,
+      "text": "set i=null"
+    },
+    {
+      "line": 40405,
+      "text": "endfunction"
+    },
+    {
+      "line": 40553,
+      "text": "if P8<=0 or bV==i or bV==null or IsUnitAlly(bV,GetOwningPlayer(i)) then"
+    },
+    {
+      "line": 40554,
+      "text": "set i=null"
+    },
+    {
+      "line": 40555,
+      "text": "set bV=null"
+    },
+    {
+      "line": 40556,
+      "text": "set Eb=null"
+    },
+    {
+      "line": 40557,
+      "text": "set h=null"
+    },
+    {
+      "line": 40558,
+      "text": "set Uz=null"
+    },
+    {
+      "line": 40559,
+      "text": "return"
+    },
+    {
+      "line": 40560,
+      "text": "endif"
+    },
+    {
+      "line": 40561,
+      "text": "if GetUnitAbilityLevel(bV,$41325937)>0 then"
+    },
+    {
+      "line": 40562,
+      "text": "set i=null"
+    },
+    {
+      "line": 40563,
+      "text": "set bV=null"
+    },
+    {
+      "line": 40564,
+      "text": "set Eb=null"
+    },
+    {
+      "line": 40565,
+      "text": "set h=null"
+    },
+    {
+      "line": 40566,
+      "text": "set Uz=null"
+    },
+    {
+      "line": 40567,
+      "text": "return"
+    },
+    {
+      "line": 40568,
+      "text": "endif"
+    },
+    {
+      "line": 40569,
+      "text": "if GetUnitAbilityLevel(i,QC)>0 then"
+    },
+    {
+      "line": 40570,
+      "text": "set P8=P8*.85"
+    },
+    {
+      "line": 40571,
+      "text": "call YDWESetEventDamage(P8)"
+    },
+    {
+      "line": 40572,
+      "text": "endif"
+    },
+    {
+      "line": 40573,
+      "text": "set Uz=CreateGroup()"
+    },
+    {
+      "line": 40574,
+      "text": "call DisableTrigger(Eb)"
+    },
+    {
+      "line": 41337,
+      "text": "if GetUnitAbilityLevel(i,$41304945)>0 and P8>GetUnitState(i,UNIT_STATE_LIFE) then"
+    },
+    {
+      "line": 41338,
+      "text": "call UnitRemoveAbility(i,$41304945)"
+    },
+    {
+      "line": 41339,
+      "text": "call UnitAddAbility(i,$41304946)"
+    },
+    {
+      "line": 41340,
+      "text": "call SaveBoolean(O,GetHandleId(i),$41304945,true)"
+    },
+    {
+      "line": 41341,
+      "text": "call SetUnitState(i,UNIT_STATE_LIFE,GetUnitState(i,UNIT_STATE_LIFE)+P8)"
+    },
+    {
+      "line": 41342,
+      "text": "set t=CreateTimer()"
+    },
+    {
+      "line": 41343,
+      "text": "call SaveUnitHandle(O,GetHandleId(t),StringHash(\"unit\"),i)"
+    },
+    {
+      "line": 41344,
+      "text": "call TimerStart(t,5,false,function A0IETimer)"
+    },
+    {
+      "line": 41345,
+      "text": "call YDWETimerDestroyEffect(2,AddSpecialEffectTarget(\"Abilities\\\\Spells\\\\Items\\\\AIda\\\\AIdaTarget.mdl\",i,\"overhead\"))"
+    },
+    {
+      "line": 41346,
+      "text": "elseif LoadBoolean(O,GetHandleId(i),$41304945) and P8>GetUnitState(i,UNIT_STATE_LIFE) then"
+    },
+    {
+      "line": 41347,
+      "text": "call SetUnitState(i,UNIT_STATE_LIFE,GetUnitState(i,UNIT_STATE_LIFE)+P8)"
+    },
+    {
+      "line": 41348,
+      "text": "elseif GetUnitAbilityLevel(i,$41304949)>0 then"
+    },
+    {
+      "line": 41349,
+      "text": "set YY=R2I((GetUnitState(i,UNIT_STATE_MAX_LIFE)-GetUnitState(i,UNIT_STATE_LIFE))/GetUnitState(i,UNIT_STATE_MAX_LIFE)*10)"
+    },
+    {
+      "line": 41350,
+      "text": "set YY=IMaxBJ(0,YY)"
+    },
+    {
+      "line": 41351,
+      "text": "set YY=IMinBJ(10,YY)"
+    },
+    {
+      "line": 41352,
+      "text": "call SetUnitAbilityLevel(i,$41304949,YY)"
+    },
+    {
+      "line": 41353,
+      "text": "elseif GetUnitAbilityLevel(bV,$41304A41)>0 and not LoadBoolean(O,GetHandleId(bV),StringHash(\"cd\")) then"
+    },
+    {
+      "line": 41354,
+      "text": "set t=CreateTimer()"
+    },
+    {
+      "line": 41355,
+      "text": "call SaveBoolean(O,GetHandleId(bV),StringHash(\"cd\"),true)"
+    },
+    {
+      "line": 41356,
+      "text": "call TimerStart(t,.9,false,function TimerA0JC)"
+    },
+    {
+      "line": 41357,
+      "text": "call SaveUnitHandle(O,H2I(t),StringHash(\"u\"),bV)"
+    },
+    {
+      "line": 41358,
+      "text": "call SaveReal(O,H2I(t),StringHash(\"x\"),GetUnitX(i))"
+    },
+    {
+      "line": 41359,
+      "text": "call SaveReal(O,H2I(t),StringHash(\"y\"),GetUnitY(i))"
+    },
+    {
+      "line": 41360,
+      "text": "call DestroyEffect(AddSpecialEffect(\"effects\\\\effect_bomb_2.mdx\",GetUnitX(i),GetUnitY(i)))"
+    },
+    {
+      "line": 41361,
+      "text": "set t=null"
+    },
+    {
+      "line": 41362,
+      "text": "set t=CreateTimer()"
+    },
+    {
+      "line": 41363,
+      "text": "call TimerStart(t,8,false,function TimerA0JC_cd)"
+    },
+    {
+      "line": 41364,
+      "text": "call SaveUnitHandle(O,H2I(t),StringHash(\"u\"),bV)"
+    },
+    {
+      "line": 41365,
+      "text": "set t=null"
+    },
+    {
+      "line": 41366,
+      "text": "elseif GetUnitAbilityLevel(i,$41304A41)>0 and GetUnitLifePercent(i)<=10. and not LoadBoolean(O,GetHandleId(i),GetHandleId(i)) then"
+    },
+    {
+      "line": 41367,
+      "text": "call SaveBoolean(O,GetHandleId(i),GetHandleId(i),true)"
+    },
+    {
+      "line": 41368,
+      "text": "set bj_lastCreatedUnit=CreateUnit(GetOwningPlayer(i),Pn,GetUnitX(i),GetUnitY(i),0)"
+    },
+    {
+      "line": 41369,
+      "text": "call UnitAddAbility(bj_lastCreatedUnit,$41304A44)"
+    },
+    {
+      "line": 41370,
+      "text": "call SetUnitState(bj_lastCreatedUnit,UNIT_STATE_LIFE,10000)"
+    },
+    {
+      "line": 41371,
+      "text": "call GroupClear(Uz)"
+    },
+    {
+      "line": 41372,
+      "text": "call GroupEnumUnitsInRange(Uz,GetUnitX(i),GetUnitY(i),400,null)"
+    },
+    {
+      "line": 41373,
+      "text": "call YDWETimerRemoveUnit(1,bj_lastCreatedUnit)"
+    },
+    {
+      "line": 41374,
+      "text": "call SetUnitLifeBJ(i,GetUnitStateSwap(UNIT_STATE_LIFE,i)+200.)"
+    },
+    {
+      "line": 41375,
+      "text": "call SetUnitInvulnerable(i,true)"
+    },
+    {
+      "line": 41376,
+      "text": "loop"
+    },
+    {
+      "line": 41377,
+      "text": "set D6=FirstOfGroup(Uz)"
+    },
+    {
+      "line": 41378,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 41379,
+      "text": "call UnitDamageTarget(i,D6,225,true,false,ATTACK_TYPE_NORMAL,DAMAGE_TYPE_NORMAL,WEAPON_TYPE_WHOKNOWS)"
+    },
+    {
+      "line": 41380,
+      "text": "call IssueTargetOrder(bj_lastCreatedUnit,\"drunkenhaze\",D6)"
+    },
+    {
+      "line": 41381,
+      "text": "call GroupRemoveUnit(Uz,D6)"
+    },
+    {
+      "line": 41382,
+      "text": "endloop"
+    },
+    {
+      "line": 41383,
+      "text": "call SetUnitInvulnerable(i,false)"
+    },
+    {
+      "line": 41384,
+      "text": "call DestroyEffect(AddSpecialEffect(\"Abilities\\\\Spells\\\\NightElf\\\\Blink\\\\BlinkCaster.mdl\",GetUnitX(i),GetUnitY(i)))"
+    },
+    {
+      "line": 41385,
+      "text": "set UD=GetUnitLoc(GetTriggerUnit())"
+    },
+    {
+      "line": 41386,
+      "text": "set VV=PolarProjectionBJ(UD,450,270.)"
+    },
+    {
+      "line": 41387,
+      "text": "if GetLocationY(VV)<=3292. then"
+    },
+    {
+      "line": 41388,
+      "text": "set VV=PolarProjectionBJ(UD,450,90.)"
+    },
+    {
+      "line": 41389,
+      "text": "call SetUnitPositionLocFacingBJ(GetTriggerUnit(),UD,270.)"
+    },
+    {
+      "line": 41390,
+      "text": "else"
+    },
+    {
+      "line": 41391,
+      "text": "call SetUnitPositionLocFacingBJ(GetTriggerUnit(),VV,270.)"
+    },
+    {
+      "line": 41392,
+      "text": "endif"
+    },
+    {
+      "line": 41393,
+      "text": "call RemoveLocation(UD)"
+    },
+    {
+      "line": 41394,
+      "text": "call RemoveLocation(VV)"
+    },
+    {
+      "line": 41395,
+      "text": "set UD=GetUnitLoc(GetTriggerUnit())"
+    },
+    {
+      "line": 41396,
+      "text": "set VV=PolarProjectionBJ(UD,450.,90.)"
+    },
+    {
+      "line": 41397,
+      "text": "if GetLocationY(VV)>=2340. then"
+    },
+    {
+      "line": 41398,
+      "text": "set VV=PolarProjectionBJ(UD,450.,270.)"
+    },
+    {
+      "line": 41399,
+      "text": "call SetUnitPositionLocFacingBJ(GetTriggerUnit(),UD,90.)"
+    },
+    {
+      "line": 41400,
+      "text": "else"
+    },
+    {
+      "line": 41401,
+      "text": "call SetUnitPositionLocFacingBJ(GetTriggerUnit(),VV,90.)"
+    },
+    {
+      "line": 41402,
+      "text": "endif"
+    },
+    {
+      "line": 41403,
+      "text": "call RemoveLocation(UD)"
+    },
+    {
+      "line": 41404,
+      "text": "call RemoveLocation(VV)"
+    },
+    {
+      "line": 41405,
+      "text": "call DestroyEffect(AddSpecialEffect(\"Abilities\\\\Spells\\\\NightElf\\\\Blink\\\\BlinkCaster.mdl\",GetUnitX(i),GetUnitY(i)))"
+    },
+    {
+      "line": 41406,
+      "text": "set bj_lastCreatedUnit=CreateUnit(GetOwningPlayer(i),Pn,GetUnitX(i),GetUnitY(i),0)"
+    },
+    {
+      "line": 41407,
+      "text": "call YDWETimerDestroyEffect(7.,AddSpecialEffect(\"Abilities\\\\Spells\\\\NightElf\\\\Tranquility\\\\Tranquility.mdl\",GetUnitX(i),GetUnitY(i)))"
+    },
+    {
+      "line": 41408,
+      "text": "call YDWETimerRemoveUnit(5,bj_lastCreatedUnit)"
+    },
+    {
+      "line": 41409,
+      "text": "call UnitAddAbility(bj_lastCreatedUnit,$41304A38)"
+    },
+    {
+      "line": 41410,
+      "text": "call UnitAddAbility(bj_lastCreatedUnit,$41304A39)"
+    },
+    {
+      "line": 41411,
+      "text": "set D6=null"
+    }
+  ],
+  "objectEvidence": {
+    "A0J8": {
+      "table": "all_abilities.csv",
+      "row": 998,
+      "fields": {
+        "code": "AUau",
+        "Area1": "500.0",
+        "DataA1": "",
+        "DataB1": "0.04",
+        "DataC1": "1",
+        "targs1": "air,friend,ground,invulnerable,self,structure,vulnerable",
+        "Cost1": "",
+        "Cool1": "",
+        "Dur1": "",
+        "HeroDur1": "",
+        "Rng1": "",
+        "BuffID1": "B057"
+      }
+    },
+    "A0J9": {
+      "table": "all_abilities.csv",
+      "row": 999,
+      "fields": {
+        "code": "AHad",
+        "Area1": "500.0",
+        "DataA1": "2.0",
+        "DataB1": "",
+        "DataC1": "",
+        "targs1": "air,ground,friend,self,vuln,invu",
+        "Cost1": "",
+        "Cool1": "",
+        "Dur1": "",
+        "HeroDur1": "",
+        "Rng1": "",
+        "BuffID1": "B058"
+      }
+    },
+    "A0JA": {
+      "table": "all_abilities.csv",
+      "row": 1000,
+      "fields": {
+        "code": "Ahea",
+        "Area1": "",
+        "DataA1": "",
+        "DataB1": "",
+        "DataC1": "",
+        "targs1": "air,friend,ground,self",
+        "Cost1": "28",
+        "Cool1": "14.0",
+        "Dur1": "",
+        "HeroDur1": "",
+        "Rng1": "600.0",
+        "BuffID1": ""
+      }
+    },
+    "A0JB": {
+      "table": "all_abilities.csv",
+      "row": 1001,
+      "fields": {
+        "code": "Asth",
+        "Area1": "",
+        "DataA1": "",
+        "DataB1": "",
+        "DataC1": "",
+        "targs1": "enemies",
+        "Cost1": "",
+        "Cool1": "",
+        "Dur1": "",
+        "HeroDur1": "",
+        "Rng1": "",
+        "BuffID1": ""
+      }
+    },
+    "A0JC": {
+      "table": "all_abilities.csv",
+      "row": 1002,
+      "fields": {
+        "code": "AOws",
+        "Area1": "200.0",
+        "DataA1": "300.0",
+        "DataB1": "",
+        "DataC1": "",
+        "targs1": "enemies",
+        "Cost1": "",
+        "Cool1": "6.0",
+        "Dur1": "2.5",
+        "HeroDur1": "1.0",
+        "Rng1": "",
+        "BuffID1": "BPSE"
+      }
+    },
+    "A0JD": {
+      "table": "all_abilities.csv",
+      "row": 1003,
+      "fields": {
+        "code": "ANdh",
+        "Area1": "200.0",
+        "DataA1": "8",
+        "DataB1": "100.0",
+        "DataC1": "",
+        "targs1": "air,ground,enemy,organic,neutral",
+        "Cost1": "70",
+        "Cool1": "12.0",
+        "Dur1": "3.0",
+        "HeroDur1": "3.0",
+        "Rng1": "550.0",
+        "BuffID1": "BNsi"
+      }
+    },
+    "A0JE": {
+      "table": "all_abilities.csv",
+      "row": 1004,
+      "fields": {
+        "code": "Asth",
+        "Area1": "",
+        "DataA1": "",
+        "DataB1": "",
+        "DataC1": "",
+        "targs1": "enemies",
+        "Cost1": "",
+        "Cool1": "",
+        "Dur1": "",
+        "HeroDur1": "",
+        "Rng1": "",
+        "BuffID1": ""
+      }
+    }
+  },
+  "runtimeContract": [
+    "A0JA Ahea has 28 mana, 14 seconds cooldown, 600 range. Native direct heal amount is absent. SPELL_EFFECT summons a registered e008 at caster position, requests stop and adds A0J8/A0J9 for 6 seconds, irrespective of targeted unit position. No healon/autocast script call was found; combat auto field is _.",
+    "A0JA outgoing positive enemy damage branch creates a 0.9-second fixed-target-location timer and a distinct 8-second boolean cooldown; does not require weapon damage or A0JB. Damage branch follows Huskar unyielding/berserk and is independent of the earlier elemental/DemonStatue chain.",
+    "Starfire timer retains source handle, creates summoned e008 with owner/userData/groups at stored point, adds A0JC and requests stomp. Dead source does not cancel the callback; explicit removed handle is unresolved.",
+    "Twilight elseif uses victim A0JA and pre-event HP percent <=10 and once-only handle flag. No A0JE condition. Ready source A0JA branch preempts it. It adds 200 HP then temporarily adds invulnerability around the unfiltered 400-radius loop, emitting 225 attack=true NORMAL/NORMAL damage before each haze order. It removes invulnerability before original event subtraction: no lethal immunity.",
+    "Twilight first dummy requests life 10000 and lifetime1 but lacks summon/group/userData registration. Second aura dummy has lifetime5 and likewise lacks registrations. Haze native repeated orders stay requests; no false -800% slow is applied.",
+    "Blink native program: firstY=(y-450<=3292?y:y-450); finalY=(firstY+450>=2340?firstY:firstY+450), final facing90. Current Web geometry explicitly is not extracted Warcraft coordinates; no invented native conversion or always-450 displacement."
+  ],
+  "partialBoundaries": [
+    "Ahea native direct heal value, target/native cast success and autocast AI; current manual command is an explicitly described host adapter.",
+    "AOws native mana/cast defaults and exact spell damage/target arbitration; current first stomp uses instant 300 magic-spell adapter and explicit durations.",
+    "A0JD flag8/100% miss semantics require the common native spell host, shared-dummy command queue and range splash. Raw fields and all per-target requests retained; no guessed effect.",
+    "E008 is represented as bounded virtual dummy state. Native collision, enumeration, JH/JW fight-count participation and removal-handle effects are not fully hosted. Aura effects use separate lifetimes with buff-key nonstacking; native residence/default movement/armor-mode fields remain uncertain.",
+    "Absolute native y-coordinate transform and path/collision are absent from current Web topology. Blink request and exact native predicate retained without an unsupported displacement."
+  ],
+  "metadataResearch": {
+    "url": "https://github.com/dc114154qq/war3-reforged-trainer/blob/master/war3_ability_fields.py",
+    "note": "Author-provided metadata table associates ANdh with Nsi1 attacks prevented, Nsi2 chance to miss, Nsi3 movement speed modifier and Nsi4 attack speed modifier. This is corroboration for not treating DataA=8 as movement slow, not proof of this map native command success."
+  }
+}

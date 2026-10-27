@@ -70,7 +70,7 @@ function earlierCleanupBranch(e,attacker,amount){
   if(has(e,'A0II')||has(attacker,'A0LN')||has(attacker,'A0NB')||has(attacker,'A0OX')||has(e,'A0NT')||has(e,'A0IE')&&amount>e.hp||raw(attacker)==='h02F'&&amount>450&&amount<750)return 'prior-elseif';
   // These prior branches depend on native hashtable flags or random effects
   // not yet hosted. Do not unconditionally execute a later elseif through them.
-  if(has(attacker,'A0JA')||has(e,'A0JA')&&e.hp<=e.maxHp*.1||has(attacker,'A0NH')||['h055','h0M1'].includes(raw(attacker))||['h0O7','h0M1'].includes(raw(e))||has(e,'A0J0'))return 'prior-elseif-unresolved';
+  if(has(attacker,'A0NH')||['h055','h0M1'].includes(raw(attacker))||['h0O7','h0M1'].includes(raw(e))||has(e,'A0J0'))return 'prior-elseif-unresolved';
   return null;
 }
 export function aesaraMainDamage(g,e,attacker,amount,api){

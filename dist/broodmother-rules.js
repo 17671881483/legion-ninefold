@@ -1,6 +1,6 @@
 // New_UnitDamaged 41295–41311; H0JIAbility 42854–42890.
 export const BROODMOTHER_RULES=Object.freeze({
-  A0I1:{status:'partial',description:'伤害来源携带孕母蛛群、受害者仍带B04U且局部伤害严格大于当时生命时，在伤害结算前创建穴居蜘蛛。不限普攻，也不等待最终击杀确认；后续免伤或回血不撤回已创建蜘蛛。来源精确为h0UV时生成h0V2，否则h03E；新体加入召唤组并获得蛛群护甲、10点攻击和每秒10点恢复。',partial:'原生CreateUnit碰撞、攻击移动命令到玩家出生点的路径及原生buff/事件时序仍有宿主差异；前置DemonStatueBounce尚未核定时不穿透。'},
+  A0I1:{status:'partial',description:'伤害来源携带孕母蛛群、受害者仍带B04U且局部伤害严格大于当时生命时，在伤害结算前创建穴居蜘蛛。不限普攻，也不等待最终击杀确认；后续免伤或回血不撤回已创建蜘蛛。来源精确为h0UV时生成h0V2，否则h03E；新体加入召唤组并获得蛛群护甲、10点攻击和每秒10点恢复。',partial:'原生CreateUnit碰撞、攻击移动命令到玩家出生点的路径及原生buff/事件时序仍有宿主差异；前置恶魔雕像分支命中时不进入蛛群。'},
   A0I2:{status:'partial',preserveNativeKind:true,description:'显式目标为self的2点护甲，不给范围内任意友军叠加。普通波FightStart等待1秒后，若全图存在h0JI/h0OK，则给全图这两类及h03E/h03F添加A0I2、10级A0I4和A0I6，不检查同玩家、距离或存活。h0UV/h0V2不加入此旧原型枚举；孕母蛛群新建蜘蛛则直接授予。',partial:'原生光环默认字段/驻留、TriggerSleepAction实际调度和原生尸体移除时刻尚未实测；Web保留等待期间尸体引用，显式RemoveUnit不再参与。'},
 });
 const raw=e=>e?.combatRawcode??e?.sourceRawcode;

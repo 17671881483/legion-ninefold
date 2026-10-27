@@ -7,6 +7,7 @@ import { compileSkills, SKILL_IMPLEMENTATION_REVISION } from '../dist/skills.js'
 const current=UNITS.filter(u=>!u.legacy);
 // Building commands are absent from many combat-form ability lists.
 const playerBuildingCommands=current.filter(u=>u.buildingAbilityIds?.includes('A118')).map(u=>({...u,abilityIds:u.buildingAbilityIds.filter(id=>['A118','A0IH'].includes(id))}));
+const playerBuildingRuleCarriers=current.filter(u=>u.buildingAbilityIds?.includes('A0RF')).map(u=>({...u,abilityIds:['A0RF']}));
 // This form is created by YseraAwakening at runtime, so it is not a separate
 // build-menu record. Its skills still belong to the player's combat coverage.
 const playerRuntimeForms=['h0YO','h0UD','h0UE','h2AE','n06V','n06W','h0CZ','h0CL','n07J','h03E','h0V2','h03K','h0SU'].map(code=>UNIT_TEMPLATES[code]);
@@ -27,6 +28,7 @@ const playerRuntimeAbilities=[
   {sourceRawcode:'h0UQ',abilityIds:['A1CK','A1OE']},
   {sourceRawcode:'h0UD',abilityIds:['A1CP']},
   {sourceRawcode:'h2AE',abilityIds:['A1CP']},
+  {sourceRawcode:'e00O',abilityIds:['A0OZ']},
   {sourceRawcode:'e008',abilityIds:['A1CV','A1CW','A0IB','A0I5','A0I7']},
   {sourceRawcode:'h0UG',abilityIds:['A1CG']},
   {sourceRawcode:'h0SY',abilityIds:['A1BD','A1BE','A1BF','A1BH']},
@@ -55,10 +57,13 @@ const result={
   sourceOnly:{items:Object.keys(ITEMS).length,technologies:Object.keys(TECHNOLOGIES).length},
   playerRuntimeForms:playerRuntimeForms.map(u=>u.sourceRawcode??u.combatRawcode),
   playerRuntimeAbilities:playerRuntimeAbilities.map(({sourceRawcode,abilityIds})=>({sourceRawcode,abilityIds})),
+  unitScriptBindings:['n050','n06R'].map(combatRawcode=>({combatRawcode,rule:'DemonStatueBounce',status:'partial',source:'war3map.j:41293-41294',displayAbility:'A0RF',abilityRequired:false})),
+  playerBuildingRuleCarriers:playerBuildingRuleCarriers.map(u=>u.sourceRawcode),
   playerBuildingCommandCarriers:playerBuildingCommands.length,
-  playerSkills:collect([...current,...playerBuildingCommands,...playerRuntimeForms,...playerRuntimeAbilities]),
-  battleSkills:collect([...current,...playerBuildingCommands,...playerRuntimeForms,...playerRuntimeAbilities,...MERCENARIES,...WAVES,...specialCodes.map(c=>UNIT_TEMPLATES[c])]),
+  playerSkills:collect([...current,...playerBuildingCommands,...playerBuildingRuleCarriers,...playerRuntimeForms,...playerRuntimeAbilities]),
+  battleSkills:collect([...current,...playerBuildingCommands,...playerBuildingRuleCarriers,...playerRuntimeForms,...playerRuntimeAbilities,...MERCENARIES,...WAVES,...specialCodes.map(c=>UNIT_TEMPLATES[c])]),
   remainingSourceGaps:[
+    '恶魔雕像n050/n06R的精确分支、550范围随机单目标弹射、局部伤害和共享k等级2眩晕请求已接入。A0RF建筑说明、A0OZ动态命令纳入覆盖，不向战斗体伪造技能；原生随机流/枚举及马甲伤害、冷却、耗魔和命令仲裁仍partial，见demon-statue-evidence.json。',
     'A0IA骷髅王已接入精确原型死亡分支、1秒复活、新旧句柄和LI波末统计生命周期；A0IB动态马甲命令纳入覆盖，缺失原生默认字段、碰撞、重击命中和移除句柄边界仍为partial，见skeleton-king-evidence.json。',
     'A0I1孕母蛛群的伤害前生成、精确变体、召唤身份及动态属性已接入；FightStart全图原型枚举与尸体引用保留，原生命令、光环驻留、碰撞与调度仍部分核定，见broodmother-evidence.json。',
     'A0XM黑暗之魂已接入5秒积累、主死亡链的实数抽样、10魂单次召唤、6魂致命伤害清零与属性增减；A0XN动态等级纳入覆盖。缺失原生魔法上限、AOae默认字段、AIml生命副作用和CreateUnit碰撞/句柄仍为partial，见nightmare-evidence.json。',

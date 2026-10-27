@@ -1,3 +1,4 @@
+import {DEMON_STATUE_RULES,DEMON_STATUE_TEXT,DEMON_STATUE_BOUNDARY,demonStatueDamageBranch} from './demon-statue-rules.js';
 import {BROODMOTHER_RULES,broodmotherDamageBranch,tickBroodmotherJob} from './broodmother-rules.js';
 import {NIGHTMARE_RULES,initializeNightmareDeployment,tickNightmareJob,nightmareMainDeath,nightmareDamagePrefix} from './nightmare-rules.js';
 import {DEATH_TRIGGER_RULES,runMainUnitDeath} from './death-trigger-rules.js';
@@ -28,7 +29,7 @@ import { closestWalkable, isWalkable } from './layout.js';
 import { GARROSH_ACTIVE_RULES, GARROSH_PASSIVE_RULES, canGarroshCastAbility, castGarroshAbility, tryGarroshAutoCast, garroshActiveAfterDamage, sourceGarroshActiveDeath, tickGarroshActiveJob } from './garrosh-active-rules.js';
 import { ILLIDAN_RULES, ILLIDAN_ACTIVE_RULES, canIllidanCastAbility, castIllidanAbility, registerIllidanSource, tickIllidanSource, illidanOnAttackHit, tryIllidanAutoCast, illidanAfterDamage, sourceIllidanDeath, tickIllidanJob, isIllidanJobType } from './illidan-rules.js';
 
-export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261027-v28-1';
+export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261027-v29-1';
 
 // Values come from resolved object fields. Empty fields remain empty: a missing
 // native default is reported, rather than replacing it with tooltip numbers.
@@ -209,6 +210,7 @@ function compile(id,version='5.0dJF') {
   if(version==='v14.1A5'&&SOURCE_CLASS_RULES[id]){const r=SOURCE_CLASS_RULES[id];Object.assign(s,{...(!r.preserveNativeKind?{kind:'source_class'}:{}),...(r.compiled??{}),status:r.status,effectText:r.description+(r.partial?`【待核定：${r.partial}】`:'')});}
   if(version==='v14.1A5'&&HUSKAR_RULES[id]){const r=HUSKAR_RULES[id];Object.assign(s,{...(!r.preserveNativeKind?{kind:'huskar_source'}:{}),status:r.status,runtimeImplemented:true,effectText:r.description+(r.partial?`【待核定：${r.partial}】`:'')});}
   if(version==='v14.1A5'&&RELOCATION_RULES[id]){const r=RELOCATION_RULES[id];Object.assign(s,{kind:'building_relocation',status:r.status,effectText:r.description+(r.status==='partial'?`【待核定：${RELOCATION_BOUNDARY}】`:'')});}
+  if(version==='v14.1A5'&&DEMON_STATUE_RULES[id]){const r=DEMON_STATUE_RULES[id];Object.assign(s,{kind:'demon_statue_source',status:r.status,runtimeImplemented:true,cooldown:has('Cool')?n('Cool'):null,manaCost:has('Cost')?n('Cost'):null,effectText:r.description+`【待核定：${r.partial}】`});}
   if(version==='v14.1A5'&&BROODMOTHER_RULES[id]){const r=BROODMOTHER_RULES[id];Object.assign(s,{kind:r.preserveNativeKind?s.kind:'source_broodmother',status:r.status,runtimeImplemented:true,effectText:r.description+`【待核定：${r.partial}】`});}
   if(version==='v14.1A5'&&DEATH_TRIGGER_RULES[id]){const r=DEATH_TRIGGER_RULES[id];Object.assign(s,{kind:'source_death_trigger',status:r.status,runtimeImplemented:true,effectText:r.description+`【待核定：${r.partial}】`});}
   if(version==='v14.1A5'&&SKELETON_KING_RULES[id]){const r=SKELETON_KING_RULES[id];Object.assign(s,{kind:id==='A0IA'?'skeleton_king_source':'skeleton_king_native_request',status:r.status,runtimeImplemented:true,effectText:r.description+`【待核定：${r.partial}】`});if(id==='A0IB'){s.manaCost=null;s.cooldown=null;}}
@@ -251,6 +253,7 @@ function effectSummary(s){
 const TRIGGER_DESCRIPTIONS={n0S4:'每次伤害事件追加受害者当前生命3%的伤害',n0S6:'每次伤害事件追加受害者最大生命1%的魔法伤害',n0SC:'死亡时300范围敌军受到8伤害',n0SD:'死亡时300范围敌军受到26伤害',h0CZ:'击杀时回复死者最大生命60%',h08B:'潜地1.5秒无敌，结束追加5秒攻速25%与移速5%',h03B:'攻击启动30%概率自施2秒狂热与2秒增益',H08U:'死亡后原位置重新生成同类型单位'};
 const V14_TRIGGER_DESCRIPTIONS={n0S4:'伤害事件>0时追加受害者当前生命3%的法术攻击/通用伤害（两倍模式分支为2%，不用于九倍）',n0S6:'伤害事件>40时，对英雄追加当前生命1%、其他单位追加最大生命1%的法术攻击/普通伤害',n0SC:'死亡时300范围敌军受到8点普通攻击/火焰伤害',h0CZ:'击杀时回复死者最大生命50%',h03B:'攻击启动30%概率自施2秒狂热与增益，击杀时追加增益',h0OC:'攻击启动30%概率自施2秒狂热与增益，击杀时追加增益',H08U:'死亡后原位置重新生成同类型单位'};
 const V14_PARTIAL_TRIGGER_DESCRIPTIONS={
+  ...Object.fromEntries(['n050','n06R'].map(code=>[code,{status:'partial',text:DEMON_STATUE_TEXT+`【待核定：${DEMON_STATUE_BOUNDARY}】`} ])),
   h0M0:{status:'partial',text:'邪恶光环按原生字段提供35%移速与每秒20生命恢复。Arthas死亡/施法监听、4秒复制尸体与辛达苟萨12次推进已接入（war3map.j:20015—20120、20194—20201、21377—21385）。原生Aslo字段继承、自动施法及每步单dummy连续眩晕命中仍未核定；护命匣联盟仍由既有克尔苏加德模块处理。'},
 };
 const V14_ECONOMY_DESCRIPTIONS={
@@ -548,8 +551,6 @@ export function sourceClassAttackDamageEvent(game,target,attacker,options={},amo
 export function initializeSourceClassCombat(game,building,entity){
   if(isV14(entity)){initializeNightmareDeployment(game,entity);initializeBrightArthasDeployment(game,building,entity);initializeLichKingDeployment(game,entity);initializeVashjDeployment(game,building,entity);return initializeSourceClassDeployment(game,building,entity,heroScriptApi);}
 }
-// DemonStatueBounce precedes A0I1 and remains unimplemented.
-function hasPendingBroodmotherPrefix(attacker){return ['n050','n06R'].includes(raw(attacker));}
 export function beforeSourceDamage(game,target,actual,attacker,options={}){
   const mainEventPosition=pos(target);
   if(isV14(target))kelthuzadBeforeDamage(game,target,actual,attacker,heroScriptApi);
@@ -578,10 +579,10 @@ export function beforeSourceDamage(game,target,actual,attacker,options={}){
     if(isV14(target))aesaraMainDamage(game,target,attacker,actual,heroScriptApi);
     const prefix=isV14(target)||isV14(attacker)?elementalDamagePrefix(game,target,attacker,actual,heroScriptApi):{selected:null,localDamage:actual};
     if(!prefix.selected&&isV14(target)&&nightmareDamagePrefix(game,target,attacker,actual,heroScriptApi)){prefix.selected='A0XM';eventDamage=0;}
+    if(isV14(target)&&!prefix.selected)prefix.selected=soulToxinDamageBranch(game,target,attacker,actual,heroScriptApi)?.selected??null;
+    if(!prefix.selected&&(isV14(target)||isV14(attacker))&&demonStatueDamageBranch(game,target,attacker,prefix.localDamage,!options.spell||options.weapon,heroScriptApi))prefix.selected='DemonStatueBounce';
     if(isV14(target)){
-      if(!prefix.selected)prefix.selected=soulToxinDamageBranch(game,target,attacker,actual,heroScriptApi)?.selected??null;
-      const unresolvedPrior=hasPendingBroodmotherPrefix(attacker);
-      if(!prefix.selected&&!unresolvedPrior&&broodmotherDamageBranch(game,target,attacker,prefix.localDamage,heroScriptApi,mainEventPosition))prefix.selected='A0I1';
+      if(!prefix.selected&&broodmotherDamageBranch(game,target,attacker,prefix.localDamage,heroScriptApi,mainEventPosition))prefix.selected='A0I1';
       huskarDuelDamage(game,target,attacker,actual,prefix.selected);
       const prior=huskarMainDamage(game,target,attacker,prefix.localDamage,heroScriptApi);
       aesaraDamageCleanup(game,target,attacker,prefix.localDamage,heroScriptApi,prior);
@@ -759,7 +760,7 @@ const mainDeathApi={universalDamage,nativeDamage,
   nightmareKill:(g,killer)=>nightmareMainDeath(g,killer,heroScriptApi),
   skeletonKingDeath:skeletonKingMainDeath,
 };
-const heroScriptApi={matchesTargets,magicImmune:e=>active(e).some(s=>s.kind==='immunity'),initializeUnit:initializeSourceSkills,applyNativeStun:(g,s,t,id)=>applyNativeControl(g,s,t,id,'stunUntil'),sourceDeath,killUnit:(g,e)=>g._killUnit(e),getOwnedUnitsOfRawcode:(g,e,code)=>[...g.state.entities.filter(u=>u.ownerId===e.ownerId&&raw(u)===code),...(g.state.players[e.ownerId]?.buildings??[]).filter(b=>(b.sourceRawcode??b.unitId?.replace(/^v14_/, ''))===code)],castNativeNova:(g,e,id,target)=>castNativeNova(g,e,id,target),applyCyclone:(g,s,t,id,seconds)=>applyNativeControl(g,s,t,id,'cycloneUntil',seconds),applyEnsnare:(g,s,t,id)=>applyNativeControl(g,s,t,id,'rootUntil'),universalDamage,nativeDamage,sourceDamage,applyCorrosion:applyYseraCorrosion,scriptInvulnerable,pauseUnitEx,compileAbility,addAbility,removeAbility,getBuilding,applyAttackLevel,setUnitPosition,moveUnit:setUnitPosition,
+const heroScriptApi={matchesTargets,magicImmune:e=>active(e).some(s=>s.kind==='immunity'),initializeUnit:initializeSourceSkills,applyNativeStun:(g,s,t,id,seconds)=>applyNativeControl(g,s,t,id,'stunUntil',seconds),sourceDeath,killUnit:(g,e)=>g._killUnit(e),getOwnedUnitsOfRawcode:(g,e,code)=>[...g.state.entities.filter(u=>u.ownerId===e.ownerId&&raw(u)===code),...(g.state.players[e.ownerId]?.buildings??[]).filter(b=>(b.sourceRawcode??b.unitId?.replace(/^v14_/, ''))===code)],castNativeNova:(g,e,id,target)=>castNativeNova(g,e,id,target),applyCyclone:(g,s,t,id,seconds)=>applyNativeControl(g,s,t,id,'cycloneUntil',seconds),applyEnsnare:(g,s,t,id)=>applyNativeControl(g,s,t,id,'rootUntil'),universalDamage,nativeDamage,sourceDamage,applyCorrosion:applyYseraCorrosion,scriptInvulnerable,pauseUnitEx,compileAbility,addAbility,removeAbility,getBuilding,applyAttackLevel,setUnitPosition,moveUnit:setUnitPosition,
   applyNativeSlow:(game,source,target,id,descriptor)=>{target.status??={};target.status.sourceClassNativeSlowPending={abilityId:id,sourceId:source.id,at:game.state.time,descriptor:{...descriptor},reason:'原生Aslo默认目标许可未核定'};},
   vertigoTarget:(game,source,target,level)=>{const frozen=target.status?.sourceAnimationFrozenUntil;pauseUnitEx(game,source,target,level);if(frozen===undefined)delete target.status.sourceAnimationFrozenUntil;else target.status.sourceAnimationFrozenUntil=frozen;},
   pauseUnit:(game,e,value)=>{e.status??={};e.status.sourcePaused=!!value;if(value)e.pendingAttack=null;},

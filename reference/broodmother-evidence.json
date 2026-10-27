@@ -487,5 +487,6 @@
       "symbol": "GetUnitsOfTypeIdAllFilter",
       "finding": "The filter compares raw unit type only; it contains no life or ownership eligibility test. YDWE wrapper enumerates every player slot."
     }
-  ]
+  ],
+  "v29Correction": "DemonStatueBounce now executes the exact n050/n06R branch, reservoir target selection, Chaos/Universal event amount and shared k level2 request. Selected branches block A0I1/A0ID; n06R missed/nonweapon/busy cases fall through. Previous conservative pending-guard statements are historical; native boundaries remain documented in demon-statue-evidence.json."
 }

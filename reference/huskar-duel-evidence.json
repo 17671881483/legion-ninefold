@@ -324,5 +324,6 @@
     "Only A0ID sets a unit tag in this source; it chooses an enemy, so i==own tag is unreachable through this feature. Self-tag immune branch retains timer/flag but does not invent AIml absorb behavior.",
     "Web death callbacks run through current sourceDeath pipeline; full Warcraft global/per-unit listener ordering remains unverified."
   ],
-  "v26Correction": "A0HX/A0IK prefix and frozen-mark branches now execute once before duel. Resolved misses fall through, selected branches skip duel. Remaining A0XM/DemonStatueBounce/A0I1 boundaries still apply; see elemental-proc-evidence.json."
+  "v26Correction": "A0HX/A0IK prefix and frozen-mark branches now execute once before duel. Resolved misses fall through, selected branches skip duel. Remaining A0XM/DemonStatueBounce/A0I1 boundaries still apply; see elemental-proc-evidence.json.",
+  "v29Correction": "DemonStatueBounce now executes the exact n050/n06R branch, reservoir target selection, Chaos/Universal event amount and shared k level2 request. Selected branches block A0I1/A0ID; n06R missed/nonweapon/busy cases fall through. Previous conservative pending-guard statements are historical; native boundaries remain documented in demon-statue-evidence.json."
 }

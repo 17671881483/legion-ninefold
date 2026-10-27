@@ -1,0 +1,525 @@
+{
+  "source": {
+    "path": "v14-source/raw_extracted/war3map.j",
+    "sha256": "e66c55b3b25b185c991be5613e21fbf5b2d598f3cc40f2f8cd01c23bcb828250",
+    "lineCounting": "Latin-1 decode; split LF only"
+  },
+  "scope": "n050/n06R DemonStatueBounce and A0RF display / A0OZ level2 shared neutral dummy command",
+  "sourceEvidence": [
+    {
+      "line": 8565,
+      "text": "function CreateNeutralPassive takes nothing returns nothing"
+    },
+    {
+      "line": 8566,
+      "text": "local player h=Player(PLAYER_NEUTRAL_PASSIVE)"
+    },
+    {
+      "line": 8567,
+      "text": "set j=CreateUnit(h,$6530305A,-3526.5,4370.6,270.)"
+    },
+    {
+      "line": 8568,
+      "text": "set k=CreateUnit(h,$6530304F,12.4,-3122.3,264.39)"
+    },
+    {
+      "line": 8569,
+      "text": "set l=CreateUnit(h,$6530305A,3527.3,4353.8,270.)"
+    },
+    {
+      "line": 8570,
+      "text": "endfunction"
+    },
+    {
+      "line": 16723,
+      "text": "set Mk[Bi]=$6E303530"
+    },
+    {
+      "line": 16724,
+      "text": "set Ml[Bi]=$6E303457"
+    },
+    {
+      "line": 18408,
+      "text": "set Mk[Bi]=$6E303652"
+    },
+    {
+      "line": 18409,
+      "text": "set Ml[Bi]=$6E303653"
+    },
+    {
+      "line": 29786,
+      "text": "function SelectRange takes unit Pf,real FF,real FG,real Px returns group"
+    },
+    {
+      "line": 29787,
+      "text": "local group DG=CreateGroup()"
+    },
+    {
+      "line": 29788,
+      "text": "local group Om=CreateGroup()"
+    },
+    {
+      "line": 29789,
+      "text": "local unit D6=null"
+    },
+    {
+      "line": 29790,
+      "text": "call GroupEnumUnitsInRange(DG,FF,FG,Px,null)"
+    },
+    {
+      "line": 29791,
+      "text": "loop"
+    },
+    {
+      "line": 29792,
+      "text": "set D6=FirstOfGroup(DG)"
+    },
+    {
+      "line": 29793,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 29794,
+      "text": "if IsUnitEnemy(D6,GetOwningPlayer(Pf)) and not IsUnitType(D6,UNIT_TYPE_DEAD) and GetUnitAbilityLevel(D6,$4176756C)==0 then"
+    },
+    {
+      "line": 29795,
+      "text": "call GroupAddUnit(Om,D6)"
+    },
+    {
+      "line": 29796,
+      "text": "endif"
+    },
+    {
+      "line": 29797,
+      "text": "call GroupRemoveUnit(DG,D6)"
+    },
+    {
+      "line": 29798,
+      "text": "endloop"
+    },
+    {
+      "line": 29799,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 29800,
+      "text": "set DG=null"
+    },
+    {
+      "line": 29801,
+      "text": "set D6=null"
+    },
+    {
+      "line": 29802,
+      "text": "set Pf=null"
+    },
+    {
+      "line": 29803,
+      "text": "set Py=Om"
+    },
+    {
+      "line": 29804,
+      "text": "set Om=null"
+    },
+    {
+      "line": 29805,
+      "text": "return Py"
+    },
+    {
+      "line": 29806,
+      "text": "endfunction"
+    },
+    {
+      "line": 40499,
+      "text": "function DemonStatueBounce takes unit Pf,unit bo,real P8 returns nothing"
+    },
+    {
+      "line": 40500,
+      "text": "local integer bp=GetHandleId(Pf)"
+    },
+    {
+      "line": 40501,
+      "text": "local integer bq=StringHash(\"DemonStatueBounceBusy\")"
+    },
+    {
+      "line": 40502,
+      "text": "local group br=null"
+    },
+    {
+      "line": 40503,
+      "text": "local unit Om=null"
+    },
+    {
+      "line": 40504,
+      "text": "if Pf==null or bo==null or P8<=0 or LoadBoolean(O,bp,bq) then"
+    },
+    {
+      "line": 40505,
+      "text": "set Pf=null"
+    },
+    {
+      "line": 40506,
+      "text": "set bo=null"
+    },
+    {
+      "line": 40507,
+      "text": "return"
+    },
+    {
+      "line": 40508,
+      "text": "endif"
+    },
+    {
+      "line": 40509,
+      "text": "set br=SelectRange(Pf,GetUnitX(bo),GetUnitY(bo),550)"
+    },
+    {
+      "line": 40510,
+      "text": "call GroupRemoveUnit(br,bo)"
+    },
+    {
+      "line": 40511,
+      "text": "set Om=GroupPickRandomUnit(br)"
+    },
+    {
+      "line": 40512,
+      "text": "call DestroyGroup(br)"
+    },
+    {
+      "line": 40513,
+      "text": "set br=null"
+    },
+    {
+      "line": 40514,
+      "text": "if Om!=null then"
+    },
+    {
+      "line": 40515,
+      "text": "call SaveBoolean(O,bp,bq,true)"
+    },
+    {
+      "line": 40516,
+      "text": "call UnitDamageTarget(Pf,Om,P8,false,false,ATTACK_TYPE_CHAOS,DAMAGE_TYPE_UNIVERSAL,WEAPON_TYPE_WHOKNOWS)"
+    },
+    {
+      "line": 40517,
+      "text": "call UnitAddAbility(k,$41304F5A)"
+    },
+    {
+      "line": 40518,
+      "text": "call SetUnitAbilityLevel(k,$41304F5A,2)"
+    },
+    {
+      "line": 40519,
+      "text": "call IssueTargetOrder(k,\"thunderbolt\",Om)"
+    },
+    {
+      "line": 40520,
+      "text": "call DestroyEffect(AddSpecialEffect(\"Abilities\\\\Spells\\\\Undead\\\\AnimateDead\\\\AnimateDeadTarget.mdl\",GetUnitX(Om),GetUnitY(Om)))"
+    },
+    {
+      "line": 40521,
+      "text": "call DestroyEffect(AddSpecialEffect(\"Abilities\\\\Weapons\\\\IllidanMissile\\\\IllidanMissile.mdl\",GetUnitX(Om),GetUnitY(Om)))"
+    },
+    {
+      "line": 40522,
+      "text": "call UnitRemoveAbility(k,$41304F5A)"
+    },
+    {
+      "line": 40523,
+      "text": "call RemoveSavedBoolean(O,bp,bq)"
+    },
+    {
+      "line": 40524,
+      "text": "endif"
+    },
+    {
+      "line": 40525,
+      "text": "set Om=null"
+    },
+    {
+      "line": 40526,
+      "text": "set Pf=null"
+    },
+    {
+      "line": 40527,
+      "text": "set bo=null"
+    },
+    {
+      "line": 40528,
+      "text": "endfunction"
+    },
+    {
+      "line": 40553,
+      "text": "if P8<=0 or bV==i or bV==null or IsUnitAlly(bV,GetOwningPlayer(i)) then"
+    },
+    {
+      "line": 40554,
+      "text": "set i=null"
+    },
+    {
+      "line": 40555,
+      "text": "set bV=null"
+    },
+    {
+      "line": 40556,
+      "text": "set Eb=null"
+    },
+    {
+      "line": 40557,
+      "text": "set h=null"
+    },
+    {
+      "line": 40558,
+      "text": "set Uz=null"
+    },
+    {
+      "line": 40559,
+      "text": "return"
+    },
+    {
+      "line": 40560,
+      "text": "endif"
+    },
+    {
+      "line": 40561,
+      "text": "if GetUnitAbilityLevel(bV,$41325937)>0 then"
+    },
+    {
+      "line": 40562,
+      "text": "set i=null"
+    },
+    {
+      "line": 40563,
+      "text": "set bV=null"
+    },
+    {
+      "line": 40564,
+      "text": "set Eb=null"
+    },
+    {
+      "line": 40565,
+      "text": "set h=null"
+    },
+    {
+      "line": 40566,
+      "text": "set Uz=null"
+    },
+    {
+      "line": 40567,
+      "text": "return"
+    },
+    {
+      "line": 40568,
+      "text": "endif"
+    },
+    {
+      "line": 40569,
+      "text": "if GetUnitAbilityLevel(i,QC)>0 then"
+    },
+    {
+      "line": 40570,
+      "text": "set P8=P8*.85"
+    },
+    {
+      "line": 40571,
+      "text": "call YDWESetEventDamage(P8)"
+    },
+    {
+      "line": 40572,
+      "text": "endif"
+    },
+    {
+      "line": 40573,
+      "text": "set Uz=CreateGroup()"
+    },
+    {
+      "line": 40574,
+      "text": "call DisableTrigger(Eb)"
+    },
+    {
+      "line": 41288,
+      "text": "elseif GetUnitAbilityLevel(i,$4130584D)>0 and (GetEventDamage()>=GetUnitState(i,UNIT_STATE_LIFE) and LoadInteger(O,GetHandleId(i),StringHash(\"killnum\"))>=6) then"
+    },
+    {
+      "line": 41289,
+      "text": "call YDWESetEventDamage(0)"
+    },
+    {
+      "line": 41290,
+      "text": "call h03L_data(i,false,false)"
+    },
+    {
+      "line": 41291,
+      "text": "elseif GetUnitAbilityLevel(i,$41304935)>0 and GetUnitState(i,UNIT_STATE_MANA)>24 then"
+    },
+    {
+      "line": 41292,
+      "text": "call IssueTargetOrder(i,\"cripple\",bV)"
+    },
+    {
+      "line": 41293,
+      "text": "elseif GetUnitTypeId(bV)==$6E303530 or GetUnitTypeId(bV)==$6E303652 and bW and not LoadBoolean(O,GetHandleId(bV),StringHash(\"DemonStatueBounceBusy\")) and GetRandomReal(0,100)<30 then"
+    },
+    {
+      "line": 41294,
+      "text": "call DemonStatueBounce(bV,i,P8)"
+    },
+    {
+      "line": 41295,
+      "text": "elseif GetUnitAbilityLevel(bV,$41304931)>0 and UnitHasBuffBJ(i,$42303455) and P8>GetUnitState(i,UNIT_STATE_LIFE) then"
+    },
+    {
+      "line": 41296,
+      "text": "call DestroyEffect(AddSpecialEffect(\"Abilities\\\\Spells\\\\Undead\\\\AnimateDead\\\\AnimateDeadTarget.mdx\",GetUnitX(i),GetUnitY(i)))"
+    },
+    {
+      "line": 41297,
+      "text": "set YY=$68303345"
+    },
+    {
+      "line": 41298,
+      "text": "if GetUnitTypeId(bV)==$68305556 then"
+    },
+    {
+      "line": 41299,
+      "text": "set YY=$68305632"
+    },
+    {
+      "line": 41300,
+      "text": "endif"
+    },
+    {
+      "line": 41301,
+      "text": "set bj_lastCreatedUnit=CreateUnit(GetOwningPlayer(bV),YY,FF,FG,GetUnitFacing(bV))"
+    },
+    {
+      "line": 41302,
+      "text": "call IssuePointOrder(bj_lastCreatedUnit,\"attack\",GetPlayerStartLocationX(Player(GetUnitUserData(bV)-1)),GetPlayerStartLocationY(Player(GetUnitUserData(bV)-1)))"
+    },
+    {
+      "line": 41303,
+      "text": "call SetUnitColor(bj_lastCreatedUnit,GetPlayerColor(Player(GetUnitUserData(bV)-1)))"
+    },
+    {
+      "line": 41304,
+      "text": "call UnitAddAbility(bj_lastCreatedUnit,$41304932)"
+    },
+    {
+      "line": 41305,
+      "text": "call UnitAddAbility(bj_lastCreatedUnit,$41304934)"
+    },
+    {
+      "line": 41306,
+      "text": "call SetUnitAbilityLevel(bj_lastCreatedUnit,$41304934,10)"
+    },
+    {
+      "line": 41307,
+      "text": "call UnitAddAbility(bj_lastCreatedUnit,$41304936)"
+    },
+    {
+      "line": 41308,
+      "text": "call UnitAddType(bj_lastCreatedUnit,UNIT_TYPE_SUMMONED)"
+    },
+    {
+      "line": 41309,
+      "text": "call SetUnitUserData(bj_lastCreatedUnit,GetUnitUserData(bV))"
+    },
+    {
+      "line": 41310,
+      "text": "call GroupAddUnit(JH[GetUnitUserData(bV)],bj_lastCreatedUnit)"
+    },
+    {
+      "line": 41311,
+      "text": "call GroupAddUnit(JW,bj_lastCreatedUnit)"
+    },
+    {
+      "line": 41312,
+      "text": "elseif GetUnitAbilityLevel(i,$41304944)>0 and LoadUnitHandle(O,H2I(i),StringHash(\"tag\"))==null then"
+    },
+    {
+      "line": 41313,
+      "text": "set bs=Condition(function Duel)"
+    },
+    {
+      "line": 41314,
+      "text": "call GroupEnumUnitsInRange(Uz,GetUnitX(bV),GetUnitY(bV),1000,bs)"
+    },
+    {
+      "line": 41315,
+      "text": "call DestroyBoolExpr(bs)"
+    },
+    {
+      "line": 41558,
+      "text": "call DestroyGroup(Uz)"
+    },
+    {
+      "line": 41559,
+      "text": "call EnableTrigger(Eb)"
+    },
+    {
+      "line": 41574,
+      "text": "function InitTrig_UnitDamage takes nothing returns nothing"
+    },
+    {
+      "line": 41575,
+      "text": "set bU=CreateTrigger()"
+    },
+    {
+      "line": 41576,
+      "text": "call YDWESyStemAnyUnitDamagedRegistTrigger(bU)"
+    },
+    {
+      "line": 41577,
+      "text": "call TriggerAddAction(bU,function Trig_UnitDamageActions)"
+    },
+    {
+      "line": 41578,
+      "text": "endfunction"
+    }
+  ],
+  "objectEvidence": {
+    "A0RF": {
+      "file": "all_abilities.csv",
+      "row": 1281,
+      "base": "Asth",
+      "runtimeAbilityRequired": false
+    },
+    "A0OZ": {
+      "file": "all_abilities.csv",
+      "row": 1194,
+      "base": "AHtb",
+      "level2": {
+        "duration": 1.5,
+        "heroDuration": 1.5,
+        "range": 10000000,
+        "targets": "air,ground,debris,enemy,neutral,organic",
+        "buff": "BPSE",
+        "damage": null,
+        "cooldown": null,
+        "manaCost": null
+      },
+      "w3a": "war3map_w3a_modifications.csv:227-228 only modifies duration at level 5; this is an original_objects row for A0OZ, not an explicit AHtb inheritance record."
+    }
+  },
+  "libraryEvidence": {
+    "url": "https://jass.sourceforge.net/doc/api/Blizzard_j-source.shtml",
+    "functions": [
+      "GroupPickRandomUnit",
+      "GroupPickRandomUnitEnum"
+    ],
+    "algorithm": "Reservoir sampling: GetRandomInt(1, considered)==1, once per candidate including count 1. Web RNG consumption follows this call structure but is not native seeded RNG parity."
+  },
+  "contract": [
+    "JASS and/or precedence: n050 always selects this elseif; n06R requires weapon, not busy and real roll <30. Helper independently rejects null/nonpositive/busy. Empty selection or rejected command does not permit fallthrough.",
+    "Victim-centered SelectRange 550; enemy, not UNIT_TYPE_DEAD and no Avul, then remove original victim. No mechanical/air/magic-immunity/hero filter on bounce.",
+    "One chosen target receives local P8 as Chaos/Universal nonattack damage before shared k level2 thunderbolt request, visual effects, ability removal and busy clearing. Main damage trigger is disabled; independent death/damage listeners are not globally disabled."
+  ],
+  "partialBoundaries": [
+    "Native enumeration order, alliance/neutral-player mapping, dead threshold, hidden/locust handling and world distances use host adapters.",
+    "Shared neutral-passive e00O is recorded as k, not spawned as a source-owned unit. Host control is instantaneous and applies known level2 duration/target filters; native command arbitration, projectile, cast/cooldown/mana defaults and immediate ability removal behavior remain unverified.",
+    "Missing DataA/Cost/Cool/Cast fields do not justify copying AHtb data or tooltip numbers. No invented 225 hammer damage.",
+    "No original models/audio or Warcraft runtime trace available; status remains partial."
+  ]
+}

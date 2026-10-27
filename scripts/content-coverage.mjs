@@ -9,7 +9,7 @@ const current=UNITS.filter(u=>!u.legacy);
 const playerBuildingCommands=current.filter(u=>u.buildingAbilityIds?.includes('A118')).map(u=>({...u,abilityIds:u.buildingAbilityIds.filter(id=>['A118','A0IH'].includes(id))}));
 // This form is created by YseraAwakening at runtime, so it is not a separate
 // build-menu record. Its skills still belong to the player's combat coverage.
-const playerRuntimeForms=['h0YO','h0UD','h0UE','h2AE','n06V','n06W','h0CZ','h0CL','n07J'].map(code=>UNIT_TEMPLATES[code]);
+const playerRuntimeForms=['h0YO','h0UD','h0UE','h2AE','n06V','n06W','h0CZ','h0CL','n07J','h03K','h0SU'].map(code=>UNIT_TEMPLATES[code]);
 // Source callbacks inject these exact auxiliary abilities. Keep them visible
 // in coverage even though they are absent from the build-menu ability lists.
 const playerRuntimeAbilities=[
@@ -20,6 +20,8 @@ const playerRuntimeAbilities=[
   {sourceRawcode:'h0OV',abilityIds:['A0W0','A0W2','A0W3']},
   {sourceRawcode:'h0JL',abilityIds:['A0IF']},
   {sourceRawcode:'h0JO',abilityIds:['A0IJ','A0IL']},
+  {sourceRawcode:'h03L',abilityIds:['A0XN']},
+  {sourceRawcode:'h0SX',abilityIds:['A0XN']},
   {sourceRawcode:'h0SR',abilityIds:['A0IF']},
   {sourceRawcode:'h0UQ',abilityIds:['A1CK','A1OE']},
   {sourceRawcode:'h0UD',abilityIds:['A1CP']},
@@ -56,6 +58,7 @@ const result={
   playerSkills:collect([...current,...playerBuildingCommands,...playerRuntimeForms,...playerRuntimeAbilities]),
   battleSkills:collect([...current,...playerBuildingCommands,...playerRuntimeForms,...playerRuntimeAbilities,...MERCENARIES,...WAVES,...specialCodes.map(c=>UNIT_TEMPLATES[c])]),
   remainingSourceGaps:[
+    'A0XM黑暗之魂已接入5秒积累、主死亡链的实数抽样、10魂单次召唤、6魂致命伤害清零与属性增减；A0XN动态等级纳入覆盖。缺失原生魔法上限、AOae默认字段、AIml生命副作用和CreateUnit碰撞/句柄仍为partial，见nightmare-evidence.json。',
     '未核定技能逐项保留在abilities中；已实现状态也不代表整套兵种联动已还原。',
     '包内未提供完整原生商店/菜单字段，部分商品与单位入口仍待补证。',
     'A1U4/A1U5/A1U6献祭奖励可核定，但没有可证实的携带单位或授予路径。',

@@ -1,0 +1,1735 @@
+{
+  "scope": "Task B: A0XM soul reserve, normal deployment timer, main death/damage branches and A0XN runtime counter",
+  "source": {
+    "path": "v14-source/raw_extracted/war3map.j",
+    "sha256": "e66c55b3b25b185c991be5613e21fbf5b2d598f3cc40f2f8cd01c23bcb828250",
+    "lineCounting": "Decode original bytes as Latin-1; split LF only"
+  },
+  "sourceEvidence": [
+    {
+      "line": 6697,
+      "text": "function YDWEGeneralBounsSystem__SetUnitMaxState takes unit i,integer Dj,real Dm returns boolean"
+    },
+    {
+      "line": 6698,
+      "text": "local integer Do=R2I(Dm)"
+    },
+    {
+      "line": 6699,
+      "text": "local integer Dp=0"
+    },
+    {
+      "line": 6700,
+      "text": "local unitstate Dn"
+    },
+    {
+      "line": 6701,
+      "text": "local integer BB=CM[Dj+1]-2"
+    },
+    {
+      "line": 6702,
+      "text": "if Dm>65535 or Dm<=0 then"
+    },
+    {
+      "line": 6703,
+      "text": "call BJDebugMsg(\"è¾å¥æ°æ®æ æ\")"
+    },
+    {
+      "line": 6704,
+      "text": "return false"
+    },
+    {
+      "line": 6705,
+      "text": "endif"
+    },
+    {
+      "line": 6706,
+      "text": "if Dj==0 then"
+    },
+    {
+      "line": 6707,
+      "text": "set Dn=UNIT_STATE_MAX_LIFE"
+    },
+    {
+      "line": 6708,
+      "text": "elseif Dj==1 then"
+    },
+    {
+      "line": 6709,
+      "text": "set Dn=UNIT_STATE_MAX_MANA"
+    },
+    {
+      "line": 6710,
+      "text": "else"
+    },
+    {
+      "line": 6711,
+      "text": "call BJDebugMsg(\"æ æç¶æ\")"
+    },
+    {
+      "line": 6712,
+      "text": "return false"
+    },
+    {
+      "line": 6713,
+      "text": "endif"
+    },
+    {
+      "line": 6714,
+      "text": "set Do=Do-R2I(GetUnitState(i,Dn))"
+    },
+    {
+      "line": 6715,
+      "text": "call YDWESaveIntegerByString(I2S(YDWEH2I(i)),\"bonusType\"+I2S(Dj),Do+YDWEGetIntegerByString(I2S(YDWEH2I(i)),\"bonusType\"+I2S(Dj)))"
+    },
+    {
+      "line": 6716,
+      "text": "if Do>0 then"
+    },
+    {
+      "line": 6717,
+      "text": "set Dp=3"
+    },
+    {
+      "line": 6718,
+      "text": "elseif Do<0 then"
+    },
+    {
+      "line": 6719,
+      "text": "set Dp=2"
+    },
+    {
+      "line": 6720,
+      "text": "set Do=-Do"
+    },
+    {
+      "line": 6721,
+      "text": "else"
+    },
+    {
+      "line": 6722,
+      "text": "return false"
+    },
+    {
+      "line": 6723,
+      "text": "endif"
+    },
+    {
+      "line": 6724,
+      "text": "loop"
+    },
+    {
+      "line": 6725,
+      "text": "exitwhen BB<CM[Dj]"
+    },
+    {
+      "line": 6726,
+      "text": "if Do>=CR[BB] then"
+    },
+    {
+      "line": 6727,
+      "text": "call UnitAddAbility(i,CQ[BB])"
+    },
+    {
+      "line": 6728,
+      "text": "call SetUnitAbilityLevel(i,CQ[BB],Dp)"
+    },
+    {
+      "line": 6729,
+      "text": "call UnitRemoveAbility(i,CQ[BB])"
+    },
+    {
+      "line": 6730,
+      "text": "set Do=Do-CR[BB]"
+    },
+    {
+      "line": 6731,
+      "text": "endif"
+    },
+    {
+      "line": 6732,
+      "text": "set BB=BB-1"
+    },
+    {
+      "line": 6733,
+      "text": "endloop"
+    },
+    {
+      "line": 6734,
+      "text": "return true"
+    },
+    {
+      "line": 6779,
+      "text": "function YDWEGeneralBounsSystem__AddUnitMaxState takes unit i,integer Dj,real Dm returns boolean"
+    },
+    {
+      "line": 6780,
+      "text": "local unitstate Dn"
+    },
+    {
+      "line": 6781,
+      "text": "if Dj==0 then"
+    },
+    {
+      "line": 6782,
+      "text": "set Dn=UNIT_STATE_MAX_LIFE"
+    },
+    {
+      "line": 6783,
+      "text": "elseif Dj==1 then"
+    },
+    {
+      "line": 6784,
+      "text": "set Dn=UNIT_STATE_MAX_MANA"
+    },
+    {
+      "line": 6785,
+      "text": "else"
+    },
+    {
+      "line": 6786,
+      "text": "return false"
+    },
+    {
+      "line": 6787,
+      "text": "endif"
+    },
+    {
+      "line": 6788,
+      "text": "return YDWEGeneralBounsSystem__SetUnitMaxState(i,Dj,Dm+GetUnitState(i,Dn))"
+    },
+    {
+      "line": 6789,
+      "text": "endfunction"
+    },
+    {
+      "line": 6790,
+      "text": "function YDWEGeneralBounsSystem__UnitAddBonus takes unit i,integer Dj,integer Dl returns boolean"
+    },
+    {
+      "line": 6791,
+      "text": "return YDWEGeneralBounsSystem__UnitSetBonus(i,Dj,YDWEGeneralBounsSystem__UnitGetBonus(i,Dj)+Dl)"
+    },
+    {
+      "line": 6819,
+      "text": "function YDWEUnitAddBonus takes unit i,integer Dj,integer Dl returns nothing"
+    },
+    {
+      "line": 6820,
+      "text": "if Dj==0 or Dj==1 then"
+    },
+    {
+      "line": 6821,
+      "text": "call YDWEGeneralBounsSystem__AddUnitMaxState(i,Dj,Dl)"
+    },
+    {
+      "line": 6822,
+      "text": "else"
+    },
+    {
+      "line": 6823,
+      "text": "call YDWEGeneralBounsSystem__UnitAddBonus(i,Dj,Dl)"
+    },
+    {
+      "line": 6824,
+      "text": "endif"
+    },
+    {
+      "line": 6825,
+      "text": "endfunction"
+    },
+    {
+      "line": 6826,
+      "text": "function YDWEGeneralBounsSystemUnitSetBonus takes unit i,integer Dj,integer Dk,integer Dl returns nothing"
+    },
+    {
+      "line": 6827,
+      "text": "if Dk==0 then"
+    },
+    {
+      "line": 6828,
+      "text": "call YDWEUnitAddBonus(i,Dj,Dl)"
+    },
+    {
+      "line": 6829,
+      "text": "elseif Dk==1 then"
+    },
+    {
+      "line": 6830,
+      "text": "call YDWEUnitAddBonus(i,Dj,0-Dl)"
+    },
+    {
+      "line": 6831,
+      "text": "else"
+    },
+    {
+      "line": 6832,
+      "text": "call YDWEUnitSetBonus(i,Dj,Dl)"
+    },
+    {
+      "line": 6833,
+      "text": "endif"
+    },
+    {
+      "line": 6885,
+      "text": "set CP=0"
+    },
+    {
+      "line": 6886,
+      "text": "loop"
+    },
+    {
+      "line": 6887,
+      "text": "exitwhen CP>CN[3]-1"
+    },
+    {
+      "line": 6888,
+      "text": "set CQ[BB]=$59446230-48+CO[CP]"
+    },
+    {
+      "line": 6889,
+      "text": "set BB=BB+1"
+    },
+    {
+      "line": 6890,
+      "text": "set CP=CP+1"
+    },
+    {
+      "line": 6901,
+      "text": "set CR[CS]=1"
+    },
+    {
+      "line": 6902,
+      "text": "loop"
+    },
+    {
+      "line": 6903,
+      "text": "set CR[CS+1]=CR[CS]*2"
+    },
+    {
+      "line": 6904,
+      "text": "set CS=CS+1"
+    },
+    {
+      "line": 9640,
+      "text": "function h03L_data takes unit i,boolean Cd,boolean UU returns nothing"
+    },
+    {
+      "line": 9641,
+      "text": "local unit Ki"
+    },
+    {
+      "line": 9642,
+      "text": "if Cd then"
+    },
+    {
+      "line": 9643,
+      "text": "call UnitAddAbility(i,$4130584E)"
+    },
+    {
+      "line": 9644,
+      "text": "call SaveInteger(O,GetHandleId(i),StringHash(\"killnum\"),LoadInteger(O,GetHandleId(i),StringHash(\"killnum\"))+1)"
+    },
+    {
+      "line": 9645,
+      "text": "if UU then"
+    },
+    {
+      "line": 9646,
+      "text": "call SaveInteger(O,GetHandleId(i),StringHash(\"timenum\"),LoadInteger(O,GetHandleId(i),StringHash(\"timenum\"))+1)"
+    },
+    {
+      "line": 9647,
+      "text": "endif"
+    },
+    {
+      "line": 9648,
+      "text": "call SetUnitState(i,UNIT_STATE_MANA,GetUnitState(i,UNIT_STATE_MANA)+1.)"
+    },
+    {
+      "line": 9649,
+      "text": "call SetUnitState(i,UNIT_STATE_LIFE,GetUnitState(i,UNIT_STATE_LIFE)+100.)"
+    },
+    {
+      "line": 9650,
+      "text": "call YDWEGeneralBounsSystemUnitSetBonus(i,0,0,100)"
+    },
+    {
+      "line": 9651,
+      "text": "call YDWEGeneralBounsSystemUnitSetBonus(i,3,0,10)"
+    },
+    {
+      "line": 9652,
+      "text": "if LoadInteger(O,GetHandleId(i),StringHash(\"killnum\"))==10 and not LoadBoolean(O,GetHandleId(i),StringHash(\"one\")) then"
+    },
+    {
+      "line": 9653,
+      "text": "if GetUnitTypeId(i)==$6830334C then"
+    },
+    {
+      "line": 9654,
+      "text": "set Ki=CreateUnit(GetOwningPlayer(i),$6830334B,GetUnitX(i),GetUnitY(i),bj_UNIT_FACING)"
+    },
+    {
+      "line": 9655,
+      "text": "elseif GetUnitTypeId(i)==$68305358 then"
+    },
+    {
+      "line": 9656,
+      "text": "set Ki=CreateUnit(GetOwningPlayer(i),$68305355,GetUnitX(i),GetUnitY(i),bj_UNIT_FACING)"
+    },
+    {
+      "line": 9657,
+      "text": "endif"
+    },
+    {
+      "line": 9658,
+      "text": "call GroupAddUnit(JW,Ki)"
+    },
+    {
+      "line": 9659,
+      "text": "call SetUnitUserData(Ki,GetUnitUserData(i))"
+    },
+    {
+      "line": 9660,
+      "text": "call GroupAddUnit(JH[GetUnitUserData(i)],Ki)"
+    },
+    {
+      "line": 9661,
+      "text": "call UnitAddType(Ki,UNIT_TYPE_SUMMONED)"
+    },
+    {
+      "line": 9662,
+      "text": "call SaveBoolean(O,GetHandleId(i),StringHash(\"one\"),true)"
+    },
+    {
+      "line": 9663,
+      "text": "endif"
+    },
+    {
+      "line": 9664,
+      "text": "else"
+    },
+    {
+      "line": 9665,
+      "text": "call SaveInteger(O,GetHandleId(i),StringHash(\"killnum\"),LoadInteger(O,GetHandleId(i),StringHash(\"killnum\"))-6)"
+    },
+    {
+      "line": 9666,
+      "text": "call SetUnitState(i,UNIT_STATE_MANA,GetUnitState(i,UNIT_STATE_MANA)-6)"
+    },
+    {
+      "line": 9667,
+      "text": "call SetUnitState(i,UNIT_STATE_LIFE,GetUnitState(i,UNIT_STATE_LIFE)+1000.)"
+    },
+    {
+      "line": 9668,
+      "text": "call YDWEGeneralBounsSystemUnitSetBonus(i,0,1,600)"
+    },
+    {
+      "line": 9669,
+      "text": "call YDWEGeneralBounsSystemUnitSetBonus(i,3,1,60)"
+    },
+    {
+      "line": 9670,
+      "text": "endif"
+    },
+    {
+      "line": 9671,
+      "text": "if LoadInteger(O,GetHandleId(i),StringHash(\"killnum\"))<=15 then"
+    },
+    {
+      "line": 9672,
+      "text": "if LoadInteger(O,GetHandleId(i),StringHash(\"killnum\"))<=0 then"
+    },
+    {
+      "line": 9673,
+      "text": "call UnitRemoveAbility(i,$4130584E)"
+    },
+    {
+      "line": 9674,
+      "text": "else"
+    },
+    {
+      "line": 9675,
+      "text": "call SetUnitAbilityLevel(i,$4130584E,LoadInteger(O,GetHandleId(i),StringHash(\"killnum\")))"
+    },
+    {
+      "line": 9676,
+      "text": "endif"
+    },
+    {
+      "line": 9677,
+      "text": "endif"
+    },
+    {
+      "line": 9678,
+      "text": "set Ki=null"
+    },
+    {
+      "line": 9679,
+      "text": "set i=null"
+    },
+    {
+      "line": 9680,
+      "text": "endfunction"
+    },
+    {
+      "line": 9681,
+      "text": "function h03L_Timer takes nothing returns nothing"
+    },
+    {
+      "line": 9682,
+      "text": "local timer t=GetExpiredTimer()"
+    },
+    {
+      "line": 9683,
+      "text": "local integer Kd=GetHandleId(t)"
+    },
+    {
+      "line": 9684,
+      "text": "local unit i=LoadUnitHandle(O,Kd,1)"
+    },
+    {
+      "line": 9685,
+      "text": "if i==null or GetUnitState(i,UNIT_STATE_LIFE)<1 then"
+    },
+    {
+      "line": 9686,
+      "text": "call FlushChildHashtable(O,Kd)"
+    },
+    {
+      "line": 9687,
+      "text": "call DestroyTimer(t)"
+    },
+    {
+      "line": 9688,
+      "text": "elseif LoadInteger(O,GetHandleId(i),StringHash(\"killnum\"))<15 then"
+    },
+    {
+      "line": 9689,
+      "text": "call h03L_data(i,true,true)"
+    },
+    {
+      "line": 9690,
+      "text": "endif"
+    },
+    {
+      "line": 9691,
+      "text": "set t=null"
+    },
+    {
+      "line": 9692,
+      "text": "set i=null"
+    },
+    {
+      "line": 9693,
+      "text": "endfunction"
+    },
+    {
+      "line": 14213,
+      "text": "function C_AuraStruggle2 takes nothing returns boolean"
+    },
+    {
+      "line": 14214,
+      "text": "return UnitHasBuffBJ(GetAttacker(),$42683132)==true"
+    },
+    {
+      "line": 14215,
+      "text": "endfunction"
+    },
+    {
+      "line": 14216,
+      "text": "function C_AuraStruggle takes nothing returns boolean"
+    },
+    {
+      "line": 14217,
+      "text": "return UnitHasBuffBJ(GetAttacker(),$42683131)==true or UnitHasBuffBJ(GetAttacker(),$42683132)==true"
+    },
+    {
+      "line": 14218,
+      "text": "endfunction"
+    },
+    {
+      "line": 14219,
+      "text": "function A_AuraStruggle takes nothing returns nothing"
+    },
+    {
+      "line": 14220,
+      "text": "if GetRandomInt(1,20)==1 and UnitHasBuffBJ(GetAttacker(),$42683131)==true or GetRandomInt(1,10)==1 and UnitHasBuffBJ(GetAttacker(),$42683132)==true then"
+    },
+    {
+      "line": 14221,
+      "text": "if GetUnitTypeId(GetAttacker())==$6830365A or GetUnitTypeId(GetAttacker())==$68303244 or GetUnitTypeId(GetAttacker())==$68305034 or GetUnitTypeId(GetAttacker())==$68324141 or GetUnitTypeId(GetAttacker())==$68303342 or GetUnitTypeId(GetAttacker())==$68304F43 or GetUnitTypeId(GetAttacker())==$6E305344 or GetUnitTypeId(GetAttacker())==$68324143 or GetUnitAbilityLevel(GetAttacker(),$4130584D)>0 or GetUnitTypeId(GetAttacker())==$6830414E or (GetUnitTypeId(GetAttacker())==$6830365A or GetUnitTypeId(GetAttacker())==$68303244 or GetUnitTypeId(GetAttacker())==$68305034 or GetUnitTypeId(GetAttacker())==$68324141 or GetUnitTypeId(GetAttacker())==$68303342 or GetUnitTypeId(GetAttacker())==$68304F43 or GetUnitTypeId(GetAttacker())==$6E305344 or GetUnitTypeId(GetAttacker())==$68324143) or GetUnitTypeId(GetAttacker())==$68313036 or GetUnitTypeId(GetAttacker())==$68324138 then"
+    },
+    {
+      "line": 14222,
+      "text": "return"
+    },
+    {
+      "line": 14223,
+      "text": "else"
+    },
+    {
+      "line": 14224,
+      "text": "set Nr=CreateUnit(Player(-1+GetUnitUserData(GetAttacker())),$75303036,GetUnitX(GetAttacker()),GetUnitY(GetAttacker()),0)"
+    },
+    {
+      "line": 14225,
+      "text": "call UnitAddAbility(Nr,$41683130)"
+    },
+    {
+      "line": 14226,
+      "text": "call IssueTargetOrder(Nr,\"bloodlust\",GetAttacker())"
+    },
+    {
+      "line": 14227,
+      "text": "call UnitApplyTimedLife(Nr,$42544C46,.2)"
+    },
+    {
+      "line": 14228,
+      "text": "endif"
+    },
+    {
+      "line": 14229,
+      "text": "endif"
+    },
+    {
+      "line": 14230,
+      "text": "endfunction"
+    },
+    {
+      "line": 16570,
+      "text": "set Mk[Bi]=$6830334B"
+    },
+    {
+      "line": 16571,
+      "text": "set Ml[Bi]=$6830315A"
+    },
+    {
+      "line": 16572,
+      "text": "set Bi=Bi+1"
+    },
+    {
+      "line": 16573,
+      "text": "set Mk[Bi]=$6830334C"
+    },
+    {
+      "line": 16574,
+      "text": "set Ml[Bi]=$68303230"
+    },
+    {
+      "line": 16575,
+      "text": "set Bi=Bi+1"
+    },
+    {
+      "line": 18411,
+      "text": "set Mk[Bi]=$68305358"
+    },
+    {
+      "line": 18412,
+      "text": "set Ml[Bi]=$6E303654"
+    },
+    {
+      "line": 18413,
+      "text": "set Bi=Bi+1"
+    },
+    {
+      "line": 19256,
+      "text": "call TriggerExecute(OD)"
+    },
+    {
+      "line": 19778,
+      "text": "call TriggerExecute(OD)"
+    },
+    {
+      "line": 20173,
+      "text": "set Kc=CreateUnit(Pc,Mk[Bi],GetLocationX(Pb),GetLocationY(Pb),bj_UNIT_FACING)"
+    },
+    {
+      "line": 20174,
+      "text": "call SetUnitUserData(Kc,1+GetPlayerId(GetOwningPlayer(Nr)))"
+    },
+    {
+      "line": 20175,
+      "text": "call ExecuteFunc(\"PassiveSkillNoArgJJC\")"
+    },
+    {
+      "line": 21329,
+      "text": "function oldcodefn_Bg takes nothing returns nothing"
+    },
+    {
+      "line": 21330,
+      "text": "local unit i=GetEnumUnit()"
+    },
+    {
+      "line": 21331,
+      "text": "local integer BB=0"
+    },
+    {
+      "line": 21332,
+      "text": "local integer Pe=0"
+    },
+    {
+      "line": 21333,
+      "text": "local player BF=GetOwningPlayer(i)"
+    },
+    {
+      "line": 21334,
+      "text": "local real US=LoadReal(O,GetPlayerId(BF),StringHash(\"ç²\"))"
+    },
+    {
+      "line": 21335,
+      "text": "local trigger t"
+    },
+    {
+      "line": 21336,
+      "text": "set bj_lastCreatedUnit=GetEnumUnit()"
+    },
+    {
+      "line": 21337,
+      "text": "set Bi=0"
+    },
+    {
+      "line": 21338,
+      "text": "call ShowUnit(i,false)"
+    },
+    {
+      "line": 21339,
+      "text": "if IsPlayerAlly(BF,Player(8)) then"
+    },
+    {
+      "line": 21340,
+      "text": "set Pc=Player(8)"
+    },
+    {
+      "line": 21341,
+      "text": "else"
+    },
+    {
+      "line": 21342,
+      "text": "set Pc=Player(9)"
+    },
+    {
+      "line": 21343,
+      "text": "endif"
+    },
+    {
+      "line": 21344,
+      "text": "set Bi=LoadInteger(K,515,GetUnitTypeId(i))"
+    },
+    {
+      "line": 21345,
+      "text": "if Bi>0 then"
+    },
+    {
+      "line": 21346,
+      "text": "if GetUnitAbilityLevel(i,$41304C50)>0 and GetPlayerTechCountSimple($52303159,GetOwningPlayer(i))==1 then"
+    },
+    {
+      "line": 21347,
+      "text": "set BB=1"
+    },
+    {
+      "line": 21348,
+      "text": "endif"
+    },
+    {
+      "line": 21349,
+      "text": "if LoadBoolean(O,GetHandleId(i),StringHash(\"A0Z1\")) then"
+    },
+    {
+      "line": 21350,
+      "text": "set Pe=1"
+    },
+    {
+      "line": 21351,
+      "text": "endif"
+    },
+    {
+      "line": 21352,
+      "text": "if LoadBoolean(O,GetHandleId(i),StringHash(\"A0Z2\")) then"
+    },
+    {
+      "line": 21353,
+      "text": "set Pe=2"
+    },
+    {
+      "line": 21354,
+      "text": "endif"
+    },
+    {
+      "line": 21355,
+      "text": "set i=CreateUnit(Pc,Bi,GetUnitX(i),GetUnitY(i),MP[GetPlayerId(BF)])"
+    },
+    {
+      "line": 21356,
+      "text": "set UT=i"
+    },
+    {
+      "line": 21357,
+      "text": "call SetUnitUserData(i,GetPlayerId(BF)+1)"
+    },
+    {
+      "line": 21358,
+      "text": "call ExecuteFunc(\"PassiveSkillNoArg\")"
+    },
+    {
+      "line": 21415,
+      "text": "if GetUnitAbilityLevel(i,$4130584D)>0 then"
+    },
+    {
+      "line": 21416,
+      "text": "call SaveTimerHandle(O,GetHandleId(i),79791,CreateTimer())"
+    },
+    {
+      "line": 21417,
+      "text": "call SaveUnitHandle(O,GetHandleId(LoadTimerHandle(O,GetHandleId(i),79791)),1,i)"
+    },
+    {
+      "line": 21418,
+      "text": "call TimerStart(LoadTimerHandle(O,GetHandleId(i),79791),5,true,function h03L_Timer)"
+    },
+    {
+      "line": 21419,
+      "text": "elseif GetUnitTypeId(i)==$6E30344F then"
+    },
+    {
+      "line": 21459,
+      "text": "function OC5F_cg takes nothing returns nothing"
+    },
+    {
+      "line": 21478,
+      "text": "call ForGroup(Bu,function oldcodefn_Bg)"
+    },
+    {
+      "line": 21479,
+      "text": "call hb()"
+    },
+    {
+      "line": 27141,
+      "text": "set S6=CreateTrigger()"
+    },
+    {
+      "line": 27142,
+      "text": "call TriggerRegisterAnyUnitEventBJ(S6,EVENT_PLAYER_UNIT_ATTACKED)"
+    },
+    {
+      "line": 27143,
+      "text": "call TriggerAddCondition(S6,Condition(function C_AuraStruggle))"
+    },
+    {
+      "line": 27144,
+      "text": "call TriggerAddAction(S6,function A_AuraStruggle)"
+    },
+    {
+      "line": 27223,
+      "text": "call TriggerAddCondition(Ro,Condition(function OC5F_Ig))"
+    },
+    {
+      "line": 27224,
+      "text": "call TriggerAddAction(Ro,function OC5F_Ng)"
+    },
+    {
+      "line": 27225,
+      "text": "set OD=CreateTrigger()"
+    },
+    {
+      "line": 27226,
+      "text": "call TriggerAddAction(OD,function OC5F_cg)"
+    },
+    {
+      "line": 40529,
+      "text": "function Trig_UnitDamageActions takes nothing returns nothing"
+    },
+    {
+      "line": 40530,
+      "text": "local unit i=GetTriggerUnit()"
+    },
+    {
+      "line": 40531,
+      "text": "local unit bV=GetEventDamageSource()"
+    },
+    {
+      "line": 40532,
+      "text": "local real P8=GetEventDamage()"
+    },
+    {
+      "line": 40533,
+      "text": "local boolean bW=YDWEIsEventAttackDamage()"
+    },
+    {
+      "line": 40553,
+      "text": "if P8<=0 or bV==i or bV==null or IsUnitAlly(bV,GetOwningPlayer(i)) then"
+    },
+    {
+      "line": 40554,
+      "text": "set i=null"
+    },
+    {
+      "line": 40555,
+      "text": "set bV=null"
+    },
+    {
+      "line": 40556,
+      "text": "set Eb=null"
+    },
+    {
+      "line": 40557,
+      "text": "set h=null"
+    },
+    {
+      "line": 40558,
+      "text": "set Uz=null"
+    },
+    {
+      "line": 40559,
+      "text": "return"
+    },
+    {
+      "line": 40560,
+      "text": "endif"
+    },
+    {
+      "line": 40561,
+      "text": "if GetUnitAbilityLevel(bV,$41325937)>0 then"
+    },
+    {
+      "line": 40562,
+      "text": "set i=null"
+    },
+    {
+      "line": 40563,
+      "text": "set bV=null"
+    },
+    {
+      "line": 40564,
+      "text": "set Eb=null"
+    },
+    {
+      "line": 40565,
+      "text": "set h=null"
+    },
+    {
+      "line": 40566,
+      "text": "set Uz=null"
+    },
+    {
+      "line": 40567,
+      "text": "return"
+    },
+    {
+      "line": 40568,
+      "text": "endif"
+    },
+    {
+      "line": 40569,
+      "text": "if GetUnitAbilityLevel(i,QC)>0 then"
+    },
+    {
+      "line": 40570,
+      "text": "set P8=P8*.85"
+    },
+    {
+      "line": 40571,
+      "text": "call YDWESetEventDamage(P8)"
+    },
+    {
+      "line": 40572,
+      "text": "endif"
+    },
+    {
+      "line": 40573,
+      "text": "set Uz=CreateGroup()"
+    },
+    {
+      "line": 40574,
+      "text": "call DisableTrigger(Eb)"
+    },
+    {
+      "line": 41260,
+      "text": "if GetUnitAbilityLevel(bV,$41304858)>0 and GetRandomReal(0,100)<5 then"
+    },
+    {
+      "line": 41261,
+      "text": "set P8=GetUnitState(i,UNIT_STATE_MAX_LIFE)*.7"
+    },
+    {
+      "line": 41262,
+      "text": "set P8=RMinBJ(P8,3000)"
+    },
+    {
+      "line": 41263,
+      "text": "if bV!=i then"
+    },
+    {
+      "line": 41264,
+      "text": "call UnitDamageTargetBJ(bV,i,P8,ATTACK_TYPE_MELEE,DAMAGE_TYPE_MAGIC)"
+    },
+    {
+      "line": 41265,
+      "text": "call DestroyEffect(AddSpecialEffect(\"Abilities\\\\Spells\\\\Other\\\\Doom\\\\DoomDeath.mdl\",FF,FG))"
+    },
+    {
+      "line": 41266,
+      "text": "endif"
+    },
+    {
+      "line": 41267,
+      "text": "elseif GetUnitAbilityLevel(bV,$4130494B)>0 and GetRandomPercentageBJ()<=30 then"
+    },
+    {
+      "line": 41268,
+      "text": "set bj_lastCreatedUnit=CreateUnit(GetOwningPlayer(bV),Pn,FF,FG,0)"
+    },
+    {
+      "line": 41269,
+      "text": "call UnitAddAbility(bj_lastCreatedUnit,$4130494A)"
+    },
+    {
+      "line": 41270,
+      "text": "call UnitApplyTimedLife(bj_lastCreatedUnit,$42487765,1.)"
+    },
+    {
+      "line": 41271,
+      "text": "if GetUnitAbilityLevel(i,$41706878)==0 and GetUnitAbilityLevel(i,$41315344)==0 then"
+    },
+    {
+      "line": 41272,
+      "text": "call IssueTargetOrder(bj_lastCreatedUnit,\"thunderbolt\",i)"
+    },
+    {
+      "line": 41273,
+      "text": "endif"
+    },
+    {
+      "line": 41274,
+      "text": "call DestroyEffect(AddSpecialEffectTarget(\"Abilities\\\\Spells\\\\Undead\\\\FrostNova\\\\FrostNovaTarget.mdl\",i,\"origin\"))"
+    },
+    {
+      "line": 41275,
+      "text": "call UnitDamageTargetBJ(bV,i,125,ATTACK_TYPE_NORMAL,DAMAGE_TYPE_NORMAL)"
+    },
+    {
+      "line": 41276,
+      "text": "if IsUnitType(i,UNIT_TYPE_DEAD) then"
+    },
+    {
+      "line": 41277,
+      "text": "call UnitAddAbility(bV,$4130494C)"
+    },
+    {
+      "line": 41278,
+      "text": "endif"
+    },
+    {
+      "line": 41279,
+      "text": "set t=null"
+    },
+    {
+      "line": 41280,
+      "text": "set bn=null"
+    },
+    {
+      "line": 41281,
+      "text": "set bj_lastCreatedUnit=null"
+    },
+    {
+      "line": 41282,
+      "text": "elseif UnitHasBuffBJ(i,$42303458) and GetUnitAbilityLevel(bV,$4130494B)>0 then"
+    },
+    {
+      "line": 41283,
+      "text": "call SaveBoolean(O,GetHandleId(i),$4130494B,true)"
+    },
+    {
+      "line": 41284,
+      "text": "elseif LoadBoolean(O,GetHandleId(i),$4130494B) and GetUnitStateSwap(UNIT_STATE_LIFE,i)<=0. then"
+    },
+    {
+      "line": 41285,
+      "text": "set YY=LoadInteger(O,GetHandleId(bV),$4130494B)+3"
+    },
+    {
+      "line": 41286,
+      "text": "call SaveInteger(O,GetHandleId(bV),$4130494B,YY)"
+    },
+    {
+      "line": 41287,
+      "text": "call UnitAddAbility(bV,$4130494C)"
+    },
+    {
+      "line": 41288,
+      "text": "elseif GetUnitAbilityLevel(i,$4130584D)>0 and (GetEventDamage()>=GetUnitState(i,UNIT_STATE_LIFE) and LoadInteger(O,GetHandleId(i),StringHash(\"killnum\"))>=6) then"
+    },
+    {
+      "line": 41289,
+      "text": "call YDWESetEventDamage(0)"
+    },
+    {
+      "line": 41290,
+      "text": "call h03L_data(i,false,false)"
+    },
+    {
+      "line": 41291,
+      "text": "elseif GetUnitAbilityLevel(i,$41304935)>0 and GetUnitState(i,UNIT_STATE_MANA)>24 then"
+    },
+    {
+      "line": 41292,
+      "text": "call IssueTargetOrder(i,\"cripple\",bV)"
+    },
+    {
+      "line": 41293,
+      "text": "elseif GetUnitTypeId(bV)==$6E303530 or GetUnitTypeId(bV)==$6E303652 and bW and not LoadBoolean(O,GetHandleId(bV),StringHash(\"DemonStatueBounceBusy\")) and GetRandomReal(0,100)<30 then"
+    },
+    {
+      "line": 41294,
+      "text": "call DemonStatueBounce(bV,i,P8)"
+    },
+    {
+      "line": 41295,
+      "text": "elseif GetUnitAbilityLevel(bV,$41304931)>0 and UnitHasBuffBJ(i,$42303455) and P8>GetUnitState(i,UNIT_STATE_LIFE) then"
+    },
+    {
+      "line": 41312,
+      "text": "elseif GetUnitAbilityLevel(i,$41304944)>0 and LoadUnitHandle(O,H2I(i),StringHash(\"tag\"))==null then"
+    },
+    {
+      "line": 41313,
+      "text": "set bs=Condition(function Duel)"
+    },
+    {
+      "line": 41314,
+      "text": "call GroupEnumUnitsInRange(Uz,GetUnitX(bV),GetUnitY(bV),1000,bs)"
+    },
+    {
+      "line": 41315,
+      "text": "call DestroyBoolExpr(bs)"
+    },
+    {
+      "line": 41316,
+      "text": "loop"
+    },
+    {
+      "line": 41317,
+      "text": "set D6=FirstOfGroup(Uz)"
+    },
+    {
+      "line": 41318,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 41319,
+      "text": "call GroupRemoveUnit(Uz,D6)"
+    },
+    {
+      "line": 41320,
+      "text": "if IsPlayerEnemy(GetOwningPlayer(i),GetOwningPlayer(D6)) then"
+    },
+    {
+      "line": 41321,
+      "text": "if GetUnitState(D6,UNIT_STATE_MAX_LIFE)>=1800 then"
+    },
+    {
+      "line": 41322,
+      "text": "call SaveUnitHandle(O,GetHandleId(i),StringHash(\"tag\"),D6)"
+    },
+    {
+      "line": 41323,
+      "text": "call IssueTargetOrder(i,\"attack\",D6)"
+    },
+    {
+      "line": 41324,
+      "text": "call IssueTargetOrder(D6,\"attack\",i)"
+    },
+    {
+      "line": 41325,
+      "text": "call SetUnitPathing(i,false)"
+    },
+    {
+      "line": 41326,
+      "text": "set bn=CreateTrigger()"
+    },
+    {
+      "line": 41327,
+      "text": "call SaveEffectHandle(O,H2I(bn),StringHash(\"effect\"),AddSpecialEffectTarget(\"Abilities\\\\Spells\\\\Orc\\\\Voodoo\\\\VoodooAuraTarget.mdl\",i,\"overhead\"))"
+    },
+    {
+      "line": 41328,
+      "text": "call DestroyEffect(AddSpecialEffect(\"Abilities\\\\Spells\\\\NightElf\\\\BattleRoar\\\\RoarCaster.mdl\",GetUnitX(i),GetUnitY(i)))"
+    },
+    {
+      "line": 41329,
+      "text": "call TriggerRegisterDeathEvent(bn,i)"
+    },
+    {
+      "line": 41330,
+      "text": "call TriggerRegisterDeathEvent(bn,D6)"
+    },
+    {
+      "line": 41331,
+      "text": "call TriggerAddCondition(bn,Condition(function A0IDCondition))"
+    },
+    {
+      "line": 41332,
+      "text": "exitwhen true"
+    },
+    {
+      "line": 41333,
+      "text": "endif"
+    },
+    {
+      "line": 41334,
+      "text": "endif"
+    },
+    {
+      "line": 41335,
+      "text": "endloop"
+    },
+    {
+      "line": 41336,
+      "text": "endif"
+    },
+    {
+      "line": 41337,
+      "text": "if GetUnitAbilityLevel(i,$41304945)>0 and P8>GetUnitState(i,UNIT_STATE_LIFE) then"
+    },
+    {
+      "line": 41338,
+      "text": "call UnitRemoveAbility(i,$41304945)"
+    },
+    {
+      "line": 41339,
+      "text": "call UnitAddAbility(i,$41304946)"
+    },
+    {
+      "line": 41340,
+      "text": "call SaveBoolean(O,GetHandleId(i),$41304945,true)"
+    },
+    {
+      "line": 41341,
+      "text": "call SetUnitState(i,UNIT_STATE_LIFE,GetUnitState(i,UNIT_STATE_LIFE)+P8)"
+    },
+    {
+      "line": 41342,
+      "text": "set t=CreateTimer()"
+    },
+    {
+      "line": 41343,
+      "text": "call SaveUnitHandle(O,GetHandleId(t),StringHash(\"unit\"),i)"
+    },
+    {
+      "line": 41344,
+      "text": "call TimerStart(t,5,false,function A0IETimer)"
+    },
+    {
+      "line": 41345,
+      "text": "call YDWETimerDestroyEffect(2,AddSpecialEffectTarget(\"Abilities\\\\Spells\\\\Items\\\\AIda\\\\AIdaTarget.mdl\",i,\"overhead\"))"
+    },
+    {
+      "line": 41346,
+      "text": "elseif LoadBoolean(O,GetHandleId(i),$41304945) and P8>GetUnitState(i,UNIT_STATE_LIFE) then"
+    },
+    {
+      "line": 41347,
+      "text": "call SetUnitState(i,UNIT_STATE_LIFE,GetUnitState(i,UNIT_STATE_LIFE)+P8)"
+    },
+    {
+      "line": 41574,
+      "text": "function InitTrig_UnitDamage takes nothing returns nothing"
+    },
+    {
+      "line": 41575,
+      "text": "set bU=CreateTrigger()"
+    },
+    {
+      "line": 41576,
+      "text": "call YDWESyStemAnyUnitDamagedRegistTrigger(bU)"
+    },
+    {
+      "line": 41577,
+      "text": "call TriggerAddAction(bU,function Trig_UnitDamageActions)"
+    },
+    {
+      "line": 41578,
+      "text": "endfunction"
+    },
+    {
+      "line": 41579,
+      "text": "function Trig_UnitSummonActions takes nothing returns nothing"
+    },
+    {
+      "line": 41580,
+      "text": "local unit i=GetTriggerUnit()"
+    },
+    {
+      "line": 41581,
+      "text": "local unit Pf=GetSummoningUnit()"
+    },
+    {
+      "line": 41582,
+      "text": "local integer x=GetUnitTypeId(i)"
+    },
+    {
+      "line": 41583,
+      "text": "if x==$6E30374A then"
+    },
+    {
+      "line": 41584,
+      "text": "call VashjSummon(Pf,i)"
+    },
+    {
+      "line": 41585,
+      "text": "elseif x==$6830334C then"
+    },
+    {
+      "line": 41586,
+      "text": "call SetUnitState(i,ConvertUnitState(18),GetUnitState(i,ConvertUnitState(18))+100)"
+    },
+    {
+      "line": 41587,
+      "text": "call SetUnitState(i,ConvertUnitState(32),GetUnitState(i,ConvertUnitState(32))+3)"
+    },
+    {
+      "line": 41588,
+      "text": "endif"
+    },
+    {
+      "line": 41589,
+      "text": "set i=null"
+    },
+    {
+      "line": 41590,
+      "text": "set Pf=null"
+    },
+    {
+      "line": 41591,
+      "text": "endfunction"
+    },
+    {
+      "line": 41592,
+      "text": "function InitTrig_UnitSummon takes nothing returns nothing"
+    },
+    {
+      "line": 41593,
+      "text": "set bt=CreateTrigger()"
+    },
+    {
+      "line": 41594,
+      "text": "call TriggerRegisterAnyUnitEventBJ(bt,EVENT_PLAYER_UNIT_SUMMON)"
+    },
+    {
+      "line": 41595,
+      "text": "call TriggerAddAction(bt,function Trig_UnitSummonActions)"
+    },
+    {
+      "line": 41908,
+      "text": "function gg_trg_UnitDeathCondition takes nothing returns boolean"
+    },
+    {
+      "line": 41909,
+      "text": "return not IsUnitInGroup(GetTriggerUnit(),Ju)"
+    },
+    {
+      "line": 41910,
+      "text": "endfunction"
+    },
+    {
+      "line": 41911,
+      "text": "function Trig_UnitDeathActions takes nothing returns nothing"
+    },
+    {
+      "line": 41912,
+      "text": "local unit i=GetTriggerUnit()"
+    },
+    {
+      "line": 41913,
+      "text": "local unit bv=GetKillingUnit()"
+    },
+    {
+      "line": 41914,
+      "text": "local trigger Eb=GetTriggeringTrigger()"
+    },
+    {
+      "line": 41915,
+      "text": "local real FF=GetUnitX(i)"
+    },
+    {
+      "line": 41916,
+      "text": "local real FG=GetUnitY(i)"
+    },
+    {
+      "line": 41917,
+      "text": "local real P8=0"
+    },
+    {
+      "line": 41918,
+      "text": "local effect DE=null"
+    },
+    {
+      "line": 41919,
+      "text": "local timer t=null"
+    },
+    {
+      "line": 41920,
+      "text": "local group Uz=CreateGroup()"
+    },
+    {
+      "line": 41921,
+      "text": "local unit D6=null"
+    },
+    {
+      "line": 41922,
+      "text": "local unit Ki=null"
+    },
+    {
+      "line": 41923,
+      "text": "local player h"
+    },
+    {
+      "line": 41924,
+      "text": "local boolexpr Cd"
+    },
+    {
+      "line": 41925,
+      "text": "local integer BF"
+    },
+    {
+      "line": 41926,
+      "text": "local integer BU"
+    },
+    {
+      "line": 41927,
+      "text": "local real a5"
+    },
+    {
+      "line": 41928,
+      "text": "call DisableTrigger(Eb)"
+    },
+    {
+      "line": 41929,
+      "text": "call SingedAlchemyGold(bv,i)"
+    },
+    {
+      "line": 42006,
+      "text": "if GetUnitAbilityLevel(bv,$4130584D)>0 and LoadInteger(O,GetHandleId(GetKillingUnit()),StringHash(\"killnum\"))<15 and GetUnitState(GetKillingUnit(),UNIT_STATE_MANA)<15. and GetRandomReal(1,101)<=20 then"
+    },
+    {
+      "line": 42007,
+      "text": "call h03L_data(bv,true,false)"
+    },
+    {
+      "line": 42008,
+      "text": "endif"
+    },
+    {
+      "line": 42090,
+      "text": "if GetUnitAbilityLevel(bv,$41304857)>0 then"
+    },
+    {
+      "line": 42091,
+      "text": "set P8=4+GetUnitState(i,UNIT_STATE_MAX_LIFE)*.02"
+    },
+    {
+      "line": 42092,
+      "text": "call DestroyEffect(AddSpecialEffect(\"Abilities\\\\Spells\\\\Other\\\\Volcano\\\\VolcanoMissile.mdl\",FF,FG))"
+    },
+    {
+      "line": 42093,
+      "text": "call DestroyEffect(AddSpecialEffect(\"Abilities\\\\Spells\\\\Other\\\\Incinerate\\\\FireLordDeathExplode.mdl\",FF,FG))"
+    },
+    {
+      "line": 42094,
+      "text": "call DamageAoe(bv,FF,FG,200,P8,ATTACK_TYPE_MELEE,DAMAGE_TYPE_MAGIC)"
+    },
+    {
+      "line": 42095,
+      "text": "elseif GetUnitTypeId(i)==$68304A4A and bv!=null and GetUnitAbilityLevel(i,$41304941)>0 and IsUnitIllusionBJ(i)==false then"
+    },
+    {
+      "line": 42096,
+      "text": "if GetRandomInt(0,1)>0 and LoadBoolean(O,GetHandleId(i),StringHash(\"u1\"))==true then"
+    },
+    {
+      "line": 42097,
+      "text": "call FlushChildHashtable(O,GetHandleId(i))"
+    },
+    {
+      "line": 42098,
+      "text": "else"
+    },
+    {
+      "line": 42099,
+      "text": "set t=CreateTimer()"
+    },
+    {
+      "line": 42100,
+      "text": "call SaveUnitHandle(O,GetHandleId(t),StringHash(\"unit\"),i)"
+    },
+    {
+      "line": 42177,
+      "text": "call EnableTrigger(Eb)"
+    },
+    {
+      "line": 42178,
+      "text": "call DestroyGroup(Uz)"
+    },
+    {
+      "line": 42179,
+      "text": "set DE=null"
+    },
+    {
+      "line": 42180,
+      "text": "set i=null"
+    },
+    {
+      "line": 42181,
+      "text": "set Ki=null"
+    },
+    {
+      "line": 42182,
+      "text": "set bv=null"
+    },
+    {
+      "line": 42183,
+      "text": "set Eb=null"
+    },
+    {
+      "line": 42184,
+      "text": "set t=null"
+    },
+    {
+      "line": 42185,
+      "text": "set Uz=null"
+    },
+    {
+      "line": 42186,
+      "text": "endfunction"
+    },
+    {
+      "line": 42187,
+      "text": "function InitTrig_UnitDeath takes nothing returns nothing"
+    },
+    {
+      "line": 42188,
+      "text": "set bu=CreateTrigger()"
+    },
+    {
+      "line": 42189,
+      "text": "call TriggerRegisterAnyUnitEventBJ(bu,EVENT_PLAYER_UNIT_DEATH)"
+    },
+    {
+      "line": 42190,
+      "text": "call TriggerAddCondition(bu,Condition(function gg_trg_UnitDeathCondition))"
+    },
+    {
+      "line": 42191,
+      "text": "call TriggerAddAction(bu,function Trig_UnitDeathActions)"
+    },
+    {
+      "line": 43868,
+      "text": "function PassiveSkillJJC takes unit Pf,unit Bc returns nothing"
+    },
+    {
+      "line": 43869,
+      "text": "if GetUnitAbilityLevel(Bc,$4131554E)>0 then"
+    },
+    {
+      "line": 43870,
+      "text": "call UnitRemoveAbility(Bc,$4131554E)"
+    },
+    {
+      "line": 43871,
+      "text": "endif"
+    },
+    {
+      "line": 43872,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 43873,
+      "text": "set Pf=null"
+    },
+    {
+      "line": 43874,
+      "text": "endfunction"
+    },
+    {
+      "line": 43875,
+      "text": "function PassiveSkillNoArg takes nothing returns nothing"
+    },
+    {
+      "line": 43876,
+      "text": "local unit Bc=UT"
+    },
+    {
+      "line": 43877,
+      "text": "local integer x=Bi"
+    },
+    {
+      "line": 43878,
+      "text": "local unit Pf=bj_lastCreatedUnit"
+    },
+    {
+      "line": 43879,
+      "text": "call PassiveSkill(Bc,x,Pf)"
+    },
+    {
+      "line": 43880,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 43881,
+      "text": "set Pf=null"
+    },
+    {
+      "line": 43882,
+      "text": "endfunction"
+    },
+    {
+      "line": 43883,
+      "text": "function PassiveSkillNoArgJJC takes nothing returns nothing"
+    },
+    {
+      "line": 43884,
+      "text": "local unit Bc=Kc"
+    },
+    {
+      "line": 43885,
+      "text": "local integer x=Mk[Bi]"
+    },
+    {
+      "line": 43886,
+      "text": "local unit Pf=Nr"
+    },
+    {
+      "line": 43887,
+      "text": "call PassiveSkillJJC(Pf,Bc)"
+    },
+    {
+      "line": 43888,
+      "text": "if Bc!=null and x>0 then"
+    },
+    {
+      "line": 43889,
+      "text": "call UnitRemoveAbility(Bc,$4131374C)"
+    },
+    {
+      "line": 43890,
+      "text": "call UnitRemoveAbility(Bc,$41315134)"
+    },
+    {
+      "line": 43891,
+      "text": "call PassiveSkill(Bc,x,Pf)"
+    },
+    {
+      "line": 43892,
+      "text": "endif"
+    },
+    {
+      "line": 49751,
+      "text": "call InitTrig_UnitDamage()"
+    },
+    {
+      "line": 49752,
+      "text": "call InitTrig_UnitSummon()"
+    },
+    {
+      "line": 49753,
+      "text": "call InitTrig_UnitDeath()"
+    }
+  ],
+  "mappings": [
+    {
+      "building": "h020",
+      "combat": "h03L",
+      "summon": "h03K",
+      "mappingLines": [
+        16573,
+        16574
+      ],
+      "summonLines": [
+        9653,
+        9654
+      ]
+    },
+    {
+      "building": "n06T",
+      "combat": "h0SX",
+      "summon": "h0SU",
+      "mappingLines": [
+        18411,
+        18412
+      ],
+      "summonLines": [
+        9655,
+        9656
+      ]
+    }
+  ],
+  "rules": {
+    "registration": "OD calls OC5F_cg, which enumerates Bu with oldcodefn_Bg. That function creates the mapped combat body and registers h03L_Timer every 5 seconds for an A0XM carrier. Arena uses PassiveSkillNoArgJJC and has no h03L_Timer call. Arbitrary creation does not register this timer.",
+    "gain": "killnum+1; timed gain alone also writes timenum+1. Mana+1 and life+100 occur before YDWE max-life +100 and attack +10. killnum caps current reserve, not lifetime gains: timenum is never read.",
+    "kill": "Independent if inside the disabled main death trigger: killer A0XM >0, killnum<15, mana<15, then one GetRandomReal(1,101)<=20. Unit death is neither attack-only nor enemy-only. Web maps one U[0,1) draw to 1+100U; cutoff is .19 inclusive, not .20. The independent initial alchemy roll still occurs first.",
+    "summon": "Only exact killnum==10 with one=false. h03L creates h03K, h0SX creates h0SU, at parent position with bj_UNIT_FACING. Adds JW, user data, JH and SUMMONED then sets one=true; no life timer, attack command, building persistence, or explicit summon event. An unmapped form still latches one after null-unit operations.",
+    "fatal": "Same elseif chain after fire/ice/mark and before A0I5/duel: A0XM>0 && GetEventDamage()>=current life && killnum>=6. YDWESetEventDamage(0), then killnum-6, mana-6, life+1000, max-life-600, attack-60. Counter ability removed at <=0 or set to remaining level <=15. The later unyielding if still uses unchanged local P8.",
+    "attackCondition": "A_AuraStruggle is a registered attack-issued callback gated by Bhi1/Bhi2 and short-circuit integer draws; A0XM is one of its bloodlust exclusions. It is not an A0XM attack or soul gain entry. The upstream struggle implementation is outside Task B.",
+    "bonusTypes": "YDWE mode 0 adds, mode 1 subtracts; bonus type 0 is maximum life and type 3 builds permanent AIat item abilities YDb*. SetUnitMaxState rejects <=0 or >65535 and applies integer deltas.",
+    "lifetime": "Per-combat-handle fields; no write to persistent building. Normal wave recreation resets reserve/timenum/one. Survivor state continues across continuous waves. Timer destroys only on callback for null or life<1 and does not recheck A0XM."
+  },
+  "hostInterfaces": {
+    "nightmareDamagePrefix": "Returns boolean actual selection. Caller must call only after the elemental prefix missed; true sets eventDamage=0 and selected=A0XM. Never clear prefix.localDamage. B removes the previous ability-only fatal duel blocker.",
+    "beforeSourceDamage": "Returns numeric effective event damage on the normal path; early existing guards may return undefined, so engine uses ??actual. Nested calls have per-call locals. Downstream independent attack listeners receive the overridden event damage.",
+    "nightmareMainDeath": "Returns boolean after full condition and sampling. Called within runMainUnitDeath, after earlier death effects and before fire/bone-dragon elseif; main trigger depth/Ju suppression remains authoritative.",
+    "state": "status.sourceKillnum is the source hashtable killnum key for future shared-counter integrations. status.nightmareTimenum, nightmareOne and nightmareTimerRegistered; sourceSkillJobs type nightmare_souls contains sourceId and absolute nextAt, no object alias. Each due timer callback temporarily uses its own nextAt as simulation time and restores the frame time in finally, so coarse catch-up preserves summon createdAt and registration deadlines.",
+    "C-integration": "After elementalDamagePrefix, call A0XM; only a false result permits C A0I5. A0I5 selection must count even when native cripple order fails. Then pass selected to duel. Keep localDamage for unyielding/aesara cleanup.",
+    "A-integration": "A0XM stays inside runMainUnitDeath disabled depth; skeleton revival nested deaths and independent callbacks must retain the shared suppression policy.",
+    "attackJournal": "sourceNightmareStatBonuses.flatDamage records net AIat soul attack bonus. First weapon reads e.damage (already updated once); sourceWeapon slot 2 adds this journal to the recomputed native base plus its existing passive-item journal. JSON round trips preserve it; no soul recount or stat reapplication."
+  },
+  "partialBoundaries": [
+    "h03L/h0SX lack explicit manaN/mana0 source fields. Existing parsed host capacity may be zero; no fabricated 15 mana pool. Mana and killnum are intentionally independent.",
+    "A0XN AOae lacks DataA/DataB values and high-level inherited range/target defaults. Dynamic ability and levels are tracked, with no invented move/attack speed aura.",
+    "Hidden native AIml add/set/remove maximum-life operations have unverified current-life side effects. Host preserves current HP on increases and clamps on decreases, after the script explicit heal. Tests label this adapter rather than native proof.",
+    "CreateUnit collision, original native handle reuse and event/enum arbitration are not available. Host uses existing creation HP rules, ownership and registered entities; no synthetic summon-event callbacks or stat inheritance.",
+    "14221 is an upstream AuraStruggle bloodlust exemption; Task B does not fabricate that unavailable upstream aura implementation.",
+    "Old saves without nightmareTimerRegistered/sourceKillnum do not recover historical unknown souls. Main integration must bump the shared implementation revision to refresh old skill specs; Task B leaves that version untouched as instructed."
+  ],
+  "objectEvidence": {
+    "bonusType3": {
+      "ability": "YDb0",
+      "code": "AIat",
+      "DataA1": "1",
+      "family": "YDb0..YDbn powers of two; type 3 CQ constructed at lines 6885–6889"
+    },
+    "lifeBonus": {
+      "ability": "YDl0",
+      "code": "AIml",
+      "levels": "3",
+      "DataA2": "1",
+      "DataA3": "-1"
+    },
+    "counter": {
+      "ability": "A0XN",
+      "code": "AOae",
+      "levels": "15",
+      "missing": [
+        "DataA*",
+        "DataB*"
+      ]
+    },
+    "carriers": {
+      "h03L": {
+        "missing": [
+          "manaN",
+          "mana0"
+        ]
+      },
+      "h0SX": {
+        "missing": [
+          "manaN",
+          "mana0"
+        ]
+      }
+    }
+  }
+}

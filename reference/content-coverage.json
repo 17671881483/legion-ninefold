@@ -18,7 +18,9 @@
     "n06W",
     "h0CZ",
     "h0CL",
-    "n07J"
+    "n07J",
+    "h03K",
+    "h0SU"
   ],
   "playerRuntimeAbilities": [
     {
@@ -77,6 +79,18 @@
       "abilityIds": [
         "A0IJ",
         "A0IL"
+      ]
+    },
+    {
+      "sourceRawcode": "h03L",
+      "abilityIds": [
+        "A0XN"
+      ]
+    },
+    {
+      "sourceRawcode": "h0SX",
+      "abilityIds": [
+        "A0XN"
       ]
     },
     {
@@ -177,9 +191,9 @@
   "playerSkills": {
     "counts": {
       "implemented": 410,
-      "partial": 74,
+      "partial": 76,
       "marker": 34,
-      "unresolved": 117
+      "unresolved": 116
     },
     "abilities": [
       {
@@ -415,6 +429,8 @@
         "kind": "brawler",
         "unitRawcodes": [
           "h01Z",
+          "h03K",
+          "h0SU",
           "n06L"
         ]
       },
@@ -3580,11 +3596,21 @@
       {
         "rawcode": "A0XM",
         "name": "黑暗之魂",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "nightmare_source",
         "unitRawcodes": [
           "h020",
           "n06T"
+        ]
+      },
+      {
+        "rawcode": "A0XN",
+        "name": "黑暗之魂",
+        "status": "partial",
+        "kind": "nightmare_source",
+        "unitRawcodes": [
+          "h03L",
+          "h0SX"
         ]
       },
       {
@@ -6738,9 +6764,9 @@
   "battleSkills": {
     "counts": {
       "implemented": 460,
-      "partial": 76,
+      "partial": 78,
       "marker": 47,
-      "unresolved": 137
+      "unresolved": 136
     },
     "abilities": [
       {
@@ -6976,6 +7002,8 @@
         "kind": "brawler",
         "unitRawcodes": [
           "h01Z",
+          "h03K",
+          "h0SU",
           "n06L"
         ]
       },
@@ -10614,11 +10642,21 @@
       {
         "rawcode": "A0XM",
         "name": "黑暗之魂",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "nightmare_source",
         "unitRawcodes": [
           "h020",
           "n06T"
+        ]
+      },
+      {
+        "rawcode": "A0XN",
+        "name": "黑暗之魂",
+        "status": "partial",
+        "kind": "nightmare_source",
+        "unitRawcodes": [
+          "h03L",
+          "h0SX"
         ]
       },
       {
@@ -14219,6 +14257,7 @@
     ]
   },
   "remainingSourceGaps": [
+    "A0XM黑暗之魂已接入5秒积累、主死亡链的实数抽样、10魂单次召唤、6魂致命伤害清零与属性增减；A0XN动态等级纳入覆盖。缺失原生魔法上限、AOae默认字段、AIml生命副作用和CreateUnit碰撞/句柄仍为partial，见nightmare-evidence.json。",
     "未核定技能逐项保留在abilities中；已实现状态也不代表整套兵种联动已还原。",
     "包内未提供完整原生商店/菜单字段，部分商品与单位入口仍待补证。",
     "A1U4/A1U5/A1U6献祭奖励可核定，但没有可证实的携带单位或授予路径。",

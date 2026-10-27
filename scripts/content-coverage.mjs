@@ -9,7 +9,7 @@ const current=UNITS.filter(u=>!u.legacy);
 const playerBuildingCommands=current.filter(u=>u.buildingAbilityIds?.includes('A118')).map(u=>({...u,abilityIds:u.buildingAbilityIds.filter(id=>['A118','A0IH'].includes(id))}));
 // This form is created by YseraAwakening at runtime, so it is not a separate
 // build-menu record. Its skills still belong to the player's combat coverage.
-const playerRuntimeForms=['h0YO','h0UD','h0UE','h2AE','n06V','n06W','h0CZ','h0CL','n07J'].map(code=>UNIT_TEMPLATES[code]);
+const playerRuntimeForms=['h0YO','h0UD','h0UE','h2AE','n06V','n06W','h0CZ','h0CL','n07J','h03E','h0V2'].map(code=>UNIT_TEMPLATES[code]);
 // Source callbacks inject these exact auxiliary abilities. Keep them visible
 // in coverage even though they are absent from the build-menu ability lists.
 const playerRuntimeAbilities=[
@@ -20,6 +20,7 @@ const playerRuntimeAbilities=[
   {sourceRawcode:'h0OV',abilityIds:['A0W0','A0W2','A0W3']},
   {sourceRawcode:'h0JL',abilityIds:['A0IF']},
   {sourceRawcode:'h0JO',abilityIds:['A0IJ','A0IL']},
+  ...['h0JI','h0OK','h03E','h03F','h0V2'].map(sourceRawcode=>({sourceRawcode,abilityIds:['A0I2','A0I4','A0I6']})),
   {sourceRawcode:'h0SR',abilityIds:['A0IF']},
   {sourceRawcode:'h0UQ',abilityIds:['A1CK','A1OE']},
   {sourceRawcode:'h0UD',abilityIds:['A1CP']},
@@ -56,6 +57,7 @@ const result={
   playerSkills:collect([...current,...playerBuildingCommands,...playerRuntimeForms,...playerRuntimeAbilities]),
   battleSkills:collect([...current,...playerBuildingCommands,...playerRuntimeForms,...playerRuntimeAbilities,...MERCENARIES,...WAVES,...specialCodes.map(c=>UNIT_TEMPLATES[c])]),
   remainingSourceGaps:[
+    'A0I1孕母蛛群的伤害前生成、精确变体、召唤身份及动态属性已接入；FightStart全图原型枚举与尸体引用保留，原生命令、光环驻留、碰撞与调度仍部分核定，见broodmother-evidence.json。',
     '未核定技能逐项保留在abilities中；已实现状态也不代表整套兵种联动已还原。',
     '包内未提供完整原生商店/菜单字段，部分商品与单位入口仍待补证。',
     'A1U4/A1U5/A1U6献祭奖励可核定，但没有可证实的携带单位或授予路径。',

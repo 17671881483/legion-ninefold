@@ -1,3 +1,4 @@
+import {queueBroodmotherAlliance,retainBroodmotherAlliance} from './broodmother-rules.js';
 import {relocationStatus,relocationRemaining,completeRelocation} from './relocation-rules.js';
 import {resetLichKingRound} from './lich-king-rules.js';
 import {sourceBarrageTargets,sourceBarrageHit} from './skills.js';
@@ -995,6 +996,7 @@ export class Game {
         }
       }
     }
+    queueBroodmotherAlliance(this);
     this._spawnQueue.sort((a, b) => a.at - b.at);
     this._log(`第 ${s.wave} 波 ${w.name ?? ''}：每路 ${monsterCount} ${boss ? '只 Boss' : '只系统怪'}，木怪额外计算。`);
     this._event('wave', { laneId: -1, x: 3, y: 4 }, `第 ${s.wave} 波`);
@@ -1513,6 +1515,7 @@ export class Game {
   }
   _clearDead() {
     for (const e of this.state.entities) if (e.expiresAt && e.expiresAt <= this.state.time) {e.hp = 0;this._sourceDeath(e,null);}
+    retainBroodmotherAlliance(this);
     this.state.entities = this.state.entities.filter(e => e.hp > 0);
   }
   _endCombat() {

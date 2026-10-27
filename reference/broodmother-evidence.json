@@ -1,0 +1,491 @@
+{
+  "source": {
+    "path": "v14-source/raw_extracted/war3map.j",
+    "sha256": "e66c55b3b25b185c991be5613e21fbf5b2d598f3cc40f2f8cd01c23bcb828250",
+    "lineCounting": "Latin-1 decode; split LF only"
+  },
+  "scope": "A0I1 pre-damage spawn; A0I2/A0I4/A0I6 direct injection and FightStart global alliance",
+  "sourceEvidence": [
+    {
+      "line": 40553,
+      "text": "if P8<=0 or bV==i or bV==null or IsUnitAlly(bV,GetOwningPlayer(i)) then"
+    },
+    {
+      "line": 40554,
+      "text": "set i=null"
+    },
+    {
+      "line": 40555,
+      "text": "set bV=null"
+    },
+    {
+      "line": 40556,
+      "text": "set Eb=null"
+    },
+    {
+      "line": 40557,
+      "text": "set h=null"
+    },
+    {
+      "line": 40558,
+      "text": "set Uz=null"
+    },
+    {
+      "line": 40559,
+      "text": "return"
+    },
+    {
+      "line": 40560,
+      "text": "endif"
+    },
+    {
+      "line": 40561,
+      "text": "if GetUnitAbilityLevel(bV,$41325937)>0 then"
+    },
+    {
+      "line": 40562,
+      "text": "set i=null"
+    },
+    {
+      "line": 40563,
+      "text": "set bV=null"
+    },
+    {
+      "line": 40564,
+      "text": "set Eb=null"
+    },
+    {
+      "line": 40565,
+      "text": "set h=null"
+    },
+    {
+      "line": 40566,
+      "text": "set Uz=null"
+    },
+    {
+      "line": 40567,
+      "text": "return"
+    },
+    {
+      "line": 40568,
+      "text": "endif"
+    },
+    {
+      "line": 40569,
+      "text": "if GetUnitAbilityLevel(i,QC)>0 then"
+    },
+    {
+      "line": 40570,
+      "text": "set P8=P8*.85"
+    },
+    {
+      "line": 40571,
+      "text": "call YDWESetEventDamage(P8)"
+    },
+    {
+      "line": 40572,
+      "text": "endif"
+    },
+    {
+      "line": 40573,
+      "text": "set Uz=CreateGroup()"
+    },
+    {
+      "line": 40574,
+      "text": "call DisableTrigger(Eb)"
+    },
+    {
+      "line": 41288,
+      "text": "elseif GetUnitAbilityLevel(i,$4130584D)>0 and (GetEventDamage()>=GetUnitState(i,UNIT_STATE_LIFE) and LoadInteger(O,GetHandleId(i),StringHash(\"killnum\"))>=6) then"
+    },
+    {
+      "line": 41289,
+      "text": "call YDWESetEventDamage(0)"
+    },
+    {
+      "line": 41290,
+      "text": "call h03L_data(i,false,false)"
+    },
+    {
+      "line": 41291,
+      "text": "elseif GetUnitAbilityLevel(i,$41304935)>0 and GetUnitState(i,UNIT_STATE_MANA)>24 then"
+    },
+    {
+      "line": 41292,
+      "text": "call IssueTargetOrder(i,\"cripple\",bV)"
+    },
+    {
+      "line": 41293,
+      "text": "elseif GetUnitTypeId(bV)==$6E303530 or GetUnitTypeId(bV)==$6E303652 and bW and not LoadBoolean(O,GetHandleId(bV),StringHash(\"DemonStatueBounceBusy\")) and GetRandomReal(0,100)<30 then"
+    },
+    {
+      "line": 41294,
+      "text": "call DemonStatueBounce(bV,i,P8)"
+    },
+    {
+      "line": 41295,
+      "text": "elseif GetUnitAbilityLevel(bV,$41304931)>0 and UnitHasBuffBJ(i,$42303455) and P8>GetUnitState(i,UNIT_STATE_LIFE) then"
+    },
+    {
+      "line": 41296,
+      "text": "call DestroyEffect(AddSpecialEffect(\"Abilities\\\\Spells\\\\Undead\\\\AnimateDead\\\\AnimateDeadTarget.mdx\",GetUnitX(i),GetUnitY(i)))"
+    },
+    {
+      "line": 41297,
+      "text": "set YY=$68303345"
+    },
+    {
+      "line": 41298,
+      "text": "if GetUnitTypeId(bV)==$68305556 then"
+    },
+    {
+      "line": 41299,
+      "text": "set YY=$68305632"
+    },
+    {
+      "line": 41300,
+      "text": "endif"
+    },
+    {
+      "line": 41301,
+      "text": "set bj_lastCreatedUnit=CreateUnit(GetOwningPlayer(bV),YY,FF,FG,GetUnitFacing(bV))"
+    },
+    {
+      "line": 41302,
+      "text": "call IssuePointOrder(bj_lastCreatedUnit,\"attack\",GetPlayerStartLocationX(Player(GetUnitUserData(bV)-1)),GetPlayerStartLocationY(Player(GetUnitUserData(bV)-1)))"
+    },
+    {
+      "line": 41303,
+      "text": "call SetUnitColor(bj_lastCreatedUnit,GetPlayerColor(Player(GetUnitUserData(bV)-1)))"
+    },
+    {
+      "line": 41304,
+      "text": "call UnitAddAbility(bj_lastCreatedUnit,$41304932)"
+    },
+    {
+      "line": 41305,
+      "text": "call UnitAddAbility(bj_lastCreatedUnit,$41304934)"
+    },
+    {
+      "line": 41306,
+      "text": "call SetUnitAbilityLevel(bj_lastCreatedUnit,$41304934,10)"
+    },
+    {
+      "line": 41307,
+      "text": "call UnitAddAbility(bj_lastCreatedUnit,$41304936)"
+    },
+    {
+      "line": 41308,
+      "text": "call UnitAddType(bj_lastCreatedUnit,UNIT_TYPE_SUMMONED)"
+    },
+    {
+      "line": 41309,
+      "text": "call SetUnitUserData(bj_lastCreatedUnit,GetUnitUserData(bV))"
+    },
+    {
+      "line": 41310,
+      "text": "call GroupAddUnit(JH[GetUnitUserData(bV)],bj_lastCreatedUnit)"
+    },
+    {
+      "line": 41311,
+      "text": "call GroupAddUnit(JW,bj_lastCreatedUnit)"
+    },
+    {
+      "line": 41312,
+      "text": "elseif GetUnitAbilityLevel(i,$41304944)>0 and LoadUnitHandle(O,H2I(i),StringHash(\"tag\"))==null then"
+    },
+    {
+      "line": 42854,
+      "text": "function H0JIAbilityGroup takes nothing returns nothing"
+    },
+    {
+      "line": 42855,
+      "text": "local unit i=GetEnumUnit()"
+    },
+    {
+      "line": 42856,
+      "text": "call UnitAddAbility(i,$41304932)"
+    },
+    {
+      "line": 42857,
+      "text": "call UnitAddAbility(i,$41304934)"
+    },
+    {
+      "line": 42858,
+      "text": "call SetUnitAbilityLevel(i,$41304934,10)"
+    },
+    {
+      "line": 42859,
+      "text": "call UnitAddAbility(i,$41304936)"
+    },
+    {
+      "line": 42860,
+      "text": "set i=null"
+    },
+    {
+      "line": 42861,
+      "text": "endfunction"
+    },
+    {
+      "line": 42862,
+      "text": "function H0JIAbility takes nothing returns nothing"
+    },
+    {
+      "line": 42863,
+      "text": "local group DG=null"
+    },
+    {
+      "line": 42864,
+      "text": "local integer N6=0"
+    },
+    {
+      "line": 42865,
+      "text": "local group D6=null"
+    },
+    {
+      "line": 42866,
+      "text": "set DG=YDWEGetUnitsOfTypeIdAllNull($68304A49)"
+    },
+    {
+      "line": 42867,
+      "text": "set D6=YDWEGetUnitsOfTypeIdAllNull($68304F4B)"
+    },
+    {
+      "line": 42868,
+      "text": "call GroupAddGroup(D6,DG)"
+    },
+    {
+      "line": 42869,
+      "text": "call DestroyGroup(D6)"
+    },
+    {
+      "line": 42870,
+      "text": "set N6=CountUnitsInGroup(DG)"
+    },
+    {
+      "line": 42871,
+      "text": "if N6>0 then"
+    },
+    {
+      "line": 42872,
+      "text": "set D6=YDWEGetUnitsOfTypeIdAllNull($68303345)"
+    },
+    {
+      "line": 42873,
+      "text": "call GroupAddGroup(D6,DG)"
+    },
+    {
+      "line": 42874,
+      "text": "call DestroyGroup(D6)"
+    },
+    {
+      "line": 42875,
+      "text": "set D6=YDWEGetUnitsOfTypeIdAllNull($68303346)"
+    },
+    {
+      "line": 42876,
+      "text": "call GroupAddGroup(D6,DG)"
+    },
+    {
+      "line": 42877,
+      "text": "call DestroyGroup(D6)"
+    },
+    {
+      "line": 42878,
+      "text": "call ForGroup(DG,function H0JIAbilityGroup)"
+    },
+    {
+      "line": 42879,
+      "text": "else"
+    },
+    {
+      "line": 42880,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 42881,
+      "text": "endif"
+    },
+    {
+      "line": 42882,
+      "text": "set D6=null"
+    },
+    {
+      "line": 42883,
+      "text": "set DG=null"
+    },
+    {
+      "line": 42884,
+      "text": "endfunction"
+    },
+    {
+      "line": 42885,
+      "text": "function FightStart takes nothing returns nothing"
+    },
+    {
+      "line": 42886,
+      "text": "call TriggerSleepAction(1)"
+    },
+    {
+      "line": 42887,
+      "text": "if Dg>13 then"
+    },
+    {
+      "line": 42888,
+      "text": "call BoxRemoveReforgeAbilityForAll()"
+    },
+    {
+      "line": 42889,
+      "text": "endif"
+    },
+    {
+      "line": 42890,
+      "text": "call H0JIAbility()"
+    },
+    {
+      "line": 42891,
+      "text": "endfunction"
+    },
+    {
+      "line": 19248,
+      "text": "set Nj=true"
+    },
+    {
+      "line": 19249,
+      "text": "call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,15.,If[Dg])"
+    },
+    {
+      "line": 19250,
+      "text": "call ExecuteFunc(\"FightStart\")"
+    },
+    {
+      "line": 19251,
+      "text": "call TriggerExecute(N7)"
+    },
+    {
+      "line": 19252,
+      "text": "call TriggerExecute(Bv)"
+    },
+    {
+      "line": 19782,
+      "text": "call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,15.,If[Dg+1])"
+    },
+    {
+      "line": 19783,
+      "text": "set Dg=Dg+1"
+    },
+    {
+      "line": 19784,
+      "text": "call ForForce(GetPlayersAll(),function CDForce)"
+    },
+    {
+      "line": 19785,
+      "text": "call ExecuteFunc(\"OC5F_Vb\")"
+    },
+    {
+      "line": 19786,
+      "text": "call ExecuteFunc(\"FightFinish\")"
+    },
+    {
+      "line": 19787,
+      "text": "call yA(1.)"
+    },
+    {
+      "line": 7074,
+      "text": "function YDWEGetUnitsOfTypeIdAllNull takes integer BM returns group"
+    },
+    {
+      "line": 7075,
+      "text": "local group DJ=CreateGroup()"
+    },
+    {
+      "line": 7076,
+      "text": "local group DG=CreateGroup()"
+    },
+    {
+      "line": 7077,
+      "text": "local integer Cx"
+    },
+    {
+      "line": 7078,
+      "text": "set Cx=0"
+    },
+    {
+      "line": 7079,
+      "text": "loop"
+    },
+    {
+      "line": 7080,
+      "text": "set bj_groupEnumTypeId=BM"
+    },
+    {
+      "line": 7081,
+      "text": "call GroupClear(DG)"
+    },
+    {
+      "line": 7082,
+      "text": "call GroupEnumUnitsOfPlayer(DG,Player(Cx),filterGetUnitsOfTypeIdAll)"
+    },
+    {
+      "line": 7083,
+      "text": "call GroupAddGroup(DG,DJ)"
+    },
+    {
+      "line": 7084,
+      "text": "set Cx=Cx+1"
+    },
+    {
+      "line": 7085,
+      "text": "exitwhen Cx==bj_MAX_PLAYER_SLOTS"
+    },
+    {
+      "line": 7086,
+      "text": "endloop"
+    },
+    {
+      "line": 7087,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 7088,
+      "text": "set DG=null"
+    },
+    {
+      "line": 7089,
+      "text": "set DI=DJ"
+    },
+    {
+      "line": 7090,
+      "text": "set DJ=null"
+    },
+    {
+      "line": 7091,
+      "text": "return DI"
+    },
+    {
+      "line": 7092,
+      "text": "endfunction"
+    }
+  ],
+  "behavior": [
+    "No weapon/confirmed death check: the selected main damage branch creates the spider before final event damage settles.",
+    "P8 > current HP is strict; equal damage does not select A0I1.",
+    "Only exact h0UV selects h0V2; all other ability carriers select h03E.",
+    "Summoned identity is explicit; no timed life, population or gold charge is present.",
+    "FightStart sleeps 1 second; H0JIAbility has no owner, radius or alive predicate. Presence of h0JI/h0OK gates global h03E/h03F inclusion.",
+    "The continuous-wave OC5F_CD path calls FightFinish, not FightStart; do not rerun H0JIAbility on every continuous transition."
+  ],
+  "partialBoundaries": [
+    "Native CreateUnit collision, command/pathing to player start locations and buff/event ordering.",
+    "Native aura defaults/residence and TriggerSleepAction scheduling.",
+    "Native corpse-removal lifetime: Web retains known corpse handles during this one-second job, excludes explicit RemoveUnit; it does not claim a general native corpse simulation.",
+    "DemonStatueBounce preceding branch remains unresolved; conservative guard remains until implemented."
+  ],
+  "nativeReferences": [
+    {
+      "url": "https://jass.sourceforge.net/doc/api/Blizzard_j-source.shtml",
+      "symbol": "GetUnitsOfTypeIdAllFilter",
+      "finding": "The filter compares raw unit type only; it contains no life or ownership eligibility test. YDWE wrapper enumerates every player slot."
+    }
+  ]
+}

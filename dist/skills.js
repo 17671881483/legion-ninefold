@@ -1,3 +1,4 @@
+import {BROODMOTHER_RULES,broodmotherDamageBranch,tickBroodmotherJob} from './broodmother-rules.js';
 import {DEATH_TRIGGER_RULES,runMainUnitDeath} from './death-trigger-rules.js';
 import {ELEMENTAL_PROC_RULES,elementalDamagePrefix,iceExplosionAttackIssued} from './elemental-proc-rules.js';
 import {HUSKAR_DUEL_RULE,huskarDuelDamage,huskarDuelDeath,tickHuskarDuelJob} from './huskar-duel.js';
@@ -165,8 +166,8 @@ function compile(id,version='5.0dJF') {
     if(id==='A0YD'){s.kind='dragon_soul';s.status='implemented';s.chance=29/99;s.effectText='独立普攻伤害监听在沸血之后、狂战回血之前按JASS GetRandomReal(1,100)<30判定（约29.29%，非文案40%）；原生英雄受到最大生命30%的混乱攻击/通用伤害，其他单位受到99999点同类伤害，并非直接设置死亡';}
     if(['AIde','AIas'].includes(a.base_code)&&has('DataA')){s.kind='passive_stats';s.status='implemented';if(a.base_code==='AIde'){s.armor=A;s.effectText=`原生物品能力：自身护甲+${A}`;}else{s.haste=A;s.effectText=`原生物品能力：自身攻速+${A*100}%`;}}
     if(['A138','A13T'].includes(id)){s.kind='passive_stats';s.status='implemented';s.bonusHp=A;s.effectText=`神秘礼物原生AIml：自身最大生命+${A}；部署时应用一次，不随存档刷新重复增加`;}
-    if(['A139','A13X'].includes(id)){s.kind='passive_stats';s.status='implemented';s.flatDamage=A;s.effectText=`神秘礼物原生AIat：两组普通武器攻击力各+${A}，不增加法术固定伤害`;}
-    if(['A13V','A198','A0W2'].includes(id)){s.kind='passive_stats';s.status='implemented';s.selfRegen=A;s.effectText=`原生Arel：自身每秒恢复${A}生命，不是范围光环或最大生命百分比恢复`;}
+    if(['A139','A13X','A0I4'].includes(id)){s.kind='passive_stats';s.status='implemented';s.flatDamage=A;s.effectText=`原生AIat：两组普通武器攻击力各+${A}，不增加法术固定伤害`;}
+    if(['A13V','A198','A0W2','A0I6'].includes(id)){s.kind='passive_stats';s.status='implemented';s.selfRegen=A;s.effectText=`原生Arel：自身每秒恢复${A}生命，不是范围光环或最大生命百分比恢复`;}
     if(id==='A2ZG'){s.kind='box_damage_shield';s.status='implemented';s.damageFactor=.85;s.sourceLines=[40524,40574];s.effectText='单位护盾按主伤害事件将正敌对伤害乘以0.85，包括通用与法术伤害；排除空来源、自伤、盟友及带A2Y7的来源，主监听内部追加伤害不重复触发。先于翡翠复苏判断（JASS 40551–40585）';}
   }
   if(s.kind==='summon'&&!TEMPLATES[s.summonId]){s.status='unresolved';s.effectText=`召唤模板${s.summonId??'未指定'}缺失`;}
@@ -205,6 +206,7 @@ function compile(id,version='5.0dJF') {
   if(version==='v14.1A5'&&SOURCE_CLASS_RULES[id]){const r=SOURCE_CLASS_RULES[id];Object.assign(s,{...(!r.preserveNativeKind?{kind:'source_class'}:{}),...(r.compiled??{}),status:r.status,effectText:r.description+(r.partial?`【待核定：${r.partial}】`:'')});}
   if(version==='v14.1A5'&&HUSKAR_RULES[id]){const r=HUSKAR_RULES[id];Object.assign(s,{...(!r.preserveNativeKind?{kind:'huskar_source'}:{}),status:r.status,runtimeImplemented:true,effectText:r.description+(r.partial?`【待核定：${r.partial}】`:'')});}
   if(version==='v14.1A5'&&RELOCATION_RULES[id]){const r=RELOCATION_RULES[id];Object.assign(s,{kind:'building_relocation',status:r.status,effectText:r.description+(r.status==='partial'?`【待核定：${RELOCATION_BOUNDARY}】`:'')});}
+  if(version==='v14.1A5'&&BROODMOTHER_RULES[id]){const r=BROODMOTHER_RULES[id];Object.assign(s,{kind:r.preserveNativeKind?s.kind:'source_broodmother',status:r.status,runtimeImplemented:true,effectText:r.description+`【待核定：${r.partial}】`});}
   if(version==='v14.1A5'&&DEATH_TRIGGER_RULES[id]){const r=DEATH_TRIGGER_RULES[id];Object.assign(s,{kind:'source_death_trigger',status:r.status,runtimeImplemented:true,effectText:r.description+`【待核定：${r.partial}】`});}
   if(version==='v14.1A5'&&ELEMENTAL_PROC_RULES[id]){const r=ELEMENTAL_PROC_RULES[id];Object.assign(s,{kind:'elemental_source_proc',status:r.status,runtimeImplemented:true,effectText:r.description+(r.partial?`【待核定：${r.partial}】`:'')});}
   if(version==='v14.1A5'&&id==='A0ID')Object.assign(s,{kind:'huskar_duel',status:'partial',effectText:HUSKAR_DUEL_RULE.description+`【待核定：${HUSKAR_DUEL_RULE.partial}】`});
@@ -249,7 +251,7 @@ const V14_ECONOMY_DESCRIPTIONS={
   farmer:{name:'淘金（玩家级经济）',rawcodes:['n085','h0W1'],text:'首座娜迦农夫从开始建造时为玩家注册15%击杀额外获得1金币的概率，每新增一座再加0.5个百分点；该概率影响玩家的击杀结算，农夫本身没有对战技能。升级完成后注销该农夫的注册；出售按原脚本不会注销已注册概率。'},
   master:{name:'压榨（回合经济）',rawcodes:['n084','h0W0'],text:'回合结算时，每座存活的娜迦农场主获得3×本波农夫数量的金币。原脚本条件会把原型h0W1的尸体也计入农夫数，皮肤农夫则要求存活；经济模块按这一源逻辑结算。'},
 };
-export function compileSkills(def) {const scale=def.distanceScale??1,version=versionOf(def);return [...new Set(def.abilityIds??def.sourceAbilityIds??(def.sourceAbilities??[]).map(a=>a.rawcode??a.id))].filter(Boolean).map(id=>compile(id,version)).map(s=>({...s,...(version==='v14.1A5'&&s.id==='A0II'?{haste:num(s.fields['DataB'+(def.abilityLevels?.A0II??1)])}:{}),...(version==='v14.1A5'&&s.id==='A1CK'?{damage:num(s.fields['DataA'+(def.abilityLevels?.A1CK??1)])}:{}),...Object.fromEntries(['range','radius','length','width','inner','outer','outerRadius','deathRadius','pull'].filter(k=>s[k]!==undefined).map(k=>[k,s[k]*scale]))}));}
+export function compileSkills(def) {const scale=def.distanceScale??1,version=versionOf(def);return [...new Set(def.abilityIds??def.sourceAbilityIds??(def.sourceAbilities??[]).map(a=>a.rawcode??a.id))].filter(Boolean).map(id=>compile(id,version)).map(s=>({...s,...(version==='v14.1A5'&&s.id==='A0II'?{haste:num(s.fields['DataB'+(def.abilityLevels?.A0II??1)])}:{}),...(version==='v14.1A5'&&s.id==='A0I4'?{flatDamage:num(s.fields['DataA'+(def.abilityLevels?.A0I4??1)])}:{}),...(version==='v14.1A5'&&s.id==='A1CK'?{damage:num(s.fields['DataA'+(def.abilityLevels?.A1CK??1)])}:{}),...Object.fromEntries(['range','radius','length','width','inner','outer','outerRadius','deathRadius','pull'].filter(k=>s[k]!==undefined).map(k=>[k,s[k]*scale]))}));}
 export function describeSkills(def) {const list=compileSkills(def).map(s=>({id:s.id,name:s.name,description:s.description,status:s.status,effectText:s.effectText,cooldown:s.cooldown,manaCost:s.manaCost,duration:s.duration,range:s.range,radius:s.radius}));const r=raw(def),descriptions=isV14(def)?V14_TRIGGER_DESCRIPTIONS:TRIGGER_DESCRIPTIONS;if(descriptions[r])list.push({id:'trigger:'+r,name:'脚本机制',description:descriptions[r],effectText:descriptions[r],status:'implemented',cooldown:0,manaCost:0});const sourceGap=isV14(def)&&V14_PARTIAL_TRIGGER_DESCRIPTIONS[r];if(sourceGap)list.push({id:'trigger:'+r,name:'脚本机制（部分实现）',description:sourceGap.text,effectText:sourceGap.text,status:sourceGap.status,cooldown:0,manaCost:0});if(isV14(def))for(const [key,rule] of Object.entries(V14_ECONOMY_DESCRIPTIONS))if(rule.rawcodes.includes(r))list.push({id:'economy:'+key,name:rule.name,description:rule.text,effectText:rule.text,status:'implemented',cooldown:0,manaCost:0});return list;}
 export function skillCoverage(def) {const list=describeSkills(def);return {implemented:list.filter(s=>s.status==='implemented').length,partial:list.filter(s=>s.status==='partial').length,markers:list.filter(s=>s.status==='marker').length,unresolved:list.filter(s=>s.status==='unresolved').length};}
 export function attachSkills(e,def) {
@@ -308,7 +310,7 @@ export function sourceWeapon(source,target,now=0){
 }
 export function canWeaponTarget(source,target,now=0){return !!sourceWeapon(source,target,now);}
 
-function active(e){return (e.skillSpecs??[]).filter(s=>s.status==='implemented'||s.status==='partial'&&s.runtimeImplemented&&['A2Y1','A2Y5','A0II'].includes(s.id));}
+function active(e){return (e.skillSpecs??[]).filter(s=>s.status==='implemented'||s.status==='partial'&&s.runtimeImplemented&&['A2Y1','A2Y5','A0II','A0I2'].includes(s.id));}
 export function hasSourceAura(e){return active(e).some(s=>s.kind.startsWith('aura_'));}
 function state(e,s){return (e.skillStates??={})[s.id]??=( {readyAt:0,casts:0});}
 function buff(e,s,source,now,extra={}){if(source.side!==e.side&&active(e).some(a=>a.kind==='immunity')&&(['Aslo','AEer','Acri','ANdh','Auhf','AUfn','ANcs','AHtb','AOcl'].includes(s.base)))return false;e.buffs??=[];const key=extra.key??s.buffKey??s.id;const b={key,skillId:s.id,ownerId:source.ownerId,sourceId:source.id,expiresAt:now+(isNativeHero(e)?s.heroDuration||s.duration:s.duration),damage:s.damage??0,armor:s.armor??0,move:s.move??0,haste:s.haste??0,regen:s.regen??0,dps:s.dps??0,miss:s.miss??0,incoming:s.incoming??0,disarm:s.base==='AEer',...extra};const old=e.buffs.findIndex(v=>v.key===key);if(old>=0)e.buffs[old]=b;else e.buffs.push(b);}
@@ -537,7 +539,12 @@ export function sourceClassAttackDamageEvent(game,target,attacker,options={},amo
 export function initializeSourceClassCombat(game,building,entity){
   if(isV14(entity)){initializeBrightArthasDeployment(game,building,entity);initializeLichKingDeployment(game,entity);initializeVashjDeployment(game,building,entity);return initializeSourceClassDeployment(game,building,entity,heroScriptApi);}
 }
+function hasPendingBroodmotherPrefix(target,attacker,actual){
+  const has=(e,id)=>e?.skillSpecs?.some(s=>s.id===id)&&(e.abilityLevels?.[id]??1)>0;
+  return has(target,'A0XM')&&actual>=target.hp||has(target,'A0I5')&&target.mana>24||['n050','n06R'].includes(raw(attacker));
+}
 export function beforeSourceDamage(game,target,actual,attacker,options={}){
+  const mainEventPosition=pos(target);
   if(isV14(target))kelthuzadBeforeDamage(game,target,actual,attacker,heroScriptApi);
   if(attacker&&actual>0&&(!options.spell||options.weapon)&&!game._sourceAttackTriggerDepth){
     game._sourceAttackTriggerDepth=1;
@@ -563,6 +570,8 @@ export function beforeSourceDamage(game,target,actual,attacker,options={}){
     if(isV14(target))aesaraMainDamage(game,target,attacker,actual,heroScriptApi);
     const prefix=isV14(target)||isV14(attacker)?elementalDamagePrefix(game,target,attacker,actual,heroScriptApi):{selected:null,localDamage:actual};
     if(isV14(target)){
+      const unresolvedPrior=hasPendingBroodmotherPrefix(target,attacker,actual);
+      if(!prefix.selected&&!unresolvedPrior&&broodmotherDamageBranch(game,target,attacker,prefix.localDamage,heroScriptApi,mainEventPosition))prefix.selected='A0I1';
       huskarDuelDamage(game,target,attacker,actual,prefix.selected);
       const prior=huskarMainDamage(game,target,attacker,prefix.localDamage,heroScriptApi);
       aesaraDamageCleanup(game,target,attacker,prefix.localDamage,heroScriptApi,prior);
@@ -744,7 +753,7 @@ const heroScriptApi={applyNativeStun:(g,s,t,id)=>applyNativeControl(g,s,t,id,'st
   isTerrainBlocked:(game,point,source)=>!isWalkable(point.x,point.y,source?.battleTeam??0,0),
   clampDummyPosition:(game,point)=>point,
   spawnUnit:(game,source,code,extra)=>summon(game,source,V14_UNIT_TEMPLATES[code],0,extra),
-  removeUnit:(game,entity)=>{game.state.entities=game.state.entities.filter(e=>e.id!==entity.id);entity.hp=0;entity.status.sourceDeathHandled=true;entity.status.deathCounted=true;entity.pendingAttack=null;},
+  removeUnit:(game,entity)=>{game.state.entities=game.state.entities.filter(e=>e.id!==entity.id);entity.hp=0;entity.status.sourceRemoved=true;entity.status.sourceDeathHandled=true;entity.status.deathCounted=true;entity.pendingAttack=null;},
   isLivingOwner:(game,source)=>!game.state.players[source.ownerId]?.eliminated,
 };
 export {darkArthasDamageListeners,brightArthasEventDamage};
@@ -804,6 +813,7 @@ export function tickSourceScriptJobs(game,dt=0){
   tickSourceAuraRules(game,{matchesTargets});
   const now=game.state.time,remaining=[];
   for(const job of game.state.sourceSkillJobs??[]){
+    if(job.type==='broodmother_alliance'){if(tickBroodmotherJob(game,job,heroScriptApi))remaining.push(job);continue;}
     if(['huskar_duel','huskar_duel_immune'].includes(job.type)){if(tickHuskarDuelJob(game,job))remaining.push(job);continue;}
     if(job.type==='huskar_unyielding'){if(tickHuskarJob(game,job,heroScriptApi))remaining.push(job);continue;}
     if(isAesaraJobType(job.type)){if(tickAesaraJob(game,job,heroScriptApi))remaining.push(job);continue;}

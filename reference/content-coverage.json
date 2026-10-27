@@ -19,6 +19,8 @@
     "h0CZ",
     "h0CL",
     "n07J",
+    "h03E",
+    "h0V2",
     "h03K",
     "h0SU"
   ],
@@ -82,6 +84,46 @@
       ]
     },
     {
+      "sourceRawcode": "h0JI",
+      "abilityIds": [
+        "A0I2",
+        "A0I4",
+        "A0I6"
+      ]
+    },
+    {
+      "sourceRawcode": "h0OK",
+      "abilityIds": [
+        "A0I2",
+        "A0I4",
+        "A0I6"
+      ]
+    },
+    {
+      "sourceRawcode": "h03E",
+      "abilityIds": [
+        "A0I2",
+        "A0I4",
+        "A0I6"
+      ]
+    },
+    {
+      "sourceRawcode": "h03F",
+      "abilityIds": [
+        "A0I2",
+        "A0I4",
+        "A0I6"
+      ]
+    },
+    {
+      "sourceRawcode": "h0V2",
+      "abilityIds": [
+        "A0I2",
+        "A0I4",
+        "A0I6"
+      ]
+    },
+    {
       "sourceRawcode": "h03L",
       "abilityIds": [
         "A0XN"
@@ -122,7 +164,9 @@
       "sourceRawcode": "e008",
       "abilityIds": [
         "A1CV",
-        "A1CW"
+        "A1CW",
+        "A0I5",
+        "A0I7"
       ]
     },
     {
@@ -191,9 +235,9 @@
   "playerSkills": {
     "counts": {
       "implemented": 410,
-      "partial": 76,
+      "partial": 80,
       "marker": 34,
-      "unresolved": 116
+      "unresolved": 115
     },
     "abilities": [
       {
@@ -2533,8 +2577,8 @@
       {
         "rawcode": "A0I1",
         "name": "孕母蛛群",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "source_broodmother",
         "unitRawcodes": [
           "h0OL",
           "h0UW",
@@ -2544,23 +2588,64 @@
       {
         "rawcode": "A0I2",
         "name": "蛛群光环",
-        "status": "implemented",
+        "status": "partial",
         "kind": "aura_armor",
         "unitRawcodes": [
+          "h03E",
+          "h03F",
+          "h0JI",
+          "h0OK",
+          "h0OL",
+          "h0UW",
+          "h0V2",
+          "n0JI"
+        ]
+      },
+      {
+        "rawcode": "A0I4",
+        "name": "atk",
+        "status": "implemented",
+        "kind": "passive_stats",
+        "unitRawcodes": [
+          "h03E",
+          "h03F",
+          "h0JI",
+          "h0OK",
+          "h0V2"
+        ]
+      },
+      {
+        "rawcode": "A0I5",
+        "name": "噬魂毒素",
+        "status": "partial",
+        "kind": "soul_toxin_source",
+        "unitRawcodes": [
+          "e008",
           "h0OL",
           "h0UW",
           "n0JI"
         ]
       },
       {
-        "rawcode": "A0I5",
-        "name": "噬魂毒素",
+        "rawcode": "A0I6",
+        "name": "提高英雄生命值恢复速度的物品",
         "status": "implemented",
-        "kind": "debuff",
+        "kind": "passive_stats",
         "unitRawcodes": [
-          "h0OL",
-          "h0UW",
-          "n0JI"
+          "h03E",
+          "h03F",
+          "h0JI",
+          "h0OK",
+          "h0V2"
+        ]
+      },
+      {
+        "rawcode": "A0I7",
+        "name": "眩晕",
+        "status": "partial",
+        "kind": "soul_toxin_source",
+        "unitRawcodes": [
+          "e008"
         ]
       },
       {
@@ -6764,9 +6849,9 @@
   "battleSkills": {
     "counts": {
       "implemented": 460,
-      "partial": 78,
+      "partial": 82,
       "marker": 47,
-      "unresolved": 136
+      "unresolved": 135
     },
     "abilities": [
       {
@@ -9472,8 +9557,8 @@
       {
         "rawcode": "A0I1",
         "name": "孕母蛛群",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "source_broodmother",
         "unitRawcodes": [
           "h0OL",
           "h0UW",
@@ -9483,23 +9568,64 @@
       {
         "rawcode": "A0I2",
         "name": "蛛群光环",
-        "status": "implemented",
+        "status": "partial",
         "kind": "aura_armor",
         "unitRawcodes": [
+          "h03E",
+          "h03F",
+          "h0JI",
+          "h0OK",
+          "h0OL",
+          "h0UW",
+          "h0V2",
+          "n0JI"
+        ]
+      },
+      {
+        "rawcode": "A0I4",
+        "name": "atk",
+        "status": "implemented",
+        "kind": "passive_stats",
+        "unitRawcodes": [
+          "h03E",
+          "h03F",
+          "h0JI",
+          "h0OK",
+          "h0V2"
+        ]
+      },
+      {
+        "rawcode": "A0I5",
+        "name": "噬魂毒素",
+        "status": "partial",
+        "kind": "soul_toxin_source",
+        "unitRawcodes": [
+          "e008",
           "h0OL",
           "h0UW",
           "n0JI"
         ]
       },
       {
-        "rawcode": "A0I5",
-        "name": "噬魂毒素",
+        "rawcode": "A0I6",
+        "name": "提高英雄生命值恢复速度的物品",
         "status": "implemented",
-        "kind": "debuff",
+        "kind": "passive_stats",
         "unitRawcodes": [
-          "h0OL",
-          "h0UW",
-          "n0JI"
+          "h03E",
+          "h03F",
+          "h0JI",
+          "h0OK",
+          "h0V2"
+        ]
+      },
+      {
+        "rawcode": "A0I7",
+        "name": "眩晕",
+        "status": "partial",
+        "kind": "soul_toxin_source",
+        "unitRawcodes": [
+          "e008"
         ]
       },
       {
@@ -14257,6 +14383,7 @@
     ]
   },
   "remainingSourceGaps": [
+    "A0I1孕母蛛群的伤害前生成、精确变体、召唤身份及动态属性已接入；FightStart全图原型枚举与尸体引用保留，原生命令、光环驻留、碰撞与调度仍部分核定，见broodmother-evidence.json。",
     "A0XM黑暗之魂已接入5秒积累、主死亡链的实数抽样、10魂单次召唤、6魂致命伤害清零与属性增减；A0XN动态等级纳入覆盖。缺失原生魔法上限、AOae默认字段、AIml生命副作用和CreateUnit碰撞/句柄仍为partial，见nightmare-evidence.json。",
     "未核定技能逐项保留在abilities中；已实现状态也不代表整套兵种联动已还原。",
     "包内未提供完整原生商店/菜单字段，部分商品与单位入口仍待补证。",
@@ -14266,6 +14393,7 @@
     "A0HW火噬与A20D死亡爆发已接入；主死亡触发器禁用/排除组与独立监听分离，原生枚举顺序及同回调其他未接入分支仍部分核定。异蛇ATTACK_TYPE_NORMAL已纠正为Spells，见death-trigger-evidence.json。",
     "A0HX原罪欲火与A0IK冰爆共享前置链、局部P8、不屈/决斗优先级、冰爆分裂箭获得/发起消耗已接入；A0IJ缺失伤害/弹道和A0IL原生仲裁仍部分核定，见elemental-proc-evidence.json。",
     "A0ID决斗已接入受伤选敌、一次攻击命令和死者自身tag驱动的死亡联动；原生枚举顺序、尸体寿命、命令仲裁、前置混合技能分支与AIml仍未完整核定，见huskar-duel-evidence.json。",
+    "A0I5已接入受伤cripple请求、非e008范围施毒、逐目标每秒检查及90伤害/A0I7结束请求；Acri原生冷却/默认字段、主目标buff与spell-effect先后、命令仲裁及RemoveUnit句柄仍部分核定，见soul-toxin-evidence.json。",
     "建筑移位已接入411个A118携带建筑：全局3次、单体移除、神灵武士豁免及耗尽门槛；选点映射现有6×8格，原生代理/占位残留、路径纹理与升级能力重建未核定，见relocation-evidence.json。",
     "五个英雄彩蛋直接升级与225条可选四折训练路径已接入；新增单位的未核定技能仍按实际状态计数。随机礼物已接入35个候选；原生CreateUnit路径/碰撞失败、可操纵建造者技能及平台专用Frame科技返费宿主仍待核定。",
     "17类种族特性与103个精确单位注册已接入；地精修理、虚空体质、原生跳跃/slow命中及多种原生法术抗性叠加仍为部分实现。旧存档中没有出生抽样记录的血统融合战斗体不补抽，新出战体才执行来源随机。",

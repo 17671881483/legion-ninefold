@@ -33,6 +33,8 @@ export function runMainUnitDeath(g,dead,killer,api){
       api.classDeath(g,dead,killer,true);
       api.yseraAwakening(g,dead);
     }
+    // Independent if at 42006 precedes the fire/bone-dragon elseif chain.
+    if(isV14(killer))api.nightmareKill?.(g,killer);
     if(isV14(killer)&&has(killer,'A0HW')){
       const amount=4+dead.maxHp*.02;
       for(const t of enumerate(g,killer,center,200*scale(dead),false))api.nativeDamage(g,t,amount,killer,{attackType:'normal',damageType:'magic'});

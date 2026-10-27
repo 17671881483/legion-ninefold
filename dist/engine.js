@@ -1355,7 +1355,7 @@ export class Game {
     let actual = modifyIncoming(this,target,damage,attacker,options);
     if(actual<=0){if((target.status.yseraRevivalCount??0)>revivalCount)beforeSourceDamage(this,target,0,attacker,options);sourceClassAttackDamageEvent(this,target,attacker,options,0);sourceRegisteredDamageEvent(this,target,registeredDamageListeners);return 0;}
     if ((target.status.shield ?? 0) > 0 && !legacyPure) { const absorbed = Math.min(actual, target.status.shield); target.status.shield -= absorbed; actual -= absorbed; }
-    beforeSourceDamage(this,target,actual,attacker,options);
+    actual=beforeSourceDamage(this,target,actual,attacker,options)??actual;
     actual=brightArthasEventDamage(this,target,actual,attacker);
     // Main damage listener was registered before New_UnitAttack in the map.
     sourceClassAttackDamageEvent(this,target,attacker,options,actual);

@@ -1,4 +1,5 @@
 import {BROODMOTHER_RULES,broodmotherDamageBranch,tickBroodmotherJob} from './broodmother-rules.js';
+import {NIGHTMARE_RULES,initializeNightmareDeployment,tickNightmareJob,nightmareMainDeath,nightmareDamagePrefix} from './nightmare-rules.js';
 import {DEATH_TRIGGER_RULES,runMainUnitDeath} from './death-trigger-rules.js';
 import {ELEMENTAL_PROC_RULES,elementalDamagePrefix,iceExplosionAttackIssued} from './elemental-proc-rules.js';
 import {HUSKAR_DUEL_RULE,huskarDuelDamage,huskarDuelDeath,tickHuskarDuelJob} from './huskar-duel.js';
@@ -209,6 +210,7 @@ function compile(id,version='5.0dJF') {
   if(version==='v14.1A5'&&BROODMOTHER_RULES[id]){const r=BROODMOTHER_RULES[id];Object.assign(s,{kind:r.preserveNativeKind?s.kind:'source_broodmother',status:r.status,runtimeImplemented:true,effectText:r.description+`【待核定：${r.partial}】`});}
   if(version==='v14.1A5'&&DEATH_TRIGGER_RULES[id]){const r=DEATH_TRIGGER_RULES[id];Object.assign(s,{kind:'source_death_trigger',status:r.status,runtimeImplemented:true,effectText:r.description+`【待核定：${r.partial}】`});}
   if(version==='v14.1A5'&&ELEMENTAL_PROC_RULES[id]){const r=ELEMENTAL_PROC_RULES[id];Object.assign(s,{kind:'elemental_source_proc',status:r.status,runtimeImplemented:true,effectText:r.description+(r.partial?`【待核定：${r.partial}】`:'')});}
+  if(version==='v14.1A5'&&NIGHTMARE_RULES[id]){const r=NIGHTMARE_RULES[id];Object.assign(s,{kind:'nightmare_source',status:r.status,runtimeImplemented:true,effectText:r.description+`【待核定：${r.partial}】`});}
   if(version==='v14.1A5'&&id==='A0ID')Object.assign(s,{kind:'huskar_duel',status:'partial',effectText:HUSKAR_DUEL_RULE.description+`【待核定：${HUSKAR_DUEL_RULE.partial}】`});
   cache.set(key,s);return s;
 }
@@ -304,7 +306,7 @@ export function sourceWeapon(source,target,now=0){
   if(source.side!==target.side&&scriptInvulnerable(target))return null;
   if(isV14(source)&&source.isBuilding&&source.sourceRawFields?.weapsOn===undefined)return null;
   const explicit=source.skillSource;for(const slot of [1,2]){const w=slot===1?source.weapon1:source.weapon2;if(!w||!Object.keys(w).length)continue;const type=w[`weapTp${slot}`],mask=num(w.weapsOn,source.sourceRawFields?.weapsOn??1);if(!(mask&(1<<(slot-1)))||!type||type==='_')continue;const targets=String(w[`targs${slot}`]??'_').split(',');if(!matchesTargets({targets},source,target))continue;
-    return {slot,raw:w,type,range:num(w[`rangeN${slot}`],source.range*100/(source.distanceScale||1))/100*(source.distanceScale??1),interval:num(w[`cool${slot}`],source.attackInterval),attackType:w[`atkType${slot}`]??source.attackType,damage:slot===1?source.damage:num(w.dmgplus2)+num(w.dice2)*(num(w.sides2)+1)/2+Object.values(source.sourcePassiveStatBonuses??{}).reduce((sum,bonus)=>sum+(bonus.flatDamage??0),0)};
+    return {slot,raw:w,type,range:num(w[`rangeN${slot}`],source.range*100/(source.distanceScale||1))/100*(source.distanceScale??1),interval:num(w[`cool${slot}`],source.attackInterval),attackType:w[`atkType${slot}`]??source.attackType,damage:slot===1?source.damage:num(w.dmgplus2)+num(w.dice2)*(num(w.sides2)+1)/2+Object.values(source.sourcePassiveStatBonuses??{}).reduce((sum,bonus)=>sum+(bonus.flatDamage??0),0)+(source.sourceNightmareStatBonuses?.flatDamage??0)};
   }
   return explicit?null:{slot:1,raw:{},type:'normal',range:source.range,interval:source.attackInterval,attackType:source.attackType,damage:source.damage};
 }
@@ -537,11 +539,11 @@ export function sourceClassAttackDamageEvent(game,target,attacker,options={},amo
   try{darkArthasAttackDamage(attacker,amount);vashjOnAttackDamage(game,attacker,target,heroScriptApi);sourceClassOnAttackDamage(game,attacker,target,heroScriptApi);huskarAttackDamage(game,attacker,target,amount,heroScriptApi);}finally{attacker.status.sourceNativeAttackBusy=false;}
 }
 export function initializeSourceClassCombat(game,building,entity){
-  if(isV14(entity)){initializeBrightArthasDeployment(game,building,entity);initializeLichKingDeployment(game,entity);initializeVashjDeployment(game,building,entity);return initializeSourceClassDeployment(game,building,entity,heroScriptApi);}
+  if(isV14(entity)){initializeNightmareDeployment(game,entity);initializeBrightArthasDeployment(game,building,entity);initializeLichKingDeployment(game,entity);initializeVashjDeployment(game,building,entity);return initializeSourceClassDeployment(game,building,entity,heroScriptApi);}
 }
 function hasPendingBroodmotherPrefix(target,attacker,actual){
   const has=(e,id)=>e?.skillSpecs?.some(s=>s.id===id)&&(e.abilityLevels?.[id]??1)>0;
-  return has(target,'A0XM')&&actual>=target.hp||has(target,'A0I5')&&target.mana>24||['n050','n06R'].includes(raw(attacker));
+  return has(target,'A0I5')&&target.mana>24||['n050','n06R'].includes(raw(attacker));
 }
 export function beforeSourceDamage(game,target,actual,attacker,options={}){
   const mainEventPosition=pos(target);
@@ -551,6 +553,7 @@ export function beforeSourceDamage(game,target,actual,attacker,options={}){
     try{if(isV14(attacker))kelthuzadOnAttackDamage(game,attacker,target,actual,heroScriptApi);if(isV14(target)||isV14(attacker))tryKelthuzadAutoCast(game,attacker,target,heroScriptApi);}finally{game._sourceAttackTriggerDepth=0;}
   }
   if(!attacker||target.id===attacker.id||target.side===attacker.side||game._sourceDamageTriggerDepth)return;
+  let eventDamage=actual;
   game._sourceDamageTriggerDepth=(game._sourceDamageTriggerDepth??0)+1;
   try{
     if(isV14(target)||isV14(attacker))tryVashjAutoCast(game,target,attacker,heroScriptApi);
@@ -569,6 +572,7 @@ export function beforeSourceDamage(game,target,actual,attacker,options={}){
     }
     if(isV14(target))aesaraMainDamage(game,target,attacker,actual,heroScriptApi);
     const prefix=isV14(target)||isV14(attacker)?elementalDamagePrefix(game,target,attacker,actual,heroScriptApi):{selected:null,localDamage:actual};
+    if(!prefix.selected&&isV14(target)&&nightmareDamagePrefix(game,target,attacker,actual,heroScriptApi)){prefix.selected='A0XM';eventDamage=0;}
     if(isV14(target)){
       const unresolvedPrior=hasPendingBroodmotherPrefix(target,attacker,actual);
       if(!prefix.selected&&!unresolvedPrior&&broodmotherDamageBranch(game,target,attacker,prefix.localDamage,heroScriptApi,mainEventPosition))prefix.selected='A0I1';
@@ -578,6 +582,7 @@ export function beforeSourceDamage(game,target,actual,attacker,options={}){
     }
     if(isV14(target)&&!(attacker.skillSpecs??[]).some(s=>s.id==='A2Y7'))sourceClassBeforeDamage(game,target,actual,attacker,heroScriptApi);
   }finally{game._sourceDamageTriggerDepth--;}
+  return eventDamage;
 }
 export function afterSourceDamage(game,target,actual,attacker,options={}) {
   if(isV14(target)){const armor=garroshAfterDamage(game,target,actual);if(armor)target.armor+=armor.addedLevel;}
@@ -745,8 +750,9 @@ const mainDeathApi={universalDamage,nativeDamage,
   classDeath:(g,dead,killer,enabled)=>sourceClassDeath(g,dead,killer,heroScriptApi,enabled),
   yseraAwakening:(g,dead)=>sourceYseraMainDeath(g,dead),
   boneDragonDeath:lichKingMainDeath,
+  nightmareKill:(g,killer)=>nightmareMainDeath(g,killer,heroScriptApi),
 };
-const heroScriptApi={applyNativeStun:(g,s,t,id)=>applyNativeControl(g,s,t,id,'stunUntil'),sourceDeath,killUnit:(g,e)=>g._killUnit(e),getOwnedUnitsOfRawcode:(g,e,code)=>[...g.state.entities.filter(u=>u.ownerId===e.ownerId&&raw(u)===code),...(g.state.players[e.ownerId]?.buildings??[]).filter(b=>(b.sourceRawcode??b.unitId?.replace(/^v14_/, ''))===code)],castNativeNova:(g,e,id,target)=>castNativeNova(g,e,id,target),applyCyclone:(g,s,t,id,seconds)=>applyNativeControl(g,s,t,id,'cycloneUntil',seconds),applyEnsnare:(g,s,t,id)=>applyNativeControl(g,s,t,id,'rootUntil'),universalDamage,nativeDamage,sourceDamage,applyCorrosion:applyYseraCorrosion,scriptInvulnerable,pauseUnitEx,compileAbility,addAbility,removeAbility,getBuilding,applyAttackLevel,setUnitPosition,moveUnit:setUnitPosition,
+const heroScriptApi={initializeUnit:initializeSourceSkills,applyNativeStun:(g,s,t,id)=>applyNativeControl(g,s,t,id,'stunUntil'),sourceDeath,killUnit:(g,e)=>g._killUnit(e),getOwnedUnitsOfRawcode:(g,e,code)=>[...g.state.entities.filter(u=>u.ownerId===e.ownerId&&raw(u)===code),...(g.state.players[e.ownerId]?.buildings??[]).filter(b=>(b.sourceRawcode??b.unitId?.replace(/^v14_/, ''))===code)],castNativeNova:(g,e,id,target)=>castNativeNova(g,e,id,target),applyCyclone:(g,s,t,id,seconds)=>applyNativeControl(g,s,t,id,'cycloneUntil',seconds),applyEnsnare:(g,s,t,id)=>applyNativeControl(g,s,t,id,'rootUntil'),universalDamage,nativeDamage,sourceDamage,applyCorrosion:applyYseraCorrosion,scriptInvulnerable,pauseUnitEx,compileAbility,addAbility,removeAbility,getBuilding,applyAttackLevel,setUnitPosition,moveUnit:setUnitPosition,
   applyNativeSlow:(game,source,target,id,descriptor)=>{target.status??={};target.status.sourceClassNativeSlowPending={abilityId:id,sourceId:source.id,at:game.state.time,descriptor:{...descriptor},reason:'原生Aslo默认目标许可未核定'};},
   vertigoTarget:(game,source,target,level)=>{const frozen=target.status?.sourceAnimationFrozenUntil;pauseUnitEx(game,source,target,level);if(frozen===undefined)delete target.status.sourceAnimationFrozenUntil;else target.status.sourceAnimationFrozenUntil=frozen;},
   pauseUnit:(game,e,value)=>{e.status??={};e.status.sourcePaused=!!value;if(value)e.pendingAttack=null;},
@@ -814,6 +820,7 @@ export function tickSourceScriptJobs(game,dt=0){
   const now=game.state.time,remaining=[];
   for(const job of game.state.sourceSkillJobs??[]){
     if(job.type==='broodmother_alliance'){if(tickBroodmotherJob(game,job,heroScriptApi))remaining.push(job);continue;}
+    if(job.type==='nightmare_souls'){if(tickNightmareJob(game,job,heroScriptApi))remaining.push(job);continue;}
     if(['huskar_duel','huskar_duel_immune'].includes(job.type)){if(tickHuskarDuelJob(game,job))remaining.push(job);continue;}
     if(job.type==='huskar_unyielding'){if(tickHuskarJob(game,job,heroScriptApi))remaining.push(job);continue;}
     if(isAesaraJobType(job.type)){if(tickAesaraJob(game,job,heroScriptApi))remaining.push(job);continue;}

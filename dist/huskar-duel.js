@@ -10,7 +10,6 @@ function precedingBranch(e,a,amount,now){
   // Same elseif chain; unimplemented effects/hashtable state cannot be assumed
   // to fall through. The common A0ID path has none of these preceding abilities.
   if(has(e,'A0XM')&&amount>=e.hp)return 'A0XM前置killnum条件尚未核定';
-  if(has(e,'A0I5')&&e.mana>24)return 'A0I5前置cripple命令';
   if(['n050','n06R'].includes(a.combatRawcode))return 'DemonStatueBounce前置分支尚未核定';
   if(has(a,'A0I1')&&buff(e,'B04U',now)&&amount>e.hp)return 'A0I1前置复活分支';
   return null;

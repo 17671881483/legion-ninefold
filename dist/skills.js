@@ -1,5 +1,6 @@
 import {DEATH_TRIGGER_RULES,runMainUnitDeath} from './death-trigger-rules.js';
 import {ELEMENTAL_PROC_RULES,elementalDamagePrefix,iceExplosionAttackIssued} from './elemental-proc-rules.js';
+import {SOUL_TOXIN_RULES,soulToxinDamageBranch,tickSoulToxinJob,pruneSoulToxinHandles} from './soul-toxin-rules.js';
 import {HUSKAR_DUEL_RULE,huskarDuelDamage,huskarDuelDeath,tickHuskarDuelJob} from './huskar-duel.js';
 import {RELOCATION_RULES,RELOCATION_BOUNDARY} from './relocation-rules.js';
 import {HUSKAR_RULES,huskarMainDamage,huskarAttackDamage,tickHuskarJob} from './huskar-rules.js';
@@ -207,6 +208,7 @@ function compile(id,version='5.0dJF') {
   if(version==='v14.1A5'&&RELOCATION_RULES[id]){const r=RELOCATION_RULES[id];Object.assign(s,{kind:'building_relocation',status:r.status,effectText:r.description+(r.status==='partial'?`【待核定：${RELOCATION_BOUNDARY}】`:'')});}
   if(version==='v14.1A5'&&DEATH_TRIGGER_RULES[id]){const r=DEATH_TRIGGER_RULES[id];Object.assign(s,{kind:'source_death_trigger',status:r.status,runtimeImplemented:true,effectText:r.description+`【待核定：${r.partial}】`});}
   if(version==='v14.1A5'&&ELEMENTAL_PROC_RULES[id]){const r=ELEMENTAL_PROC_RULES[id];Object.assign(s,{kind:'elemental_source_proc',status:r.status,runtimeImplemented:true,effectText:r.description+(r.partial?`【待核定：${r.partial}】`:'')});}
+  if(version==='v14.1A5'&&SOUL_TOXIN_RULES[id]){const r=SOUL_TOXIN_RULES[id];Object.assign(s,{kind:'soul_toxin_source',status:r.status,runtimeImplemented:true,soulToxinRevision:1,cooldown:has('Cool')?n('Cool'):null,effectText:r.description+`【待核定：${r.partial}】`});}
   if(version==='v14.1A5'&&id==='A0ID')Object.assign(s,{kind:'huskar_duel',status:'partial',effectText:HUSKAR_DUEL_RULE.description+`【待核定：${HUSKAR_DUEL_RULE.partial}】`});
   cache.set(key,s);return s;
 }
@@ -271,11 +273,13 @@ export function attachSkills(e,def) {
   }
 }
 export function refreshSourceSkills(e,def) {
-  if(e.skillImplementationRevision===SKILL_IMPLEMENTATION_REVISION)return false;
+  const staleSoulToxin=e.skillSpecs?.some(s=>SOUL_TOXIN_RULES[s.id]&&s.soulToxinRevision!==1);
+  if(e.skillImplementationRevision===SKILL_IMPLEMENTATION_REVISION&&!staleSoulToxin)return false;
   // Recompile the saved runtime ability set. Rebuilding from the template's
   // abilityIds would lose injected abilities and give mirror images skills.
   const abilityIds=Array.isArray(e.skillSpecs)?e.skillSpecs.map(s=>s.id).filter(Boolean):def.abilityIds;
   e.skillSpecs=compileSkills({...def,abilityIds,abilityLevels:e.abilityLevels});
+  if(staleSoulToxin&&e.skillStates?.A0I5?.casts>0){e.skillStates.A0I5.nativeCooldownUnresolved=true;e.skillStates.A0I5.readyAt=null;}
   // Runtime state belongs to the save: preserve cooldowns, counters, buffs,
   // resources and HP. New skill state is initialized by state() on first use.
   e.skillStates??={};e.skillImplementationRevision=SKILL_IMPLEMENTATION_REVISION;
@@ -563,6 +567,10 @@ export function beforeSourceDamage(game,target,actual,attacker,options={}){
     if(isV14(target))aesaraMainDamage(game,target,attacker,actual,heroScriptApi);
     const prefix=isV14(target)||isV14(attacker)?elementalDamagePrefix(game,target,attacker,actual,heroScriptApi):{selected:null,localDamage:actual};
     if(isV14(target)){
+      // A0XM is the preceding branch. Until its source killnum condition is
+      // integrated, preserve the existing deferred boundary for mixed units.
+      const unresolvedNightmare=target.skillSpecs?.some(s=>s.id==='A0XM'&&(target.abilityLevels?.A0XM??1)>0)&&actual>=target.hp;
+      if(!prefix.selected&&!unresolvedNightmare)prefix.selected=soulToxinDamageBranch(game,target,attacker,actual,heroScriptApi)?.selected??null;
       huskarDuelDamage(game,target,attacker,actual,prefix.selected);
       const prior=huskarMainDamage(game,target,attacker,prefix.localDamage,heroScriptApi);
       aesaraDamageCleanup(game,target,attacker,prefix.localDamage,heroScriptApi,prior);
@@ -707,7 +715,7 @@ function pauseUnitEx(game,source,target,seconds){
   if(duration>0)target.status.stunUntil=Math.max(target.status.stunUntil??0,now+duration);
 }
 function applyNativeControl(game,source,target,id,kind,seconds){
-  const now=game._aesaraEventAt??game._brightArthasEventAt??game._arthasEventAt??game._lichEventAt??game._vashjEventAt??game._iceEventAt??game._trollEventAt??game._kelthuzadEventAt??game.state.time,skill=compileSkills({abilityIds:[id],skillVersion:'v14.1A5',distanceScale:source.distanceScale??1/3})[0];
+  const now=game._soulToxinEventAt??game._aesaraEventAt??game._brightArthasEventAt??game._arthasEventAt??game._lichEventAt??game._vashjEventAt??game._iceEventAt??game._trollEventAt??game._kelthuzadEventAt??game.state.time,skill=compileSkills({abilityIds:[id],skillVersion:'v14.1A5',distanceScale:source.distanceScale??1/3})[0];
   if(!target||target.hp<=.405||target.isBuilding||target.side===source.side||source.battleTeam!==target.battleTeam||scriptInvulnerable(target)||id!=='A15I'&&active(target).some(s=>s.kind==='immunity')||target.status?.cycloneUntil>now||!matchesTargets(skill,source,target))return false;
   const duration=seconds??(isNativeHero(target)?skill.heroDuration:skill.duration);
   target.status??={};target.status[kind]=Math.max(target.status[kind]??0,now+duration);
@@ -737,7 +745,7 @@ const mainDeathApi={universalDamage,nativeDamage,
   yseraAwakening:(g,dead)=>sourceYseraMainDeath(g,dead),
   boneDragonDeath:lichKingMainDeath,
 };
-const heroScriptApi={applyNativeStun:(g,s,t,id)=>applyNativeControl(g,s,t,id,'stunUntil'),sourceDeath,killUnit:(g,e)=>g._killUnit(e),getOwnedUnitsOfRawcode:(g,e,code)=>[...g.state.entities.filter(u=>u.ownerId===e.ownerId&&raw(u)===code),...(g.state.players[e.ownerId]?.buildings??[]).filter(b=>(b.sourceRawcode??b.unitId?.replace(/^v14_/, ''))===code)],castNativeNova:(g,e,id,target)=>castNativeNova(g,e,id,target),applyCyclone:(g,s,t,id,seconds)=>applyNativeControl(g,s,t,id,'cycloneUntil',seconds),applyEnsnare:(g,s,t,id)=>applyNativeControl(g,s,t,id,'rootUntil'),universalDamage,nativeDamage,sourceDamage,applyCorrosion:applyYseraCorrosion,scriptInvulnerable,pauseUnitEx,compileAbility,addAbility,removeAbility,getBuilding,applyAttackLevel,setUnitPosition,moveUnit:setUnitPosition,
+const heroScriptApi={matchesTargets,magicImmune:e=>active(e).some(s=>s.kind==='immunity'),applyNativeStun:(g,s,t,id)=>applyNativeControl(g,s,t,id,'stunUntil'),sourceDeath,killUnit:(g,e)=>g._killUnit(e),getOwnedUnitsOfRawcode:(g,e,code)=>[...g.state.entities.filter(u=>u.ownerId===e.ownerId&&raw(u)===code),...(g.state.players[e.ownerId]?.buildings??[]).filter(b=>(b.sourceRawcode??b.unitId?.replace(/^v14_/, ''))===code)],castNativeNova:(g,e,id,target)=>castNativeNova(g,e,id,target),applyCyclone:(g,s,t,id,seconds)=>applyNativeControl(g,s,t,id,'cycloneUntil',seconds),applyEnsnare:(g,s,t,id)=>applyNativeControl(g,s,t,id,'rootUntil'),universalDamage,nativeDamage,sourceDamage,applyCorrosion:applyYseraCorrosion,scriptInvulnerable,pauseUnitEx,compileAbility,addAbility,removeAbility,getBuilding,applyAttackLevel,setUnitPosition,moveUnit:setUnitPosition,
   applyNativeSlow:(game,source,target,id,descriptor)=>{target.status??={};target.status.sourceClassNativeSlowPending={abilityId:id,sourceId:source.id,at:game.state.time,descriptor:{...descriptor},reason:'原生Aslo默认目标许可未核定'};},
   vertigoTarget:(game,source,target,level)=>{const frozen=target.status?.sourceAnimationFrozenUntil;pauseUnitEx(game,source,target,level);if(frozen===undefined)delete target.status.sourceAnimationFrozenUntil;else target.status.sourceAnimationFrozenUntil=frozen;},
   pauseUnit:(game,e,value)=>{e.status??={};e.status.sourcePaused=!!value;if(value)e.pendingAttack=null;},
@@ -804,6 +812,7 @@ export function tickSourceScriptJobs(game,dt=0){
   tickSourceAuraRules(game,{matchesTargets});
   const now=game.state.time,remaining=[];
   for(const job of game.state.sourceSkillJobs??[]){
+    if(job.type==='soul_toxin'){if(tickSoulToxinJob(game,job,heroScriptApi))remaining.push(job);continue;}
     if(['huskar_duel','huskar_duel_immune'].includes(job.type)){if(tickHuskarDuelJob(game,job))remaining.push(job);continue;}
     if(job.type==='huskar_unyielding'){if(tickHuskarJob(game,job,heroScriptApi))remaining.push(job);continue;}
     if(isAesaraJobType(job.type)){if(tickAesaraJob(game,job,heroScriptApi))remaining.push(job);continue;}
@@ -856,6 +865,7 @@ export function tickSourceScriptJobs(game,dt=0){
     }
   }
   game.state.sourceSkillJobs=remaining;
+  pruneSoulToxinHandles(game);
   if(game.state.nagaScriptCasters){
     const owned=new Set(remaining.filter(isRetainedNagaJob).map(job=>String(job.sourceId)));
     for(const id of Object.keys(game.state.nagaScriptCasters))if(!owned.has(id))delete game.state.nagaScriptCasters[id];

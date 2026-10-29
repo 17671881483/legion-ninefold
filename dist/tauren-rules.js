@@ -45,7 +45,7 @@ export function taurenAttackDamage(g,e,target,api,selectedBranch=null){
 export function taurenMainDeath(g,e,api){
   if(!level(e,'A0N6'))return false;
   // These earlier branches match on prototype regardless of A0N6. The
-  // living-bomb tag "7" is recorded as a remaining cross-family boundary.
+  // living-bomb tag "7" is selected in runMainUnitDeath before this hook.
   if(['h0PC','h0D3','h2A2','n004'].includes(raw(e)))return false;
   const p=pos(e),userData=e.userData??(Number.isInteger(e.ownerId)?e.ownerId+1:0),body=api.spawnUnit(g,e,raw(e),{worldX:p.x,worldY:p.y,facing:e.facing??0,userData,expiresAt:g.state.time+9,isSummon:true,isIllusion:false});
   if(!body){(e.status??={}).taurenMissingTemplate=raw(e);return true;}

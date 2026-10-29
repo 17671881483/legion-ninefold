@@ -1,0 +1,443 @@
+{
+  "source": {
+    "path": "reference/v14-source/raw_extracted/war3map.j",
+    "sha256": "e66c55b3b25b185c991be5613e21fbf5b2d598f3cc40f2f8cd01c23bcb828250",
+    "lineFormat": "Latin-1 / LF"
+  },
+  "abilities": {
+    "A0IP": {
+      "rawcode": "A0IP",
+      "name": "活体炸弹",
+      "tip": "活体炸弹",
+      "ubertip": "附近600码内随机一个敌方单位注入活体炸弹，使其减少攻击速度50%，且每秒受到其最大生命值5%的伤害，持续7s。如果该单位在活体炸弹效果持续时间内死亡，则以其为中心对半径450码单位造成150点伤害，眩晕1.5s，并且减少5点护甲持续3s。",
+      "alias": "A0IP",
+      "code": "Aslo",
+      "BuffID1": "B04Y",
+      "DataB1": "0.5",
+      "levels": "1",
+      "targs1": "air,enemies,ground",
+      "targs2": "_",
+      "targs3": "_",
+      "targs4": "_",
+      "untip": "点击右键激活自动施法",
+      "unubertip": "点击右键取消自动施法",
+      "Cost1": "20",
+      "Dur1": "7.0",
+      "HeroDur1": "7.0",
+      "Rng1": "600.0",
+      "Cool1": "2.0",
+      "priority": "3"
+    },
+    "A0IQ": {
+      "rawcode": "A0IQ",
+      "name": "活体炸弹 马甲",
+      "tip": "Faerie Fire",
+      "ubertip": "活体炸弹",
+      "alias": "A0IQ",
+      "code": "Afae",
+      "BuffID1": "B050",
+      "DataA1": "5",
+      "levels": "1",
+      "targs1": "_",
+      "targs2": "_",
+      "targs3": "_",
+      "targs4": "_",
+      "untip": "Right-click to activate auto-casting.",
+      "unubertip": "Right-click to deactivate auto-casting.",
+      "Dur1": "3.0",
+      "HeroDur1": "3.0",
+      "Rng1": "700.0",
+      "checkDep": "1",
+      "priority": "2"
+    },
+    "A0IR": {
+      "rawcode": "A0IR",
+      "name": "死灵术士光环",
+      "tip": "虔诚光环 - [等级 11]",
+      "ubertip": "为附近的友方单位提供5点额外护甲。\n\n对自身无效",
+      "alias": "A0IR",
+      "code": "AHad",
+      "Area1": "600.0",
+      "levels": "1",
+      "targs1": "none",
+      "targs2": "_",
+      "targs3": "_",
+      "targs4": "_",
+      "checkDep": "1",
+      "reqLevel": "1"
+    },
+    "A0IS": {
+      "rawcode": "A0IS",
+      "name": "活体炸弹",
+      "tip": "风暴之锤(T) - [等级 1]",
+      "ubertip": "向目标投掷一巨大的魔法锤，对其造成100点伤害并使其5秒内处于眩晕状态。",
+      "alias": "A0IS",
+      "code": "AHtb",
+      "BuffID1": "B04Z",
+      "levels": "1",
+      "targs1": "_",
+      "targs2": "_",
+      "targs3": "_",
+      "targs4": "_",
+      "Dur1": "1.5",
+      "HeroDur1": "1.5",
+      "Rng1": "5000.0",
+      "checkDep": "1",
+      "reqLevel": "1"
+    }
+  },
+  "units": {
+    "h0JP": {
+      "rawcode": "h0JP",
+      "name": "骷髅术士",
+      "mana0": "20",
+      "regenMana": "1.0",
+      "abilList": "A0IR,Aihn,A0IP",
+      "auto": "_",
+      "castbsw": "0.51",
+      "castpt": "0.3",
+      "manaN": "22",
+      "type": "giant"
+    },
+    "h0JQ": {
+      "rawcode": "h0JQ",
+      "name": "骷髅术士",
+      "abilList": "A02K,A0IP,A008,A118",
+      "auto": "_",
+      "castbsw": "0.51",
+      "type": "ancient"
+    }
+  },
+  "sourceEvidence": [
+    {
+      "line": 38591,
+      "text": "function BOOMA01 takes nothing returns nothing"
+    },
+    {
+      "line": 38592,
+      "text": "local timer t=GetExpiredTimer()"
+    },
+    {
+      "line": 38593,
+      "text": "local unit i=LoadUnitHandle(O,H2I(t),StringHash(\"u\"))"
+    },
+    {
+      "line": 38594,
+      "text": "local unit Qf=LoadUnitHandle(O,H2I(t),StringHash(\"tag\"))"
+    },
+    {
+      "line": 38595,
+      "text": "call SaveInteger(O,H2I(Qf),StringHash(\"7\"),LoadInteger(O,H2I(Qf),StringHash(\"7\"))-1)"
+    },
+    {
+      "line": 38596,
+      "text": "call UnitDamageTargetBJ(i,Qf,GetUnitState(Qf,UNIT_STATE_MAX_LIFE)*.05,ATTACK_TYPE_CHAOS,DAMAGE_TYPE_UNIVERSAL)"
+    },
+    {
+      "line": 38597,
+      "text": "if LoadInteger(O,H2I(Qf),StringHash(\"7\"))==0 then"
+    },
+    {
+      "line": 38598,
+      "text": "call FlushChildHashtable(O,H2I(t))"
+    },
+    {
+      "line": 38599,
+      "text": "call DestroyTimer(t)"
+    },
+    {
+      "line": 38600,
+      "text": "endif"
+    },
+    {
+      "line": 38601,
+      "text": "endfunction"
+    },
+    {
+      "line": 39218,
+      "text": "function Trig_allabilityActions takes nothing returns nothing"
+    },
+    {
+      "line": 39219,
+      "text": "local integer BF=GetSpellAbilityId()"
+    },
+    {
+      "line": 39221,
+      "text": "local unit i=GetTriggerUnit()"
+    },
+    {
+      "line": 39224,
+      "text": "local unit Qf=GetSpellTargetUnit()"
+    },
+    {
+      "line": 39239,
+      "text": "call DisableTrigger(Eb)"
+    },
+    {
+      "line": 39769,
+      "text": "elseif BF==$41304950 then"
+    },
+    {
+      "line": 39770,
+      "text": "set t=CreateTimer()"
+    },
+    {
+      "line": 39771,
+      "text": "call TimerStart(t,1,true,function BOOMA01)"
+    },
+    {
+      "line": 39772,
+      "text": "call SaveUnitHandle(O,H2I(t),StringHash(\"tag\"),Qf)"
+    },
+    {
+      "line": 39773,
+      "text": "call SaveUnitHandle(O,H2I(t),StringHash(\"u\"),i)"
+    },
+    {
+      "line": 39774,
+      "text": "call SaveInteger(O,H2I(Qf),StringHash(\"7\"),7)"
+    },
+    {
+      "line": 39958,
+      "text": "function InitTrig_allability takes nothing returns nothing"
+    },
+    {
+      "line": 39959,
+      "text": "set Yp=CreateTrigger()"
+    },
+    {
+      "line": 39960,
+      "text": "call TriggerRegisterAnyUnitEventBJ(Yp,EVENT_PLAYER_UNIT_SPELL_EFFECT)"
+    },
+    {
+      "line": 39961,
+      "text": "call TriggerAddAction(Yp,function Trig_allabilityActions)"
+    },
+    {
+      "line": 41703,
+      "text": "function Destruction01 takes nothing returns boolean"
+    },
+    {
+      "line": 41704,
+      "text": "local unit i=GetKillingUnit()"
+    },
+    {
+      "line": 41705,
+      "text": "return IsUnitEnemy(GetFilterUnit(),GetOwningPlayer(i))==true"
+    },
+    {
+      "line": 41706,
+      "text": "set i=null"
+    },
+    {
+      "line": 41707,
+      "text": "endfunction"
+    },
+    {
+      "line": 42090,
+      "text": "if GetUnitAbilityLevel(bv,$41304857)>0 then"
+    },
+    {
+      "line": 42091,
+      "text": "set P8=4+GetUnitState(i,UNIT_STATE_MAX_LIFE)*.02"
+    },
+    {
+      "line": 42092,
+      "text": "call DestroyEffect(AddSpecialEffect(\"Abilities\\\\Spells\\\\Other\\\\Volcano\\\\VolcanoMissile.mdl\",FF,FG))"
+    },
+    {
+      "line": 42093,
+      "text": "call DestroyEffect(AddSpecialEffect(\"Abilities\\\\Spells\\\\Other\\\\Incinerate\\\\FireLordDeathExplode.mdl\",FF,FG))"
+    },
+    {
+      "line": 42094,
+      "text": "call DamageAoe(bv,FF,FG,200,P8,ATTACK_TYPE_MELEE,DAMAGE_TYPE_MAGIC)"
+    },
+    {
+      "line": 42095,
+      "text": "elseif GetUnitTypeId(i)==$68304A4A and bv!=null and GetUnitAbilityLevel(i,$41304941)>0 and IsUnitIllusionBJ(i)==false then"
+    },
+    {
+      "line": 42096,
+      "text": "if GetRandomInt(0,1)>0 and LoadBoolean(O,GetHandleId(i),StringHash(\"u1\"))==true then"
+    },
+    {
+      "line": 42097,
+      "text": "call FlushChildHashtable(O,GetHandleId(i))"
+    },
+    {
+      "line": 42098,
+      "text": "else"
+    },
+    {
+      "line": 42099,
+      "text": "set t=CreateTimer()"
+    },
+    {
+      "line": 42100,
+      "text": "call SaveUnitHandle(O,GetHandleId(t),StringHash(\"unit\"),i)"
+    },
+    {
+      "line": 42101,
+      "text": "if LoadBoolean(O,GetHandleId(i),StringHash(\"SMYinwei\")) then"
+    },
+    {
+      "line": 42102,
+      "text": "call SaveBoolean(O,GetHandleId(t),1,true)"
+    },
+    {
+      "line": 42103,
+      "text": "endif"
+    },
+    {
+      "line": 42104,
+      "text": "call TimerStart(t,1,false,function A01ATimer)"
+    },
+    {
+      "line": 42105,
+      "text": "endif"
+    },
+    {
+      "line": 42106,
+      "text": "elseif GetUnitTypeId(i)==$68305043 then"
+    },
+    {
+      "line": 42107,
+      "text": "elseif LoadInteger(O,H2I(i),StringHash(\"7\"))!=0 then"
+    },
+    {
+      "line": 42108,
+      "text": "set bj_lastCreatedUnit=CreateUnit(GetOwningPlayer(bv),Pn,FF,FG,0)"
+    },
+    {
+      "line": 42109,
+      "text": "call YDWETimerRemoveUnit(1.,bj_lastCreatedUnit)"
+    },
+    {
+      "line": 42110,
+      "text": "call UnitAddAbility(bj_lastCreatedUnit,$41304953)"
+    },
+    {
+      "line": 42111,
+      "text": "call UnitAddAbility(bj_lastCreatedUnit,$41304951)"
+    },
+    {
+      "line": 42112,
+      "text": "call UnitApplyTimedLife(bj_lastCreatedUnit,$42487765,2.)"
+    },
+    {
+      "line": 42113,
+      "text": "call DestroyEffect(AddSpecialEffect(\"Units\\\\Undead\\\\Abomination\\\\AbominationExplosion.mdl\",FF,FG))"
+    },
+    {
+      "line": 42114,
+      "text": "set Cd=Condition(function Destruction01)"
+    },
+    {
+      "line": 42115,
+      "text": "call GroupEnumUnitsInRange(Uz,GetUnitX(i),GetUnitY(i),450,Cd)"
+    },
+    {
+      "line": 42116,
+      "text": "call DestroyBoolExpr(Cd)"
+    },
+    {
+      "line": 42117,
+      "text": "set Cd=null"
+    },
+    {
+      "line": 42118,
+      "text": "loop"
+    },
+    {
+      "line": 42119,
+      "text": "set D6=FirstOfGroup(Uz)"
+    },
+    {
+      "line": 42120,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 42121,
+      "text": "call UnitDamageTargetBJ(i,D6,150,ATTACK_TYPE_CHAOS,DAMAGE_TYPE_UNIVERSAL)"
+    },
+    {
+      "line": 42122,
+      "text": "call IssueTargetOrder(bj_lastCreatedUnit,\"thunderbolt\",D6)"
+    },
+    {
+      "line": 42123,
+      "text": "call IssueTargetOrder(bj_lastCreatedUnit,\"faeriefire\",D6)"
+    },
+    {
+      "line": 42124,
+      "text": "call GroupRemoveUnit(Uz,D6)"
+    },
+    {
+      "line": 42125,
+      "text": "endloop"
+    },
+    {
+      "line": 42126,
+      "text": "elseif GetUnitTypeId(i)==$68304433 or GetUnitTypeId(i)==$68324132 then"
+    },
+    {
+      "line": 42127,
+      "text": "set h=LoadPlayerHandle(O,GetHandleId(i),StringHash(\"P_id\"))"
+    },
+    {
+      "line": 42128,
+      "text": "call SaveInteger(O,GetHandleId(h),StringHash(\"Bone_Dragon\"),LoadInteger(O,GetHandleId(h),StringHash(\"Bone_Dragon\"))-1)"
+    },
+    {
+      "line": 42129,
+      "text": "set h=null"
+    },
+    {
+      "line": 42130,
+      "text": "elseif GetUnitTypeId(i)==$6E303034 then"
+    },
+    {
+      "line": 20222,
+      "text": "if GetUnitTypeId(Kc)==$68304A50 then"
+    },
+    {
+      "line": 20223,
+      "text": "call SaveInteger(O,GetHandleId(BF),StringHash(\"Attack20\"),LoadInteger(O,GetHandleId(BF),StringHash(\"Attack20\"))+1)"
+    },
+    {
+      "line": 21405,
+      "text": "if GetUnitTypeId(i)==$68304A50 then"
+    },
+    {
+      "line": 21406,
+      "text": "call SaveInteger(O,GetHandleId(BF),StringHash(\"Attack20\"),LoadInteger(O,GetHandleId(BF),StringHash(\"Attack20\"))+1)"
+    },
+    {
+      "line": 48628,
+      "text": "call UnitRemoveAbility(i,$41304950)"
+    },
+    {
+      "line": 48629,
+      "text": "call UnitAddAbility(i,$41304950)"
+    }
+  ],
+  "rules": [
+    "Every SPELL_EFFECT creates a new repeating1s timer and sets the same target integer key7 to7. No buff/alive test in BOOMA01.",
+    "Each callback decrements the shared integer before dealing5% current max life. It checks exact zero after damage; other timers are not cancelled.",
+    "Death elseif: killer fire, Skeleton King, h0PC(empty), nonzero key7, bone dragon, n004, Tauren. Nonzero includes negative.",
+    "Explosion selects enemies of killer owner within450, but damage150 is sourced by the dead bomb target, with chaos/universal. No alive/Avul filter in Destruction01.",
+    "One shared dummy owner is killer; each target gets thunderbolt then faeriefire command. RemoveUnit at1sec and timedLife2sec both recorded.",
+    "A0IR native armor DataA1 is absent and targs1=none; separate prototype Attack20 registration needs further investigation."
+  ],
+  "boundaries": [
+    "Aslo command execution currently instant. h0JP castpt0.3/castbsw0.51 exist, but full native cast sequencing and missing DataA movement slow are not synthesized.",
+    "Web manual target cast available. Unit auto field_ and no A0IP-specific automated slow entry found; no tooltip-based random-target AI invented.",
+    "Dummy casts have missing native damage/mana/cooldown/target/cast fields and shared command cancellation. Only requests retained; no automatic area stun/armor reduction asserted.",
+    "Null killer GetOwningPlayer(null) semantics unverified; death branch selected and explicit boundary recorded, no fallback to bomber owner.",
+    "Real RemoveUnit handle behavior unresolved; jobs stop with a boundary on explicit removed handles, not ordinary death/corpse cleanup.",
+    "Host enumeration omits hidden/locust and follows entity insertion order. Timer family is interleaved chronologically, cross-family native ordering remains partial.",
+    "Negative shared counters can leave a timer running indefinitely in source. Preserved, not silently capped; normal wave reset still follows host lifecycle.",
+    "UnitDamageTargetBJ uses host attack-flag adapter as in existing Bandit/Malfurion branches. Native engine event classification not independently exercised."
+  ]
+}

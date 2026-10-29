@@ -722,7 +722,7 @@
     "AOws Cost1 and cast defaults absent. The host records missingNativeManaCost and adapts immediate damage without inventing a zero-cost native claim.",
     "AOws Sonic damage classification is not encoded in the packet fields; the host uses its existing spell/magic adapter. Native engine classification, cast arbitration and 0.001-second effect/frame ordering remain unverified.",
     "The attack elseif prefix retains explicit branch selection; other family effects and their full random stream are not implemented here.",
-    "Death branch with source hashtable string key 7 (A0IP living-bomb tag (Skeleton Warlock; corrected attribution in v34)) precedes A0N6 but is not implemented. Other explicit prototype branches and fire/skeleton priority are retained.",
+    "Death branch with source hashtable string key 7 belongs to Skeleton Warlock A0IP living bomb (attribution corrected in v34). Implemented in v35 before A0N6; native dummy command and null-killer boundaries remain. Other explicit prototype branches and fire/skeleton priority are retained.",
     "CreateUnit uses fresh template stats, not corpse buffs. Technology, all native creation triggers, unit/terrain collision and group handle behavior are only partially hosted.",
     "Aloc spirits are visible but not clickable; host unit repulsion is disabled, while terrain paths use the existing map adaptation."
   ],

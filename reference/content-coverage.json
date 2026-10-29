@@ -1,6 +1,6 @@
 {
   "sourceVersion": "v14.1A5",
-  "skillImplementationRevision": "v14-content-20261029-v34-1",
+  "skillImplementationRevision": "v14-content-20261029-v35-1",
   "units": 534,
   "mercenaryRecords": 60,
   "mainWaves": 35,
@@ -78,6 +78,13 @@
         "A0W0",
         "A0W2",
         "A0W3"
+      ]
+    },
+    {
+      "sourceRawcode": "h0JP",
+      "abilityIds": [
+        "A0IQ",
+        "A0IS"
       ]
     },
     {
@@ -287,10 +294,10 @@
   "playerBuildingCommandCarriers": 411,
   "playerSkills": {
     "counts": {
-      "implemented": 408,
-      "partial": 98,
+      "implemented": 406,
+      "partial": 101,
       "marker": 34,
-      "unresolved": 109
+      "unresolved": 110
     },
     "abilities": [
       {
@@ -2858,19 +2865,37 @@
       {
         "rawcode": "A0IP",
         "name": "活体炸弹",
-        "status": "implemented",
-        "kind": "debuff",
+        "status": "partial",
+        "kind": "living_bomb_source",
         "unitRawcodes": [
           "h0JQ"
         ]
       },
       {
+        "rawcode": "A0IQ",
+        "name": "活体炸弹 马甲",
+        "status": "partial",
+        "kind": "living_bomb_source",
+        "unitRawcodes": [
+          "h0JP"
+        ]
+      },
+      {
         "rawcode": "A0IR",
         "name": "死灵术士光环",
-        "status": "implemented",
-        "kind": "aura_armor",
+        "status": "unresolved",
+        "kind": "living_bomb_source",
         "unitRawcodes": [
           "h0JQ"
+        ]
+      },
+      {
+        "rawcode": "A0IS",
+        "name": "活体炸弹",
+        "status": "partial",
+        "kind": "living_bomb_source",
+        "unitRawcodes": [
+          "h0JP"
         ]
       },
       {
@@ -6997,10 +7022,10 @@
   },
   "battleSkills": {
     "counts": {
-      "implemented": 458,
-      "partial": 104,
+      "implemented": 456,
+      "partial": 107,
       "marker": 47,
-      "unresolved": 125
+      "unresolved": 126
     },
     "abilities": [
       {
@@ -9934,19 +9959,37 @@
       {
         "rawcode": "A0IP",
         "name": "活体炸弹",
-        "status": "implemented",
-        "kind": "debuff",
+        "status": "partial",
+        "kind": "living_bomb_source",
         "unitRawcodes": [
           "h0JQ"
         ]
       },
       {
+        "rawcode": "A0IQ",
+        "name": "活体炸弹 马甲",
+        "status": "partial",
+        "kind": "living_bomb_source",
+        "unitRawcodes": [
+          "h0JP"
+        ]
+      },
+      {
         "rawcode": "A0IR",
         "name": "死灵术士光环",
-        "status": "implemented",
-        "kind": "aura_armor",
+        "status": "unresolved",
+        "kind": "living_bomb_source",
         "unitRawcodes": [
           "h0JQ"
+        ]
+      },
+      {
+        "rawcode": "A0IS",
+        "name": "活体炸弹",
+        "status": "partial",
+        "kind": "living_bomb_source",
+        "unitRawcodes": [
+          "h0JP"
         ]
       },
       {
@@ -14718,8 +14761,9 @@
     }
   ],
   "remainingSourceGaps": [
+    "活体炸弹A0IP接入手动施法、共享计数1秒任务与主死亡爆炸，动态A0IQ/A0IS保留同一马甲连续命令请求。重复施放的负计数、先减后伤、击杀者阵营与死者伤害来源均保留。原生自动施法入口、Aslo施法/默认移速、马甲命令执行及null击杀者语义仍partial；A0IR缺护甲且另有Attack20登记，改为unresolved，见living-bomb-evidence.json。",
     "翼族毁灭者A0IN/A0IO及A0J5接入独立武器伤害事件：每次回魔1、恰到15才发雷霆一击命令；旧计数15时繁衍，第16/32次事件各一只，终身上限2，剧毒异虫生成h2AC。AHtc缺失冷却/施法/减速默认值、mana0继承、创建钩子及原生路线仍partial；A116缺恢复字段由误报implemented改为unresolved。A0SB既有死亡适配的完整elseif优先级待复核，见destroyer-evidence.json。",
-    "牛头人酋长A0N5/A0N6及动态A0N7接入独立武器伤害和主死亡链，保留25/101与85/101概率、9秒新灵魂和0.001秒控制字段。AOws耗魔/施法默认值、原生音波伤害类别、连续命令、先于灵魂的活体炸弹标记7分支和创建钩子仍partial，见tauren-evidence.json。",
+    "牛头人酋长A0N5/A0N6及动态A0N7接入独立武器伤害和主死亡链，保留25/101与85/101概率、9秒新灵魂和0.001秒控制字段。AOws耗魔/施法默认值、原生音波伤害类别、连续命令、先于灵魂的活体炸弹标记7分支已在v35接入，原生马甲及创建钩子仍partial，见tauren-evidence.json。",
     "萨穆罗n07U→h0VQ原型在源包有映射但未找到获取入口，当前不伪造建造菜单；单列sourceOnlyCombatForms，不冒充玩家可达技能。A1QC/D/E/F/G/H及动态A1QI/A1D6接入伤害请求、9秒暴击能力移除、15杀风暴、火刃波与5次灼烧、氏族延迟授予/独立死亡监听；原生镜像被动/驱散/隐藏阶段、基础攻击动态字段、施法仲裁和建筑事件仍partial，见blademaster-evidence.json。",
     "强盗头子A18D/E/G/H已接入圣盾事件计数、裂地、三路怨魂与死亡范围伤害，保留原生注册、施法/耗魔、碰撞边界。A18F隐形和原图入口区域映射仍unresolved，见bandit-lord-evidence.json。",
     "玛法里奥宁静手动施法/6秒光环、0.9秒星火/8秒独立冷却、结算前10%生命的一次暮光分支与5秒光环已接入。原生直接治疗、AOws施法/伤害仲裁、醉酒云雾、虚拟马甲句柄和绝对坐标转换仍partial，见malfurion-evidence.json。",

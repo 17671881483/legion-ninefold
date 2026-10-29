@@ -41,6 +41,10 @@ export function runMainUnitDeath(g,dead,killer,api){
       g._event?.('splash',dead,'火噬',{skillId:'A0HW',sourceId:killer.id,radius:200*scale(dead)});
     }else if(isV14(dead)&&api.skeletonKingDeath(g,dead,killer)){
       // This is the same final elseif chain, including random-failure cases.
+    }else if(isV14(dead)&&(dead.combatRawcode??dead.sourceRawcode)==='h0PC'){
+      // Explicit empty branch at42106 precedes the shared living-bomb tag.
+    }else if(isV14(dead)&&api.livingBombDeath?.(g,dead,killer)){
+      // Any nonzero shared counter, including negative, selects this branch.
     }else if(isV14(dead)){
       api.boneDragonDeath(g,dead);
       api.taurenDeath?.(g,dead);

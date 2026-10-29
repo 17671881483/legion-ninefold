@@ -1,0 +1,1678 @@
+{
+  "source": {
+    "path": "v14-source/raw_extracted/war3map.j",
+    "sha256": "e66c55b3b25b185c991be5613e21fbf5b2d598f3cc40f2f8cd01c23bcb828250",
+    "lineCounting": "latin1, LF only"
+  },
+  "sourceEvidence": [
+    {
+      "line": 1161,
+      "text": "integer aw=$41314436"
+    },
+    {
+      "line": 3638,
+      "text": "call DisableEggUnitTypeDialog___RegisterDialogEggUnitType($6E303755,\"è¨ç©ç½\",1)"
+    },
+    {
+      "line": 17436,
+      "text": "set Mk[Bi]=$68305651"
+    },
+    {
+      "line": 17437,
+      "text": "set Ml[Bi]=$6E303755"
+    },
+    {
+      "line": 32191,
+      "text": "function BlademasterDrawAKnifeAndChop takes unit Bc returns nothing"
+    },
+    {
+      "line": 32192,
+      "text": "local group DG=SelectRange(Bc,GetUnitX(Bc),GetUnitY(Bc),300)"
+    },
+    {
+      "line": 32193,
+      "text": "local unit D6"
+    },
+    {
+      "line": 32194,
+      "text": "loop"
+    },
+    {
+      "line": 32195,
+      "text": "set D6=FirstOfGroup(DG)"
+    },
+    {
+      "line": 32196,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 32197,
+      "text": "call GroupRemoveUnit(DG,D6)"
+    },
+    {
+      "line": 32198,
+      "text": "call UnitDamageTargetBJ(Bc,D6,5*GetUnitState(Bc,ConvertUnitState(18)),ATTACK_TYPE_CHAOS,DAMAGE_TYPE_UNIVERSAL)"
+    },
+    {
+      "line": 32199,
+      "text": "endloop"
+    },
+    {
+      "line": 32200,
+      "text": "call SetUnitLifePercentBJ(Bc,GetUnitLifePercent(Bc)+75)"
+    },
+    {
+      "line": 32201,
+      "text": "call YDWETimerDestroyEffect(1,AddSpecialEffect(\"LJQ_BDZ01_RED.mdx\",GetUnitX(Bc),GetUnitY(Bc)))"
+    },
+    {
+      "line": 32202,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 32203,
+      "text": "set DG=null"
+    },
+    {
+      "line": 32204,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 32205,
+      "text": "endfunction"
+    },
+    {
+      "line": 32206,
+      "text": "function BlademasterCriticalStrikeTimer takes nothing returns nothing"
+    },
+    {
+      "line": 32207,
+      "text": "local timer t=GetExpiredTimer()"
+    },
+    {
+      "line": 32208,
+      "text": "local unit Bc=LoadUnitHandle(O,GetHandleId(t),0)"
+    },
+    {
+      "line": 32209,
+      "text": "local integer BF=LoadInteger(O,GetHandleId(t),1)"
+    },
+    {
+      "line": 32210,
+      "text": "if Bc!=null and BF!=0 then"
+    },
+    {
+      "line": 32211,
+      "text": "call UnitAddAbility(Bc,BF)"
+    },
+    {
+      "line": 32212,
+      "text": "call UnitMakeAbilityPermanent(Bc,true,BF)"
+    },
+    {
+      "line": 32213,
+      "text": "if LoadTimerHandle(O,GetHandleId(Bc),BF)==t then"
+    },
+    {
+      "line": 32214,
+      "text": "call RemoveSavedHandle(O,GetHandleId(Bc),BF)"
+    },
+    {
+      "line": 32215,
+      "text": "endif"
+    },
+    {
+      "line": 32216,
+      "text": "endif"
+    },
+    {
+      "line": 32217,
+      "text": "call FlushChildHashtable(O,GetHandleId(t))"
+    },
+    {
+      "line": 32218,
+      "text": "call DestroyTimer(t)"
+    },
+    {
+      "line": 32219,
+      "text": "set t=null"
+    },
+    {
+      "line": 32220,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 32221,
+      "text": "endfunction"
+    },
+    {
+      "line": 32222,
+      "text": "function BlademasterCriticalStrike takes unit Bc returns nothing"
+    },
+    {
+      "line": 32223,
+      "text": "local integer BF=$41315145"
+    },
+    {
+      "line": 32224,
+      "text": "local timer t"
+    },
+    {
+      "line": 32225,
+      "text": "if Bc!=null and GetUnitAbilityLevel(Bc,BF)>0 and not IsUnitIllusion(Bc) and not HaveSavedHandle(O,GetHandleId(Bc),BF) then"
+    },
+    {
+      "line": 32226,
+      "text": "call UnitRemoveAbility(Bc,BF)"
+    },
+    {
+      "line": 32227,
+      "text": "set t=CreateTimer()"
+    },
+    {
+      "line": 32228,
+      "text": "call SaveAgentHandle(O,GetHandleId(t),0,Bc)"
+    },
+    {
+      "line": 32229,
+      "text": "call SaveInteger(O,GetHandleId(t),1,BF)"
+    },
+    {
+      "line": 32230,
+      "text": "call SaveTimerHandle(O,GetHandleId(Bc),BF,t)"
+    },
+    {
+      "line": 32231,
+      "text": "call TimerStart(t,9,false,function BlademasterCriticalStrikeTimer)"
+    },
+    {
+      "line": 32232,
+      "text": "set t=null"
+    },
+    {
+      "line": 32233,
+      "text": "endif"
+    },
+    {
+      "line": 32234,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 32235,
+      "text": "endfunction"
+    },
+    {
+      "line": 32236,
+      "text": "function BlademasterBladeStormTimer takes nothing returns nothing"
+    },
+    {
+      "line": 32237,
+      "text": "local timer t=GetExpiredTimer()"
+    },
+    {
+      "line": 32238,
+      "text": "local unit Bc=LoadUnitHandle(O,GetHandleId(t),0)"
+    },
+    {
+      "line": 32239,
+      "text": "local real FF=GetUnitX(Bc)"
+    },
+    {
+      "line": 32240,
+      "text": "local real FG=GetUnitY(Bc)"
+    },
+    {
+      "line": 32241,
+      "text": "local integer Ez=LoadInteger(O,GetHandleId(t),1)"
+    },
+    {
+      "line": 32242,
+      "text": "local group DG=SelectRange(Bc,FF,FG,200)"
+    },
+    {
+      "line": 32243,
+      "text": "local unit D6"
+    },
+    {
+      "line": 32244,
+      "text": "loop"
+    },
+    {
+      "line": 32245,
+      "text": "set D6=FirstOfGroup(DG)"
+    },
+    {
+      "line": 32246,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 32247,
+      "text": "call GroupRemoveUnit(DG,D6)"
+    },
+    {
+      "line": 32248,
+      "text": "call UnitDamageTarget(Bc,D6,137,true,false,ATTACK_TYPE_NORMAL,DAMAGE_TYPE_MAGIC,WEAPON_TYPE_WHOKNOWS)"
+    },
+    {
+      "line": 32249,
+      "text": "endloop"
+    },
+    {
+      "line": 32250,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 32251,
+      "text": "set Ez=Ez-1"
+    },
+    {
+      "line": 32252,
+      "text": "call SaveInteger(O,GetHandleId(t),1,Ez)"
+    },
+    {
+      "line": 32253,
+      "text": "if Ez<=0 then"
+    },
+    {
+      "line": 32254,
+      "text": "call SaveBoolean(O,GetHandleId(Bc),$41315144,false)"
+    },
+    {
+      "line": 32255,
+      "text": "call FlushChildHashtable(O,GetHandleId(t))"
+    },
+    {
+      "line": 32256,
+      "text": "call DestroyTimer(t)"
+    },
+    {
+      "line": 32257,
+      "text": "call AddUnitAnimationProperties(Bc,\"spin\",false)"
+    },
+    {
+      "line": 32258,
+      "text": "call UnitRemoveAbility(Bc,aw)"
+    },
+    {
+      "line": 32259,
+      "text": "else"
+    },
+    {
+      "line": 32260,
+      "text": "call TimerStart(t,1,false,function BlademasterBladeStormTimer)"
+    },
+    {
+      "line": 32261,
+      "text": "endif"
+    },
+    {
+      "line": 32262,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 32263,
+      "text": "set t=null"
+    },
+    {
+      "line": 32264,
+      "text": "set DG=null"
+    },
+    {
+      "line": 32265,
+      "text": "endfunction"
+    },
+    {
+      "line": 32266,
+      "text": "function BlademasterBladeStorm takes unit Bc returns nothing"
+    },
+    {
+      "line": 32267,
+      "text": "local timer t"
+    },
+    {
+      "line": 32268,
+      "text": "local integer y=LoadInteger(O,GetHandleId(Bc),$41315144)+1"
+    },
+    {
+      "line": 32269,
+      "text": "if y>=15 and not LoadBoolean(O,GetHandleId(Bc),$41315144) then"
+    },
+    {
+      "line": 32270,
+      "text": "call SaveInteger(O,GetHandleId(Bc),$41315144,y-15)"
+    },
+    {
+      "line": 32271,
+      "text": "call SaveBoolean(O,GetHandleId(Bc),$41315144,true)"
+    },
+    {
+      "line": 32272,
+      "text": "call AddUnitAnimationProperties(Bc,\"spin\",true)"
+    },
+    {
+      "line": 32273,
+      "text": "set t=CreateTimer()"
+    },
+    {
+      "line": 32274,
+      "text": "call SaveUnitHandle(O,GetHandleId(t),0,Bc)"
+    },
+    {
+      "line": 32275,
+      "text": "call SaveInteger(O,GetHandleId(t),1,4)"
+    },
+    {
+      "line": 32276,
+      "text": "call TimerStart(t,0,false,function BlademasterBladeStormTimer)"
+    },
+    {
+      "line": 32277,
+      "text": "call UnitAddAbility(Bc,aw)"
+    },
+    {
+      "line": 32278,
+      "text": "set t=null"
+    },
+    {
+      "line": 32279,
+      "text": "elseif not LoadBoolean(O,GetHandleId(Bc),$41315144) then"
+    },
+    {
+      "line": 32280,
+      "text": "call SaveInteger(O,GetHandleId(Bc),$41315144,y)"
+    },
+    {
+      "line": 32281,
+      "text": "endif"
+    },
+    {
+      "line": 32282,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 32283,
+      "text": "endfunction"
+    },
+    {
+      "line": 32284,
+      "text": "function BladeMasterSwordFireFireTimer takes nothing returns nothing"
+    },
+    {
+      "line": 32285,
+      "text": "local timer t=GetExpiredTimer()"
+    },
+    {
+      "line": 32286,
+      "text": "local unit Om=LoadUnitHandle(O,GetHandleId(t),0)"
+    },
+    {
+      "line": 32287,
+      "text": "local unit Bc=LoadUnitHandle(O,GetHandleId(t),1)"
+    },
+    {
+      "line": 32288,
+      "text": "local integer Ez=LoadInteger(O,GetHandleId(t),2)"
+    },
+    {
+      "line": 32289,
+      "text": "call UnitDamageTarget(Bc,Om,72,false,false,ATTACK_TYPE_NORMAL,DAMAGE_TYPE_MAGIC,null)"
+    },
+    {
+      "line": 32290,
+      "text": "set Ez=Ez-1"
+    },
+    {
+      "line": 32291,
+      "text": "call SaveInteger(O,GetHandleId(t),2,Ez)"
+    },
+    {
+      "line": 32292,
+      "text": "if Ez<=0 then"
+    },
+    {
+      "line": 32293,
+      "text": "call FlushChildHashtable(O,GetHandleId(t))"
+    },
+    {
+      "line": 32294,
+      "text": "call DestroyTimer(t)"
+    },
+    {
+      "line": 32295,
+      "text": "endif"
+    },
+    {
+      "line": 32296,
+      "text": "set Om=null"
+    },
+    {
+      "line": 32297,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 32298,
+      "text": "set t=null"
+    },
+    {
+      "line": 32299,
+      "text": "endfunction"
+    },
+    {
+      "line": 32300,
+      "text": "function BladeMasterSwordFireTimer takes nothing returns nothing"
+    },
+    {
+      "line": 32301,
+      "text": "local timer t=GetExpiredTimer()"
+    },
+    {
+      "line": 32302,
+      "text": "local unit Bc=LoadUnitHandle(O,GetHandleId(t),0)"
+    },
+    {
+      "line": 32303,
+      "text": "local unit Ki=LoadUnitHandle(O,GetHandleId(t),1)"
+    },
+    {
+      "line": 32304,
+      "text": "local real Pm=LoadReal(O,GetHandleId(t),2)"
+    },
+    {
+      "line": 32305,
+      "text": "local real Qx=LoadReal(O,GetHandleId(t),3)"
+    },
+    {
+      "line": 32306,
+      "text": "local real FF=GetUnitX(Ki)"
+    },
+    {
+      "line": 32307,
+      "text": "local real FG=GetUnitY(Ki)"
+    },
+    {
+      "line": 32308,
+      "text": "local real QT=200*.03"
+    },
+    {
+      "line": 32309,
+      "text": "local real ID=Cos(Pm*bj_DEGTORAD)*QT"
+    },
+    {
+      "line": 32310,
+      "text": "local real IF=Sin(Pm*bj_DEGTORAD)*QT"
+    },
+    {
+      "line": 32311,
+      "text": "local real ah=FF+ID"
+    },
+    {
+      "line": 32312,
+      "text": "local real ai=FG+IF"
+    },
+    {
+      "line": 32313,
+      "text": "local group DG=SelectRange(Bc,ah,ai,200)"
+    },
+    {
+      "line": 32314,
+      "text": "local group ag=LoadGroupHandle(O,GetHandleId(t),4)"
+    },
+    {
+      "line": 32315,
+      "text": "local unit D6=null"
+    },
+    {
+      "line": 32316,
+      "text": "local timer aj=null"
+    },
+    {
+      "line": 32317,
+      "text": "call SetUnitPosition(Ki,ah,ai)"
+    },
+    {
+      "line": 32318,
+      "text": "loop"
+    },
+    {
+      "line": 32319,
+      "text": "set D6=FirstOfGroup(DG)"
+    },
+    {
+      "line": 32320,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 32321,
+      "text": "call GroupRemoveUnit(DG,D6)"
+    },
+    {
+      "line": 32322,
+      "text": "if not IsUnitInGroup(D6,ag) then"
+    },
+    {
+      "line": 32323,
+      "text": "call UnitDamageTarget(Bc,D6,225,true,false,ATTACK_TYPE_NORMAL,DAMAGE_TYPE_MAGIC,null)"
+    },
+    {
+      "line": 32324,
+      "text": "set aj=CreateTimer()"
+    },
+    {
+      "line": 32325,
+      "text": "call SaveUnitHandle(O,GetHandleId(aj),0,D6)"
+    },
+    {
+      "line": 32326,
+      "text": "call SaveUnitHandle(O,GetHandleId(aj),1,Bc)"
+    },
+    {
+      "line": 32327,
+      "text": "call SaveInteger(O,GetHandleId(aj),2,5)"
+    },
+    {
+      "line": 32328,
+      "text": "call TimerStart(aj,1.,true,function BladeMasterSwordFireFireTimer)"
+    },
+    {
+      "line": 32329,
+      "text": "call GroupAddUnit(ag,D6)"
+    },
+    {
+      "line": 32330,
+      "text": "endif"
+    },
+    {
+      "line": 32331,
+      "text": "endloop"
+    },
+    {
+      "line": 32332,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 32333,
+      "text": "set Qx=Qx-QT"
+    },
+    {
+      "line": 32334,
+      "text": "if Qx>0. then"
+    },
+    {
+      "line": 32335,
+      "text": "call SaveReal(O,GetHandleId(t),3,Qx)"
+    },
+    {
+      "line": 32336,
+      "text": "else"
+    },
+    {
+      "line": 32337,
+      "text": "call RemoveUnit(Ki)"
+    },
+    {
+      "line": 32338,
+      "text": "call DestroyGroup(ag)"
+    },
+    {
+      "line": 32339,
+      "text": "call FlushChildHashtable(O,GetHandleId(t))"
+    },
+    {
+      "line": 32340,
+      "text": "call DestroyTimer(t)"
+    },
+    {
+      "line": 32341,
+      "text": "endif"
+    },
+    {
+      "line": 32342,
+      "text": "set Ki=null"
+    },
+    {
+      "line": 32343,
+      "text": "set D6=null"
+    },
+    {
+      "line": 32344,
+      "text": "set DG=null"
+    },
+    {
+      "line": 32345,
+      "text": "set ag=null"
+    },
+    {
+      "line": 32346,
+      "text": "set aj=null"
+    },
+    {
+      "line": 32347,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 32348,
+      "text": "set t=null"
+    },
+    {
+      "line": 32349,
+      "text": "endfunction"
+    },
+    {
+      "line": 32350,
+      "text": "function BladeMasterSwordFire takes unit Bc,real Pm returns nothing"
+    },
+    {
+      "line": 32351,
+      "text": "local real Qx=1000."
+    },
+    {
+      "line": 32352,
+      "text": "local unit Ki=CreateUnit(GetOwningPlayer(Bc),Pn,GetUnitX(Bc),GetUnitY(Bc),Pm)"
+    },
+    {
+      "line": 32353,
+      "text": "local group ag=CreateGroup()"
+    },
+    {
+      "line": 32354,
+      "text": "local timer t=CreateTimer()"
+    },
+    {
+      "line": 32355,
+      "text": "local effect DE=AddSpecialEffect(\"LJQ_JS_JQB01.mdx\",GetUnitX(Bc),GetUnitY(Bc))"
+    },
+    {
+      "line": 32356,
+      "text": "call EXEffectMatRotateZ(DE,Pm)"
+    },
+    {
+      "line": 32357,
+      "text": "call YDWETimerDestroyEffect(1,DE)"
+    },
+    {
+      "line": 32358,
+      "text": "call SaveUnitHandle(O,GetHandleId(t),0,Bc)"
+    },
+    {
+      "line": 32359,
+      "text": "call SaveUnitHandle(O,GetHandleId(t),1,Ki)"
+    },
+    {
+      "line": 32360,
+      "text": "call SaveReal(O,GetHandleId(t),2,Pm)"
+    },
+    {
+      "line": 32361,
+      "text": "call SaveReal(O,GetHandleId(t),3,Qx)"
+    },
+    {
+      "line": 32362,
+      "text": "call SaveGroupHandle(O,GetHandleId(t),4,ag)"
+    },
+    {
+      "line": 32363,
+      "text": "call TimerStart(t,.03,true,function BladeMasterSwordFireTimer)"
+    },
+    {
+      "line": 32364,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 32365,
+      "text": "set Ki=null"
+    },
+    {
+      "line": 32366,
+      "text": "set ag=null"
+    },
+    {
+      "line": 32367,
+      "text": "set t=null"
+    },
+    {
+      "line": 32368,
+      "text": "set DE=null"
+    },
+    {
+      "line": 32369,
+      "text": "endfunction"
+    },
+    {
+      "line": 32370,
+      "text": "function BlademasterClassTimerAction takes nothing returns nothing"
+    },
+    {
+      "line": 32371,
+      "text": "local trigger t=GetTriggeringTrigger()"
+    },
+    {
+      "line": 32372,
+      "text": "local unit Bc=LoadUnitHandle(O,GetHandleId(t),0)"
+    },
+    {
+      "line": 32373,
+      "text": "local group DG=SelectRange(Bc,GetUnitX(Bc),GetUnitY(Bc),400)"
+    },
+    {
+      "line": 32374,
+      "text": "local unit Qf"
+    },
+    {
+      "line": 32375,
+      "text": "if CountUnitsInGroup(DG)>0 then"
+    },
+    {
+      "line": 32376,
+      "text": "set Qf=GroupPickRandomUnit(DG)"
+    },
+    {
+      "line": 32377,
+      "text": "call UnitDamageTargetBJ(Bc,Qf,999999,ATTACK_TYPE_CHAOS,DAMAGE_TYPE_UNIVERSAL)"
+    },
+    {
+      "line": 32378,
+      "text": "else"
+    },
+    {
+      "line": 32379,
+      "text": "set Qf=GetKillingUnit()"
+    },
+    {
+      "line": 32380,
+      "text": "endif"
+    },
+    {
+      "line": 32381,
+      "text": "if Qf!=null and IsUnitAliveBJ(Qf) then"
+    },
+    {
+      "line": 32382,
+      "text": "call KillUnit(Qf)"
+    },
+    {
+      "line": 32383,
+      "text": "endif"
+    },
+    {
+      "line": 32384,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 32385,
+      "text": "if Bc!=null then"
+    },
+    {
+      "line": 32386,
+      "text": "call RemoveSavedHandle(O,GetHandleId(Bc),$41315149)"
+    },
+    {
+      "line": 32387,
+      "text": "endif"
+    },
+    {
+      "line": 32388,
+      "text": "call FlushChildHashtable(O,GetHandleId(t))"
+    },
+    {
+      "line": 32389,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 32390,
+      "text": "set Qf=null"
+    },
+    {
+      "line": 32391,
+      "text": "set t=null"
+    },
+    {
+      "line": 32392,
+      "text": "set DG=null"
+    },
+    {
+      "line": 32393,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 32394,
+      "text": "endfunction"
+    },
+    {
+      "line": 32395,
+      "text": "function BlademasterClassTimer takes nothing returns nothing"
+    },
+    {
+      "line": 32396,
+      "text": "local timer t=GetExpiredTimer()"
+    },
+    {
+      "line": 32397,
+      "text": "local integer BF=LoadInteger(O,GetHandleId(t),1)"
+    },
+    {
+      "line": 32398,
+      "text": "local unit Bc=LoadUnitHandle(O,GetHandleId(t),0)"
+    },
+    {
+      "line": 32399,
+      "text": "local group DG=YDWEGetUnitsOfPlayerAndTypeIdNull(GetOwningPlayer(Bc),BF)"
+    },
+    {
+      "line": 32400,
+      "text": "local unit D6"
+    },
+    {
+      "line": 32401,
+      "text": "local trigger El"
+    },
+    {
+      "line": 32402,
+      "text": "if CountUnitsInGroup(DG)>0 then"
+    },
+    {
+      "line": 32403,
+      "text": "call UnitAddAbility(Bc,$41315149)"
+    },
+    {
+      "line": 32404,
+      "text": "call UnitMakeAbilityPermanent(Bc,true,$41315149)"
+    },
+    {
+      "line": 32405,
+      "text": "if not HaveSavedHandle(O,GetHandleId(Bc),$41315149) then"
+    },
+    {
+      "line": 32406,
+      "text": "set El=CreateTrigger()"
+    },
+    {
+      "line": 32407,
+      "text": "call SaveAgentHandle(O,GetHandleId(El),0,Bc)"
+    },
+    {
+      "line": 32408,
+      "text": "call SaveTriggerHandle(O,GetHandleId(Bc),$41315149,El)"
+    },
+    {
+      "line": 32409,
+      "text": "call TriggerRegisterUnitEvent(El,Bc,EVENT_UNIT_DEATH)"
+    },
+    {
+      "line": 32410,
+      "text": "call TriggerAddAction(El,function BlademasterClassTimerAction)"
+    },
+    {
+      "line": 32411,
+      "text": "endif"
+    },
+    {
+      "line": 32412,
+      "text": "loop"
+    },
+    {
+      "line": 32413,
+      "text": "set D6=FirstOfGroup(DG)"
+    },
+    {
+      "line": 32414,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 32415,
+      "text": "call GroupRemoveUnit(DG,D6)"
+    },
+    {
+      "line": 32416,
+      "text": "call UnitAddAbility(D6,$41315149)"
+    },
+    {
+      "line": 32417,
+      "text": "call UnitMakeAbilityPermanent(D6,true,$41315149)"
+    },
+    {
+      "line": 32418,
+      "text": "if not HaveSavedHandle(O,GetHandleId(D6),$41315149) then"
+    },
+    {
+      "line": 32419,
+      "text": "set El=CreateTrigger()"
+    },
+    {
+      "line": 32420,
+      "text": "call SaveAgentHandle(O,GetHandleId(El),0,D6)"
+    },
+    {
+      "line": 32421,
+      "text": "call SaveTriggerHandle(O,GetHandleId(D6),$41315149,El)"
+    },
+    {
+      "line": 32422,
+      "text": "call TriggerRegisterUnitEvent(El,D6,EVENT_UNIT_DEATH)"
+    },
+    {
+      "line": 32423,
+      "text": "call TriggerAddAction(El,function BlademasterClassTimerAction)"
+    },
+    {
+      "line": 32424,
+      "text": "endif"
+    },
+    {
+      "line": 32425,
+      "text": "endloop"
+    },
+    {
+      "line": 32426,
+      "text": "endif"
+    },
+    {
+      "line": 32427,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 32428,
+      "text": "call FlushChildHashtable(O,GetHandleId(t))"
+    },
+    {
+      "line": 32429,
+      "text": "call DestroyTimer(t)"
+    },
+    {
+      "line": 32430,
+      "text": "set DG=null"
+    },
+    {
+      "line": 32431,
+      "text": "set t=null"
+    },
+    {
+      "line": 32432,
+      "text": "set El=null"
+    },
+    {
+      "line": 32433,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 32434,
+      "text": "endfunction"
+    },
+    {
+      "line": 32435,
+      "text": "function BlademasterClass takes unit Bc,integer BF returns nothing"
+    },
+    {
+      "line": 32436,
+      "text": "local timer t=CreateTimer()"
+    },
+    {
+      "line": 32437,
+      "text": "call SaveAgentHandle(O,GetHandleId(t),0,Bc)"
+    },
+    {
+      "line": 32438,
+      "text": "call SaveInteger(O,GetHandleId(t),1,BF)"
+    },
+    {
+      "line": 32439,
+      "text": "call TimerStart(t,1,false,function BlademasterClassTimer)"
+    },
+    {
+      "line": 32440,
+      "text": "set t=null"
+    },
+    {
+      "line": 32441,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 32442,
+      "text": "endfunction"
+    },
+    {
+      "line": 39336,
+      "text": "if BF==$41315146 then"
+    },
+    {
+      "line": 39337,
+      "text": "call BlademasterDrawAKnifeAndChop(i)"
+    },
+    {
+      "line": 39338,
+      "text": "endif"
+    },
+    {
+      "line": 39339,
+      "text": "if BF==$41315147 then"
+    },
+    {
+      "line": 39340,
+      "text": "call BladeMasterSwordFire(i,Atan2BJ(FG-GetUnitY(i),FF-GetUnitX(i)))"
+    },
+    {
+      "line": 39341,
+      "text": "endif"
+    },
+    {
+      "line": 40553,
+      "text": "if P8<=0 or bV==i or bV==null or IsUnitAlly(bV,GetOwningPlayer(i)) then"
+    },
+    {
+      "line": 40554,
+      "text": "set i=null"
+    },
+    {
+      "line": 40555,
+      "text": "set bV=null"
+    },
+    {
+      "line": 40556,
+      "text": "set Eb=null"
+    },
+    {
+      "line": 40557,
+      "text": "set h=null"
+    },
+    {
+      "line": 40558,
+      "text": "set Uz=null"
+    },
+    {
+      "line": 40559,
+      "text": "return"
+    },
+    {
+      "line": 40560,
+      "text": "endif"
+    },
+    {
+      "line": 40561,
+      "text": "if GetUnitAbilityLevel(bV,$41325937)>0 then"
+    },
+    {
+      "line": 40562,
+      "text": "set i=null"
+    },
+    {
+      "line": 40563,
+      "text": "set bV=null"
+    },
+    {
+      "line": 40564,
+      "text": "set Eb=null"
+    },
+    {
+      "line": 40565,
+      "text": "set h=null"
+    },
+    {
+      "line": 40566,
+      "text": "set Uz=null"
+    },
+    {
+      "line": 40567,
+      "text": "return"
+    },
+    {
+      "line": 40568,
+      "text": "endif"
+    },
+    {
+      "line": 40569,
+      "text": "if GetUnitAbilityLevel(i,QC)>0 then"
+    },
+    {
+      "line": 40570,
+      "text": "set P8=P8*.85"
+    },
+    {
+      "line": 40571,
+      "text": "call YDWESetEventDamage(P8)"
+    },
+    {
+      "line": 40572,
+      "text": "endif"
+    },
+    {
+      "line": 40573,
+      "text": "set Uz=CreateGroup()"
+    },
+    {
+      "line": 40574,
+      "text": "call DisableTrigger(Eb)"
+    },
+    {
+      "line": 40575,
+      "text": "if IsUnitType(i,UNIT_TYPE_ANCIENT) and IsPlayer(GetOwningPlayer(i)) then"
+    },
+    {
+      "line": 40576,
+      "text": "call YDWESetEventDamage(0)"
+    },
+    {
+      "line": 40577,
+      "text": "endif"
+    },
+    {
+      "line": 40578,
+      "text": "if GetUnitAbilityLevel(i,aw)>0 then"
+    },
+    {
+      "line": 40579,
+      "text": "call YDWESetEventDamage(0)"
+    },
+    {
+      "line": 40580,
+      "text": "endif"
+    },
+    {
+      "line": 40581,
+      "text": "if not (IsUnitType(i,UNIT_TYPE_ANCIENT) and IsPlayer(GetOwningPlayer(i))) and GetUnitAbilityLevel(i,aw)<=0 then"
+    },
+    {
+      "line": 40582,
+      "text": "if P8>0 and GetUnitAbilityLevel(i,Qj)>0 then"
+    },
+    {
+      "line": 40583,
+      "text": "set P8=YseraOnDamage(i,bV,P8)"
+    },
+    {
+      "line": 40584,
+      "text": "call YDWESetEventDamage(P8)"
+    },
+    {
+      "line": 40585,
+      "text": "endif"
+    },
+    {
+      "line": 40586,
+      "text": "if P8>0 and GetUnitAbilityLevel(bV,Zq)>0 then"
+    },
+    {
+      "line": 40587,
+      "text": "call YseraApplyDreamCorrosion(bV,i)"
+    },
+    {
+      "line": 40588,
+      "text": "endif"
+    },
+    {
+      "line": 40589,
+      "text": "endif"
+    },
+    {
+      "line": 40836,
+      "text": "if GetUnitAbilityLevel(i,$41315143)>0 then"
+    },
+    {
+      "line": 40837,
+      "text": "call IssueImmediateOrder(i,\"mirrorimage\")"
+    },
+    {
+      "line": 40838,
+      "text": "elseif GetUnitAbilityLevel(bV,$41315143)>0 then"
+    },
+    {
+      "line": 40839,
+      "text": "call IssueImmediateOrder(bV,\"mirrorimage\")"
+    },
+    {
+      "line": 40840,
+      "text": "endif"
+    },
+    {
+      "line": 40841,
+      "text": "if GetUnitAbilityLevel(i,$41315146)>0 then"
+    },
+    {
+      "line": 40842,
+      "text": "call IssueImmediateOrder(i,\"unloadall\")"
+    },
+    {
+      "line": 40843,
+      "text": "elseif GetUnitAbilityLevel(bV,$41315146)>0 then"
+    },
+    {
+      "line": 40844,
+      "text": "call IssueImmediateOrder(bV,\"unloadall\")"
+    },
+    {
+      "line": 40845,
+      "text": "endif"
+    },
+    {
+      "line": 40846,
+      "text": "if GetUnitAbilityLevel(i,$41315147)>0 then"
+    },
+    {
+      "line": 40847,
+      "text": "call IssueTargetOrder(i,\"unloadallcorpses\",bV)"
+    },
+    {
+      "line": 40848,
+      "text": "elseif GetUnitAbilityLevel(bV,$41315147)>0 then"
+    },
+    {
+      "line": 40849,
+      "text": "call IssueTargetOrder(bV,\"unloadallcorpses\",i)"
+    },
+    {
+      "line": 40850,
+      "text": "endif"
+    },
+    {
+      "line": 41911,
+      "text": "function Trig_UnitDeathActions takes nothing returns nothing"
+    },
+    {
+      "line": 41912,
+      "text": "local unit i=GetTriggerUnit()"
+    },
+    {
+      "line": 41913,
+      "text": "local unit bv=GetKillingUnit()"
+    },
+    {
+      "line": 41914,
+      "text": "local trigger Eb=GetTriggeringTrigger()"
+    },
+    {
+      "line": 41915,
+      "text": "local real FF=GetUnitX(i)"
+    },
+    {
+      "line": 41916,
+      "text": "local real FG=GetUnitY(i)"
+    },
+    {
+      "line": 41917,
+      "text": "local real P8=0"
+    },
+    {
+      "line": 41918,
+      "text": "local effect DE=null"
+    },
+    {
+      "line": 41919,
+      "text": "local timer t=null"
+    },
+    {
+      "line": 41920,
+      "text": "local group Uz=CreateGroup()"
+    },
+    {
+      "line": 41921,
+      "text": "local unit D6=null"
+    },
+    {
+      "line": 41922,
+      "text": "local unit Ki=null"
+    },
+    {
+      "line": 41923,
+      "text": "local player h"
+    },
+    {
+      "line": 41924,
+      "text": "local boolexpr Cd"
+    },
+    {
+      "line": 41925,
+      "text": "local integer BF"
+    },
+    {
+      "line": 41926,
+      "text": "local integer BU"
+    },
+    {
+      "line": 41927,
+      "text": "local real a5"
+    },
+    {
+      "line": 41946,
+      "text": "if GetUnitAbilityLevel(bv,$41315144)>0 then"
+    },
+    {
+      "line": 41947,
+      "text": "call BlademasterBladeStorm(bv)"
+    },
+    {
+      "line": 41948,
+      "text": "endif"
+    },
+    {
+      "line": 42252,
+      "text": "function Trig_New_UnitAttackActions takes nothing returns boolean"
+    },
+    {
+      "line": 42253,
+      "text": "local unit Qf=GetTriggerUnit()"
+    },
+    {
+      "line": 42254,
+      "text": "local unit i=GetEventDamageSource()"
+    },
+    {
+      "line": 42255,
+      "text": "local integer BF=GetUnitTypeId(i)"
+    },
+    {
+      "line": 42256,
+      "text": "local integer b9=$6E305344"
+    },
+    {
+      "line": 42257,
+      "text": "local integer YY=0"
+    },
+    {
+      "line": 42258,
+      "text": "local unit Ki=null"
+    },
+    {
+      "line": 42259,
+      "text": "local unit D6=null"
+    },
+    {
+      "line": 42260,
+      "text": "local group Uz=null"
+    },
+    {
+      "line": 42261,
+      "text": "local real P8=0"
+    },
+    {
+      "line": 42262,
+      "text": "local unit cB=null"
+    },
+    {
+      "line": 42263,
+      "text": "local boolexpr Cd"
+    },
+    {
+      "line": 42264,
+      "text": "local timer DK"
+    },
+    {
+      "line": 42265,
+      "text": "local real FF"
+    },
+    {
+      "line": 42266,
+      "text": "local real FG"
+    },
+    {
+      "line": 42267,
+      "text": "local integer y=0"
+    },
+    {
+      "line": 42268,
+      "text": "local player h"
+    },
+    {
+      "line": 42269,
+      "text": "local effect DE"
+    },
+    {
+      "line": 42270,
+      "text": "if YDWEIsEventAttackDamage() and not LoadBoolean(O,GetHandleId(i),StringHash(\"Attack\")) then"
+    },
+    {
+      "line": 42271,
+      "text": "call SaveBoolean(O,GetHandleId(i),StringHash(\"Attack\"),true)"
+    },
+    {
+      "line": 42272,
+      "text": "if GetUnitAbilityLevel(i,$4131554B)>0 then"
+    },
+    {
+      "line": 42273,
+      "text": "call NazuoCurseAttack(i,Qf,GetUnitAbilityLevel(i,$4131554B))"
+    },
+    {
+      "line": 42274,
+      "text": "endif"
+    },
+    {
+      "line": 42275,
+      "text": "if GetUnitAbilityLevel(i,$41315652)>0 then"
+    },
+    {
+      "line": 42276,
+      "text": "call ArthasAttack(i,Qf,GetEventDamage())"
+    },
+    {
+      "line": 42277,
+      "text": "call ArthasReadyAttack(i,GetEventDamage())"
+    },
+    {
+      "line": 42278,
+      "text": "endif"
+    },
+    {
+      "line": 42279,
+      "text": "if GetUnitAbilityLevel(i,$4131444F)>0 then"
+    },
+    {
+      "line": 42280,
+      "text": "call NagaAttack(i,Qf)"
+    },
+    {
+      "line": 42281,
+      "text": "endif"
+    },
+    {
+      "line": 42282,
+      "text": "if GetUnitAbilityLevel(Qf,$41325936)>0 then"
+    },
+    {
+      "line": 42283,
+      "text": "call NagaShamanTideBoon(Qf)"
+    },
+    {
+      "line": 42284,
+      "text": "endif"
+    },
+    {
+      "line": 42285,
+      "text": "if GetUnitAbilityLevel(i,$41315145)>0 then"
+    },
+    {
+      "line": 42286,
+      "text": "call BlademasterCriticalStrike(i)"
+    },
+    {
+      "line": 43738,
+      "text": "if GetUnitAbilityLevel(Pf,$41315148)>0 then"
+    },
+    {
+      "line": 43739,
+      "text": "call BlademasterClass(Bc,$65303048)"
+    },
+    {
+      "line": 43740,
+      "text": "call BlademasterClass(Bc,$6530304D)"
+    },
+    {
+      "line": 43741,
+      "text": "call BlademasterClass(Bc,$6E303648)"
+    },
+    {
+      "line": 43742,
+      "text": "endif"
+    }
+  ],
+  "abilities": {
+    "A1D6": {
+      "rawcode": "A1D6",
+      "name": "伤害免疫",
+      "tip": "伤害免疫",
+      "ubertip": "对伤害免疫",
+      "alias": "A1D6",
+      "code": "Asth",
+      "levels": "1",
+      "targs1": "_",
+      "targs2": "_",
+      "targs3": "_",
+      "targs4": "_"
+    },
+    "A1QC": {
+      "rawcode": "A1QC",
+      "name": "镜像",
+      "tip": "镜像",
+      "ubertip": "制造出2个幻象来迷惑敌人。同时也会驱逐掉剑圣身上所有的魔法效果。\n持续18秒。",
+      "alias": "A1QC",
+      "code": "AOmi",
+      "Area1": "1000.0",
+      "BuffID1": "BOmi",
+      "DataA1": "2",
+      "DataB1": "0.75",
+      "DataC1": "1.0",
+      "levels": "1",
+      "targs1": "_",
+      "targs2": "_",
+      "targs3": "_",
+      "targs4": "_",
+      "Cost1": "10",
+      "Dur1": "18.0",
+      "HeroDur1": "18.0",
+      "Rng1": "128.0",
+      "Cool1": "20.0",
+      "checkDep": "1",
+      "DataD1": "0.5",
+      "reqLevel": "1"
+    },
+    "A1QD": {
+      "rawcode": "A1QD",
+      "name": "无极剑刃",
+      "tip": "无极剑刃",
+      "ubertip": "每击杀15个单位，可激活该效果免疫所有负面效果，对其攻击范围内敌方单位造成137点持续伤害，效果持续3s",
+      "alias": "A1QD",
+      "code": "Asth",
+      "levels": "1",
+      "targs1": "_",
+      "targs2": "_",
+      "targs3": "_",
+      "targs4": "_"
+    },
+    "A1QE": {
+      "rawcode": "A1QE",
+      "name": "致命一击",
+      "tip": "致命一击",
+      "ubertip": "每隔9s，穆萨罗可造成一次50%的额外致命伤害，镜像第一次攻击也能触发此效果.",
+      "alias": "A1QE",
+      "code": "AOcr",
+      "DataA1": "100.0",
+      "DataB1": "1.5",
+      "levels": "1",
+      "targs1": "air,ground,enemy,neutral",
+      "targs2": "_",
+      "targs3": "_",
+      "targs4": "_"
+    },
+    "A1QF": {
+      "rawcode": "A1QF",
+      "name": "拔剑斩",
+      "tip": "拔剑斩",
+      "ubertip": "挥出一道斩击，以自身为中心对半径200码范围内的敌方单位造成最大伤害的5倍，并恢复自身75%的血量",
+      "alias": "A1QF",
+      "code": "ANcl",
+      "DataC1": "1",
+      "levels": "1",
+      "targs1": "_",
+      "targs2": "_",
+      "targs3": "_",
+      "targs4": "_",
+      "Cost1": "22",
+      "Rng1": "500.0",
+      "Cool1": "13.0",
+      "checkDep": "1",
+      "reqLevel": "1",
+      "DataE1": "1",
+      "DataF1": "unloadall"
+    },
+    "A1QG": {
+      "rawcode": "A1QG",
+      "name": "火刃剑气",
+      "tip": "火刃剑气",
+      "ubertip": "释放一道火焰剑气，对其目标及其附近敌方单位造成225点伤害，并产生灼烧效果，灼烧效果持续5s，每秒造成72点伤害",
+      "alias": "A1QG",
+      "code": "ANcl",
+      "DataB1": "3",
+      "DataC1": "1",
+      "levels": "1",
+      "targs1": "_",
+      "targs2": "_",
+      "targs3": "_",
+      "targs4": "_",
+      "Cost1": "15",
+      "Rng1": "500.0",
+      "Cool1": "9.0",
+      "checkDep": "1",
+      "reqLevel": "1",
+      "DataE1": "1",
+      "DataF1": "unloadallcorpses"
+    },
+    "A1QH": {
+      "rawcode": "A1QH",
+      "name": "火刃氏族的荣耀",
+      "tip": "火刃氏族的荣耀",
+      "ubertip": "当场上穆萨罗与剑圣·斩同场出现时，将会激活此羁绊，增强穆萨罗与剑圣·斩30%的攻击，并在这两个单位死亡时会将手中的武器掷出，随机对一个敌方单位造成秒杀",
+      "alias": "A1QH",
+      "code": "Asth",
+      "levels": "1",
+      "targs1": "_",
+      "targs2": "_",
+      "targs3": "_",
+      "targs4": "_"
+    },
+    "A1QI": {
+      "rawcode": "A1QI",
+      "name": "火刃氏族",
+      "tip": "战鼓",
+      "ubertip": "能增加周围友军单位的攻击力。",
+      "alias": "A1QI",
+      "code": "Aakb",
+      "Area1": "900.0",
+      "BuffID1": "B07O",
+      "DataA1": "0.3",
+      "DataB1": "1",
+      "DataC1": "1",
+      "levels": "1",
+      "targs1": "ground,vulnerable,air,invulnerable,self",
+      "targs2": "_",
+      "targs3": "_",
+      "targs4": "_",
+      "checkDep": "1"
+    }
+  },
+  "externalMetadata": [
+    {
+      "url": "https://github.com/yefq/JapiNative/blob/master/JapiNative.j",
+      "meaning": "ConvertUnitState(0x12) / 18 is DAMAGE_BASE_1, not maximum damage."
+    },
+    {
+      "url": "https://jass.sourceforge.net/doc/api/Blizzard_j-source.shtml",
+      "meaning": "UnitDamageTargetBJ forwards attack=true. GroupPickRandomUnit reservoir draws for each candidate including first."
+    }
+  ],
+  "boundaries": [
+    "Native cast arbitration/backswing, same-frame repeated orders and global timer ordering use host adapters.",
+    "A1QC native illusion passive inheritance, .5 hide phase and precise dispel behavior unverified; host clones remain skill-less. A1QE no longer optimistically implemented.",
+    "A1QF reads object base damage or explicit sourceBaseDamage; general native dynamic base-field sync not complete.",
+    "A1QI aura self only; separate death event registered only by the one-second deployment callback. Native building/combat shared handles and building deaths remain partial.",
+    "A1D6 zeros only eligible v14 main damage events; it suppresses the adjacent Ysera revival/corrosion branch without adding general control immunity. Full source listener registration order remains partial.",
+    "Virtual wave dummy uses straight host movement; 167 ticks reach1002 because source checks remaining after moving. Dead source retained; explicit removal boundary remains."
+  ],
+  "acquisition": {
+    "status": "entry-unresolved",
+    "buildingRawcode": "n07U",
+    "combatRawcode": "h0VQ",
+    "mapEvidenceLines": [
+      17436,
+      17437
+    ],
+    "banLimitEvidenceLine": 3638,
+    "audit": "JASS rawcode literals occur only in the limit and form mapping. Packet CSV references include unit objects and ban limit, with no confirmed creation, recipe or upgrade entry. The packet lacks original W3U/menu data. UNITS intentionally excludes this prototype; separate sourceOnlyCombatForms coverage does not inflate reachable player counts."
+  }
+}

@@ -62,7 +62,9 @@ const result={
   playerBuildingCommandCarriers:playerBuildingCommands.length,
   playerSkills:collect([...current,...playerBuildingCommands,...playerBuildingRuleCarriers,...playerRuntimeForms,...playerRuntimeAbilities]),
   battleSkills:collect([...current,...playerBuildingCommands,...playerBuildingRuleCarriers,...playerRuntimeForms,...playerRuntimeAbilities,...MERCENARIES,...WAVES,...specialCodes.map(c=>UNIT_TEMPLATES[c])]),
+  sourceOnlyCombatForms:[{combatRawcode:'h0VQ',buildingRawcode:'n07U',status:'entry-unresolved',evidence:'war3map.j:17436-17437 maps forms; line3638 ban limit1; no source creation/recipe/upgrade entry found in packet',skills:collect([{...UNIT_TEMPLATES.h0VQ,abilityIds:[...UNIT_TEMPLATES.h0VQ.abilityIds,'A1QI','A1D6']}])}],
   remainingSourceGaps:[
+    '萨穆罗n07U→h0VQ原型在源包有映射但未找到获取入口，当前不伪造建造菜单；单列sourceOnlyCombatForms，不冒充玩家可达技能。A1QC/D/E/F/G/H及动态A1QI/A1D6接入伤害请求、9秒暴击能力移除、15杀风暴、火刃波与5次灼烧、氏族延迟授予/独立死亡监听；原生镜像被动/驱散/隐藏阶段、基础攻击动态字段、施法仲裁和建筑事件仍partial，见blademaster-evidence.json。',
     '强盗头子A18D/E/G/H已接入圣盾事件计数、裂地、三路怨魂与死亡范围伤害，保留原生注册、施法/耗魔、碰撞边界。A18F隐形和原图入口区域映射仍unresolved，见bandit-lord-evidence.json。',
     '玛法里奥宁静手动施法/6秒光环、0.9秒星火/8秒独立冷却、结算前10%生命的一次暮光分支与5秒光环已接入。原生直接治疗、AOws施法/伤害仲裁、醉酒云雾、虚拟马甲句柄和绝对坐标转换仍partial，见malfurion-evidence.json。',
     '恶魔雕像n050/n06R的精确分支、550范围随机单目标弹射、局部伤害和共享k等级2眩晕请求已接入。A0RF建筑说明、A0OZ动态命令纳入覆盖，不向战斗体伪造技能；原生随机流/枚举及马甲伤害、冷却、耗魔和命令仲裁仍partial，见demon-statue-evidence.json。',

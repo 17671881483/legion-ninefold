@@ -400,3 +400,8 @@ A0RF 是建筑说明能力，战斗体不要求持有它。覆盖清单单独记
 - 使用Blizzard.j公开源码确认UnitDamageTargetBJ传attack=true，因此这三种脚本伤害可以触发独立攻击监听。自动请求每技能分别选攻击者优先，失败不回退受击者。即时施法适配下，受击者裂地反击可能在主施法监听禁用期间耗掉怨魂冷却而不执行弹体，已测试并保留；原生0.3秒前摇/同帧命令仲裁仍需原生运行证据。
 - 两个ANcl未提供Cost1。当前宿主不扣未核定魔法，状态明确unknown，不能声称原生免费。h0SF第16波可购买出战，h0SG维持预览身份。Apiv与四矩形入区移除脚本已找到，原生隐形/探测和坐标映射未实现，A18F保持unresolved。
 - 覆盖玩家647种不变（410实现/91部分/34标记/112待核定），全战斗732种（460实现/97部分/47标记/128待核定）。详情与归档见`docs/parallel-development/integration-v31.md`。整体还原目标仍未完成。
+
+
+## v32 萨穆罗脚本及入口核查
+
+已接入A1QC—A1QI和动态A1D6的可证明分支，修正免伤与邻接伊瑟拉复苏/腐蚀的关系。war3map.j仅确认n07U/h0VQ映射与限造1，未找到获取链，因此保留不可建状态，覆盖单列sourceOnlyCombatForms。镜像原生行为、动态基础攻击、建筑句柄及命令/计时器边界继续标partial；详见[来源证据](reference/blademaster-evidence.json)及[本批归档](docs/parallel-development/integration-v32.md)。

@@ -1,3 +1,4 @@
+import {TAUREN_RULES,taurenAttackDamage,taurenMainDeath} from './tauren-rules.js';
 import {BLADEMASTER_RULES,canBlademasterCast,castBlademaster,blademasterAuto,blademasterAttack,blademasterKill,blademasterDeath,blademasterImmune,initializeBlademaster,tickBlademasterJob} from './blademaster-rules.js';
 import {BANDIT_LORD_RULES,canBanditCast,castBanditAbility,banditMainDamage,banditShieldEvent,banditDeath,banditIndependentDeath,banditAttackOrders,tickBanditJob} from './bandit-lord-rules.js';
 import {MALFURION_RULES,canMalfurionCast,castMalfurionAbility,malfurionMainDamage,malfurionAuraSources,tickMalfurionJob} from './malfurion-rules.js';
@@ -32,7 +33,7 @@ import { closestWalkable, isWalkable } from './layout.js';
 import { GARROSH_ACTIVE_RULES, GARROSH_PASSIVE_RULES, canGarroshCastAbility, castGarroshAbility, tryGarroshAutoCast, garroshActiveAfterDamage, sourceGarroshActiveDeath, tickGarroshActiveJob } from './garrosh-active-rules.js';
 import { ILLIDAN_RULES, ILLIDAN_ACTIVE_RULES, canIllidanCastAbility, castIllidanAbility, registerIllidanSource, tickIllidanSource, illidanOnAttackHit, tryIllidanAutoCast, illidanAfterDamage, sourceIllidanDeath, tickIllidanJob, isIllidanJobType } from './illidan-rules.js';
 
-export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261029-v32-1';
+export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261029-v33-1';
 
 // Values come from resolved object fields. Empty fields remain empty: a missing
 // native default is reported, rather than replacing it with tooltip numbers.
@@ -213,6 +214,7 @@ function compile(id,version='5.0dJF') {
   if(version==='v14.1A5'&&SOURCE_CLASS_RULES[id]){const r=SOURCE_CLASS_RULES[id];Object.assign(s,{...(!r.preserveNativeKind?{kind:'source_class'}:{}),...(r.compiled??{}),status:r.status,effectText:r.description+(r.partial?`【待核定：${r.partial}】`:'')});}
   if(version==='v14.1A5'&&HUSKAR_RULES[id]){const r=HUSKAR_RULES[id];Object.assign(s,{...(!r.preserveNativeKind?{kind:'huskar_source'}:{}),status:r.status,runtimeImplemented:true,effectText:r.description+(r.partial?`【待核定：${r.partial}】`:'')});}
   if(version==='v14.1A5'&&RELOCATION_RULES[id]){const r=RELOCATION_RULES[id];Object.assign(s,{kind:'building_relocation',status:r.status,effectText:r.description+(r.status==='partial'?`【待核定：${RELOCATION_BOUNDARY}】`:'')});}
+  if(version==='v14.1A5'&&TAUREN_RULES[id]){const r=TAUREN_RULES[id];Object.assign(s,{kind:'tauren_source',status:r.status,runtimeImplemented:true,effectText:r.description+`【待核定：${r.partial}】`});}
   if(version==='v14.1A5'&&BLADEMASTER_RULES[id]){const r=BLADEMASTER_RULES[id];Object.assign(s,{kind:r.nativeKind?s.kind:'blademaster_source',status:r.status,runtimeImplemented:true,effectText:r.description+`【待核定：${r.partial}】`});}
   if(version==='v14.1A5'&&BANDIT_LORD_RULES[id]){const r=BANDIT_LORD_RULES[id];Object.assign(s,{kind:'bandit_source',status:r.status,runtimeImplemented:r.status==='partial',effectText:r.description+`【待核定：${r.partial}】`});}
   if(version==='v14.1A5'&&MALFURION_RULES[id]){const r=MALFURION_RULES[id];Object.assign(s,{kind:r.preserveNativeKind?s.kind:'malfurion_source',status:r.status,runtimeImplemented:true,effectText:r.description+`【待核定：${r.partial}】`});}
@@ -553,7 +555,7 @@ export function modifyIncoming(game,target,damage,attacker,options={}) {
 export function sourceClassAttackDamageEvent(game,target,attacker,options={},amount=0){
   if(!isV14(attacker)||options.spell&&!options.weapon||attacker.status?.sourceNativeAttackBusy)return;
   (attacker.status??={}).sourceNativeAttackBusy=true;
-  try{darkArthasAttackDamage(attacker,amount);vashjOnAttackDamage(game,attacker,target,heroScriptApi);blademasterAttack(game,attacker,heroScriptApi);sourceClassOnAttackDamage(game,attacker,target,heroScriptApi);huskarAttackDamage(game,attacker,target,amount,heroScriptApi);banditAttackOrders(game,attacker,target,heroScriptApi);}finally{attacker.status.sourceNativeAttackBusy=false;}
+  try{darkArthasAttackDamage(attacker,amount);vashjOnAttackDamage(game,attacker,target,heroScriptApi);blademasterAttack(game,attacker,heroScriptApi);sourceClassOnAttackDamage(game,attacker,target,heroScriptApi);huskarAttackDamage(game,attacker,target,amount,heroScriptApi);banditAttackOrders(game,attacker,target,heroScriptApi);taurenAttackDamage(game,attacker,target,heroScriptApi);}finally{attacker.status.sourceNativeAttackBusy=false;}
 }
 export function initializeSourceClassCombat(game,building,entity){
   if(isV14(entity)){initializeBlademaster(game,building,entity);initializeNightmareDeployment(game,entity);initializeBrightArthasDeployment(game,building,entity);initializeLichKingDeployment(game,entity);initializeVashjDeployment(game,building,entity);return initializeSourceClassDeployment(game,building,entity,heroScriptApi);}
@@ -770,6 +772,7 @@ const mainDeathApi={universalDamage,nativeDamage,
   classDeath:(g,dead,killer,enabled)=>sourceClassDeath(g,dead,killer,heroScriptApi,enabled),
   yseraAwakening:(g,dead)=>sourceYseraMainDeath(g,dead),
   boneDragonDeath:lichKingMainDeath,
+  taurenDeath:(g,e)=>taurenMainDeath(g,e,heroScriptApi),
   nightmareKill:(g,killer)=>nightmareMainDeath(g,killer,heroScriptApi),
   skeletonKingDeath:skeletonKingMainDeath,
   blademasterKill:(g,e)=>blademasterKill(g,e,heroScriptApi),

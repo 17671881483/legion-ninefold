@@ -18,6 +18,7 @@ const playerRuntimeAbilities=[
   // dynamically granted child abilities and source-trigger dummy requests.
   {sourceRawcode:'h06J',abilityIds:Object.keys(SOURCE_CLASS_RULES)},
   {sourceRawcode:'h0XA',abilityIds:['A1W2']},
+  {sourceRawcode:'h0NE',abilityIds:['A0N7','Avul','Aloc']},
   {sourceRawcode:'h0OV',abilityIds:['A0W0','A0W2','A0W3']},
   {sourceRawcode:'h0JL',abilityIds:['A0IF']},
   {sourceRawcode:'h0JO',abilityIds:['A0IJ','A0IL']},
@@ -64,6 +65,7 @@ const result={
   battleSkills:collect([...current,...playerBuildingCommands,...playerBuildingRuleCarriers,...playerRuntimeForms,...playerRuntimeAbilities,...MERCENARIES,...WAVES,...specialCodes.map(c=>UNIT_TEMPLATES[c])]),
   sourceOnlyCombatForms:[{combatRawcode:'h0VQ',buildingRawcode:'n07U',status:'entry-unresolved',evidence:'war3map.j:17436-17437 maps forms; line3638 ban limit1; no source creation/recipe/upgrade entry found in packet',skills:collect([{...UNIT_TEMPLATES.h0VQ,abilityIds:[...UNIT_TEMPLATES.h0VQ.abilityIds,'A1QI','A1D6']}])}],
   remainingSourceGaps:[
+    '牛头人酋长A0N5/A0N6及动态A0N7接入独立武器伤害和主死亡链，保留25/101与85/101概率、9秒新灵魂和0.001秒控制字段。AOws耗魔/施法默认值、原生音波伤害类别、连续命令、先于灵魂的毁灭标记7分支和创建钩子仍partial，见tauren-evidence.json。',
     '萨穆罗n07U→h0VQ原型在源包有映射但未找到获取入口，当前不伪造建造菜单；单列sourceOnlyCombatForms，不冒充玩家可达技能。A1QC/D/E/F/G/H及动态A1QI/A1D6接入伤害请求、9秒暴击能力移除、15杀风暴、火刃波与5次灼烧、氏族延迟授予/独立死亡监听；原生镜像被动/驱散/隐藏阶段、基础攻击动态字段、施法仲裁和建筑事件仍partial，见blademaster-evidence.json。',
     '强盗头子A18D/E/G/H已接入圣盾事件计数、裂地、三路怨魂与死亡范围伤害，保留原生注册、施法/耗魔、碰撞边界。A18F隐形和原图入口区域映射仍unresolved，见bandit-lord-evidence.json。',
     '玛法里奥宁静手动施法/6秒光环、0.9秒星火/8秒独立冷却、结算前10%生命的一次暮光分支与5秒光环已接入。原生直接治疗、AOws施法/伤害仲裁、醉酒云雾、虚拟马甲句柄和绝对坐标转换仍partial，见malfurion-evidence.json。',

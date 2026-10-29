@@ -405,3 +405,8 @@ A0RF 是建筑说明能力，战斗体不要求持有它。覆盖清单单独记
 ## v32 萨穆罗脚本及入口核查
 
 已接入A1QC—A1QI和动态A1D6的可证明分支，修正免伤与邻接伊瑟拉复苏/腐蚀的关系。war3map.j仅确认n07U/h0VQ映射与限造1，未找到获取链，因此保留不可建状态，覆盖单列sourceOnlyCombatForms。镜像原生行为、动态基础攻击、建筑句柄及命令/计时器边界继续标partial；详见[来源证据](reference/blademaster-evidence.json)及[本批归档](docs/parallel-development/integration-v32.md)。
+
+
+## v33 牛头人酋长
+
+A0N5按独立武器伤害事件抽整数1—101，普通阈值25、Avul等级1阈值85；成功重添A0N7并请求stomp。A0N6主死亡分支创建全新同型召唤体，添加Avul/Aloc、移除复活能力，持续9秒。A0N7字段为300范围、100伤害和0.001秒控制，缺失耗魔/施法默认字段不按文案补造。真实祭坛升级、保存与下一波重建已验收；详见[证据](reference/tauren-evidence.json)和[归档](docs/parallel-development/integration-v33.md)。

@@ -1247,8 +1247,8 @@ export class Game {
     for (const a of battle.auras ?? []) if (a.side !== e.side && a.hp > 0 && a.ability?.type === 'aura_slow' && distance(a, e) <= number(a.ability.radius, 2)) auraSlow = Math.max(auraSlow, number(a.ability.value, .15));
     const step = Math.min(delta, e.moveSpeed * slow * (1 - auraSlow) * sourceMoveFactor(this,e,battle) * dt);
     let repelX = 0, repelY = 0;
-    for (const a of e.status.huskarPathingOff?[]:this._nearby(e, 1)) {
-      if (a.id === e.id || a.hp <= 0) continue;
+    for (const a of e.status.huskarPathingOff||e.status.sourceLocust?[]:this._nearby(e, 1)) {
+      if (a.id === e.id || a.hp <= 0 || a.status?.sourceLocust) continue;
       const ax = e.worldX - a.worldX, ay = e.worldY - a.worldY, separation = Math.hypot(ax, ay), radius = e.radius + a.radius;
       if (separation < radius * .9) {
         repelX += (separation > .001 ? ax / separation : e.id < a.id ? -1 : 1) * (radius - separation);

@@ -1,0 +1,735 @@
+{
+  "source": {
+    "path": "v14-source/raw_extracted/war3map.j",
+    "sha256": "e66c55b3b25b185c991be5613e21fbf5b2d598f3cc40f2f8cd01c23bcb828250",
+    "lineCounting": "latin1, LF only"
+  },
+  "abilities": {
+    "A0N5": {
+      "rawcode": "A0N5",
+      "name": "粉碎震击",
+      "tip": "粉碎震击",
+      "ubertip": "牛头人酋长攻击时有25%的几率触发粉碎震击，对半径300码范围内的敌人造成100点神圣伤害，并且眩晕0.01s",
+      "alias": "A0N5",
+      "code": "Asth",
+      "levels": "1",
+      "targs1": "_",
+      "targs2": "_",
+      "targs3": "_",
+      "targs4": "_"
+    },
+    "A0N6": {
+      "rawcode": "A0N6",
+      "name": "先祖之魂",
+      "tip": "先祖之魂",
+      "ubertip": "牛头人酋长阵亡后会以灵魂状态复活，持续9s。灵魂状态下的牛头人酋长将获得无敌效果且没有碰撞体积、没有仇恨值，且灵魂状态下“粉碎震击”的触发几率从25%提升至85%。每波战斗先祖之魂只能触发一次",
+      "alias": "A0N6",
+      "code": "Asth",
+      "levels": "1",
+      "targs1": "_",
+      "targs2": "_",
+      "targs3": "_",
+      "targs4": "_"
+    },
+    "A0N7": {
+      "rawcode": "A0N7",
+      "name": "粉碎震击",
+      "tip": "战争践踏(T) - [等级 1]",
+      "ubertip": "重击地面，对周围的地面单位造成25点的伤害并在3秒内使其处于昏晕状态。",
+      "alias": "A0N7",
+      "code": "AOws",
+      "Area1": "300.0",
+      "BuffID1": "BPSE",
+      "DataA1": "100.0",
+      "levels": "1",
+      "targs1": "enemies,organic",
+      "targs2": "_",
+      "targs3": "_",
+      "targs4": "_",
+      "Dur1": "0.001",
+      "HeroDur1": "0.001",
+      "Cool1": "80.0",
+      "checkDep": "1",
+      "reqLevel": "1"
+    }
+  },
+  "sourceEvidence": [
+    {
+      "line": 41908,
+      "text": "function gg_trg_UnitDeathCondition takes nothing returns boolean"
+    },
+    {
+      "line": 41909,
+      "text": "return not IsUnitInGroup(GetTriggerUnit(),Ju)"
+    },
+    {
+      "line": 41910,
+      "text": "endfunction"
+    },
+    {
+      "line": 41911,
+      "text": "function Trig_UnitDeathActions takes nothing returns nothing"
+    },
+    {
+      "line": 41912,
+      "text": "local unit i=GetTriggerUnit()"
+    },
+    {
+      "line": 41913,
+      "text": "local unit bv=GetKillingUnit()"
+    },
+    {
+      "line": 41914,
+      "text": "local trigger Eb=GetTriggeringTrigger()"
+    },
+    {
+      "line": 41915,
+      "text": "local real FF=GetUnitX(i)"
+    },
+    {
+      "line": 41916,
+      "text": "local real FG=GetUnitY(i)"
+    },
+    {
+      "line": 41917,
+      "text": "local real P8=0"
+    },
+    {
+      "line": 41918,
+      "text": "local effect DE=null"
+    },
+    {
+      "line": 41919,
+      "text": "local timer t=null"
+    },
+    {
+      "line": 41920,
+      "text": "local group Uz=CreateGroup()"
+    },
+    {
+      "line": 41921,
+      "text": "local unit D6=null"
+    },
+    {
+      "line": 41922,
+      "text": "local unit Ki=null"
+    },
+    {
+      "line": 41923,
+      "text": "local player h"
+    },
+    {
+      "line": 41924,
+      "text": "local boolexpr Cd"
+    },
+    {
+      "line": 41925,
+      "text": "local integer BF"
+    },
+    {
+      "line": 41926,
+      "text": "local integer BU"
+    },
+    {
+      "line": 41927,
+      "text": "local real a5"
+    },
+    {
+      "line": 41928,
+      "text": "call DisableTrigger(Eb)"
+    },
+    {
+      "line": 42090,
+      "text": "if GetUnitAbilityLevel(bv,$41304857)>0 then"
+    },
+    {
+      "line": 42091,
+      "text": "set P8=4+GetUnitState(i,UNIT_STATE_MAX_LIFE)*.02"
+    },
+    {
+      "line": 42092,
+      "text": "call DestroyEffect(AddSpecialEffect(\"Abilities\\\\Spells\\\\Other\\\\Volcano\\\\VolcanoMissile.mdl\",FF,FG))"
+    },
+    {
+      "line": 42093,
+      "text": "call DestroyEffect(AddSpecialEffect(\"Abilities\\\\Spells\\\\Other\\\\Incinerate\\\\FireLordDeathExplode.mdl\",FF,FG))"
+    },
+    {
+      "line": 42094,
+      "text": "call DamageAoe(bv,FF,FG,200,P8,ATTACK_TYPE_MELEE,DAMAGE_TYPE_MAGIC)"
+    },
+    {
+      "line": 42095,
+      "text": "elseif GetUnitTypeId(i)==$68304A4A and bv!=null and GetUnitAbilityLevel(i,$41304941)>0 and IsUnitIllusionBJ(i)==false then"
+    },
+    {
+      "line": 42096,
+      "text": "if GetRandomInt(0,1)>0 and LoadBoolean(O,GetHandleId(i),StringHash(\"u1\"))==true then"
+    },
+    {
+      "line": 42097,
+      "text": "call FlushChildHashtable(O,GetHandleId(i))"
+    },
+    {
+      "line": 42098,
+      "text": "else"
+    },
+    {
+      "line": 42099,
+      "text": "set t=CreateTimer()"
+    },
+    {
+      "line": 42100,
+      "text": "call SaveUnitHandle(O,GetHandleId(t),StringHash(\"unit\"),i)"
+    },
+    {
+      "line": 42101,
+      "text": "if LoadBoolean(O,GetHandleId(i),StringHash(\"SMYinwei\")) then"
+    },
+    {
+      "line": 42102,
+      "text": "call SaveBoolean(O,GetHandleId(t),1,true)"
+    },
+    {
+      "line": 42103,
+      "text": "endif"
+    },
+    {
+      "line": 42104,
+      "text": "call TimerStart(t,1,false,function A01ATimer)"
+    },
+    {
+      "line": 42105,
+      "text": "endif"
+    },
+    {
+      "line": 42106,
+      "text": "elseif GetUnitTypeId(i)==$68305043 then"
+    },
+    {
+      "line": 42107,
+      "text": "elseif LoadInteger(O,H2I(i),StringHash(\"7\"))!=0 then"
+    },
+    {
+      "line": 42108,
+      "text": "set bj_lastCreatedUnit=CreateUnit(GetOwningPlayer(bv),Pn,FF,FG,0)"
+    },
+    {
+      "line": 42109,
+      "text": "call YDWETimerRemoveUnit(1.,bj_lastCreatedUnit)"
+    },
+    {
+      "line": 42110,
+      "text": "call UnitAddAbility(bj_lastCreatedUnit,$41304953)"
+    },
+    {
+      "line": 42111,
+      "text": "call UnitAddAbility(bj_lastCreatedUnit,$41304951)"
+    },
+    {
+      "line": 42112,
+      "text": "call UnitApplyTimedLife(bj_lastCreatedUnit,$42487765,2.)"
+    },
+    {
+      "line": 42113,
+      "text": "call DestroyEffect(AddSpecialEffect(\"Units\\\\Undead\\\\Abomination\\\\AbominationExplosion.mdl\",FF,FG))"
+    },
+    {
+      "line": 42114,
+      "text": "set Cd=Condition(function Destruction01)"
+    },
+    {
+      "line": 42115,
+      "text": "call GroupEnumUnitsInRange(Uz,GetUnitX(i),GetUnitY(i),450,Cd)"
+    },
+    {
+      "line": 42116,
+      "text": "call DestroyBoolExpr(Cd)"
+    },
+    {
+      "line": 42117,
+      "text": "set Cd=null"
+    },
+    {
+      "line": 42118,
+      "text": "loop"
+    },
+    {
+      "line": 42119,
+      "text": "set D6=FirstOfGroup(Uz)"
+    },
+    {
+      "line": 42120,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 42121,
+      "text": "call UnitDamageTargetBJ(i,D6,150,ATTACK_TYPE_CHAOS,DAMAGE_TYPE_UNIVERSAL)"
+    },
+    {
+      "line": 42122,
+      "text": "call IssueTargetOrder(bj_lastCreatedUnit,\"thunderbolt\",D6)"
+    },
+    {
+      "line": 42123,
+      "text": "call IssueTargetOrder(bj_lastCreatedUnit,\"faeriefire\",D6)"
+    },
+    {
+      "line": 42124,
+      "text": "call GroupRemoveUnit(Uz,D6)"
+    },
+    {
+      "line": 42125,
+      "text": "endloop"
+    },
+    {
+      "line": 42126,
+      "text": "elseif GetUnitTypeId(i)==$68304433 or GetUnitTypeId(i)==$68324132 then"
+    },
+    {
+      "line": 42127,
+      "text": "set h=LoadPlayerHandle(O,GetHandleId(i),StringHash(\"P_id\"))"
+    },
+    {
+      "line": 42128,
+      "text": "call SaveInteger(O,GetHandleId(h),StringHash(\"Bone_Dragon\"),LoadInteger(O,GetHandleId(h),StringHash(\"Bone_Dragon\"))-1)"
+    },
+    {
+      "line": 42129,
+      "text": "set h=null"
+    },
+    {
+      "line": 42130,
+      "text": "elseif GetUnitTypeId(i)==$6E303034 then"
+    },
+    {
+      "line": 42131,
+      "text": "call DestroyEffect(AddSpecialEffect(\"Units\\\\Undead\\\\Abomination\\\\AbominationExplosion.mdl\",FF,FG))"
+    },
+    {
+      "line": 42132,
+      "text": "call GroupEnumUnitsInRange(Uz,GetUnitX(i),GetUnitY(i),150,null)"
+    },
+    {
+      "line": 42133,
+      "text": "set bj_lastCreatedUnit=CreateUnit(GetOwningPlayer(i),Pn,FF,FG,0)"
+    },
+    {
+      "line": 42134,
+      "text": "call YDWETimerRemoveUnit(1.,bj_lastCreatedUnit)"
+    },
+    {
+      "line": 42135,
+      "text": "call UnitAddAbility(bj_lastCreatedUnit,$41304A54)"
+    },
+    {
+      "line": 42136,
+      "text": "call UnitAddAbility(bj_lastCreatedUnit,$41304A55)"
+    },
+    {
+      "line": 42137,
+      "text": "call UnitApplyTimedLife(bj_lastCreatedUnit,$42487765,2.)"
+    },
+    {
+      "line": 42138,
+      "text": "loop"
+    },
+    {
+      "line": 42139,
+      "text": "set D6=FirstOfGroup(Uz)"
+    },
+    {
+      "line": 42140,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 42141,
+      "text": "if IsUnitEnemy(D6,GetOwningPlayer(i)) then"
+    },
+    {
+      "line": 42142,
+      "text": "call UnitDamageTargetBJ(i,D6,45,ATTACK_TYPE_CHAOS,DAMAGE_TYPE_UNIVERSAL)"
+    },
+    {
+      "line": 42143,
+      "text": "call IssueTargetOrder(bj_lastCreatedUnit,\"slow\",D6)"
+    },
+    {
+      "line": 42144,
+      "text": "call IssueTargetOrder(bj_lastCreatedUnit,\"thunderbolt\",D6)"
+    },
+    {
+      "line": 42145,
+      "text": "endif"
+    },
+    {
+      "line": 42146,
+      "text": "call GroupRemoveUnit(Uz,D6)"
+    },
+    {
+      "line": 42147,
+      "text": "set D6=null"
+    },
+    {
+      "line": 42148,
+      "text": "endloop"
+    },
+    {
+      "line": 42149,
+      "text": "set D6=null"
+    },
+    {
+      "line": 42150,
+      "text": "elseif GetUnitAbilityLevel(i,$41304E36)>0 then"
+    },
+    {
+      "line": 42151,
+      "text": "set bj_lastCreatedUnit=CreateUnit(GetOwningPlayer(i),GetUnitTypeId(i),FF,FG,GetUnitFacing(GetTriggerUnit()))"
+    },
+    {
+      "line": 42152,
+      "text": "call SetUnitColor(bj_lastCreatedUnit,GetPlayerColor(ConvertedPlayer(GetUnitUserData(i))))"
+    },
+    {
+      "line": 42153,
+      "text": "call UnitApplyTimedLife(bj_lastCreatedUnit,$42487765,9.)"
+    },
+    {
+      "line": 42154,
+      "text": "call GroupAddUnit(JW,bj_lastCreatedUnit)"
+    },
+    {
+      "line": 42155,
+      "text": "call SetUnitUserData(bj_lastCreatedUnit,GetUnitUserData(i))"
+    },
+    {
+      "line": 42156,
+      "text": "call GroupAddUnit(JH[GetUnitUserData(i)],bj_lastCreatedUnit)"
+    },
+    {
+      "line": 42157,
+      "text": "call UnitAddType(bj_lastCreatedUnit,UNIT_TYPE_SUMMONED)"
+    },
+    {
+      "line": 42158,
+      "text": "call UnitRemoveAbility(bj_lastCreatedUnit,$41304E36)"
+    },
+    {
+      "line": 42159,
+      "text": "call UnitAddAbility(bj_lastCreatedUnit,$4176756C)"
+    },
+    {
+      "line": 42160,
+      "text": "call UnitAddAbility(bj_lastCreatedUnit,$416C6F63)"
+    },
+    {
+      "line": 42161,
+      "text": "elseif GetUnitAbilityLevel(i,$41313042)>0 then"
+    },
+    {
+      "line": 42187,
+      "text": "function InitTrig_UnitDeath takes nothing returns nothing"
+    },
+    {
+      "line": 42188,
+      "text": "set bu=CreateTrigger()"
+    },
+    {
+      "line": 42189,
+      "text": "call TriggerRegisterAnyUnitEventBJ(bu,EVENT_PLAYER_UNIT_DEATH)"
+    },
+    {
+      "line": 42190,
+      "text": "call TriggerAddCondition(bu,Condition(function gg_trg_UnitDeathCondition))"
+    },
+    {
+      "line": 42191,
+      "text": "call TriggerAddAction(bu,function Trig_UnitDeathActions)"
+    },
+    {
+      "line": 42192,
+      "text": "endfunction"
+    },
+    {
+      "line": 42252,
+      "text": "function Trig_New_UnitAttackActions takes nothing returns boolean"
+    },
+    {
+      "line": 42253,
+      "text": "local unit Qf=GetTriggerUnit()"
+    },
+    {
+      "line": 42254,
+      "text": "local unit i=GetEventDamageSource()"
+    },
+    {
+      "line": 42255,
+      "text": "local integer BF=GetUnitTypeId(i)"
+    },
+    {
+      "line": 42256,
+      "text": "local integer b9=$6E305344"
+    },
+    {
+      "line": 42257,
+      "text": "local integer YY=0"
+    },
+    {
+      "line": 42258,
+      "text": "local unit Ki=null"
+    },
+    {
+      "line": 42259,
+      "text": "local unit D6=null"
+    },
+    {
+      "line": 42260,
+      "text": "local group Uz=null"
+    },
+    {
+      "line": 42261,
+      "text": "local real P8=0"
+    },
+    {
+      "line": 42262,
+      "text": "local unit cB=null"
+    },
+    {
+      "line": 42263,
+      "text": "local boolexpr Cd"
+    },
+    {
+      "line": 42264,
+      "text": "local timer DK"
+    },
+    {
+      "line": 42265,
+      "text": "local real FF"
+    },
+    {
+      "line": 42266,
+      "text": "local real FG"
+    },
+    {
+      "line": 42267,
+      "text": "local integer y=0"
+    },
+    {
+      "line": 42268,
+      "text": "local player h"
+    },
+    {
+      "line": 42269,
+      "text": "local effect DE"
+    },
+    {
+      "line": 42270,
+      "text": "if YDWEIsEventAttackDamage() and not LoadBoolean(O,GetHandleId(i),StringHash(\"Attack\")) then"
+    },
+    {
+      "line": 42271,
+      "text": "call SaveBoolean(O,GetHandleId(i),StringHash(\"Attack\"),true)"
+    },
+    {
+      "line": 42618,
+      "text": "if GetUnitState(i,UNIT_STATE_MANA)!=15. and GetUnitAbilityLevel(i,$4130494E)>0 then"
+    },
+    {
+      "line": 42619,
+      "text": "call SetUnitManaBJ(i,GetUnitState(i,UNIT_STATE_MANA)+1.)"
+    },
+    {
+      "line": 42620,
+      "text": "if GetUnitState(i,UNIT_STATE_MANA)==15. then"
+    },
+    {
+      "line": 42621,
+      "text": "call IssueImmediateOrder(i,\"thunderclap\")"
+    },
+    {
+      "line": 42622,
+      "text": "endif"
+    },
+    {
+      "line": 42623,
+      "text": "elseif GetUnitAbilityLevel(i,$41304A56)==1 and GetRandomReal(1.,106)>=73 then"
+    },
+    {
+      "line": 42624,
+      "text": "call DestroyEffect(AddSpecialEffect(\"Abilities\\\\Spells\\\\Human\\\\Thunderclap\\\\ThunderClapCaster.mdl\",GetUnitX(Qf),GetUnitY(Qf)))"
+    },
+    {
+      "line": 42644,
+      "text": "elseif GetUnitAbilityLevel(i,$41305448)>0 and GetRandomReal(1.,101)>=68 then"
+    },
+    {
+      "line": 42645,
+      "text": "set DK=CreateTimer()"
+    },
+    {
+      "line": 42664,
+      "text": "elseif GetUnitAbilityLevel(i,$41305030)==1 then"
+    },
+    {
+      "line": 42665,
+      "text": "set Uz=CreateGroup()"
+    },
+    {
+      "line": 42686,
+      "text": "elseif GetUnitTypeId(i)==$68304F56 and GetRandomReal(0,101)<=25 then"
+    },
+    {
+      "line": 42687,
+      "text": "set FF=GetUnitX(Qf)+CosBJ(YDWEAngleBetweenUnits(i,Qf))*50"
+    },
+    {
+      "line": 42694,
+      "text": "elseif GetUnitTypeId(i)==$68304252 then"
+    },
+    {
+      "line": 42695,
+      "text": "call SaveGroupHandle(O,GetHandleId(i),420,CreateGroup())"
+    },
+    {
+      "line": 42707,
+      "text": "elseif GetUnitAbilityLevel(i,$41305056)==1 then"
+    },
+    {
+      "line": 42708,
+      "text": "if GetUnitState(Qf,UNIT_STATE_MAX_LIFE)*.15<=400. then"
+    },
+    {
+      "line": 42709,
+      "text": "call UnitDamageTargetBJ(i,Qf,GetUnitState(Qf,UNIT_STATE_MAX_LIFE)*.15,ATTACK_TYPE_CHAOS,DAMAGE_TYPE_UNIVERSAL)"
+    },
+    {
+      "line": 42710,
+      "text": "else"
+    },
+    {
+      "line": 42711,
+      "text": "call UnitDamageTargetBJ(i,Qf,400,ATTACK_TYPE_CHAOS,DAMAGE_TYPE_UNIVERSAL)"
+    },
+    {
+      "line": 42712,
+      "text": "endif"
+    },
+    {
+      "line": 42713,
+      "text": "elseif GetUnitAbilityLevel(i,$41304E35)==1 then"
+    },
+    {
+      "line": 42714,
+      "text": "if GetUnitAbilityLevel(i,$4176756C)==1 then"
+    },
+    {
+      "line": 42715,
+      "text": "if GetRandomInt(1,101)<=85 then"
+    },
+    {
+      "line": 42716,
+      "text": "call UnitRemoveAbility(i,$41304E37)"
+    },
+    {
+      "line": 42717,
+      "text": "call UnitAddAbility(i,$41304E37)"
+    },
+    {
+      "line": 42718,
+      "text": "call IssueImmediateOrder(i,\"stomp\")"
+    },
+    {
+      "line": 42719,
+      "text": "endif"
+    },
+    {
+      "line": 42720,
+      "text": "elseif GetRandomInt(1,101)<=25 then"
+    },
+    {
+      "line": 42721,
+      "text": "call UnitRemoveAbility(i,$41304E37)"
+    },
+    {
+      "line": 42722,
+      "text": "call UnitAddAbility(i,$41304E37)"
+    },
+    {
+      "line": 42723,
+      "text": "call IssueImmediateOrder(i,\"stomp\")"
+    },
+    {
+      "line": 42724,
+      "text": "endif"
+    },
+    {
+      "line": 42794,
+      "text": "call SaveBoolean(O,GetHandleId(i),StringHash(\"Attack\"),false)"
+    },
+    {
+      "line": 42795,
+      "text": "endif"
+    },
+    {
+      "line": 42804,
+      "text": "function InitTrig_New_UnitAttack takes nothing returns nothing"
+    },
+    {
+      "line": 42805,
+      "text": "set b4=CreateTrigger()"
+    },
+    {
+      "line": 42806,
+      "text": "call YDWESyStemAnyUnitDamagedRegistTrigger(b4)"
+    },
+    {
+      "line": 42807,
+      "text": "call TriggerAddCondition(b4,Condition(function Trig_New_UnitAttackActions))"
+    },
+    {
+      "line": 42808,
+      "text": "endfunction"
+    },
+    {
+      "line": 49753,
+      "text": "call InitTrig_UnitDeath()"
+    },
+    {
+      "line": 49754,
+      "text": "call InitTrig_New_UnitAttack()"
+    }
+  ],
+  "acquisition": {
+    "building": "n03S",
+    "combat": "h0NE",
+    "chain": [
+      "h0DB",
+      "h0N3",
+      "n03K",
+      "n03L",
+      "n03M",
+      "n03N",
+      "n03O",
+      "n03P",
+      "n03Q",
+      "n03R",
+      "n03T",
+      "n03S"
+    ],
+    "method": "Current altar and 11 hero-stage upgrade commands; original growing-chain reconstruction remains inferred as documented."
+  },
+  "boundaries": [
+    "AOws Cost1 and cast defaults absent. The host records missingNativeManaCost and adapts immediate damage without inventing a zero-cost native claim.",
+    "AOws Sonic damage classification is not encoded in the packet fields; the host uses its existing spell/magic adapter. Native engine classification, cast arbitration and 0.001-second effect/frame ordering remain unverified.",
+    "The attack elseif prefix retains explicit branch selection; other family effects and their full random stream are not implemented here.",
+    "Death branch with source hashtable string key 7 (A0IP destruction tag) precedes A0N6 but is not implemented. Other explicit prototype branches and fire/skeleton priority are retained.",
+    "CreateUnit uses fresh template stats, not corpse buffs. Technology, all native creation triggers, unit/terrain collision and group handle behavior are only partially hosted.",
+    "Aloc spirits are visible but not clickable; host unit repulsion is disabled, while terrain paths use the existing map adaptation."
+  ],
+  "externalContext": [
+    {
+      "url": "https://www.hiveworkshop.com/threads/spell-ability-damage-types-and-what-they-mean.316271/",
+      "meaning": "First-hand ability damage-type testing lists War Stomp as Sonic. This does not prove behavior in the supplied v14 map or close native boundaries."
+    }
+  ]
+}

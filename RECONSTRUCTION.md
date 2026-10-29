@@ -410,3 +410,9 @@ A0RF 是建筑说明能力，战斗体不要求持有它。覆盖清单单独记
 ## v33 牛头人酋长
 
 A0N5按独立武器伤害事件抽整数1—101，普通阈值25、Avul等级1阈值85；成功重添A0N7并请求stomp。A0N6主死亡分支创建全新同型召唤体，添加Avul/Aloc、移除复活能力，持续9秒。A0N7字段为300范围、100伤害和0.001秒控制，缺失耗魔/施法默认字段不按文案补造。真实祭坛升级、保存与下一波重建已验收；详见[证据](reference/tauren-evidence.json)和[归档](docs/parallel-development/integration-v33.md)。
+
+## v34 翼族毁灭者
+
+A0IN与A0IO接入独立武器伤害事件：回魔前不等于15时增加1，恰到15才发thunderclap；繁衍先检查旧计数15，实际在第16与32次事件生成猎手，累计上限2。h2A8/h2A9生成h2AC，普通毁灭者生成n0SD；子体死亡不返还名额。A0J5显式50伤害、300范围和15耗魔替换通用靠近自动施法，原生缺失冷却/减速/命令时序仍partial。A116没有恢复数据，纠正为unresolved。
+
+普通与外观的真实升级链、自然战斗、暂停和存档恢复已验证。v33将A0IP字符串7状态误称毁灭标记，现已更正为骷髅术士活体炸弹，该死亡分支仍未接入。详见[证据](reference/destroyer-evidence.json)和[上下文归档](docs/parallel-development/integration-v34.md)。

@@ -1,0 +1,350 @@
+{
+  "source": {
+    "path": "reference/v14-source/raw_extracted/war3map.j",
+    "sha256": "e66c55b3b25b185c991be5613e21fbf5b2d598f3cc40f2f8cd01c23bcb828250",
+    "lineFormat": "Latin-1 bytes, split LF only"
+  },
+  "abilities": {
+    "A0IN": {
+      "rawcode": "A0IN",
+      "name": "毁灭",
+      "tip": "毁灭",
+      "ubertip": "耗蓝15，无内置CD，对周围半径300码范围内造成50点伤害",
+      "alias": "A0IN",
+      "code": "Asth",
+      "levels": "1",
+      "targs1": "_",
+      "targs2": "_",
+      "targs3": "_",
+      "targs4": "_"
+    },
+    "A0IO": {
+      "rawcode": "A0IO",
+      "name": "繁衍",
+      "tip": "繁衍",
+      "ubertip": "翼族射手每15次攻击诞生一个异族猎手\n每个毁灭者只能繁衍出两只",
+      "alias": "A0IO",
+      "code": "Asth",
+      "levels": "1",
+      "targs1": "_",
+      "targs2": "_",
+      "targs3": "_",
+      "targs4": "_"
+    },
+    "A0J5": {
+      "rawcode": "A0J5",
+      "name": "翼族毁灭",
+      "tip": "翼族毁灭",
+      "ubertip": "对周围敌人造成50点伤害",
+      "alias": "A0J5",
+      "code": "AHtc",
+      "Area1": "300.0",
+      "DataA1": "50.0",
+      "DataB1": "50.0",
+      "levels": "1",
+      "targs1": "enemies",
+      "targs2": "_",
+      "targs3": "_",
+      "targs4": "_",
+      "Cost1": "15",
+      "Dur1": "0.001",
+      "HeroDur1": "0.001",
+      "checkDep": "1",
+      "reqLevel": "1"
+    },
+    "A116": {
+      "rawcode": "A116",
+      "name": "Healing Ward Aura",
+      "alias": "A116",
+      "code": "Aoar",
+      "BuffID1": "Boar",
+      "levels": "1",
+      "targs1": "_",
+      "targs2": "_",
+      "targs3": "_",
+      "targs4": "_",
+      "checkDep": "1"
+    }
+  },
+  "units": {
+    "h106": {
+      "rawcode": "h106",
+      "name": "翼族毁灭者",
+      "movetp": "fly",
+      "targType": "ground",
+      "HP": "600",
+      "abilList": "A0J5,A0IO,A116,A0IN",
+      "auto": "_",
+      "castbsw": "0.51",
+      "castpt": "0.3",
+      "manaN": "15",
+      "type": "giant"
+    },
+    "h2A8": {
+      "rawcode": "h2A8",
+      "name": "剧毒异虫",
+      "movetp": "fly",
+      "targType": "ground",
+      "HP": "600",
+      "abilList": "A0J5,A0IO,A116,A0IN",
+      "auto": "_",
+      "castbsw": "0.51",
+      "castpt": "0.3",
+      "manaN": "15",
+      "type": "giant"
+    },
+    "h2AC": {
+      "rawcode": "h2AC",
+      "name": "剧毒异虫",
+      "movetp": "fly",
+      "targType": "ground",
+      "HP": "300",
+      "abilList": "A0SB,A116",
+      "auto": "_",
+      "castbsw": "0.51",
+      "castpt": "0.3",
+      "type": "giant"
+    },
+    "n0SD": {
+      "rawcode": "n0SD",
+      "name": "翼族猎手",
+      "movetp": "fly",
+      "targType": "ground",
+      "HP": "300",
+      "abilList": "A0SB,A116",
+      "auto": "_",
+      "castbsw": "0.51",
+      "castpt": "0.3",
+      "type": "giant"
+    }
+  },
+  "sourceEvidence": [
+    {
+      "line": 3759,
+      "text": "call SaveInteger(O,$68324138,StringHash(\"SkinBase\"),$68313036)"
+    },
+    {
+      "line": 4201,
+      "text": "call SaveInteger(B,$4130494E,StringHash(\"Requires\"),$52686862)"
+    },
+    {
+      "line": 4202,
+      "text": "call SaveInteger(B,$4130494F,StringHash(\"Requires\"),$52686862)"
+    },
+    {
+      "line": 17186,
+      "text": "set Bi=Bi+1"
+    },
+    {
+      "line": 17187,
+      "text": "set Mk[Bi]=$6E305344"
+    },
+    {
+      "line": 17188,
+      "text": "set Ml[Bi]=$68305344"
+    },
+    {
+      "line": 17189,
+      "text": "set Bi=Bi+1"
+    },
+    {
+      "line": 17190,
+      "text": "set Mk[Bi]=$68324143"
+    },
+    {
+      "line": 17191,
+      "text": "set Ml[Bi]=$68324144"
+    },
+    {
+      "line": 17192,
+      "text": "set Bi=Bi+1"
+    },
+    {
+      "line": 17193,
+      "text": "set Mk[Bi]=$6E305344"
+    },
+    {
+      "line": 17194,
+      "text": "set Ml[Bi]=$68305345"
+    },
+    {
+      "line": 17195,
+      "text": "set Bi=Bi+1"
+    },
+    {
+      "line": 17196,
+      "text": "set Mk[Bi]=$68313036"
+    },
+    {
+      "line": 17197,
+      "text": "set Ml[Bi]=$68313035"
+    },
+    {
+      "line": 17198,
+      "text": "set Bi=Bi+1"
+    },
+    {
+      "line": 17199,
+      "text": "set Mk[Bi]=$68324138"
+    },
+    {
+      "line": 17200,
+      "text": "set Ml[Bi]=$68324139"
+    },
+    {
+      "line": 42270,
+      "text": "if YDWEIsEventAttackDamage() and not LoadBoolean(O,GetHandleId(i),StringHash(\"Attack\")) then"
+    },
+    {
+      "line": 42271,
+      "text": "call SaveBoolean(O,GetHandleId(i),StringHash(\"Attack\"),true)"
+    },
+    {
+      "line": 42599,
+      "text": "if LoadInteger(O,GetHandleId(i),StringHash(\"A0IO\"))==15 and GetUnitAbilityLevel(i,$4130494F)>0 and LoadInteger(O,GetHandleId(i),StringHash(\"number01\"))<2 then"
+    },
+    {
+      "line": 42600,
+      "text": "set b9=$6E305344"
+    },
+    {
+      "line": 42601,
+      "text": "if BF==$68324138 or BF==$68324139 then"
+    },
+    {
+      "line": 42602,
+      "text": "set b9=$68324143"
+    },
+    {
+      "line": 42603,
+      "text": "endif"
+    },
+    {
+      "line": 42604,
+      "text": "set bj_lastCreatedUnit=CreateUnit(GetOwningPlayer(i),b9,GetUnitX(i),GetUnitY(i),GetUnitFacing(i))"
+    },
+    {
+      "line": 42605,
+      "text": "call SaveInteger(O,GetHandleId(i),StringHash(\"number01\"),LoadInteger(O,GetHandleId(i),StringHash(\"number01\"))+1)"
+    },
+    {
+      "line": 42606,
+      "text": "call GroupAddUnit(JW,bj_lastCreatedUnit)"
+    },
+    {
+      "line": 42607,
+      "text": "call SetUnitUserData(bj_lastCreatedUnit,GetUnitUserData(i))"
+    },
+    {
+      "line": 42608,
+      "text": "call GroupAddUnit(JH[GetUnitUserData(i)],bj_lastCreatedUnit)"
+    },
+    {
+      "line": 42609,
+      "text": "call UnitAddType(bj_lastCreatedUnit,UNIT_TYPE_SUMMONED)"
+    },
+    {
+      "line": 42610,
+      "text": "call SetUnitColor(bj_lastCreatedUnit,GetPlayerColor(Player(GetUnitUserData(i)-1)))"
+    },
+    {
+      "line": 42611,
+      "text": "call IssuePointOrder(bj_lastCreatedUnit,\"attack\",GetPlayerStartLocationX(Player(GetUnitUserData(i)-1)),GetPlayerStartLocationY(Player(GetUnitUserData(i)-1)))"
+    },
+    {
+      "line": 42612,
+      "text": "call DestroyEffect(AddSpecialEffect(\"Units\\\\NightElf\\\\Wisp\\\\WispExplode.mdl\",GetUnitX(i),GetUnitY(i)))"
+    },
+    {
+      "line": 42613,
+      "text": "call SaveInteger(O,GetHandleId(i),StringHash(\"A0IO\"),0)"
+    },
+    {
+      "line": 42614,
+      "text": "set bj_lastCreatedUnit=null"
+    },
+    {
+      "line": 42615,
+      "text": "else"
+    },
+    {
+      "line": 42616,
+      "text": "call SaveInteger(O,GetHandleId(i),StringHash(\"A0IO\"),LoadInteger(O,GetHandleId(i),StringHash(\"A0IO\"))+1)"
+    },
+    {
+      "line": 42617,
+      "text": "endif"
+    },
+    {
+      "line": 42618,
+      "text": "if GetUnitState(i,UNIT_STATE_MANA)!=15. and GetUnitAbilityLevel(i,$4130494E)>0 then"
+    },
+    {
+      "line": 42619,
+      "text": "call SetUnitManaBJ(i,GetUnitState(i,UNIT_STATE_MANA)+1.)"
+    },
+    {
+      "line": 42620,
+      "text": "if GetUnitState(i,UNIT_STATE_MANA)==15. then"
+    },
+    {
+      "line": 42621,
+      "text": "call IssueImmediateOrder(i,\"thunderclap\")"
+    },
+    {
+      "line": 42622,
+      "text": "endif"
+    },
+    {
+      "line": 42623,
+      "text": "elseif GetUnitAbilityLevel(i,$41304A56)==1 and GetRandomReal(1.,106)>=73 then"
+    },
+    {
+      "line": 42794,
+      "text": "call SaveBoolean(O,GetHandleId(i),StringHash(\"Attack\"),false)"
+    },
+    {
+      "line": 42804,
+      "text": "function InitTrig_New_UnitAttack takes nothing returns nothing"
+    },
+    {
+      "line": 42805,
+      "text": "set b4=CreateTrigger()"
+    },
+    {
+      "line": 42806,
+      "text": "call YDWESyStemAnyUnitDamagedRegistTrigger(b4)"
+    },
+    {
+      "line": 42807,
+      "text": "call TriggerAddCondition(b4,Condition(function Trig_New_UnitAttackActions))"
+    },
+    {
+      "line": 39769,
+      "text": "elseif BF==$41304950 then"
+    },
+    {
+      "line": 39774,
+      "text": "call SaveInteger(O,H2I(Qf),StringHash(\"7\"),7)"
+    },
+    {
+      "line": 42107,
+      "text": "elseif LoadInteger(O,H2I(i),StringHash(\"7\"))!=0 then"
+    }
+  ],
+  "rules": [
+    "A0IO checks old count exactly15 then resets; otherwise increments, even without the ability or after cap2. Fresh units therefore spawn at weapon-damage events16 and32.",
+    "Skin rawcodes h2A8 and h2A9 spawn h2AC, all other carriers spawn n0SD. New summoned bodies inherit owner, position, facing and userData, not bonuses or the chase target.",
+    "A0IN selects the shared elseif before mutation: mana!=15 and positive ability level. Add1 clamped, request thunderclap only if resulting mana==15.",
+    "A0J5 no longer uses generic proximity auto-casting. Explicit damage50, area300, mana15; AHtc duration is not a stun declaration.",
+    "A116 has no supplied healing/area/target values. Reclassified unresolved instead of claiming an implemented zero-effect aura.",
+    "A0IP string7 death branch is Skeleton Warlock living bomb, unrelated to Destroyer. v33 attribution corrected."
+  ],
+  "boundaries": [
+    "Missing native AHtc Cool1/Cast1/DataC1/DataD1/BuffID1. Immediate magic/spells damage and no imposed cooldown are host adapters, not verified native defaults. No invented slow or stun.",
+    "mana0 absent in source table; current importer manaStart0 retained. Not independently verified native inheritance.",
+    "Source CreateUnit callbacks, Warcraft group/handle lifecycle, birth collision/tech stats and start-location mapping need native validation.",
+    "A0SB hatchling death explosion still uses the existing host implementation; full independent death elseif priority not covered by this batch.",
+    "Old snapshots lack pre-upgrade source event history; absent counters begin0 and are not reconstructed from guessed attacks."
+  ]
+}

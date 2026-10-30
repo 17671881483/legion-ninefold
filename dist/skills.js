@@ -1,3 +1,4 @@
+import {DESERT_LIZARD_RULES,desertLizardAttackDamage,desertLizardIncoming} from './desert-lizard-rules.js';
 import {SCORPION_RULES,scorpionMainDamage} from './scorpion-rules.js';
 import {STORM_LIZARD_RULES,canStormLizardCast,castStormLizard,stormLizardAttackDamage,stormLizardChanneling} from './storm-lizard-rules.js';
 import {UNSTABLE_ALCHEMY_RULES,unstableAlchemyDeath} from './unstable-alchemy-rules.js';
@@ -39,7 +40,7 @@ import { closestWalkable, isWalkable } from './layout.js';
 import { GARROSH_ACTIVE_RULES, GARROSH_PASSIVE_RULES, canGarroshCastAbility, castGarroshAbility, tryGarroshAutoCast, garroshActiveAfterDamage, sourceGarroshActiveDeath, tickGarroshActiveJob } from './garrosh-active-rules.js';
 import { ILLIDAN_RULES, ILLIDAN_ACTIVE_RULES, canIllidanCastAbility, castIllidanAbility, registerIllidanSource, tickIllidanSource, illidanOnAttackHit, tryIllidanAutoCast, illidanAfterDamage, sourceIllidanDeath, tickIllidanJob, isIllidanJobType } from './illidan-rules.js';
 
-export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261030-v39-1';
+export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261030-v40-1';
 
 // Values come from resolved object fields. Empty fields remain empty: a missing
 // native default is reported, rather than replacing it with tooltip numbers.
@@ -224,6 +225,7 @@ function compile(id,version='5.0dJF') {
   if(version==='v14.1A5'&&UNSTABLE_ALCHEMY_RULES[id]){const r=UNSTABLE_ALCHEMY_RULES[id];Object.assign(s,{kind:'unstable_alchemy_source',status:r.status,runtimeImplemented:true,effectText:r.description+`【待核定：${r.partial}】`});}
   if(version==='v14.1A5'&&UNDEAD_LEGION_RULES[id]){const r=UNDEAD_LEGION_RULES[id];Object.assign(s,{kind:'undead_legion_source',status:r.status,runtimeImplemented:true,effectText:r.description+`【待核定：${r.partial}】`});}
   if(version==='v14.1A5'&&LIVING_BOMB_RULES[id]){const r=LIVING_BOMB_RULES[id];Object.assign(s,{kind:'living_bomb_source',status:r.status,runtimeImplemented:r.status==='partial',effectText:r.description+`【待核定：${r.partial}】`});}
+  if(version==='v14.1A5'&&DESERT_LIZARD_RULES[id]){const r=DESERT_LIZARD_RULES[id];Object.assign(s,{kind:r.nativeKind?s.kind:'desert_lizard_source',status:r.status,runtimeImplemented:r.status==='partial',effectText:r.description+`【待核定：${r.partial}】`});}
   if(version==='v14.1A5'&&SCORPION_RULES[id]){const r=SCORPION_RULES[id];Object.assign(s,{kind:id==='A10G'?'poison':'scorpion_source',status:r.status,runtimeImplemented:true,effectText:r.description+`【待核定：${r.partial}】`});}
   if(version==='v14.1A5'&&STORM_LIZARD_RULES[id]){const r=STORM_LIZARD_RULES[id];Object.assign(s,{kind:'storm_lizard_source',status:r.status,runtimeImplemented:r.status==='partial',effectText:r.description+`【待核定：${r.partial}】`});}
   if(version==='v14.1A5'&&DESTROYER_RULES[id]){const r=DESTROYER_RULES[id];Object.assign(s,{kind:'destroyer_source',status:r.status,runtimeImplemented:r.status==='partial',effectText:r.description+`【待核定：${r.partial}】`});}
@@ -343,7 +345,7 @@ export function sourceWeapon(source,target,now=0){
 }
 export function canWeaponTarget(source,target,now=0){return !!sourceWeapon(source,target,now);}
 
-function active(e){return (e.skillSpecs??[]).filter(s=>s.status==='implemented'||s.status==='partial'&&s.runtimeImplemented&&['A2Y1','A2Y5','A0II','A0I2','A0J8','A0J9','A1QE','A1QI','A10G'].includes(s.id));}
+function active(e){return (e.skillSpecs??[]).filter(s=>s.status==='implemented'||s.status==='partial'&&s.runtimeImplemented&&['A2Y1','A2Y5','A0II','A0I2','A0J8','A0J9','A1QE','A1QI','A10G','A12I'].includes(s.id));}
 export function hasSourceAura(e){return active(e).some(s=>s.kind.startsWith('aura_'));}
 function state(e,s){return (e.skillStates??={})[s.id]??=( {readyAt:0,casts:0});}
 function buff(e,s,source,now,extra={}){if(source.side!==e.side&&active(e).some(a=>a.kind==='immunity')&&(['Aslo','AEer','Acri','ANdh','Auhf','AUfn','ANcs','AHtb','AOcl'].includes(s.base)))return false;e.buffs??=[];const key=extra.key??s.buffKey??s.id;const b={key,skillId:s.id,ownerId:source.ownerId,sourceId:source.id,expiresAt:now+(isNativeHero(e)?s.heroDuration||s.duration:s.duration),damage:s.damage??0,armor:s.armor??0,move:s.move??0,haste:s.haste??0,regen:s.regen??0,dps:s.dps??0,miss:s.miss??0,incoming:s.incoming??0,disarm:s.base==='AEer',...extra};const old=e.buffs.findIndex(v=>v.key===key);if(old>=0)e.buffs[old]=b;else e.buffs.push(b);}
@@ -535,7 +537,7 @@ export function modifyIncoming(game,target,damage,attacker,options={}) {
     if(s.kind==='carapace'&&s.incomingFactor>0)result*=s.incomingFactor;
     if(s.kind==='shield'&&s.damagePerMana>0){const absorb=Math.min(result*s.absorb,target.mana*s.damagePerMana);target.mana-=absorb/s.damagePerMana;result-=absorb;}
   }
-  if(isV14(target))result=aesaraIncomingDamage(game,target,result);
+  if(isV14(target))result=desertLizardIncoming(target,aesaraIncomingDamage(game,target,result),attacker,options);
   for(const b of target.buffs??[])if(b.expiresAt>game.state.time)result*=1+(b.incoming??0);
   result*=target.status?.incomingMultiplier??1;
   // A19A is an AIsr native resistance, not a reduction to magic weapons or
@@ -567,7 +569,7 @@ export function modifyIncoming(game,target,damage,attacker,options={}) {
 export function sourceClassAttackDamageEvent(game,target,attacker,options={},amount=0){
   if(!isV14(attacker)||options.spell&&!options.weapon||attacker.status?.sourceNativeAttackBusy)return;
   (attacker.status??={}).sourceNativeAttackBusy=true;
-  try{darkArthasAttackDamage(attacker,amount);vashjOnAttackDamage(game,attacker,target,heroScriptApi);blademasterAttack(game,attacker,heroScriptApi);sourceClassOnAttackDamage(game,attacker,target,heroScriptApi);banditAttackOrders(game,attacker,target,heroScriptApi);stormLizardAttackDamage(game,attacker,target,heroScriptApi);huskarAttackDamage(game,attacker,target,amount,heroScriptApi);const manaBranch=destroyerAttackDamage(game,attacker,heroScriptApi);taurenAttackDamage(game,attacker,target,heroScriptApi,manaBranch?'A0IN':null);}finally{attacker.status.sourceNativeAttackBusy=false;}
+  try{darkArthasAttackDamage(attacker,amount);vashjOnAttackDamage(game,attacker,target,heroScriptApi);blademasterAttack(game,attacker,heroScriptApi);sourceClassOnAttackDamage(game,attacker,target,heroScriptApi);banditAttackOrders(game,attacker,target,heroScriptApi);desertLizardAttackDamage(game,attacker,heroScriptApi);stormLizardAttackDamage(game,attacker,target,heroScriptApi);huskarAttackDamage(game,attacker,target,amount,heroScriptApi);const manaBranch=destroyerAttackDamage(game,attacker,heroScriptApi);taurenAttackDamage(game,attacker,target,heroScriptApi,manaBranch?'A0IN':null);}finally{attacker.status.sourceNativeAttackBusy=false;}
 }
 export function initializeSourceClassCombat(game,building,entity){
   if(isV14(entity)){initializeBlademaster(game,building,entity);initializeNightmareDeployment(game,entity);initializeBrightArthasDeployment(game,building,entity);initializeLichKingDeployment(game,entity);initializeVashjDeployment(game,building,entity);return initializeSourceClassDeployment(game,building,entity,heroScriptApi);}

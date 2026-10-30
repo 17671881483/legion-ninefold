@@ -67,7 +67,8 @@ test('v14 kill heal uses 50% of dead maximum HP and A0SB follows ability holders
  const g=fixture(),killer=add(g,v14([],{rawcode:'h0CZ',hp:2000})),dead=add(g,v14(['A0SB'],{rawcode:'some'}),'monster',.2),other=add(g,v14(),'defender',.4);killer.hp=100;g._hurt(dead,2000,killer,{spell:true});near(killer.hp,574);near(other.hp,974);
 });
 test('unverified v14 script markers remain visible as unresolved, not old-version effects',()=>{
- for(const id of ['A0R5','A12K']){const source=V14_ABILITIES[id];assert.ok(source,id);const [s]=describeSkills(v14([id]));assert.equal(s.status,'unresolved',id);assert.ok(s.effectText);}
+ for(const id of ['A0R5']){const source=V14_ABILITIES[id];assert.ok(source,id);const [s]=describeSkills(v14([id]));assert.equal(s.status,'unresolved',id);assert.ok(s.effectText);}
+ const [thickHide]=describeSkills(v14(['A12K']));assert.equal(thickHide.status,'partial');assert.ok(thickHide.effectText.includes('0.65'));
 });
 
 

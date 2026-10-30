@@ -1,0 +1,643 @@
+{
+  "source": {
+    "file": "reference/v14-source/raw_extracted/war3map.j",
+    "sha256": "e66c55b3b25b185c991be5613e21fbf5b2d598f3cc40f2f8cd01c23bcb828250",
+    "lineEncoding": "latin1/LF"
+  },
+  "abilities": {
+    "A129": {
+      "rawcode": "A129",
+      "name": "狂热",
+      "tip": "狂热",
+      "ubertip": "攻击时有7%的几率进入狂热状态，使自己接下来的5次攻击的攻击速度提高300%,效果生效时能再次触发这个效果.",
+      "alias": "A129",
+      "code": "Asth",
+      "levels": "1",
+      "targs1": "_",
+      "targs2": "_",
+      "targs3": "_",
+      "targs4": "_",
+      "checkDep": "1"
+    },
+    "A12A": {
+      "rawcode": "A12A",
+      "name": "嗜热",
+      "tip": "嗜热",
+      "ubertip": "攻击时有8%的几率进入狂热状态，使自己接下来的6次攻击的攻击速度提高300%,效果生效时能再次触发这个效果.",
+      "alias": "A12A",
+      "code": "Asth",
+      "levels": "1",
+      "targs1": "_",
+      "targs2": "_",
+      "targs3": "_",
+      "targs4": "_",
+      "checkDep": "1"
+    },
+    "A12B": {
+      "rawcode": "A12B",
+      "name": "狂热",
+      "tip": "狂热(B)",
+      "alias": "A12B",
+      "code": "Ablo",
+      "BuffID1": "Bblo",
+      "DataA1": "3.0",
+      "levels": "1",
+      "targs1": "ground,air,organic,neutral,self",
+      "targs2": "_",
+      "targs3": "_",
+      "targs4": "_",
+      "untip": "点击右键以启动自动施放功能。",
+      "unubertip": "点击右键以取消自动施放功能。",
+      "Dur1": "6.0",
+      "HeroDur1": "6.0",
+      "Cool1": "1.0",
+      "checkDep": "1",
+      "priority": "11"
+    },
+    "A12C": {
+      "rawcode": "A12C",
+      "name": "战斗渴望",
+      "tip": "战斗渴望",
+      "ubertip": "荒漠巨蜥之王渴望战斗的意志促使其愈发强大。荒漠巨蜥之王每第8次攻击将造成10倍暴击同时恢复200生命",
+      "alias": "A12C",
+      "code": "Asth",
+      "levels": "1",
+      "targs1": "_",
+      "targs2": "_",
+      "targs3": "_",
+      "targs4": "_",
+      "checkDep": "1"
+    },
+    "A12I": {
+      "rawcode": "A12I",
+      "name": "战斗渴望暴击",
+      "tip": "战斗渴望暴击",
+      "ubertip": "战斗渴望暴击",
+      "alias": "A12I",
+      "code": "AOcr",
+      "DataA1": "100.0",
+      "DataB1": "10.0",
+      "levels": "1",
+      "targs1": "air,enemies,ground",
+      "targs2": "_",
+      "targs3": "_",
+      "targs4": "_"
+    },
+    "A12K": {
+      "rawcode": "A12K",
+      "name": "厚皮",
+      "tip": "厚皮",
+      "ubertip": "荒漠巨蜥之王有着一层厚实的外皮，对于常规伤害有着很高抗性。荒漠巨蜥之王受到的穿刺攻击/魔法攻击伤害减少45%",
+      "alias": "A12K",
+      "code": "AIdd",
+      "DataA1": "0.65",
+      "DataB1": "1.0",
+      "levels": "1",
+      "targs1": "vuln,invu",
+      "targs2": "_",
+      "targs3": "_",
+      "targs4": "_",
+      "checkDep": "1",
+      "DataE1": "0.65",
+      "DataH1": "1.0",
+      "DataG1": "1.0"
+    }
+  },
+  "units": {
+    "h0Q2": {
+      "rawcode": "h0Q2",
+      "name": "荒漠巨蜥",
+      "ubertip": ",",
+      "unitID": "h0Q2",
+      "canFlee": "1",
+      "cargoSize": "1",
+      "death": "3.04",
+      "deathType": "3",
+      "movetp": "foot",
+      "points": "135",
+      "prio": "6",
+      "propWin": "60.0",
+      "race": "human",
+      "targType": "ground",
+      "turnRate": "0.6",
+      "unitBalanceID": "h0Q2",
+      "bldtm": "20",
+      "bountydice": "6",
+      "bountyplus": "20",
+      "bountysides": "3",
+      "defType": "medium",
+      "goldcost": "135",
+      "goldRep": "135",
+      "HP": "1100",
+      "level": "2",
+      "nsight": "800",
+      "preventPlace": "_",
+      "Primary": "_",
+      "regenHP": "1.0",
+      "regenType": "always",
+      "reptm": "20",
+      "requirePlace": "_",
+      "sight": "1400",
+      "spd": "240",
+      "stockMax": "3",
+      "stockRegen": "30",
+      "tilesets": "*",
+      "upgrades": "R00B,R00C,R009,R00A",
+      "unitUIID": "h0Q2",
+      "armor": "Wood",
+      "blend": "0.15",
+      "blue": "255",
+      "elevRad": "20.0",
+      "file": "Larch.mdl",
+      "green": "255",
+      "maxPitch": "10.0",
+      "maxRoll": "10.0",
+      "modelScale": "1.0",
+      "red": "255",
+      "run": "210.0",
+      "scale": "1.0",
+      "scaleBull": "1",
+      "shadowH": "140.0",
+      "shadowOnWater": "1",
+      "shadowW": "140.0",
+      "shadowX": "50.0",
+      "shadowY": "50.0",
+      "teamColor": "-1",
+      "unitShadow": "Shadow",
+      "unitSound": "AncientProtector",
+      "walk": "210.0",
+      "unitAbilID": "h0Q2",
+      "abilList": "A129",
+      "auto": "_",
+      "unitWeapID": "h0Q2",
+      "acquire": "500.0",
+      "atkType1": "normal",
+      "atkType2": "normal",
+      "backSw1": "0.6",
+      "castbsw": "0.51",
+      "castpt": "0.3",
+      "cool1": "0.9",
+      "dice1": "1",
+      "dmgpt1": "0.4",
+      "impactZ": "60.0",
+      "launchZ": "60.0",
+      "rangeN1": "120",
+      "RngBuff1": "250.0",
+      "showUI1": "1",
+      "showUI2": "1",
+      "sides1": "6",
+      "targCount1": "1",
+      "targCount2": "1",
+      "targs1": "enemies",
+      "weapsOn": "1",
+      "weapTp1": "normal",
+      "weapType1": "WoodHeavyBash",
+      "hotkey": "F",
+      "damage_min_1": "106.0",
+      "damage_max_1": "111.0",
+      "damage_avg_1": "108.5",
+      "dps_avg_1": "120.55555555555556",
+      "bounty_min": "26.0",
+      "bounty_max": "38.0",
+      "bounty_avg": "32.0",
+      "attack_type_zh": "普通",
+      "armor_type_zh": "中甲",
+      "ability_ids": "A129",
+      "ability_names": "狂热",
+      "def": "3.0",
+      "defUp": "2.0",
+      "type": "giant",
+      "dmgplus1": "105"
+    },
+    "h0Q3": {
+      "rawcode": "h0Q3",
+      "name": "荒漠巨蜥之王",
+      "ubertip": ",",
+      "unitID": "h0Q3",
+      "canFlee": "1",
+      "cargoSize": "1",
+      "death": "3.04",
+      "deathType": "3",
+      "movetp": "foot",
+      "points": "100",
+      "prio": "6",
+      "propWin": "60.0",
+      "race": "human",
+      "targType": "ground",
+      "turnRate": "0.6",
+      "unitBalanceID": "h0Q3",
+      "bldtm": "20",
+      "bountydice": "6",
+      "bountyplus": "20",
+      "bountysides": "3",
+      "defType": "hero",
+      "goldcost": "135",
+      "goldRep": "135",
+      "HP": "2700",
+      "level": "2",
+      "nsight": "800",
+      "preventPlace": "_",
+      "Primary": "_",
+      "regenHP": "3.0",
+      "regenType": "always",
+      "reptm": "20",
+      "requirePlace": "_",
+      "sight": "1400",
+      "spd": "240",
+      "stockMax": "3",
+      "stockRegen": "30",
+      "tilesets": "*",
+      "upgrades": "R00B,R00C,R009,R00A",
+      "unitUIID": "h0Q3",
+      "armor": "Wood",
+      "blend": "0.15",
+      "blue": "255",
+      "elevRad": "20.0",
+      "file": "LizardmanRaidingCavalry.mdl",
+      "green": "255",
+      "maxPitch": "10.0",
+      "maxRoll": "10.0",
+      "modelScale": "1.5",
+      "red": "255",
+      "run": "210.0",
+      "scale": "1.0",
+      "scaleBull": "1",
+      "shadowH": "140.0",
+      "shadowOnWater": "1",
+      "shadowW": "140.0",
+      "shadowX": "50.0",
+      "shadowY": "50.0",
+      "teamColor": "-1",
+      "unitShadow": "Shadow",
+      "unitSound": "AncientProtector",
+      "walk": "210.0",
+      "unitAbilID": "h0Q3",
+      "abilList": "A12A,A12C,A12K",
+      "auto": "_",
+      "unitWeapID": "h0Q3",
+      "acquire": "500.0",
+      "atkType1": "normal",
+      "atkType2": "normal",
+      "backSw1": "0.6",
+      "castbsw": "0.51",
+      "castpt": "0.3",
+      "cool1": "0.75",
+      "dice1": "1",
+      "dmgpt1": "0.4",
+      "impactZ": "60.0",
+      "launchZ": "60.0",
+      "rangeN1": "120",
+      "RngBuff1": "250.0",
+      "showUI1": "1",
+      "showUI2": "1",
+      "sides1": "19",
+      "targCount1": "1",
+      "targCount2": "1",
+      "targs1": "enemies",
+      "weapsOn": "1",
+      "weapTp1": "normal",
+      "weapType1": "WoodHeavyBash",
+      "hotkey": "F",
+      "damage_min_1": "226.0",
+      "damage_max_1": "244.0",
+      "damage_avg_1": "235.0",
+      "dps_avg_1": "313.3333333333333",
+      "bounty_min": "26.0",
+      "bounty_max": "38.0",
+      "bounty_avg": "32.0",
+      "attack_type_zh": "普通",
+      "armor_type_zh": "英雄甲",
+      "ability_ids": "A12A,A12C,A12K",
+      "ability_names": "嗜热,战斗渴望,厚皮",
+      "def": "3.0",
+      "defUp": "2.0",
+      "type": "giant,sapper",
+      "dmgplus1": "225"
+    }
+  },
+  "sourceEvidence": [
+    {
+      "line": 42252,
+      "text": "function Trig_New_UnitAttackActions takes nothing returns boolean"
+    },
+    {
+      "line": 42253,
+      "text": "local unit Qf=GetTriggerUnit()"
+    },
+    {
+      "line": 42254,
+      "text": "local unit i=GetEventDamageSource()"
+    },
+    {
+      "line": 42255,
+      "text": "local integer BF=GetUnitTypeId(i)"
+    },
+    {
+      "line": 42256,
+      "text": "local integer b9=$6E305344"
+    },
+    {
+      "line": 42257,
+      "text": "local integer YY=0"
+    },
+    {
+      "line": 42258,
+      "text": "local unit Ki=null"
+    },
+    {
+      "line": 42259,
+      "text": "local unit D6=null"
+    },
+    {
+      "line": 42260,
+      "text": "local group Uz=null"
+    },
+    {
+      "line": 42261,
+      "text": "local real P8=0"
+    },
+    {
+      "line": 42262,
+      "text": "local unit cB=null"
+    },
+    {
+      "line": 42263,
+      "text": "local boolexpr Cd"
+    },
+    {
+      "line": 42264,
+      "text": "local timer DK"
+    },
+    {
+      "line": 42265,
+      "text": "local real FF"
+    },
+    {
+      "line": 42266,
+      "text": "local real FG"
+    },
+    {
+      "line": 42267,
+      "text": "local integer y=0"
+    },
+    {
+      "line": 42268,
+      "text": "local player h"
+    },
+    {
+      "line": 42269,
+      "text": "local effect DE"
+    },
+    {
+      "line": 42270,
+      "text": "if YDWEIsEventAttackDamage() and not LoadBoolean(O,GetHandleId(i),StringHash(\"Attack\")) then"
+    },
+    {
+      "line": 42271,
+      "text": "call SaveBoolean(O,GetHandleId(i),StringHash(\"Attack\"),true)"
+    },
+    {
+      "line": 42505,
+      "text": "if GetUnitAbilityLevel(i,$41313239)>0 then"
+    },
+    {
+      "line": 42506,
+      "text": "set YY=LoadInteger(O,GetHandleId(i),$41313239)"
+    },
+    {
+      "line": 42507,
+      "text": "if YY>0 then"
+    },
+    {
+      "line": 42508,
+      "text": "call SaveInteger(O,GetHandleId(i),$41313239,YY-1)"
+    },
+    {
+      "line": 42509,
+      "text": "if YY==1 then"
+    },
+    {
+      "line": 42510,
+      "text": "call UnitRemoveAbility(i,$42626C6F)"
+    },
+    {
+      "line": 42511,
+      "text": "endif"
+    },
+    {
+      "line": 42512,
+      "text": "endif"
+    },
+    {
+      "line": 42513,
+      "text": "if GetRandomReal(0,100)<=7 then"
+    },
+    {
+      "line": 42514,
+      "text": "call SaveInteger(O,GetHandleId(i),$41313239,5)"
+    },
+    {
+      "line": 42515,
+      "text": "call UnitAddAbility(i,$41313242)"
+    },
+    {
+      "line": 42516,
+      "text": "call IssueTargetOrder(i,\"bloodlust\",i)"
+    },
+    {
+      "line": 42517,
+      "text": "endif"
+    },
+    {
+      "line": 42518,
+      "text": "endif"
+    },
+    {
+      "line": 42519,
+      "text": "if GetUnitAbilityLevel(i,$41313241)>0 then"
+    },
+    {
+      "line": 42520,
+      "text": "set YY=LoadInteger(O,GetHandleId(i),$41313241)"
+    },
+    {
+      "line": 42521,
+      "text": "if YY>0 then"
+    },
+    {
+      "line": 42522,
+      "text": "call SaveInteger(O,GetHandleId(i),$41313241,YY-1)"
+    },
+    {
+      "line": 42523,
+      "text": "if YY==1 then"
+    },
+    {
+      "line": 42524,
+      "text": "call UnitRemoveAbility(i,$42626C6F)"
+    },
+    {
+      "line": 42525,
+      "text": "endif"
+    },
+    {
+      "line": 42526,
+      "text": "endif"
+    },
+    {
+      "line": 42527,
+      "text": "if GetRandomReal(0,100)<=8 then"
+    },
+    {
+      "line": 42528,
+      "text": "call SaveInteger(O,GetHandleId(i),$41313241,6)"
+    },
+    {
+      "line": 42529,
+      "text": "call UnitAddAbility(i,$41313242)"
+    },
+    {
+      "line": 42530,
+      "text": "call IssueTargetOrder(i,\"bloodlustoff\",i)"
+    },
+    {
+      "line": 42531,
+      "text": "call IssueTargetOrder(i,\"bloodlust\",i)"
+    },
+    {
+      "line": 42532,
+      "text": "endif"
+    },
+    {
+      "line": 42533,
+      "text": "endif"
+    },
+    {
+      "line": 42534,
+      "text": "if GetUnitAbilityLevel(i,$41313243)>0 then"
+    },
+    {
+      "line": 42535,
+      "text": "set YY=LoadInteger(O,GetHandleId(i),$41313243)+1"
+    },
+    {
+      "line": 42536,
+      "text": "if YY>=8 then"
+    },
+    {
+      "line": 42537,
+      "text": "call SaveInteger(O,GetHandleId(i),$41313243,0)"
+    },
+    {
+      "line": 42538,
+      "text": "call SetUnitState(i,UNIT_STATE_LIFE,GetUnitState(i,UNIT_STATE_LIFE)+200)"
+    },
+    {
+      "line": 42539,
+      "text": "call UnitAddAbility(i,$41313249)"
+    },
+    {
+      "line": 42540,
+      "text": "else"
+    },
+    {
+      "line": 42541,
+      "text": "call SaveInteger(O,GetHandleId(i),$41313243,YY)"
+    },
+    {
+      "line": 42542,
+      "text": "call UnitRemoveAbility(i,$41313249)"
+    },
+    {
+      "line": 42543,
+      "text": "endif"
+    },
+    {
+      "line": 42544,
+      "text": "endif"
+    },
+    {
+      "line": 42794,
+      "text": "call SaveBoolean(O,GetHandleId(i),StringHash(\"Attack\"),false)"
+    },
+    {
+      "line": 42795,
+      "text": "endif"
+    },
+    {
+      "line": 42796,
+      "text": "set DK=null"
+    },
+    {
+      "line": 42797,
+      "text": "set D6=null"
+    },
+    {
+      "line": 42798,
+      "text": "set Uz=null"
+    },
+    {
+      "line": 42799,
+      "text": "set Ki=null"
+    },
+    {
+      "line": 42800,
+      "text": "set Qf=null"
+    },
+    {
+      "line": 42801,
+      "text": "set i=null"
+    },
+    {
+      "line": 42802,
+      "text": "return false"
+    },
+    {
+      "line": 42803,
+      "text": "endfunction"
+    },
+    {
+      "line": 42804,
+      "text": "function InitTrig_New_UnitAttack takes nothing returns nothing"
+    },
+    {
+      "line": 42805,
+      "text": "set b4=CreateTrigger()"
+    },
+    {
+      "line": 42806,
+      "text": "call YDWESyStemAnyUnitDamagedRegistTrigger(b4)"
+    },
+    {
+      "line": 42807,
+      "text": "call TriggerAddCondition(b4,Condition(function Trig_New_UnitAttackActions))"
+    },
+    {
+      "line": 42808,
+      "text": "endfunction"
+    },
+    {
+      "line": 49754,
+      "text": "call InitTrig_New_UnitAttack()"
+    }
+  ],
+  "findings": [
+    "监听来自伤害事件且要求YDWEIsEventAttackDamage，不是EVENT_PLAYER_UNIT_ATTACKED；按伤害来源Attack标记防重入，无正伤害/敌我/存活门槛。",
+    "两个狂热分支分别判断，先减计数/移除共享Bblo，再独立抽签。A12A额外发bloodlustoff，仍为IssueTargetOrder。",
+    "A12C第8次事件后加A12I，普通顺序攻击第9/17次用十倍暴击；额外武器伤害事件亦更新计数并能移除暴击能力。",
+    "A12B明确300%攻速、6秒持续和1秒冷却，但缺原生命令/资源字段；动态授予仅记录请求，不让通用buff编译器按0耗魔每秒随意自动给友军增益。",
+    "A12K原表DataA/E=0.65；适配穿刺、魔法/法术攻击类型承伤，不能照文案45%减伤。特殊伤害、原生版本与多重防御叠加仍待核定。",
+    "数据包解析工具将SLK存在的单元格原样输出；本地包缺对应原始SLK和原版完整默认表，未把空值猜为0。"
+  ],
+  "nativeEvidence": [
+    {
+      "url": "https://github.com/Cokemonkey11/wc3-ability-doc/blob/main/sources/screwthetrees-wc3-editor-ability-insight-document/2023-11-14.md",
+      "reportedVersions": "Aegr 1.36; Ablo 1.28.5.7680",
+      "use": "原生实验记述：穿刺使用Damage Taken，法术/魔法攻击用Magic Damage Reduction；同类多项最低倍率等仍未在本图验证。Ablo的攻速字段已知，但不足以确认缺失施法参数。"
+    },
+    {
+      "url": "https://github.com/dc114154qq/war3-reforged-trainer/blob/master/war3_ability_fields.py",
+      "use": "字段元数据映射：AIdd适用Def1承伤、Def2输出、Def5魔法承伤。不是该版本地图运行验证。"
+    }
+  ]
+}

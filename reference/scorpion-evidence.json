@@ -1,0 +1,1107 @@
+{
+  "source": {
+    "file": "reference/v14-source/raw_extracted/war3map.j",
+    "sha256": "e66c55b3b25b185c991be5613e21fbf5b2d598f3cc40f2f8cd01c23bcb828250",
+    "lineEncoding": "latin1/LF"
+  },
+  "abilities": {
+    "A10G": {
+      "rawcode": "A10G",
+      "name": "毒素注入",
+      "tip": "毒素注入",
+      "ubertip": "毒蝎攻击目标时会通过蝎尾注入毒素使目标中毒，中毒的目标每秒会损失10点生命值同时减少20%攻击速度和30%移动速度持续3秒",
+      "alias": "A10G",
+      "code": "Aven",
+      "BuffID1": "B074,B075",
+      "DataA1": "10.0",
+      "DataB1": "0.3",
+      "DataC1": "0.2",
+      "levels": "1",
+      "targs1": "air,ground,organic",
+      "targs2": "_",
+      "targs3": "_",
+      "targs4": "_",
+      "Dur1": "3.0",
+      "HeroDur1": "3.0",
+      "DataD1": "9"
+    },
+    "A10H": {
+      "rawcode": "A10H",
+      "name": "剧毒飞弹",
+      "tip": "剧毒飞弹(D)",
+      "ubertip": "大型毒蝎随机选中600码内一名敌人，向其射出剧毒飞弹，使目标立即受到100点伤害同时使半径125码内所有敌人中毒受到\"毒素注入\"技能效果的影响",
+      "alias": "A10H",
+      "code": "AEsh",
+      "BuffID1": "BEsh",
+      "DataB1": "0.3",
+      "levels": "1",
+      "targs1": "ground,air,enemy,neutral,organic",
+      "targs2": "_",
+      "targs3": "_",
+      "targs4": "_",
+      "Cost1": "9",
+      "Dur1": "0.001",
+      "HeroDur1": "0.001",
+      "Rng1": "600.0",
+      "Cool1": "4.0",
+      "checkDep": "1",
+      "Cast1": "3.0",
+      "DataD1": "0.2",
+      "reqLevel": "1",
+      "DataE1": "100.0"
+    },
+    "A10I": {
+      "rawcode": "A10I",
+      "name": "剧毒新星",
+      "tip": "剧毒新星(D)",
+      "ubertip": "翡翠巨蝎随机选中700码内一名敌人，向其射出剧毒新星，使目标半径200码内所有敌人受到150点伤害同时中毒受到“毒素注入”技能效果的影响。",
+      "alias": "A10I",
+      "code": "AEsh",
+      "BuffID1": "BEsh",
+      "levels": "1",
+      "targs1": "ground,air,enemy,neutral,organic",
+      "targs2": "_",
+      "targs3": "_",
+      "targs4": "_",
+      "Cost1": "19",
+      "Dur1": "0.001",
+      "HeroDur1": "0.001",
+      "Rng1": "700.0",
+      "Cool1": "6.0",
+      "checkDep": "1",
+      "Cast1": "3.0",
+      "reqLevel": "1",
+      "DataE1": "150.0"
+    },
+    "A10J": {
+      "rawcode": "A10J",
+      "name": "剧毒外壳",
+      "tip": "剧毒外壳",
+      "ubertip": "翡翠巨蝎有着锋利的外壳同时带有剧毒。攻击翡翠巨蝎的近战敌人有30%的几率受到技能\"毒素注入\"的影响",
+      "alias": "A10J",
+      "code": "Asth",
+      "levels": "1",
+      "targs1": "_",
+      "targs2": "_",
+      "targs3": "_",
+      "targs4": "_"
+    }
+  },
+  "units": {
+    "e00W": {
+      "rawcode": "e00W",
+      "name": "通用攻击马甲",
+      "ubertip": ",",
+      "unitID": "e00W",
+      "canFlee": "1",
+      "cargoSize": "1",
+      "death": "1.0",
+      "movetp": "hover",
+      "points": "100",
+      "prio": "1",
+      "propWin": "60.0",
+      "race": "nightelf",
+      "targType": "ground",
+      "turnRate": "3.0",
+      "unitBalanceID": "e00W",
+      "bldtm": "30",
+      "bountydice": "5",
+      "bountyplus": "15",
+      "bountysides": "3",
+      "collision": "16.0",
+      "defType": "medium",
+      "fused": "1",
+      "goldcost": "50",
+      "goldRep": "60",
+      "HP": "120",
+      "level": "1",
+      "nsight": "600",
+      "preventPlace": "_",
+      "Primary": "_",
+      "regenType": "none",
+      "reptm": "14",
+      "requirePlace": "_",
+      "sight": "600",
+      "spd": "522",
+      "stockMax": "3",
+      "stockRegen": "30",
+      "tilesets": "*",
+      "upgrades": "R00H,R003",
+      "unitUIID": "e00W",
+      "armor": "Ethereal",
+      "blend": "0.15",
+      "blue": "255",
+      "elevRad": "50.0",
+      "file": "_",
+      "green": "255",
+      "maxPitch": "25.0",
+      "maxRoll": "25.0",
+      "modelScale": "1.0",
+      "red": "255",
+      "run": "200.0",
+      "scale": "1.0",
+      "scaleBull": "1",
+      "shadowOnWater": "1",
+      "teamColor": "-1",
+      "unitSound": "Wisp",
+      "walk": "200.0",
+      "unitAbilID": "e00W",
+      "abilList": "Avul",
+      "auto": "_",
+      "unitWeapID": "e00W",
+      "atkType1": "normal",
+      "atkType2": "normal",
+      "castbsw": "0.1",
+      "castpt": "0.1",
+      "cool1": "0.1",
+      "dice1": "1",
+      "impactZ": "60.0",
+      "launchZ": "60.0",
+      "rangeN1": "100",
+      "RngBuff1": "250.0",
+      "showUI1": "1",
+      "showUI2": "1",
+      "sides1": "1",
+      "targCount2": "1",
+      "weapsOn": "1",
+      "weapTp1": "normal",
+      "hotkey": "W",
+      "damage_min_1": "1.0",
+      "damage_max_1": "1.0",
+      "damage_avg_1": "1.0",
+      "dps_avg_1": "10.0",
+      "bounty_min": "20.0",
+      "bounty_max": "30.0",
+      "bounty_avg": "25.0",
+      "attack_type_zh": "普通",
+      "armor_type_zh": "中甲",
+      "ability_ids": "Avul",
+      "ability_names": "无敌的",
+      "formation": "4",
+      "defUp": "2.0",
+      "type": "giant,summoned"
+    },
+    "h0PS": {
+      "rawcode": "h0PS",
+      "name": "毒蝎",
+      "ubertip": ",",
+      "unitID": "h0PS",
+      "canFlee": "1",
+      "cargoSize": "1",
+      "death": "1.7",
+      "deathType": "3",
+      "movetp": "foot",
+      "points": "100",
+      "prio": "6",
+      "propWin": "60.0",
+      "race": "human",
+      "targType": "ground",
+      "turnRate": "0.6",
+      "unitBalanceID": "h0PS",
+      "bldtm": "26",
+      "bountydice": "6",
+      "bountyplus": "20",
+      "bountysides": "3",
+      "collision": "14.0",
+      "defType": "small",
+      "goldcost": "205",
+      "goldRep": "205",
+      "HP": "250",
+      "level": "3",
+      "lumberRep": "30",
+      "nsight": "800",
+      "preventPlace": "_",
+      "Primary": "_",
+      "regenHP": "1.0",
+      "regenType": "none",
+      "reptm": "26",
+      "requirePlace": "_",
+      "sight": "1400",
+      "spd": "270",
+      "stockMax": "3",
+      "stockRegen": "30",
+      "tilesets": "*",
+      "upgrades": "R00B,R00C,R009,R00A",
+      "unitUIID": "h0PS",
+      "armor": "Ethereal",
+      "blend": "0.15",
+      "blue": "255",
+      "elevRad": "20.0",
+      "file": "Units\\Creeps\\Archnathid\\Archnathid.mdl",
+      "green": "255",
+      "maxPitch": "10.0",
+      "maxRoll": "10.0",
+      "modelScale": "1.0",
+      "red": "255",
+      "run": "240.0",
+      "scale": "1.1",
+      "scaleBull": "1",
+      "shadowH": "120.0",
+      "shadowOnWater": "1",
+      "shadowW": "120.0",
+      "shadowX": "50.0",
+      "shadowY": "50.0",
+      "teamColor": "-1",
+      "unitShadow": "Shadow",
+      "unitSound": "Shade",
+      "walk": "240.0",
+      "unitAbilID": "h0PS",
+      "abilList": "A10G",
+      "auto": "_",
+      "unitWeapID": "h0PS",
+      "acquire": "500.0",
+      "atkType1": "pierce",
+      "atkType2": "normal",
+      "backSw1": "0.28",
+      "castbsw": "0.51",
+      "castpt": "0.3",
+      "cool1": "0.9",
+      "dice1": "1",
+      "dmgpt1": "0.24",
+      "impactZ": "60.0",
+      "launchZ": "60.0",
+      "rangeN1": "400",
+      "RngBuff1": "250.0",
+      "showUI1": "1",
+      "showUI2": "1",
+      "sides1": "3",
+      "targCount1": "1",
+      "targCount2": "1",
+      "targs1": "enemies",
+      "weapsOn": "1",
+      "weapTp1": "missile",
+      "hotkey": "R",
+      "damage_min_1": "26.0",
+      "damage_max_1": "28.0",
+      "damage_avg_1": "27.0",
+      "dps_avg_1": "30.0",
+      "bounty_min": "26.0",
+      "bounty_max": "38.0",
+      "bounty_avg": "32.0",
+      "attack_type_zh": "穿刺",
+      "armor_type_zh": "轻甲",
+      "ability_ids": "A10G",
+      "ability_names": "毒素注入",
+      "formation": "2",
+      "def": "3.0",
+      "defUp": "2.0",
+      "type": "giant",
+      "dmgplus1": "25"
+    },
+    "h0PT": {
+      "rawcode": "h0PT",
+      "name": "大型毒蝎",
+      "ubertip": ",",
+      "unitID": "h0PT",
+      "canFlee": "1",
+      "cargoSize": "1",
+      "death": "1.7",
+      "deathType": "3",
+      "movetp": "foot",
+      "points": "100",
+      "prio": "6",
+      "propWin": "60.0",
+      "race": "human",
+      "targType": "ground",
+      "turnRate": "0.6",
+      "unitBalanceID": "h0PT",
+      "bldtm": "26",
+      "bountydice": "6",
+      "bountyplus": "20",
+      "bountysides": "3",
+      "collision": "14.0",
+      "defType": "small",
+      "goldcost": "205",
+      "goldRep": "205",
+      "HP": "700",
+      "level": "3",
+      "lumberRep": "30",
+      "mana0": "10",
+      "nsight": "800",
+      "preventPlace": "_",
+      "Primary": "_",
+      "regenHP": "1.0",
+      "regenMana": "1.0",
+      "regenType": "always",
+      "reptm": "26",
+      "requirePlace": "_",
+      "sight": "1400",
+      "spd": "270",
+      "stockMax": "3",
+      "stockRegen": "30",
+      "tilesets": "*",
+      "upgrades": "R00B,R00C,R009,R00A",
+      "unitUIID": "h0PT",
+      "armor": "Ethereal",
+      "blend": "0.15",
+      "blue": "255",
+      "elevRad": "20.0",
+      "file": "shawang01.mdl",
+      "green": "255",
+      "maxPitch": "10.0",
+      "maxRoll": "10.0",
+      "modelScale": "1.2",
+      "red": "255",
+      "run": "240.0",
+      "scale": "1.1",
+      "scaleBull": "1",
+      "shadowH": "120.0",
+      "shadowOnWater": "1",
+      "shadowW": "120.0",
+      "shadowX": "50.0",
+      "shadowY": "50.0",
+      "teamColor": "-1",
+      "unitShadow": "Shadow",
+      "unitSound": "Shade",
+      "walk": "240.0",
+      "unitAbilID": "h0PT",
+      "abilList": "A10G,A10H",
+      "auto": "_",
+      "unitWeapID": "h0PT",
+      "acquire": "500.0",
+      "atkType1": "pierce",
+      "atkType2": "normal",
+      "backSw1": "0.28",
+      "castbsw": "0.51",
+      "castpt": "0.3",
+      "cool1": "0.9",
+      "dice1": "1",
+      "dmgpt1": "0.24",
+      "impactZ": "60.0",
+      "launchZ": "60.0",
+      "rangeN1": "400",
+      "RngBuff1": "250.0",
+      "showUI1": "1",
+      "showUI2": "1",
+      "sides1": "10",
+      "targCount1": "1",
+      "targCount2": "1",
+      "targs1": "enemies",
+      "weapsOn": "1",
+      "weapTp1": "missile",
+      "hotkey": "R",
+      "damage_min_1": "46.0",
+      "damage_max_1": "55.0",
+      "damage_avg_1": "50.5",
+      "dps_avg_1": "56.11111111111111",
+      "bounty_min": "26.0",
+      "bounty_max": "38.0",
+      "bounty_avg": "32.0",
+      "attack_type_zh": "穿刺",
+      "armor_type_zh": "轻甲",
+      "ability_ids": "A10G,A10H",
+      "ability_names": "毒素注入,剧毒飞弹",
+      "formation": "2",
+      "def": "3.0",
+      "defUp": "2.0",
+      "manaN": "10",
+      "type": "giant",
+      "dmgplus1": "45"
+    },
+    "h0PU": {
+      "rawcode": "h0PU",
+      "name": "翡翠巨蝎",
+      "ubertip": ",",
+      "unitID": "h0PU",
+      "canFlee": "1",
+      "cargoSize": "1",
+      "death": "1.7",
+      "deathType": "3",
+      "movetp": "foot",
+      "points": "100",
+      "prio": "6",
+      "propWin": "60.0",
+      "race": "human",
+      "targType": "ground",
+      "turnRate": "0.6",
+      "unitBalanceID": "h0PU",
+      "bldtm": "26",
+      "bountydice": "6",
+      "bountyplus": "20",
+      "bountysides": "3",
+      "collision": "14.0",
+      "defType": "normal",
+      "goldcost": "205",
+      "goldRep": "205",
+      "HP": "1600",
+      "level": "3",
+      "lumberRep": "30",
+      "mana0": "20",
+      "nsight": "800",
+      "preventPlace": "_",
+      "Primary": "_",
+      "regenHP": "3.0",
+      "regenMana": "2.0",
+      "regenType": "always",
+      "reptm": "26",
+      "requirePlace": "_",
+      "sight": "1400",
+      "spd": "270",
+      "stockMax": "3",
+      "stockRegen": "30",
+      "tilesets": "*",
+      "upgrades": "R00B,R00C,R009,R00A",
+      "unitUIID": "h0PU",
+      "armor": "Ethereal",
+      "blend": "0.15",
+      "blue": "255",
+      "elevRad": "20.0",
+      "file": "shawang02.mdl",
+      "green": "255",
+      "maxPitch": "10.0",
+      "maxRoll": "10.0",
+      "modelScale": "1.2",
+      "red": "255",
+      "run": "240.0",
+      "scale": "1.1",
+      "scaleBull": "1",
+      "shadowH": "120.0",
+      "shadowOnWater": "1",
+      "shadowW": "120.0",
+      "shadowX": "50.0",
+      "shadowY": "50.0",
+      "teamColor": "-1",
+      "unitShadow": "Shadow",
+      "unitSound": "Shade",
+      "walk": "240.0",
+      "unitAbilID": "h0PU",
+      "abilList": "A10G,A10I,A10J",
+      "auto": "_",
+      "unitWeapID": "h0PU",
+      "acquire": "500.0",
+      "atkType1": "chaos",
+      "atkType2": "normal",
+      "backSw1": "0.28",
+      "castbsw": "0.51",
+      "castpt": "0.3",
+      "cool1": "0.9",
+      "dice1": "1",
+      "dmgpt1": "0.24",
+      "impactZ": "60.0",
+      "launchZ": "60.0",
+      "rangeN1": "400",
+      "RngBuff1": "250.0",
+      "showUI1": "1",
+      "showUI2": "1",
+      "sides1": "19",
+      "targCount1": "1",
+      "targCount2": "1",
+      "targs1": "enemies",
+      "weapsOn": "1",
+      "weapTp1": "missile",
+      "hotkey": "R",
+      "damage_min_1": "156.0",
+      "damage_max_1": "174.0",
+      "damage_avg_1": "165.0",
+      "dps_avg_1": "183.33333333333334",
+      "bounty_min": "26.0",
+      "bounty_max": "38.0",
+      "bounty_avg": "32.0",
+      "attack_type_zh": "混乱",
+      "armor_type_zh": "无甲",
+      "ability_ids": "A10G,A10I,A10J",
+      "ability_names": "毒素注入,剧毒新星,剧毒外壳",
+      "formation": "2",
+      "def": "3.0",
+      "defUp": "2.0",
+      "manaN": "20",
+      "type": "giant",
+      "dmgplus1": "155"
+    },
+    "h0SZ": {
+      "rawcode": "h0SZ",
+      "name": "寒冰巨蝎",
+      "ubertip": ",",
+      "unitID": "h0SZ",
+      "canFlee": "1",
+      "cargoSize": "1",
+      "death": "1.7",
+      "deathType": "3",
+      "movetp": "foot",
+      "points": "100",
+      "prio": "6",
+      "propWin": "60.0",
+      "race": "human",
+      "targType": "ground",
+      "turnRate": "0.6",
+      "unitBalanceID": "h0SZ",
+      "bldtm": "26",
+      "bountydice": "6",
+      "bountyplus": "20",
+      "bountysides": "3",
+      "collision": "14.0",
+      "defType": "normal",
+      "goldcost": "205",
+      "goldRep": "205",
+      "HP": "1600",
+      "level": "3",
+      "lumberRep": "30",
+      "mana0": "20",
+      "nsight": "800",
+      "preventPlace": "_",
+      "Primary": "_",
+      "regenHP": "3.0",
+      "regenMana": "2.0",
+      "regenType": "always",
+      "reptm": "26",
+      "requirePlace": "_",
+      "sight": "1400",
+      "spd": "270",
+      "stockMax": "3",
+      "stockRegen": "30",
+      "tilesets": "*",
+      "upgrades": "R00B,R00C,R009,R00A",
+      "unitUIID": "h0SZ",
+      "armor": "Ethereal",
+      "blend": "0.15",
+      "blue": "255",
+      "elevRad": "20.0",
+      "file": "Hero_SandKing_N5.mdl",
+      "green": "255",
+      "maxPitch": "10.0",
+      "maxRoll": "10.0",
+      "modelScale": "1.2",
+      "red": "255",
+      "run": "240.0",
+      "scale": "1.1",
+      "scaleBull": "1",
+      "shadowH": "120.0",
+      "shadowOnWater": "1",
+      "shadowW": "120.0",
+      "shadowX": "50.0",
+      "shadowY": "50.0",
+      "teamColor": "-1",
+      "unitShadow": "Shadow",
+      "unitSound": "Shade",
+      "walk": "240.0",
+      "unitAbilID": "h0SZ",
+      "abilList": "A10G,A10I,A10J",
+      "auto": "_",
+      "unitWeapID": "h0SZ",
+      "acquire": "500.0",
+      "atkType1": "chaos",
+      "atkType2": "normal",
+      "backSw1": "0.28",
+      "castbsw": "0.51",
+      "castpt": "0.3",
+      "cool1": "0.9",
+      "dice1": "1",
+      "dmgpt1": "0.24",
+      "impactZ": "60.0",
+      "launchZ": "60.0",
+      "rangeN1": "400",
+      "RngBuff1": "250.0",
+      "showUI1": "1",
+      "showUI2": "1",
+      "sides1": "19",
+      "targCount1": "1",
+      "targCount2": "1",
+      "targs1": "enemies",
+      "weapsOn": "1",
+      "weapTp1": "missile",
+      "hotkey": "R",
+      "damage_min_1": "156.0",
+      "damage_max_1": "174.0",
+      "damage_avg_1": "165.0",
+      "dps_avg_1": "183.33333333333334",
+      "bounty_min": "26.0",
+      "bounty_max": "38.0",
+      "bounty_avg": "32.0",
+      "attack_type_zh": "混乱",
+      "armor_type_zh": "无甲",
+      "ability_ids": "A10G,A10I,A10J",
+      "ability_names": "毒素注入,剧毒新星,剧毒外壳",
+      "formation": "2",
+      "def": "3.0",
+      "defUp": "2.0",
+      "manaN": "20",
+      "type": "giant",
+      "dmgplus1": "155"
+    }
+  },
+  "sourceEvidence": [
+    {
+      "line": 29774,
+      "text": "function SetTargetAttackFormAbility takes unit Pf,unit Om,integer Ph returns nothing"
+    },
+    {
+      "line": 29775,
+      "text": "local unit Ki=CreateUnit(GetOwningPlayer(Pf),$65303057,GetUnitX(Om),GetUnitY(Om),270)"
+    },
+    {
+      "line": 29776,
+      "text": "call SetUnitUserData(Ki,GetUnitUserData(Pf))"
+    },
+    {
+      "line": 29777,
+      "text": "call GroupAddUnit(JH[GetUnitUserData(Pf)],Ki)"
+    },
+    {
+      "line": 29778,
+      "text": "call UnitAddType(Ki,UNIT_TYPE_SUMMONED)"
+    },
+    {
+      "line": 29779,
+      "text": "call UnitAddAbility(Ki,Ph)"
+    },
+    {
+      "line": 29780,
+      "text": "call IssueTargetOrder(Ki,\"attack\",Om)"
+    },
+    {
+      "line": 29781,
+      "text": "call UnitApplyTimedLife(Ki,$42487765,5)"
+    },
+    {
+      "line": 29782,
+      "text": "set Pf=null"
+    },
+    {
+      "line": 29783,
+      "text": "set Om=null"
+    },
+    {
+      "line": 29784,
+      "text": "set Ki=null"
+    },
+    {
+      "line": 29785,
+      "text": "endfunction"
+    },
+    {
+      "line": 29786,
+      "text": "function SelectRange takes unit Pf,real FF,real FG,real Px returns group"
+    },
+    {
+      "line": 29787,
+      "text": "local group DG=CreateGroup()"
+    },
+    {
+      "line": 29788,
+      "text": "local group Om=CreateGroup()"
+    },
+    {
+      "line": 29789,
+      "text": "local unit D6=null"
+    },
+    {
+      "line": 29790,
+      "text": "call GroupEnumUnitsInRange(DG,FF,FG,Px,null)"
+    },
+    {
+      "line": 29791,
+      "text": "loop"
+    },
+    {
+      "line": 29792,
+      "text": "set D6=FirstOfGroup(DG)"
+    },
+    {
+      "line": 29793,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 29794,
+      "text": "if IsUnitEnemy(D6,GetOwningPlayer(Pf)) and not IsUnitType(D6,UNIT_TYPE_DEAD) and GetUnitAbilityLevel(D6,$4176756C)==0 then"
+    },
+    {
+      "line": 29795,
+      "text": "call GroupAddUnit(Om,D6)"
+    },
+    {
+      "line": 29796,
+      "text": "endif"
+    },
+    {
+      "line": 29797,
+      "text": "call GroupRemoveUnit(DG,D6)"
+    },
+    {
+      "line": 29798,
+      "text": "endloop"
+    },
+    {
+      "line": 29799,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 29800,
+      "text": "set DG=null"
+    },
+    {
+      "line": 29801,
+      "text": "set D6=null"
+    },
+    {
+      "line": 29802,
+      "text": "set Pf=null"
+    },
+    {
+      "line": 29803,
+      "text": "set Py=Om"
+    },
+    {
+      "line": 29804,
+      "text": "set Om=null"
+    },
+    {
+      "line": 29805,
+      "text": "return Py"
+    },
+    {
+      "line": 29806,
+      "text": "endfunction"
+    },
+    {
+      "line": 40480,
+      "text": "function ScorpionSkillEnum takes nothing returns nothing"
+    },
+    {
+      "line": 40481,
+      "text": "local unit bV=GetEventDamageSource()"
+    },
+    {
+      "line": 40482,
+      "text": "local unit i=GetEnumUnit()"
+    },
+    {
+      "line": 40483,
+      "text": "if GetUnitAbilityLevel(bV,$41313049)>0 then"
+    },
+    {
+      "line": 40484,
+      "text": "call UnitDamageTarget(bV,i,150,true,false,ATTACK_TYPE_NORMAL,DAMAGE_TYPE_NORMAL,WEAPON_TYPE_WHOKNOWS)"
+    },
+    {
+      "line": 40485,
+      "text": "endif"
+    },
+    {
+      "line": 40486,
+      "text": "call SetTargetAttackFormAbility(bV,i,$41313047)"
+    },
+    {
+      "line": 40487,
+      "text": "set i=null"
+    },
+    {
+      "line": 40488,
+      "text": "set bV=null"
+    },
+    {
+      "line": 40489,
+      "text": "endfunction"
+    },
+    {
+      "line": 40490,
+      "text": "function ScorpionSkill takes unit Pf,unit Om,real Px returns nothing"
+    },
+    {
+      "line": 40491,
+      "text": "local group DG=SelectRange(Pf,GetUnitX(Om),GetUnitY(Om),Px)"
+    },
+    {
+      "line": 40492,
+      "text": "call GroupRemoveUnit(DG,Om)"
+    },
+    {
+      "line": 40493,
+      "text": "call ForGroup(DG,function ScorpionSkillEnum)"
+    },
+    {
+      "line": 40494,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 40495,
+      "text": "set DG=null"
+    },
+    {
+      "line": 40496,
+      "text": "set Pf=null"
+    },
+    {
+      "line": 40497,
+      "text": "set Om=null"
+    },
+    {
+      "line": 40498,
+      "text": "endfunction"
+    },
+    {
+      "line": 40529,
+      "text": "function Trig_UnitDamageActions takes nothing returns nothing"
+    },
+    {
+      "line": 40530,
+      "text": "local unit i=GetTriggerUnit()"
+    },
+    {
+      "line": 40531,
+      "text": "local unit bV=GetEventDamageSource()"
+    },
+    {
+      "line": 40532,
+      "text": "local real P8=GetEventDamage()"
+    },
+    {
+      "line": 40533,
+      "text": "local boolean bW=YDWEIsEventAttackDamage()"
+    },
+    {
+      "line": 40534,
+      "text": "local real FF=GetUnitX(i)"
+    },
+    {
+      "line": 40535,
+      "text": "local real FG=GetUnitY(i)"
+    },
+    {
+      "line": 40536,
+      "text": "local trigger Eb=GetTriggeringTrigger()"
+    },
+    {
+      "line": 40537,
+      "text": "local group Uz=null"
+    },
+    {
+      "line": 40538,
+      "text": "local player h=GetOwningPlayer(bV)"
+    },
+    {
+      "line": 40539,
+      "text": "local integer BB=0"
+    },
+    {
+      "line": 40540,
+      "text": "local unit D6"
+    },
+    {
+      "line": 40541,
+      "text": "local trigger bn=null"
+    },
+    {
+      "line": 40542,
+      "text": "local timer t=null"
+    },
+    {
+      "line": 40543,
+      "text": "local integer YY=0"
+    },
+    {
+      "line": 40544,
+      "text": "local integer bj=$68305544"
+    },
+    {
+      "line": 40545,
+      "text": "local boolean Cd"
+    },
+    {
+      "line": 40546,
+      "text": "local boolexpr bs"
+    },
+    {
+      "line": 40547,
+      "text": "local texttag Bj"
+    },
+    {
+      "line": 40548,
+      "text": "local real a5=0"
+    },
+    {
+      "line": 40549,
+      "text": "local real Pm=0"
+    },
+    {
+      "line": 40550,
+      "text": "local effect bk=null"
+    },
+    {
+      "line": 40551,
+      "text": "local unit Ki"
+    },
+    {
+      "line": 40552,
+      "text": "local group DG"
+    },
+    {
+      "line": 40553,
+      "text": "if P8<=0 or bV==i or bV==null or IsUnitAlly(bV,GetOwningPlayer(i)) then"
+    },
+    {
+      "line": 40554,
+      "text": "set i=null"
+    },
+    {
+      "line": 40555,
+      "text": "set bV=null"
+    },
+    {
+      "line": 40556,
+      "text": "set Eb=null"
+    },
+    {
+      "line": 40557,
+      "text": "set h=null"
+    },
+    {
+      "line": 40558,
+      "text": "set Uz=null"
+    },
+    {
+      "line": 40559,
+      "text": "return"
+    },
+    {
+      "line": 40560,
+      "text": "endif"
+    },
+    {
+      "line": 40561,
+      "text": "if GetUnitAbilityLevel(bV,$41325937)>0 then"
+    },
+    {
+      "line": 40562,
+      "text": "set i=null"
+    },
+    {
+      "line": 40563,
+      "text": "set bV=null"
+    },
+    {
+      "line": 40564,
+      "text": "set Eb=null"
+    },
+    {
+      "line": 40565,
+      "text": "set h=null"
+    },
+    {
+      "line": 40566,
+      "text": "set Uz=null"
+    },
+    {
+      "line": 40567,
+      "text": "return"
+    },
+    {
+      "line": 40568,
+      "text": "endif"
+    },
+    {
+      "line": 40569,
+      "text": "if GetUnitAbilityLevel(i,QC)>0 then"
+    },
+    {
+      "line": 40570,
+      "text": "set P8=P8*.85"
+    },
+    {
+      "line": 40571,
+      "text": "call YDWESetEventDamage(P8)"
+    },
+    {
+      "line": 40572,
+      "text": "endif"
+    },
+    {
+      "line": 40573,
+      "text": "set Uz=CreateGroup()"
+    },
+    {
+      "line": 40574,
+      "text": "call DisableTrigger(Eb)"
+    },
+    {
+      "line": 40575,
+      "text": "if IsUnitType(i,UNIT_TYPE_ANCIENT) and IsPlayer(GetOwningPlayer(i)) then"
+    },
+    {
+      "line": 41215,
+      "text": "if GetUnitAbilityLevel(bV,$41313048)>0 or GetUnitAbilityLevel(bV,$41313049)>0 then"
+    },
+    {
+      "line": 41216,
+      "text": "call IssueTargetOrder(bV,\"shadowstrike\",i)"
+    },
+    {
+      "line": 41217,
+      "text": "elseif GetUnitAbilityLevel(i,$41313048)>0 or GetUnitAbilityLevel(i,$41313049)>0 then"
+    },
+    {
+      "line": 41218,
+      "text": "call IssueTargetOrder(i,\"shadowstrike\",bV)"
+    },
+    {
+      "line": 41219,
+      "text": "endif"
+    },
+    {
+      "line": 41220,
+      "text": "if YDWEIsEventDamageType(DAMAGE_TYPE_SLOW_POISON) and P8>0 and GetUnitAbilityLevel(bV,$41313048)>0 or GetUnitAbilityLevel(bV,$41313049)>0 then"
+    },
+    {
+      "line": 41221,
+      "text": "if GetUnitAbilityLevel(bV,$41313048)>0 then"
+    },
+    {
+      "line": 41222,
+      "text": "call ScorpionSkill(bV,i,128)"
+    },
+    {
+      "line": 41223,
+      "text": "elseif GetUnitAbilityLevel(bV,$41313049)>0 then"
+    },
+    {
+      "line": 41224,
+      "text": "call ScorpionSkill(bV,i,250)"
+    },
+    {
+      "line": 41225,
+      "text": "endif"
+    },
+    {
+      "line": 41226,
+      "text": "endif"
+    },
+    {
+      "line": 41227,
+      "text": "if GetUnitAbilityLevel(i,$4131304A)>0 and IsUnitType(i,UNIT_TYPE_MELEE_ATTACKER) then"
+    },
+    {
+      "line": 41228,
+      "text": "if GetRandomPercentageBJ()<=30 then"
+    },
+    {
+      "line": 41229,
+      "text": "call SetTargetAttackFormAbility(i,bV,$41313047)"
+    },
+    {
+      "line": 41230,
+      "text": "call DestroyEffect(AddSpecialEffect(\"Abilities\\\\Spells\\\\Undead\\\\Impale\\\\ImpaleHitTarget.mdl\",GetUnitX(bV),GetUnitY(bV)))"
+    },
+    {
+      "line": 41231,
+      "text": "endif"
+    },
+    {
+      "line": 41232,
+      "text": "endif"
+    }
+  ],
+  "findings": [
+    "A10I不受SLOW_POISON条件约束，但仍受主伤害监听的P8>0/敌我/self/null/A2Y7提前返回约束。",
+    "同有A10H/I时选择128半径，同时A10I仍追加150普通/普通武器伤害。",
+    "A10J检查受击者自身近战属性；h0PU/h0SZ武器1是missile且weapsOn=1。",
+    "每个扩散目标先150伤害，后请求e00W；死亡不取消该创建请求。组构建在遍历之前，排除主目标。",
+    "原生shadowstrike、e00W攻击仍待核定；未将模板缺省值猜为0，未将命令请求当已执行。",
+    "A10G现有按dt持续伤害/同键刷新属于宿主适配，其事件频率会影响A10I；缺原生逐跳验证，不能宣称完整平衡已还原。",
+    "外部DamageEngine项目可区分SLOW_POISON与SHADOW_STRIKE枚举，但不能证明本地图原生毒弹事件类型；不据此强行将AEsh初伤标成SLOW_POISON。"
+  ],
+  "externalResearch": [
+    {
+      "url": "https://github.com/BribeFromTheHive/DamageEngine/blob/master/ConfigTrigger.txt",
+      "use": "仅确认存在不同枚举，不作为本地图AEsh/Aven伤害时序证据"
+    }
+  ]
+}

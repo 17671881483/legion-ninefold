@@ -23,6 +23,8 @@ const playerRuntimeAbilities=[
   {sourceRawcode:'h0JP',abilityIds:['A0IQ','A0IS']},
   {sourceRawcode:'h0Q5',abilityIds:['A12G','A0I7']},
   {sourceRawcode:'h0Q2',abilityIds:['A12B']},
+  {sourceRawcode:'h0QQ',abilityIds:['A150']},
+  {sourceRawcode:'h0QR',abilityIds:['A150','A0I7']},
   {sourceRawcode:'h0Q3',abilityIds:['A12B','A12I']},
   {sourceRawcode:'e00W',abilityIds:['A10G']},
   {sourceRawcode:'h0JL',abilityIds:['A0IF']},
@@ -70,6 +72,7 @@ const result={
   battleSkills:collect([...current,...playerBuildingCommands,...playerBuildingRuleCarriers,...playerRuntimeForms,...playerRuntimeAbilities,...MERCENARIES,...WAVES,...specialCodes.map(c=>UNIT_TEMPLATES[c])]),
   sourceOnlyCombatForms:[{combatRawcode:'h0JR',buildingRawcode:'n00S',status:'entry-unresolved',evidence:'war3map.j:17544-17545 maps forms; line3644 ban dialog; 48355 barracks egg marker and 48750 monthly record do not provide acquisition',skills:collect([{...UNIT_TEMPLATES.h0JR,abilityIds:[...UNIT_TEMPLATES.h0JR.abilityIds,'A0J2','A0J3']}])},{combatRawcode:'h0VQ',buildingRawcode:'n07U',status:'entry-unresolved',evidence:'war3map.j:17436-17437 maps forms; line3638 ban limit1; no source creation/recipe/upgrade entry found in packet',skills:collect([{...UNIT_TEMPLATES.h0VQ,abilityIds:[...UNIT_TEMPLATES.h0VQ.abilityIds,'A1QI','A1D6']}])}],
   remainingSourceGaps:[
+    '青铜龙按建筑体A14Y/A14Z登记5/4秒回溯第2秒生命比例，并授予A150；保留战斗体技能交叉、攻击事件登记门槛及第二次移除。A151按PauseUnitEx(1.5)请求等级1控制；h0QR分裂期间普通配置事件改写为随机攻击一半而非文案150%。原生弹道/上下限动态字段、混合P8前置分支、死亡句柄写生命与旧档历史仍partial，见bronze-dragon-evidence.json。',
     '荒漠巨蜥A129/A12A分别保留伤害事件倒计数、7/8实数概率和共享Bblo移除；动态A12B仅请求，原生缺失耗魔/移动字段未猜。A12C每8次事件回复200并添加A12I，下一非第8次事件移除；普通连续攻击第9/17次暴击。A12K读取0.65承伤，非文案45%减伤，混合防御边界仍partial；见desert-lizard-evidence.json。',
     '毒蝎A10H/A10I/A10J主伤害脚本接入，保留新星任意正敌对伤害触发、128/250范围与150普通伤害、受击者自身近战门槛。shadowstrike与e00W毒素攻击马甲仅记录请求；A10G连续附毒沿用现有适配，原生跳数、DataD1=9叠加和类型未核定，四项均为partial，见scorpion-evidence.json。',
     '风暴蜥蜴A12F落雷接入点选施法、独立武器伤害自动请求、100范围随机主目标及100/200/300范围分层伤害；A12H保留双方优先级与攻击者monsoon门槛，并动态授予A12G。ANmo额外伤害/施法时序、雷雨A12E、原生链A12G递减等字段尚未闭合；A12F/A12H为partial，A12E/A12G仍unresolved，见storm-lizard-evidence.json。',

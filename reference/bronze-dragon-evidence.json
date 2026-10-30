@@ -1,0 +1,2275 @@
+{
+  "revision": "v14-content-20261030-v41-1",
+  "scope": "青铜龙探险者/守卫定时生命回溯、A150分裂与A151停滞",
+  "source": {
+    "path": "reference/v14-source/raw_extracted/war3map.j",
+    "sha256": "e66c55b3b25b185c991be5613e21fbf5b2d598f3cc40f2f8cd01c23bcb828250",
+    "lineCounting": "latin1 / LF only"
+  },
+  "sourceEvidence": [
+    {
+      "line": 1194,
+      "text": "integer Ps=$41313156"
+    },
+    {
+      "line": 1195,
+      "text": "integer Pt=$41313157"
+    },
+    {
+      "line": 1196,
+      "text": "integer Pu=$41313158"
+    },
+    {
+      "line": 1197,
+      "text": "integer Pz=$4131314F"
+    },
+    {
+      "line": 1198,
+      "text": "integer P0=$41313150"
+    },
+    {
+      "line": 1199,
+      "text": "integer P6=$41313151"
+    },
+    {
+      "line": 1200,
+      "text": "integer P1=$41313152"
+    },
+    {
+      "line": 1201,
+      "text": "integer P5=$41313231"
+    },
+    {
+      "line": 1202,
+      "text": "integer P2=$41313153"
+    },
+    {
+      "line": 1203,
+      "text": "integer P3=$41313154"
+    },
+    {
+      "line": 1204,
+      "text": "integer P4=$41313155"
+    },
+    {
+      "line": 1205,
+      "text": "integer Pw=$41313159"
+    },
+    {
+      "line": 17278,
+      "text": "set Mk[Bi]=$68305152"
+    },
+    {
+      "line": 17279,
+      "text": "set Ml[Bi]=$68305150"
+    },
+    {
+      "line": 17305,
+      "text": "set Mk[Bi]=$68305151"
+    },
+    {
+      "line": 17306,
+      "text": "set Ml[Bi]=$6830514F"
+    },
+    {
+      "line": 20173,
+      "text": "set Kc=CreateUnit(Pc,Mk[Bi],GetLocationX(Pb),GetLocationY(Pb),bj_UNIT_FACING)"
+    },
+    {
+      "line": 20174,
+      "text": "call SetUnitUserData(Kc,1+GetPlayerId(GetOwningPlayer(Nr)))"
+    },
+    {
+      "line": 20175,
+      "text": "call ExecuteFunc(\"PassiveSkillNoArgJJC\")"
+    },
+    {
+      "line": 21355,
+      "text": "set i=CreateUnit(Pc,Bi,GetUnitX(i),GetUnitY(i),MP[GetPlayerId(BF)])"
+    },
+    {
+      "line": 21356,
+      "text": "set UT=i"
+    },
+    {
+      "line": 21357,
+      "text": "call SetUnitUserData(i,GetPlayerId(BF)+1)"
+    },
+    {
+      "line": 21358,
+      "text": "call ExecuteFunc(\"PassiveSkillNoArg\")"
+    },
+    {
+      "line": 29669,
+      "text": "function VertigoTarget takes unit Pf,unit Om,integer CC returns nothing"
+    },
+    {
+      "line": 29670,
+      "text": "set bj_lastCreatedUnit=CreateUnit(GetOwningPlayer(Pf),Pn,GetUnitX(Om),GetUnitY(Om),0)"
+    },
+    {
+      "line": 29671,
+      "text": "call UnitAddAbility(bj_lastCreatedUnit,$41304937)"
+    },
+    {
+      "line": 29672,
+      "text": "call UnitApplyTimedLife(bj_lastCreatedUnit,$42487765,1.)"
+    },
+    {
+      "line": 29673,
+      "text": "call SetUnitAbilityLevel(bj_lastCreatedUnit,$41304937,CC)"
+    },
+    {
+      "line": 29674,
+      "text": "call IssueTargetOrder(bj_lastCreatedUnit,\"thunderbolt\",Om)"
+    },
+    {
+      "line": 29857,
+      "text": "function PauseUnitExAction takes nothing returns nothing"
+    },
+    {
+      "line": 29858,
+      "text": "local trigger t=GetTriggeringTrigger()"
+    },
+    {
+      "line": 29859,
+      "text": "local integer Pr=GetHandleId(t)"
+    },
+    {
+      "line": 29860,
+      "text": "local unit i=LoadUnitHandle(O,Pr,0)"
+    },
+    {
+      "line": 29861,
+      "text": "call SetUnitTimeScale(i,1)"
+    },
+    {
+      "line": 29862,
+      "text": "call FlushChildHashtable(O,Pr)"
+    },
+    {
+      "line": 29863,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 29864,
+      "text": "set i=null"
+    },
+    {
+      "line": 29865,
+      "text": "set t=null"
+    },
+    {
+      "line": 29866,
+      "text": "endfunction"
+    },
+    {
+      "line": 29867,
+      "text": "function PauseUnitEx takes unit Pf,unit Om,real DK returns nothing"
+    },
+    {
+      "line": 29868,
+      "text": "local trigger t=CreateTrigger()"
+    },
+    {
+      "line": 29869,
+      "text": "call VertigoTarget(Pf,Om,R2I(DK))"
+    },
+    {
+      "line": 29870,
+      "text": "call SetUnitTimeScale(Om,0)"
+    },
+    {
+      "line": 29871,
+      "text": "call SaveUnitHandle(O,GetHandleId(t),0,Om)"
+    },
+    {
+      "line": 29872,
+      "text": "call TriggerRegisterTimerEvent(t,DK,false)"
+    },
+    {
+      "line": 29873,
+      "text": "call TriggerAddAction(t,function PauseUnitExAction)"
+    },
+    {
+      "line": 29874,
+      "text": "set t=null"
+    },
+    {
+      "line": 29875,
+      "text": "set Pf=null"
+    },
+    {
+      "line": 29876,
+      "text": "set Om=null"
+    },
+    {
+      "line": 42252,
+      "text": "function Trig_New_UnitAttackActions takes nothing returns boolean"
+    },
+    {
+      "line": 42253,
+      "text": "local unit Qf=GetTriggerUnit()"
+    },
+    {
+      "line": 42254,
+      "text": "local unit i=GetEventDamageSource()"
+    },
+    {
+      "line": 42255,
+      "text": "local integer BF=GetUnitTypeId(i)"
+    },
+    {
+      "line": 42256,
+      "text": "local integer b9=$6E305344"
+    },
+    {
+      "line": 42257,
+      "text": "local integer YY=0"
+    },
+    {
+      "line": 42258,
+      "text": "local unit Ki=null"
+    },
+    {
+      "line": 42259,
+      "text": "local unit D6=null"
+    },
+    {
+      "line": 42260,
+      "text": "local group Uz=null"
+    },
+    {
+      "line": 42261,
+      "text": "local real P8=0"
+    },
+    {
+      "line": 42262,
+      "text": "local unit cB=null"
+    },
+    {
+      "line": 42263,
+      "text": "local boolexpr Cd"
+    },
+    {
+      "line": 42264,
+      "text": "local timer DK"
+    },
+    {
+      "line": 42265,
+      "text": "local real FF"
+    },
+    {
+      "line": 42266,
+      "text": "local real FG"
+    },
+    {
+      "line": 42267,
+      "text": "local integer y=0"
+    },
+    {
+      "line": 42268,
+      "text": "local player h"
+    },
+    {
+      "line": 42269,
+      "text": "local effect DE"
+    },
+    {
+      "line": 42270,
+      "text": "if YDWEIsEventAttackDamage() and not LoadBoolean(O,GetHandleId(i),StringHash(\"Attack\")) then"
+    },
+    {
+      "line": 42271,
+      "text": "call SaveBoolean(O,GetHandleId(i),StringHash(\"Attack\"),true)"
+    },
+    {
+      "line": 42383,
+      "text": "if GetUnitAbilityLevel(i,Pw)>0 then"
+    },
+    {
+      "line": 42384,
+      "text": "if LoadBoolean(O,GetHandleId(i),StringHash(\"angry double blades battle\")) then"
+    },
+    {
+      "line": 42385,
+      "text": "call SetUnitState(i,UNIT_STATE_MANA,GetUnitState(i,UNIT_STATE_MANA)+2)"
+    },
+    {
+      "line": 42386,
+      "text": "else"
+    },
+    {
+      "line": 42387,
+      "text": "call SetUnitState(i,UNIT_STATE_MANA,GetUnitState(i,UNIT_STATE_MANA)+1)"
+    },
+    {
+      "line": 42388,
+      "text": "endif"
+    },
+    {
+      "line": 42389,
+      "text": "if GetUnitAbilityLevel(i,P2)>0 then"
+    },
+    {
+      "line": 42390,
+      "text": "set P8=GetRandomReal(GetUnitState(i,ConvertUnitState(20)),GetUnitState(i,ConvertUnitState(21)))"
+    },
+    {
+      "line": 42391,
+      "text": "call YDWESetEventDamage(P8)"
+    },
+    {
+      "line": 42392,
+      "text": "call DestroyEffect(AddSpecialEffect(\"Abilities\\\\Spells\\\\Other\\\\Stampede\\\\StampedeMissileDeath.mdl\",GetUnitX(Qf),GetUnitY(Qf)))"
+    },
+    {
+      "line": 42393,
+      "text": "if GetRandomPercentageBJ()>=26 then"
+    },
+    {
+      "line": 42394,
+      "text": "call DestroyEffect(AddSpecialEffect(\"Abilities\\\\Spells\\\\Human\\\\Thunderclap\\\\ThunderClapCaster.mdl\",GetUnitX(Qf),GetUnitY(Qf)))"
+    },
+    {
+      "line": 42395,
+      "text": "set Uz=SelectRange(i,GetUnitX(Qf),GetUnitY(Qf),300)"
+    },
+    {
+      "line": 42396,
+      "text": "loop"
+    },
+    {
+      "line": 42397,
+      "text": "set D6=FirstOfGroup(Uz)"
+    },
+    {
+      "line": 42398,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 42399,
+      "text": "call GroupRemoveUnit(Uz,D6)"
+    },
+    {
+      "line": 42400,
+      "text": "call UnitDamageTargetBJ(i,D6,125,ATTACK_TYPE_CHAOS,DAMAGE_TYPE_UNIVERSAL)"
+    },
+    {
+      "line": 42401,
+      "text": "endloop"
+    },
+    {
+      "line": 42402,
+      "text": "call DestroyGroup(Uz)"
+    },
+    {
+      "line": 42403,
+      "text": "endif"
+    },
+    {
+      "line": 42404,
+      "text": "endif"
+    },
+    {
+      "line": 42405,
+      "text": "endif"
+    },
+    {
+      "line": 42416,
+      "text": "if GetUnitAbilityLevel(i,$4131365A)>0 then"
+    },
+    {
+      "line": 42417,
+      "text": "set P8=GetRandomReal(GetUnitState(i,ConvertUnitState(20)),GetUnitState(i,ConvertUnitState(21)))"
+    },
+    {
+      "line": 42418,
+      "text": "call UnitDamageTargetBJ(i,Qf,P8*.25,ATTACK_TYPE_CHAOS,DAMAGE_TYPE_UNIVERSAL)"
+    },
+    {
+      "line": 42419,
+      "text": "if GetUnitState(Qf,UNIT_STATE_LIFE)<=P8 then"
+    },
+    {
+      "line": 42420,
+      "text": "call SetUnitLifeBJ(i,GetUnitState(i,UNIT_STATE_LIFE)+100)"
+    },
+    {
+      "line": 42421,
+      "text": "set h=ConvertedPlayer(GetUnitUserData(i))"
+    },
+    {
+      "line": 42422,
+      "text": "if GetRandomPercentageBJ()>=45 and LoadInteger(O,GetHandleId(h),$4131365A)<40 then"
+    },
+    {
+      "line": 42423,
+      "text": "call SaveInteger(O,GetHandleId(h),$4131365A,LoadInteger(O,GetHandleId(h),$4131365A)+1)"
+    },
+    {
+      "line": 42424,
+      "text": "call SetUnitState(i,ConvertUnitState(32),GetUnitState(i,ConvertUnitState(32))+1)"
+    },
+    {
+      "line": 42425,
+      "text": "endif"
+    },
+    {
+      "line": 42426,
+      "text": "endif"
+    },
+    {
+      "line": 42427,
+      "text": "endif"
+    },
+    {
+      "line": 42428,
+      "text": "if GetUnitAbilityLevel(i,Zq)>0 then"
+    },
+    {
+      "line": 42429,
+      "text": "call YseraApplyDreamCorrosion(i,Qf)"
+    },
+    {
+      "line": 42430,
+      "text": "endif"
+    },
+    {
+      "line": 42431,
+      "text": "if GetUnitAbilityLevel(i,$41313531)>0 then"
+    },
+    {
+      "line": 42432,
+      "text": "if GetRandomPercentageBJ()<=20 then"
+    },
+    {
+      "line": 42433,
+      "text": "call PauseUnitEx(i,Qf,1.5)"
+    },
+    {
+      "line": 42434,
+      "text": "call YDWETimerDestroyEffect(1.5,AddSpecialEffect(\"effect_halo_qingtong.mdx\",GetUnitX(Qf),GetUnitY(Qf)))"
+    },
+    {
+      "line": 42435,
+      "text": "endif"
+    },
+    {
+      "line": 42436,
+      "text": "endif"
+    },
+    {
+      "line": 42437,
+      "text": "if GetUnitAbilityLevel(i,$41313530)>0 and GetUnitTypeId(i)==$68305152 then"
+    },
+    {
+      "line": 42438,
+      "text": "set P8=P8+GetRandomReal(GetUnitState(i,ConvertUnitState(20)),GetUnitState(i,ConvertUnitState(21)))*.5"
+    },
+    {
+      "line": 42439,
+      "text": "call YDWESetEventDamage(P8)"
+    },
+    {
+      "line": 42440,
+      "text": "endif"
+    },
+    {
+      "line": 42794,
+      "text": "call SaveBoolean(O,GetHandleId(i),StringHash(\"Attack\"),false)"
+    },
+    {
+      "line": 42795,
+      "text": "endif"
+    },
+    {
+      "line": 42796,
+      "text": "set DK=null"
+    },
+    {
+      "line": 42797,
+      "text": "set D6=null"
+    },
+    {
+      "line": 42798,
+      "text": "set Uz=null"
+    },
+    {
+      "line": 42799,
+      "text": "set Ki=null"
+    },
+    {
+      "line": 42800,
+      "text": "set Qf=null"
+    },
+    {
+      "line": 42801,
+      "text": "set i=null"
+    },
+    {
+      "line": 42802,
+      "text": "return false"
+    },
+    {
+      "line": 42803,
+      "text": "endfunction"
+    },
+    {
+      "line": 42804,
+      "text": "function InitTrig_New_UnitAttack takes nothing returns nothing"
+    },
+    {
+      "line": 42805,
+      "text": "set b4=CreateTrigger()"
+    },
+    {
+      "line": 42806,
+      "text": "call YDWESyStemAnyUnitDamagedRegistTrigger(b4)"
+    },
+    {
+      "line": 42807,
+      "text": "call TriggerAddCondition(b4,Condition(function Trig_New_UnitAttackActions))"
+    },
+    {
+      "line": 43544,
+      "text": "function RegisterSpaceTimeFissureAction takes nothing returns nothing"
+    },
+    {
+      "line": 43545,
+      "text": "local trigger t=GetTriggeringTrigger()"
+    },
+    {
+      "line": 43546,
+      "text": "local integer BF=GetHandleId(t)"
+    },
+    {
+      "line": 43547,
+      "text": "local unit Bc=LoadUnitHandle(O,BF,0)"
+    },
+    {
+      "line": 43548,
+      "text": "local real DK=LoadReal(O,BF,2)"
+    },
+    {
+      "line": 43549,
+      "text": "local real QY=LoadReal(O,BF,1)"
+    },
+    {
+      "line": 43550,
+      "text": "local real Qa=LoadReal(O,BF,4)"
+    },
+    {
+      "line": 43551,
+      "text": "set Qa=Qa+DK"
+    },
+    {
+      "line": 43552,
+      "text": "if Qa==QY then"
+    },
+    {
+      "line": 43553,
+      "text": "call SetUnitLifePercentBJ(Bc,LoadReal(O,BF,10+R2I(LoadReal(O,BF,3))))"
+    },
+    {
+      "line": 43554,
+      "text": "call YDWETimerDestroyEffect(2,AddSpecialEffect(\"LJQ_Heidong.mdx\",GetUnitX(Bc),GetUnitY(Bc)))"
+    },
+    {
+      "line": 43555,
+      "text": "call SaveReal(O,BF,4,0)"
+    },
+    {
+      "line": 43556,
+      "text": "call UnitAddAbility(Bc,$41313530)"
+    },
+    {
+      "line": 43557,
+      "text": "else"
+    },
+    {
+      "line": 43558,
+      "text": "call SaveReal(O,BF,4,Qa)"
+    },
+    {
+      "line": 43559,
+      "text": "call SaveReal(O,BF,10+R2I(Qa),GetUnitLifePercent(Bc))"
+    },
+    {
+      "line": 43560,
+      "text": "endif"
+    },
+    {
+      "line": 43561,
+      "text": "if IsUnitType(Bc,UNIT_TYPE_DEAD) then"
+    },
+    {
+      "line": 43562,
+      "text": "call FlushChildHashtable(O,BF)"
+    },
+    {
+      "line": 43563,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 43564,
+      "text": "endif"
+    },
+    {
+      "line": 43565,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 43566,
+      "text": "set t=null"
+    },
+    {
+      "line": 43567,
+      "text": "endfunction"
+    },
+    {
+      "line": 43568,
+      "text": "function RegisterSpaceTimeFissure takes unit Bc,real QY,real DK,real QZ returns nothing"
+    },
+    {
+      "line": 43569,
+      "text": "local trigger t=CreateTrigger()"
+    },
+    {
+      "line": 43570,
+      "text": "local integer BF=GetHandleId(t)"
+    },
+    {
+      "line": 43571,
+      "text": "call SaveAgentHandle(O,BF,0,Bc)"
+    },
+    {
+      "line": 43572,
+      "text": "call SaveReal(O,BF,1,QY)"
+    },
+    {
+      "line": 43573,
+      "text": "call SaveReal(O,BF,2,DK)"
+    },
+    {
+      "line": 43574,
+      "text": "call SaveReal(O,BF,3,QZ)"
+    },
+    {
+      "line": 43575,
+      "text": "call TriggerRegisterTimerEvent(t,DK,true)"
+    },
+    {
+      "line": 43576,
+      "text": "call TriggerAddAction(t,function RegisterSpaceTimeFissureAction)"
+    },
+    {
+      "line": 43577,
+      "text": "set t=null"
+    },
+    {
+      "line": 43578,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 43724,
+      "text": "if GetUnitAbilityLevel(Pf,$41313459)>0 then"
+    },
+    {
+      "line": 43725,
+      "text": "call RegisterSpaceTimeFissure(Bc,5,1,2)"
+    },
+    {
+      "line": 43726,
+      "text": "elseif GetUnitAbilityLevel(Pf,$4131345A)>0 then"
+    },
+    {
+      "line": 43727,
+      "text": "call RegisterSpaceTimeFissure(Bc,4,1,2)"
+    },
+    {
+      "line": 43728,
+      "text": "elseif GetUnitAbilityLevel(Pf,$41313541)>0 then"
+    },
+    {
+      "line": 43729,
+      "text": "call RegisterSpaceTimeFissureEx(Bc,$41313541,6,1)"
+    },
+    {
+      "line": 43730,
+      "text": "endif"
+    },
+    {
+      "line": 43875,
+      "text": "function PassiveSkillNoArg takes nothing returns nothing"
+    },
+    {
+      "line": 43876,
+      "text": "local unit Bc=UT"
+    },
+    {
+      "line": 43877,
+      "text": "local integer x=Bi"
+    },
+    {
+      "line": 43878,
+      "text": "local unit Pf=bj_lastCreatedUnit"
+    },
+    {
+      "line": 43879,
+      "text": "call PassiveSkill(Bc,x,Pf)"
+    },
+    {
+      "line": 43880,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 43881,
+      "text": "set Pf=null"
+    },
+    {
+      "line": 43882,
+      "text": "endfunction"
+    },
+    {
+      "line": 43883,
+      "text": "function PassiveSkillNoArgJJC takes nothing returns nothing"
+    },
+    {
+      "line": 43884,
+      "text": "local unit Bc=Kc"
+    },
+    {
+      "line": 43885,
+      "text": "local integer x=Mk[Bi]"
+    },
+    {
+      "line": 43886,
+      "text": "local unit Pf=Nr"
+    },
+    {
+      "line": 43887,
+      "text": "call PassiveSkillJJC(Pf,Bc)"
+    },
+    {
+      "line": 43888,
+      "text": "if Bc!=null and x>0 then"
+    },
+    {
+      "line": 43889,
+      "text": "call UnitRemoveAbility(Bc,$4131374C)"
+    },
+    {
+      "line": 43890,
+      "text": "call UnitRemoveAbility(Bc,$41315134)"
+    },
+    {
+      "line": 43891,
+      "text": "call PassiveSkill(Bc,x,Pf)"
+    },
+    {
+      "line": 43892,
+      "text": "endif"
+    },
+    {
+      "line": 47498,
+      "text": "function Trig_AttackTrigegrConditions takes nothing returns boolean"
+    },
+    {
+      "line": 47499,
+      "text": "local integer x=GetUnitTypeId(GetTriggerUnit())"
+    },
+    {
+      "line": 47500,
+      "text": "local integer dk=GetUnitTypeId(GetAttacker())"
+    },
+    {
+      "line": 47501,
+      "text": "return LoadInteger(Q,x,x)==x or LoadInteger(Q,dk,dk)==dk or LoadStr(Q,dk,10000)!=null"
+    },
+    {
+      "line": 47502,
+      "text": "endfunction"
+    },
+    {
+      "line": 47590,
+      "text": "if GetUnitAbilityLevel(Pf,$4130494B)>0 and LoadInteger(O,GetHandleId(Pf),$4130494B)>0 then"
+    },
+    {
+      "line": 47591,
+      "text": "set YY=LoadInteger(O,GetHandleId(Pf),$4130494B)-1"
+    },
+    {
+      "line": 47592,
+      "text": "call SaveInteger(O,GetHandleId(Pf),$4130494B,YY)"
+    },
+    {
+      "line": 47593,
+      "text": "if YY==1 then"
+    },
+    {
+      "line": 47594,
+      "text": "call UnitRemoveAbility(Pf,$4130494C)"
+    },
+    {
+      "line": 47595,
+      "text": "endif"
+    },
+    {
+      "line": 47597,
+      "text": "if x==$6831384A or x==$68304A53 and GetUnitState(i,UNIT_STATE_LIFE)<=2. then"
+    },
+    {
+      "line": 47598,
+      "text": "call KillUnit(i)"
+    },
+    {
+      "line": 47599,
+      "text": "endif"
+    },
+    {
+      "line": 47600,
+      "text": "if GetUnitTypeId(i)==$6E30304B and GetUnitState(Pf,UNIT_STATE_MANA)>=20. then"
+    },
+    {
+      "line": 47601,
+      "text": "call DisableTrigger(GetTriggeringTrigger())"
+    },
+    {
+      "line": 47602,
+      "text": "call IssueTargetOrder(Pf,\"frostnova\",i)"
+    },
+    {
+      "line": 47603,
+      "text": "call EnableTrigger(GetTriggeringTrigger())"
+    },
+    {
+      "line": 47604,
+      "text": "elseif GetUnitTypeId(i)==$68303259 then"
+    },
+    {
+      "line": 47605,
+      "text": "call IssueTargetOrder(Pf,\"entanglingroots\",i)"
+    },
+    {
+      "line": 47606,
+      "text": "elseif GetUnitTypeId(Pf)==$68304F53 then"
+    },
+    {
+      "line": 47607,
+      "text": "call IssueTargetOrder(Pf,\"slow\",i)"
+    },
+    {
+      "line": 47608,
+      "text": "elseif GetUnitAbilityLevel(Pf,$53303036)>0 and GetUnitState(Pf,UNIT_STATE_MANA)>=17 and LoadTimerHandle(O,GetHandleId(Pf),$53303036)==null then"
+    },
+    {
+      "line": 47609,
+      "text": "call AttackTriggerCastCyclone(Pf,i)"
+    },
+    {
+      "line": 47610,
+      "text": "elseif GetUnitAbilityLevel(Pf,$41305442)>0 then"
+    },
+    {
+      "line": 47611,
+      "text": "call AttackTriggerHydraAttack(Pf,YY)"
+    },
+    {
+      "line": 47612,
+      "text": "elseif GetUnitTypeId(Pf)==$68303838 or GetUnitTypeId(Pf)==$68305349 then"
+    },
+    {
+      "line": 47613,
+      "text": "call IssueImmediateOrder(Pf,\"stomp\")"
+    },
+    {
+      "line": 47614,
+      "text": "elseif GetUnitTypeId(Pf)==$68303842 and UnitHasBuffBJ(Pf,$42303259)==false then"
+    },
+    {
+      "line": 47615,
+      "text": "call SetUnitInvulnerable(Pf,false)"
+    },
+    {
+      "line": 47616,
+      "text": "elseif GetUnitTypeId(Pf)==$68303255 and GetUnitManaPercent(Pf)==100. then"
+    },
+    {
+      "line": 47617,
+      "text": "call IssueImmediateOrderById(Pf,852164)"
+    },
+    {
+      "line": 47618,
+      "text": "elseif GetUnitTypeId(Pf)==$6830344D or GetUnitTypeId(Pf)==$68305039 or GetUnitTypeId(Pf)==$6830344E or GetUnitTypeId(Pf)==$6E323035 or GetUnitTypeId(Pf)==$68303647 or GetUnitTypeId(Pf)==$68313647 or GetUnitTypeId(Pf)==$6E315332 or GetUnitTypeId(Pf)==$6E315334 then"
+    },
+    {
+      "line": 47619,
+      "text": "if GetUnitStateSwap(UNIT_STATE_MANA,Pf)>=4. and UnitHasBuffBJ(Pf,$4230304F)==false and UnitHasBuffBJ(Pf,$4230315A)==false and UnitHasBuffBJ(Pf,$42305233)==false and UnitHasBuffBJ(Pf,$42315230)==false then"
+    },
+    {
+      "line": 47620,
+      "text": "if GetUnitTypeId(Pf)!=$6E315332 and GetUnitTypeId(Pf)!=$6E315334 then"
+    },
+    {
+      "line": 47621,
+      "text": "if GetUnitAbilityLevel(Pf,$41305233)!=0 then"
+    },
+    {
+      "line": 47622,
+      "text": "call UnitRemoveAbility(Pf,$41305233)"
+    },
+    {
+      "line": 47623,
+      "text": "call UnitAddAbility(Pf,$41305233)"
+    },
+    {
+      "line": 47624,
+      "text": "elseif GetUnitAbilityLevel(Pf,$41315230)!=0 then"
+    },
+    {
+      "line": 47625,
+      "text": "call UnitRemoveAbility(Pf,$41315230)"
+    },
+    {
+      "line": 47626,
+      "text": "call UnitAddAbility(Pf,$41315230)"
+    },
+    {
+      "line": 47627,
+      "text": "endif"
+    },
+    {
+      "line": 47628,
+      "text": "endif"
+    },
+    {
+      "line": 47629,
+      "text": "call IssueImmediateOrderById(Pf,852589)"
+    },
+    {
+      "line": 47630,
+      "text": "if GetUnitTypeId(Pf)==$6E315332 then"
+    },
+    {
+      "line": 47631,
+      "text": "set a7=GetUnitLoc(i)"
+    },
+    {
+      "line": 47632,
+      "text": "set dl=OffsetLocation(a7,1.,1.)"
+    },
+    {
+      "line": 47633,
+      "text": "call IssuePointOrderLoc(Pf,\"attack\",dl)"
+    },
+    {
+      "line": 47634,
+      "text": "call RemoveLocation(dl)"
+    },
+    {
+      "line": 47635,
+      "text": "call RemoveLocation(a7)"
+    },
+    {
+      "line": 47636,
+      "text": "set a7=null"
+    },
+    {
+      "line": 47637,
+      "text": "set dl=null"
+    },
+    {
+      "line": 47638,
+      "text": "endif"
+    },
+    {
+      "line": 47639,
+      "text": "endif"
+    },
+    {
+      "line": 47640,
+      "text": "elseif GetUnitTypeId(Pf)==$68304344 and GetUnitStateSwap(UNIT_STATE_MANA,Pf)>=3. then"
+    },
+    {
+      "line": 47641,
+      "text": "set Pb=GetUnitLoc(Pf)"
+    },
+    {
+      "line": 47642,
+      "text": "call CreateNUnitsAtLoc(1,$75303036,Player(-1+GetUnitUserData(Pf)),Pb,bj_UNIT_FACING)"
+    },
+    {
+      "line": 47643,
+      "text": "set Nr=bj_lastCreatedUnit"
+    },
+    {
+      "line": 47644,
+      "text": "if GetUnitLifePercent(Pf)<=30. then"
+    },
+    {
+      "line": 47645,
+      "text": "call UnitAddAbility(Nr,$4130414D)"
+    },
+    {
+      "line": 47646,
+      "text": "call IssueTargetOrderById(Nr,852101,Pf)"
+    },
+    {
+      "line": 47647,
+      "text": "call SetUnitManaBJ(Pf,0.)"
+    },
+    {
+      "line": 47648,
+      "text": "else"
+    },
+    {
+      "line": 47649,
+      "text": "if GetUnitLifePercent(Pf)<=50. then"
+    },
+    {
+      "line": 47650,
+      "text": "call UnitAddAbility(Nr,$41303841)"
+    },
+    {
+      "line": 47651,
+      "text": "call IssueTargetOrderById(Nr,852101,Pf)"
+    },
+    {
+      "line": 47652,
+      "text": "call SetUnitManaBJ(Pf,0.)"
+    },
+    {
+      "line": 47653,
+      "text": "else"
+    },
+    {
+      "line": 47654,
+      "text": "if GetUnitLifePercent(Pf)<=70. then"
+    },
+    {
+      "line": 47655,
+      "text": "call UnitAddAbility(Nr,$4130414E)"
+    },
+    {
+      "line": 47656,
+      "text": "call IssueTargetOrderById(Nr,852101,Pf)"
+    },
+    {
+      "line": 47657,
+      "text": "call SetUnitManaBJ(Pf,0.)"
+    },
+    {
+      "line": 47658,
+      "text": "endif"
+    },
+    {
+      "line": 47659,
+      "text": "endif"
+    },
+    {
+      "line": 47660,
+      "text": "endif"
+    },
+    {
+      "line": 47661,
+      "text": "call UnitApplyTimedLifeBJ(2.,$42544C46,Nr)"
+    },
+    {
+      "line": 47662,
+      "text": "call RemoveLocation(Pb)"
+    },
+    {
+      "line": 47663,
+      "text": "elseif GetUnitTypeId(Pf)==$68303342 or GetUnitTypeId(Pf)==$68304F43 then"
+    },
+    {
+      "line": 47664,
+      "text": "if UnitHasBuffBJ(Pf,$42303133)==false and GetRandomInt(1,R2I(100))<=30 then"
+    },
+    {
+      "line": 47665,
+      "text": "call UnitRemoveAbility(Pf,$41305241)"
+    },
+    {
+      "line": 47666,
+      "text": "call UnitResetCooldown(Pf)"
+    },
+    {
+      "line": 47667,
+      "text": "call UnitAddAbility(Pf,$41305241)"
+    },
+    {
+      "line": 47668,
+      "text": "call IssueTargetOrder(Pf,\"frenzy\",Pf)"
+    },
+    {
+      "line": 47669,
+      "text": "call ResetUnitAnimation(Pf)"
+    },
+    {
+      "line": 47670,
+      "text": "set Pb=GetUnitLoc(Pf)"
+    },
+    {
+      "line": 47671,
+      "text": "call CreateNUnitsAtLoc(1,$75303036,Player(-1+GetUnitUserData(Pf)),Pb,bj_UNIT_FACING)"
+    },
+    {
+      "line": 47672,
+      "text": "set Nr=bj_lastCreatedUnit"
+    },
+    {
+      "line": 47673,
+      "text": "call UnitAddAbility(Nr,$41303256)"
+    },
+    {
+      "line": 47674,
+      "text": "call IssueTargetOrderById(Nr,852066,Pf)"
+    },
+    {
+      "line": 47675,
+      "text": "call UnitApplyTimedLifeBJ(2.,$42544C46,Nr)"
+    },
+    {
+      "line": 47676,
+      "text": "call RemoveLocation(Pb)"
+    },
+    {
+      "line": 47677,
+      "text": "endif"
+    },
+    {
+      "line": 47678,
+      "text": "elseif GetUnitAbilityLevel(Pf,$4130364F)>0 then"
+    },
+    {
+      "line": 47679,
+      "text": "if GetUnitStateSwap(UNIT_STATE_MANA,Pf)==GetUnitStateSwap(UNIT_STATE_MAX_MANA,Pf) then"
+    },
+    {
+      "line": 47680,
+      "text": "call SetWidgetLife(Pf,GetUnitStateSwap(UNIT_STATE_LIFE,Pf)+80)"
+    },
+    {
+      "line": 47681,
+      "text": "call SetUnitManaBJ(Pf,0)"
+    },
+    {
+      "line": 47682,
+      "text": "set Pb=GetUnitLoc(Pf)"
+    },
+    {
+      "line": 47683,
+      "text": "call DestroyEffect(AddSpecialEffectLoc(\"Abilities\\\\Spells\\\\Undead\\\\VampiricAura\\\\VampiricAuraTarget.mdl\",Pb))"
+    },
+    {
+      "line": 47684,
+      "text": "call RemoveLocation(Pb)"
+    },
+    {
+      "line": 47685,
+      "text": "else"
+    },
+    {
+      "line": 47686,
+      "text": "call SetUnitManaBJ(Pf,GetUnitStateSwap(UNIT_STATE_MANA,Pf)+1)"
+    },
+    {
+      "line": 47687,
+      "text": "endif"
+    },
+    {
+      "line": 47688,
+      "text": "elseif GetUnitTypeId(i)==$68303832 then"
+    },
+    {
+      "line": 47689,
+      "text": "if GetUnitLifePercent(i)<=10 then"
+    },
+    {
+      "line": 47690,
+      "text": "call UnitAddAbility(i,$41303650)"
+    },
+    {
+      "line": 47691,
+      "text": "call IssueImmediateOrderById(i,852100)"
+    },
+    {
+      "line": 47692,
+      "text": "endif"
+    },
+    {
+      "line": 47693,
+      "text": "elseif GetUnitTypeId(Pf)==$6E303037 then"
+    },
+    {
+      "line": 47694,
+      "text": "call IssueTargetOrderById(Pf,852587,i)"
+    },
+    {
+      "line": 47695,
+      "text": "elseif GetUnitTypeId(Pf)==$68303330 and GetUnitAbilityLevelSwapped($41303555,Pf)==0 then"
+    },
+    {
+      "line": 47696,
+      "text": "call UnitAddAbility(i,$41303555)"
+    },
+    {
+      "line": 47697,
+      "text": "call UnitAddAbility(i,$41303556)"
+    },
+    {
+      "line": 47698,
+      "text": "elseif GetUnitTypeId(Pf)==$6E305342 then"
+    },
+    {
+      "line": 47699,
+      "text": "call UnitAddAbility(i,$41305339)"
+    },
+    {
+      "line": 47700,
+      "text": "call UnitAddAbility(i,$41305330)"
+    },
+    {
+      "line": 47701,
+      "text": "elseif GetUnitTypeId(Pf)==$6830365A then"
+    },
+    {
+      "line": 47702,
+      "text": "if GetRandomInt(1,R2I(100))<=20 and UnitHasBuffBJ(Pf,$42303239)==false then"
+    },
+    {
+      "line": 47703,
+      "text": "call IssueImmediateOrderById(Pf,852100)"
+    },
+    {
+      "line": 47704,
+      "text": "endif"
+    },
+    {
+      "line": 47705,
+      "text": "elseif GetUnitTypeId(Pf)==$68303734 and GetUnitManaPercent(Pf)==100. then"
+    },
+    {
+      "line": 47706,
+      "text": "call IssueImmediateOrderById(Pf,852096)"
+    },
+    {
+      "line": 47707,
+      "text": "elseif GetUnitTypeId(Pf)==$68303735 and GetUnitManaPercent(Pf)==100. then"
+    },
+    {
+      "line": 47708,
+      "text": "call IssueImmediateOrderById(Pf,852127)"
+    },
+    {
+      "line": 47709,
+      "text": "elseif GetUnitTypeId(Pf)==$68303950 or GetUnitTypeId(Pf)==$68313950 then"
+    },
+    {
+      "line": 47710,
+      "text": "call IssueImmediateOrderById(Pf,852055)"
+    },
+    {
+      "line": 47711,
+      "text": "elseif GetUnitTypeId(Pf)==$68304137 or GetUnitTypeId(Pf)==$68304156 or GetUnitTypeId(Pf)==$68304157 then"
+    },
+    {
+      "line": 47712,
+      "text": "call IssueImmediateOrderById(Pf,852041)"
+    },
+    {
+      "line": 47713,
+      "text": "elseif GetUnitTypeId(Pf)==$68303643 then"
+    },
+    {
+      "line": 47714,
+      "text": "if GetRandomInt(1,R2I(100))<=25 and UnitHasBuffBJ(Pf,$42303155)==false then"
+    },
+    {
+      "line": 47715,
+      "text": "set Pb=GetUnitLoc(Pf)"
+    },
+    {
+      "line": 47716,
+      "text": "call CreateNUnitsAtLoc(1,$75303036,Player(-1+GetUnitUserData(Pf)),Pb,bj_UNIT_FACING)"
+    },
+    {
+      "line": 47717,
+      "text": "set Nr=bj_lastCreatedUnit"
+    },
+    {
+      "line": 47718,
+      "text": "call UnitAddAbility(Nr,$41303442)"
+    },
+    {
+      "line": 47719,
+      "text": "call IssueTargetOrderById(Nr,852066,Pf)"
+    },
+    {
+      "line": 47720,
+      "text": "call UnitApplyTimedLifeBJ(4.,$42544C46,Nr)"
+    },
+    {
+      "line": 47721,
+      "text": "call RemoveLocation(Pb)"
+    },
+    {
+      "line": 47722,
+      "text": "endif"
+    },
+    {
+      "line": 47723,
+      "text": "elseif GetUnitTypeId(Pf)==$68303639 or GetUnitTypeId(Pf)==$68303641 or GetUnitTypeId(Pf)==$68304F39 or GetUnitTypeId(Pf)==$68304F45 then"
+    },
+    {
+      "line": 47724,
+      "text": "call IssueImmediateOrderById(Pf,852526)"
+    },
+    {
+      "line": 47725,
+      "text": "elseif GetUnitTypeId(Pf)==$68303854 then"
+    },
+    {
+      "line": 47726,
+      "text": "if GetUnitStateSwap(UNIT_STATE_MANA,Pf)>=30. then"
+    },
+    {
+      "line": 47727,
+      "text": "call IssueImmediateOrderById(Pf,852123)"
+    },
+    {
+      "line": 47728,
+      "text": "endif"
+    },
+    {
+      "line": 47729,
+      "text": "elseif GetUnitTypeId(Pf)==$68303932 and GetUnitManaPercent(Pf)==100. then"
+    },
+    {
+      "line": 47730,
+      "text": "call IssueTargetOrderById(Pf,852119,i)"
+    },
+    {
+      "line": 47731,
+      "text": "elseif GetUnitTypeId(Pf)==$68303244 or GetUnitTypeId(Pf)==$68305034 or GetUnitTypeId(Pf)==$68324141 then"
+    },
+    {
+      "line": 47732,
+      "text": "if GetUnitStateSwap(UNIT_STATE_MANA,Pf)<10 then"
+    },
+    {
+      "line": 47733,
+      "text": "call SetUnitManaBJ(Pf,GetUnitStateSwap(UNIT_STATE_MANA,Pf)+1)"
+    },
+    {
+      "line": 47734,
+      "text": "endif"
+    },
+    {
+      "line": 47735,
+      "text": "elseif GetUnitTypeId(i)==$68304D31 then"
+    },
+    {
+      "line": 47736,
+      "text": "call SaveBoolean(O,GetHandleId(Pf),1,true)"
+    },
+    {
+      "line": 47737,
+      "text": "elseif GetUnitTypeId(Pf)==$68303248 then"
+    },
+    {
+      "line": 47738,
+      "text": "if GetRandomInt(1,10)<=5 then"
+    },
+    {
+      "line": 47739,
+      "text": "set a7=GetUnitLoc(i)"
+    },
+    {
+      "line": 47740,
+      "text": "call CreateNUnitsAtLoc(1,$75303036,GetOwningPlayer(Pf),a7,bj_UNIT_FACING)"
+    },
+    {
+      "line": 47741,
+      "text": "set Ki=bj_lastCreatedUnit"
+    },
+    {
+      "line": 47742,
+      "text": "call SetUnitUserData(Ki,GetUnitUserData(Pf))"
+    },
+    {
+      "line": 47743,
+      "text": "call UnitAddAbility(Ki,$41303356)"
+    },
+    {
+      "line": 47744,
+      "text": "call YDWEPolledWaitNull(.6)"
+    },
+    {
+      "line": 47745,
+      "text": "call IssueImmediateOrderById(Ki,852526)"
+    },
+    {
+      "line": 47746,
+      "text": "call UnitApplyTimedLifeBJ(3.,$42544C46,Ki)"
+    },
+    {
+      "line": 47747,
+      "text": "call RemoveLocation(a7)"
+    },
+    {
+      "line": 47748,
+      "text": "set a7=null"
+    },
+    {
+      "line": 47749,
+      "text": "endif"
+    },
+    {
+      "line": 47750,
+      "text": "elseif GetUnitTypeId(Pf)==$6E303044 then"
+    },
+    {
+      "line": 47751,
+      "text": "if GetUnitLifePercent(Pf)>=31. then"
+    },
+    {
+      "line": 47752,
+      "text": "call UnitRemoveAbility(Pf,$41303941)"
+    },
+    {
+      "line": 47753,
+      "text": "else"
+    },
+    {
+      "line": 47754,
+      "text": "if GetUnitLifePercent(Pf)<=30. then"
+    },
+    {
+      "line": 47755,
+      "text": "call UnitAddAbility(Pf,$41303941)"
+    },
+    {
+      "line": 47756,
+      "text": "endif"
+    },
+    {
+      "line": 47757,
+      "text": "endif"
+    },
+    {
+      "line": 47758,
+      "text": "elseif GetUnitTypeId(Pf)==$68303357 and GetUnitState(i,UNIT_STATE_MAX_LIFE)<=150. and LoadBoolean(O,GetHandleId(Player(2)),GetHandleId(Player(2)))!=true then"
+    },
+    {
+      "line": 47759,
+      "text": "call DisableTrigger(GetTriggeringTrigger())"
+    },
+    {
+      "line": 47760,
+      "text": "call DestroyEffect(AddSpecialEffectTarget(\"Objects\\\\Spawnmodels\\\\Undead\\\\UndeadLargeDeathExplode\\\\UndeadLargeDeathExplode.mdl\",i,\"chest\"))"
+    },
+    {
+      "line": 47761,
+      "text": "call UnitDamageTarget(Pf,i,50000.,true,true,ATTACK_TYPE_SIEGE,DAMAGE_TYPE_NORMAL,WEAPON_TYPE_WHOKNOWS)"
+    },
+    {
+      "line": 47762,
+      "text": "if GetOwningPlayer(Pf)==Player(10) then"
+    },
+    {
+      "line": 47763,
+      "text": "set a7=GetUnitLoc(Bd)"
+    },
+    {
+      "line": 47764,
+      "text": "set dl=OffsetLocation(a7,1.,1.)"
+    },
+    {
+      "line": 47765,
+      "text": "call IssueImmediateOrder(Pf,\"stop\")"
+    },
+    {
+      "line": 47766,
+      "text": "call IssuePointOrderLoc(Pf,\"attack\",dl)"
+    },
+    {
+      "line": 47767,
+      "text": "else"
+    },
+    {
+      "line": 47768,
+      "text": "set a7=GetUnitLoc(Bh)"
+    },
+    {
+      "line": 47769,
+      "text": "set dl=OffsetLocation(a7,1.,1.)"
+    },
+    {
+      "line": 47770,
+      "text": "call IssueImmediateOrder(Pf,\"stop\")"
+    },
+    {
+      "line": 47771,
+      "text": "call IssuePointOrderLoc(Pf,\"attack\",dl)"
+    },
+    {
+      "line": 47772,
+      "text": "endif"
+    },
+    {
+      "line": 47773,
+      "text": "call RemoveLocation(dl)"
+    },
+    {
+      "line": 47774,
+      "text": "call RemoveLocation(a7)"
+    },
+    {
+      "line": 47775,
+      "text": "set a7=null"
+    },
+    {
+      "line": 47776,
+      "text": "set dl=null"
+    },
+    {
+      "line": 47777,
+      "text": "call EnableTrigger(GetTriggeringTrigger())"
+    },
+    {
+      "line": 47778,
+      "text": "elseif GetUnitTypeId(Pf)==$6830304B or GetUnitTypeId(Pf)==$68303648 then"
+    },
+    {
+      "line": 47779,
+      "text": "set Ob=true"
+    },
+    {
+      "line": 47780,
+      "text": "if NJ and GetOwningPlayer(Pf)==Player(8) or NK and GetOwningPlayer(Pf)==Player(9) then"
+    },
+    {
+      "line": 47781,
+      "text": "set Bi=GetRandomInt(1,4)"
+    },
+    {
+      "line": 47782,
+      "text": "set Pb=GetUnitLoc(Pf)"
+    },
+    {
+      "line": 47783,
+      "text": "set RQ=GetUnitLoc(i)"
+    },
+    {
+      "line": 47784,
+      "text": "if GetUnitAbilityLevelSwapped($41303235,Pf)==1 then"
+    },
+    {
+      "line": 47785,
+      "text": "call IssueTargetOrderById(Pf,852189,i)"
+    },
+    {
+      "line": 47786,
+      "text": "endif"
+    },
+    {
+      "line": 47787,
+      "text": "if GetUnitAbilityLevelSwapped($41303233,Pf)==1 then"
+    },
+    {
+      "line": 47788,
+      "text": "call IssueTargetOrderById(Pf,852171,i)"
+    },
+    {
+      "line": 47789,
+      "text": "endif"
+    },
+    {
+      "line": 47790,
+      "text": "if GetUnitAbilityLevelSwapped($41303231,Pf)==1 then"
+    },
+    {
+      "line": 47791,
+      "text": "call IssuePointOrderByIdLoc(Pf,852125,Pb)"
+    },
+    {
+      "line": 47792,
+      "text": "endif"
+    },
+    {
+      "line": 47793,
+      "text": "if GetUnitAbilityLevelSwapped($41303232,Pf)==1 and DistanceBetweenPoints(Pb,RQ)<=200. then"
+    },
+    {
+      "line": 47794,
+      "text": "call IssueImmediateOrderById(Pf,852127)"
+    },
+    {
+      "line": 47795,
+      "text": "endif"
+    },
+    {
+      "line": 47796,
+      "text": "call RemoveLocation(Pb)"
+    },
+    {
+      "line": 47797,
+      "text": "call RemoveLocation(RQ)"
+    },
+    {
+      "line": 47798,
+      "text": "endif"
+    },
+    {
+      "line": 47799,
+      "text": "elseif GetUnitStateSwap(UNIT_STATE_MANA,Pf)==GetUnitStateSwap(UNIT_STATE_MAX_MANA,Pf) and GetUnitTypeId(Pf)==$68304352 or GetUnitTypeId(Pf)==$68304354 or GetUnitTypeId(Pf)==$68303347 or GetUnitTypeId(Pf)==$68303348 or GetUnitTypeId(Pf)==$6830334D or GetUnitTypeId(Pf)==$6830334E or GetUnitTypeId(Pf)==$68303837 or GetUnitTypeId(Pf)==$68304259 or GetUnitTypeId(Pf)==$6830425A or GetUnitTypeId(Pf)==$75303035 then"
+    },
+    {
+      "line": 47800,
+      "text": "call IssueImmediateOrderById(Pf,852097)"
+    },
+    {
+      "line": 47801,
+      "text": "elseif GetUnitAbilityLevel(Pf,$41313530)>0 then"
+    },
+    {
+      "line": 47802,
+      "text": "if LoadInteger(O,GetHandleId(Pf),$41313530)>=1 then"
+    },
+    {
+      "line": 47803,
+      "text": "call SaveInteger(O,GetHandleId(Pf),$41313530,0)"
+    },
+    {
+      "line": 47804,
+      "text": "call UnitRemoveAbility(Pf,$41313530)"
+    },
+    {
+      "line": 47805,
+      "text": "else"
+    },
+    {
+      "line": 47806,
+      "text": "call SaveInteger(O,GetHandleId(Pf),$41313530,1)"
+    },
+    {
+      "line": 47807,
+      "text": "endif"
+    },
+    {
+      "line": 47808,
+      "text": "endif"
+    },
+    {
+      "line": 47809,
+      "text": "set Ki=null"
+    },
+    {
+      "line": 47810,
+      "text": "set i=null"
+    },
+    {
+      "line": 47811,
+      "text": "set Pf=null"
+    },
+    {
+      "line": 47812,
+      "text": "set a7=null"
+    },
+    {
+      "line": 47813,
+      "text": "set dl=null"
+    },
+    {
+      "line": 47814,
+      "text": "endfunction"
+    },
+    {
+      "line": 47815,
+      "text": "function InitTrig_AttackTrigegr takes nothing returns nothing"
+    },
+    {
+      "line": 47816,
+      "text": "local trigger dj=CreateTrigger()"
+    },
+    {
+      "line": 47817,
+      "text": "call TriggerAddCondition(dj,Condition(function Trig_AttackTrigegrConditions))"
+    },
+    {
+      "line": 47818,
+      "text": "call TriggerRegisterPlayerUnitEventSimple(dj,Player(8),EVENT_PLAYER_UNIT_ATTACKED)"
+    },
+    {
+      "line": 47819,
+      "text": "call TriggerRegisterPlayerUnitEventSimple(dj,Player(9),EVENT_PLAYER_UNIT_ATTACKED)"
+    },
+    {
+      "line": 47820,
+      "text": "call TriggerRegisterPlayerUnitEventSimple(dj,Player(10),EVENT_PLAYER_UNIT_ATTACKED)"
+    },
+    {
+      "line": 47821,
+      "text": "call TriggerRegisterPlayerUnitEventSimple(dj,Player(11),EVENT_PLAYER_UNIT_ATTACKED)"
+    },
+    {
+      "line": 47822,
+      "text": "call TriggerRegisterPlayerUnitEventSimple(dj,Player(12),EVENT_PLAYER_UNIT_ATTACKED)"
+    },
+    {
+      "line": 47823,
+      "text": "call TriggerAddAction(dj,function Trig_AttackTrigegrActions)"
+    },
+    {
+      "line": 47824,
+      "text": "set dj=null"
+    },
+    {
+      "line": 48387,
+      "text": "call SaveInteger(Q,$68305158,$68305158,$68305158)"
+    },
+    {
+      "line": 48388,
+      "text": "call SaveInteger(Q,$68305142,$68305142,$68305142)"
+    },
+    {
+      "line": 48389,
+      "text": "call SaveInteger(Q,$68305139,$68305139,$68305139)"
+    },
+    {
+      "line": 48390,
+      "text": "call SaveInteger(Q,$68305138,$68305138,$68305138)"
+    },
+    {
+      "line": 48391,
+      "text": "call SaveInteger(Q,$68305137,$68305137,$68305137)"
+    },
+    {
+      "line": 48392,
+      "text": "call SaveInteger(Q,$68305134,$68305134,$68305134)"
+    },
+    {
+      "line": 48393,
+      "text": "call SaveInteger(Q,$6E303578,$6E303578,$6E303578)"
+    },
+    {
+      "line": 48394,
+      "text": "call SaveInteger(Q,$68305135,$68305135,$68305135)"
+    },
+    {
+      "line": 48395,
+      "text": "call SaveInteger(Q,$6E303579,$6E303579,$6E303579)"
+    },
+    {
+      "line": 48396,
+      "text": "call SaveInteger(Q,$68305132,$68305132,$68305132)"
+    },
+    {
+      "line": 48397,
+      "text": "call SaveInteger(Q,$68305133,$68305133,$68305133)"
+    },
+    {
+      "line": 48398,
+      "text": "call SaveInteger(Q,$68305132,$68305132,$68305132)"
+    },
+    {
+      "line": 48399,
+      "text": "call SaveInteger(Q,$68305057,$68305057,$68305057)"
+    },
+    {
+      "line": 48400,
+      "text": "call SaveInteger(Q,$68305059,$68305059,$68305059)"
+    },
+    {
+      "line": 48401,
+      "text": "call SaveInteger(Q,$6E30304B,$6E30304B,$6E30304B)"
+    },
+    {
+      "line": 48402,
+      "text": "call SaveInteger(Q,$68303842,$68303842,$68303842)"
+    },
+    {
+      "line": 48403,
+      "text": "call SaveInteger(Q,$68303255,$68303255,$68303255)"
+    },
+    {
+      "line": 48404,
+      "text": "call SaveInteger(Q,$6830344D,$6830344D,$6830344D)"
+    },
+    {
+      "line": 48405,
+      "text": "call SaveInteger(Q,$6830344E,$6830344E,$6830344E)"
+    },
+    {
+      "line": 48406,
+      "text": "call SaveInteger(Q,$68305039,$68305039,$68305039)"
+    },
+    {
+      "line": 48407,
+      "text": "call SaveInteger(Q,$6E323035,$6E323035,$6E323035)"
+    },
+    {
+      "line": 48408,
+      "text": "call SaveInteger(Q,$68303647,$68303647,$68303647)"
+    },
+    {
+      "line": 48409,
+      "text": "call SaveInteger(Q,$68313647,$68313647,$68313647)"
+    },
+    {
+      "line": 48410,
+      "text": "call SaveInteger(Q,$6E315332,$6E315332,$6E315332)"
+    },
+    {
+      "line": 48411,
+      "text": "call SaveInteger(Q,$6E315334,$6E315334,$6E315334)"
+    },
+    {
+      "line": 48412,
+      "text": "call SaveInteger(Q,$68304344,$68304344,$68304344)"
+    },
+    {
+      "line": 48413,
+      "text": "call SaveInteger(Q,$68303342,$68303342,$68303342)"
+    },
+    {
+      "line": 48414,
+      "text": "call SaveInteger(Q,$68303831,$68303831,$68303831)"
+    },
+    {
+      "line": 48415,
+      "text": "call SaveInteger(Q,$68303841,$68303841,$68303841)"
+    },
+    {
+      "line": 48416,
+      "text": "call SaveInteger(Q,$68303832,$68303832,$68303832)"
+    },
+    {
+      "line": 48417,
+      "text": "call SaveInteger(Q,$6E303037,$6E303037,$6E303037)"
+    },
+    {
+      "line": 48418,
+      "text": "call SaveInteger(Q,$68303332,$68303332,$68303332)"
+    },
+    {
+      "line": 48419,
+      "text": "call SaveInteger(Q,$68313332,$68313332,$68313332)"
+    },
+    {
+      "line": 48420,
+      "text": "call SaveInteger(Q,$68303330,$68303330,$68303330)"
+    },
+    {
+      "line": 48421,
+      "text": "call SaveInteger(Q,$6E305342,$6E305342,$6E305342)"
+    },
+    {
+      "line": 48422,
+      "text": "call SaveInteger(Q,$6830365A,$6830365A,$6830365A)"
+    },
+    {
+      "line": 48423,
+      "text": "call SaveInteger(Q,$68303734,$68303734,$68303734)"
+    },
+    {
+      "line": 48424,
+      "text": "call SaveInteger(Q,$68303735,$68303735,$68303735)"
+    },
+    {
+      "line": 48425,
+      "text": "call SaveInteger(Q,$68303950,$68303950,$68303950)"
+    },
+    {
+      "line": 48426,
+      "text": "call SaveInteger(Q,$68313950,$68313950,$68313950)"
+    },
+    {
+      "line": 48427,
+      "text": "call SaveInteger(Q,$68304137,$68304137,$68304137)"
+    },
+    {
+      "line": 48428,
+      "text": "call SaveInteger(Q,$68304156,$68304156,$68304156)"
+    },
+    {
+      "line": 48429,
+      "text": "call SaveInteger(Q,$68304157,$68304157,$68304157)"
+    },
+    {
+      "line": 48430,
+      "text": "call SaveInteger(Q,$68303643,$68303643,$68303643)"
+    },
+    {
+      "line": 48431,
+      "text": "call SaveInteger(Q,$68303639,$68303639,$68303639)"
+    },
+    {
+      "line": 48432,
+      "text": "call SaveInteger(Q,$68303641,$68303641,$68303641)"
+    },
+    {
+      "line": 48433,
+      "text": "call SaveInteger(Q,$68303854,$68303854,$68303854)"
+    },
+    {
+      "line": 48434,
+      "text": "call SaveInteger(Q,$68303932,$68303932,$68303932)"
+    },
+    {
+      "line": 48435,
+      "text": "call SaveInteger(Q,$68303244,$68303244,$68303244)"
+    },
+    {
+      "line": 48436,
+      "text": "call SaveInteger(Q,$68324141,$68324141,$68324141)"
+    },
+    {
+      "line": 48437,
+      "text": "call SaveInteger(Q,$68303248,$68303248,$68303248)"
+    },
+    {
+      "line": 48438,
+      "text": "call SaveInteger(Q,$6E303044,$6E303044,$6E303044)"
+    },
+    {
+      "line": 48439,
+      "text": "call SaveInteger(Q,$68304F43,$68304F43,$68304F43)"
+    },
+    {
+      "line": 48440,
+      "text": "call SaveInteger(Q,$68303357,$68303357,$68303357)"
+    },
+    {
+      "line": 48441,
+      "text": "call SaveInteger(Q,$6830304B,$6830304B,$6830304B)"
+    },
+    {
+      "line": 48442,
+      "text": "call SaveInteger(Q,$68303648,$68303648,$68303648)"
+    },
+    {
+      "line": 48443,
+      "text": "call SaveInteger(Q,$68304352,$68304352,$68304352)"
+    },
+    {
+      "line": 48444,
+      "text": "call SaveInteger(Q,$68304354,$68304354,$68304354)"
+    },
+    {
+      "line": 48445,
+      "text": "call SaveInteger(Q,$68303347,$68303347,$68303347)"
+    },
+    {
+      "line": 48446,
+      "text": "call SaveInteger(Q,$68303348,$68303348,$68303348)"
+    },
+    {
+      "line": 48447,
+      "text": "call SaveInteger(Q,$6830334D,$6830334D,$6830334D)"
+    },
+    {
+      "line": 48448,
+      "text": "call SaveInteger(Q,$6830334E,$6830334E,$6830334E)"
+    },
+    {
+      "line": 48449,
+      "text": "call SaveInteger(Q,$68303837,$68303837,$68303837)"
+    },
+    {
+      "line": 48450,
+      "text": "call SaveInteger(Q,$68304259,$68304259,$68304259)"
+    },
+    {
+      "line": 48451,
+      "text": "call SaveInteger(Q,$6830425A,$6830425A,$6830425A)"
+    },
+    {
+      "line": 48452,
+      "text": "call SaveInteger(Q,$75303035,$75303035,$75303035)"
+    },
+    {
+      "line": 48453,
+      "text": "call SaveInteger(Q,$68304D31,$68304D31,$68304D31)"
+    },
+    {
+      "line": 48454,
+      "text": "call SaveInteger(Q,$68304E47,$68304E47,$68304E47)"
+    },
+    {
+      "line": 48455,
+      "text": "call SaveInteger(Q,$68303259,$68303259,$68303259)"
+    },
+    {
+      "line": 48456,
+      "text": "call SaveInteger(Q,$68304F39,$68304F39,$68304F39)"
+    },
+    {
+      "line": 48457,
+      "text": "call SaveInteger(Q,$68303841,$68303841,$68303841)"
+    },
+    {
+      "line": 48458,
+      "text": "call SaveInteger(Q,$68303759,$68303759,$68303759)"
+    },
+    {
+      "line": 48459,
+      "text": "call SaveInteger(Q,$68304F45,$68304F45,$68304F45)"
+    },
+    {
+      "line": 48460,
+      "text": "call SaveInteger(Q,$68304F37,$68304F37,$68304F37)"
+    },
+    {
+      "line": 48461,
+      "text": "call SaveInteger(Q,$68304A4E,$68304A4E,$68304A4E)"
+    },
+    {
+      "line": 48462,
+      "text": "call SaveInteger(Q,$68304F35,$68304F35,$68304F35)"
+    },
+    {
+      "line": 48463,
+      "text": "call SaveInteger(Q,$68305034,$68305034,$68305034)"
+    },
+    {
+      "line": 48464,
+      "text": "call SaveInteger(Q,$68304F5A,$68304F5A,$68304F5A)"
+    },
+    {
+      "line": 48565,
+      "text": "function InitTrig_MonsterInit takes nothing returns nothing"
+    },
+    {
+      "line": 48566,
+      "text": "set dp=CreateTrigger()"
+    },
+    {
+      "line": 48567,
+      "text": "call TriggerRegisterTimerEventSingle(dp,.01)"
+    },
+    {
+      "line": 48568,
+      "text": "call TriggerAddAction(dp,function Trig_monsterActions)"
+    },
+    {
+      "line": 49754,
+      "text": "call InitTrig_New_UnitAttack()"
+    },
+    {
+      "line": 49790,
+      "text": "call InitTrig_AttackTrigegr()"
+    }
+  ],
+  "attackRegistry": [
+    "h0QX",
+    "h0QB",
+    "h0Q9",
+    "h0Q8",
+    "h0Q7",
+    "h0Q4",
+    "n05x",
+    "h0Q5",
+    "n05y",
+    "h0Q2",
+    "h0Q3",
+    "h0PW",
+    "h0PY",
+    "n00K",
+    "h08B",
+    "h02U",
+    "h04M",
+    "h04N",
+    "h0P9",
+    "n205",
+    "h06G",
+    "h16G",
+    "n1S2",
+    "n1S4",
+    "h0CD",
+    "h03B",
+    "h081",
+    "h08A",
+    "h082",
+    "n007",
+    "h032",
+    "h132",
+    "h030",
+    "n0SB",
+    "h06Z",
+    "h074",
+    "h075",
+    "h09P",
+    "h19P",
+    "h0A7",
+    "h0AV",
+    "h0AW",
+    "h06C",
+    "h069",
+    "h06A",
+    "h08T",
+    "h092",
+    "h02D",
+    "h2AA",
+    "h02H",
+    "n00D",
+    "h0OC",
+    "h03W",
+    "h00K",
+    "h06H",
+    "h0CR",
+    "h0CT",
+    "h03G",
+    "h03H",
+    "h03M",
+    "h03N",
+    "h087",
+    "h0BY",
+    "h0BZ",
+    "u005",
+    "h0M1",
+    "h0NG",
+    "h02Y",
+    "h0O9",
+    "h07Y",
+    "h0OE",
+    "h0O7",
+    "h0JN",
+    "h0O5",
+    "h0P4",
+    "h0OZ"
+  ],
+  "abilities": {
+    "A0I7": {
+      "rawcode": "A0I7",
+      "name": "眩晕",
+      "tip": "风暴之锤(T) - [等级 1],风暴之锤(T) - [等级 2],风暴之锤(T) - [等级 3],风暴之锤(T) - [等级 4]",
+      "ubertip": "向目标投掷一巨大的魔法斧，对其造成100点伤害并使其5秒内处于眩晕状态。,向目标投掷一巨大的魔法斧，对其造成200 点伤害并使其7秒内处于眩晕状态。,向目标投掷一巨大的魔法斧，对其造成300点伤害并使其9秒内处于眩晕状态。,向目标投掷一巨大的魔法斧，对其造成450点伤害并使其12秒内处于眩晕状态。",
+      "alias": "A0I7",
+      "code": "AHtb",
+      "BuffID1": "BPSE",
+      "levels": "10",
+      "targs1": "air,ground,debris,enemy,neutral,organic",
+      "targs2": "air,ground,debris,enemy,neutral,organic",
+      "targs3": "air,ground,debris,enemy,neutral,organic",
+      "targs4": "air,ground,debris,enemy,neutral,organic",
+      "Dur1": "1.0",
+      "HeroDur1": "0.5",
+      "Rng1": "100000.0",
+      "checkDep": "1",
+      "BuffID2": "BPSE",
+      "BuffID3": "BPSE",
+      "reqLevel": "1",
+      "Dur2": "2.0",
+      "Dur3": "3.0",
+      "Rng2": "100000.0",
+      "Rng3": "100000.0",
+      "HeroDur2": "1.0",
+      "HeroDur3": "1.5",
+      "BuffID4": "BPSE",
+      "Dur4": "4.0",
+      "HeroDur4": "2.0",
+      "Rng4": "100000.0"
+    },
+    "A14Y": {
+      "rawcode": "A14Y",
+      "name": "时空裂隙",
+      "tip": "时空裂隙",
+      "ubertip": "青铜龙探险者每隔5s，生命值会回到2s前的状态，同时下一次普攻会同时攻击4个单位造成100%的攻击力伤害",
+      "alias": "A14Y",
+      "code": "Asth",
+      "levels": "1",
+      "targs1": "_",
+      "targs2": "_",
+      "targs3": "_",
+      "targs4": "_"
+    },
+    "A14Z": {
+      "rawcode": "A14Z",
+      "name": "虫洞",
+      "tip": "虫洞",
+      "ubertip": "青铜龙守卫每隔4s，生命值会回到2s前的状态，同时下一次普攻会同时攻击4个单位造成150%的攻击力伤害",
+      "alias": "A14Z",
+      "code": "Asth",
+      "levels": "1",
+      "targs1": "_",
+      "targs2": "_",
+      "targs3": "_",
+      "targs4": "_"
+    },
+    "A150": {
+      "rawcode": "A150",
+      "name": "青铜龙分裂",
+      "tip": "弹幕攻击",
+      "ubertip": "对周围的敌方空中单位进行强有力的弹幕攻击。每次发射能造成13 - 14点的伤害。",
+      "alias": "A150",
+      "code": "Aroc",
+      "Area1": "500.0",
+      "DataB1": "999999.0",
+      "DataC1": "3",
+      "levels": "1",
+      "targs1": "enemies",
+      "targs2": "_",
+      "targs3": "_",
+      "targs4": "_",
+      "Dur1": "1.0",
+      "HeroDur1": "1.0",
+      "Cool1": "2.0"
+    },
+    "A151": {
+      "rawcode": "A151",
+      "name": "时间停滞",
+      "tip": "时间停滞",
+      "ubertip": "青铜龙守卫的攻击（包括虫洞的分裂攻击）有20%的几率使被攻击目标停滞1.5s",
+      "alias": "A151",
+      "code": "Asth",
+      "levels": "1",
+      "targs1": "_",
+      "targs2": "_",
+      "targs3": "_",
+      "targs4": "_"
+    }
+  },
+  "nativeEvidence": [
+    {
+      "url": "https://github.com/actboy168/YDWE/blob/master/Development/Plugin/Warcraft3/yd_jass_api/UnitState.cpp",
+      "supports": "0x14/0x15为主武器最小/最大攻击，公式base+bonus+dice与base+bonus+dice*sides。当前用对象范围与宿主直接攻击差值适配，动态原生bonus仍partial。",
+      "sha256": "cce69daa88a376177c31dacf52901e30f9bb37fd28cfb3abfbabe112a3d139a8",
+      "lineRanges": [
+        [
+          18,
+          23
+        ],
+        [
+          289,
+          294
+        ]
+      ]
+    },
+    {
+      "url": "https://github.com/Cokemonkey11/wc3-ability-doc/blob/main/sources/screwthetrees-wc3-editor-ability-insight-document/2023-11-14.md",
+      "supports": "原生Aroc武器伤害、暴击抑制；完整目标数量的既有来源见native-barrage-evidence.json。"
+    }
+  ],
+  "differences": [
+    "building h0QO A14Y -> combat h0QQ A14Z; building h0QP A14Z -> combat h0QR A14Y,A151; registration reads building",
+    "period5/4 always reads phase2 history, not rolling two seconds",
+    "A150 damage P8 starts0, no ordinary eventdamage assignment, h0QR branch replaces to half randomattack in normal configuration",
+    "h0QQ/h0QR absent from Q self-registration; victim must be registered for attack-start counter to execute; Q parent1 registrations do not qualify",
+    "A150 count lives in sourcehashtable and is not reset when regranted",
+    "PauseUnitEx1.5 truncates stunlevel1 and separately freezes animation1.5"
+  ],
+  "remaining": [
+    "native Aroc missiles/targetorder, PRNG, dynamic native attackbonus and native-version checks",
+    "unimplemented P8-changing Varian/A16Z mixed-ability branches retained as unresolved, no guessed local damage",
+    "PauseUnitEx command arbitration and overlapping animationreset semantics",
+    "dead/removedhandle life value separate fromdeathstate; no fabricated resurrection",
+    "old snapshots without timer history do not receive invented history; a fresh deployment initializes it",
+    "Nozdormu hero A15A and A154/A155/A158 are outside this ordinary-unit batch and remain unresolved",
+    "AttackTrigegr的S006计时器与玩家2布尔值仅有宿主适配字段，混入其他家族时的共享状态仍待闭合；普通青铜龙配置不携带这些能力。",
+    "The host damage pipeline still conflates native rejected hits (invulnerability/immunity/evasion) with true zero events. Direct independent-listener calls can rewrite zero, but _hurt keeps its preexisting early-zero return and does not apply the returned override in that branch. Initial nonpositive damage also exits before listeners. Do not claim complete native zero-event production/ordering."
+  ]
+}

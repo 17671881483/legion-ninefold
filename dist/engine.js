@@ -1285,7 +1285,7 @@ export class Game {
     if (e.pendingAttack || e.hp <= 0 || target.hp <= 0 || target.team === e.team || target.battleTeam !== e.battleTeam ||
       e.buffs?.some(b => b.expiresAt > this.state.time && b.disarm)) return;
     const weapon = sourceWeapon(e, target,this.state.time); if (!weapon) return;
-    sourceAttackIssued(this,e);
+    sourceAttackIssued(this,e,target);
     const sourceWindup = Math.max(0, number(weapon.raw[`dmgpt${weapon.slot}`], 0));
     if (!sourceWindup) { this._attack(e, target, battle, true); return; }
     let haste = this._auraEffects(e, battle.auras).attackSpeedMultiplier;
@@ -1315,7 +1315,7 @@ export class Game {
     const ability = e.ability, type = ability?.type;
     if(e.buffs?.some(b=>b.expiresAt>this.state.time&&b.disarm))return;
     const weapon=sourceWeapon(e,target,this.state.time);if(!weapon)return;
-    if(!alreadyIssued)sourceAttackIssued(this,e);
+    if(!alreadyIssued)sourceAttackIssued(this,e,target);
     const sourceAttack=sourceAttackStart(this,e,target);
     const attackAuras = this._auraEffects(e, lane.auras), targetAuras = this._auraEffects(target, lane.auras);
     let damage = (weapon.damage * sourceAttack.multiplier+sourceAttack.bonus)*sourceAttack.outgoingFactor, haste = attackAuras.attackSpeedMultiplier;
@@ -1332,7 +1332,7 @@ export class Game {
     const dealt = damage * multiplier * armorFactor;
     const actual=this._hurt(target,dealt,e,{magic:weapon.attackType==='magic',attackType:weapon.attackType});
     if(actual>0&&e.hp>0)sourceOnHit(this,e,target,lane,actual,sourceAttack.procs,damage);
-    this._event(e.range > 1 ? 'projectile' : 'hit', target, `${Math.round(dealt)}`, { fromX: e.x, fromY: e.y, fromWorldX: e.worldX, fromWorldY: e.worldY, color: e.color });
+    this._event(e.range > 1 ? 'projectile' : 'hit', target, `${Math.round(actual ?? dealt)}`, { fromX: e.x, fromY: e.y, fromWorldX: e.worldX, fromWorldY: e.worldY, color: e.color });
     for(const other of barrageTargets)sourceBarrageHit(this,e,other,lane,weapon,barrageDamage);
     if (e.hp <= 0) return;
     if (!ability || type === 'crit' || this._random() > number(ability.chance, 1)) return;
@@ -1361,12 +1361,15 @@ export class Game {
     const registeredDamageListeners=sourceDamageListeners(this,target);
     const revivalCount=target.status.yseraRevivalCount??0;
     let actual = modifyIncoming(this,target,damage,attacker,options);
+    // The host still conflates native rejected hits with true zero-damage
+    // events. Preserve its rejection here: a listener override must not turn
+    // an invulnerable / immune target into a valid damage recipient.
     if(actual<=0){if((target.status.yseraRevivalCount??0)>revivalCount)beforeSourceDamage(this,target,0,attacker,options);sourceClassAttackDamageEvent(this,target,attacker,options,0);sourceRegisteredDamageEvent(this,target,registeredDamageListeners);return 0;}
     if ((target.status.shield ?? 0) > 0 && !legacyPure) { const absorbed = Math.min(actual, target.status.shield); target.status.shield -= absorbed; actual -= absorbed; }
     actual=beforeSourceDamage(this,target,actual,attacker,options)??actual;
     actual=brightArthasEventDamage(this,target,actual,attacker);
     // Main damage listener was registered before New_UnitAttack in the map.
-    sourceClassAttackDamageEvent(this,target,attacker,options,actual);
+    actual=sourceClassAttackDamageEvent(this,target,attacker,options,actual)??actual;
     actual=sourceRegisteredDamageEvent(this,target,registeredDamageListeners,actual);
     const sourcePreDamageHp=target.hp;
     target.hp -= actual;
@@ -1762,7 +1765,7 @@ export class Game {
     for(const e of [...this.state.entities,...this.state.kings])if(this.state.aesaraHandles[e.id])this.state.aesaraHandles[e.id]=e;
     for(const e of [...this.state.entities,...this.state.kings]){if(this.state.soulToxinHandles[e.id])this.state.soulToxinHandles[e.id]=e;if(this.state.livingBombHandles[e.id])this.state.livingBombHandles[e.id]=e;}
     for(const j of this.state.sourceSkillJobs)if(['huskar_unyielding','huskar_duel_immune'].includes(j.type)){const e=[...this.state.entities,...this.state.kings].find(e=>e.id===j.sourceId);if(e)j.source=e;}
-    for(const j of this.state.sourceSkillJobs)if(isSkeletonKingJobType(j.type)){const e=this.state.entities.find(e=>e.id===j.sourceId);if(e)j.source=e;}
+    for(const j of this.state.sourceSkillJobs)if(isSkeletonKingJobType(j.type)||j.type==='bronze_fissure'){const e=this.state.entities.find(e=>e.id===j.sourceId);if(e)j.source=e;}
     if (saved.version === 1) {
       this.state.map = { id: MAP.id, version: MAP.version, topology: '2x2-crossbar-stem' };
       for (const e of this.state.entities) {

@@ -1,6 +1,6 @@
 {
   "sourceVersion": "v14.1A5",
-  "skillImplementationRevision": "v14-content-20261030-v40-1",
+  "skillImplementationRevision": "v14-content-20261030-v41-1",
   "units": 534,
   "mercenaryRecords": 60,
   "mainWaves": 35,
@@ -98,6 +98,19 @@
       "sourceRawcode": "h0Q2",
       "abilityIds": [
         "A12B"
+      ]
+    },
+    {
+      "sourceRawcode": "h0QQ",
+      "abilityIds": [
+        "A150"
+      ]
+    },
+    {
+      "sourceRawcode": "h0QR",
+      "abilityIds": [
+        "A150",
+        "A0I7"
       ]
     },
     {
@@ -321,9 +334,9 @@
   "playerSkills": {
     "counts": {
       "implemented": 405,
-      "partial": 113,
+      "partial": 117,
       "marker": 34,
-      "unresolved": 102
+      "unresolved": 99
     },
     "abilities": [
       {
@@ -2732,7 +2745,8 @@
         "kind": "soul_toxin_source",
         "unitRawcodes": [
           "e008",
-          "h0Q5"
+          "h0Q5",
+          "h0QR"
         ]
       },
       {
@@ -4961,8 +4975,8 @@
       {
         "rawcode": "A14Y",
         "name": "时空裂隙",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "bronze_dragon_source",
         "unitRawcodes": [
           "h0QP"
         ]
@@ -4970,17 +4984,27 @@
       {
         "rawcode": "A14Z",
         "name": "虫洞",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "bronze_dragon_source",
         "unitRawcodes": [
           "h0QO"
         ]
       },
       {
+        "rawcode": "A150",
+        "name": "青铜龙分裂",
+        "status": "partial",
+        "kind": "native_barrage",
+        "unitRawcodes": [
+          "h0QQ",
+          "h0QR"
+        ]
+      },
+      {
         "rawcode": "A151",
         "name": "时间停滞",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "bronze_dragon_source",
         "unitRawcodes": [
           "h0QP"
         ]
@@ -7079,9 +7103,9 @@
   "battleSkills": {
     "counts": {
       "implemented": 455,
-      "partial": 119,
+      "partial": 123,
       "marker": 47,
-      "unresolved": 118
+      "unresolved": 115
     },
     "abilities": [
       {
@@ -9856,7 +9880,8 @@
         "kind": "soul_toxin_source",
         "unitRawcodes": [
           "e008",
-          "h0Q5"
+          "h0Q5",
+          "h0QR"
         ]
       },
       {
@@ -12301,8 +12326,8 @@
       {
         "rawcode": "A14Y",
         "name": "时空裂隙",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "bronze_dragon_source",
         "unitRawcodes": [
           "h0QP"
         ]
@@ -12310,17 +12335,27 @@
       {
         "rawcode": "A14Z",
         "name": "虫洞",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "bronze_dragon_source",
         "unitRawcodes": [
           "h0QO"
         ]
       },
       {
+        "rawcode": "A150",
+        "name": "青铜龙分裂",
+        "status": "partial",
+        "kind": "native_barrage",
+        "unitRawcodes": [
+          "h0QQ",
+          "h0QR"
+        ]
+      },
+      {
         "rawcode": "A151",
         "name": "时间停滞",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "bronze_dragon_source",
         "unitRawcodes": [
           "h0QP"
         ]
@@ -14926,6 +14961,7 @@
     }
   ],
   "remainingSourceGaps": [
+    "青铜龙按建筑体A14Y/A14Z登记5/4秒回溯第2秒生命比例，并授予A150；保留战斗体技能交叉、攻击事件登记门槛及第二次移除。A151按PauseUnitEx(1.5)请求等级1控制；h0QR分裂期间普通配置事件改写为随机攻击一半而非文案150%。原生弹道/上下限动态字段、混合P8前置分支、死亡句柄写生命与旧档历史仍partial，见bronze-dragon-evidence.json。",
     "荒漠巨蜥A129/A12A分别保留伤害事件倒计数、7/8实数概率和共享Bblo移除；动态A12B仅请求，原生缺失耗魔/移动字段未猜。A12C每8次事件回复200并添加A12I，下一非第8次事件移除；普通连续攻击第9/17次暴击。A12K读取0.65承伤，非文案45%减伤，混合防御边界仍partial；见desert-lizard-evidence.json。",
     "毒蝎A10H/A10I/A10J主伤害脚本接入，保留新星任意正敌对伤害触发、128/250范围与150普通伤害、受击者自身近战门槛。shadowstrike与e00W毒素攻击马甲仅记录请求；A10G连续附毒沿用现有适配，原生跳数、DataD1=9叠加和类型未核定，四项均为partial，见scorpion-evidence.json。",
     "风暴蜥蜴A12F落雷接入点选施法、独立武器伤害自动请求、100范围随机主目标及100/200/300范围分层伤害；A12H保留双方优先级与攻击者monsoon门槛，并动态授予A12G。ANmo额外伤害/施法时序、雷雨A12E、原生链A12G递减等字段尚未闭合；A12F/A12H为partial，A12E/A12G仍unresolved，见storm-lizard-evidence.json。",

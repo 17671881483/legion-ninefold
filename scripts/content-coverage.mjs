@@ -7,7 +7,7 @@ import { compileSkills, SKILL_IMPLEMENTATION_REVISION } from '../dist/skills.js'
 const current=UNITS.filter(u=>!u.legacy);
 // Building commands are absent from many combat-form ability lists.
 const playerBuildingCommands=current.filter(u=>u.buildingAbilityIds?.includes('A118')).map(u=>({...u,abilityIds:u.buildingAbilityIds.filter(id=>['A118','A0IH'].includes(id))}));
-const playerBuildingRuleCarriers=current.filter(u=>u.buildingAbilityIds?.some(id=>['A0RF','A0JE'].includes(id))).map(u=>({...u,abilityIds:u.buildingAbilityIds.filter(id=>['A0RF','A0JE'].includes(id))}));
+const playerBuildingRuleCarriers=current.filter(u=>u.buildingAbilityIds?.some(id=>['A0RF','A0JE','A1BL'].includes(id))).map(u=>({...u,abilityIds:u.buildingAbilityIds.filter(id=>['A0RF','A0JE','A1BL'].includes(id))}));
 // This form is created by YseraAwakening at runtime, so it is not a separate
 // build-menu record. Its skills still belong to the player's combat coverage.
 const playerRuntimeForms=['h0YO','h0UD','h0UE','h2AE','n06V','n06W','h0CZ','h0CL','n07J','h03E','h0V2','h03K','h0SU','n0SD','h2AC'].map(code=>UNIT_TEMPLATES[code]);
@@ -23,6 +23,8 @@ const playerRuntimeAbilities=[
   {sourceRawcode:'h0JP',abilityIds:['A0IQ','A0IS']},
   {sourceRawcode:'h0Q5',abilityIds:['A12G','A0I7']},
   {sourceRawcode:'h0Q2',abilityIds:['A12B']},
+  {sourceRawcode:'h0QE',abilityIds:['A14E']},
+  {sourceRawcode:'h0UX',abilityIds:['A14E']},
   {sourceRawcode:'h0QQ',abilityIds:['A150']},
   {sourceRawcode:'h0QR',abilityIds:['A150','A0I7']},
   {sourceRawcode:'h0Q3',abilityIds:['A12B','A12I']},
@@ -72,6 +74,7 @@ const result={
   battleSkills:collect([...current,...playerBuildingCommands,...playerBuildingRuleCarriers,...playerRuntimeForms,...playerRuntimeAbilities,...MERCENARIES,...WAVES,...specialCodes.map(c=>UNIT_TEMPLATES[c])]),
   sourceOnlyCombatForms:[{combatRawcode:'h0JR',buildingRawcode:'n00S',status:'entry-unresolved',evidence:'war3map.j:17544-17545 maps forms; line3644 ban dialog; 48355 barracks egg marker and 48750 monthly record do not provide acquisition',skills:collect([{...UNIT_TEMPLATES.h0JR,abilityIds:[...UNIT_TEMPLATES.h0JR.abilityIds,'A0J2','A0J3']}])},{combatRawcode:'h0VQ',buildingRawcode:'n07U',status:'entry-unresolved',evidence:'war3map.j:17436-17437 maps forms; line3638 ban limit1; no source creation/recipe/upgrade entry found in packet',skills:collect([{...UNIT_TEMPLATES.h0VQ,abilityIds:[...UNIT_TEMPLATES.h0VQ.abilityIds,'A1QI','A1D6']}])}],
   remainingSourceGaps:[
+    '木乃伊/法老王按建筑登记：A14F每5秒蓄水池抽样，命令接受才授予永久A14E，4次成功或widget死亡终止；已登记句柄死亡后2.01秒移除A14E。普通n061只有A1BL，不伪造一次性移除。ANcl资源/仲裁为部分适配，ACrn缺Cost1及复生事件模型，当前不实际复活；见mummy-evidence.json。',
     '青铜龙按建筑体A14Y/A14Z登记5/4秒回溯第2秒生命比例，并授予A150；保留战斗体技能交叉、攻击事件登记门槛及第二次移除。A151按PauseUnitEx(1.5)请求等级1控制；h0QR分裂期间普通配置事件改写为随机攻击一半而非文案150%。原生弹道/上下限动态字段、混合P8前置分支、死亡句柄写生命与旧档历史仍partial，见bronze-dragon-evidence.json。',
     '荒漠巨蜥A129/A12A分别保留伤害事件倒计数、7/8实数概率和共享Bblo移除；动态A12B仅请求，原生缺失耗魔/移动字段未猜。A12C每8次事件回复200并添加A12I，下一非第8次事件移除；普通连续攻击第9/17次暴击。A12K读取0.65承伤，非文案45%减伤，混合防御边界仍partial；见desert-lizard-evidence.json。',
     '毒蝎A10H/A10I/A10J主伤害脚本接入，保留新星任意正敌对伤害触发、128/250范围与150普通伤害、受击者自身近战门槛。shadowstrike与e00W毒素攻击马甲仅记录请求；A10G连续附毒沿用现有适配，原生跳数、DataD1=9叠加和类型未核定，四项均为partial，见scorpion-evidence.json。',

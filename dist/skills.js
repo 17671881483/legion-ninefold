@@ -1,3 +1,4 @@
+import {MUMMY_RULES,initializeMummyDeployment,tickMummyJob,mummyWidgetDeath} from './mummy-rules.js';
 import {BRONZE_DRAGON_RULES,initializeBronzeDeployment,tickBronzeJob,bronzeAttackIssued,bronzeAttackDamage} from './bronze-dragon-rules.js';
 import {DESERT_LIZARD_RULES,desertLizardAttackDamage,desertLizardIncoming} from './desert-lizard-rules.js';
 import {SCORPION_RULES,scorpionMainDamage} from './scorpion-rules.js';
@@ -41,7 +42,7 @@ import { closestWalkable, isWalkable } from './layout.js';
 import { GARROSH_ACTIVE_RULES, GARROSH_PASSIVE_RULES, canGarroshCastAbility, castGarroshAbility, tryGarroshAutoCast, garroshActiveAfterDamage, sourceGarroshActiveDeath, tickGarroshActiveJob } from './garrosh-active-rules.js';
 import { ILLIDAN_RULES, ILLIDAN_ACTIVE_RULES, canIllidanCastAbility, castIllidanAbility, registerIllidanSource, tickIllidanSource, illidanOnAttackHit, tryIllidanAutoCast, illidanAfterDamage, sourceIllidanDeath, tickIllidanJob, isIllidanJobType } from './illidan-rules.js';
 
-export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261030-v41-1';
+export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261030-v42-1';
 
 // Values come from resolved object fields. Empty fields remain empty: a missing
 // native default is reported, rather than replacing it with tooltip numbers.
@@ -226,6 +227,7 @@ function compile(id,version='5.0dJF') {
   if(version==='v14.1A5'&&UNSTABLE_ALCHEMY_RULES[id]){const r=UNSTABLE_ALCHEMY_RULES[id];Object.assign(s,{kind:'unstable_alchemy_source',status:r.status,runtimeImplemented:true,effectText:r.description+`【待核定：${r.partial}】`});}
   if(version==='v14.1A5'&&UNDEAD_LEGION_RULES[id]){const r=UNDEAD_LEGION_RULES[id];Object.assign(s,{kind:'undead_legion_source',status:r.status,runtimeImplemented:true,effectText:r.description+`【待核定：${r.partial}】`});}
   if(version==='v14.1A5'&&LIVING_BOMB_RULES[id]){const r=LIVING_BOMB_RULES[id];Object.assign(s,{kind:'living_bomb_source',status:r.status,runtimeImplemented:r.status==='partial',effectText:r.description+`【待核定：${r.partial}】`});}
+  if(version==='v14.1A5'&&MUMMY_RULES[id]){const r=MUMMY_RULES[id];Object.assign(s,{kind:'mummy_source',status:r.status,runtimeImplemented:true,effectText:r.description+`【待核定：${r.partial}】`});}
   if(version==='v14.1A5'&&BRONZE_DRAGON_RULES[id]){const r=BRONZE_DRAGON_RULES[id];Object.assign(s,{kind:r.nativeKind?s.kind:'bronze_dragon_source',status:r.status,runtimeImplemented:true,effectText:r.description+`【待核定：${r.partial}】`});}
   if(version==='v14.1A5'&&DESERT_LIZARD_RULES[id]){const r=DESERT_LIZARD_RULES[id];Object.assign(s,{kind:r.nativeKind?s.kind:'desert_lizard_source',status:r.status,runtimeImplemented:r.status==='partial',effectText:r.description+`【待核定：${r.partial}】`});}
   if(version==='v14.1A5'&&SCORPION_RULES[id]){const r=SCORPION_RULES[id];Object.assign(s,{kind:id==='A10G'?'poison':'scorpion_source',status:r.status,runtimeImplemented:true,effectText:r.description+`【待核定：${r.partial}】`});}
@@ -574,7 +576,7 @@ export function sourceClassAttackDamageEvent(game,target,attacker,options={},amo
   try{darkArthasAttackDamage(attacker,amount);vashjOnAttackDamage(game,attacker,target,heroScriptApi);blademasterAttack(game,attacker,heroScriptApi);sourceClassOnAttackDamage(game,attacker,target,heroScriptApi);banditAttackOrders(game,attacker,target,heroScriptApi);amount=bronzeAttackDamage(game,attacker,target,amount,heroScriptApi);desertLizardAttackDamage(game,attacker,heroScriptApi);stormLizardAttackDamage(game,attacker,target,heroScriptApi);huskarAttackDamage(game,attacker,target,amount,heroScriptApi);const manaBranch=destroyerAttackDamage(game,attacker,heroScriptApi);taurenAttackDamage(game,attacker,target,heroScriptApi,manaBranch?'A0IN':null);return amount;}finally{attacker.status.sourceNativeAttackBusy=false;}
 }
 export function initializeSourceClassCombat(game,building,entity){
-  if(isV14(entity)){initializeBronzeDeployment(game,building,entity);initializeBlademaster(game,building,entity);initializeNightmareDeployment(game,entity);initializeBrightArthasDeployment(game,building,entity);initializeLichKingDeployment(game,entity);initializeVashjDeployment(game,building,entity);return initializeSourceClassDeployment(game,building,entity,heroScriptApi);}
+  if(isV14(entity)){initializeMummyDeployment(game,building,entity);initializeBronzeDeployment(game,building,entity);initializeBlademaster(game,building,entity);initializeNightmareDeployment(game,entity);initializeBrightArthasDeployment(game,building,entity);initializeLichKingDeployment(game,entity);initializeVashjDeployment(game,building,entity);return initializeSourceClassDeployment(game,building,entity,heroScriptApi);}
 }
 export function beforeSourceDamage(game,target,actual,attacker,options={}){
   const mainEventPosition=pos(target);
@@ -663,6 +665,7 @@ export function afterSourceDamage(game,target,actual,attacker,options={}) {
 }
 export function sourceDeath(game,target,killer) {
   if(target.status?.sourceDeathHandled)return;target.status.sourceDeathHandled=true;
+  if(isV14(target))mummyWidgetDeath(game,target,heroScriptApi);
   const mainDeathRan=runMainUnitDeath(game,target,killer,mainDeathApi);
   if(isV14(target)&&!mainDeathRan)sourceClassDeath(game,target,killer,heroScriptApi,false);
   // JSON restoration breaks live-object aliases. Rebind the retained script
@@ -877,6 +880,7 @@ export function tickSourceScriptJobs(game,dt=0){
   tickLivingBombJobs(game,heroScriptApi);
   const now=game.state.time,remaining=[];
   for(const job of game.state.sourceSkillJobs??[]){
+    if(job.type?.startsWith('mummy_')){if(tickMummyJob(game,job,heroScriptApi))remaining.push(job);continue;}
     if(job.type==='bronze_fissure'){if(tickBronzeJob(game,job,heroScriptApi))remaining.push(job);continue;}
     if(job.type==='living_bomb'){if(!job.done)remaining.push(job);continue;}
     if(job.type.startsWith('blademaster_')){if(tickBlademasterJob(game,job,heroScriptApi))remaining.push(job);continue;}

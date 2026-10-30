@@ -1765,7 +1765,9 @@ export class Game {
     for(const e of [...this.state.entities,...this.state.kings])if(this.state.aesaraHandles[e.id])this.state.aesaraHandles[e.id]=e;
     for(const e of [...this.state.entities,...this.state.kings]){if(this.state.soulToxinHandles[e.id])this.state.soulToxinHandles[e.id]=e;if(this.state.livingBombHandles[e.id])this.state.livingBombHandles[e.id]=e;}
     for(const j of this.state.sourceSkillJobs)if(['huskar_unyielding','huskar_duel_immune'].includes(j.type)){const e=[...this.state.entities,...this.state.kings].find(e=>e.id===j.sourceId);if(e)j.source=e;}
-    for(const j of this.state.sourceSkillJobs)if(isSkeletonKingJobType(j.type)||j.type==='bronze_fissure'){const e=this.state.entities.find(e=>e.id===j.sourceId);if(e)j.source=e;}
+    for(const j of this.state.sourceSkillJobs)if(isSkeletonKingJobType(j.type)||j.type==='bronze_fissure'||j.type?.startsWith('mummy_')){const e=this.state.entities.find(e=>e.id===j.sourceId);if(e)j.source=e;}
+    const mummyHandles=new Map([...this.state.entities,...this.state.kings].map(e=>[e.id,e]));
+    for(const j of this.state.sourceSkillJobs)if(j.type?.startsWith('mummy_')){if(!mummyHandles.has(j.sourceId)&&j.source)mummyHandles.set(j.sourceId,j.source);j.source=mummyHandles.get(j.sourceId);}
     if (saved.version === 1) {
       this.state.map = { id: MAP.id, version: MAP.version, topology: '2x2-crossbar-stem' };
       for (const e of this.state.entities) {

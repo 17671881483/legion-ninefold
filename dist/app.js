@@ -1,3 +1,4 @@
+import {isReincarnating} from './reincarnation-rules.js';
 import {Game} from './engine.js';
 import {MATCH_STORAGE_KEYS,matchMode,readMatch,writeMatch} from './match-storage.js';
 import {UNITS,MERCENARIES,HEROES,WAVES,RULES,BUILDERS} from './data.js';
@@ -359,7 +360,8 @@ function updateSelection(){
   else if(b&&(u.heroEntry||u.hero)){const node=document.createElement('p');node.className='unit-order';node.textContent=u.heroEntry?'祭坛已完成 · 从右侧选择英雄':`${unitLevel(u)||'英雄'} · 已完成${u.upgrades?.length?' · 可继续升级':' · 已到当前升级链末端'}`;$('selection').querySelector('.selection-copy').append(node);}
   if(selected?.type==='unit'&&u.heroEntry){const node=document.createElement('p');node.className='unit-order';node.dataset.deploymentStatus='';node.textContent=`${unitPrice(u)} · ${buildOptionStatus(u).reason||'已选择，点击自己的空格建造'}`;$('selection').querySelector('.selection-copy').append(node);}
   if(e?.status?.huskarDuelTag){const target=[...s.entities,...s.kings].find(t=>t.id===e.status.huskarDuelTag),note=document.createElement('p');note.className='unit-order';note.textContent=`决斗记录：${target?.name??'目标已离场'}${target?.hp>0?' · 双方已下达攻击命令':' · 保留原目标，不再次选择'}`;$('selection').querySelector('.selection-copy').append(note);}
-  if(e?.side==='defender'&&e.routeMode){const label={guard:'防区交战',return:'返回出生口',warp_wait:'等待协防传送',support:'王前协防'}[e.routeMode];if(label){const order=document.createElement('p');order.className='unit-order';order.textContent=`当前行动：${label}`;$('selection').querySelector('.selection-copy').append(order);}}
+  if(isReincarnating(e)){const note=document.createElement('p');note.className='unit-order';note.setAttribute('role','status');note.textContent=`复生中 · 剩余 ${Math.max(0,e.status.reincarnation.reviveAt-s.time).toFixed(1)} 秒`;note.dataset.reincarnation='waiting';$('selection').querySelector('.selection-copy h2').after(note);}
+  if(e?.side==='defender'&&e.routeMode&&!isReincarnating(e)){const label={guard:'防区交战',return:'返回出生口',warp_wait:'等待协防传送',support:'王前协防'}[e.routeMode];if(label){const order=document.createElement('p');order.className='unit-order';order.textContent=`当前行动：${label}`;$('selection').querySelector('.selection-copy').append(order);}}
   if(b&&p.id===0){
     const groups=splitUnitCategories((u.upgrades||[]).map(id=>defs[id]).filter(Boolean));
     const renderGroup=(targets,label,appearance=false)=>targets.length?`<span class="unit-order upgrade-group-label">${label}</span>`+targets.map(v=>`<button data-upgrade="${esc(v.id)}" data-unit-category="${appearance?'appearance':'upgrade'}" title="${esc(unitCategoryLabel(v))} · ${esc(documentUnit(v)?.conditionText||'需满足原有资格与条件')}" ${s.phase!=='build'||b.construction?'disabled':''}>${appearance?esc(unitBranchLabel(v)):u.heroEntry?'选择':'升级'} ${esc(unitDisplayName(v))}${unitLevel(v)?` <span class="hero-level">${unitLevel(v)}</span>`:''}<small>${esc(unitPrice(v,true))}</small><em class="upgrade-reason" data-upgrade-reason hidden></em></button>`).join(''):'';

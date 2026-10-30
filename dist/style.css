@@ -440,3 +440,7 @@ input:focus-visible,select:focus-visible{outline:2px solid #edcc83;outline-offse
 #sandbox-box-training{grid-column:1/-1;border-color:#b4995f;background:#39432b}
 .box-gift-test-note{color:#c6bb91}
 @media(max-width:700px){.box-gift-section>details>summary{padding:10px 8px}.box-gift-card{padding:10px 8px}.box-gift-field select,.box-gift-card>button{min-height:38px}}
+
+/* Keep the revival status visible and reserve the army summary row. */
+.selection-copy>[data-reincarnation="waiting"]{color:#f0d894;font-weight:600;margin:3px 0}
+@media(min-width:961px){.selection-panel{height:calc(100% - 26px);min-height:0;align-self:start;overflow-y:auto;scrollbar-width:thin}}

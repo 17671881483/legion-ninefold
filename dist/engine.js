@@ -6,7 +6,8 @@ import {resetLichKingRound} from './lich-king-rules.js';
 import {skeletonKingGate,beginSkeletonKingRoundFinish,tickSkeletonKingLifecycle,isSkeletonKingJobType} from './skeleton-king-rules.js';
 import {sourceBarrageTargets,sourceBarrageHit} from './skills.js';
 import { UNITS, MERCENARIES, LEGACY_MERCENARIES, WAVES, RULES, HEROES, BUILDERS, PROPHET_POOLS, UNIT_TEMPLATES, TECHNOLOGIES, BOX_TRAINING_RULES } from './data.js';
-import { attachSkills, refreshSourceSkills, initializeSourceSkills, initializeSourceClassCombat, sourceClassAttackDamageEvent, sourceDamageListeners, sourceRegisteredDamageEvent, brightArthasEventDamage, compileSkills, sourceAuraEffects, hasSourceAura, tickSourceSkills, sourceAttackIssued, sourceAttackStart, sourceOnHit, modifyIncoming, beforeSourceDamage, afterSourceDamage, sourceDeath, sourceMoveFactor, canWeaponTarget, sourceWeapon, tickSourceScriptJobs, manualSourceSkills, castManualSourceSkill, stormLizardChanneling } from './skills.js';
+import { attachSkills, refreshSourceSkills, initializeSourceSkills, initializeSourceClassCombat, sourceClassAttackDamageEvent, sourceDamageListeners, sourceRegisteredDamageEvent, brightArthasEventDamage, compileSkills, sourceAuraEffects, hasSourceAura, tickSourceSkills, sourceAttackIssued, sourceAttackStart, sourceOnHit, modifyIncoming, beforeSourceDamage, afterSourceDamage, sourceDeath, trySourceReincarnation, sourceMoveFactor, canWeaponTarget, sourceWeapon, tickSourceScriptJobs, manualSourceSkills, castManualSourceSkill, stormLizardChanneling } from './skills.js';
+import {isReincarnating,countsForBattle,reincarnationLethal} from './reincarnation-rules.js';
 import { initializeSourceClassBuilding } from './source-class-rules.js';
 import { MAP, laneToWorld, worldToLane, kingWorld, spawnWarpWorld, supportWorld, routePoints, isWalkable, isSegmentWalkable, constrainPoint, closestWalkable, navigationPath } from './layout.js';
 import { recordEggCompletion, restoreEggHistory, finishEggWave, recordBeastKingKill, eggRequirementStatus, appearanceQualificationStatus } from './egg-rules.js';
@@ -937,7 +938,7 @@ export class Game {
     }
     tickSourceScriptJobs(this,dt);
     this._updateEntities(dt);
-    if(s.roundMode==='arena'){this._clearDead();s.arenaRemaining=Math.max(0,(s.arenaRemaining??120)-dt);const alive=[0,1].map(team=>s.entities.some(e=>e.team===team&&e.hp>0));if(!alive[0]||!alive[1]||s.arenaRemaining<=0)this._endArena(alive);return;}
+    if(s.roundMode==='arena'){this._clearDead();s.arenaRemaining=Math.max(0,(s.arenaRemaining??120)-dt);const alive=[0,1].map(team=>s.entities.some(e=>e.team===team&&countsForBattle(e)));if(!alive[0]||!alive[1]||s.arenaRemaining<=0)this._endArena(alive);return;}
     this._updateKings(dt);
     this._clearDead();
     if (s.phase === 'ended') return;
@@ -945,7 +946,7 @@ export class Game {
     this._warpTimer += dt;
     if (this._warpTimer >= 1 - 1e-9) { this._warpTimer = Math.max(0, this._warpTimer - 1); this._warpDefenders(); }
     if(s.mode !== 'sandbox' && s.wave>=31){if(s.wave<35){s.continuousRemaining=Math.max(0,(s.continuousRemaining??50)-dt);if(s.continuousRemaining<=0)this._advanceContinuous();}}
-    else if (!this._spawnQueue.length && !s.entities.some(e => e.side === 'monster' && e.hp > 0)) this._endCombat();
+    else if (!this._spawnQueue.length && !s.entities.some(e => e.side === 'monster' && countsForBattle(e))) this._endCombat();
     // A very long stalled wave receives visible reinforcements, preserving actual combat.
     if (RULES.webFrenzyEnabled === true && this._roundTime > 100 && !this._overtime) {
       this._overtime = true; this._log('战斗持续过久：双方获得狂暴，攻击速度提升。');
@@ -1135,6 +1136,7 @@ export class Game {
     this._spatial = [new Map(), new Map()]; this._worldEntities = new Map();
     for (const battle of battles) battle.auras = [];
     for (const e of entities) {
+      if(isReincarnating(e)){e.hp=0;e.pendingAttack=null;continue;}
       if (e.hp <= 0) { e.pendingAttack = null; continue; }
       if (e.expiresAt && e.expiresAt <= now) { e.hp = 0; e.pendingAttack = null; continue; }
       if(e.status.yseraHidden)continue;
@@ -1356,6 +1358,7 @@ export class Game {
     }
   }
   _hurt(target, damage, attacker, pure = false) {
+    if(isReincarnating(target))return 0;
     if (target.hp <= 0 || damage <= 0 || (target.status?.cycloneUntil??0)>(this._aesaraEventAt??this._brightArthasEventAt??this._arthasEventAt??this._lichEventAt??this._vashjEventAt??this._iceEventAt??this._trollEventAt??this._kelthuzadEventAt??this.state.time)) return 0;
     const options=typeof pure==='object'?pure:{spell:!!pure},legacyPure=typeof pure==='boolean'&&pure;
     const registeredDamageListeners=sourceDamageListeners(this,target);
@@ -1390,7 +1393,9 @@ export class Game {
     return true;
   }
   _settleDeath(target,attacker){
-    if (target.hp <= 0 && !target.status.deathCounted) {
+    if (reincarnationLethal(target) && !target.status.deathCounted) {
+      if(target.hp>0)target.hp=0;
+      if(trySourceReincarnation(this,target))return;
       target.status.deathCounted = true;
       const economicPlayer=this.state.players[attacker?.ownerId];
       this._sourceDeath(target,attacker);
@@ -1463,7 +1468,7 @@ export class Game {
     // entry into the central stem, not immediately at the build-zone exit.
     for (let laneId = 0; laneId < 8; laneId++) {
       if (this._settledLanes.includes(laneId) || this._spawnQueue.some(e => e.laneId === laneId)) continue;
-      if (this.state.entities.some(e => e.sourceLaneId === laneId && e.side === 'monster' && !e.status.enteredStem && e.hp > 0)) continue;
+      if (this.state.entities.some(e => e.sourceLaneId === laneId && e.side === 'monster' && !e.status.enteredStem && countsForBattle(e))) continue;
       this._settledLanes.push(laneId);
       const player = this.state.players[laneId]; if (!player.roundLeaks) player.stats.wavesHeld++;
       // The original clear-lane trigger supplies a return order even to units
@@ -1525,9 +1530,9 @@ export class Game {
     }
   }
   _clearDead() {
-    for (const e of this.state.entities) if (e.expiresAt && e.expiresAt <= this.state.time) {e.hp = 0;this._sourceDeath(e,null);}
+    for (const e of this.state.entities) if (e.expiresAt && e.expiresAt <= this.state.time) {e.hp = 0;if(isReincarnating(e)){e.status.reincarnation.phase='cancelled';e.status.reincarnation.reason='expired';}this._sourceDeath(e,null);}
     retainBroodmotherAlliance(this);
-    this.state.entities = this.state.entities.filter(e => e.hp > 0);
+    this.state.entities = this.state.entities.filter(countsForBattle);
   }
   _endCombat() {
     const s = this.state;
@@ -1593,7 +1598,7 @@ export class Game {
   }
   _advanceContinuous(){
     if (this.state.mode === 'sandbox') return;
-    const s=this.state;if(s.wave>=35)return;const survivors=s.entities.filter(e=>e.hp>0),jobs=s.sourceSkillJobs??[],nagaCasters=s.nagaScriptCasters??{},arthasCasters=s.darkArthasCasters??{},brightHandles=s.brightArthasHandles??{},aesaraHandles=s.aesaraHandles??{},soulToxinHandles=s.soulToxinHandles??{},livingBombHandles=s.livingBombHandles??{},oldTime=this._roundTime,queue=this._spawnQueue.map(e=>({...e,at:Math.max(0,e.at-oldTime)}));
+    const s=this.state;if(s.wave>=35)return;const survivors=s.entities.filter(countsForBattle),jobs=s.sourceSkillJobs??[],nagaCasters=s.nagaScriptCasters??{},arthasCasters=s.darkArthasCasters??{},brightHandles=s.brightArthasHandles??{},aesaraHandles=s.aesaraHandles??{},soulToxinHandles=s.soulToxinHandles??{},livingBombHandles=s.livingBombHandles??{},oldTime=this._roundTime,queue=this._spawnQueue.map(e=>({...e,at:Math.max(0,e.at-oldTime)}));
     s.wave++;s.phase='build';this._startCombat({continuousJoin:true});s.sourceSkillJobs=jobs;s.nagaScriptCasters=nagaCasters;s.darkArthasCasters=arthasCasters;s.brightArthasHandles=brightHandles;s.aesaraHandles=aesaraHandles;s.soulToxinHandles=soulToxinHandles;s.livingBombHandles=livingBombHandles;s.entities=[...survivors,...s.entities.filter(e=>e.side==='monster')];this._spawnQueue=[...queue,...this._spawnQueue].sort((a,b)=>a.at-b.at);
     s.continuousRemaining=s.wave<35?50:null;this._log(`连续进攻：第${s.wave}波已加入战场，存活守军与残怪保留。`);
   }

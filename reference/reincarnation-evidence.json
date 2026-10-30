@@ -1,0 +1,475 @@
+{
+  "scope": "A14E ACrn reincarnation host adapter; remains partial, not a claim of full native fidelity",
+  "source": {
+    "path": "reference/v14-source/raw_extracted/war3map.j",
+    "sha256": "e66c55b3b25b185c991be5613e21fbf5b2d598f3cc40f2f8cd01c23bcb828250",
+    "encoding": "latin1",
+    "lineSeparator": "LF"
+  },
+  "sourceEvidence": [
+    {
+      "line": 43447,
+      "text": "function RegisterMummyAbilityAction takes nothing returns nothing"
+    },
+    {
+      "line": 43448,
+      "text": "local trigger t=GetTriggeringTrigger()"
+    },
+    {
+      "line": 43449,
+      "text": "local unit Bc=LoadUnitHandle(O,GetHandleId(t),0)"
+    },
+    {
+      "line": 43450,
+      "text": "local integer BF=LoadInteger(O,GetHandleId(t),1)"
+    },
+    {
+      "line": 43451,
+      "text": "if GetTriggerEventId()==EVENT_WIDGET_DEATH then"
+    },
+    {
+      "line": 43452,
+      "text": "if GetUnitTypeId(Bc)==$68305144 then"
+    },
+    {
+      "line": 43453,
+      "text": "call SetUnitAnimation(Bc,\"spell alternate\")"
+    },
+    {
+      "line": 43454,
+      "text": "endif"
+    },
+    {
+      "line": 43455,
+      "text": "call YDWETimerDestroyEffect(2,AddSpecialEffect(\"[tx][jn]chuanjialingjian111.mdx\",GetUnitX(Bc),GetUnitY(Bc)))"
+    },
+    {
+      "line": 43456,
+      "text": "call TriggerRegisterTimerEvent(t,2.01,false)"
+    },
+    {
+      "line": 43457,
+      "text": "call DestroyEffect(LoadEffectHandle(O,GetHandleId(Bc),$41313446))"
+    },
+    {
+      "line": 43458,
+      "text": "else"
+    },
+    {
+      "line": 43459,
+      "text": "call UnitRemoveAbility(Bc,BF)"
+    },
+    {
+      "line": 43460,
+      "text": "call FlushChildHashtable(O,GetHandleId(t))"
+    },
+    {
+      "line": 43461,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 43462,
+      "text": "endif"
+    },
+    {
+      "line": 43463,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 43464,
+      "text": "set t=null"
+    },
+    {
+      "line": 43465,
+      "text": "endfunction"
+    },
+    {
+      "line": 43466,
+      "text": "function RegisterMummyAbility takes unit Bc,integer BF returns nothing"
+    },
+    {
+      "line": 43467,
+      "text": "local trigger t=CreateTrigger()"
+    },
+    {
+      "line": 43468,
+      "text": "call SaveAgentHandle(O,GetHandleId(t),0,Bc)"
+    },
+    {
+      "line": 43469,
+      "text": "call SaveInteger(O,GetHandleId(t),1,BF)"
+    },
+    {
+      "line": 43470,
+      "text": "call TriggerRegisterDeathEvent(t,Bc)"
+    },
+    {
+      "line": 43471,
+      "text": "call TriggerAddAction(t,function RegisterMummyAbilityAction)"
+    },
+    {
+      "line": 43472,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 43473,
+      "text": "set t=null"
+    },
+    {
+      "line": 43474,
+      "text": "endfunction"
+    },
+    {
+      "line": 43499,
+      "text": "function RegisterSuperMummyAbilityAction takes nothing returns nothing"
+    },
+    {
+      "line": 43500,
+      "text": "local trigger t=GetTriggeringTrigger()"
+    },
+    {
+      "line": 43501,
+      "text": "local unit Bc=LoadUnitHandle(O,GetHandleId(t),0)"
+    },
+    {
+      "line": 43502,
+      "text": "local integer BF=LoadInteger(O,GetHandleId(t),1)"
+    },
+    {
+      "line": 43503,
+      "text": "local group DG=SelectRangeNotMummy(Bc,GetUnitX(Bc),GetUnitY(Bc),600,BF)"
+    },
+    {
+      "line": 43504,
+      "text": "local unit Om=RadomOfGroup(DG)"
+    },
+    {
+      "line": 43505,
+      "text": "local integer D9=LoadInteger(O,GetHandleId(t),2)"
+    },
+    {
+      "line": 43506,
+      "text": "if GetTriggerEventId()==EVENT_WIDGET_DEATH then"
+    },
+    {
+      "line": 43507,
+      "text": "call FlushChildHashtable(O,GetHandleId(t))"
+    },
+    {
+      "line": 43508,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 43509,
+      "text": "else"
+    },
+    {
+      "line": 43510,
+      "text": "if Om!=null then"
+    },
+    {
+      "line": 43511,
+      "text": "if IssueTargetOrder(Bc,\"unflamingattack\",Om) then"
+    },
+    {
+      "line": 43512,
+      "text": "call UnitAddAbility(Om,BF)"
+    },
+    {
+      "line": 43513,
+      "text": "call UnitMakeAbilityPermanent(Om,true,BF)"
+    },
+    {
+      "line": 43514,
+      "text": "call RegisterMummyAbility(Om,BF)"
+    },
+    {
+      "line": 43515,
+      "text": "call SaveEffectHandle(O,GetHandleId(Om),$41313446,AddSpecialEffectTarget(\"Abilities\\\\Spells\\\\Items\\\\AIda\\\\AIdaTarget.mdl\",Om,\"overhead\"))"
+    },
+    {
+      "line": 43516,
+      "text": "set D9=D9+1"
+    },
+    {
+      "line": 43517,
+      "text": "if D9>=4 then"
+    },
+    {
+      "line": 43518,
+      "text": "call FlushChildHashtable(O,GetHandleId(t))"
+    },
+    {
+      "line": 43519,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 43520,
+      "text": "else"
+    },
+    {
+      "line": 43521,
+      "text": "call SaveInteger(O,GetHandleId(t),2,D9)"
+    },
+    {
+      "line": 43522,
+      "text": "endif"
+    },
+    {
+      "line": 43523,
+      "text": "endif"
+    },
+    {
+      "line": 43524,
+      "text": "endif"
+    },
+    {
+      "line": 43525,
+      "text": "endif"
+    },
+    {
+      "line": 43526,
+      "text": "call GroupClear(DG)"
+    },
+    {
+      "line": 43527,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 43528,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 43529,
+      "text": "set t=null"
+    },
+    {
+      "line": 43530,
+      "text": "set DG=null"
+    },
+    {
+      "line": 43531,
+      "text": "set Om=null"
+    },
+    {
+      "line": 43532,
+      "text": "endfunction"
+    },
+    {
+      "line": 43533,
+      "text": "function RegisterSupperMummyAbility takes unit Bc,integer BF,integer QE returns nothing"
+    },
+    {
+      "line": 43534,
+      "text": "local trigger t=CreateTrigger()"
+    },
+    {
+      "line": 43535,
+      "text": "call RegisterMummyAbility(Bc,QE)"
+    },
+    {
+      "line": 43536,
+      "text": "call SaveAgentHandle(O,GetHandleId(t),0,Bc)"
+    },
+    {
+      "line": 43537,
+      "text": "call SaveInteger(O,GetHandleId(t),1,QE)"
+    },
+    {
+      "line": 43538,
+      "text": "call TriggerRegisterTimerEvent(t,5,true)"
+    },
+    {
+      "line": 43539,
+      "text": "call TriggerRegisterDeathEvent(t,Bc)"
+    },
+    {
+      "line": 43540,
+      "text": "call TriggerAddAction(t,function RegisterSuperMummyAbilityAction)"
+    },
+    {
+      "line": 43541,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 43542,
+      "text": "set t=null"
+    },
+    {
+      "line": 43543,
+      "text": "endfunction"
+    },
+    {
+      "line": 43700,
+      "text": "if GetUnitAbilityLevel(Pf,$41313445)>0 then"
+    },
+    {
+      "line": 43701,
+      "text": "call RegisterMummyAbility(Bc,$41313445)"
+    },
+    {
+      "line": 43702,
+      "text": "endif"
+    },
+    {
+      "line": 43703,
+      "text": "if GetUnitAbilityLevel(Pf,$41313446)>0 then"
+    },
+    {
+      "line": 43704,
+      "text": "call RegisterSupperMummyAbility(Bc,$41313446,$41313445)"
+    },
+    {
+      "line": 43705,
+      "text": "endif"
+    },
+    {
+      "line": 48108,
+      "text": "call RemoveLocation(VV)"
+    },
+    {
+      "line": 48109,
+      "text": "endif"
+    },
+    {
+      "line": 48110,
+      "text": "endif"
+    },
+    {
+      "line": 48111,
+      "text": "if GetOwningPlayer(i)==Player(8) or GetOwningPlayer(i)==Player(9) then"
+    },
+    {
+      "line": 48112,
+      "text": "call GroupRemoveUnit(JW,i)"
+    },
+    {
+      "line": 48113,
+      "text": "call GroupRemoveUnit(Jw,i)"
+    },
+    {
+      "line": 48114,
+      "text": "call GroupRemoveUnit(Jx,i)"
+    },
+    {
+      "line": 48115,
+      "text": "call GroupRemoveUnit(J1,i)"
+    },
+    {
+      "line": 48116,
+      "text": "call GroupRemoveUnit(J1,i)"
+    },
+    {
+      "line": 48117,
+      "text": "call GroupRemoveUnit(JH[BF],i)"
+    },
+    {
+      "line": 48118,
+      "text": "call FlushChildHashtable(O,GetHandleId(i))"
+    },
+    {
+      "line": 48119,
+      "text": "if Nv==false then"
+    },
+    {
+      "line": 48120,
+      "text": "set Nv=true"
+    }
+  ],
+  "customFields": {
+    "rawcode": "A14E",
+    "code": "ACrn",
+    "DataA1": "2.0",
+    "Cast1": "2.0",
+    "Cool1": "240.0",
+    "Cost1": null
+  },
+  "nativeDefaults": [
+    {
+      "url": "https://github.com/sumneko/w3x2lni/blob/master/data/zhCN-1.24.4/prebuilt/Custom/ability.ini",
+      "gitBlobSha": "b726c6f485e56ca85fc42093dd83f2640cc3037b",
+      "ACrn": {
+        "line": 3703,
+        "fields": {
+          "cast": "{3.0,0.0,0.0,0.0}",
+          "cool": "{240.0,0.0,0.0,0.0}",
+          "cost": "{0,0,0,0}",
+          "dataa": "{7.0,0.0,0.0,0.0}",
+          "hero": "0"
+        }
+      }
+    },
+    {
+      "url": "https://github.com/sumneko/w3x2lni/blob/master/data/enUS-1.27.1/prebuilt/Custom/ability.ini",
+      "gitBlobSha": "0105224cb538776baef1e0a7ca7ce56eb342c316",
+      "ACrn": {
+        "line": 3703,
+        "fields": {
+          "cast": "{3.0,0.0,0.0,0.0}",
+          "cool": "{240.0,0.0,0.0,0.0}",
+          "cost": "{0,0,0,0}",
+          "dataa": "{7.0,0.0,0.0,0.0}",
+          "hero": "0"
+        }
+      }
+    }
+  ],
+  "externalEvidence": [
+    {
+      "url": "https://xgm.guru/p/wc3/197452",
+      "author": "quq_CCCP",
+      "claim": "TriggerRegisterDeathEvent fires on reincarnation; EVENT_UNIT_DEATH does not.",
+      "scope": "Author report, not this map runtime capture."
+    },
+    {
+      "url": "https://www.hiveworkshop.com/threads/detect-reincarnation.274322/",
+      "authors": [
+        "Ezekiel12",
+        "Bribe"
+      ],
+      "claim": "Waiting unit is dead according to native predicates. Ordinary unit-death event is skipped; Bribe describes separate lifecycle detection.",
+      "scope": "Generic engine lifecycle; does not prove map-specific table inheritance."
+    },
+    {
+      "url": "https://www.hiveworkshop.com/threads/reincarnation-summon.370049/",
+      "claim": "Author implementation checks cooldown has just started when reincarnation begins, and reads Ore1 delay.",
+      "scope": "Reforged author evidence for phase timing, not direct legacy ACrn validation."
+    },
+    {
+      "url": "https://classic.battle.net/war3/basics/spellbasics.shtml",
+      "claim": "Reincarnation death awards no experience; final death does.",
+      "scope": "Official generic mechanic; map gold behavior additionally follows skipping its UNIT_DEATH callback."
+    },
+    {
+      "url": "https://classic.battle.net/war3/orc/units/taurenchieftain.shtml",
+      "claim": "Official heroic variant returns with full mana.",
+      "scope": "Not an ACrn cost/default source. Full resource restoration in the host remains an explicitly recorded generic reincarnation inference."
+    }
+  ],
+  "mapMetadata": {
+    "w3iFormat": 25,
+    "editorVersion": 6052,
+    "warning": "Legacy header/title does not prove runtime patch or native table version."
+  },
+  "implemented": [
+    "A14E-only positive-level v14 lethal transition",
+    "2-second retained dead handle with no normal death/bounty",
+    "240-second cooldown starts on lethal transition",
+    "same handle/owner/position/building and script state",
+    "zero mana adapter using named ACrn table evidence",
+    "full HP/mana return adapter",
+    "widget listeners once including2.01s removal and pharaoh timer stop",
+    "pending bodies retained in cleanup/arena/wave/continuous mode",
+    "waiting marker and countdown",
+    "snapshot continuation without retroactive resurrection"
+  ],
+  "boundaries": [
+    "Actual map native default inheritance and exact engine version unverified",
+    "Full HP/mana restoration inferred from generic reincarnation; needs actual ACrn runtime capture",
+    "Native buff purge/persistence not implemented; existing Web expiry retained",
+    "Ability removal during the2-second pending phase and native collision/corpse/animation behavior unverified",
+    "No generic native table fill for any other ability",
+    "No original model/audio replacement; countdown is Web UI",
+    "Normal mummy has no script removal listener, therefore repeated revival after240 seconds is retained despite once-per-wave tooltip"
+  ]
+}

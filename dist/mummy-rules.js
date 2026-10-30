@@ -1,8 +1,8 @@
 import {V14_ABILITIES,V14_UNIT_TEMPLATES} from './v14-reference.js';
 
-const revivalBoundary='ACrn原生复活尚未实现：数据包缺Cost1及原生死亡/复活事件模型，不能把空耗魔当0，也不能拿英雄AOre默认值替代。当前只执行已登记的死亡后移除能力脚本，不凭说明令尸体回满血。';
+const revivalBoundary='已接入ACrn复生适配：致命伤害先进入死亡等待，2秒后同句柄恢复生命/魔法，期间只触发widget监听、不结算普通死亡。耗魔0取自1.24.4与1.27.1的ACrn默认表，不是将空字段直接当0；本图默认继承、生命/魔法恢复及buff持久性仍需原生实测，保留部分核定。';
 export const MUMMY_RULES={
- A14E:{status:'partial',description:'复生的已知原生参数为2秒延迟、240秒冷却。建筑有A14E时登记死亡移除；有A14F时另登记一次。收到widget死亡后2.01秒移除A14E，移除的是原句柄当时的能力。普通木乃伊建筑只有A1BL，不额外套一次性移除规则。',partial:revivalBoundary},
+ A14E:{status:'partial',description:'复生：致命伤害后2秒在原句柄恢复满生命/魔法，触发时开始240秒冷却。等待期间不能行动或受击，也不触发普通死亡奖励。建筑有A14E或A14F时分别登记死亡后2.01秒移除A14E；普通木乃伊建筑只有A1BL，不擅加一次性移除，冷却结束后可再次复生。',partial:revivalBoundary},
  A14F:{status:'partial',description:'建筑有复生秘咒时，每5秒在600范围的友军中逐个蓄水池抽样；排除已有A14E、召唤物及四个指定战斗体。命令接受才立即授予永久A14E并登记死亡移除，累计4次成功后停止；自身widget死亡也停止。',partial:'ANcl按显式28耗魔、5秒冷却和目标字段作即时命令适配；施法点、FollowThrough及原生命令仲裁未闭合。随机候选不会预先去掉尸体或自身；无效命令不重抽。'+revivalBoundary},
 };
 const level=(e,id)=>e?.skillSpecs?.some(s=>s.id===id)?e.abilityLevels?.[id]??1:0;
@@ -62,12 +62,11 @@ function grant(g,e,t,j,at,api){
  if(j.successes>=4)j.done=true;
 }
 
-// This entry is deliberately separate from UNIT_DEATH: native reincarnation
-// can emit widget death without the normal unit-death chain. The current host
-// calls it for terminal deaths; native reincarnation delivery remains pending.
+// Both terminal deaths and reincarnation enter the widget listener. Only a
+// terminal death enters the independent UNIT_DEATH chain and reward settlement.
 export function mummyWidgetDeath(g,e,api){
  const at=g.state.time;
- if(level(e,'A14E'))(e.status??={}).mummyReincarnationBoundary={at,delay:2,cooldown:240,missingManaCost:true,nativeRevivalUnresolved:true};
+ if(level(e,'A14E'))(e.status??={}).mummyReincarnationBoundary={at,delay:2,cooldown:240,manaCost:0,manaSource:'ACrn-versioned-default',adapterImplemented:true,nativeRevivalUnresolved:true};
  for(const j of [...jobs(g)]){
   if(j.sourceId!==e.id||j.done||!j.type?.startsWith('mummy_'))continue;j.source=e;
   if(j.type==='mummy_remove'){

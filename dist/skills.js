@@ -1,4 +1,5 @@
 import {KODO_RULES,canKodoCast,castKodo,kodoAttackOrders} from './kodo-rules.js';
+import {beginReincarnation,tickReincarnations,isReincarnating} from './reincarnation-rules.js';
 import {MUMMY_RULES,initializeMummyDeployment,tickMummyJob,mummyWidgetDeath} from './mummy-rules.js';
 import {BRONZE_DRAGON_RULES,initializeBronzeDeployment,tickBronzeJob,bronzeAttackIssued,bronzeAttackDamage} from './bronze-dragon-rules.js';
 import {DESERT_LIZARD_RULES,desertLizardAttackDamage,desertLizardIncoming} from './desert-lizard-rules.js';
@@ -43,7 +44,7 @@ import { closestWalkable, isWalkable } from './layout.js';
 import { GARROSH_ACTIVE_RULES, GARROSH_PASSIVE_RULES, canGarroshCastAbility, castGarroshAbility, tryGarroshAutoCast, garroshActiveAfterDamage, sourceGarroshActiveDeath, tickGarroshActiveJob } from './garrosh-active-rules.js';
 import { ILLIDAN_RULES, ILLIDAN_ACTIVE_RULES, canIllidanCastAbility, castIllidanAbility, registerIllidanSource, tickIllidanSource, illidanOnAttackHit, tryIllidanAutoCast, illidanAfterDamage, sourceIllidanDeath, tickIllidanJob, isIllidanJobType } from './illidan-rules.js';
 
-export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261030-v43-1';
+export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261030-v44-1';
 
 // Values come from resolved object fields. Empty fields remain empty: a missing
 // native default is reported, rather than replacing it with tooltip numbers.
@@ -665,6 +666,12 @@ export function afterSourceDamage(game,target,actual,attacker,options={}) {
   if(attacker.combatRawcode==='n0S6'&&target.hp>0&&!active(target).some(s=>s.kind==='immunity'))game._hurt(target,target.maxHp*.01*game._typeMultiplier('magic',target.armorType,target.sourceArmorTypeRaw??target.sourceRawFields?.defType),attacker,{magic:true,spell:true,scripted:true});
   } finally {game._sourceDamageTriggerDepth--;}
 }
+export function trySourceReincarnation(game,target) {
+  if(isReincarnating(target))return true;
+  if(!beginReincarnation(game,target))return false;
+  mummyWidgetDeath(game,target,heroScriptApi);
+  return true;
+}
 export function sourceDeath(game,target,killer) {
   if(target.status?.sourceDeathHandled)return;target.status.sourceDeathHandled=true;
   if(isV14(target))mummyWidgetDeath(game,target,heroScriptApi);
@@ -878,6 +885,9 @@ function triggerNagaBoon(game,target){
   }
 }
 export function tickSourceScriptJobs(game,dt=0){
+  // At a coarse frame crossing both deadlines, native return at +2.00 must
+  // precede the script's +2.01 ability removal on that same retained handle.
+  tickReincarnations(game);
   for(const e of game.state.entities)if(e.status?.ensnareOriginalTargetType&&e.status.ensnareGroundedUntil<=game.state.time){e.targetType=e.status.ensnareOriginalTargetType;delete e.status.ensnareOriginalTargetType;delete e.status.ensnareGroundedUntil;}
   tickSourceAuraRules(game,{matchesTargets});
   tickLivingBombJobs(game,heroScriptApi);

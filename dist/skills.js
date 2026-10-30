@@ -1,3 +1,4 @@
+import {UNSTABLE_ALCHEMY_RULES,unstableAlchemyDeath} from './unstable-alchemy-rules.js';
 import {UNDEAD_LEGION_RULES} from './undead-legion-rules.js';
 import {LIVING_BOMB_RULES,canLivingBombCast,castLivingBomb,livingBombMainDeath,tickLivingBombJobs,pruneLivingBombHandles} from './living-bomb-rules.js';
 import {TAUREN_RULES,taurenAttackDamage,taurenMainDeath} from './tauren-rules.js';
@@ -36,7 +37,7 @@ import { closestWalkable, isWalkable } from './layout.js';
 import { GARROSH_ACTIVE_RULES, GARROSH_PASSIVE_RULES, canGarroshCastAbility, castGarroshAbility, tryGarroshAutoCast, garroshActiveAfterDamage, sourceGarroshActiveDeath, tickGarroshActiveJob } from './garrosh-active-rules.js';
 import { ILLIDAN_RULES, ILLIDAN_ACTIVE_RULES, canIllidanCastAbility, castIllidanAbility, registerIllidanSource, tickIllidanSource, illidanOnAttackHit, tryIllidanAutoCast, illidanAfterDamage, sourceIllidanDeath, tickIllidanJob, isIllidanJobType } from './illidan-rules.js';
 
-export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261030-v36-1';
+export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261030-v37-1';
 
 // Values come from resolved object fields. Empty fields remain empty: a missing
 // native default is reported, rather than replacing it with tooltip numbers.
@@ -218,6 +219,7 @@ function compile(id,version='5.0dJF') {
   if(version==='v14.1A5'&&HUSKAR_RULES[id]){const r=HUSKAR_RULES[id];Object.assign(s,{...(!r.preserveNativeKind?{kind:'huskar_source'}:{}),status:r.status,runtimeImplemented:true,effectText:r.description+(r.partial?`【待核定：${r.partial}】`:'')});}
   if(version==='v14.1A5'&&RELOCATION_RULES[id]){const r=RELOCATION_RULES[id];Object.assign(s,{kind:'building_relocation',status:r.status,effectText:r.description+(r.status==='partial'?`【待核定：${RELOCATION_BOUNDARY}】`:'')});}
   if(version==='v14.1A5'&&TAUREN_RULES[id]){const r=TAUREN_RULES[id];Object.assign(s,{kind:'tauren_source',status:r.status,runtimeImplemented:true,effectText:r.description+`【待核定：${r.partial}】`});}
+  if(version==='v14.1A5'&&UNSTABLE_ALCHEMY_RULES[id]){const r=UNSTABLE_ALCHEMY_RULES[id];Object.assign(s,{kind:'unstable_alchemy_source',status:r.status,runtimeImplemented:true,effectText:r.description+`【待核定：${r.partial}】`});}
   if(version==='v14.1A5'&&UNDEAD_LEGION_RULES[id]){const r=UNDEAD_LEGION_RULES[id];Object.assign(s,{kind:'undead_legion_source',status:r.status,runtimeImplemented:true,effectText:r.description+`【待核定：${r.partial}】`});}
   if(version==='v14.1A5'&&LIVING_BOMB_RULES[id]){const r=LIVING_BOMB_RULES[id];Object.assign(s,{kind:'living_bomb_source',status:r.status,runtimeImplemented:r.status==='partial',effectText:r.description+`【待核定：${r.partial}】`});}
   if(version==='v14.1A5'&&DESTROYER_RULES[id]){const r=DESTROYER_RULES[id];Object.assign(s,{kind:'destroyer_source',status:r.status,runtimeImplemented:r.status==='partial',effectText:r.description+`【待核定：${r.partial}】`});}
@@ -784,6 +786,7 @@ const mainDeathApi={universalDamage,nativeDamage,
   skeletonKingDeath:skeletonKingMainDeath,
   blademasterKill:(g,e)=>blademasterKill(g,e,heroScriptApi),
   banditDeath:(g,e)=>banditDeath(g,e,heroScriptApi),
+  unstableAlchemyDeath,
 };
 const heroScriptApi={matchesTargets,magicImmune:e=>active(e).some(s=>s.kind==='immunity'),initializeUnit:initializeSourceSkills,applyNativeStun:(g,s,t,id,seconds)=>applyNativeControl(g,s,t,id,'stunUntil',seconds),sourceDeath,killUnit:(g,e)=>g._killUnit(e),getOwnedUnitsOfRawcode:(g,e,code)=>[...g.state.entities.filter(u=>u.ownerId===e.ownerId&&raw(u)===code),...(g.state.players[e.ownerId]?.buildings??[]).filter(b=>(b.sourceRawcode??b.unitId?.replace(/^v14_/, ''))===code)],castNativeNova:(g,e,id,target)=>castNativeNova(g,e,id,target),applyCyclone:(g,s,t,id,seconds)=>applyNativeControl(g,s,t,id,'cycloneUntil',seconds),applyEnsnare:(g,s,t,id)=>applyNativeControl(g,s,t,id,'rootUntil'),universalDamage,nativeDamage,sourceDamage,applyCorrosion:applyYseraCorrosion,scriptInvulnerable,pauseUnitEx,compileAbility,addAbility,removeAbility,getBuilding,applyAttackLevel,setUnitPosition,moveUnit:setUnitPosition,
   applyNativeSlow:(game,source,target,id,descriptor)=>{target.status??={};target.status.sourceClassNativeSlowPending={abilityId:id,sourceId:source.id,at:game.state.time,descriptor:{...descriptor},reason:'原生Aslo默认目标许可未核定'};},

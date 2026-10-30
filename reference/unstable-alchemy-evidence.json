@@ -1,0 +1,335 @@
+{
+  "source": {
+    "file": "reference/v14-source/raw_extracted/war3map.j",
+    "sha256": "e66c55b3b25b185c991be5613e21fbf5b2d598f3cc40f2f8cd01c23bcb828250",
+    "lineEncoding": "latin1/LF"
+  },
+  "sourceEvidence": [
+    {
+      "line": 41911,
+      "text": "function Trig_UnitDeathActions takes nothing returns nothing"
+    },
+    {
+      "line": 41912,
+      "text": "local unit i=GetTriggerUnit()"
+    },
+    {
+      "line": 41913,
+      "text": "local unit bv=GetKillingUnit()"
+    },
+    {
+      "line": 41914,
+      "text": "local trigger Eb=GetTriggeringTrigger()"
+    },
+    {
+      "line": 41915,
+      "text": "local real FF=GetUnitX(i)"
+    },
+    {
+      "line": 41916,
+      "text": "local real FG=GetUnitY(i)"
+    },
+    {
+      "line": 41917,
+      "text": "local real P8=0"
+    },
+    {
+      "line": 41918,
+      "text": "local effect DE=null"
+    },
+    {
+      "line": 41919,
+      "text": "local timer t=null"
+    },
+    {
+      "line": 41920,
+      "text": "local group Uz=CreateGroup()"
+    },
+    {
+      "line": 41921,
+      "text": "local unit D6=null"
+    },
+    {
+      "line": 41922,
+      "text": "local unit Ki=null"
+    },
+    {
+      "line": 41923,
+      "text": "local player h"
+    },
+    {
+      "line": 41924,
+      "text": "local boolexpr Cd"
+    },
+    {
+      "line": 41925,
+      "text": "local integer BF"
+    },
+    {
+      "line": 41926,
+      "text": "local integer BU"
+    },
+    {
+      "line": 41927,
+      "text": "local real a5"
+    },
+    {
+      "line": 41928,
+      "text": "call DisableTrigger(Eb)"
+    },
+    {
+      "line": 41929,
+      "text": "call SingedAlchemyGold(bv,i)"
+    },
+    {
+      "line": 42033,
+      "text": "if GetUnitAbilityLevel(i,$41305541)==1 then"
+    },
+    {
+      "line": 42034,
+      "text": "set BF=GetUnitUserData(i)"
+    },
+    {
+      "line": 42035,
+      "text": "set BU=GetRandomInt(1,20)"
+    },
+    {
+      "line": 42036,
+      "text": "call DestroyEffect(AddSpecialEffect(\"Abilities\\\\Spells\\\\Other\\\\Transmute\\\\PileofGold.mdl\",GetUnitX(i),GetUnitY(i)))"
+    },
+    {
+      "line": 42037,
+      "text": "call SetPlayerState(Player(BF-1),PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(Player(BF-1),PLAYER_STATE_RESOURCE_GOLD)+BU)"
+    },
+    {
+      "line": 42038,
+      "text": "call OC5F_Eb(i,\"+\"+I2S(BU),100.,77.,0.,Player(BF-1))"
+    },
+    {
+      "line": 42039,
+      "text": "elseif GetUnitAbilityLevel(bv,$41305541)==1 and GetRandomReal(1,101)<=1 then"
+    },
+    {
+      "line": 42040,
+      "text": "set BF=GetUnitUserData(bv)"
+    },
+    {
+      "line": 42041,
+      "text": "set BU=GetRandomInt(1,20)"
+    },
+    {
+      "line": 42042,
+      "text": "call DestroyEffect(AddSpecialEffect(\"Abilities\\\\Spells\\\\Other\\\\Transmute\\\\PileofGold.mdl\",GetUnitX(bv),GetUnitY(bv)))"
+    },
+    {
+      "line": 42043,
+      "text": "call SetPlayerState(Player(BF-1),PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(Player(BF-1),PLAYER_STATE_RESOURCE_GOLD)+BU)"
+    },
+    {
+      "line": 42044,
+      "text": "call OC5F_Eb(bv,\"+\"+I2S(BU),100.,77.,0.,Player(BF-1))"
+    },
+    {
+      "line": 42045,
+      "text": "endif"
+    },
+    {
+      "line": 42187,
+      "text": "function InitTrig_UnitDeath takes nothing returns nothing"
+    },
+    {
+      "line": 42188,
+      "text": "set bu=CreateTrigger()"
+    },
+    {
+      "line": 42189,
+      "text": "call TriggerRegisterAnyUnitEventBJ(bu,EVENT_PLAYER_UNIT_DEATH)"
+    },
+    {
+      "line": 42190,
+      "text": "call TriggerAddCondition(bu,Condition(function gg_trg_UnitDeathCondition))"
+    },
+    {
+      "line": 42191,
+      "text": "call TriggerAddAction(bu,function Trig_UnitDeathActions)"
+    },
+    {
+      "line": 42192,
+      "text": "endfunction"
+    },
+    {
+      "line": 42193,
+      "text": "function n04S_Skills takes nothing returns nothing"
+    },
+    {
+      "line": 42194,
+      "text": "local timer t=GetExpiredTimer()"
+    },
+    {
+      "line": 42195,
+      "text": "local unit i=LoadUnitHandle(O,GetHandleId(t),1)"
+    },
+    {
+      "line": 42196,
+      "text": "local real Pm=LoadReal(O,GetHandleId(t),3)"
+    },
+    {
+      "line": 42197,
+      "text": "local real FF"
+    },
+    {
+      "line": 42198,
+      "text": "local real FG"
+    },
+    {
+      "line": 42199,
+      "text": "local unit D6"
+    },
+    {
+      "line": 42200,
+      "text": "local group Uz"
+    },
+    {
+      "line": 42201,
+      "text": "set FF=GetUnitX(i)+CosBJ(Pm)*LoadReal(O,GetHandleId(t),4)"
+    },
+    {
+      "line": 42202,
+      "text": "set FG=GetUnitY(i)+SinBJ(Pm)*LoadReal(O,GetHandleId(t),4)"
+    },
+    {
+      "line": 42203,
+      "text": "call DestroyEffect(AddSpecialEffect(\"Abilities\\\\Spells\\\\Undead\\\\Impale\\\\ImpaleMissTarget.mdl\",FF,FG))"
+    },
+    {
+      "line": 21355,
+      "text": "set i=CreateUnit(Pc,Bi,GetUnitX(i),GetUnitY(i),MP[GetPlayerId(BF)])"
+    },
+    {
+      "line": 21356,
+      "text": "set UT=i"
+    },
+    {
+      "line": 21357,
+      "text": "call SetUnitUserData(i,GetPlayerId(BF)+1)"
+    },
+    {
+      "line": 21358,
+      "text": "call ExecuteFunc(\"PassiveSkillNoArg\")"
+    },
+    {
+      "line": 21447,
+      "text": "call SetUnitColor(i,GetPlayerColor(BF))"
+    },
+    {
+      "line": 21448,
+      "text": "call SetUnitUserData(i,GetPlayerId(BF)+1)"
+    },
+    {
+      "line": 21449,
+      "text": "call GroupAddUnit(JW,i)"
+    },
+    {
+      "line": 21450,
+      "text": "call GroupAddUnit(JH[GetPlayerId(BF)+1],i)"
+    },
+    {
+      "line": 21451,
+      "text": "call UnitResetCooldown(i)"
+    },
+    {
+      "line": 20173,
+      "text": "set Kc=CreateUnit(Pc,Mk[Bi],GetLocationX(Pb),GetLocationY(Pb),bj_UNIT_FACING)"
+    },
+    {
+      "line": 20174,
+      "text": "call SetUnitUserData(Kc,1+GetPlayerId(GetOwningPlayer(Nr)))"
+    },
+    {
+      "line": 20175,
+      "text": "call ExecuteFunc(\"PassiveSkillNoArgJJC\")"
+    },
+    {
+      "line": 20232,
+      "text": "call SetUnitColor(Kc,GetPlayerColor(GetOwningPlayer(Nr)))"
+    },
+    {
+      "line": 20233,
+      "text": "call SetUnitUserData(Kc,1+GetPlayerId(GetOwningPlayer(Nr)))"
+    },
+    {
+      "line": 16686,
+      "text": "set Bi=Bi+1"
+    },
+    {
+      "line": 16687,
+      "text": "set Mk[Bi]=$68303739"
+    },
+    {
+      "line": 16688,
+      "text": "set Ml[Bi]=$68303738"
+    },
+    {
+      "line": 16689,
+      "text": "set Bi=Bi+1"
+    },
+    {
+      "line": 16690,
+      "text": "set Mk[Bi]=$68303657"
+    },
+    {
+      "line": 16691,
+      "text": "set Ml[Bi]=$68303649"
+    },
+    {
+      "line": 16692,
+      "text": "set Bi=Bi+1"
+    },
+    {
+      "line": 16693,
+      "text": "set Mk[Bi]=$68303737"
+    },
+    {
+      "line": 16694,
+      "text": "set Ml[Bi]=$68303736"
+    },
+    {
+      "line": 18395,
+      "text": "set Bi=Bi+1"
+    },
+    {
+      "line": 18396,
+      "text": "set Mk[Bi]=$68305435"
+    },
+    {
+      "line": 18397,
+      "text": "set Ml[Bi]=$68305433"
+    },
+    {
+      "line": 18398,
+      "text": "set Bi=Bi+1"
+    },
+    {
+      "line": 18399,
+      "text": "set Mk[Bi]=$68305435"
+    },
+    {
+      "line": 18400,
+      "text": "set Ml[Bi]=$68305432"
+    }
+  ],
+  "semantics": {
+    "deathBranch": "A0UA level exactly1: uniform integer1..20, no killer requirement",
+    "killBranch": "else if killer A0UA level exactly1 AND GetRandomReal(1,101)<=1 then GetRandomInt(1,20)",
+    "priority": "dead branch wins even when both carry A0UA; no enemy, life, attack, hero, illusion or wave condition",
+    "recipient": "Player(GetUnitUserData(source)-1); do not substitute current owner",
+    "scope": "disabled main death trigger; Ju excluded; independent death listeners still run",
+    "random": "SingedAlchemyGold initial random draw precedes this branch even for non-alchemist deaths; no A0UA draws when not eligible"
+  },
+  "boundaries": [
+    "Native RNG precision and event sequence are not reproduced by host PRNG",
+    "Unimplemented earlier main death branches may consume RNG",
+    "Native invalid/non-participating Player indexes not represented; record payout request without guessing owner",
+    "Legacy userdata migration only when persistent building+owner are identifiable"
+  ]
+}

@@ -426,3 +426,7 @@ A0IP新增Web手动目标入口，20耗魔、2秒冷却、600距离和7秒50%攻
 ## v36 希尔瓦娜斯亡灵军团
 
 补入六类骷髅的原玩家登记、最后h0JR句柄加成及A0J2/A0J3各等级攻速；普通波清计数、竞技累计、连续波不重登记。h0JP的Attack20明确属于这一机制，不是A0IR光环。n00S获取入口尚未找到，原型单列sourceOnlyCombatForms，未新增建造按钮。原生生命副作用、顺序、等级溢出与其他技能仍未闭合，详见[证据](reference/undead-legion-evidence.json)及[归档](docs/parallel-development/integration-v36.md)。
+
+## v37 不稳定炼金术
+
+补入A0UA死亡金币及击杀金币分支，严格保留等级1、死者优先和userData原玩家归属；源码实数1—101≤1不替换成文案1%。已验证地精技师至普通、兴奋和外观变种人的升级出战、自然战斗与存档。原生随机序列和前序死亡链仍partial。详见[归档](docs/parallel-development/integration-v37.md)及[证据](reference/unstable-alchemy-evidence.json)。灵魂链分摊字段与魂耀/40生命脱链审计另存[来源记录](reference/soul-link-source-audit.json)，未补造运行效果。

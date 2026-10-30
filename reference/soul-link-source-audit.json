@@ -1,0 +1,134 @@
+{
+  "source": {
+    "file": "reference/v14-source/raw_extracted/war3map.j",
+    "sha256": "e66c55b3b25b185c991be5613e21fbf5b2d598f3cc40f2f8cd01c23bcb828250",
+    "lineEncoding": "latin1/LF"
+  },
+  "abilities": {
+    "A0JJ": {
+      "rawcode": "A0JJ",
+      "name": "灵魂锁链",
+      "tip": "灵魂锁链(R)",
+      "ubertip": "耗mp60。内置cd12s。选中周围随机12个友方单位释放灵魂链，使受灵魂链链接的单位受到的伤害均摊，持续10s，受灵魂锁链效果影响的友方单位在灵魂锁链持续时间内受到致命伤害时，会立即脱离灵魂锁链的效果，同时恢复自身60%的最大生命值。",
+      "alias": "A0JJ",
+      "code": "Aspl",
+      "Area1": "750.0",
+      "BuffID1": "Bspl",
+      "DataB1": "12",
+      "levels": "1",
+      "targs1": "ground,air,friend,self",
+      "targs2": "_",
+      "targs3": "_",
+      "targs4": "_",
+      "Cost1": "60",
+      "Dur1": "10.0",
+      "HeroDur1": "10.0",
+      "Rng1": "750.0",
+      "Cool1": "12.0",
+      "checkDep": "1"
+    },
+    "A0JL": {
+      "rawcode": "A0JL",
+      "name": "魂耀",
+      "tip": "魂耀",
+      "ubertip": "灵魂法师每次攻击，可以为受灵魂链影响的单位恢复75点生命值",
+      "alias": "A0JL",
+      "code": "Asth",
+      "levels": "1",
+      "targs1": "_",
+      "targs2": "_",
+      "targs3": "_",
+      "targs4": "_"
+    }
+  },
+  "sourceEvidence": [
+    {
+      "line": 41526,
+      "text": "elseif GetUnitTypeId(bV)==$68313033 then"
+    },
+    {
+      "line": 41527,
+      "text": "call GroupClear(Uz)"
+    },
+    {
+      "line": 41528,
+      "text": "call GroupEnumUnitsInRange(Uz,GetUnitX(bV),GetUnitY(bV),1200,null)"
+    },
+    {
+      "line": 41529,
+      "text": "loop"
+    },
+    {
+      "line": 41530,
+      "text": "set D6=FirstOfGroup(Uz)"
+    },
+    {
+      "line": 41531,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 41532,
+      "text": "if UnitHasBuffBJ(D6,$4273706C) and IsUnitAlly(D6,GetOwningPlayer(bV)) then"
+    },
+    {
+      "line": 41533,
+      "text": "call SetUnitLifeBJ(D6,GetUnitState(D6,UNIT_STATE_LIFE)+75)"
+    },
+    {
+      "line": 41534,
+      "text": "call DestroyEffect(AddSpecialEffect(\"Abilities\\\\Spells\\\\Items\\\\AIre\\\\AIreTarget.mdl\",GetUnitX(D6),GetUnitY(D6)))"
+    },
+    {
+      "line": 41535,
+      "text": "endif"
+    },
+    {
+      "line": 41536,
+      "text": "call GroupRemoveUnit(Uz,D6)"
+    },
+    {
+      "line": 41537,
+      "text": "endloop"
+    },
+    {
+      "line": 41538,
+      "text": "set D6=null"
+    },
+    {
+      "line": 41539,
+      "text": "elseif UnitHasBuffBJ(i,$4273706C) and GetUnitState(i,UNIT_STATE_LIFE)<=40. then"
+    },
+    {
+      "line": 41540,
+      "text": "call UnitRemoveBuffBJ($4273706C,i)"
+    },
+    {
+      "line": 41541,
+      "text": "call SetUnitLifePercentBJ(i,60.)"
+    },
+    {
+      "line": 41542,
+      "text": "elseif GetUnitAbilityLevel(bV,$41304A4F)!=0 then"
+    },
+    {
+      "line": 41543,
+      "text": "call SetUnitManaBJ(bV,GetUnitState(bV,UNIT_STATE_MANA)+2.)"
+    },
+    {
+      "line": 41544,
+      "text": "elseif GetUnitAbilityLevel(i,$41304A56)==1 and GetUnitState(i,UNIT_STATE_LIFE)<=1000 then"
+    },
+    {
+      "line": 41545,
+      "text": "call UnitAddAbility(i,$41304A58)"
+    }
+  ],
+  "findings": [
+    "A0JJ是原生Aspl，明确60魔法/12秒/750范围/12目标/10秒/Bspl，缺失DataA分摊比例。",
+    "未找到A0JJ的原始施法效果脚本或spiritlink自动命令；战斗体h103 auto=_。不依文案随机12友军编造选取规则。",
+    "魂耀按伤害来源精确h103判断，而非A0JL存在，也没有普通攻击判断。枚举1200内带Bspl的同盟并直接加75生命。",
+    "后续elseif是受伤者带Bspl且伤害结算前生命<=40，移除buff并设生命为60%；不是通用致命伤害条件，也没有直接取消本次伤害。",
+    "h103分支优先于低生命脱链分支，后面才是A0JO回魔。当前共享链完整前序条件与原生Aspl尚未闭合，本次未接入猜测行为。"
+  ],
+  "next": "取得原生Aspl默认字段/可核定选择规则，再在主伤害elseif链相应位置实现；现状仍unresolved。"
+}

@@ -1,3 +1,4 @@
+import {restoreUnstableAlchemyUserData} from './unstable-alchemy-rules.js';
 import {prepareUndeadLegion,restoreUndeadLegionHandles} from './undead-legion-rules.js';
 import {queueBroodmotherAlliance,retainBroodmotherAlliance} from './broodmother-rules.js';
 import {relocationStatus,relocationRemaining,completeRelocation} from './relocation-rules.js';
@@ -1036,7 +1037,7 @@ export class Game {
     const e = this._entity(def, { team: player.team, side: 'defender', laneId: player.id,
       ownerId: player.id, sourceLaneId: player.id, x, y, buildingId, isHero });
     initializeSourceClassCombat(this,player.buildings.find(b=>b.id===buildingId),e);
-    if(e.combatRawcode==='h0JJ')e.userData=player.id+1;
+    if(e.combatRawcode==='h0JJ'||e.skillSpecs?.some(s=>s.id==='A0UA'))e.userData=player.id+1;
     // PassiveSkill copies A1PE from the persistent building on every deployment.
     e.armor+=number(player.buildings.find(b=>b.id===buildingId)?.treasureArmor,0);
     const garroshArmor=number(player.buildings.find(b=>b.id===buildingId)?.garroshArmorLevel,0);
@@ -1569,7 +1570,7 @@ export class Game {
       let def=units[b.unitId];if(!def||(isSourceUnit(def)&&!def.combatRawcode))continue;def=this._boxCombatDefinition(def,b);const point=laneToWorld(0,1.2+(p.id%4)*1.1+(b.col-2.5)*.12,p.team===0?5+(b.row/8):9-(b.row/8));
       const e=this._entity(def,{team:p.team,side:`arena${p.team}`,battleTeam:0,laneId:0,sourceLaneId:p.id,ownerId:p.id,buildingId:b.id,isArena:true,worldX:point.x,worldY:point.y});
       initializeSourceClassCombat(this,b,e);
-      if(e.combatRawcode==='h0JJ')e.userData=p.id+1;
+      if(e.combatRawcode==='h0JJ'||e.skillSpecs?.some(s=>s.id==='A0UA'))e.userData=p.id+1;
       e.armor+=number(b.treasureArmor,0);
       if(b.garroshArmorLevel){e.armor+=b.garroshArmorLevel;e.status.garroshArmorLevel=b.garroshArmorLevel;}
       if(b.garroshAttackLevel){e.damage+=b.garroshAttackLevel;e.status.garroshAttackLevel=b.garroshAttackLevel;}
@@ -1751,6 +1752,7 @@ export class Game {
       else if(def&&isV14(def)&&refreshSourceSkills(e,def)){e.status??={};e.status.sourceSkillsRestoredAt=this.state.time;}
       if(isV14(def)&&def.heroFamily)e.isNativeHero=['STR','AGI','INT'].includes(def.sourceRawFields?.Primary);
       e.skillStates??={};e.buffs??=[];
+      restoreUnstableAlchemyUserData(this,e);
     }
     restoreUndeadLegionHandles(this);
     // JSON stores retained handles separately; surviving units must share the

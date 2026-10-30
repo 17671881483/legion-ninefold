@@ -1,3 +1,4 @@
+import {prepareUndeadLegion,restoreUndeadLegionHandles} from './undead-legion-rules.js';
 import {queueBroodmotherAlliance,retainBroodmotherAlliance} from './broodmother-rules.js';
 import {relocationStatus,relocationRemaining,completeRelocation} from './relocation-rules.js';
 import {resetLichKingRound} from './lich-king-rules.js';
@@ -80,7 +81,7 @@ export class Game {
         attack: rule('kingDamage', 135), regen: rule('kingRegen', 4), healCharges: rule('kingHealCharges', 4),
         armor: rule('kingArmor', 8), armorType: 'hero', attackType: 'hero', autoUpgradeCount: 0, healBlockedUntil: 0,
         id:`king-${team}`,unitId:'king',side:'defender',isKing:true,battleTeam:team,laneId:8+team,status:{},targetType:'structure',traits:['mechanical'],isBuilding:true,hpLevel: 0, attackLevel: 0, regenLevel: 0, attackCd: 0, worldX: kingWorld(team).x, worldY: kingWorld(team).y, radius: .8 })),
-      entities: [], sourceSkillJobs: [], nagaScriptCasters: {}, darkArthasCasters: {}, brightArthasHandles: {}, aesaraHandles: {}, soulToxinHandles: {}, livingBombHandles: {}, skeletonKingGate: {li:false,statisticsEnabled:true}, events: [], logs: [], pendingSends: [], kingBountyPools: [0, 0], teamLeakFlags: [false, false],
+      undeadLegion: {counts:{},recipients:{}}, entities: [], sourceSkillJobs: [], nagaScriptCasters: {}, darkArthasCasters: {}, brightArthasHandles: {}, aesaraHandles: {}, soulToxinHandles: {}, livingBombHandles: {}, skeletonKingGate: {li:false,statisticsEnabled:true}, events: [], logs: [], pendingSends: [], kingBountyPools: [0, 0], teamLeakFlags: [false, false],
       metrics: { spawned: 0, killed: 0, leaked: 0 }, boxRewardProgress: { firstGranted:false, secondGranted:false },
     };
     for (const p of this.state.players) {
@@ -539,6 +540,7 @@ export class Game {
   /** Discard a trial without settling it or moving the economy clock. */
   _resetSandboxWave(wave = this.state.wave) {
     const s = this.state;
+    s.undeadLegion={counts:{},recipients:{}};
     s.wave = wave; s.phase = 'build'; s.roundMode = 'normal'; s.timer = this.buildDuration(wave);
     s.paused = false; s.winner = null; s.entities = []; s.sourceSkillJobs = []; s.nagaScriptCasters = {}; s.darkArthasCasters = {}; s.brightArthasHandles = {}; s.aesaraHandles = {}; s.soulToxinHandles = {}; s.livingBombHandles = {}; s.sourceAuraNextAt=Math.floor(s.time)+1; s.events = []; s.pendingSends = [];
     s.kingBountyPools = [0, 0]; s.teamLeakFlags = [false, false]; s.specialMonsters = {};
@@ -952,7 +954,7 @@ export class Game {
   _waveData() {
     return WAVES.find(w => Number(w.wave ?? w.id ?? w.number) === this.state.wave) ?? WAVES[Math.min(this.state.wave - 1, WAVES.length - 1)] ?? {};
   }
-  _startCombat() {
+  _startCombat({continuousJoin=false}={}) {
     if (this.state.phase !== 'build') return;
     const s = this.state;
     if (s.mode === 'sandbox') s.roundMode = 'normal';
@@ -979,6 +981,7 @@ export class Game {
       for (let i = 0; i < monsterCount && (p.id === 0 || this._aiEnabled()); i++) this._spawnQueue.push({ at: (i + 1) * rule('spawnInterval', .1), laneId: p.id, wave: waveBatches[i].wave, sourceWave:s.wave, substituted:waveBatches[i].substituted, boss: waveBatches[i].substituted ? !!waveBatches[i].wave.boss : boss,
         x: clamp(3 + (i % 6 - 2.5) * (rule('spawnSpreadWidth', 1.8) / 5) + (this._random() - .5) * .04, 3 - rule('spawnSpreadWidth',1.8)/2, 3 + rule('spawnSpreadWidth',1.8)/2), y: .3 });
     }
+    if(!continuousJoin)prepareUndeadLegion(this,s.entities,{reset:true},{compileSkills});
     queueSpecialMonsters(this,monsterCount);
     const sends = s.pendingSends.filter(v => v.wave <= s.wave);
     s.pendingSends = s.pendingSends.filter(v => v.wave > s.wave);
@@ -1573,6 +1576,7 @@ export class Game {
       this._ensureWorld(e);
       e.status.activated=true;e.acquisitionRange=12;e.nav={mode:'arena',path:[],index:0,distance:0};s.entities.push(e);
     }
+    prepareUndeadLegion(this,s.entities,{reset:false},{compileSkills});
     this._log(`第${s.wave}波竞技场开始，限时120秒；Web在同一场地模拟双方军团交战。`);
   }
   _endArena(alive){
@@ -1585,7 +1589,7 @@ export class Game {
   _advanceContinuous(){
     if (this.state.mode === 'sandbox') return;
     const s=this.state;if(s.wave>=35)return;const survivors=s.entities.filter(e=>e.hp>0),jobs=s.sourceSkillJobs??[],nagaCasters=s.nagaScriptCasters??{},arthasCasters=s.darkArthasCasters??{},brightHandles=s.brightArthasHandles??{},aesaraHandles=s.aesaraHandles??{},soulToxinHandles=s.soulToxinHandles??{},livingBombHandles=s.livingBombHandles??{},oldTime=this._roundTime,queue=this._spawnQueue.map(e=>({...e,at:Math.max(0,e.at-oldTime)}));
-    s.wave++;s.phase='build';this._startCombat();s.sourceSkillJobs=jobs;s.nagaScriptCasters=nagaCasters;s.darkArthasCasters=arthasCasters;s.brightArthasHandles=brightHandles;s.aesaraHandles=aesaraHandles;s.soulToxinHandles=soulToxinHandles;s.livingBombHandles=livingBombHandles;s.entities=[...survivors,...s.entities.filter(e=>e.side==='monster')];this._spawnQueue=[...queue,...this._spawnQueue].sort((a,b)=>a.at-b.at);
+    s.wave++;s.phase='build';this._startCombat({continuousJoin:true});s.sourceSkillJobs=jobs;s.nagaScriptCasters=nagaCasters;s.darkArthasCasters=arthasCasters;s.brightArthasHandles=brightHandles;s.aesaraHandles=aesaraHandles;s.soulToxinHandles=soulToxinHandles;s.livingBombHandles=livingBombHandles;s.entities=[...survivors,...s.entities.filter(e=>e.side==='monster')];this._spawnQueue=[...queue,...this._spawnQueue].sort((a,b)=>a.at-b.at);
     s.continuousRemaining=s.wave<35?50:null;this._log(`连续进攻：第${s.wave}波已加入战场，存活守军与残怪保留。`);
   }
 
@@ -1748,6 +1752,7 @@ export class Game {
       if(isV14(def)&&def.heroFamily)e.isNativeHero=['STR','AGI','INT'].includes(def.sourceRawFields?.Primary);
       e.skillStates??={};e.buffs??=[];
     }
+    restoreUndeadLegionHandles(this);
     // JSON stores retained handles separately; surviving units must share the
     // live object again so later healing, movement and death update one handle.
     for(const e of [...this.state.entities,...this.state.kings])if(this.state.brightArthasHandles[e.id])this.state.brightArthasHandles[e.id]=e;

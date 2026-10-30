@@ -422,3 +422,7 @@ A0IN与A0IO接入独立武器伤害事件：回魔前不等于15时增加1，恰
 A0IP新增Web手动目标入口，20耗魔、2秒冷却、600距离和7秒50%攻速削弱使用明确字段。施法效果创建独立1秒计时器，共用目标字符串7计数；回调先减后伤、取当时最大生命5%、伤后恰为0才销毁。重复施放可能留下负计数任务，按原脚本保留。
 
 非零计数死亡爆炸置于h0PC之后、骨龙和先祖之魂之前；450范围按击杀者敌人筛选，150混乱/通用伤害来源为死者。同一马甲的A0IS/A0IQ连续命令只记录请求，不宣称全范围必定眩晕减甲。自动施法入口与原生执行仍partial，A0IR护甲缺失及Attack20链另列待办。详见[证据](reference/living-bomb-evidence.json)和[归档](docs/parallel-development/integration-v35.md)。
+
+## v36 希尔瓦娜斯亡灵军团
+
+补入六类骷髅的原玩家登记、最后h0JR句柄加成及A0J2/A0J3各等级攻速；普通波清计数、竞技累计、连续波不重登记。h0JP的Attack20明确属于这一机制，不是A0IR光环。n00S获取入口尚未找到，原型单列sourceOnlyCombatForms，未新增建造按钮。原生生命副作用、顺序、等级溢出与其他技能仍未闭合，详见[证据](reference/undead-legion-evidence.json)及[归档](docs/parallel-development/integration-v36.md)。

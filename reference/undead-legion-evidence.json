@@ -1,0 +1,724 @@
+{
+  "source": {
+    "file": "reference/v14-source/raw_extracted/war3map.j",
+    "sha256": "e66c55b3b25b185c991be5613e21fbf5b2d598f3cc40f2f8cd01c23bcb828250",
+    "lineEncoding": "latin1 / LF"
+  },
+  "sourceEvidence": [
+    {
+      "line": 6697,
+      "text": "function YDWEGeneralBounsSystem__SetUnitMaxState takes unit i,integer Dj,real Dm returns boolean"
+    },
+    {
+      "line": 6698,
+      "text": "local integer Do=R2I(Dm)"
+    },
+    {
+      "line": 6699,
+      "text": "local integer Dp=0"
+    },
+    {
+      "line": 6700,
+      "text": "local unitstate Dn"
+    },
+    {
+      "line": 6701,
+      "text": "local integer BB=CM[Dj+1]-2"
+    },
+    {
+      "line": 6702,
+      "text": "if Dm>65535 or Dm<=0 then"
+    },
+    {
+      "line": 6703,
+      "text": "call BJDebugMsg(\"è¾å¥æ°æ®æ æ\")"
+    },
+    {
+      "line": 6704,
+      "text": "return false"
+    },
+    {
+      "line": 6705,
+      "text": "endif"
+    },
+    {
+      "line": 6776,
+      "text": "function YDWEGeneralBounsSystem__UnitGetBonus takes unit i,integer Dj returns integer"
+    },
+    {
+      "line": 6777,
+      "text": "return YDWEGetIntegerByString(I2S(YDWEH2I(i)),\"bonusType\"+I2S(Dj))"
+    },
+    {
+      "line": 6778,
+      "text": "endfunction"
+    },
+    {
+      "line": 6779,
+      "text": "function YDWEGeneralBounsSystem__AddUnitMaxState takes unit i,integer Dj,real Dm returns boolean"
+    },
+    {
+      "line": 6780,
+      "text": "local unitstate Dn"
+    },
+    {
+      "line": 6781,
+      "text": "if Dj==0 then"
+    },
+    {
+      "line": 6782,
+      "text": "set Dn=UNIT_STATE_MAX_LIFE"
+    },
+    {
+      "line": 6783,
+      "text": "elseif Dj==1 then"
+    },
+    {
+      "line": 6784,
+      "text": "set Dn=UNIT_STATE_MAX_MANA"
+    },
+    {
+      "line": 6785,
+      "text": "else"
+    },
+    {
+      "line": 6786,
+      "text": "return false"
+    },
+    {
+      "line": 6787,
+      "text": "endif"
+    },
+    {
+      "line": 6788,
+      "text": "return YDWEGeneralBounsSystem__SetUnitMaxState(i,Dj,Dm+GetUnitState(i,Dn))"
+    },
+    {
+      "line": 6789,
+      "text": "endfunction"
+    },
+    {
+      "line": 6790,
+      "text": "function YDWEGeneralBounsSystem__UnitAddBonus takes unit i,integer Dj,integer Dl returns boolean"
+    },
+    {
+      "line": 6791,
+      "text": "return YDWEGeneralBounsSystem__UnitSetBonus(i,Dj,YDWEGeneralBounsSystem__UnitGetBonus(i,Dj)+Dl)"
+    },
+    {
+      "line": 6792,
+      "text": "endfunction"
+    },
+    {
+      "line": 6826,
+      "text": "function YDWEGeneralBounsSystemUnitSetBonus takes unit i,integer Dj,integer Dk,integer Dl returns nothing"
+    },
+    {
+      "line": 6827,
+      "text": "if Dk==0 then"
+    },
+    {
+      "line": 6828,
+      "text": "call YDWEUnitAddBonus(i,Dj,Dl)"
+    },
+    {
+      "line": 6829,
+      "text": "elseif Dk==1 then"
+    },
+    {
+      "line": 6830,
+      "text": "call YDWEUnitAddBonus(i,Dj,0-Dl)"
+    },
+    {
+      "line": 6831,
+      "text": "else"
+    },
+    {
+      "line": 6832,
+      "text": "call YDWEUnitSetBonus(i,Dj,Dl)"
+    },
+    {
+      "line": 6833,
+      "text": "endif"
+    },
+    {
+      "line": 6834,
+      "text": "endfunction"
+    },
+    {
+      "line": 20140,
+      "text": "function vf takes nothing returns nothing"
+    },
+    {
+      "line": 20141,
+      "text": "local trigger t"
+    },
+    {
+      "line": 20142,
+      "text": "local unit i=GetEnumUnit()"
+    },
+    {
+      "line": 20143,
+      "text": "local player BF=GetOwningPlayer(i)"
+    },
+    {
+      "line": 20144,
+      "text": "local integer Pd=0"
+    },
+    {
+      "line": 20173,
+      "text": "set Kc=CreateUnit(Pc,Mk[Bi],GetLocationX(Pb),GetLocationY(Pb),bj_UNIT_FACING)"
+    },
+    {
+      "line": 20174,
+      "text": "call SetUnitUserData(Kc,1+GetPlayerId(GetOwningPlayer(Nr)))"
+    },
+    {
+      "line": 20175,
+      "text": "call ExecuteFunc(\"PassiveSkillNoArgJJC\")"
+    },
+    {
+      "line": 20207,
+      "text": "if GetUnitTypeId(Kc)==$68304A52 then"
+    },
+    {
+      "line": 20208,
+      "text": "call SaveUnitHandle(O,GetHandleId(BF),StringHash(\"h0JR\"),Kc)"
+    },
+    {
+      "line": 20209,
+      "text": "endif"
+    },
+    {
+      "line": 20210,
+      "text": "if GetUnitTypeId(Kc)==$68304A4A then"
+    },
+    {
+      "line": 20211,
+      "text": "call SaveInteger(O,GetHandleId(BF),StringHash(\"HP200\"),LoadInteger(O,GetHandleId(BF),StringHash(\"HP200\"))+1)"
+    },
+    {
+      "line": 20212,
+      "text": "endif"
+    },
+    {
+      "line": 20213,
+      "text": "if GetUnitTypeId(Kc)==$68303342 or GetUnitTypeId(Kc)==$68304F43 then"
+    },
+    {
+      "line": 20214,
+      "text": "call SaveInteger(O,GetHandleId(BF),StringHash(\"HP50\"),LoadInteger(O,GetHandleId(BF),StringHash(\"HP50\"))+1)"
+    },
+    {
+      "line": 20215,
+      "text": "endif"
+    },
+    {
+      "line": 20216,
+      "text": "if GetUnitTypeId(Kc)==$68303343 then"
+    },
+    {
+      "line": 20217,
+      "text": "call SaveInteger(O,GetHandleId(BF),StringHash(\"Speed1\"),LoadInteger(O,GetHandleId(BF),StringHash(\"Speed1\"))+1)"
+    },
+    {
+      "line": 20218,
+      "text": "endif"
+    },
+    {
+      "line": 20219,
+      "text": "if GetUnitTypeId(Kc)==$68304A4E or GetUnitTypeId(Kc)==$68304F5A then"
+    },
+    {
+      "line": 20220,
+      "text": "call SaveInteger(O,GetHandleId(BF),StringHash(\"Speed3\"),LoadInteger(O,GetHandleId(BF),StringHash(\"Speed3\"))+1)"
+    },
+    {
+      "line": 20221,
+      "text": "endif"
+    },
+    {
+      "line": 20222,
+      "text": "if GetUnitTypeId(Kc)==$68304A50 then"
+    },
+    {
+      "line": 20223,
+      "text": "call SaveInteger(O,GetHandleId(BF),StringHash(\"Attack20\"),LoadInteger(O,GetHandleId(BF),StringHash(\"Attack20\"))+1)"
+    },
+    {
+      "line": 20224,
+      "text": "endif"
+    },
+    {
+      "line": 20225,
+      "text": "if GetUnitTypeId(Kc)==$68303344 then"
+    },
+    {
+      "line": 20226,
+      "text": "call SaveInteger(O,GetHandleId(BF),StringHash(\"Attack5\"),LoadInteger(O,GetHandleId(BF),StringHash(\"Attack5\"))+1)"
+    },
+    {
+      "line": 20227,
+      "text": "endif"
+    },
+    {
+      "line": 20423,
+      "text": "call TriggerExecute(RR)"
+    },
+    {
+      "line": 21329,
+      "text": "function oldcodefn_Bg takes nothing returns nothing"
+    },
+    {
+      "line": 21330,
+      "text": "local unit i=GetEnumUnit()"
+    },
+    {
+      "line": 21331,
+      "text": "local integer BB=0"
+    },
+    {
+      "line": 21332,
+      "text": "local integer Pe=0"
+    },
+    {
+      "line": 21333,
+      "text": "local player BF=GetOwningPlayer(i)"
+    },
+    {
+      "line": 21334,
+      "text": "local real US=LoadReal(O,GetPlayerId(BF),StringHash(\"ç²\"))"
+    },
+    {
+      "line": 21335,
+      "text": "local trigger t"
+    },
+    {
+      "line": 21355,
+      "text": "set i=CreateUnit(Pc,Bi,GetUnitX(i),GetUnitY(i),MP[GetPlayerId(BF)])"
+    },
+    {
+      "line": 21356,
+      "text": "set UT=i"
+    },
+    {
+      "line": 21357,
+      "text": "call SetUnitUserData(i,GetPlayerId(BF)+1)"
+    },
+    {
+      "line": 21358,
+      "text": "call ExecuteFunc(\"PassiveSkillNoArg\")"
+    },
+    {
+      "line": 21390,
+      "text": "if GetUnitTypeId(i)==$68304A52 then"
+    },
+    {
+      "line": 21391,
+      "text": "call SaveUnitHandle(O,GetHandleId(BF),StringHash(\"h0JR\"),i)"
+    },
+    {
+      "line": 21392,
+      "text": "endif"
+    },
+    {
+      "line": 21393,
+      "text": "if GetUnitTypeId(i)==$68304A4A then"
+    },
+    {
+      "line": 21394,
+      "text": "call SaveInteger(O,GetHandleId(BF),StringHash(\"HP200\"),LoadInteger(O,GetHandleId(BF),StringHash(\"HP200\"))+1)"
+    },
+    {
+      "line": 21395,
+      "text": "endif"
+    },
+    {
+      "line": 21396,
+      "text": "if GetUnitTypeId(i)==$68303342 or GetUnitTypeId(i)==$68304F43 then"
+    },
+    {
+      "line": 21397,
+      "text": "call SaveInteger(O,GetHandleId(BF),StringHash(\"HP50\"),LoadInteger(O,GetHandleId(BF),StringHash(\"HP50\"))+1)"
+    },
+    {
+      "line": 21398,
+      "text": "endif"
+    },
+    {
+      "line": 21399,
+      "text": "if GetUnitTypeId(i)==$68303343 then"
+    },
+    {
+      "line": 21400,
+      "text": "call SaveInteger(O,GetHandleId(BF),StringHash(\"Speed1\"),LoadInteger(O,GetHandleId(BF),StringHash(\"Speed1\"))+1)"
+    },
+    {
+      "line": 21401,
+      "text": "endif"
+    },
+    {
+      "line": 21402,
+      "text": "if GetUnitTypeId(i)==$68304A4E or GetUnitTypeId(i)==$68304F5A then"
+    },
+    {
+      "line": 21403,
+      "text": "call SaveInteger(O,GetHandleId(BF),StringHash(\"Speed3\"),LoadInteger(O,GetHandleId(BF),StringHash(\"Speed3\"))+1)"
+    },
+    {
+      "line": 21404,
+      "text": "endif"
+    },
+    {
+      "line": 21405,
+      "text": "if GetUnitTypeId(i)==$68304A50 then"
+    },
+    {
+      "line": 21406,
+      "text": "call SaveInteger(O,GetHandleId(BF),StringHash(\"Attack20\"),LoadInteger(O,GetHandleId(BF),StringHash(\"Attack20\"))+1)"
+    },
+    {
+      "line": 21407,
+      "text": "endif"
+    },
+    {
+      "line": 21408,
+      "text": "if GetUnitTypeId(i)==$68303344 then"
+    },
+    {
+      "line": 21409,
+      "text": "call SaveInteger(O,GetHandleId(BF),StringHash(\"Attack5\"),LoadInteger(O,GetHandleId(BF),StringHash(\"Attack5\"))+1)"
+    },
+    {
+      "line": 21410,
+      "text": "endif"
+    },
+    {
+      "line": 21411,
+      "text": "call War_BUFF(i)"
+    },
+    {
+      "line": 21459,
+      "text": "function OC5F_cg takes nothing returns nothing"
+    },
+    {
+      "line": 21460,
+      "text": "local player h=null"
+    },
+    {
+      "line": 21461,
+      "text": "local integer BB=0"
+    },
+    {
+      "line": 21462,
+      "text": "loop"
+    },
+    {
+      "line": 21463,
+      "text": "set h=Player(BB)"
+    },
+    {
+      "line": 21464,
+      "text": "if Dd[BB]!=null then"
+    },
+    {
+      "line": 21465,
+      "text": "call YDWESetUnitAbilityDataReal(Dd[BB],$41305543,1,109,20+I2R(Dg)*(10+I2R(Dg)*2))"
+    },
+    {
+      "line": 21466,
+      "text": "endif"
+    },
+    {
+      "line": 21467,
+      "text": "call SaveInteger(O,GetHandleId(h),StringHash(\"HP200\"),0)"
+    },
+    {
+      "line": 21468,
+      "text": "call SaveInteger(O,GetHandleId(h),StringHash(\"HP50\"),0)"
+    },
+    {
+      "line": 21469,
+      "text": "call SaveInteger(O,GetHandleId(h),StringHash(\"Speed1\"),0)"
+    },
+    {
+      "line": 21470,
+      "text": "call SaveInteger(O,GetHandleId(h),StringHash(\"Speed3\"),0)"
+    },
+    {
+      "line": 21471,
+      "text": "call SaveInteger(O,GetHandleId(h),StringHash(\"Attack20\"),0)"
+    },
+    {
+      "line": 21472,
+      "text": "call SaveInteger(O,GetHandleId(h),StringHash(\"Attack5\"),0)"
+    },
+    {
+      "line": 21473,
+      "text": "call SaveInteger(O,GetHandleId(h),StringHash(\"Bone_Dragon\"),0)"
+    },
+    {
+      "line": 21474,
+      "text": "exitwhen BB>=10"
+    },
+    {
+      "line": 21475,
+      "text": "set h=null"
+    },
+    {
+      "line": 21476,
+      "text": "set BB=BB+1"
+    },
+    {
+      "line": 21477,
+      "text": "endloop"
+    },
+    {
+      "line": 21478,
+      "text": "call ForGroup(Bu,function oldcodefn_Bg)"
+    },
+    {
+      "line": 21496,
+      "text": "call TriggerExecute(RR)"
+    },
+    {
+      "line": 21497,
+      "text": "endfunction"
+    },
+    {
+      "line": 27225,
+      "text": "set OD=CreateTrigger()"
+    },
+    {
+      "line": 27226,
+      "text": "call TriggerAddAction(OD,function OC5F_cg)"
+    },
+    {
+      "line": 44723,
+      "text": "function Trig_Legion_1Actions takes nothing returns nothing"
+    },
+    {
+      "line": 44724,
+      "text": "local unit i=null"
+    },
+    {
+      "line": 44725,
+      "text": "local player h=null"
+    },
+    {
+      "line": 44726,
+      "text": "local integer BB=0"
+    },
+    {
+      "line": 44727,
+      "text": "loop"
+    },
+    {
+      "line": 44728,
+      "text": "set h=Player(BB)"
+    },
+    {
+      "line": 44729,
+      "text": "if LoadUnitHandle(O,GetHandleId(h),StringHash(\"h0JR\"))!=null then"
+    },
+    {
+      "line": 44730,
+      "text": "set i=LoadUnitHandle(O,GetHandleId(h),StringHash(\"h0JR\"))"
+    },
+    {
+      "line": 44731,
+      "text": "if LoadInteger(O,GetHandleId(h),StringHash(\"HP200\"))>0 then"
+    },
+    {
+      "line": 44732,
+      "text": "call YDWEGeneralBounsSystemUnitSetBonus(i,0,0,200*LoadInteger(O,GetHandleId(h),StringHash(\"HP200\")))"
+    },
+    {
+      "line": 44733,
+      "text": "endif"
+    },
+    {
+      "line": 44734,
+      "text": "if LoadInteger(O,GetHandleId(h),StringHash(\"HP50\"))>0 then"
+    },
+    {
+      "line": 44735,
+      "text": "call YDWEGeneralBounsSystemUnitSetBonus(i,0,0,50*LoadInteger(O,GetHandleId(h),StringHash(\"HP50\")))"
+    },
+    {
+      "line": 44736,
+      "text": "endif"
+    },
+    {
+      "line": 44737,
+      "text": "if LoadInteger(O,GetHandleId(h),StringHash(\"Speed1\"))>0 then"
+    },
+    {
+      "line": 44738,
+      "text": "call UnitAddAbility(i,$41304A32)"
+    },
+    {
+      "line": 44739,
+      "text": "call SetUnitAbilityLevel(i,$41304A32,LoadInteger(O,GetHandleId(h),StringHash(\"Speed1\")))"
+    },
+    {
+      "line": 44740,
+      "text": "endif"
+    },
+    {
+      "line": 44741,
+      "text": "if LoadInteger(O,GetHandleId(h),StringHash(\"Speed3\"))>0 then"
+    },
+    {
+      "line": 44742,
+      "text": "call UnitAddAbility(i,$41304A33)"
+    },
+    {
+      "line": 44743,
+      "text": "call SetUnitAbilityLevel(i,$41304A33,LoadInteger(O,GetHandleId(h),StringHash(\"Speed3\")))"
+    },
+    {
+      "line": 44744,
+      "text": "endif"
+    },
+    {
+      "line": 44745,
+      "text": "if LoadInteger(O,GetHandleId(h),StringHash(\"Attack20\"))>0 then"
+    },
+    {
+      "line": 44746,
+      "text": "call YDWEGeneralBounsSystemUnitSetBonus(i,3,0,20*LoadInteger(O,GetHandleId(h),StringHash(\"Attack20\")))"
+    },
+    {
+      "line": 44747,
+      "text": "endif"
+    },
+    {
+      "line": 44748,
+      "text": "if LoadInteger(O,GetHandleId(h),StringHash(\"Attack5\"))>0 then"
+    },
+    {
+      "line": 44749,
+      "text": "call YDWEGeneralBounsSystemUnitSetBonus(i,3,0,5*LoadInteger(O,GetHandleId(h),StringHash(\"Attack5\")))"
+    },
+    {
+      "line": 44750,
+      "text": "endif"
+    },
+    {
+      "line": 44751,
+      "text": "endif"
+    },
+    {
+      "line": 44752,
+      "text": "exitwhen BB>=9"
+    },
+    {
+      "line": 44753,
+      "text": "set BB=BB+1"
+    },
+    {
+      "line": 44754,
+      "text": "endloop"
+    },
+    {
+      "line": 44755,
+      "text": "endfunction"
+    },
+    {
+      "line": 44756,
+      "text": "function InitTrig_Legion_1 takes nothing returns nothing"
+    },
+    {
+      "line": 44757,
+      "text": "set RR=CreateTrigger()"
+    },
+    {
+      "line": 44758,
+      "text": "call TriggerAddAction(RR,function Trig_Legion_1Actions)"
+    },
+    {
+      "line": 44759,
+      "text": "endfunction"
+    },
+    {
+      "line": 17543,
+      "text": "set Bi=Bi+1"
+    },
+    {
+      "line": 17544,
+      "text": "set Mk[Bi]=$68304A52"
+    },
+    {
+      "line": 17545,
+      "text": "set Ml[Bi]=$6E303053"
+    },
+    {
+      "line": 17546,
+      "text": "set Bi=Bi+1"
+    },
+    {
+      "line": 16862,
+      "text": "set Bi=Bi+1"
+    },
+    {
+      "line": 16863,
+      "text": "set Mk[Bi]=$68304A53"
+    },
+    {
+      "line": 16864,
+      "text": "set Ml[Bi]=$68304A52"
+    },
+    {
+      "line": 16865,
+      "text": "set Bi=Bi+1"
+    },
+    {
+      "line": 3644,
+      "text": "call DisableEggUnitTypeDialog___RegisterDialogEggUnitType($6E303053,\"å¸å°ç¦å¨æ¯\",1)"
+    },
+    {
+      "line": 48355,
+      "text": "call MonsterInitMarkBarracksEgg($6E303053,1)"
+    },
+    {
+      "line": 48750,
+      "text": "elseif x==$6E303053 and LoadInteger(Y,$6E303053,ZX)==0 then"
+    },
+    {
+      "line": 48751,
+      "text": "call Trig_MonthlyAddRecord(h,\"å¸å°+1\",x,ZX)"
+    }
+  ],
+  "scope": "A0J1亡灵军团及动态A0J2/A0J3；不含希尔瓦娜斯其余技能",
+  "entry": {
+    "building": "n00S",
+    "combat": "h0JR",
+    "status": "entry-unresolved",
+    "found": [
+      "形态映射17544—17545",
+      "禁用彩蛋对话框3644",
+      "MonsterInitMarkBarracksEgg48355",
+      "月度记录48750—48751"
+    ],
+    "missing": "未找到创建、升级或合成入口；不新增建造菜单。16863—16864还将h0JR作为另一组的建筑体映射到h0JS，不把它当作n00S获取证据。"
+  },
+  "semantics": {
+    "registration": "只在建筑转换的vf/oldcodefn_Bg登记，按原建筑owner；不是通用召唤钩子",
+    "recipient": "每原玩家单个最后登记h0JR，A0J1等级/存在不是脚本条件；普通重置不清句柄",
+    "normal": "OC5F_cg清六种计数，然后转换完执行RR",
+    "arena": "vf只增加计数，倒数后执行RR，未发现该路径清计数",
+    "continuous": "Nj为true时只执行OF，不重新OD登记",
+    "bonus": "Dk=0是加法；200和50、20和5分别累加。生命helper每次检查最大值65535后整数差；attack参数3",
+    "levels": "A0J2/A0J3明确70级，按原对象DataA各级值；超过70请求保留边界，不伪造上限行为"
+  },
+  "boundaries": [
+    "原生遍历顺序及多个h0JR选择",
+    "AIml当前生命副作用采用既有Web加生命适配，未原生验证",
+    "原生移除/失效句柄",
+    "超70级SetUnitAbilityLevel行为",
+    "其它共享bonusType3能力的全局容量和重写",
+    "Web竞技不含原生倒数、区域与出生失败",
+    "旧档未记录开战计数，不从当前存活部队推断过去计数"
+  ]
+}

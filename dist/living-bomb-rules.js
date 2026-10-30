@@ -3,7 +3,7 @@ export const LIVING_BOMB_RULES={
  A0IP:{status:'partial',active:true,targetKind:'enemy',description:'活体炸弹耗魔20、冷却2秒、距离600；原生B04Y降低50%攻速并持续7秒。每次施法效果把目标共享计数7重设为7并新建1秒计时器；每次先减计数，再造成目标当时最大生命5%的混乱/通用伤害，伤害后计数恰为0才停止该计时器。带非零计数死亡时进入爆炸分支。',partial:'提供Web手动选敌入口；原型auto为_，未找到自动slow命令入口，不把文案随机选敌当作脚本。瞬时Aslo命中、缺失移动减速默认值、施法前摇及原生事件顺序待核定。多计时器共享计数可降为负数，照源码继续，不擅自裁成7跳。'},
  A0IQ:{status:'partial',description:'活体炸弹爆炸的同一马甲对每个枚举目标依次请求thunderbolt、faeriefire。Afae显式减甲5、普通/英雄持续3秒、距离700。',partial:'Cost/Cool/施法和默认目标许可缺失，连续命令覆盖未验证。记录所有命令，不把命令发出当成所有目标已减甲。'},
  A0IS:{status:'partial',description:'活体炸弹爆炸马甲请求的风暴之锤，AHtb显式普通/英雄控制1.5秒、距离5000。',partial:'伤害、Cost/Cool/施法和默认目标许可缺失；未采用文案100伤害/5秒。连续命令与弹道未验证，当前只保留请求。'},
- A0IR:{status:'unresolved',description:'死灵术士光环AHad对象缺少DataA1护甲数值且目标为none。',partial:'原型h0JP在创建路径还登记Attack20；完整共享增益链尚未核定，不能以文案5护甲或零效果宣称已实现。'},
+ A0IR:{status:'unresolved',description:'死灵术士光环AHad对象缺少DataA1护甲数值且目标为none。',partial:'不能以文案5护甲或零效果宣称已实现；h0JP的Attack20另属亡灵军团开战登记，已独立接入。'},
 };
 const all=g=>[...g.state.entities,...(g.state.kings??[])];
 const has=(e,id)=>e?.skillSpecs?.some(s=>s.id===id)&&(e.abilityLevels?.[id]??1)>0;

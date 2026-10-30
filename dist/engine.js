@@ -6,7 +6,7 @@ import {resetLichKingRound} from './lich-king-rules.js';
 import {skeletonKingGate,beginSkeletonKingRoundFinish,tickSkeletonKingLifecycle,isSkeletonKingJobType} from './skeleton-king-rules.js';
 import {sourceBarrageTargets,sourceBarrageHit} from './skills.js';
 import { UNITS, MERCENARIES, LEGACY_MERCENARIES, WAVES, RULES, HEROES, BUILDERS, PROPHET_POOLS, UNIT_TEMPLATES, TECHNOLOGIES, BOX_TRAINING_RULES } from './data.js';
-import { attachSkills, refreshSourceSkills, initializeSourceSkills, initializeSourceClassCombat, sourceClassAttackDamageEvent, sourceDamageListeners, sourceRegisteredDamageEvent, brightArthasEventDamage, compileSkills, sourceAuraEffects, hasSourceAura, tickSourceSkills, sourceAttackIssued, sourceAttackStart, sourceOnHit, modifyIncoming, beforeSourceDamage, afterSourceDamage, sourceDeath, sourceMoveFactor, canWeaponTarget, sourceWeapon, tickSourceScriptJobs, manualSourceSkills, castManualSourceSkill } from './skills.js';
+import { attachSkills, refreshSourceSkills, initializeSourceSkills, initializeSourceClassCombat, sourceClassAttackDamageEvent, sourceDamageListeners, sourceRegisteredDamageEvent, brightArthasEventDamage, compileSkills, sourceAuraEffects, hasSourceAura, tickSourceSkills, sourceAttackIssued, sourceAttackStart, sourceOnHit, modifyIncoming, beforeSourceDamage, afterSourceDamage, sourceDeath, sourceMoveFactor, canWeaponTarget, sourceWeapon, tickSourceScriptJobs, manualSourceSkills, castManualSourceSkill, stormLizardChanneling } from './skills.js';
 import { initializeSourceClassBuilding } from './source-class-rules.js';
 import { MAP, laneToWorld, worldToLane, kingWorld, spawnWarpWorld, supportWorld, routePoints, isWalkable, isSegmentWalkable, constrainPoint, closestWalkable, navigationPath } from './layout.js';
 import { recordEggCompletion, restoreEggHistory, finishEggWave, recordBeastKingKill, eggRequirementStatus, appearanceQualificationStatus } from './egg-rules.js';
@@ -1159,7 +1159,8 @@ export class Game {
       this._applyHealingAura(e, battle.auras, dt);
       this._passiveAbility(e, battle, dt);
       tickSourceSkills(this,e,battle,dt);
-      if (e.hp <= 0 || (st.stunUntil ?? 0) > now || (st.cycloneUntil ?? 0) > now) { e.pendingAttack = null; continue; }
+      const stormChannel=stormLizardChanneling(this,e);
+      if (stormChannel || e.hp <= 0 || (st.stunUntil ?? 0) > now || (st.cycloneUntil ?? 0) > now) { e.pendingAttack = null; continue; }
       if (e.side === 'monster' && e.pendingAttack && this._advanceMonsterAttack(e, battle)) continue;
       const aggro = Math.max(e.range, number(e.acquisitionRange, Math.max(4.5, e.range + 1)));
       let ordered=st.huskarAttackOrder?.targetId===e.targetId&&e.targetId!=null;

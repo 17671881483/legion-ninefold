@@ -430,3 +430,7 @@ A0IP新增Web手动目标入口，20耗魔、2秒冷却、600距离和7秒50%攻
 ## v37 不稳定炼金术
 
 补入A0UA死亡金币及击杀金币分支，严格保留等级1、死者优先和userData原玩家归属；源码实数1—101≤1不替换成文案1%。已验证地精技师至普通、兴奋和外观变种人的升级出战、自然战斗与存档。原生随机序列和前序死亡链仍partial。详见[归档](docs/parallel-development/integration-v37.md)及[证据](reference/unstable-alchemy-evidence.json)。灵魂链分摊字段与魂耀/40生命脱链审计另存[来源记录](reference/soul-link-source-audit.json)，未补造运行效果。
+
+## v38 风暴蜥蜴脚本
+
+落雷A12F按原脚本接入点选、双方武器伤害自动请求、落点100内主目标重选及100/200/300分层范围伤害。保留先控制后伤害、主目标无存活/Avul过滤、范围组后枚举及普通攻击/魔法伤害类别。A12H保留攻击者优先与双方分支都检查攻击者monsoon命令的语义。A12E与A12G原生参数仍缺失，分别只保留命令、动态授予和请求，不宣称效果已完成。源码证据、1299项检查与浏览器验证详见[v38独立归档](docs/parallel-development/integration-v38.md)。

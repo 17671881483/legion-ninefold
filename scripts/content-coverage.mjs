@@ -21,6 +21,7 @@ const playerRuntimeAbilities=[
   {sourceRawcode:'h0NE',abilityIds:['A0N7','Avul','Aloc']},
   {sourceRawcode:'h0OV',abilityIds:['A0W0','A0W2','A0W3']},
   {sourceRawcode:'h0JP',abilityIds:['A0IQ','A0IS']},
+  {sourceRawcode:'h0Q5',abilityIds:['A12G','A0I7']},
   {sourceRawcode:'h0JL',abilityIds:['A0IF']},
   {sourceRawcode:'h0JO',abilityIds:['A0IJ','A0IL']},
   ...['h0JI','h0OK','h03E','h03F','h0V2'].map(sourceRawcode=>({sourceRawcode,abilityIds:['A0I2','A0I4','A0I6']})),
@@ -66,6 +67,7 @@ const result={
   battleSkills:collect([...current,...playerBuildingCommands,...playerBuildingRuleCarriers,...playerRuntimeForms,...playerRuntimeAbilities,...MERCENARIES,...WAVES,...specialCodes.map(c=>UNIT_TEMPLATES[c])]),
   sourceOnlyCombatForms:[{combatRawcode:'h0JR',buildingRawcode:'n00S',status:'entry-unresolved',evidence:'war3map.j:17544-17545 maps forms; line3644 ban dialog; 48355 barracks egg marker and 48750 monthly record do not provide acquisition',skills:collect([{...UNIT_TEMPLATES.h0JR,abilityIds:[...UNIT_TEMPLATES.h0JR.abilityIds,'A0J2','A0J3']}])},{combatRawcode:'h0VQ',buildingRawcode:'n07U',status:'entry-unresolved',evidence:'war3map.j:17436-17437 maps forms; line3638 ban limit1; no source creation/recipe/upgrade entry found in packet',skills:collect([{...UNIT_TEMPLATES.h0VQ,abilityIds:[...UNIT_TEMPLATES.h0VQ.abilityIds,'A1QI','A1D6']}])}],
   remainingSourceGaps:[
+    '风暴蜥蜴A12F落雷接入点选施法、独立武器伤害自动请求、100范围随机主目标及100/200/300范围分层伤害；A12H保留双方优先级与攻击者monsoon门槛，并动态授予A12G。ANmo额外伤害/施法时序、雷雨A12E、原生链A12G递减等字段尚未闭合；A12F/A12H为partial，A12E/A12G仍unresolved，见storm-lizard-evidence.json。',
     '不稳定炼金术A0UA已按主死亡链接入：死者等级1优先抽1—20金币，否则击杀者等级1才检查实数1—101≤1；按userData原玩家入账，不擅改文案1%。原生随机精度及未接入前序死亡链仍partial，见unstable-alchemy-evidence.json。灵魂链Aspl分摊字段缺失，魂耀/40生命脱链源码差异见soul-link-source-audit.json，仍待接入。',
     '亡灵军团A0J1的六种原玩家开战登记及最后h0JR加成已接入；A0J2/A0J3读取原对象各等级攻速。普通波清计数、竞技累计、连续波不重登记。n00S获取入口未找到，仅列sourceOnlyCombatForms；原生顺序、生命副作用和超70级请求仍partial，见undead-legion-evidence.json。',
     '活体炸弹A0IP接入手动施法、共享计数1秒任务与主死亡爆炸，动态A0IQ/A0IS保留同一马甲连续命令请求。重复施放的负计数、先减后伤、击杀者阵营与死者伤害来源均保留。原生自动施法入口、Aslo施法/默认移速、马甲命令执行及null击杀者语义仍partial；A0IR缺护甲仍unresolved；Attack20已核定为亡灵军团独立开战登记（v36），见living-bomb-evidence.json。',

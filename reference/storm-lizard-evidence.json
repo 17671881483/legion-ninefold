@@ -1,0 +1,740 @@
+{
+  "source": {
+    "file": "reference/v14-source/raw_extracted/war3map.j",
+    "sha256": "e66c55b3b25b185c991be5613e21fbf5b2d598f3cc40f2f8cd01c23bcb828250",
+    "lineEncoding": "latin1/LF"
+  },
+  "abilities": {
+    "A0I7": {
+      "rawcode": "A0I7",
+      "name": "眩晕",
+      "tip": "风暴之锤(T) - [等级 1],风暴之锤(T) - [等级 2],风暴之锤(T) - [等级 3],风暴之锤(T) - [等级 4]",
+      "ubertip": "向目标投掷一巨大的魔法斧，对其造成100点伤害并使其5秒内处于眩晕状态。,向目标投掷一巨大的魔法斧，对其造成200 点伤害并使其7秒内处于眩晕状态。,向目标投掷一巨大的魔法斧，对其造成300点伤害并使其9秒内处于眩晕状态。,向目标投掷一巨大的魔法斧，对其造成450点伤害并使其12秒内处于眩晕状态。",
+      "alias": "A0I7",
+      "code": "AHtb",
+      "BuffID1": "BPSE",
+      "levels": "10",
+      "targs1": "air,ground,debris,enemy,neutral,organic",
+      "targs2": "air,ground,debris,enemy,neutral,organic",
+      "targs3": "air,ground,debris,enemy,neutral,organic",
+      "targs4": "air,ground,debris,enemy,neutral,organic",
+      "Dur1": "1.0",
+      "HeroDur1": "0.5",
+      "Rng1": "100000.0",
+      "checkDep": "1",
+      "BuffID2": "BPSE",
+      "BuffID3": "BPSE",
+      "reqLevel": "1",
+      "Dur2": "2.0",
+      "Dur3": "3.0",
+      "Rng2": "100000.0",
+      "Rng3": "100000.0",
+      "HeroDur2": "1.0",
+      "HeroDur3": "1.5",
+      "BuffID4": "BPSE",
+      "Dur4": "4.0",
+      "HeroDur4": "2.0",
+      "Rng4": "100000.0"
+    },
+    "A12E": {
+      "rawcode": "A12E",
+      "name": "雷雨",
+      "tip": "雷雨(Q)",
+      "ubertip": "蜥蜴巫师随机选中600码内一名敌人，持续吟唱施法对其半径300码内范围释放雷雨，雷雨范围内的敌人每秒受到20点伤害，吟唱持续3秒",
+      "alias": "A12E",
+      "code": "ANmo",
+      "Area1": "300.0",
+      "BuffID1": "ANmd",
+      "DataA1": "20.0",
+      "DataB1": "1.0",
+      "DataC1": "1.0",
+      "levels": "1",
+      "targs1": "air,ground,structure,enemy,neutral",
+      "targs2": "_",
+      "targs3": "_",
+      "targs4": "_",
+      "Cost1": "18",
+      "Dur1": "3.0",
+      "HeroDur1": "3.0",
+      "Rng1": "600.0",
+      "Cool1": "6.0",
+      "checkDep": "1",
+      "EfctID1": "XNmo"
+    },
+    "A12F": {
+      "rawcode": "A12F",
+      "name": "落雷",
+      "tip": "落雷(Q)",
+      "ubertip": "风暴蜥蜴随机选中800码内一名敌人，对其释放落雷使其受到1000点伤害并且眩晕5s，同时目标半径300/200/100码内的敌人会受到100/150/200点伤害并且眩晕1s。",
+      "alias": "A12F",
+      "code": "ANmo",
+      "Area1": "300.0",
+      "BuffID1": "ANmd",
+      "DataB1": "1.0",
+      "DataC1": "1.0",
+      "levels": "1",
+      "targs1": "air,ground,structure,enemy,neutral",
+      "targs2": "_",
+      "targs3": "_",
+      "targs4": "_",
+      "Cost1": "18",
+      "Dur1": "1.0",
+      "HeroDur1": "1.0",
+      "Rng1": "800.0",
+      "Cool1": "5.0",
+      "checkDep": "1",
+      "EfctID1": "XNmo"
+    },
+    "A12G": {
+      "rawcode": "A12G",
+      "name": "闪电链",
+      "tip": "闪电链(C)",
+      "ubertip": "投掷出一道闪电对第一个敌人造成100点的伤害，闪电一共跳跃4次。每次闪电的攻击力会随着跳跃次数增加而递减。",
+      "alias": "A12G",
+      "code": "AOcl",
+      "Area1": "600.0",
+      "DataA1": "150.0",
+      "DataB1": "3",
+      "levels": "1",
+      "targs1": "enemies",
+      "targs2": "_",
+      "targs3": "_",
+      "targs4": "_",
+      "Rng1": "10000000.0"
+    },
+    "A12H": {
+      "rawcode": "A12H",
+      "name": "闪电风暴",
+      "tip": "闪电风暴",
+      "ubertip": "风暴蜥蜴攻击时有30%的几率释放闪电风暴，对半径600码内的随机3名敌人造成150点伤害",
+      "alias": "A12H",
+      "code": "Asth",
+      "levels": "1",
+      "targs1": "_",
+      "targs2": "_",
+      "targs3": "_",
+      "targs4": "_",
+      "checkDep": "1"
+    }
+  },
+  "sourceEvidence": [
+    {
+      "line": 29669,
+      "text": "function VertigoTarget takes unit Pf,unit Om,integer CC returns nothing"
+    },
+    {
+      "line": 29670,
+      "text": "set bj_lastCreatedUnit=CreateUnit(GetOwningPlayer(Pf),Pn,GetUnitX(Om),GetUnitY(Om),0)"
+    },
+    {
+      "line": 29671,
+      "text": "call UnitAddAbility(bj_lastCreatedUnit,$41304937)"
+    },
+    {
+      "line": 29672,
+      "text": "call UnitApplyTimedLife(bj_lastCreatedUnit,$42487765,1.)"
+    },
+    {
+      "line": 29673,
+      "text": "call SetUnitAbilityLevel(bj_lastCreatedUnit,$41304937,CC)"
+    },
+    {
+      "line": 29674,
+      "text": "call IssueTargetOrder(bj_lastCreatedUnit,\"thunderbolt\",Om)"
+    },
+    {
+      "line": 29675,
+      "text": "set Pf=null"
+    },
+    {
+      "line": 29676,
+      "text": "set Om=null"
+    },
+    {
+      "line": 29708,
+      "text": "function GetRandomTarget takes real Px,real FF,real FG,unit Pf returns unit"
+    },
+    {
+      "line": 29709,
+      "text": "local unit D6"
+    },
+    {
+      "line": 29710,
+      "text": "local group DG=CreateGroup()"
+    },
+    {
+      "line": 29711,
+      "text": "local group Po=CreateGroup()"
+    },
+    {
+      "line": 29712,
+      "text": "call GroupEnumUnitsInRange(DG,FF,FG,Px,null)"
+    },
+    {
+      "line": 29713,
+      "text": "if Pf==null then"
+    },
+    {
+      "line": 29714,
+      "text": "call GroupAddGroup(DG,Po)"
+    },
+    {
+      "line": 29715,
+      "text": "else"
+    },
+    {
+      "line": 29716,
+      "text": "loop"
+    },
+    {
+      "line": 29717,
+      "text": "set D6=FirstOfGroup(DG)"
+    },
+    {
+      "line": 29718,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 29719,
+      "text": "if IsUnitEnemy(D6,GetOwningPlayer(Pf)) then"
+    },
+    {
+      "line": 29720,
+      "text": "call GroupAddUnit(Po,D6)"
+    },
+    {
+      "line": 29721,
+      "text": "endif"
+    },
+    {
+      "line": 29722,
+      "text": "call GroupRemoveUnit(DG,D6)"
+    },
+    {
+      "line": 29723,
+      "text": "endloop"
+    },
+    {
+      "line": 29724,
+      "text": "endif"
+    },
+    {
+      "line": 29725,
+      "text": "set D6=GroupPickRandomUnit(Po)"
+    },
+    {
+      "line": 29726,
+      "text": "call DestroyGroup(Po)"
+    },
+    {
+      "line": 29727,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 29728,
+      "text": "set DG=null"
+    },
+    {
+      "line": 29729,
+      "text": "set Po=null"
+    },
+    {
+      "line": 29730,
+      "text": "set Pf=null"
+    },
+    {
+      "line": 29731,
+      "text": "set a2=D6"
+    },
+    {
+      "line": 29732,
+      "text": "set D6=null"
+    },
+    {
+      "line": 29733,
+      "text": "return a2"
+    },
+    {
+      "line": 29734,
+      "text": "endfunction"
+    },
+    {
+      "line": 29786,
+      "text": "function SelectRange takes unit Pf,real FF,real FG,real Px returns group"
+    },
+    {
+      "line": 29787,
+      "text": "local group DG=CreateGroup()"
+    },
+    {
+      "line": 29788,
+      "text": "local group Om=CreateGroup()"
+    },
+    {
+      "line": 29789,
+      "text": "local unit D6=null"
+    },
+    {
+      "line": 29790,
+      "text": "call GroupEnumUnitsInRange(DG,FF,FG,Px,null)"
+    },
+    {
+      "line": 29791,
+      "text": "loop"
+    },
+    {
+      "line": 29792,
+      "text": "set D6=FirstOfGroup(DG)"
+    },
+    {
+      "line": 29793,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 29794,
+      "text": "if IsUnitEnemy(D6,GetOwningPlayer(Pf)) and not IsUnitType(D6,UNIT_TYPE_DEAD) and GetUnitAbilityLevel(D6,$4176756C)==0 then"
+    },
+    {
+      "line": 29795,
+      "text": "call GroupAddUnit(Om,D6)"
+    },
+    {
+      "line": 29796,
+      "text": "endif"
+    },
+    {
+      "line": 29797,
+      "text": "call GroupRemoveUnit(DG,D6)"
+    },
+    {
+      "line": 29798,
+      "text": "endloop"
+    },
+    {
+      "line": 29799,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 29800,
+      "text": "set DG=null"
+    },
+    {
+      "line": 29801,
+      "text": "set D6=null"
+    },
+    {
+      "line": 29802,
+      "text": "set Pf=null"
+    },
+    {
+      "line": 29803,
+      "text": "set Py=Om"
+    },
+    {
+      "line": 29804,
+      "text": "set Om=null"
+    },
+    {
+      "line": 29805,
+      "text": "return Py"
+    },
+    {
+      "line": 29806,
+      "text": "endfunction"
+    },
+    {
+      "line": 38808,
+      "text": "function A12F_Damage takes unit Om,real FF,real FG returns real"
+    },
+    {
+      "line": 38809,
+      "text": "local real QN=GetDisFromUnitAndPos(Om,FF,FG)"
+    },
+    {
+      "line": 38810,
+      "text": "set Om=null"
+    },
+    {
+      "line": 38811,
+      "text": "if QN<=100 then"
+    },
+    {
+      "line": 38812,
+      "text": "return 200."
+    },
+    {
+      "line": 38813,
+      "text": "elseif QN<=200 then"
+    },
+    {
+      "line": 38814,
+      "text": "return 150."
+    },
+    {
+      "line": 38815,
+      "text": "elseif QN<=300 then"
+    },
+    {
+      "line": 38816,
+      "text": "return 100."
+    },
+    {
+      "line": 38817,
+      "text": "endif"
+    },
+    {
+      "line": 38818,
+      "text": "return 100."
+    },
+    {
+      "line": 38819,
+      "text": "endfunction"
+    },
+    {
+      "line": 39218,
+      "text": "function Trig_allabilityActions takes nothing returns nothing"
+    },
+    {
+      "line": 39219,
+      "text": "local integer BF=GetSpellAbilityId()"
+    },
+    {
+      "line": 39220,
+      "text": "local player h=GetTriggerPlayer()"
+    },
+    {
+      "line": 39221,
+      "text": "local unit i=GetTriggerUnit()"
+    },
+    {
+      "line": 39222,
+      "text": "local real FF=GetSpellTargetX()"
+    },
+    {
+      "line": 39223,
+      "text": "local real FG=GetSpellTargetY()"
+    },
+    {
+      "line": 39224,
+      "text": "local unit Qf=GetSpellTargetUnit()"
+    },
+    {
+      "line": 39239,
+      "text": "call DisableTrigger(Eb)"
+    },
+    {
+      "line": 39240,
+      "text": "call BoxClickAction(i,Qf,BF)"
+    },
+    {
+      "line": 39532,
+      "text": "elseif BF==$41313246 then"
+    },
+    {
+      "line": 39533,
+      "text": "set Qf=GetRandomTarget(100,FF,FG,i)"
+    },
+    {
+      "line": 39534,
+      "text": "if Qf!=null then"
+    },
+    {
+      "line": 39535,
+      "text": "call VertigoTarget(i,Qf,5)"
+    },
+    {
+      "line": 39536,
+      "text": "call UnitDamageTargetBJ(i,Qf,1000,ATTACK_TYPE_NORMAL,DAMAGE_TYPE_MAGIC)"
+    },
+    {
+      "line": 39537,
+      "text": "endif"
+    },
+    {
+      "line": 39538,
+      "text": "set Uz=SelectRange(i,FF,FG,300)"
+    },
+    {
+      "line": 39539,
+      "text": "call GroupRemoveUnit(Uz,Qf)"
+    },
+    {
+      "line": 39540,
+      "text": "loop"
+    },
+    {
+      "line": 39541,
+      "text": "set D6=FirstOfGroup(Uz)"
+    },
+    {
+      "line": 39542,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 39543,
+      "text": "call GroupRemoveUnit(Uz,D6)"
+    },
+    {
+      "line": 39544,
+      "text": "call VertigoTarget(i,D6,1)"
+    },
+    {
+      "line": 39545,
+      "text": "call UnitDamageTargetBJ(i,D6,A12F_Damage(D6,FF,FG),ATTACK_TYPE_NORMAL,DAMAGE_TYPE_MAGIC)"
+    },
+    {
+      "line": 39546,
+      "text": "endloop"
+    },
+    {
+      "line": 39547,
+      "text": "call DestroyGroup(Uz)"
+    },
+    {
+      "line": 39548,
+      "text": "set Uz=null"
+    },
+    {
+      "line": 39958,
+      "text": "function InitTrig_allability takes nothing returns nothing"
+    },
+    {
+      "line": 39959,
+      "text": "set Yp=CreateTrigger()"
+    },
+    {
+      "line": 39960,
+      "text": "call TriggerRegisterAnyUnitEventBJ(Yp,EVENT_PLAYER_UNIT_SPELL_EFFECT)"
+    },
+    {
+      "line": 39961,
+      "text": "call TriggerAddAction(Yp,function Trig_allabilityActions)"
+    },
+    {
+      "line": 39962,
+      "text": "endfunction"
+    },
+    {
+      "line": 42252,
+      "text": "function Trig_New_UnitAttackActions takes nothing returns boolean"
+    },
+    {
+      "line": 42253,
+      "text": "local unit Qf=GetTriggerUnit()"
+    },
+    {
+      "line": 42254,
+      "text": "local unit i=GetEventDamageSource()"
+    },
+    {
+      "line": 42255,
+      "text": "local integer BF=GetUnitTypeId(i)"
+    },
+    {
+      "line": 42256,
+      "text": "local integer b9=$6E305344"
+    },
+    {
+      "line": 42257,
+      "text": "local integer YY=0"
+    },
+    {
+      "line": 42258,
+      "text": "local unit Ki=null"
+    },
+    {
+      "line": 42259,
+      "text": "local unit D6=null"
+    },
+    {
+      "line": 42260,
+      "text": "local group Uz=null"
+    },
+    {
+      "line": 42261,
+      "text": "local real P8=0"
+    },
+    {
+      "line": 42262,
+      "text": "local unit cB=null"
+    },
+    {
+      "line": 42263,
+      "text": "local boolexpr Cd"
+    },
+    {
+      "line": 42264,
+      "text": "local timer DK"
+    },
+    {
+      "line": 42265,
+      "text": "local real FF"
+    },
+    {
+      "line": 42266,
+      "text": "local real FG"
+    },
+    {
+      "line": 42267,
+      "text": "local integer y=0"
+    },
+    {
+      "line": 42268,
+      "text": "local player h"
+    },
+    {
+      "line": 42269,
+      "text": "local effect DE"
+    },
+    {
+      "line": 42270,
+      "text": "if YDWEIsEventAttackDamage() and not LoadBoolean(O,GetHandleId(i),StringHash(\"Attack\")) then"
+    },
+    {
+      "line": 42271,
+      "text": "call SaveBoolean(O,GetHandleId(i),StringHash(\"Attack\"),true)"
+    },
+    {
+      "line": 42545,
+      "text": "if GetUnitAbilityLevel(i,$41313245)>0 or GetUnitAbilityLevel(i,$41313246)>0 then"
+    },
+    {
+      "line": 42546,
+      "text": "call IssuePointOrder(i,\"monsoon\",GetUnitX(Qf),GetUnitY(Qf))"
+    },
+    {
+      "line": 42547,
+      "text": "elseif GetUnitAbilityLevel(Qf,$41313245)>0 or GetUnitAbilityLevel(Qf,$41313246)>0 then"
+    },
+    {
+      "line": 42548,
+      "text": "call IssuePointOrder(Qf,\"monsoon\",GetUnitX(i),GetUnitY(i))"
+    },
+    {
+      "line": 42549,
+      "text": "endif"
+    },
+    {
+      "line": 42550,
+      "text": "if GetUnitAbilityLevel(i,$41313248)>0 and OrderId2String(GetUnitCurrentOrder(i))!=\"monsoon\" then"
+    },
+    {
+      "line": 42551,
+      "text": "if GetRandomPercentageBJ()<=30 then"
+    },
+    {
+      "line": 42552,
+      "text": "call UnitAddAbility(i,$41313247)"
+    },
+    {
+      "line": 42553,
+      "text": "call IssueTargetOrder(i,\"chainlightning\",Qf)"
+    },
+    {
+      "line": 42554,
+      "text": "endif"
+    },
+    {
+      "line": 42555,
+      "text": "elseif GetUnitAbilityLevel(Qf,$41313248)>0 and OrderId2String(GetUnitCurrentOrder(i))!=\"monsoon\" then"
+    },
+    {
+      "line": 42556,
+      "text": "if GetRandomPercentageBJ()<=30 then"
+    },
+    {
+      "line": 42557,
+      "text": "call UnitAddAbility(Qf,$41313247)"
+    },
+    {
+      "line": 42558,
+      "text": "call IssueTargetOrder(Qf,\"chainlightning\",i)"
+    },
+    {
+      "line": 42559,
+      "text": "endif"
+    },
+    {
+      "line": 42560,
+      "text": "endif"
+    },
+    {
+      "line": 42794,
+      "text": "call SaveBoolean(O,GetHandleId(i),StringHash(\"Attack\"),false)"
+    },
+    {
+      "line": 42795,
+      "text": "endif"
+    },
+    {
+      "line": 42796,
+      "text": "set DK=null"
+    },
+    {
+      "line": 42797,
+      "text": "set D6=null"
+    },
+    {
+      "line": 42798,
+      "text": "set Uz=null"
+    },
+    {
+      "line": 42799,
+      "text": "set Ki=null"
+    },
+    {
+      "line": 42800,
+      "text": "set Qf=null"
+    },
+    {
+      "line": 42801,
+      "text": "set i=null"
+    },
+    {
+      "line": 42802,
+      "text": "return false"
+    },
+    {
+      "line": 42803,
+      "text": "endfunction"
+    },
+    {
+      "line": 42804,
+      "text": "function InitTrig_New_UnitAttack takes nothing returns nothing"
+    },
+    {
+      "line": 42805,
+      "text": "set b4=CreateTrigger()"
+    },
+    {
+      "line": 42806,
+      "text": "call YDWESyStemAnyUnitDamagedRegistTrigger(b4)"
+    },
+    {
+      "line": 42807,
+      "text": "call TriggerAddCondition(b4,Condition(function Trig_New_UnitAttackActions))"
+    },
+    {
+      "line": 49746,
+      "text": "call InitTrig_allability()"
+    },
+    {
+      "line": 49754,
+      "text": "call InitTrig_New_UnitAttack()"
+    }
+  ],
+  "status": {
+    "A12E": "unresolved",
+    "A12F": "partial",
+    "A12H": "partial",
+    "A12G": "unresolved"
+  },
+  "boundaries": [
+    "A12F DataA1 missing: native monsoon additional damage unknown. Script effects execute immediately using host adapter, duration1 represents channel; unit cast point/backswing not yet modeled.",
+    "A12E native ANmo tick execution is not derived from tooltip; only command recorded, no guessed damage/mana spending.",
+    "A12G DataC1/Cost1/Cool1/Cast1 and native bounce selection missing; grant and request retained without guessed chain damage.",
+    "A0I7 level5 resolved durations5/2.5 used; missing native hammer damage/mana/cooldown/projectile left partial.",
+    "Group enumeration and random sequence, hidden/locust/corpse lifetime, shared order replacement and order movement are host adaptations.",
+    "Independent weapon listener uses no damage amount/enemy test. It checks attacker monsoon order in BOTH A12H branches."
+  ]
+}

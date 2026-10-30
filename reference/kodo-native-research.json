@@ -1,0 +1,75 @@
+{
+  "scope": "External old-version default evidence only. Not the custom map native table or runtime verification. Do not automatically fill every missing custom field.",
+  "sources": [
+    {
+      "url": "https://github.com/sumneko/w3x2lni/blob/master/data/zhCN-1.24.4/prebuilt/Custom/ability.ini",
+      "gitBlobSha": "b726c6f485e56ca85fc42093dd83f2640cc3037b",
+      "entries": {
+        "ANcl": {
+          "line": 17280,
+          "fields": {
+            "cast": "{0.0,0.0,0.0,0.0}",
+            "cool": "{0.0,0.0,0.0,0.0}",
+            "cost": "{0,0,0,0}",
+            "dataa": "{180.0,180.0,180.0,180.0}",
+            "datab": "{0,0,0,0}",
+            "datac": "{0,0,0,0}",
+            "datad": "{0.98,0.98,0.98,0.98}",
+            "datae": "{1,1,1,1}",
+            "dataf": "{\"channel\",\"\",\"\",\"\"}",
+            "hero": "1"
+          }
+        },
+        "ACrn": {
+          "line": 3703,
+          "fields": {
+            "cast": "{3.0,0.0,0.0,0.0}",
+            "cool": "{240.0,0.0,0.0,0.0}",
+            "cost": "{0,0,0,0}",
+            "dataa": "{7.0,0.0,0.0,0.0}",
+            "hero": "0"
+          }
+        }
+      }
+    },
+    {
+      "url": "https://github.com/sumneko/w3x2lni/blob/master/data/enUS-1.27.1/prebuilt/Custom/ability.ini",
+      "gitBlobSha": "0105224cb538776baef1e0a7ca7ce56eb342c316",
+      "entries": {
+        "ANcl": {
+          "line": 17280,
+          "fields": {
+            "cast": "{0.0,0.0,0.0,0.0}",
+            "cool": "{0.0,0.0,0.0,0.0}",
+            "cost": "{0,0,0,0}",
+            "dataa": "{180.0,180.0,180.0,180.0}",
+            "datab": "{0,0,0,0}",
+            "datac": "{0,0,0,0}",
+            "datad": "{0.98,0.98,0.98,0.98}",
+            "datae": "{1,1,1,1}",
+            "dataf": "{\"channel\",\"\",\"\",\"\"}",
+            "hero": "1"
+          }
+        },
+        "ACrn": {
+          "line": 3703,
+          "fields": {
+            "cast": "{3.0,0.0,0.0,0.0}",
+            "cool": "{240.0,0.0,0.0,0.0}",
+            "cost": "{0,0,0,0}",
+            "dataa": "{7.0,0.0,0.0,0.0}",
+            "hero": "0"
+          }
+        }
+      }
+    }
+  ],
+  "interpretation": {
+    "ANcl": "Both versions expose 0 cost and cast delay, 180s FollowThrough; custom map inheritance and full native channel still unverified. Kodo host adapter currently leaves unknown resource unchanged.",
+    "ACrn": "Both versions expose 0 cost, 3 cast, 7 dataA, 240 cooldown. This is useful new evidence for the separate pending mummy native revival task, not proof of that implementation."
+  },
+  "channelOptions": {
+    "url": "https://www.hiveworkshop.com/threads/channel-spell-with-dataoption-physical-spell-not-castable-on-spell-immune-units.307510/",
+    "claim": "Author test reports Universal option permits spell immunity; native permission and combined flags require version-specific testing."
+  }
+}

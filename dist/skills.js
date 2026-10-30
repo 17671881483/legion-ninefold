@@ -1,3 +1,4 @@
+import {KODO_RULES,canKodoCast,castKodo,kodoAttackOrders} from './kodo-rules.js';
 import {MUMMY_RULES,initializeMummyDeployment,tickMummyJob,mummyWidgetDeath} from './mummy-rules.js';
 import {BRONZE_DRAGON_RULES,initializeBronzeDeployment,tickBronzeJob,bronzeAttackIssued,bronzeAttackDamage} from './bronze-dragon-rules.js';
 import {DESERT_LIZARD_RULES,desertLizardAttackDamage,desertLizardIncoming} from './desert-lizard-rules.js';
@@ -42,7 +43,7 @@ import { closestWalkable, isWalkable } from './layout.js';
 import { GARROSH_ACTIVE_RULES, GARROSH_PASSIVE_RULES, canGarroshCastAbility, castGarroshAbility, tryGarroshAutoCast, garroshActiveAfterDamage, sourceGarroshActiveDeath, tickGarroshActiveJob } from './garrosh-active-rules.js';
 import { ILLIDAN_RULES, ILLIDAN_ACTIVE_RULES, canIllidanCastAbility, castIllidanAbility, registerIllidanSource, tickIllidanSource, illidanOnAttackHit, tryIllidanAutoCast, illidanAfterDamage, sourceIllidanDeath, tickIllidanJob, isIllidanJobType } from './illidan-rules.js';
 
-export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261030-v42-1';
+export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261030-v43-1';
 
 // Values come from resolved object fields. Empty fields remain empty: a missing
 // native default is reported, rather than replacing it with tooltip numbers.
@@ -227,6 +228,7 @@ function compile(id,version='5.0dJF') {
   if(version==='v14.1A5'&&UNSTABLE_ALCHEMY_RULES[id]){const r=UNSTABLE_ALCHEMY_RULES[id];Object.assign(s,{kind:'unstable_alchemy_source',status:r.status,runtimeImplemented:true,effectText:r.description+`【待核定：${r.partial}】`});}
   if(version==='v14.1A5'&&UNDEAD_LEGION_RULES[id]){const r=UNDEAD_LEGION_RULES[id];Object.assign(s,{kind:'undead_legion_source',status:r.status,runtimeImplemented:true,effectText:r.description+`【待核定：${r.partial}】`});}
   if(version==='v14.1A5'&&LIVING_BOMB_RULES[id]){const r=LIVING_BOMB_RULES[id];Object.assign(s,{kind:'living_bomb_source',status:r.status,runtimeImplemented:r.status==='partial',effectText:r.description+`【待核定：${r.partial}】`});}
+  if(version==='v14.1A5'&&KODO_RULES[id]){const r=KODO_RULES[id];Object.assign(s,{kind:'kodo_source',status:r.status,runtimeImplemented:true,effectText:r.description+`【待核定：${r.partial}】`});}
   if(version==='v14.1A5'&&MUMMY_RULES[id]){const r=MUMMY_RULES[id];Object.assign(s,{kind:'mummy_source',status:r.status,runtimeImplemented:true,effectText:r.description+`【待核定：${r.partial}】`});}
   if(version==='v14.1A5'&&BRONZE_DRAGON_RULES[id]){const r=BRONZE_DRAGON_RULES[id];Object.assign(s,{kind:r.nativeKind?s.kind:'bronze_dragon_source',status:r.status,runtimeImplemented:true,effectText:r.description+`【待核定：${r.partial}】`});}
   if(version==='v14.1A5'&&DESERT_LIZARD_RULES[id]){const r=DESERT_LIZARD_RULES[id];Object.assign(s,{kind:r.nativeKind?s.kind:'desert_lizard_source',status:r.status,runtimeImplemented:r.status==='partial',effectText:r.description+`【待核定：${r.partial}】`});}
@@ -573,7 +575,7 @@ export function modifyIncoming(game,target,damage,attacker,options={}) {
 export function sourceClassAttackDamageEvent(game,target,attacker,options={},amount=0){
   if(!isV14(attacker)||options.spell&&!options.weapon||attacker.status?.sourceNativeAttackBusy)return;
   (attacker.status??={}).sourceNativeAttackBusy=true;
-  try{darkArthasAttackDamage(attacker,amount);vashjOnAttackDamage(game,attacker,target,heroScriptApi);blademasterAttack(game,attacker,heroScriptApi);sourceClassOnAttackDamage(game,attacker,target,heroScriptApi);banditAttackOrders(game,attacker,target,heroScriptApi);amount=bronzeAttackDamage(game,attacker,target,amount,heroScriptApi);desertLizardAttackDamage(game,attacker,heroScriptApi);stormLizardAttackDamage(game,attacker,target,heroScriptApi);huskarAttackDamage(game,attacker,target,amount,heroScriptApi);const manaBranch=destroyerAttackDamage(game,attacker,heroScriptApi);taurenAttackDamage(game,attacker,target,heroScriptApi,manaBranch?'A0IN':null);return amount;}finally{attacker.status.sourceNativeAttackBusy=false;}
+  try{darkArthasAttackDamage(attacker,amount);vashjOnAttackDamage(game,attacker,target,heroScriptApi);blademasterAttack(game,attacker,heroScriptApi);sourceClassOnAttackDamage(game,attacker,target,heroScriptApi);banditAttackOrders(game,attacker,target,heroScriptApi);amount=bronzeAttackDamage(game,attacker,target,amount,heroScriptApi);kodoAttackOrders(game,attacker,target,heroScriptApi);desertLizardAttackDamage(game,attacker,heroScriptApi);stormLizardAttackDamage(game,attacker,target,heroScriptApi);huskarAttackDamage(game,attacker,target,amount,heroScriptApi);const manaBranch=destroyerAttackDamage(game,attacker,heroScriptApi);taurenAttackDamage(game,attacker,target,heroScriptApi,manaBranch?'A0IN':null);return amount;}finally{attacker.status.sourceNativeAttackBusy=false;}
 }
 export function initializeSourceClassCombat(game,building,entity){
   if(isV14(entity)){initializeMummyDeployment(game,building,entity);initializeBronzeDeployment(game,building,entity);initializeBlademaster(game,building,entity);initializeNightmareDeployment(game,entity);initializeBrightArthasDeployment(game,building,entity);initializeLichKingDeployment(game,entity);initializeVashjDeployment(game,building,entity);return initializeSourceClassDeployment(game,building,entity,heroScriptApi);}
@@ -821,11 +823,11 @@ export function sourceRegisteredDamageEvent(game,target,listeners,amount=0){
 }
 export function manualSourceSkills(game,e){
   if(!e||!isV14(e))return [];
-  return (e.skillSpecs??[]).filter(s=>canStormLizardCast(e,s.id)||canLivingBombCast(e,s.id)||canBlademasterCast(e,s.id)||canBanditCast(e,s.id)||canMalfurionCast(e,s.id)||ALCHEMIST_ACTIVE_RULES[s.id]||canYseraCastAbility(e,s.id)||NAGA_ACTIVE_RULES[s.id]?.active||canVashjCastAbility(e,s.id)||canAesaraCastAbility(e,s.id)||canBrightArthasCastAbility(e,s.id)||canDarkArthasCastAbility(e,s.id)||canLichKingCastAbility(e,s.id)||canGarroshCastAbility(e,s.id)||canIllidanCastAbility(e,s.id)||canIceHeroCastAbility(e,s.id)||canTrollCastAbility(e,s.id)||canKelthuzadCastAbility(e,s.id)).map(s=>{
+  return (e.skillSpecs??[]).filter(s=>canKodoCast(e,s.id)||canStormLizardCast(e,s.id)||canLivingBombCast(e,s.id)||canBlademasterCast(e,s.id)||canBanditCast(e,s.id)||canMalfurionCast(e,s.id)||ALCHEMIST_ACTIVE_RULES[s.id]||canYseraCastAbility(e,s.id)||NAGA_ACTIVE_RULES[s.id]?.active||canVashjCastAbility(e,s.id)||canAesaraCastAbility(e,s.id)||canBrightArthasCastAbility(e,s.id)||canDarkArthasCastAbility(e,s.id)||canLichKingCastAbility(e,s.id)||canGarroshCastAbility(e,s.id)||canIllidanCastAbility(e,s.id)||canIceHeroCastAbility(e,s.id)||canTrollCastAbility(e,s.id)||canKelthuzadCastAbility(e,s.id)).map(s=>{
     if(AESARA_RULES[s.id])return aesaraManualSkill(game,e,s);
-    const alchemy=!!ALCHEMIST_ACTIVE_RULES[s.id],family=NAGA_ACTIVE_RULES[s.id]?.active?NAGA_ACTIVE_RULES[s.id]:STORM_LIZARD_RULES[s.id]??LIVING_BOMB_RULES[s.id]??BLADEMASTER_RULES[s.id]??BANDIT_LORD_RULES[s.id]??MALFURION_RULES[s.id]??BRIGHT_ARTHAS_RULES[s.id]??DARK_ARTHAS_RULES[s.id]??VASHJ_RULES[s.id]??LICH_KING_RULES[s.id]??GARROSH_ACTIVE_RULES[s.id]??ILLIDAN_ACTIVE_RULES[s.id]??ICE_HERO_RULES[s.id]??TROLL_ACTIVE_RULES[s.id]??KELTHUZAD_ACTIVE_RULES[s.id]??(s.id==='A0ZO'?KELTHUZAD_RULES.A0ZO:null),shared=!!family,st=e.skillStates?.[s.id]??{},remaining=Math.max(0,(st[alchemy?'manualReadyAt':'readyAt']??0)-game.state.time),autoRemaining=shared?Math.max(0,(st.readyAt??0)-game.state.time):Math.max(0,(st[alchemy?'readyAt':'yseraAutoReadyAt']??0)-game.state.time);
+    const alchemy=!!ALCHEMIST_ACTIVE_RULES[s.id],family=NAGA_ACTIVE_RULES[s.id]?.active?NAGA_ACTIVE_RULES[s.id]:KODO_RULES[s.id]??STORM_LIZARD_RULES[s.id]??LIVING_BOMB_RULES[s.id]??BLADEMASTER_RULES[s.id]??BANDIT_LORD_RULES[s.id]??MALFURION_RULES[s.id]??BRIGHT_ARTHAS_RULES[s.id]??DARK_ARTHAS_RULES[s.id]??VASHJ_RULES[s.id]??LICH_KING_RULES[s.id]??GARROSH_ACTIVE_RULES[s.id]??ILLIDAN_ACTIVE_RULES[s.id]??ICE_HERO_RULES[s.id]??TROLL_ACTIVE_RULES[s.id]??KELTHUZAD_ACTIVE_RULES[s.id]??(s.id==='A0ZO'?KELTHUZAD_RULES.A0ZO:null),shared=!!family,st=e.skillStates?.[s.id]??{},remaining=Math.max(0,(st[alchemy?'manualReadyAt':'readyAt']??0)-game.state.time),autoRemaining=shared?Math.max(0,(st.readyAt??0)-game.state.time):Math.max(0,(st[alchemy?'readyAt':'yseraAutoReadyAt']??0)-game.state.time);
     const reason=e.hp<=.405?'单位已阵亡':e.status?.yseraHidden||e.status?.yseraPaused||e.status?.sourcePaused||e.status?.illidanPaused||e.status?.stunUntil>game.state.time||e.status?.cycloneUntil>game.state.time?'单位当前无法施法':remaining>1e-8?'技能冷却中':e.mana<s.manaCost?'魔法不足':'';
-    return {id:s.id,name:s.name,status:s.status,manaCost:s.manaCost,manaCostKnown:!BANDIT_LORD_RULES[s.id]?.active,cooldown:s.cooldown,remaining,autoRemaining,cooldownMode:shared?'shared_native':'independent',targetKind:family?family.targetKind:s.id==='A2YA'?'point':s.id==='A2YD'?'enemy':'none',range:s.range,radius:s.radius,canStart:!reason,reason};
+    return {id:s.id,name:s.name,status:s.status,manaCost:s.manaCost,manaCostKnown:!BANDIT_LORD_RULES[s.id]?.active&&!KODO_RULES[s.id]?.active,cooldown:s.cooldown,remaining,autoRemaining,cooldownMode:shared?'shared_native':'independent',targetKind:family?family.targetKind:s.id==='A2YA'?'point':s.id==='A2YD'?'enemy':'none',range:s.range,radius:s.radius,canStart:!reason,reason};
   });
 }
 export function castManualSourceSkill(game,e,id,params={}){
@@ -835,6 +837,7 @@ export function castManualSourceSkill(game,e,id,params={}){
   if(s.targetKind==='enemy'&&(!params.target||params.target.hp<=0||params.target.side===e.side||params.target.battleTeam!==e.battleTeam||scriptInvulnerable(params.target)))return {ok:false,message:'请选择可攻击的敌人'};
   if(s.targetKind==='unit'&&(!params.target||params.target.hp<=0||params.target.battleTeam!==e.battleTeam))return {ok:false,message:'请选择有效单位目标'};
   if(params.point&&s.targetKind==='point'||params.target&&s.targetKind==='enemy'){const p=params.point??pos(params.target),v=pos(e);if(dist(v,p)>1e-8)e.facing=Math.atan2(p.y-v.y,p.x-v.x)*180/Math.PI;}
+  if(canKodoCast(e,id))return castKodo(game,e,id,params,heroScriptApi);
   if(canStormLizardCast(e,id))return castStormLizard(game,e,id,params,heroScriptApi);
   if(canLivingBombCast(e,id))return castLivingBomb(game,e,id,params,heroScriptApi);
   if(canBlademasterCast(e,id))return castBlademaster(game,e,id,params,heroScriptApi);

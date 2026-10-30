@@ -1,0 +1,2828 @@
+{
+  "revision": "v14-content-20261030-v43-1",
+  "scope": "Kodo/attack/defense/glutton devour executable spell branches and New_UnitAttack requests; native channel adapter remains partial.",
+  "source": {
+    "path": "reference/v14-source/raw_extracted/war3map.j",
+    "sha256": "e66c55b3b25b185c991be5613e21fbf5b2d598f3cc40f2f8cd01c23bcb828250",
+    "lineConvention": "latin1 bytes split LF; strip final CR"
+  },
+  "sourceEvidence": [
+    {
+      "line": 1189,
+      "text": "integer a8=$41313454"
+    },
+    {
+      "line": 17272,
+      "text": "set Mk[Bi]=$6830514B"
+    },
+    {
+      "line": 17273,
+      "text": "set Ml[Bi]=$68305147"
+    },
+    {
+      "line": 17274,
+      "text": "set Bi=Bi+1"
+    },
+    {
+      "line": 17311,
+      "text": "set Mk[Bi]=$6830514E"
+    },
+    {
+      "line": 17312,
+      "text": "set Ml[Bi]=$6830514A"
+    },
+    {
+      "line": 17313,
+      "text": "set Bi=Bi+1"
+    },
+    {
+      "line": 17314,
+      "text": "set Mk[Bi]=$6830514D"
+    },
+    {
+      "line": 17315,
+      "text": "set Ml[Bi]=$68305149"
+    },
+    {
+      "line": 17316,
+      "text": "set Bi=Bi+1"
+    },
+    {
+      "line": 17317,
+      "text": "set Mk[Bi]=$6830514C"
+    },
+    {
+      "line": 17318,
+      "text": "set Ml[Bi]=$68305148"
+    },
+    {
+      "line": 29786,
+      "text": "function SelectRange takes unit Pf,real FF,real FG,real Px returns group"
+    },
+    {
+      "line": 29787,
+      "text": "local group DG=CreateGroup()"
+    },
+    {
+      "line": 29788,
+      "text": "local group Om=CreateGroup()"
+    },
+    {
+      "line": 29789,
+      "text": "local unit D6=null"
+    },
+    {
+      "line": 29790,
+      "text": "call GroupEnumUnitsInRange(DG,FF,FG,Px,null)"
+    },
+    {
+      "line": 29791,
+      "text": "loop"
+    },
+    {
+      "line": 29792,
+      "text": "set D6=FirstOfGroup(DG)"
+    },
+    {
+      "line": 29793,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 29794,
+      "text": "if IsUnitEnemy(D6,GetOwningPlayer(Pf)) and not IsUnitType(D6,UNIT_TYPE_DEAD) and GetUnitAbilityLevel(D6,$4176756C)==0 then"
+    },
+    {
+      "line": 29795,
+      "text": "call GroupAddUnit(Om,D6)"
+    },
+    {
+      "line": 29796,
+      "text": "endif"
+    },
+    {
+      "line": 29797,
+      "text": "call GroupRemoveUnit(DG,D6)"
+    },
+    {
+      "line": 29798,
+      "text": "endloop"
+    },
+    {
+      "line": 29799,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 29800,
+      "text": "set DG=null"
+    },
+    {
+      "line": 29801,
+      "text": "set D6=null"
+    },
+    {
+      "line": 29802,
+      "text": "set Pf=null"
+    },
+    {
+      "line": 29803,
+      "text": "set Py=Om"
+    },
+    {
+      "line": 29804,
+      "text": "set Om=null"
+    },
+    {
+      "line": 29805,
+      "text": "return Py"
+    },
+    {
+      "line": 29806,
+      "text": "endfunction"
+    },
+    {
+      "line": 38440,
+      "text": "function DevourSkillAction takes nothing returns nothing"
+    },
+    {
+      "line": 38441,
+      "text": "local trigger t=GetTriggeringTrigger()"
+    },
+    {
+      "line": 38442,
+      "text": "local unit Pf=LoadUnitHandle(O,GetHandleId(t),0)"
+    },
+    {
+      "line": 38443,
+      "text": "local unit Om=LoadUnitHandle(O,GetHandleId(t),1)"
+    },
+    {
+      "line": 38444,
+      "text": "local real QY=LoadReal(O,GetHandleId(t),2)"
+    },
+    {
+      "line": 38445,
+      "text": "local real B0=LoadReal(O,GetHandleId(t),3)"
+    },
+    {
+      "line": 38446,
+      "text": "local real a9=LoadReal(O,GetHandleId(t),4)"
+    },
+    {
+      "line": 38447,
+      "text": "if GetTriggerEventId()==EVENT_WIDGET_DEATH or a9+B0>=QY then"
+    },
+    {
+      "line": 38448,
+      "text": "call SetUnitPosition(Om,GetUnitX(Pf),GetUnitY(Pf))"
+    },
+    {
+      "line": 38449,
+      "text": "call ShowUnit(Om,true)"
+    },
+    {
+      "line": 38450,
+      "text": "call DestroyEffect(AddSpecialEffect(\"AZ_fuwang01_E1.MDX\",GetUnitX(Om),GetUnitY(Om)))"
+    },
+    {
+      "line": 38451,
+      "text": "call UnitRemoveAbility(Pf,$41313457)"
+    },
+    {
+      "line": 38452,
+      "text": "call UnitAddAbility(Pf,a8)"
+    },
+    {
+      "line": 38453,
+      "text": "call UnitMakeAbilityPermanent(Pf,true,a8)"
+    },
+    {
+      "line": 38454,
+      "text": "call YDWESetUnitAbilityState(Pf,a8,1,5)"
+    },
+    {
+      "line": 38455,
+      "text": "call FlushChildHashtable(O,GetHandleId(t))"
+    },
+    {
+      "line": 38456,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 38457,
+      "text": "else"
+    },
+    {
+      "line": 38458,
+      "text": "call SaveReal(O,GetHandleId(t),4,B0+a9)"
+    },
+    {
+      "line": 38459,
+      "text": "call UnitDamageTargetBJ(Pf,Om,30,ATTACK_TYPE_CHAOS,DAMAGE_TYPE_UNIVERSAL)"
+    },
+    {
+      "line": 38460,
+      "text": "endif"
+    },
+    {
+      "line": 38461,
+      "text": "set t=null"
+    },
+    {
+      "line": 38462,
+      "text": "set Pf=null"
+    },
+    {
+      "line": 38463,
+      "text": "set Om=null"
+    },
+    {
+      "line": 38464,
+      "text": "endfunction"
+    },
+    {
+      "line": 38465,
+      "text": "function DevourSkill takes unit Pf,unit Om,real QY,real B0 returns nothing"
+    },
+    {
+      "line": 38466,
+      "text": "local trigger t=null"
+    },
+    {
+      "line": 38467,
+      "text": "call YDWETimerDestroyLightning(.2,AddLightningEx(\"FORK\",false,GetUnitX(Pf),GetUnitY(Pf),GetUnitFlyHeight(Pf)+100,GetUnitX(Om),GetUnitY(Om),GetUnitFlyHeight(Om)+100))"
+    },
+    {
+      "line": 38468,
+      "text": "call UnitDamageTargetBJ(Pf,Om,99999,ATTACK_TYPE_CHAOS,DAMAGE_TYPE_UNIVERSAL)"
+    },
+    {
+      "line": 38469,
+      "text": "if IsUnitType(Om,UNIT_TYPE_DEAD) then"
+    },
+    {
+      "line": 38470,
+      "text": "call YDWEFlyEnable(Om)"
+    },
+    {
+      "line": 38471,
+      "text": "call SetUnitFlyHeight(Om,100000,$F4240)"
+    },
+    {
+      "line": 38472,
+      "text": "endif"
+    },
+    {
+      "line": 38473,
+      "text": "return"
+    },
+    {
+      "line": 38474,
+      "text": "call ShowUnit(Om,false)"
+    },
+    {
+      "line": 38475,
+      "text": "call UnitAddAbility(Pf,$41313457)"
+    },
+    {
+      "line": 38476,
+      "text": "call TriggerAddAction(t,function DevourSkillAction)"
+    },
+    {
+      "line": 38477,
+      "text": "call SaveAgentHandle(O,GetHandleId(t),0,Pf)"
+    },
+    {
+      "line": 38478,
+      "text": "call SaveAgentHandle(O,GetHandleId(t),1,Om)"
+    },
+    {
+      "line": 38479,
+      "text": "call UnitRemoveAbility(Pf,a8)"
+    },
+    {
+      "line": 38480,
+      "text": "call SaveReal(O,GetHandleId(t),2,QY)"
+    },
+    {
+      "line": 38481,
+      "text": "call SaveReal(O,GetHandleId(t),3,B0)"
+    },
+    {
+      "line": 38482,
+      "text": "call TriggerRegisterTimerEvent(t,QY,false)"
+    },
+    {
+      "line": 38483,
+      "text": "call TriggerRegisterTimerEvent(t,B0,true)"
+    },
+    {
+      "line": 38484,
+      "text": "call TriggerRegisterDeathEvent(t,Pf)"
+    },
+    {
+      "line": 38485,
+      "text": "call TriggerRegisterDeathEvent(t,Om)"
+    },
+    {
+      "line": 38486,
+      "text": "set t=null"
+    },
+    {
+      "line": 38487,
+      "text": "set Pf=null"
+    },
+    {
+      "line": 38488,
+      "text": "set Om=null"
+    },
+    {
+      "line": 38489,
+      "text": "endfunction"
+    },
+    {
+      "line": 38490,
+      "text": "function DevourSkillActionEx takes nothing returns nothing"
+    },
+    {
+      "line": 38491,
+      "text": "local trigger t=GetTriggeringTrigger()"
+    },
+    {
+      "line": 38492,
+      "text": "local unit Pf=LoadUnitHandle(O,GetHandleId(t),0)"
+    },
+    {
+      "line": 38493,
+      "text": "local unit Om=LoadUnitHandle(O,GetHandleId(t),1)"
+    },
+    {
+      "line": 38494,
+      "text": "local real QY=LoadReal(O,GetHandleId(t),2)"
+    },
+    {
+      "line": 38495,
+      "text": "local real B0=LoadReal(O,GetHandleId(t),3)"
+    },
+    {
+      "line": 38496,
+      "text": "local real a9=LoadReal(O,GetHandleId(t),4)"
+    },
+    {
+      "line": 38497,
+      "text": "if GetTriggerEventId()==EVENT_WIDGET_DEATH or a9+B0>=QY then"
+    },
+    {
+      "line": 38498,
+      "text": "call SetUnitPosition(Om,GetUnitX(Pf),GetUnitY(Pf))"
+    },
+    {
+      "line": 38499,
+      "text": "call ShowUnit(Om,true)"
+    },
+    {
+      "line": 38500,
+      "text": "call DestroyEffect(AddSpecialEffect(\"AZ_fuwang01_E1.MDX\",GetUnitX(Om),GetUnitY(Om)))"
+    },
+    {
+      "line": 38501,
+      "text": "call UnitRemoveAbility(Pf,$41313457)"
+    },
+    {
+      "line": 38502,
+      "text": "call UnitAddAbility(Pf,$41313458)"
+    },
+    {
+      "line": 38503,
+      "text": "call UnitMakeAbilityPermanent(Pf,true,$41313458)"
+    },
+    {
+      "line": 38504,
+      "text": "call YDWESetUnitAbilityState(Pf,$41313458,1,5)"
+    },
+    {
+      "line": 38505,
+      "text": "call FlushChildHashtable(O,GetHandleId(t))"
+    },
+    {
+      "line": 38506,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 38507,
+      "text": "else"
+    },
+    {
+      "line": 38508,
+      "text": "call SaveReal(O,GetHandleId(t),4,B0+a9)"
+    },
+    {
+      "line": 38509,
+      "text": "call UnitDamageTargetBJ(Pf,Om,30+GetUnitState(Om,UNIT_STATE_MAX_LIFE)*.08,ATTACK_TYPE_NORMAL,DAMAGE_TYPE_NORMAL)"
+    },
+    {
+      "line": 38510,
+      "text": "endif"
+    },
+    {
+      "line": 38511,
+      "text": "set t=null"
+    },
+    {
+      "line": 38512,
+      "text": "set Pf=null"
+    },
+    {
+      "line": 38513,
+      "text": "set Om=null"
+    },
+    {
+      "line": 38514,
+      "text": "endfunction"
+    },
+    {
+      "line": 38515,
+      "text": "function DevourSkillEx takes unit Pf,unit Om,real QY,real B0 returns nothing"
+    },
+    {
+      "line": 38516,
+      "text": "local trigger t=null"
+    },
+    {
+      "line": 38517,
+      "text": "call YDWETimerDestroyLightning(.2,AddLightningEx(\"FORK\",false,GetUnitX(Pf),GetUnitY(Pf),GetUnitFlyHeight(Pf)+100,GetUnitX(Om),GetUnitY(Om),GetUnitFlyHeight(Om)+100))"
+    },
+    {
+      "line": 38518,
+      "text": "call UnitDamageTargetBJ(Pf,Om,99999,ATTACK_TYPE_NORMAL,DAMAGE_TYPE_NORMAL)"
+    },
+    {
+      "line": 38519,
+      "text": "if IsUnitType(Om,UNIT_TYPE_DEAD) then"
+    },
+    {
+      "line": 38520,
+      "text": "call YDWEFlyEnable(Om)"
+    },
+    {
+      "line": 38521,
+      "text": "call SetUnitFlyHeight(Om,100000,$F4240)"
+    },
+    {
+      "line": 38522,
+      "text": "endif"
+    },
+    {
+      "line": 38523,
+      "text": "return"
+    },
+    {
+      "line": 38524,
+      "text": "call ShowUnit(Om,false)"
+    },
+    {
+      "line": 38525,
+      "text": "call UnitAddAbility(Pf,$41313457)"
+    },
+    {
+      "line": 38526,
+      "text": "call TriggerAddAction(t,function DevourSkillActionEx)"
+    },
+    {
+      "line": 38527,
+      "text": "call SaveAgentHandle(O,GetHandleId(t),0,Pf)"
+    },
+    {
+      "line": 38528,
+      "text": "call SaveAgentHandle(O,GetHandleId(t),1,Om)"
+    },
+    {
+      "line": 38529,
+      "text": "call UnitRemoveAbility(Pf,$41313458)"
+    },
+    {
+      "line": 38530,
+      "text": "call SaveReal(O,GetHandleId(t),2,QY)"
+    },
+    {
+      "line": 38531,
+      "text": "call SaveReal(O,GetHandleId(t),3,B0)"
+    },
+    {
+      "line": 38532,
+      "text": "call TriggerRegisterTimerEvent(t,QY,false)"
+    },
+    {
+      "line": 38533,
+      "text": "call TriggerRegisterTimerEvent(t,B0,true)"
+    },
+    {
+      "line": 38534,
+      "text": "call TriggerRegisterDeathEvent(t,Pf)"
+    },
+    {
+      "line": 38535,
+      "text": "call TriggerRegisterDeathEvent(t,Om)"
+    },
+    {
+      "line": 38536,
+      "text": "set t=null"
+    },
+    {
+      "line": 38537,
+      "text": "set Pf=null"
+    },
+    {
+      "line": 38538,
+      "text": "set Om=null"
+    },
+    {
+      "line": 38539,
+      "text": "endfunction"
+    },
+    {
+      "line": 39216,
+      "text": "set ao=null"
+    },
+    {
+      "line": 39217,
+      "text": "endfunction"
+    },
+    {
+      "line": 39218,
+      "text": "function Trig_allabilityActions takes nothing returns nothing"
+    },
+    {
+      "line": 39219,
+      "text": "local integer BF=GetSpellAbilityId()"
+    },
+    {
+      "line": 39220,
+      "text": "local player h=GetTriggerPlayer()"
+    },
+    {
+      "line": 39221,
+      "text": "local unit i=GetTriggerUnit()"
+    },
+    {
+      "line": 39222,
+      "text": "local real FF=GetSpellTargetX()"
+    },
+    {
+      "line": 39223,
+      "text": "local real FG=GetSpellTargetY()"
+    },
+    {
+      "line": 39224,
+      "text": "local unit Qf=GetSpellTargetUnit()"
+    },
+    {
+      "line": 39225,
+      "text": "local group Uz=null"
+    },
+    {
+      "line": 39226,
+      "text": "local timer t"
+    },
+    {
+      "line": 39227,
+      "text": "local effect DE=null"
+    },
+    {
+      "line": 39228,
+      "text": "local unit D6=null"
+    },
+    {
+      "line": 39229,
+      "text": "local integer BB=0"
+    },
+    {
+      "line": 39230,
+      "text": "local string a4=\"\""
+    },
+    {
+      "line": 39231,
+      "text": "local trigger Eb=GetTriggeringTrigger()"
+    },
+    {
+      "line": 39232,
+      "text": "local trigger RL=null"
+    },
+    {
+      "line": 39233,
+      "text": "local unit Ki"
+    },
+    {
+      "line": 39234,
+      "text": "local real Pm=0"
+    },
+    {
+      "line": 39235,
+      "text": "local real P8=0"
+    },
+    {
+      "line": 39236,
+      "text": "local real Qv"
+    },
+    {
+      "line": 39237,
+      "text": "local real Qw"
+    },
+    {
+      "line": 39238,
+      "text": "local location a7=null"
+    },
+    {
+      "line": 39239,
+      "text": "call DisableTrigger(Eb)"
+    },
+    {
+      "line": 39240,
+      "text": "call BoxClickAction(i,Qf,BF)"
+    },
+    {
+      "line": 39513,
+      "text": "elseif BF==a8 then"
+    },
+    {
+      "line": 39514,
+      "text": "call DevourSkill(i,Qf,10,1)"
+    },
+    {
+      "line": 39515,
+      "text": "elseif BF==$41313458 then"
+    },
+    {
+      "line": 39516,
+      "text": "set Uz=SelectRange(i,GetUnitX(i),GetUnitY(i),300)"
+    },
+    {
+      "line": 39517,
+      "text": "call DevourSkillEx(i,Qf,10,1)"
+    },
+    {
+      "line": 39518,
+      "text": "loop"
+    },
+    {
+      "line": 39519,
+      "text": "set D6=FirstOfGroup(Uz)"
+    },
+    {
+      "line": 39520,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 39521,
+      "text": "call GroupRemoveUnit(Uz,D6)"
+    },
+    {
+      "line": 39522,
+      "text": "if GetUnitState(D6,UNIT_STATE_LIFE)<=3000 and IsUnitType(D6,UNIT_TYPE_GROUND) and not IsUnitHidden(D6) then"
+    },
+    {
+      "line": 39523,
+      "text": "if D6!=Qf then"
+    },
+    {
+      "line": 39524,
+      "text": "call DevourSkillEx(i,D6,10,1)"
+    },
+    {
+      "line": 39525,
+      "text": "exitwhen true"
+    },
+    {
+      "line": 39526,
+      "text": "endif"
+    },
+    {
+      "line": 39527,
+      "text": "endif"
+    },
+    {
+      "line": 39528,
+      "text": "endloop"
+    },
+    {
+      "line": 39529,
+      "text": "call DestroyGroup(Uz)"
+    },
+    {
+      "line": 39530,
+      "text": "set Uz=null"
+    },
+    {
+      "line": 39531,
+      "text": "set D6=null"
+    },
+    {
+      "line": 42252,
+      "text": "function Trig_New_UnitAttackActions takes nothing returns boolean"
+    },
+    {
+      "line": 42253,
+      "text": "local unit Qf=GetTriggerUnit()"
+    },
+    {
+      "line": 42254,
+      "text": "local unit i=GetEventDamageSource()"
+    },
+    {
+      "line": 42255,
+      "text": "local integer BF=GetUnitTypeId(i)"
+    },
+    {
+      "line": 42256,
+      "text": "local integer b9=$6E305344"
+    },
+    {
+      "line": 42257,
+      "text": "local integer YY=0"
+    },
+    {
+      "line": 42258,
+      "text": "local unit Ki=null"
+    },
+    {
+      "line": 42259,
+      "text": "local unit D6=null"
+    },
+    {
+      "line": 42260,
+      "text": "local group Uz=null"
+    },
+    {
+      "line": 42261,
+      "text": "local real P8=0"
+    },
+    {
+      "line": 42262,
+      "text": "local unit cB=null"
+    },
+    {
+      "line": 42263,
+      "text": "local boolexpr Cd"
+    },
+    {
+      "line": 42264,
+      "text": "local timer DK"
+    },
+    {
+      "line": 42265,
+      "text": "local real FF"
+    },
+    {
+      "line": 42266,
+      "text": "local real FG"
+    },
+    {
+      "line": 42267,
+      "text": "local integer y=0"
+    },
+    {
+      "line": 42268,
+      "text": "local player h"
+    },
+    {
+      "line": 42269,
+      "text": "local effect DE"
+    },
+    {
+      "line": 42270,
+      "text": "if YDWEIsEventAttackDamage() and not LoadBoolean(O,GetHandleId(i),StringHash(\"Attack\")) then"
+    },
+    {
+      "line": 42271,
+      "text": "call SaveBoolean(O,GetHandleId(i),StringHash(\"Attack\"),true)"
+    },
+    {
+      "line": 42447,
+      "text": "if GetUnitAbilityLevel(i,a8)>0 then"
+    },
+    {
+      "line": 42448,
+      "text": "set Uz=SelectRange(i,GetUnitX(i),GetUnitY(i),300)"
+    },
+    {
+      "line": 42449,
+      "text": "loop"
+    },
+    {
+      "line": 42450,
+      "text": "set D6=FirstOfGroup(Uz)"
+    },
+    {
+      "line": 42451,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 42452,
+      "text": "call GroupRemoveUnit(Uz,D6)"
+    },
+    {
+      "line": 42453,
+      "text": "if GetUnitState(D6,UNIT_STATE_LIFE)<=400 and IsUnitType(D6,UNIT_TYPE_GROUND) then"
+    },
+    {
+      "line": 42454,
+      "text": "if IssueTargetOrder(i,\"unflamingattack\",D6) then"
+    },
+    {
+      "line": 42455,
+      "text": "exitwhen true"
+    },
+    {
+      "line": 42456,
+      "text": "endif"
+    },
+    {
+      "line": 42457,
+      "text": "endif"
+    },
+    {
+      "line": 42458,
+      "text": "endloop"
+    },
+    {
+      "line": 42459,
+      "text": "call DestroyGroup(Uz)"
+    },
+    {
+      "line": 42460,
+      "text": "set D6=null"
+    },
+    {
+      "line": 42461,
+      "text": "elseif GetUnitAbilityLevel(Qf,a8)>0 then"
+    },
+    {
+      "line": 42462,
+      "text": "set Uz=SelectRange(Qf,GetUnitX(Qf),GetUnitY(Qf),300)"
+    },
+    {
+      "line": 42463,
+      "text": "loop"
+    },
+    {
+      "line": 42464,
+      "text": "set D6=FirstOfGroup(Uz)"
+    },
+    {
+      "line": 42465,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 42466,
+      "text": "call GroupRemoveUnit(Uz,D6)"
+    },
+    {
+      "line": 42467,
+      "text": "if GetUnitState(D6,UNIT_STATE_LIFE)<=400 and IsUnitType(D6,UNIT_TYPE_GROUND) and not IsUnitHidden(D6) then"
+    },
+    {
+      "line": 42468,
+      "text": "if IssueTargetOrder(Qf,\"unflamingattack\",D6) then"
+    },
+    {
+      "line": 42469,
+      "text": "exitwhen true"
+    },
+    {
+      "line": 42470,
+      "text": "endif"
+    },
+    {
+      "line": 42471,
+      "text": "endif"
+    },
+    {
+      "line": 42472,
+      "text": "endloop"
+    },
+    {
+      "line": 42473,
+      "text": "call DestroyGroup(Uz)"
+    },
+    {
+      "line": 42474,
+      "text": "set D6=null"
+    },
+    {
+      "line": 42475,
+      "text": "endif"
+    },
+    {
+      "line": 42476,
+      "text": "if GetUnitAbilityLevel(i,$41313458)>0 then"
+    },
+    {
+      "line": 42477,
+      "text": "set Uz=SelectRange(i,GetUnitX(i),GetUnitY(i),300)"
+    },
+    {
+      "line": 42478,
+      "text": "loop"
+    },
+    {
+      "line": 42479,
+      "text": "set D6=FirstOfGroup(Uz)"
+    },
+    {
+      "line": 42480,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 42481,
+      "text": "call GroupRemoveUnit(Uz,D6)"
+    },
+    {
+      "line": 42482,
+      "text": "if GetUnitState(D6,UNIT_STATE_LIFE)<=3000 and IsUnitType(D6,UNIT_TYPE_GROUND) and not IsUnitHidden(D6) then"
+    },
+    {
+      "line": 42483,
+      "text": "if IssueTargetOrder(i,\"unflamingattack\",D6) then"
+    },
+    {
+      "line": 42484,
+      "text": "exitwhen true"
+    },
+    {
+      "line": 42485,
+      "text": "endif"
+    },
+    {
+      "line": 42486,
+      "text": "endif"
+    },
+    {
+      "line": 42487,
+      "text": "endloop"
+    },
+    {
+      "line": 42488,
+      "text": "call DestroyGroup(Uz)"
+    },
+    {
+      "line": 42489,
+      "text": "set D6=null"
+    },
+    {
+      "line": 42490,
+      "text": "elseif GetUnitAbilityLevel(Qf,$41313458)>0 then"
+    },
+    {
+      "line": 42491,
+      "text": "set Uz=SelectRange(Qf,GetUnitX(Qf),GetUnitY(Qf),300)"
+    },
+    {
+      "line": 42492,
+      "text": "loop"
+    },
+    {
+      "line": 42493,
+      "text": "set D6=FirstOfGroup(Uz)"
+    },
+    {
+      "line": 42494,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 42495,
+      "text": "call GroupRemoveUnit(Uz,D6)"
+    },
+    {
+      "line": 42496,
+      "text": "if GetUnitState(D6,UNIT_STATE_LIFE)<=3000 and IsUnitType(D6,UNIT_TYPE_GROUND) then"
+    },
+    {
+      "line": 42497,
+      "text": "if IssueTargetOrder(Qf,\"unflamingattack\",D6) then"
+    },
+    {
+      "line": 42498,
+      "text": "exitwhen true"
+    },
+    {
+      "line": 42499,
+      "text": "endif"
+    },
+    {
+      "line": 42500,
+      "text": "endif"
+    },
+    {
+      "line": 42501,
+      "text": "endloop"
+    },
+    {
+      "line": 42502,
+      "text": "call DestroyGroup(Uz)"
+    },
+    {
+      "line": 42503,
+      "text": "set D6=null"
+    },
+    {
+      "line": 42504,
+      "text": "endif"
+    },
+    {
+      "line": 42794,
+      "text": "call SaveBoolean(O,GetHandleId(i),StringHash(\"Attack\"),false)"
+    },
+    {
+      "line": 42795,
+      "text": "endif"
+    },
+    {
+      "line": 42796,
+      "text": "set DK=null"
+    },
+    {
+      "line": 42797,
+      "text": "set D6=null"
+    },
+    {
+      "line": 42798,
+      "text": "set Uz=null"
+    },
+    {
+      "line": 42799,
+      "text": "set Ki=null"
+    },
+    {
+      "line": 42800,
+      "text": "set Qf=null"
+    },
+    {
+      "line": 42801,
+      "text": "set i=null"
+    },
+    {
+      "line": 42802,
+      "text": "return false"
+    },
+    {
+      "line": 42803,
+      "text": "endfunction"
+    },
+    {
+      "line": 42804,
+      "text": "function InitTrig_New_UnitAttack takes nothing returns nothing"
+    },
+    {
+      "line": 42805,
+      "text": "set b4=CreateTrigger()"
+    },
+    {
+      "line": 42806,
+      "text": "call YDWESyStemAnyUnitDamagedRegistTrigger(b4)"
+    },
+    {
+      "line": 42807,
+      "text": "call TriggerAddCondition(b4,Condition(function Trig_New_UnitAttackActions))"
+    }
+  ],
+  "nativeResearch": "kodo-native-research.json",
+  "boundaries": [
+    "Cost/Cast/FollowThrough/DisableOtherAbilities absent in custom CSV, instant execution and resource-not-deducted adapter; old-version external defaults do not prove custom map inheritance.",
+    "300 range and HP<=400/3000 are auto filters. Manual A14T may target air; manual primary targets have no script HP restriction.",
+    "A14T attacker and A14X damaged branches omit hidden predicate; native order may still reject. Keep select/attempt distinct.",
+    "A14X snapshots SelectRange before main damage; second filter does not recheck dead/Avul after main damage side effects.",
+    "99999 damage is not KillUnit. Main and independent damage listeners still apply, with weapon flag true from UnitDamageTargetBJ.",
+    "Return bypasses all digestion, A14W grant/removal, 5-second cooldown reset and trigger registration. No dynamic A14W runtime coverage added.",
+    "Native group enumeration, team mapping, dead state vs health threshold and flight/model visuals remain host adaptations."
+  ],
+  "abilities": {
+    "A14T": {
+      "rawcode": "A14T",
+      "name": "吞噬",
+      "tip": "吞噬",
+      "ubertip": "科多兽随机吞噬半径300码内随机一名生命值低于400的敌人进入肚中消化，吞噬状态下被吞噬单位每秒损失30点生命值，每次吞噬最多持续10s。（吞噬状态结束后技能才会进入cd）（吞噬状态结束后如果目标没有死亡则会于原地吐出）吞噬状态下科多兽每秒额外恢复10点生命值。如果科多兽处于吞噬状态下死亡则肚中单位会以当前生命值状态逃出",
+      "alias": "A14T",
+      "code": "ANcl",
+      "Area1": "",
+      "BuffID1": "",
+      "DataA1": "",
+      "DataB1": "1",
+      "DataC1": "13",
+      "levels": "1",
+      "targs1": "enemies",
+      "targs2": "_",
+      "targs3": "_",
+      "targs4": "_",
+      "untip": "",
+      "unubertip": "",
+      "Cost1": "",
+      "Dur1": "",
+      "HeroDur1": "",
+      "Rng1": "300.0",
+      "Cool1": "10.0",
+      "checkDep": "1",
+      "Cast1": "",
+      "DataD1": "",
+      "EfctID1": "",
+      "Area2": "",
+      "Area3": "",
+      "BuffID2": "",
+      "BuffID3": "",
+      "DataA2": "",
+      "DataA3": "",
+      "DataB2": "",
+      "DataB3": "",
+      "reqLevel": "1",
+      "DataC2": "",
+      "DataC3": "",
+      "Cool2": "",
+      "Cool3": "",
+      "Cost2": "",
+      "Cost3": "",
+      "Dur2": "",
+      "Dur3": "",
+      "Rng2": "",
+      "Rng3": "",
+      "HeroDur2": "",
+      "HeroDur3": "",
+      "DataD2": "",
+      "DataD3": "",
+      "UnitID1": "",
+      "UnitID2": "",
+      "UnitID3": "",
+      "DataE1": "",
+      "Cast2": "",
+      "Cast3": "",
+      "DataE2": "",
+      "DataE3": "",
+      "DataF1": "unflamingattack",
+      "DataF2": "",
+      "DataF3": "",
+      "EfctID2": "",
+      "EfctID3": "",
+      "DataH1": "",
+      "DataH2": "",
+      "DataH3": "",
+      "DataI1": "",
+      "DataI2": "",
+      "DataI3": "",
+      "priority": "",
+      "DataA4": "",
+      "DataG1": "",
+      "BuffID4": "",
+      "Dur4": "",
+      "HeroDur4": "",
+      "Rng4": "",
+      "Area4": "",
+      "DataB4": "",
+      "DataC4": "",
+      "Cost4": "",
+      "levelSkip": "",
+      "DataF4": "",
+      "DataE4": ""
+    },
+    "A14W": {
+      "rawcode": "A14W",
+      "name": "科多兽吞噬恢复生命",
+      "tip": "",
+      "ubertip": "",
+      "alias": "A14W",
+      "code": "Arel",
+      "Area1": "",
+      "BuffID1": "",
+      "DataA1": "30",
+      "DataB1": "",
+      "DataC1": "",
+      "levels": "1",
+      "targs1": "_",
+      "targs2": "_",
+      "targs3": "_",
+      "targs4": "_",
+      "untip": "",
+      "unubertip": "",
+      "Cost1": "",
+      "Dur1": "",
+      "HeroDur1": "",
+      "Rng1": "",
+      "Cool1": "",
+      "checkDep": "",
+      "Cast1": "",
+      "DataD1": "",
+      "EfctID1": "",
+      "Area2": "",
+      "Area3": "",
+      "BuffID2": "",
+      "BuffID3": "",
+      "DataA2": "",
+      "DataA3": "",
+      "DataB2": "",
+      "DataB3": "",
+      "reqLevel": "",
+      "DataC2": "",
+      "DataC3": "",
+      "Cool2": "",
+      "Cool3": "",
+      "Cost2": "",
+      "Cost3": "",
+      "Dur2": "",
+      "Dur3": "",
+      "Rng2": "",
+      "Rng3": "",
+      "HeroDur2": "",
+      "HeroDur3": "",
+      "DataD2": "",
+      "DataD3": "",
+      "UnitID1": "",
+      "UnitID2": "",
+      "UnitID3": "",
+      "DataE1": "",
+      "Cast2": "",
+      "Cast3": "",
+      "DataE2": "",
+      "DataE3": "",
+      "DataF1": "",
+      "DataF2": "",
+      "DataF3": "",
+      "EfctID2": "",
+      "EfctID3": "",
+      "DataH1": "",
+      "DataH2": "",
+      "DataH3": "",
+      "DataI1": "",
+      "DataI2": "",
+      "DataI3": "",
+      "priority": "",
+      "DataA4": "",
+      "DataG1": "",
+      "BuffID4": "",
+      "Dur4": "",
+      "HeroDur4": "",
+      "Rng4": "",
+      "Area4": "",
+      "DataB4": "",
+      "DataC4": "",
+      "Cost4": "",
+      "levelSkip": "",
+      "DataF4": "",
+      "DataE4": ""
+    },
+    "A14X": {
+      "rawcode": "A14X",
+      "name": "暴食",
+      "tip": "暴食",
+      "ubertip": "暴食科多兽比寻常的科多兽更加饥饿凶残。暴食科多兽随机吞噬半径300码内随机2名生命值低于3000的敌人进入肚中消化，吞噬状态下被吞噬单位每秒损失30+8%最大生命值，每次吞噬最多持续10s。（吞噬状态结束后技能才会进入cd）（吞噬状态结束后如果目标没有死亡则会于原地吐出）吞噬状态下科多兽每秒额外恢复30点生命值。如果暴食科多兽处于吞噬状态下死亡则肚中单位也会随之死亡。（技能无视魔免）（技能对空军单位无效）",
+      "alias": "A14X",
+      "code": "ANcl",
+      "Area1": "",
+      "BuffID1": "",
+      "DataA1": "",
+      "DataB1": "1",
+      "DataC1": "13",
+      "levels": "1",
+      "targs1": "enemies,ground",
+      "targs2": "_",
+      "targs3": "_",
+      "targs4": "_",
+      "untip": "",
+      "unubertip": "",
+      "Cost1": "",
+      "Dur1": "",
+      "HeroDur1": "",
+      "Rng1": "300.0",
+      "Cool1": "3.0",
+      "checkDep": "1",
+      "Cast1": "",
+      "DataD1": "",
+      "EfctID1": "",
+      "Area2": "",
+      "Area3": "",
+      "BuffID2": "",
+      "BuffID3": "",
+      "DataA2": "",
+      "DataA3": "",
+      "DataB2": "",
+      "DataB3": "",
+      "reqLevel": "1",
+      "DataC2": "",
+      "DataC3": "",
+      "Cool2": "",
+      "Cool3": "",
+      "Cost2": "",
+      "Cost3": "",
+      "Dur2": "",
+      "Dur3": "",
+      "Rng2": "",
+      "Rng3": "",
+      "HeroDur2": "",
+      "HeroDur3": "",
+      "DataD2": "",
+      "DataD3": "",
+      "UnitID1": "",
+      "UnitID2": "",
+      "UnitID3": "",
+      "DataE1": "",
+      "Cast2": "",
+      "Cast3": "",
+      "DataE2": "",
+      "DataE3": "",
+      "DataF1": "unflamingattack",
+      "DataF2": "",
+      "DataF3": "",
+      "EfctID2": "",
+      "EfctID3": "",
+      "DataH1": "",
+      "DataH2": "",
+      "DataH3": "",
+      "DataI1": "",
+      "DataI2": "",
+      "DataI3": "",
+      "priority": "",
+      "DataA4": "",
+      "DataG1": "",
+      "BuffID4": "",
+      "Dur4": "",
+      "HeroDur4": "",
+      "Rng4": "",
+      "Area4": "",
+      "DataB4": "",
+      "DataC4": "",
+      "Cost4": "",
+      "levelSkip": "",
+      "DataF4": "",
+      "DataE4": ""
+    }
+  },
+  "units": {
+    "h0QG": {
+      "rawcode": "h0QG",
+      "name": "科多兽",
+      "proper_names": "",
+      "tip": "建造 <科多兽> - [A]",
+      "ubertip": "攻击伤害: 101-104\n攻击速度: 1.3\n攻击距离: 300\n生命值: 1000\n攻击类型: 穿刺\n防御类型: 轻甲\n技能:  吞噬",
+      "unitID": "h0QG",
+      "canFlee": "1",
+      "cargoSize": "",
+      "death": "2.34",
+      "deathType": "2",
+      "movetp": "",
+      "nameCount": "",
+      "orientInterp": "",
+      "points": "200",
+      "prio": "2",
+      "propWin": "60.0",
+      "race": "human",
+      "targType": "structure",
+      "turnRate": "",
+      "unitBalanceID": "h0QG",
+      "AGI": "",
+      "AGIplus": "",
+      "bldtm": "2",
+      "bountydice": "",
+      "bountyplus": "",
+      "bountysides": "",
+      "collision": "72.0",
+      "defType": "small",
+      "fused": "2",
+      "goldcost": "200",
+      "goldRep": "",
+      "HP": "1000",
+      "INT": "",
+      "INTplus": "",
+      "level": "1",
+      "lumbercost": "",
+      "lumberRep": "",
+      "mana0": "",
+      "nsight": "800",
+      "preventPlace": "unbuildable",
+      "Primary": "_",
+      "regenHP": "3.0",
+      "regenMana": "",
+      "regenType": "always",
+      "reptm": "1",
+      "requirePlace": "_",
+      "sight": "800",
+      "spd": "",
+      "stockMax": "",
+      "stockRegen": "",
+      "stockStart": "",
+      "STR": "",
+      "STRplus": "",
+      "tilesets": "*",
+      "upgrades": "R009,R00A",
+      "unitUIID": "h0QG",
+      "armor": "metal",
+      "blend": "0.15",
+      "blue": "255",
+      "elevRad": "50.0",
+      "file": "units\\orc\\KotoBeastNoRider\\KotoBeastNoRider.mdl",
+      "green": "255",
+      "maxPitch": "",
+      "maxRoll": "",
+      "modelScale": "0.9",
+      "red": "255",
+      "run": "200.0",
+      "scale": "1.7",
+      "scaleBull": "1",
+      "shadowH": "",
+      "shadowOnWater": "1",
+      "shadowW": "",
+      "shadowX": "",
+      "shadowY": "",
+      "teamColor": "-1",
+      "unitShadow": "",
+      "unitSound": "Infernal",
+      "walk": "200.0",
+      "unitAbilID": "h0QG",
+      "abilList": "A14T,A008,A118",
+      "auto": "_",
+      "heroAbilList": "",
+      "unitWeapID": "h0QG",
+      "acquire": "500.0",
+      "atkType1": "pierce",
+      "atkType2": "normal",
+      "backSw1": "0.5",
+      "backSw2": "",
+      "castbsw": "0.51",
+      "castpt": "",
+      "cool1": "1.3",
+      "cool2": "",
+      "dice1": "1",
+      "dice2": "",
+      "dmgpt1": "0.5",
+      "dmgpt2": "",
+      "impactZ": "120.0",
+      "launchZ": "145.0",
+      "rangeN1": "300",
+      "rangeN2": "",
+      "RngBuff1": "250.0",
+      "RngBuff2": "",
+      "showUI1": "",
+      "showUI2": "1",
+      "sides1": "4",
+      "sides2": "",
+      "targCount1": "1",
+      "targCount2": "1",
+      "targs1": "enemies",
+      "targs2": "",
+      "weapsOn": "1",
+      "weapTp1": "normal",
+      "weapTp2": "",
+      "weapType1": "MetalHeavyBash",
+      "hotkey": "A",
+      "damage_min_1": "101.0",
+      "damage_max_1": "104.0",
+      "damage_avg_1": "102.5",
+      "dps_avg_1": "78.84615384615384",
+      "bounty_min": "",
+      "bounty_max": "",
+      "bounty_avg": "",
+      "attack_type_zh": "穿刺",
+      "armor_type_zh": "轻甲",
+      "ability_ids": "A14T,A008,A118",
+      "ability_names": "吞噬,出售,移位",
+      "formation": "",
+      "Farea1": "",
+      "Harea1": "",
+      "Hfact1": "",
+      "Qarea1": "",
+      "Qfact1": "",
+      "splashTargs1": "",
+      "launchX": "",
+      "def": "3.0",
+      "defUp": "",
+      "manaN": "",
+      "minSpd": "",
+      "type": "ancient",
+      "hideHeroDeathMsg": "",
+      "dmgplus1": "100",
+      "damageLoss1": "",
+      "buildingShadow": "ShadowGuardTower",
+      "hideHeroMinimap": "",
+      "launchY": "",
+      "moveHeight": "",
+      "fileVerFlags": "",
+      "isbldg": "1",
+      "buffRadius": "15.0",
+      "buffType": "buffer",
+      "pathTex": "PathTextures\\4x4SimpleSolid.tga",
+      "elevPts": "4",
+      "uberSplat": "",
+      "dmgplus2": "",
+      "weapType2": "",
+      "damageLoss2": "",
+      "Farea2": "",
+      "Harea2": "",
+      "Hfact2": "",
+      "minRange": "",
+      "Qarea2": "",
+      "Qfact2": "",
+      "spillRadius1": "",
+      "spillRadius2": "",
+      "splashTargs2": "",
+      "moveFloor": "",
+      "repulse": "",
+      "repulseParam": "",
+      "selZ": "",
+      "fmade": "",
+      "hideOnMinimap": "",
+      "repulseGroup": "",
+      "maxSpd": "",
+      "canSleep": "",
+      "spillDist1": "",
+      "nbmmIcon": "",
+      "tilesetSpecific": "",
+      "dmgUp2": "",
+      "fatLOS": "",
+      "selCircOnWater": "",
+      "launchSwimZ": "",
+      "isBuildOn": ""
+    },
+    "h0QH": {
+      "rawcode": "h0QH",
+      "name": "攻击型科多兽",
+      "proper_names": "",
+      "tip": "升级到 <进攻型科多兽> - [P]",
+      "ubertip": "攻击伤害: 251-254\n攻击速度: 1.3\n攻击距离: 300\n生命值: 1500\n攻击类型: 混乱\n防御类型: 轻甲\n技能:  吞噬| 战鼓r",
+      "unitID": "h0QH",
+      "canFlee": "1",
+      "cargoSize": "",
+      "death": "2.34",
+      "deathType": "2",
+      "movetp": "",
+      "nameCount": "",
+      "orientInterp": "",
+      "points": "400",
+      "prio": "2",
+      "propWin": "60.0",
+      "race": "human",
+      "targType": "structure",
+      "turnRate": "",
+      "unitBalanceID": "h0QH",
+      "AGI": "",
+      "AGIplus": "",
+      "bldtm": "2",
+      "bountydice": "",
+      "bountyplus": "",
+      "bountysides": "",
+      "collision": "72.0",
+      "defType": "small",
+      "fused": "5",
+      "goldcost": "200",
+      "goldRep": "",
+      "HP": "1500",
+      "INT": "",
+      "INTplus": "",
+      "level": "1",
+      "lumbercost": "",
+      "lumberRep": "",
+      "mana0": "",
+      "nsight": "800",
+      "preventPlace": "unbuildable",
+      "Primary": "_",
+      "regenHP": "3.0",
+      "regenMana": "",
+      "regenType": "always",
+      "reptm": "1",
+      "requirePlace": "_",
+      "sight": "800",
+      "spd": "",
+      "stockMax": "",
+      "stockRegen": "",
+      "stockStart": "",
+      "STR": "",
+      "STRplus": "",
+      "tilesets": "*",
+      "upgrades": "R009,R00A",
+      "unitUIID": "h0QH",
+      "armor": "metal",
+      "blend": "0.15",
+      "blue": "10",
+      "elevRad": "50.0",
+      "file": "KodoBeastPvP.mdl",
+      "green": "10",
+      "maxPitch": "",
+      "maxRoll": "",
+      "modelScale": "0.5",
+      "red": "255",
+      "run": "200.0",
+      "scale": "1.7",
+      "scaleBull": "1",
+      "shadowH": "",
+      "shadowOnWater": "1",
+      "shadowW": "",
+      "shadowX": "",
+      "shadowY": "",
+      "teamColor": "-1",
+      "unitShadow": "",
+      "unitSound": "Infernal",
+      "walk": "200.0",
+      "unitAbilID": "h0QH",
+      "abilList": "A14T,A14U,A008,A118",
+      "auto": "_",
+      "heroAbilList": "",
+      "unitWeapID": "h0QH",
+      "acquire": "500.0",
+      "atkType1": "chaos",
+      "atkType2": "normal",
+      "backSw1": "0.5",
+      "backSw2": "",
+      "castbsw": "0.51",
+      "castpt": "",
+      "cool1": "1.3",
+      "cool2": "",
+      "dice1": "1",
+      "dice2": "",
+      "dmgpt1": "0.5",
+      "dmgpt2": "",
+      "impactZ": "120.0",
+      "launchZ": "145.0",
+      "rangeN1": "300",
+      "rangeN2": "",
+      "RngBuff1": "250.0",
+      "RngBuff2": "",
+      "showUI1": "",
+      "showUI2": "1",
+      "sides1": "4",
+      "sides2": "",
+      "targCount1": "1",
+      "targCount2": "1",
+      "targs1": "enemies",
+      "targs2": "",
+      "weapsOn": "1",
+      "weapTp1": "normal",
+      "weapTp2": "",
+      "weapType1": "MetalHeavyBash",
+      "hotkey": "P",
+      "damage_min_1": "251.0",
+      "damage_max_1": "254.0",
+      "damage_avg_1": "252.5",
+      "dps_avg_1": "194.23076923076923",
+      "bounty_min": "",
+      "bounty_max": "",
+      "bounty_avg": "",
+      "attack_type_zh": "混乱",
+      "armor_type_zh": "轻甲",
+      "ability_ids": "A14T,A14U,A008,A118",
+      "ability_names": "吞噬,战鼓,出售,移位",
+      "formation": "",
+      "Farea1": "",
+      "Harea1": "",
+      "Hfact1": "",
+      "Qarea1": "",
+      "Qfact1": "",
+      "splashTargs1": "",
+      "launchX": "",
+      "def": "3.0",
+      "defUp": "",
+      "manaN": "",
+      "minSpd": "",
+      "type": "ancient",
+      "hideHeroDeathMsg": "",
+      "dmgplus1": "250",
+      "damageLoss1": "",
+      "buildingShadow": "ShadowGuardTower",
+      "hideHeroMinimap": "",
+      "launchY": "",
+      "moveHeight": "",
+      "fileVerFlags": "",
+      "isbldg": "1",
+      "buffRadius": "15.0",
+      "buffType": "buffer",
+      "pathTex": "PathTextures\\4x4SimpleSolid.tga",
+      "elevPts": "4",
+      "uberSplat": "",
+      "dmgplus2": "",
+      "weapType2": "",
+      "damageLoss2": "",
+      "Farea2": "",
+      "Harea2": "",
+      "Hfact2": "",
+      "minRange": "",
+      "Qarea2": "",
+      "Qfact2": "",
+      "spillRadius1": "",
+      "spillRadius2": "",
+      "splashTargs2": "",
+      "moveFloor": "",
+      "repulse": "",
+      "repulseParam": "",
+      "selZ": "",
+      "fmade": "",
+      "hideOnMinimap": "",
+      "repulseGroup": "",
+      "maxSpd": "",
+      "canSleep": "",
+      "spillDist1": "",
+      "nbmmIcon": "",
+      "tilesetSpecific": "",
+      "dmgUp2": "",
+      "fatLOS": "",
+      "selCircOnWater": "",
+      "launchSwimZ": "",
+      "isBuildOn": ""
+    },
+    "h0QI": {
+      "rawcode": "h0QI",
+      "name": "防御型科多兽",
+      "proper_names": "",
+      "tip": "升级到 <防御型科多兽> - [P]",
+      "ubertip": "攻击伤害: 101-104\n攻击速度: 1.3\n攻击距离: 300\n生命值: 2000\n攻击类型: 穿刺\n防御类型: 国王甲\n技能:  吞噬 坚固",
+      "unitID": "h0QI",
+      "canFlee": "1",
+      "cargoSize": "",
+      "death": "2.34",
+      "deathType": "2",
+      "movetp": "",
+      "nameCount": "",
+      "orientInterp": "",
+      "points": "400",
+      "prio": "2",
+      "propWin": "60.0",
+      "race": "human",
+      "targType": "structure",
+      "turnRate": "",
+      "unitBalanceID": "h0QI",
+      "AGI": "",
+      "AGIplus": "",
+      "bldtm": "2",
+      "bountydice": "",
+      "bountyplus": "",
+      "bountysides": "",
+      "collision": "72.0",
+      "defType": "hero",
+      "fused": "5",
+      "goldcost": "200",
+      "goldRep": "",
+      "HP": "2000",
+      "INT": "",
+      "INTplus": "",
+      "level": "1",
+      "lumbercost": "",
+      "lumberRep": "",
+      "mana0": "",
+      "nsight": "800",
+      "preventPlace": "unbuildable",
+      "Primary": "_",
+      "regenHP": "3.0",
+      "regenMana": "",
+      "regenType": "always",
+      "reptm": "1",
+      "requirePlace": "_",
+      "sight": "800",
+      "spd": "",
+      "stockMax": "",
+      "stockRegen": "",
+      "stockStart": "",
+      "STR": "",
+      "STRplus": "",
+      "tilesets": "*",
+      "upgrades": "R009,R00A",
+      "unitUIID": "h0QI",
+      "armor": "metal",
+      "blend": "0.15",
+      "blue": "120",
+      "elevRad": "50.0",
+      "file": "KodoBeastPvP.mdl",
+      "green": "255",
+      "maxPitch": "",
+      "maxRoll": "",
+      "modelScale": "0.5",
+      "red": "255",
+      "run": "200.0",
+      "scale": "1.7",
+      "scaleBull": "1",
+      "shadowH": "",
+      "shadowOnWater": "1",
+      "shadowW": "",
+      "shadowX": "",
+      "shadowY": "",
+      "teamColor": "-1",
+      "unitShadow": "",
+      "unitSound": "Infernal",
+      "walk": "200.0",
+      "unitAbilID": "h0QI",
+      "abilList": "A14T,A14V,A008,A118",
+      "auto": "_",
+      "heroAbilList": "",
+      "unitWeapID": "h0QI",
+      "acquire": "500.0",
+      "atkType1": "pierce",
+      "atkType2": "normal",
+      "backSw1": "0.5",
+      "backSw2": "",
+      "castbsw": "0.51",
+      "castpt": "",
+      "cool1": "1.3",
+      "cool2": "",
+      "dice1": "1",
+      "dice2": "",
+      "dmgpt1": "0.5",
+      "dmgpt2": "",
+      "impactZ": "120.0",
+      "launchZ": "145.0",
+      "rangeN1": "300",
+      "rangeN2": "",
+      "RngBuff1": "250.0",
+      "RngBuff2": "",
+      "showUI1": "",
+      "showUI2": "1",
+      "sides1": "4",
+      "sides2": "",
+      "targCount1": "1",
+      "targCount2": "1",
+      "targs1": "enemies",
+      "targs2": "",
+      "weapsOn": "1",
+      "weapTp1": "normal",
+      "weapTp2": "",
+      "weapType1": "MetalHeavyBash",
+      "hotkey": "P",
+      "damage_min_1": "101.0",
+      "damage_max_1": "104.0",
+      "damage_avg_1": "102.5",
+      "dps_avg_1": "78.84615384615384",
+      "bounty_min": "",
+      "bounty_max": "",
+      "bounty_avg": "",
+      "attack_type_zh": "穿刺",
+      "armor_type_zh": "英雄甲",
+      "ability_ids": "A14T,A14V,A008,A118",
+      "ability_names": "吞噬,坚固,出售,移位",
+      "formation": "",
+      "Farea1": "",
+      "Harea1": "",
+      "Hfact1": "",
+      "Qarea1": "",
+      "Qfact1": "",
+      "splashTargs1": "",
+      "launchX": "",
+      "def": "3.0",
+      "defUp": "",
+      "manaN": "",
+      "minSpd": "",
+      "type": "ancient",
+      "hideHeroDeathMsg": "",
+      "dmgplus1": "100",
+      "damageLoss1": "",
+      "buildingShadow": "ShadowGuardTower",
+      "hideHeroMinimap": "",
+      "launchY": "",
+      "moveHeight": "",
+      "fileVerFlags": "",
+      "isbldg": "1",
+      "buffRadius": "15.0",
+      "buffType": "buffer",
+      "pathTex": "PathTextures\\4x4SimpleSolid.tga",
+      "elevPts": "4",
+      "uberSplat": "",
+      "dmgplus2": "",
+      "weapType2": "",
+      "damageLoss2": "",
+      "Farea2": "",
+      "Harea2": "",
+      "Hfact2": "",
+      "minRange": "",
+      "Qarea2": "",
+      "Qfact2": "",
+      "spillRadius1": "",
+      "spillRadius2": "",
+      "splashTargs2": "",
+      "moveFloor": "",
+      "repulse": "",
+      "repulseParam": "",
+      "selZ": "",
+      "fmade": "",
+      "hideOnMinimap": "",
+      "repulseGroup": "",
+      "maxSpd": "",
+      "canSleep": "",
+      "spillDist1": "",
+      "nbmmIcon": "",
+      "tilesetSpecific": "",
+      "dmgUp2": "",
+      "fatLOS": "",
+      "selCircOnWater": "",
+      "launchSwimZ": "",
+      "isBuildOn": ""
+    },
+    "h0QJ": {
+      "rawcode": "h0QJ",
+      "name": "暴食科多兽",
+      "proper_names": "",
+      "tip": "升级到 <暴食科多兽> - [P]",
+      "ubertip": "攻击伤害: 251-304\n攻击速度: 1.0\n攻击距离: 90\n生命值: 3000\n攻击类型: 普通\n防御类型: 重甲\n技能:  暴食",
+      "unitID": "h0QJ",
+      "canFlee": "1",
+      "cargoSize": "",
+      "death": "2.34",
+      "deathType": "2",
+      "movetp": "",
+      "nameCount": "",
+      "orientInterp": "",
+      "points": "600",
+      "prio": "2",
+      "propWin": "60.0",
+      "race": "human",
+      "targType": "structure",
+      "turnRate": "",
+      "unitBalanceID": "h0QJ",
+      "AGI": "",
+      "AGIplus": "",
+      "bldtm": "2",
+      "bountydice": "",
+      "bountyplus": "",
+      "bountysides": "",
+      "collision": "72.0",
+      "defType": "large",
+      "fused": "5",
+      "goldcost": "400",
+      "goldRep": "",
+      "HP": "3000",
+      "INT": "",
+      "INTplus": "",
+      "level": "1",
+      "lumbercost": "",
+      "lumberRep": "",
+      "mana0": "",
+      "nsight": "800",
+      "preventPlace": "unbuildable",
+      "Primary": "_",
+      "regenHP": "3.0",
+      "regenMana": "",
+      "regenType": "always",
+      "reptm": "1",
+      "requirePlace": "_",
+      "sight": "800",
+      "spd": "",
+      "stockMax": "",
+      "stockRegen": "",
+      "stockStart": "",
+      "STR": "",
+      "STRplus": "",
+      "tilesets": "*",
+      "upgrades": "R009,R00A",
+      "unitUIID": "h0QJ",
+      "armor": "metal",
+      "blend": "0.15",
+      "blue": "255",
+      "elevRad": "50.0",
+      "file": "KodoBeastPvP.mdl",
+      "green": "",
+      "maxPitch": "",
+      "maxRoll": "",
+      "modelScale": "0.5",
+      "red": "100",
+      "run": "200.0",
+      "scale": "1.7",
+      "scaleBull": "1",
+      "shadowH": "",
+      "shadowOnWater": "1",
+      "shadowW": "",
+      "shadowX": "",
+      "shadowY": "",
+      "teamColor": "-1",
+      "unitShadow": "",
+      "unitSound": "Infernal",
+      "walk": "200.0",
+      "unitAbilID": "h0QJ",
+      "abilList": "A14X,A008,A118",
+      "auto": "_",
+      "heroAbilList": "",
+      "unitWeapID": "h0QJ",
+      "acquire": "500.0",
+      "atkType1": "normal",
+      "atkType2": "normal",
+      "backSw1": "0.5",
+      "backSw2": "",
+      "castbsw": "0.51",
+      "castpt": "",
+      "cool1": "1.0",
+      "cool2": "",
+      "dice1": "1",
+      "dice2": "",
+      "dmgpt1": "0.5",
+      "dmgpt2": "",
+      "impactZ": "120.0",
+      "launchZ": "145.0",
+      "rangeN1": "90",
+      "rangeN2": "",
+      "RngBuff1": "250.0",
+      "RngBuff2": "",
+      "showUI1": "",
+      "showUI2": "1",
+      "sides1": "54",
+      "sides2": "",
+      "targCount1": "1",
+      "targCount2": "1",
+      "targs1": "enemies",
+      "targs2": "",
+      "weapsOn": "1",
+      "weapTp1": "normal",
+      "weapTp2": "",
+      "weapType1": "MetalHeavyBash",
+      "hotkey": "P",
+      "damage_min_1": "251.0",
+      "damage_max_1": "304.0",
+      "damage_avg_1": "277.5",
+      "dps_avg_1": "277.5",
+      "bounty_min": "",
+      "bounty_max": "",
+      "bounty_avg": "",
+      "attack_type_zh": "普通",
+      "armor_type_zh": "重甲",
+      "ability_ids": "A14X,A008,A118",
+      "ability_names": "暴食,出售,移位",
+      "formation": "",
+      "Farea1": "",
+      "Harea1": "",
+      "Hfact1": "",
+      "Qarea1": "",
+      "Qfact1": "",
+      "splashTargs1": "",
+      "launchX": "",
+      "def": "3.0",
+      "defUp": "",
+      "manaN": "",
+      "minSpd": "",
+      "type": "ancient",
+      "hideHeroDeathMsg": "",
+      "dmgplus1": "250",
+      "damageLoss1": "",
+      "buildingShadow": "ShadowGuardTower",
+      "hideHeroMinimap": "",
+      "launchY": "",
+      "moveHeight": "",
+      "fileVerFlags": "",
+      "isbldg": "1",
+      "buffRadius": "15.0",
+      "buffType": "buffer",
+      "pathTex": "PathTextures\\4x4SimpleSolid.tga",
+      "elevPts": "4",
+      "uberSplat": "",
+      "dmgplus2": "",
+      "weapType2": "",
+      "damageLoss2": "",
+      "Farea2": "",
+      "Harea2": "",
+      "Hfact2": "",
+      "minRange": "",
+      "Qarea2": "",
+      "Qfact2": "",
+      "spillRadius1": "",
+      "spillRadius2": "",
+      "splashTargs2": "",
+      "moveFloor": "",
+      "repulse": "",
+      "repulseParam": "",
+      "selZ": "",
+      "fmade": "",
+      "hideOnMinimap": "",
+      "repulseGroup": "",
+      "maxSpd": "",
+      "canSleep": "",
+      "spillDist1": "",
+      "nbmmIcon": "",
+      "tilesetSpecific": "",
+      "dmgUp2": "",
+      "fatLOS": "",
+      "selCircOnWater": "",
+      "launchSwimZ": "",
+      "isBuildOn": ""
+    },
+    "h0QK": {
+      "rawcode": "h0QK",
+      "name": "科多兽",
+      "proper_names": "",
+      "tip": "科多兽",
+      "ubertip": ",",
+      "unitID": "h0QK",
+      "canFlee": "1",
+      "cargoSize": "1",
+      "death": "3.04",
+      "deathType": "3",
+      "movetp": "foot",
+      "nameCount": "",
+      "orientInterp": "",
+      "points": "100",
+      "prio": "6",
+      "propWin": "60.0",
+      "race": "human",
+      "targType": "ground",
+      "turnRate": "0.6",
+      "unitBalanceID": "h0QK",
+      "AGI": "",
+      "AGIplus": "",
+      "bldtm": "20",
+      "bountydice": "6",
+      "bountyplus": "20",
+      "bountysides": "3",
+      "collision": "60.0",
+      "defType": "small",
+      "fused": "",
+      "goldcost": "",
+      "goldRep": "",
+      "HP": "1000",
+      "INT": "",
+      "INTplus": "",
+      "level": "2",
+      "lumbercost": "",
+      "lumberRep": "",
+      "mana0": "",
+      "nsight": "800",
+      "preventPlace": "_",
+      "Primary": "_",
+      "regenHP": "3.0",
+      "regenMana": "",
+      "regenType": "always",
+      "reptm": "20",
+      "requirePlace": "_",
+      "sight": "800",
+      "spd": "280",
+      "stockMax": "3",
+      "stockRegen": "30",
+      "stockStart": "",
+      "STR": "",
+      "STRplus": "",
+      "tilesets": "*",
+      "upgrades": "R00B,R00C,R009,R00A",
+      "unitUIID": "h0QK",
+      "armor": "Metal",
+      "blend": "0.15",
+      "blue": "255",
+      "elevRad": "20.0",
+      "file": "units\\orc\\KotoBeastNoRider\\KotoBeastNoRider.mdl",
+      "green": "255",
+      "maxPitch": "10.0",
+      "maxRoll": "10.0",
+      "modelScale": "0.9",
+      "red": "255",
+      "run": "210.0",
+      "scale": "1.7",
+      "scaleBull": "1",
+      "shadowH": "140.0",
+      "shadowOnWater": "1",
+      "shadowW": "140.0",
+      "shadowX": "50.0",
+      "shadowY": "50.0",
+      "teamColor": "-1",
+      "unitShadow": "Shadow",
+      "unitSound": "Infernal",
+      "walk": "210.0",
+      "unitAbilID": "h0QK",
+      "abilList": "A14T",
+      "auto": "_",
+      "heroAbilList": "",
+      "unitWeapID": "h0QK",
+      "acquire": "500.0",
+      "atkType1": "pierce",
+      "atkType2": "normal",
+      "backSw1": "0.3",
+      "backSw2": "",
+      "castbsw": "0.51",
+      "castpt": "0.3",
+      "cool1": "1.3",
+      "cool2": "",
+      "dice1": "1",
+      "dice2": "",
+      "dmgpt1": "0.3",
+      "dmgpt2": "",
+      "impactZ": "60.0",
+      "launchZ": "60.0",
+      "rangeN1": "300",
+      "rangeN2": "",
+      "RngBuff1": "250.0",
+      "RngBuff2": "",
+      "showUI1": "1",
+      "showUI2": "1",
+      "sides1": "4",
+      "sides2": "",
+      "targCount1": "1",
+      "targCount2": "1",
+      "targs1": "enemies",
+      "targs2": "",
+      "weapsOn": "1",
+      "weapTp1": "normal",
+      "weapTp2": "",
+      "weapType1": "MetalMediumSlice",
+      "hotkey": "F",
+      "damage_min_1": "101.0",
+      "damage_max_1": "104.0",
+      "damage_avg_1": "102.5",
+      "dps_avg_1": "78.84615384615384",
+      "bounty_min": "26.0",
+      "bounty_max": "38.0",
+      "bounty_avg": "32.0",
+      "attack_type_zh": "穿刺",
+      "armor_type_zh": "轻甲",
+      "ability_ids": "A14T",
+      "ability_names": "吞噬",
+      "formation": "",
+      "Farea1": "",
+      "Harea1": "",
+      "Hfact1": "",
+      "Qarea1": "",
+      "Qfact1": "",
+      "splashTargs1": "",
+      "launchX": "",
+      "def": "3.0",
+      "defUp": "2.0",
+      "manaN": "",
+      "minSpd": "",
+      "type": "giant",
+      "hideHeroDeathMsg": "",
+      "dmgplus1": "100",
+      "damageLoss1": "",
+      "buildingShadow": "",
+      "hideHeroMinimap": "",
+      "launchY": "",
+      "moveHeight": "",
+      "fileVerFlags": "",
+      "isbldg": "",
+      "buffRadius": "",
+      "buffType": "",
+      "pathTex": "",
+      "elevPts": "",
+      "uberSplat": "",
+      "dmgplus2": "",
+      "weapType2": "",
+      "damageLoss2": "",
+      "Farea2": "",
+      "Harea2": "",
+      "Hfact2": "",
+      "minRange": "",
+      "Qarea2": "",
+      "Qfact2": "",
+      "spillRadius1": "",
+      "spillRadius2": "",
+      "splashTargs2": "",
+      "moveFloor": "",
+      "repulse": "",
+      "repulseParam": "",
+      "selZ": "",
+      "fmade": "",
+      "hideOnMinimap": "",
+      "repulseGroup": "",
+      "maxSpd": "",
+      "canSleep": "",
+      "spillDist1": "",
+      "nbmmIcon": "",
+      "tilesetSpecific": "",
+      "dmgUp2": "",
+      "fatLOS": "",
+      "selCircOnWater": "",
+      "launchSwimZ": "",
+      "isBuildOn": ""
+    },
+    "h0QL": {
+      "rawcode": "h0QL",
+      "name": "攻击型科多兽",
+      "proper_names": "",
+      "tip": "科多兽",
+      "ubertip": ",",
+      "unitID": "h0QL",
+      "canFlee": "1",
+      "cargoSize": "1",
+      "death": "3.04",
+      "deathType": "3",
+      "movetp": "foot",
+      "nameCount": "",
+      "orientInterp": "",
+      "points": "100",
+      "prio": "6",
+      "propWin": "60.0",
+      "race": "human",
+      "targType": "ground",
+      "turnRate": "0.6",
+      "unitBalanceID": "h0QL",
+      "AGI": "",
+      "AGIplus": "",
+      "bldtm": "20",
+      "bountydice": "6",
+      "bountyplus": "20",
+      "bountysides": "3",
+      "collision": "60.0",
+      "defType": "small",
+      "fused": "",
+      "goldcost": "",
+      "goldRep": "",
+      "HP": "1500",
+      "INT": "",
+      "INTplus": "",
+      "level": "2",
+      "lumbercost": "",
+      "lumberRep": "",
+      "mana0": "",
+      "nsight": "800",
+      "preventPlace": "_",
+      "Primary": "_",
+      "regenHP": "3.0",
+      "regenMana": "",
+      "regenType": "always",
+      "reptm": "20",
+      "requirePlace": "_",
+      "sight": "800",
+      "spd": "280",
+      "stockMax": "3",
+      "stockRegen": "30",
+      "stockStart": "",
+      "STR": "",
+      "STRplus": "",
+      "tilesets": "*",
+      "upgrades": "R00B,R00C,R009,R00A",
+      "unitUIID": "h0QL",
+      "armor": "Metal",
+      "blend": "0.15",
+      "blue": "10",
+      "elevRad": "20.0",
+      "file": "KodoBeastPvP.mdl",
+      "green": "10",
+      "maxPitch": "10.0",
+      "maxRoll": "10.0",
+      "modelScale": "0.5",
+      "red": "255",
+      "run": "210.0",
+      "scale": "1.7",
+      "scaleBull": "1",
+      "shadowH": "140.0",
+      "shadowOnWater": "1",
+      "shadowW": "140.0",
+      "shadowX": "50.0",
+      "shadowY": "50.0",
+      "teamColor": "-1",
+      "unitShadow": "Shadow",
+      "unitSound": "Infernal",
+      "walk": "210.0",
+      "unitAbilID": "h0QL",
+      "abilList": "A14T,A14U",
+      "auto": "_",
+      "heroAbilList": "",
+      "unitWeapID": "h0QL",
+      "acquire": "500.0",
+      "atkType1": "chaos",
+      "atkType2": "normal",
+      "backSw1": "0.3",
+      "backSw2": "",
+      "castbsw": "0.51",
+      "castpt": "0.3",
+      "cool1": "1.3",
+      "cool2": "",
+      "dice1": "1",
+      "dice2": "",
+      "dmgpt1": "0.3",
+      "dmgpt2": "",
+      "impactZ": "60.0",
+      "launchZ": "60.0",
+      "rangeN1": "300",
+      "rangeN2": "",
+      "RngBuff1": "250.0",
+      "RngBuff2": "",
+      "showUI1": "1",
+      "showUI2": "1",
+      "sides1": "4",
+      "sides2": "",
+      "targCount1": "1",
+      "targCount2": "1",
+      "targs1": "enemies",
+      "targs2": "",
+      "weapsOn": "1",
+      "weapTp1": "normal",
+      "weapTp2": "",
+      "weapType1": "MetalMediumSlice",
+      "hotkey": "F",
+      "damage_min_1": "251.0",
+      "damage_max_1": "254.0",
+      "damage_avg_1": "252.5",
+      "dps_avg_1": "194.23076923076923",
+      "bounty_min": "26.0",
+      "bounty_max": "38.0",
+      "bounty_avg": "32.0",
+      "attack_type_zh": "混乱",
+      "armor_type_zh": "轻甲",
+      "ability_ids": "A14T,A14U",
+      "ability_names": "吞噬,战鼓",
+      "formation": "",
+      "Farea1": "",
+      "Harea1": "",
+      "Hfact1": "",
+      "Qarea1": "",
+      "Qfact1": "",
+      "splashTargs1": "",
+      "launchX": "",
+      "def": "3.0",
+      "defUp": "2.0",
+      "manaN": "",
+      "minSpd": "",
+      "type": "giant",
+      "hideHeroDeathMsg": "",
+      "dmgplus1": "250",
+      "damageLoss1": "",
+      "buildingShadow": "",
+      "hideHeroMinimap": "",
+      "launchY": "",
+      "moveHeight": "",
+      "fileVerFlags": "",
+      "isbldg": "",
+      "buffRadius": "",
+      "buffType": "",
+      "pathTex": "",
+      "elevPts": "",
+      "uberSplat": "",
+      "dmgplus2": "",
+      "weapType2": "",
+      "damageLoss2": "",
+      "Farea2": "",
+      "Harea2": "",
+      "Hfact2": "",
+      "minRange": "",
+      "Qarea2": "",
+      "Qfact2": "",
+      "spillRadius1": "",
+      "spillRadius2": "",
+      "splashTargs2": "",
+      "moveFloor": "",
+      "repulse": "",
+      "repulseParam": "",
+      "selZ": "",
+      "fmade": "",
+      "hideOnMinimap": "",
+      "repulseGroup": "",
+      "maxSpd": "",
+      "canSleep": "",
+      "spillDist1": "",
+      "nbmmIcon": "",
+      "tilesetSpecific": "",
+      "dmgUp2": "",
+      "fatLOS": "",
+      "selCircOnWater": "",
+      "launchSwimZ": "",
+      "isBuildOn": ""
+    },
+    "h0QM": {
+      "rawcode": "h0QM",
+      "name": "防御型科多兽",
+      "proper_names": "",
+      "tip": "生产步兵(F)",
+      "ubertip": ",",
+      "unitID": "h0QM",
+      "canFlee": "1",
+      "cargoSize": "1",
+      "death": "3.04",
+      "deathType": "3",
+      "movetp": "foot",
+      "nameCount": "",
+      "orientInterp": "",
+      "points": "100",
+      "prio": "6",
+      "propWin": "60.0",
+      "race": "human",
+      "targType": "ground",
+      "turnRate": "0.6",
+      "unitBalanceID": "h0QM",
+      "AGI": "",
+      "AGIplus": "",
+      "bldtm": "20",
+      "bountydice": "6",
+      "bountyplus": "20",
+      "bountysides": "3",
+      "collision": "60.0",
+      "defType": "hero",
+      "fused": "",
+      "goldcost": "",
+      "goldRep": "",
+      "HP": "2000",
+      "INT": "",
+      "INTplus": "",
+      "level": "2",
+      "lumbercost": "",
+      "lumberRep": "",
+      "mana0": "",
+      "nsight": "800",
+      "preventPlace": "_",
+      "Primary": "_",
+      "regenHP": "3.0",
+      "regenMana": "",
+      "regenType": "always",
+      "reptm": "20",
+      "requirePlace": "_",
+      "sight": "800",
+      "spd": "280",
+      "stockMax": "3",
+      "stockRegen": "30",
+      "stockStart": "",
+      "STR": "",
+      "STRplus": "",
+      "tilesets": "*",
+      "upgrades": "R00B,R00C,R009,R00A",
+      "unitUIID": "h0QM",
+      "armor": "Metal",
+      "blend": "0.15",
+      "blue": "120",
+      "elevRad": "20.0",
+      "file": "KodoBeastPvP.mdl",
+      "green": "255",
+      "maxPitch": "10.0",
+      "maxRoll": "10.0",
+      "modelScale": "0.5",
+      "red": "255",
+      "run": "210.0",
+      "scale": "1.7",
+      "scaleBull": "1",
+      "shadowH": "140.0",
+      "shadowOnWater": "1",
+      "shadowW": "140.0",
+      "shadowX": "50.0",
+      "shadowY": "50.0",
+      "teamColor": "-1",
+      "unitShadow": "Shadow",
+      "unitSound": "Infernal",
+      "walk": "210.0",
+      "unitAbilID": "h0QM",
+      "abilList": "A14T,A14V",
+      "auto": "_",
+      "heroAbilList": "",
+      "unitWeapID": "h0QM",
+      "acquire": "500.0",
+      "atkType1": "pierce",
+      "atkType2": "normal",
+      "backSw1": "0.3",
+      "backSw2": "",
+      "castbsw": "0.51",
+      "castpt": "0.3",
+      "cool1": "1.3",
+      "cool2": "",
+      "dice1": "1",
+      "dice2": "",
+      "dmgpt1": "0.3",
+      "dmgpt2": "",
+      "impactZ": "60.0",
+      "launchZ": "60.0",
+      "rangeN1": "300",
+      "rangeN2": "",
+      "RngBuff1": "250.0",
+      "RngBuff2": "",
+      "showUI1": "1",
+      "showUI2": "1",
+      "sides1": "4",
+      "sides2": "",
+      "targCount1": "1",
+      "targCount2": "1",
+      "targs1": "enemies",
+      "targs2": "",
+      "weapsOn": "1",
+      "weapTp1": "normal",
+      "weapTp2": "",
+      "weapType1": "MetalMediumSlice",
+      "hotkey": "F",
+      "damage_min_1": "101.0",
+      "damage_max_1": "104.0",
+      "damage_avg_1": "102.5",
+      "dps_avg_1": "78.84615384615384",
+      "bounty_min": "26.0",
+      "bounty_max": "38.0",
+      "bounty_avg": "32.0",
+      "attack_type_zh": "穿刺",
+      "armor_type_zh": "英雄甲",
+      "ability_ids": "A14T,A14V",
+      "ability_names": "吞噬,坚固",
+      "formation": "",
+      "Farea1": "",
+      "Harea1": "",
+      "Hfact1": "",
+      "Qarea1": "",
+      "Qfact1": "",
+      "splashTargs1": "",
+      "launchX": "",
+      "def": "3.0",
+      "defUp": "2.0",
+      "manaN": "",
+      "minSpd": "",
+      "type": "giant",
+      "hideHeroDeathMsg": "",
+      "dmgplus1": "100",
+      "damageLoss1": "",
+      "buildingShadow": "",
+      "hideHeroMinimap": "",
+      "launchY": "",
+      "moveHeight": "",
+      "fileVerFlags": "",
+      "isbldg": "",
+      "buffRadius": "",
+      "buffType": "",
+      "pathTex": "",
+      "elevPts": "",
+      "uberSplat": "",
+      "dmgplus2": "",
+      "weapType2": "",
+      "damageLoss2": "",
+      "Farea2": "",
+      "Harea2": "",
+      "Hfact2": "",
+      "minRange": "",
+      "Qarea2": "",
+      "Qfact2": "",
+      "spillRadius1": "",
+      "spillRadius2": "",
+      "splashTargs2": "",
+      "moveFloor": "",
+      "repulse": "",
+      "repulseParam": "",
+      "selZ": "",
+      "fmade": "",
+      "hideOnMinimap": "",
+      "repulseGroup": "",
+      "maxSpd": "",
+      "canSleep": "",
+      "spillDist1": "",
+      "nbmmIcon": "",
+      "tilesetSpecific": "",
+      "dmgUp2": "",
+      "fatLOS": "",
+      "selCircOnWater": "",
+      "launchSwimZ": "",
+      "isBuildOn": ""
+    },
+    "h0QN": {
+      "rawcode": "h0QN",
+      "name": "暴食科多兽",
+      "proper_names": "",
+      "tip": "生产步兵(F)",
+      "ubertip": ",",
+      "unitID": "h0QN",
+      "canFlee": "1",
+      "cargoSize": "1",
+      "death": "3.04",
+      "deathType": "3",
+      "movetp": "foot",
+      "nameCount": "",
+      "orientInterp": "",
+      "points": "100",
+      "prio": "6",
+      "propWin": "60.0",
+      "race": "human",
+      "targType": "ground",
+      "turnRate": "0.6",
+      "unitBalanceID": "h0QN",
+      "AGI": "",
+      "AGIplus": "",
+      "bldtm": "20",
+      "bountydice": "6",
+      "bountyplus": "20",
+      "bountysides": "3",
+      "collision": "60.0",
+      "defType": "large",
+      "fused": "",
+      "goldcost": "",
+      "goldRep": "",
+      "HP": "3000",
+      "INT": "",
+      "INTplus": "",
+      "level": "2",
+      "lumbercost": "",
+      "lumberRep": "",
+      "mana0": "",
+      "nsight": "800",
+      "preventPlace": "_",
+      "Primary": "_",
+      "regenHP": "3.0",
+      "regenMana": "",
+      "regenType": "always",
+      "reptm": "20",
+      "requirePlace": "_",
+      "sight": "800",
+      "spd": "280",
+      "stockMax": "3",
+      "stockRegen": "30",
+      "stockStart": "",
+      "STR": "",
+      "STRplus": "",
+      "tilesets": "*",
+      "upgrades": "R00B,R00C,R009,R00A",
+      "unitUIID": "h0QN",
+      "armor": "Metal",
+      "blend": "0.15",
+      "blue": "255",
+      "elevRad": "20.0",
+      "file": "KodoBeastPvP.mdl",
+      "green": "",
+      "maxPitch": "10.0",
+      "maxRoll": "10.0",
+      "modelScale": "0.5",
+      "red": "100",
+      "run": "210.0",
+      "scale": "1.7",
+      "scaleBull": "1",
+      "shadowH": "140.0",
+      "shadowOnWater": "1",
+      "shadowW": "140.0",
+      "shadowX": "50.0",
+      "shadowY": "50.0",
+      "teamColor": "-1",
+      "unitShadow": "Shadow",
+      "unitSound": "Infernal",
+      "walk": "210.0",
+      "unitAbilID": "h0QN",
+      "abilList": "A14X",
+      "auto": "_",
+      "heroAbilList": "",
+      "unitWeapID": "h0QN",
+      "acquire": "500.0",
+      "atkType1": "pierce",
+      "atkType2": "normal",
+      "backSw1": "0.3",
+      "backSw2": "",
+      "castbsw": "0.51",
+      "castpt": "0.3",
+      "cool1": "1.0",
+      "cool2": "",
+      "dice1": "1",
+      "dice2": "",
+      "dmgpt1": "0.3",
+      "dmgpt2": "",
+      "impactZ": "60.0",
+      "launchZ": "60.0",
+      "rangeN1": "90",
+      "rangeN2": "",
+      "RngBuff1": "250.0",
+      "RngBuff2": "",
+      "showUI1": "1",
+      "showUI2": "1",
+      "sides1": "54",
+      "sides2": "",
+      "targCount1": "1",
+      "targCount2": "1",
+      "targs1": "enemies",
+      "targs2": "",
+      "weapsOn": "1",
+      "weapTp1": "normal",
+      "weapTp2": "",
+      "weapType1": "MetalMediumSlice",
+      "hotkey": "F",
+      "damage_min_1": "251.0",
+      "damage_max_1": "304.0",
+      "damage_avg_1": "277.5",
+      "dps_avg_1": "277.5",
+      "bounty_min": "26.0",
+      "bounty_max": "38.0",
+      "bounty_avg": "32.0",
+      "attack_type_zh": "穿刺",
+      "armor_type_zh": "重甲",
+      "ability_ids": "A14X",
+      "ability_names": "暴食",
+      "formation": "",
+      "Farea1": "",
+      "Harea1": "",
+      "Hfact1": "",
+      "Qarea1": "",
+      "Qfact1": "",
+      "splashTargs1": "",
+      "launchX": "",
+      "def": "3.0",
+      "defUp": "2.0",
+      "manaN": "",
+      "minSpd": "",
+      "type": "giant",
+      "hideHeroDeathMsg": "",
+      "dmgplus1": "250",
+      "damageLoss1": "",
+      "buildingShadow": "",
+      "hideHeroMinimap": "",
+      "launchY": "",
+      "moveHeight": "",
+      "fileVerFlags": "",
+      "isbldg": "",
+      "buffRadius": "",
+      "buffType": "",
+      "pathTex": "",
+      "elevPts": "",
+      "uberSplat": "",
+      "dmgplus2": "",
+      "weapType2": "",
+      "damageLoss2": "",
+      "Farea2": "",
+      "Harea2": "",
+      "Hfact2": "",
+      "minRange": "",
+      "Qarea2": "",
+      "Qfact2": "",
+      "spillRadius1": "",
+      "spillRadius2": "",
+      "splashTargs2": "",
+      "moveFloor": "",
+      "repulse": "",
+      "repulseParam": "",
+      "selZ": "",
+      "fmade": "",
+      "hideOnMinimap": "",
+      "repulseGroup": "",
+      "maxSpd": "",
+      "canSleep": "",
+      "spillDist1": "",
+      "nbmmIcon": "",
+      "tilesetSpecific": "",
+      "dmgUp2": "",
+      "fatLOS": "",
+      "selCircOnWater": "",
+      "launchSwimZ": "",
+      "isBuildOn": ""
+    }
+  }
+}

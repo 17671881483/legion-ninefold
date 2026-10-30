@@ -14,7 +14,7 @@ const all=g=>[...g.state.entities,...(g.state.kings??[])];
 
 // Preserve selection of earlier 42618–42712 elseif branches. Their unfinished
 // effects stay in their own families; a match must not also execute A0N5.
-function earlierAttackBranch(g,e){
+export function earlierTaurenAttackBranch(g,e){
   if(e.mana!==15&&level(e,'A0IN')>0)return 'A0IN';
   if(level(e,'A0JV')===1&&1+105*g._random()>=73)return 'A0JV';
   if(level(e,'A0TH')>0&&1+100*g._random()>=68)return 'A0TH';
@@ -26,20 +26,20 @@ function earlierAttackBranch(g,e){
 }
 export function taurenAttackDamage(g,e,target,api,selectedBranch=null){
   if(level(e,'A0N5')!==1)return;
-  const st=e.status??={},prior=selectedBranch??earlierAttackBranch(g,e);
-  if(prior){st.taurenSkippedBranch=prior;return;}
+  const st=e.status??={},prior=selectedBranch??earlierTaurenAttackBranch(g,e);
+  if(prior){st.taurenSkippedBranch=prior;return prior;}
   const roll=1+Math.floor(g._random()*101),threshold=level(e,'Avul')===1?85:25;
-  st.taurenLastRoll={at:g.state.time,roll,threshold};if(roll>threshold)return;
+  st.taurenLastRoll={at:g.state.time,roll,threshold};if(roll>threshold)return 'A0N5';
   api.removeAbility(g,e,'A0N7');api.addAbility(g,e,'A0N7');
   const s=api.compileAbility(g,e,'A0N7'),state=e.skillStates.A0N7;
   const blocked=e.hp<=.405||removed(e)||st.sourceHidden||st.yseraHidden||st.sourcePaused||st.yseraPaused||st.illidanPaused||st.stunUntil>g.state.time||st.cycloneUntil>g.state.time;
   st.taurenStompRequest={at:g.state.time,order:'stomp',abilityId:'A0N7',outcome:blocked?'blocked':'adapted-instant',missingNativeManaCost:true};
-  if(blocked)return;
+  if(blocked)return 'A0N5';
   state.casts++;state.readyAt=g.state.time+s.cooldown;
   // Native AOws executes independently of the map's SPELL_EFFECT trigger.
   const p=pos(e),group=all(g).filter(t=>t.hp>.405&&!removed(t)&&!t.status?.sourceHidden&&!t.status?.yseraHidden&&!level(t,'Aloc')&&t.battleTeam===e.battleTeam&&Math.hypot(pos(t).x-p.x,pos(t).y-p.y)<=s.radius+1e-8&&api.matchesTargets(s,e,t)&&!api.magicImmune(t)&&!api.scriptInvulnerable(t));
   for(const t of group){api.nativeDamage(g,t,Number(s.fields.DataA1),e,{attackType:'spells',damageType:'magic'});api.applyNativeStun(g,e,t,'A0N7');}
-  g._event?.('stomp',e,'粉碎震击',{skillId:'A0N7',radius:s.radius});
+  g._event?.('stomp',e,'粉碎震击',{skillId:'A0N7',radius:s.radius});return 'A0N5';
 }
 
 export function taurenMainDeath(g,e,api){

@@ -1,0 +1,806 @@
+{
+  "source": {
+    "file": "reference/v14-source/raw_extracted/war3map.j",
+    "sha256": "e66c55b3b25b185c991be5613e21fbf5b2d598f3cc40f2f8cd01c23bcb828250",
+    "lineEncoding": "latin1/LF"
+  },
+  "abilities": {
+    "A0LH": {
+      "rawcode": "A0LH",
+      "name": "灰烬使者",
+      "tip": "灰烬使者",
+      "ubertip": "提里奥·弗丁的宝剑灰烬使者会将圣光的敌人们化为灰烬!提里奥弗丁的每一次攻击都附有阳炎之力，对目标造成150+15%最大生命值的额外伤害，且攻击击杀目标时额外恢复提里奥弗丁18%的最大生命值",
+      "alias": "A0LH",
+      "code": "Asth",
+      "levels": "1"
+    },
+    "A0LP": {
+      "rawcode": "A0LP",
+      "name": "羁绊效果",
+      "tip": "羁绊效果",
+      "ubertip": "如果一玩家场上同时建有泰兰·弗丁和提里奥·弗丁，则该技能的触发几率从15%提升至35%，且提里奥弗丁额外获得15点护甲加成。",
+      "alias": "A0LP",
+      "code": "Asth",
+      "levels": "1",
+      "checkDep": "1"
+    },
+    "A0LO": {
+      "rawcode": "A0LO",
+      "name": "羁绊攻击速度30%",
+      "alias": "A0LO",
+      "code": "AIas",
+      "BuffID1": "B03M",
+      "levels": "1",
+      "targs1": "air,allies,ground,self",
+      "Dur1": "10.0"
+    },
+    "A0LQ": {
+      "rawcode": "A0LQ",
+      "name": "羁绊护甲+15",
+      "alias": "A0LQ",
+      "code": "AIde",
+      "DataA1": "15.0",
+      "levels": "1"
+    },
+    "A0LR": {
+      "rawcode": "A0LR",
+      "name": "死妈了",
+      "alias": "A0LR",
+      "code": "AIas",
+      "levels": "1",
+      "targs1": "air,allies,ground,self",
+      "Dur1": "10.0"
+    },
+    "Af01": {
+      "rawcode": "Af01",
+      "name": "失落的荣耀",
+      "tip": "失落的荣耀",
+      "ubertip": "- 永远不要忘记圣光之道”父亲如此教诲道。圣光的战旗庇护着所有人。提高全队“圣光”的治愈效果至60%生命值。重拾圣光荣耀的泰兰信仰之心愈发坚定，\n - 泰兰弗丁在受到任何伤害时有30%几率免疫。当泰兰弗丁低于1000生命值持续长达3s时会自动恢复1000点生命值，恢复效果有1s冷却时间，1s后才会重新计算判断回血所需的3s时间。",
+      "alias": "Af01",
+      "code": "Asth",
+      "levels": "1"
+    },
+    "A0LG": {
+      "rawcode": "A0LG",
+      "name": "神圣愤怒",
+      "tip": "神圣愤怒",
+      "ubertip": "使附近的敌人每秒受到10+敌方0.5%最大生命值伤害.",
+      "alias": "A0LG",
+      "code": "ANpi",
+      "Area1": "350.0",
+      "BuffID1": "BNpi",
+      "DataA1": "15.0",
+      "levels": "1",
+      "targs1": "enemies,ground",
+      "Dur1": "1.0",
+      "HeroDur1": "1.0"
+    }
+  },
+  "sourceEvidence": [
+    {
+      "line": 14258,
+      "text": "function n203LIFE takes nothing returns nothing"
+    },
+    {
+      "line": 14259,
+      "text": "local timer t=GetExpiredTimer()"
+    },
+    {
+      "line": 14260,
+      "text": "local unit i=LoadUnitHandle(O,GetHandleId(t),1)"
+    },
+    {
+      "line": 14261,
+      "text": "if GetUnitState(i,UNIT_STATE_LIFE)>0 then"
+    },
+    {
+      "line": 14262,
+      "text": "call SetUnitLifeBJ(i,GetUnitState(i,UNIT_STATE_LIFE)+1000)"
+    },
+    {
+      "line": 14263,
+      "text": "endif"
+    },
+    {
+      "line": 14264,
+      "text": "call FlushChildHashtable(O,GetHandleId(t))"
+    },
+    {
+      "line": 14265,
+      "text": "call SaveBoolean(O,GetHandleId(i),1,false)"
+    },
+    {
+      "line": 14266,
+      "text": "call DestroyTimer(t)"
+    },
+    {
+      "line": 14267,
+      "text": "set t=null"
+    },
+    {
+      "line": 14268,
+      "text": "set i=null"
+    },
+    {
+      "line": 14269,
+      "text": "endfunction"
+    },
+    {
+      "line": 14270,
+      "text": "function C_TirionFordring takes nothing returns boolean"
+    },
+    {
+      "line": 14271,
+      "text": "return GetUnitAbilityLevel(GetTriggerUnit(),$41304C52)>0 or GetUnitAbilityLevel(GetEventDamageSource(),$41304C52)>0"
+    },
+    {
+      "line": 14272,
+      "text": "endfunction"
+    },
+    {
+      "line": 14273,
+      "text": "function A_TirionFordring takes nothing returns nothing"
+    },
+    {
+      "line": 14274,
+      "text": "local timer t=null"
+    },
+    {
+      "line": 14275,
+      "text": "local real B0=15"
+    },
+    {
+      "line": 14276,
+      "text": "call DisableTrigger(GetTriggeringTrigger())"
+    },
+    {
+      "line": 14277,
+      "text": "if GetUnitAbilityLevel(GetTriggerUnit(),$41304C52)>0 and GetRandomInt(1,10)<=3 then"
+    },
+    {
+      "line": 14278,
+      "text": "call DestroyEffect(AddSpecialEffectTarget(\"Abilities\\\\Spells\\\\Undead\\\\ReplenishHealth\\\\ReplenishHealthCasterOverhead.mdl\",GetTriggerUnit(),\"overhead\"))"
+    },
+    {
+      "line": 14279,
+      "text": "call SetUnitLifeBJ(GetTriggerUnit(),GetUnitState(GetTriggerUnit(),UNIT_STATE_LIFE)+GetEventDamage())"
+    },
+    {
+      "line": 14280,
+      "text": "call EnableTrigger(GetTriggeringTrigger())"
+    },
+    {
+      "line": 14281,
+      "text": "if GetUnitState(GetTriggerUnit(),UNIT_STATE_LIFE)<=1000 and not LoadBoolean(O,GetHandleId(GetTriggerUnit()),1) then"
+    },
+    {
+      "line": 14282,
+      "text": "set t=CreateTimer()"
+    },
+    {
+      "line": 14283,
+      "text": "call TimerStart(t,3,false,function n203LIFE)"
+    },
+    {
+      "line": 14284,
+      "text": "call SaveUnitHandle(O,GetHandleId(t),1,GetTriggerUnit())"
+    },
+    {
+      "line": 14285,
+      "text": "call SaveBoolean(O,GetHandleId(GetTriggerUnit()),1,true)"
+    },
+    {
+      "line": 14286,
+      "text": "set t=null"
+    },
+    {
+      "line": 14287,
+      "text": "endif"
+    },
+    {
+      "line": 14288,
+      "text": "endif"
+    },
+    {
+      "line": 14289,
+      "text": "if GetUnitAbilityLevel(GetEventDamageSource(),$41663031)>0 then"
+    },
+    {
+      "line": 14290,
+      "text": "if GetUnitAbilityLevel(GetEventDamageSource(),$41304C52)>0 then"
+    },
+    {
+      "line": 14291,
+      "text": "set B0=35"
+    },
+    {
+      "line": 14292,
+      "text": "endif"
+    },
+    {
+      "line": 14293,
+      "text": "if GetRandomPercentageBJ()<=B0 then"
+    },
+    {
+      "line": 14294,
+      "text": "call UnitDamageTarget(GetEventDamageSource(),GetTriggerUnit(),200,true,false,ATTACK_TYPE_NORMAL,DAMAGE_TYPE_NORMAL,WEAPON_TYPE_WHOKNOWS)"
+    },
+    {
+      "line": 14295,
+      "text": "call SetUnitLifeBJ(GetEventDamageSource(),GetUnitState(GetEventDamageSource(),UNIT_STATE_LIFE)+1000)"
+    },
+    {
+      "line": 14296,
+      "text": "endif"
+    },
+    {
+      "line": 14297,
+      "text": "endif"
+    },
+    {
+      "line": 14298,
+      "text": "call EnableTrigger(GetTriggeringTrigger())"
+    },
+    {
+      "line": 20164,
+      "text": "if GetUnitAbilityLevel(i,$41304C50)>0 and GetPlayerTechCountSimple($52303159,GetOwningPlayer(i))==1 then"
+    },
+    {
+      "line": 20165,
+      "text": "set Pd=1"
+    },
+    {
+      "line": 20186,
+      "text": "if Pd==1 then"
+    },
+    {
+      "line": 20187,
+      "text": "if GetUnitAbilityLevel(Kc,$41304C50)>0 then"
+    },
+    {
+      "line": 20188,
+      "text": "call UnitAddAbility(Kc,$41304C4F)"
+    },
+    {
+      "line": 20189,
+      "text": "call UnitAddAbility(Kc,$41304C51)"
+    },
+    {
+      "line": 20190,
+      "text": "else"
+    },
+    {
+      "line": 20191,
+      "text": "call UnitAddAbility(Kc,$41304C52)"
+    },
+    {
+      "line": 20192,
+      "text": "endif"
+    },
+    {
+      "line": 20193,
+      "text": "endif"
+    },
+    {
+      "line": 21346,
+      "text": "if GetUnitAbilityLevel(i,$41304C50)>0 and GetPlayerTechCountSimple($52303159,GetOwningPlayer(i))==1 then"
+    },
+    {
+      "line": 21347,
+      "text": "set BB=1"
+    },
+    {
+      "line": 21369,
+      "text": "if BB==1 then"
+    },
+    {
+      "line": 21370,
+      "text": "if GetUnitAbilityLevel(i,$41304C50)>0 then"
+    },
+    {
+      "line": 21371,
+      "text": "call UnitAddAbility(i,$41304C4F)"
+    },
+    {
+      "line": 21372,
+      "text": "call UnitAddAbility(i,$41304C51)"
+    },
+    {
+      "line": 21373,
+      "text": "else"
+    },
+    {
+      "line": 21374,
+      "text": "call UnitAddAbility(i,$41304C52)"
+    },
+    {
+      "line": 21375,
+      "text": "endif"
+    },
+    {
+      "line": 21376,
+      "text": "endif"
+    },
+    {
+      "line": 27153,
+      "text": "set T4=CreateTrigger()"
+    },
+    {
+      "line": 27154,
+      "text": "call YDWESyStemAnyUnitDamagedRegistTrigger(T4)"
+    },
+    {
+      "line": 27155,
+      "text": "call TriggerAddCondition(T4,Condition(function C_TirionFordring))"
+    },
+    {
+      "line": 27156,
+      "text": "call TriggerAddAction(T4,function A_TirionFordring)"
+    },
+    {
+      "line": 28700,
+      "text": "if x==$68304D32 or x==$68323033 then"
+    },
+    {
+      "line": 28701,
+      "text": "call SaveBoolean(O,GetHandleId(h),x,true)"
+    },
+    {
+      "line": 28702,
+      "text": "if LoadBoolean(O,GetHandleId(h),$68304D32) and LoadBoolean(O,GetHandleId(h),$68323033) then"
+    },
+    {
+      "line": 28703,
+      "text": "call SetPlayerTechResearchedSwap($52303159,1,h)"
+    },
+    {
+      "line": 41467,
+      "text": "elseif GetUnitTypeId(bV)==$68304D31 and GetEventDamage()==15 and LoadBoolean(O,GetHandleId(i),1) then"
+    },
+    {
+      "line": 41468,
+      "text": "call SaveBoolean(O,GetHandleId(bV),2,true)"
+    },
+    {
+      "line": 41469,
+      "text": "call UnitDamageTargetBJ(bV,i,105,ATTACK_TYPE_CHAOS,DAMAGE_TYPE_UNIVERSAL)"
+    },
+    {
+      "line": 41470,
+      "text": "call SaveBoolean(O,GetHandleId(bV),2,false)"
+    },
+    {
+      "line": 41471,
+      "text": "elseif GetUnitTypeId(i)==$68304D31 and LoadBoolean(O,GetHandleId(i),1) then"
+    },
+    {
+      "line": 41472,
+      "text": "call SetUnitLifeBJ(i,GetUnitState(i,UNIT_STATE_LIFE)+GetEventDamage()*.5)"
+    },
+    {
+      "line": 42270,
+      "text": "if YDWEIsEventAttackDamage() and not LoadBoolean(O,GetHandleId(i),StringHash(\"Attack\")) then"
+    },
+    {
+      "line": 42271,
+      "text": "call SaveBoolean(O,GetHandleId(i),StringHash(\"Attack\"),true)"
+    },
+    {
+      "line": 42618,
+      "text": "if GetUnitState(i,UNIT_STATE_MANA)!=15. and GetUnitAbilityLevel(i,$4130494E)>0 then"
+    },
+    {
+      "line": 42619,
+      "text": "call SetUnitManaBJ(i,GetUnitState(i,UNIT_STATE_MANA)+1.)"
+    },
+    {
+      "line": 42620,
+      "text": "if GetUnitState(i,UNIT_STATE_MANA)==15. then"
+    },
+    {
+      "line": 42621,
+      "text": "call IssueImmediateOrder(i,\"thunderclap\")"
+    },
+    {
+      "line": 42622,
+      "text": "endif"
+    },
+    {
+      "line": 42623,
+      "text": "elseif GetUnitAbilityLevel(i,$41304A56)==1 and GetRandomReal(1.,106)>=73 then"
+    },
+    {
+      "line": 42644,
+      "text": "elseif GetUnitAbilityLevel(i,$41305448)>0 and GetRandomReal(1.,101)>=68 then"
+    },
+    {
+      "line": 42664,
+      "text": "elseif GetUnitAbilityLevel(i,$41305030)==1 then"
+    },
+    {
+      "line": 42686,
+      "text": "elseif GetUnitTypeId(i)==$68304F56 and GetRandomReal(0,101)<=25 then"
+    },
+    {
+      "line": 42694,
+      "text": "elseif GetUnitTypeId(i)==$68304252 then"
+    },
+    {
+      "line": 42707,
+      "text": "elseif GetUnitAbilityLevel(i,$41305056)==1 then"
+    },
+    {
+      "line": 42708,
+      "text": "if GetUnitState(Qf,UNIT_STATE_MAX_LIFE)*.15<=400. then"
+    },
+    {
+      "line": 42709,
+      "text": "call UnitDamageTargetBJ(i,Qf,GetUnitState(Qf,UNIT_STATE_MAX_LIFE)*.15,ATTACK_TYPE_CHAOS,DAMAGE_TYPE_UNIVERSAL)"
+    },
+    {
+      "line": 42710,
+      "text": "else"
+    },
+    {
+      "line": 42711,
+      "text": "call UnitDamageTargetBJ(i,Qf,400,ATTACK_TYPE_CHAOS,DAMAGE_TYPE_UNIVERSAL)"
+    },
+    {
+      "line": 42712,
+      "text": "endif"
+    },
+    {
+      "line": 42713,
+      "text": "elseif GetUnitAbilityLevel(i,$41304E35)==1 then"
+    },
+    {
+      "line": 42714,
+      "text": "if GetUnitAbilityLevel(i,$4176756C)==1 then"
+    },
+    {
+      "line": 42725,
+      "text": "elseif GetUnitAbilityLevel(i,$41305441)==1 then"
+    },
+    {
+      "line": 42726,
+      "text": "call SaveReal(O,GetHandleId(Qf),GetHandleId(i)+77,LoadReal(O,GetHandleId(Qf),GetHandleId(i)+77)+5)"
+    },
+    {
+      "line": 42727,
+      "text": "call UnitDamageTargetBJ(i,Qf,LoadReal(O,GetHandleId(Qf),GetHandleId(i)+77),ATTACK_TYPE_CHAOS,DAMAGE_TYPE_UNIVERSAL)"
+    },
+    {
+      "line": 42728,
+      "text": "elseif GetUnitAbilityLevel(i,$41303552)==1 and GetEventDamage()>=GetUnitState(i,ConvertUnitState(21)) then"
+    },
+    {
+      "line": 42729,
+      "text": "call UnitAddAbility(k,$41305434)"
+    },
+    {
+      "line": 42730,
+      "text": "call IssueTargetOrder(k,\"slow\",Qf)"
+    },
+    {
+      "line": 42731,
+      "text": "call UnitRemoveAbility(k,$41305434)"
+    },
+    {
+      "line": 42732,
+      "text": "elseif GetUnitAbilityLevel(i,$41305355)==1 then"
+    },
+    {
+      "line": 42733,
+      "text": "if LoadInteger(O,GetHandleId(i),9001)==7 then"
+    },
+    {
+      "line": 42766,
+      "text": "elseif GetUnitTypeId(i)==$6E303453 and GetRandomReal(0,100)<10 and not HaveSavedHandle(O,GetHandleId(i),1) then"
+    },
+    {
+      "line": 42767,
+      "text": "call SaveTimerHandle(O,GetHandleId(i),1,CreateTimer())"
+    },
+    {
+      "line": 42768,
+      "text": "call SaveUnitHandle(O,GetHandleId(LoadTimerHandle(O,GetHandleId(i),1)),1,i)"
+    },
+    {
+      "line": 42769,
+      "text": "call SaveReal(O,GetHandleId(LoadTimerHandle(O,GetHandleId(i),1)),3,GetUnitFacing(i))"
+    },
+    {
+      "line": 42770,
+      "text": "call TimerStart(LoadTimerHandle(O,GetHandleId(i),1),.1,true,function n04S_Skills)"
+    },
+    {
+      "line": 42771,
+      "text": "elseif GetUnitTypeId(i)==$68303838 or GetUnitTypeId(i)==$68305349 then"
+    },
+    {
+      "line": 42772,
+      "text": "if GetUnitAbilityLevel(i,$41303730)==1 then"
+    },
+    {
+      "line": 42773,
+      "text": "call SetUnitState(i,UNIT_STATE_LIFE,GetUnitState(i,UNIT_STATE_LIFE)+GetEventDamage()*.15)"
+    },
+    {
+      "line": 42774,
+      "text": "call DestroyEffect(AddSpecialEffectTarget(\"Abilities\\\\Spells\\\\Undead\\\\VampiricAura\\\\VampiricAuraTarget.mdl\",i,\"origin\"))"
+    },
+    {
+      "line": 42775,
+      "text": "call UnitRemoveAbility(i,$41303730)"
+    },
+    {
+      "line": 42776,
+      "text": "elseif GetRandomReal(0,100)<25 then"
+    },
+    {
+      "line": 42777,
+      "text": "call UnitAddAbility(i,$41303730)"
+    },
+    {
+      "line": 42778,
+      "text": "endif"
+    },
+    {
+      "line": 42779,
+      "text": "elseif GetUnitAbilityLevel(i,$41304C48)>0 and not LoadBoolean(O,GetHandleId(i),2) then"
+    },
+    {
+      "line": 42780,
+      "text": "set P8=GetUnitState(Qf,UNIT_STATE_MAX_LIFE)*.15"
+    },
+    {
+      "line": 42781,
+      "text": "call UnitDamageTargetBJ(i,Qf,150+P8,ATTACK_TYPE_CHAOS,DAMAGE_TYPE_UNIVERSAL)"
+    },
+    {
+      "line": 47735,
+      "text": "elseif GetUnitTypeId(i)==$68304D31 then"
+    },
+    {
+      "line": 47736,
+      "text": "call SaveBoolean(O,GetHandleId(Pf),1,true)"
+    },
+    {
+      "line": 47929,
+      "text": "if GetUnitAbilityLevel(i,$41305346)>0 then"
+    },
+    {
+      "line": 47930,
+      "text": "call DisableTrigger(GetTriggeringTrigger())"
+    },
+    {
+      "line": 47931,
+      "text": "if IsUnitType(GetKillingUnitBJ(),UNIT_TYPE_HERO)==true or GetUnitTypeId(GetKillingUnitBJ())==$6830354C or GetUnitTypeId(GetKillingUnitBJ())==$48303538 or GetUnitTypeId(GetKillingUnitBJ())==$48303237 or GetUnitTypeId(GetKillingUnitBJ())==$48303547 or GetUnitTypeId(GetKillingUnitBJ())==$68303357 or GetUnitTypeId(GetKillingUnitBJ())==$68303356 or GetUnitTypeId(GetKillingUnitBJ())==$68303353 or GetUnitTypeId(GetKillingUnitBJ())==$68303355 then"
+    },
+    {
+      "line": 47932,
+      "text": "call UnitDamageTarget(i,GetKillingUnitBJ(),1500,false,false,ATTACK_TYPE_NORMAL,DAMAGE_TYPE_MAGIC,WEAPON_TYPE_WHOKNOWS)"
+    },
+    {
+      "line": 47933,
+      "text": "else"
+    },
+    {
+      "line": 47934,
+      "text": "call UnitDamageTarget(i,GetKillingUnitBJ(),99999.,false,false,ATTACK_TYPE_NORMAL,DAMAGE_TYPE_MAGIC,WEAPON_TYPE_WHOKNOWS)"
+    },
+    {
+      "line": 47935,
+      "text": "endif"
+    },
+    {
+      "line": 47936,
+      "text": "call DestroyEffect(AddSpecialEffectTarget(\"Abilities\\\\Spells\\\\Human\\\\MarkOfChaos\\\\MarkOfChaosDone.mdl\",GetKillingUnitBJ(),\"origin\"))"
+    },
+    {
+      "line": 47937,
+      "text": "call DestroyEffect(AddSpecialEffect(\"Abilities\\\\Spells\\\\Undead\\\\DeathandDecay\\\\DeathandDecayTarget.mdl\",GetUnitX(i),GetUnitY(i)))"
+    },
+    {
+      "line": 47938,
+      "text": "call EnableTrigger(GetTriggeringTrigger())"
+    },
+    {
+      "line": 47939,
+      "text": "elseif x==$48303855 then"
+    },
+    {
+      "line": 47955,
+      "text": "elseif x==$68304158 then"
+    },
+    {
+      "line": 47964,
+      "text": "elseif x==$68304153 then"
+    },
+    {
+      "line": 47975,
+      "text": "elseif x==$68304150 then"
+    },
+    {
+      "line": 47994,
+      "text": "elseif x==$68303339 then"
+    },
+    {
+      "line": 48003,
+      "text": "elseif x==$68303338 then"
+    },
+    {
+      "line": 48004,
+      "text": "set Pb=GetUnitLoc(i)"
+    },
+    {
+      "line": 48005,
+      "text": "call CreateNUnitsAtLoc(1,$75303036,GetOwningPlayer(i),Pb,bj_UNIT_FACING)"
+    },
+    {
+      "line": 48006,
+      "text": "set Kc=bj_lastCreatedUnit"
+    },
+    {
+      "line": 48007,
+      "text": "call UnitAddAbility(Kc,$41303138)"
+    },
+    {
+      "line": 48008,
+      "text": "call IssueImmediateOrderById(Kc,852526)"
+    },
+    {
+      "line": 48009,
+      "text": "call UnitApplyTimedLifeBJ(1.,$42544C46,Kc)"
+    },
+    {
+      "line": 48010,
+      "text": "call RemoveLocation(Pb)"
+    },
+    {
+      "line": 48011,
+      "text": "elseif GetUnitAbilityLevel(GetKillingUnit(),$41304C48)>0 then"
+    },
+    {
+      "line": 48012,
+      "text": "call SetUnitLifeBJ(GetKillingUnit(),GetUnitState(GetKillingUnit(),UNIT_STATE_LIFE)+GetUnitState(GetKillingUnit(),UNIT_STATE_MAX_LIFE)*.18)"
+    },
+    {
+      "line": 48013,
+      "text": "elseif x==$68303841 or x==$68305057 then"
+    },
+    {
+      "line": 48056,
+      "text": "elseif GetUnitTypeId(GetKillingUnit())==$68303342 or GetUnitTypeId(GetKillingUnit())==$68304F43 then"
+    },
+    {
+      "line": 48057,
+      "text": "call UnitRemoveAbility(GetAttacker(),$41305241)"
+    },
+    {
+      "line": 48058,
+      "text": "call UnitResetCooldown(GetAttacker())"
+    },
+    {
+      "line": 48059,
+      "text": "call UnitAddAbility(GetAttacker(),$41305241)"
+    },
+    {
+      "line": 48060,
+      "text": "call IssueTargetOrder(GetAttacker(),\"frenzy\",GetAttacker())"
+    },
+    {
+      "line": 48061,
+      "text": "call ResetUnitAnimation(GetAttacker())"
+    },
+    {
+      "line": 48062,
+      "text": "set Pb=GetUnitLoc(GetKillingUnit())"
+    },
+    {
+      "line": 48063,
+      "text": "call CreateNUnitsAtLoc(1,$75303036,Player(-1+GetUnitUserData(GetKillingUnit())),Pb,bj_UNIT_FACING)"
+    },
+    {
+      "line": 48064,
+      "text": "set Nr=bj_lastCreatedUnit"
+    },
+    {
+      "line": 48065,
+      "text": "call UnitAddAbility(Nr,$41303256)"
+    },
+    {
+      "line": 48066,
+      "text": "call IssueTargetOrderById(Nr,852066,GetKillingUnit())"
+    },
+    {
+      "line": 48067,
+      "text": "call UnitApplyTimedLifeBJ(2.,$42544C46,Nr)"
+    },
+    {
+      "line": 48068,
+      "text": "call RemoveLocation(Pb)"
+    },
+    {
+      "line": 48069,
+      "text": "elseif GetUnitTypeId(GetKillingUnit())==$6830435A then"
+    },
+    {
+      "line": 48070,
+      "text": "call SetUnitLifeBJ(GetKillingUnitBJ(),GetUnitState(GetKillingUnitBJ(),UNIT_STATE_LIFE)+GetUnitState(i,UNIT_STATE_MAX_LIFE)*.5)"
+    },
+    {
+      "line": 48071,
+      "text": "call DestroyEffect(AddSpecialEffectTarget(\"Abilities\\\\Spells\\\\Undead\\\\RaiseSkeletonWarrior\\\\RaiseSkeleton.mdl\",GetKillingUnit(),\"origin\"))"
+    },
+    {
+      "line": 48072,
+      "text": "elseif x==$6E305343 then"
+    },
+    {
+      "line": 48073,
+      "text": "call DeathTriggerDamageNearby(i,300,8)"
+    },
+    {
+      "line": 48074,
+      "text": "call DestroyEffect(AddSpecialEffect(\"Units\\\\NightElf\\\\Wisp\\\\WispExplode.mdl\",GetUnitX(i),GetUnitY(i)))"
+    },
+    {
+      "line": 48075,
+      "text": "elseif GetUnitAbilityLevel(i,$41305342)==1 then"
+    },
+    {
+      "line": 48076,
+      "text": "call DeathTriggerDamageNearby(i,300,26)"
+    },
+    {
+      "line": 48077,
+      "text": "call DestroyEffect(AddSpecialEffect(\"Units\\\\NightElf\\\\Wisp\\\\WispExplode.mdl\",GetUnitX(i),GetUnitY(i)))"
+    },
+    {
+      "line": 48142,
+      "text": "function InitTrig_DeathTrigger takes nothing returns nothing"
+    },
+    {
+      "line": 48143,
+      "text": "local trigger t=CreateTrigger()"
+    },
+    {
+      "line": 48144,
+      "text": "call TriggerRegisterPlayerUnitEventSimple(t,Player(8),EVENT_PLAYER_UNIT_DEATH)"
+    },
+    {
+      "line": 48145,
+      "text": "call TriggerRegisterPlayerUnitEventSimple(t,Player(9),EVENT_PLAYER_UNIT_DEATH)"
+    },
+    {
+      "line": 48146,
+      "text": "call TriggerRegisterPlayerUnitEventSimple(t,Player(10),EVENT_PLAYER_UNIT_DEATH)"
+    },
+    {
+      "line": 48147,
+      "text": "call TriggerRegisterPlayerUnitEventSimple(t,Player(11),EVENT_PLAYER_UNIT_DEATH)"
+    },
+    {
+      "line": 48148,
+      "text": "call TriggerRegisterPlayerUnitEventSimple(t,Player(12),EVENT_PLAYER_UNIT_DEATH)"
+    },
+    {
+      "line": 48149,
+      "text": "call TriggerAddCondition(t,Condition(function Trig_DeathTriggerConditions))"
+    },
+    {
+      "line": 48150,
+      "text": "call TriggerAddAction(t,function Trig_DeathTriggerActions)"
+    }
+  ],
+  "boundaries": [
+    "A0LO/A0LR native AIas DataA1 missing; no inferred attack-speed effect.",
+    "h0M1 holy anger flag and reflection chain remains separate unfinished work; this batch is not all Tirion abilities.",
+    "Native damage listener order with other triggers and shared hashtable numeric key1/key2 writes remains partial.",
+    "Attack preceding unimplemented effects remain unimplemented; exact selection gates suppress Ashbringer. ConvertUnitState21 unavailable in mixed A05R configuration is explicitly unknown.",
+    "T4 defensive heal clamps before outer damage, unlike tooltip invulnerability. Low-life check is after heal and only on successful defensive roll, timer not continuous-low-life.",
+    "Independent DeathTrigger A0LH branch does not require weapon kill, excludes earlier branch prototypes and suppresses later A0SB and h0CZ effects. Other incomplete DeathTrigger cases retained.",
+    "A0LG corrected from implemented to partial: native base burn runs, while exact h0M1 attack flag and main-damage branches are absent; h0VT does not satisfy exact h0M1 guards."
+  ]
+}

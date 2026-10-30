@@ -1,3 +1,4 @@
+import {TIRION_RULES,initializeTirionDeployment,tirionAttackDamage,tirionKillBranch,tirionBondDamage,tickTirionJob} from './tirion-rules.js';
 import {KODO_RULES,canKodoCast,castKodo,kodoAttackOrders} from './kodo-rules.js';
 import {beginReincarnation,tickReincarnations,isReincarnating} from './reincarnation-rules.js';
 import {MUMMY_RULES,initializeMummyDeployment,tickMummyJob,mummyWidgetDeath} from './mummy-rules.js';
@@ -44,7 +45,7 @@ import { closestWalkable, isWalkable } from './layout.js';
 import { GARROSH_ACTIVE_RULES, GARROSH_PASSIVE_RULES, canGarroshCastAbility, castGarroshAbility, tryGarroshAutoCast, garroshActiveAfterDamage, sourceGarroshActiveDeath, tickGarroshActiveJob } from './garrosh-active-rules.js';
 import { ILLIDAN_RULES, ILLIDAN_ACTIVE_RULES, canIllidanCastAbility, castIllidanAbility, registerIllidanSource, tickIllidanSource, illidanOnAttackHit, tryIllidanAutoCast, illidanAfterDamage, sourceIllidanDeath, tickIllidanJob, isIllidanJobType } from './illidan-rules.js';
 
-export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261030-v44-1';
+export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261030-v45-1';
 
 // Values come from resolved object fields. Empty fields remain empty: a missing
 // native default is reported, rather than replacing it with tooltip numbers.
@@ -230,6 +231,7 @@ function compile(id,version='5.0dJF') {
   if(version==='v14.1A5'&&UNDEAD_LEGION_RULES[id]){const r=UNDEAD_LEGION_RULES[id];Object.assign(s,{kind:'undead_legion_source',status:r.status,runtimeImplemented:true,effectText:r.description+`【待核定：${r.partial}】`});}
   if(version==='v14.1A5'&&LIVING_BOMB_RULES[id]){const r=LIVING_BOMB_RULES[id];Object.assign(s,{kind:'living_bomb_source',status:r.status,runtimeImplemented:r.status==='partial',effectText:r.description+`【待核定：${r.partial}】`});}
   if(version==='v14.1A5'&&KODO_RULES[id]){const r=KODO_RULES[id];Object.assign(s,{kind:'kodo_source',status:r.status,runtimeImplemented:true,effectText:r.description+`【待核定：${r.partial}】`});}
+  if(version==='v14.1A5'&&TIRION_RULES[id]){const r=TIRION_RULES[id];Object.assign(s,{kind:r.nativeKind?s.kind:'tirion_source',status:r.status,runtimeImplemented:r.status==='partial',effectText:r.description+(r.partial?`【待核定：${r.partial}】`:'' )});}
   if(version==='v14.1A5'&&MUMMY_RULES[id]){const r=MUMMY_RULES[id];Object.assign(s,{kind:'mummy_source',status:r.status,runtimeImplemented:true,effectText:r.description+`【待核定：${r.partial}】`});}
   if(version==='v14.1A5'&&BRONZE_DRAGON_RULES[id]){const r=BRONZE_DRAGON_RULES[id];Object.assign(s,{kind:r.nativeKind?s.kind:'bronze_dragon_source',status:r.status,runtimeImplemented:true,effectText:r.description+`【待核定：${r.partial}】`});}
   if(version==='v14.1A5'&&DESERT_LIZARD_RULES[id]){const r=DESERT_LIZARD_RULES[id];Object.assign(s,{kind:r.nativeKind?s.kind:'desert_lizard_source',status:r.status,runtimeImplemented:r.status==='partial',effectText:r.description+`【待核定：${r.partial}】`});}
@@ -576,11 +578,12 @@ export function modifyIncoming(game,target,damage,attacker,options={}) {
 export function sourceClassAttackDamageEvent(game,target,attacker,options={},amount=0){
   if(!isV14(attacker)||options.spell&&!options.weapon||attacker.status?.sourceNativeAttackBusy)return;
   (attacker.status??={}).sourceNativeAttackBusy=true;
-  try{darkArthasAttackDamage(attacker,amount);vashjOnAttackDamage(game,attacker,target,heroScriptApi);blademasterAttack(game,attacker,heroScriptApi);sourceClassOnAttackDamage(game,attacker,target,heroScriptApi);banditAttackOrders(game,attacker,target,heroScriptApi);amount=bronzeAttackDamage(game,attacker,target,amount,heroScriptApi);kodoAttackOrders(game,attacker,target,heroScriptApi);desertLizardAttackDamage(game,attacker,heroScriptApi);stormLizardAttackDamage(game,attacker,target,heroScriptApi);huskarAttackDamage(game,attacker,target,amount,heroScriptApi);const manaBranch=destroyerAttackDamage(game,attacker,heroScriptApi);taurenAttackDamage(game,attacker,target,heroScriptApi,manaBranch?'A0IN':null);return amount;}finally{attacker.status.sourceNativeAttackBusy=false;}
+  try{darkArthasAttackDamage(attacker,amount);vashjOnAttackDamage(game,attacker,target,heroScriptApi);blademasterAttack(game,attacker,heroScriptApi);sourceClassOnAttackDamage(game,attacker,target,heroScriptApi);banditAttackOrders(game,attacker,target,heroScriptApi);amount=bronzeAttackDamage(game,attacker,target,amount,heroScriptApi);kodoAttackOrders(game,attacker,target,heroScriptApi);desertLizardAttackDamage(game,attacker,heroScriptApi);stormLizardAttackDamage(game,attacker,target,heroScriptApi);huskarAttackDamage(game,attacker,target,amount,heroScriptApi);const manaBranch=destroyerAttackDamage(game,attacker,heroScriptApi);const lateBranch=taurenAttackDamage(game,attacker,target,heroScriptApi,manaBranch?'A0IN':null)??(manaBranch?'A0IN':null);tirionAttackDamage(game,attacker,target,amount,heroScriptApi,lateBranch);return amount;}finally{attacker.status.sourceNativeAttackBusy=false;}
 }
 export function initializeSourceClassCombat(game,building,entity){
-  if(isV14(entity)){initializeMummyDeployment(game,building,entity);initializeBronzeDeployment(game,building,entity);initializeBlademaster(game,building,entity);initializeNightmareDeployment(game,entity);initializeBrightArthasDeployment(game,building,entity);initializeLichKingDeployment(game,entity);initializeVashjDeployment(game,building,entity);return initializeSourceClassDeployment(game,building,entity,heroScriptApi);}
+  if(isV14(entity)){initializeTirionDeployment(game,building,entity,heroScriptApi);initializeMummyDeployment(game,building,entity);initializeBronzeDeployment(game,building,entity);initializeBlademaster(game,building,entity);initializeNightmareDeployment(game,entity);initializeBrightArthasDeployment(game,building,entity);initializeLichKingDeployment(game,entity);initializeVashjDeployment(game,building,entity);return initializeSourceClassDeployment(game,building,entity,heroScriptApi);}
 }
+export function tirionBondDamageEvent(game,target,attacker,amount){tirionBondDamage(game,target,attacker,amount,heroScriptApi);}
 export function beforeSourceDamage(game,target,actual,attacker,options={}){
   const mainEventPosition=pos(target);
   if(isV14(target))kelthuzadBeforeDamage(game,target,actual,attacker,heroScriptApi);
@@ -680,7 +683,7 @@ export function sourceDeath(game,target,killer) {
   // JSON restoration breaks live-object aliases. Rebind the retained script
   // handle before corpse cleanup so its final mana/cooldowns remain authoritative.
   if(game.state.nagaScriptCasters?.[target.id])game.state.nagaScriptCasters[target.id]=target;
-  for(const job of game.state.sourceSkillJobs??[])if(job.type==='bronze_fissure'&&job.sourceId===target.id)job.source=target;
+  for(const job of game.state.sourceSkillJobs??[])if(['bronze_fissure','tirion_bond_heal'].includes(job.type)&&job.sourceId===target.id)job.source=target;
   blademasterDeath(game,target,killer,heroScriptApi);
   banditIndependentDeath(game,target);
   sourceAesaraDeath(game,target);
@@ -695,11 +698,12 @@ export function sourceDeath(game,target,killer) {
   sourceAlchemistDeath(game,target,killer,{universalDamage});
   sourceNagaDeath(game,target,killer,heroScriptApi);
   if(isV14(target))sourceYseraDeath(game,target,heroScriptApi,false);
-  if(killer?.combatRawcode==='h0CZ')killer.hp=Math.min(killer.maxHp,killer.hp+target.maxHp*(isV14(killer)?.5:.6));
-  if(killer?.combatRawcode==='h03B'||isV14(killer)&&killer?.combatRawcode==='h0OC')buff(killer,{...compile('A02V',killer.skillVersion),buffKey:'skeleton-buff'},killer,game.state.time);
+  const tirionKillSelected=tirionKillBranch(game,target,killer);
+  if(!tirionKillSelected&&killer?.combatRawcode==='h0CZ')killer.hp=Math.min(killer.maxHp,killer.hp+target.maxHp*(isV14(killer)?.5:.6));
+  if(!tirionKillSelected&&(killer?.combatRawcode==='h03B'||isV14(killer)&&killer?.combatRawcode==='h0OC'))buff(killer,{...compile('A02V',killer.skillVersion),buffKey:'skeleton-buff'},killer,game.state.time);
   if(isV14(target)){
     for(const s of active(target))if(s.kind==='x9_sapper')for(const t of scriptTargets(game,target,target,s.deathRadius,false))universalDamage(game,t,s.deathDamage,target);
-    const explosion=target.combatRawcode==='n0SC'?8:active(target).some(s=>s.id==='A0SB')?26:0;
+    const explosion=tirionKillSelected?0:target.combatRawcode==='n0SC'?8:active(target).some(s=>s.id==='A0SB')?26:0;
     if(explosion)for(const t of scriptTargets(game,target,target,3*target.distanceScale,false)){const a=game._auraEffects(t,game._battleAuras?.[t.battleTeam]??[]);game._hurt(t,explosion*game._typeMultiplier('normal',t.armorType,t.sourceArmorTypeRaw??t.sourceRawFields?.defType),target,{spell:true,scripted:true});}
   }
   if(!isV14(target)&&['n0SC','n0SD'].includes(target.combatRawcode))for(const t of game.state.entities)if(t.hp>0&&t.side!==target.side&&t.battleTeam===target.battleTeam&&dist(t,target)<=3*target.distanceScale)sourceDamage(game,t,target.combatRawcode==='n0SC'?8:26,target,false);
@@ -897,6 +901,7 @@ export function tickSourceScriptJobs(game,dt=0){
     if(job.type==='bronze_fissure'){if(tickBronzeJob(game,job,heroScriptApi))remaining.push(job);continue;}
     if(job.type==='living_bomb'){if(!job.done)remaining.push(job);continue;}
     if(job.type.startsWith('blademaster_')){if(tickBlademasterJob(game,job,heroScriptApi))remaining.push(job);continue;}
+    if(job.type==='tirion_bond_heal'){if(tickTirionJob(game,job))remaining.push(job);continue;}
     if(job.type.startsWith('bandit_')){if(tickBanditJob(game,job,heroScriptApi))remaining.push(job);continue;}
     if(job.type.startsWith('malfurion_')){if(tickMalfurionJob(game,job,heroScriptApi))remaining.push(job);continue;}
     if(job.type==='broodmother_alliance'){if(tickBroodmotherJob(game,job,heroScriptApi))remaining.push(job);continue;}

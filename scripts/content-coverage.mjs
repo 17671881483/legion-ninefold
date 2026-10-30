@@ -14,6 +14,9 @@ const playerRuntimeForms=['h0YO','h0UD','h0UE','h2AE','n06V','n06W','h0CZ','h0CL
 // Source callbacks inject these exact auxiliary abilities. Keep them visible
 // in coverage even though they are absent from the build-menu ability lists.
 const playerRuntimeAbilities=[
+  {sourceRawcode:'h0M1',abilityIds:['A0LO','A0LQ']},
+  {sourceRawcode:'h0VT',abilityIds:['A0LO','A0LQ']},
+  {sourceRawcode:'n203',abilityIds:['A0LR']},
   // Blood fusion can select all other registered classes; include their
   // dynamically granted child abilities and source-trigger dummy requests.
   {sourceRawcode:'h06J',abilityIds:Object.keys(SOURCE_CLASS_RULES)},
@@ -75,7 +78,8 @@ const result={
   sourceOnlyCombatForms:[{combatRawcode:'h0JR',buildingRawcode:'n00S',status:'entry-unresolved',evidence:'war3map.j:17544-17545 maps forms; line3644 ban dialog; 48355 barracks egg marker and 48750 monthly record do not provide acquisition',skills:collect([{...UNIT_TEMPLATES.h0JR,abilityIds:[...UNIT_TEMPLATES.h0JR.abilityIds,'A0J2','A0J3']}])},{combatRawcode:'h0VQ',buildingRawcode:'n07U',status:'entry-unresolved',evidence:'war3map.j:17436-17437 maps forms; line3638 ban limit1; no source creation/recipe/upgrade entry found in packet',skills:collect([{...UNIT_TEMPLATES.h0VQ,abilityIds:[...UNIT_TEMPLATES.h0VQ.abilityIds,'A1QI','A1D6']}])}],
   remainingSourceGaps:[
     '科多吞噬/暴食施法脚本实际造成99999混乱/通用或普通/普通伤害后return，不执行旧消化、恢复及吐出；自动门槛400/3000，手动主目标无血量门槛，暴食预先保存组再取首个合格第二目标。ANcl即时命令适配及默认耗魔/引导仍partial；见kodo-evidence.json。',
-    '木乃伊/法老王按建筑登记：A14F每5秒蓄水池抽样，命令接受才授予永久A14E，4次成功或widget死亡终止；已登记句柄死亡后2.01秒移除A14E。普通n061只有A1BL，不伪造一次性移除。ANcl资源/仲裁为部分适配，ACrn缺Cost1及复生事件模型，当前不实际复活；见mummy-evidence.json。',
+    '提里奥灰烬使者附伤/独立击杀回血与R01Y历史羁绊及出战授予已接入；A0LR独立伤害监听保留先回血、低血3秒任务及Af01附伤。A0LO/A0LR攻速DataA缺失，神圣愤怒h0M1标记/反伤与其他泰兰规则仍待还原，见tirion-evidence.json。',
+    '木乃伊/法老王按建筑登记：A14F每5秒蓄水池抽样，命令接受才授予永久A14E，4次成功或widget死亡终止；已登记句柄死亡后2.01秒移除A14E。普通n061只有A1BL，不伪造一次性移除。ANcl资源/仲裁为部分适配，ACrn已补2秒同句柄复生、240秒冷却与终结死亡分流，耗魔默认继承、资源恢复和buff仍partial；见mummy-evidence.json及reincarnation-evidence.json。',
     '青铜龙按建筑体A14Y/A14Z登记5/4秒回溯第2秒生命比例，并授予A150；保留战斗体技能交叉、攻击事件登记门槛及第二次移除。A151按PauseUnitEx(1.5)请求等级1控制；h0QR分裂期间普通配置事件改写为随机攻击一半而非文案150%。原生弹道/上下限动态字段、混合P8前置分支、死亡句柄写生命与旧档历史仍partial，见bronze-dragon-evidence.json。',
     '荒漠巨蜥A129/A12A分别保留伤害事件倒计数、7/8实数概率和共享Bblo移除；动态A12B仅请求，原生缺失耗魔/移动字段未猜。A12C每8次事件回复200并添加A12I，下一非第8次事件移除；普通连续攻击第9/17次暴击。A12K读取0.65承伤，非文案45%减伤，混合防御边界仍partial；见desert-lizard-evidence.json。',
     '毒蝎A10H/A10I/A10J主伤害脚本接入，保留新星任意正敌对伤害触发、128/250范围与150普通伤害、受击者自身近战门槛。shadowstrike与e00W毒素攻击马甲仅记录请求；A10G连续附毒沿用现有适配，原生跳数、DataD1=9叠加和类型未核定，四项均为partial，见scorpion-evidence.json。',

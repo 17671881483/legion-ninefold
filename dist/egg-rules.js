@@ -358,6 +358,13 @@ export const EGG_REQUIREMENTS = Object.freeze({
       ]
     ]
   },
+  "R01Y": {
+    "text": "曾实际完成提里奥·弗丁（h0M2）与泰兰·弗丁（h203）；原始完成记录永久保留，不要求同时在场，外观h0VU不替代h0M2事件",
+    "status": "confirmed",
+    "sourceLines": [28700, 28703],
+    "completionMode": "raw",
+    "groups": [["h0M2", "h203"]]
+  },
   "R01X": {
     "text": "曾完成过以下任一组：骑士＋圣骑士（满级）；或圣骑士 -全能骑士（满级）＋近卫兵；或永生近卫军（外观形态记录）；完成记录保留",
     "status": "confirmed",

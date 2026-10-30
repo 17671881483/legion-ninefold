@@ -6,7 +6,7 @@ import {resetLichKingRound} from './lich-king-rules.js';
 import {skeletonKingGate,beginSkeletonKingRoundFinish,tickSkeletonKingLifecycle,isSkeletonKingJobType} from './skeleton-king-rules.js';
 import {sourceBarrageTargets,sourceBarrageHit} from './skills.js';
 import { UNITS, MERCENARIES, LEGACY_MERCENARIES, WAVES, RULES, HEROES, BUILDERS, PROPHET_POOLS, UNIT_TEMPLATES, TECHNOLOGIES, BOX_TRAINING_RULES } from './data.js';
-import { attachSkills, refreshSourceSkills, initializeSourceSkills, initializeSourceClassCombat, sourceClassAttackDamageEvent, sourceDamageListeners, sourceRegisteredDamageEvent, brightArthasEventDamage, compileSkills, sourceAuraEffects, hasSourceAura, tickSourceSkills, sourceAttackIssued, sourceAttackStart, sourceOnHit, modifyIncoming, beforeSourceDamage, afterSourceDamage, sourceDeath, trySourceReincarnation, sourceMoveFactor, canWeaponTarget, sourceWeapon, tickSourceScriptJobs, manualSourceSkills, castManualSourceSkill, stormLizardChanneling } from './skills.js';
+import { attachSkills, refreshSourceSkills, initializeSourceSkills, initializeSourceClassCombat, sourceClassAttackDamageEvent, tirionBondDamageEvent, sourceDamageListeners, sourceRegisteredDamageEvent, brightArthasEventDamage, compileSkills, sourceAuraEffects, hasSourceAura, tickSourceSkills, sourceAttackIssued, sourceAttackStart, sourceOnHit, modifyIncoming, beforeSourceDamage, afterSourceDamage, sourceDeath, trySourceReincarnation, sourceMoveFactor, canWeaponTarget, sourceWeapon, tickSourceScriptJobs, manualSourceSkills, castManualSourceSkill, stormLizardChanneling } from './skills.js';
 import {isReincarnating,countsForBattle,reincarnationLethal} from './reincarnation-rules.js';
 import { initializeSourceClassBuilding } from './source-class-rules.js';
 import { MAP, laneToWorld, worldToLane, kingWorld, spawnWarpWorld, supportWorld, routePoints, isWalkable, isSegmentWalkable, constrainPoint, closestWalkable, navigationPath } from './layout.js';
@@ -1369,6 +1369,7 @@ export class Game {
     // an invulnerable / immune target into a valid damage recipient.
     if(actual<=0){if((target.status.yseraRevivalCount??0)>revivalCount)beforeSourceDamage(this,target,0,attacker,options);sourceClassAttackDamageEvent(this,target,attacker,options,0);sourceRegisteredDamageEvent(this,target,registeredDamageListeners);return 0;}
     if ((target.status.shield ?? 0) > 0 && !legacyPure) { const absorbed = Math.min(actual, target.status.shield); target.status.shield -= absorbed; actual -= absorbed; }
+    tirionBondDamageEvent(this,target,attacker,actual);
     actual=beforeSourceDamage(this,target,actual,attacker,options)??actual;
     actual=brightArthasEventDamage(this,target,actual,attacker);
     // Main damage listener was registered before New_UnitAttack in the map.
@@ -1770,7 +1771,7 @@ export class Game {
     for(const e of [...this.state.entities,...this.state.kings])if(this.state.aesaraHandles[e.id])this.state.aesaraHandles[e.id]=e;
     for(const e of [...this.state.entities,...this.state.kings]){if(this.state.soulToxinHandles[e.id])this.state.soulToxinHandles[e.id]=e;if(this.state.livingBombHandles[e.id])this.state.livingBombHandles[e.id]=e;}
     for(const j of this.state.sourceSkillJobs)if(['huskar_unyielding','huskar_duel_immune'].includes(j.type)){const e=[...this.state.entities,...this.state.kings].find(e=>e.id===j.sourceId);if(e)j.source=e;}
-    for(const j of this.state.sourceSkillJobs)if(isSkeletonKingJobType(j.type)||j.type==='bronze_fissure'||j.type?.startsWith('mummy_')){const e=this.state.entities.find(e=>e.id===j.sourceId);if(e)j.source=e;}
+    for(const j of this.state.sourceSkillJobs)if(isSkeletonKingJobType(j.type)||j.type==='bronze_fissure'||j.type==='tirion_bond_heal'||j.type?.startsWith('mummy_')){const e=this.state.entities.find(e=>e.id===j.sourceId);if(e)j.source=e;}
     const mummyHandles=new Map([...this.state.entities,...this.state.kings].map(e=>[e.id,e]));
     for(const j of this.state.sourceSkillJobs)if(j.type?.startsWith('mummy_')){if(!mummyHandles.has(j.sourceId)&&j.source)mummyHandles.set(j.sourceId,j.source);j.source=mummyHandles.get(j.sourceId);}
     if (saved.version === 1) {

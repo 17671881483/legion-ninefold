@@ -150,6 +150,12 @@ export class Battlefield{
       for(const p of state.players)if(p.heroId){const pos=this.world(p.id,3.5,9.5),pt=this.project(pos.x,pos.y);c.save();c.translate(pt.x,pt.y);drawSprite(c,definitions[p.heroId],s*.44,now);c.restore();}
     }else{
       for(const job of state.sourceSkillJobs??[]){
+        if(!job.done&&['musketeer_shot','musketeer_mine'].includes(job.type)){
+          const p=this.project(job.x,job.y);c.save();
+          if(job.type==='musketeer_shot'){c.strokeStyle='#ffd387';c.lineWidth=3;c.beginPath();c.moveTo(p.x-Math.cos(job.angle)*s*.45,p.y-Math.sin(job.angle)*s*.35);c.lineTo(p.x,p.y);c.stroke();}
+          else {c.fillStyle=job.stage==='armed'?'#b9ba86':'#e3bf79';c.strokeStyle='#322b1e';c.lineWidth=1;c.beginPath();c.ellipse(p.x,p.y,Math.max(3,s*.14),Math.max(2,s*.08),0,0,Math.PI*2);c.fill();c.stroke();c.fillStyle='#ed9268';c.fillRect(p.x-1,p.y-2,2,2);}
+          c.restore();continue;
+        }
         if(job.done||!['vashj_flight','vashj_lightning','vashj_spore','lich_king_dragon','dark_arthas_dragon','dark_arthas_coil','dark_arthas_wind','bright_arthas_light','bright_arthas_judgment','bright_arthas_hammer','aesara_snake'].includes(job.type))continue;
         const spot=job.type==='dark_arthas_wind'?(job.lastImpact??job):job,p=this.project(spot.x,spot.y),scale=(job.source.distanceScale??1/3)/100;
         c.save();

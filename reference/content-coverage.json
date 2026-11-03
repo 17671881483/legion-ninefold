@@ -1,6 +1,6 @@
 {
   "sourceVersion": "v14.1A5",
-  "skillImplementationRevision": "v14-content-20261103-v51-1",
+  "skillImplementationRevision": "v14-content-20261103-v52-1",
   "units": 534,
   "mercenaryRecords": 60,
   "mainWaves": 35,
@@ -365,19 +365,22 @@
   ],
   "playerBuildingRuleCarriers": [
     "h0JV",
+    "h2A7",
     "n04W",
     "n061",
     "n062",
     "n06S",
-    "n07O"
+    "n07O",
+    "n07R",
+    "n07S"
   ],
   "playerBuildingCommandCarriers": 411,
   "playerSkills": {
     "counts": {
       "implemented": 405,
-      "partial": 127,
-      "marker": 34,
-      "unresolved": 94
+      "partial": 130,
+      "marker": 36,
+      "unresolved": 90
     },
     "abilities": [
       {
@@ -6076,8 +6079,8 @@
       {
         "rawcode": "A1PG",
         "name": "穿刺射击",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "musketeer_source",
         "unitRawcodes": [
           "h2A7",
           "n07R",
@@ -6087,8 +6090,8 @@
       {
         "rawcode": "A1PH",
         "name": "蜘蛛地雷",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "musketeer_source",
         "unitRawcodes": [
           "h2A7",
           "n07R",
@@ -6098,8 +6101,8 @@
       {
         "rawcode": "A1PI",
         "name": "爆裂弹夹",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "marker",
+        "kind": "marker",
         "unitRawcodes": [
           "h2A7",
           "n07R",
@@ -6109,8 +6112,19 @@
       {
         "rawcode": "A1PJ",
         "name": "爆裂弹夹",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "musketeer_source",
+        "unitRawcodes": [
+          "h2A7",
+          "n07R",
+          "n07S"
+        ]
+      },
+      {
+        "rawcode": "A1PK",
+        "name": "蜘蛛地雷",
+        "status": "marker",
+        "kind": "marker",
         "unitRawcodes": [
           "h2A7",
           "n07R",
@@ -7195,9 +7209,9 @@
   "battleSkills": {
     "counts": {
       "implemented": 454,
-      "partial": 136,
-      "marker": 47,
-      "unresolved": 108
+      "partial": 139,
+      "marker": 49,
+      "unresolved": 104
     },
     "abilities": [
       {
@@ -13655,8 +13669,8 @@
       {
         "rawcode": "A1PG",
         "name": "穿刺射击",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "musketeer_source",
         "unitRawcodes": [
           "h2A7",
           "n07R",
@@ -13666,8 +13680,8 @@
       {
         "rawcode": "A1PH",
         "name": "蜘蛛地雷",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "musketeer_source",
         "unitRawcodes": [
           "h2A7",
           "n07R",
@@ -13677,8 +13691,8 @@
       {
         "rawcode": "A1PI",
         "name": "爆裂弹夹",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "marker",
+        "kind": "marker",
         "unitRawcodes": [
           "h2A7",
           "n07R",
@@ -13688,8 +13702,19 @@
       {
         "rawcode": "A1PJ",
         "name": "爆裂弹夹",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "musketeer_source",
+        "unitRawcodes": [
+          "h2A7",
+          "n07R",
+          "n07S"
+        ]
+      },
+      {
+        "rawcode": "A1PK",
+        "name": "蜘蛛地雷",
+        "status": "marker",
+        "kind": "marker",
         "unitRawcodes": [
           "h2A7",
           "n07R",

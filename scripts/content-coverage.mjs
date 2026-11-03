@@ -7,7 +7,7 @@ import { compileSkills, SKILL_IMPLEMENTATION_REVISION } from '../dist/skills.js'
 const current=UNITS.filter(u=>!u.legacy);
 // Building commands are absent from many combat-form ability lists.
 const playerBuildingCommands=current.filter(u=>u.buildingAbilityIds?.includes('A118')).map(u=>({...u,abilityIds:u.buildingAbilityIds.filter(id=>['A118','A0IH'].includes(id))}));
-const playerBuildingRuleCarriers=current.filter(u=>u.buildingAbilityIds?.some(id=>['A0RF','A0JE','A1BL'].includes(id))).map(u=>({...u,abilityIds:u.buildingAbilityIds.filter(id=>['A0RF','A0JE','A1BL'].includes(id))}));
+const playerBuildingRuleCarriers=current.filter(u=>u.buildingAbilityIds?.some(id=>['A0RF','A0JE','A1BL','A1PK'].includes(id))).map(u=>({...u,abilityIds:u.buildingAbilityIds.filter(id=>['A0RF','A0JE','A1BL','A1PK'].includes(id))}));
 // This form is created by YseraAwakening at runtime, so it is not a separate
 // build-menu record. Its skills still belong to the player's combat coverage.
 const playerRuntimeForms=['h0YO','h0UD','h0UE','h2AE','n06V','n06W','h0CZ','h0CL','n07J','h03E','h0V2','h03K','h0SU','n0SD','h2AC'].map(code=>UNIT_TEMPLATES[code]);

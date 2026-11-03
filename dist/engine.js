@@ -1711,6 +1711,8 @@ export class Game {
     for(const j of this.state.sourceSkillJobs)if(isSkeletonKingJobType(j.type)||j.type==='bronze_fissure'||j.type==='tirion_bond_heal'||j.type?.startsWith('mummy_')){const e=this.state.entities.find(e=>e.id===j.sourceId);if(e)j.source=e;}
     const mummyHandles=new Map([...this.state.entities,...this.state.kings].map(e=>[e.id,e]));
     for(const j of this.state.sourceSkillJobs)if(j.type?.startsWith('mummy_')){if(!mummyHandles.has(j.sourceId)&&j.source)mummyHandles.set(j.sourceId,j.source);j.source=mummyHandles.get(j.sourceId);}
+    const musketeerHandles=new Map([...this.state.entities,...this.state.kings].map(e=>[e.id,e]));
+    for(const j of this.state.sourceSkillJobs)if(j.type?.startsWith('musketeer_')){if(!musketeerHandles.has(j.sourceId)&&j.source)musketeerHandles.set(j.sourceId,j.source);j.source=musketeerHandles.get(j.sourceId);}
     if (saved.version === 1) {
       this.state.map = { id: MAP.id, version: MAP.version, topology: '2x2-crossbar-stem' };
       for (const e of this.state.entities) {

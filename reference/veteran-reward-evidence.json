@@ -1,0 +1,283 @@
+{
+  "source": {
+    "file": "reference/v14-source/raw_extracted/war3map.j",
+    "sha256": "e66c55b3b25b185c991be5613e21fbf5b2d598f3cc40f2f8cd01c23bcb828250",
+    "lineEncoding": "latin1/LF"
+  },
+  "sourceEvidence": [
+    {
+      "line": 13511,
+      "text": "set Sf[0]=0"
+    },
+    {
+      "line": 13517,
+      "text": "if GetPlayerSlotState(ConvertedPlayer(bj_forLoopAIndex))==PLAYER_SLOT_STATE_PLAYING and GetPlayerController(ConvertedPlayer(bj_forLoopAIndex))==MAP_CONTROL_USER then"
+    },
+    {
+      "line": 13518,
+      "text": "set Sf[0]=Sf[0]+1"
+    },
+    {
+      "line": 13519,
+      "text": "set Sf[Sf[0]]=bj_forLoopAIndex"
+    },
+    {
+      "line": 16387,
+      "text": "set Mk[Bi]=$68303238"
+    },
+    {
+      "line": 16388,
+      "text": "set Ml[Bi]=$68303054"
+    },
+    {
+      "line": 18644,
+      "text": "call SetUnitUserData(Bd,9)"
+    },
+    {
+      "line": 18645,
+      "text": "call SetUnitUserData(Bh,10)"
+    },
+    {
+      "line": 20150,
+      "text": "if IsPlayerAlly(GetOwningPlayer(Nr),Player(8)) then"
+    },
+    {
+      "line": 20151,
+      "text": "set Pc=Player(8)"
+    },
+    {
+      "line": 20153,
+      "text": "set Pc=Player(9)"
+    },
+    {
+      "line": 20173,
+      "text": "set Kc=CreateUnit(Pc,Mk[Bi],GetLocationX(Pb),GetLocationY(Pb),bj_UNIT_FACING)"
+    },
+    {
+      "line": 20174,
+      "text": "call SetUnitUserData(Kc,1+GetPlayerId(GetOwningPlayer(Nr)))"
+    },
+    {
+      "line": 21339,
+      "text": "if IsPlayerAlly(BF,Player(8)) then"
+    },
+    {
+      "line": 21340,
+      "text": "set Pc=Player(8)"
+    },
+    {
+      "line": 21342,
+      "text": "set Pc=Player(9)"
+    },
+    {
+      "line": 21355,
+      "text": "set i=CreateUnit(Pc,Bi,GetUnitX(i),GetUnitY(i),MP[GetPlayerId(BF)])"
+    },
+    {
+      "line": 21357,
+      "text": "call SetUnitUserData(i,GetPlayerId(BF)+1)"
+    },
+    {
+      "line": 22184,
+      "text": "function C_ExperiencedSoldierSkill takes nothing returns boolean"
+    },
+    {
+      "line": 22185,
+      "text": "return GetUnitTypeId(GetKillingUnit())==$68303238 and GetOwningPlayer(GetKillingUnit())==Player(8) or GetOwningPlayer(GetKillingUnit())==Player(9)"
+    },
+    {
+      "line": 22186,
+      "text": "endfunction"
+    },
+    {
+      "line": 22187,
+      "text": "function A_ExperiencedSoldierSkill takes nothing returns nothing"
+    },
+    {
+      "line": 22188,
+      "text": "local unit Nu=GetKillingUnit()"
+    },
+    {
+      "line": 22189,
+      "text": "local integer BF=GetUnitUserData(Nu)"
+    },
+    {
+      "line": 22190,
+      "text": "if Sf[0]!=2 and GetRandomInt(1,10)<=6 then"
+    },
+    {
+      "line": 22191,
+      "text": "call OC5F_Eb(Nu,\"+\"+I2S(1),100.,77.,0.,Player(BF-1))"
+    },
+    {
+      "line": 22192,
+      "text": "call SetPlayerState(Player(BF-1),PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(Player(BF-1),PLAYER_STATE_RESOURCE_GOLD)+1)"
+    },
+    {
+      "line": 22193,
+      "text": "set Jh[BF]=Jh[BF]+1"
+    },
+    {
+      "line": 22194,
+      "text": "set T1[BF]=T1[BF]+1"
+    },
+    {
+      "line": 22195,
+      "text": "if T1[BF]>=125 and T2[BF] and T3[BF] then"
+    },
+    {
+      "line": 22196,
+      "text": "call SetPlayerTechMaxAllowed(Player(BF-1),$68323033,1)"
+    },
+    {
+      "line": 22197,
+      "text": "call SetPlayerTechResearchedSwap($5230304D,1,Player(BF-1))"
+    },
+    {
+      "line": 22198,
+      "text": "endif"
+    },
+    {
+      "line": 22199,
+      "text": "else"
+    },
+    {
+      "line": 22200,
+      "text": "if Sf[0]==2 and GetRandomInt(1,10)<=3 then"
+    },
+    {
+      "line": 22201,
+      "text": "call OC5F_Eb(Nu,\"+\"+I2S(1),100.,77.,0.,Player(BF-1))"
+    },
+    {
+      "line": 22202,
+      "text": "call SetPlayerState(Player(BF-1),PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(Player(BF-1),PLAYER_STATE_RESOURCE_GOLD)+1)"
+    },
+    {
+      "line": 22203,
+      "text": "set Jh[BF]=Jh[BF]+1"
+    },
+    {
+      "line": 22204,
+      "text": "set T1[BF]=T1[BF]+1"
+    },
+    {
+      "line": 22205,
+      "text": "if T1[BF]>=125 and T2[BF] and T3[BF] then"
+    },
+    {
+      "line": 22206,
+      "text": "call SetPlayerTechMaxAllowed(Player(BF-1),$68323033,1)"
+    },
+    {
+      "line": 22207,
+      "text": "call SetPlayerTechResearchedSwap($5230304D,1,Player(BF-1))"
+    },
+    {
+      "line": 22208,
+      "text": "endif"
+    },
+    {
+      "line": 22209,
+      "text": "endif"
+    },
+    {
+      "line": 22210,
+      "text": "endif"
+    },
+    {
+      "line": 22211,
+      "text": "set Nu=null"
+    },
+    {
+      "line": 27003,
+      "text": "set Nt=CreateTrigger()"
+    },
+    {
+      "line": 27004,
+      "text": "call TriggerRegisterPlayerUnitEvent(Nt,Player(10),EVENT_PLAYER_UNIT_DEATH,null)"
+    },
+    {
+      "line": 27005,
+      "text": "call TriggerRegisterPlayerUnitEvent(Nt,Player(11),EVENT_PLAYER_UNIT_DEATH,null)"
+    },
+    {
+      "line": 27006,
+      "text": "call TriggerAddCondition(Nt,Condition(function OC5F_PC))"
+    },
+    {
+      "line": 27007,
+      "text": "call TriggerAddAction(Nt,function qC)"
+    },
+    {
+      "line": 27137,
+      "text": "set T0=CreateTrigger()"
+    },
+    {
+      "line": 27138,
+      "text": "call TriggerRegisterAnyUnitEventBJ(T0,EVENT_PLAYER_UNIT_DEATH)"
+    },
+    {
+      "line": 27139,
+      "text": "call TriggerAddCondition(T0,Condition(function C_ExperiencedSoldierSkill))"
+    },
+    {
+      "line": 27140,
+      "text": "call TriggerAddAction(T0,function A_ExperiencedSoldierSkill)"
+    },
+    {
+      "line": 28317,
+      "text": "function Trig_mainmyActions takes nothing returns nothing"
+    },
+    {
+      "line": 28320,
+      "text": "call main2()"
+    },
+    {
+      "line": 42187,
+      "text": "function InitTrig_UnitDeath takes nothing returns nothing"
+    },
+    {
+      "line": 42188,
+      "text": "set bu=CreateTrigger()"
+    },
+    {
+      "line": 42189,
+      "text": "call TriggerRegisterAnyUnitEventBJ(bu,EVENT_PLAYER_UNIT_DEATH)"
+    },
+    {
+      "line": 42190,
+      "text": "call TriggerAddCondition(bu,Condition(function gg_trg_UnitDeathCondition))"
+    },
+    {
+      "line": 42191,
+      "text": "call TriggerAddAction(bu,function Trig_UnitDeathActions)"
+    },
+    {
+      "line": 49753,
+      "text": "call InitTrig_UnitDeath()"
+    },
+    {
+      "line": 50022,
+      "text": "call InitCustomTriggers()"
+    },
+    {
+      "line": 50023,
+      "text": "call RunInitializationTriggers()"
+    }
+  ],
+  "hostMapping": {
+    "nativeArmyOwners": {
+      "blue": 8,
+      "red": 9
+    },
+    "humanCount": 1,
+    "note": "The browser match has one human and seven AI. Sandbox AI toggle does not change the human count. Exact source count 2 is supported in stored source state but there is no network 1v1 UI."
+  },
+  "boundaries": [
+    "Native players outside host IDs0..7 retain an attempted-payout report and T1 counter but no invented human-wallet recipient.",
+    "Only proven building deployments migrate native owner/userData in old saves; unrelated dummies are not inferred from economic owner.",
+    "Generic summon creation inherits native owner, but independently constructed dummies and original native RNG/event ordering remain partial.",
+    "T2/T3 have no assignments in the supplied script; 125 successful rewards alone never unlock R00M."
+  ]
+}

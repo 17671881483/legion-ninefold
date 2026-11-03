@@ -1,6 +1,6 @@
 {
   "sourceVersion": "v14.1A5",
-  "skillImplementationRevision": "v14-content-20261103-v48-1",
+  "skillImplementationRevision": "v14-content-20261103-v49-1",
   "units": 534,
   "mercenaryRecords": 60,
   "mainWaves": 35,
@@ -27,6 +27,12 @@
     "h2AC"
   ],
   "playerRuntimeAbilities": [
+    {
+      "sourceRawcode": "h00T",
+      "abilityIds": [
+        "A113"
+      ]
+    },
     {
       "sourceRawcode": "h0M1",
       "abilityIds": [
@@ -369,7 +375,7 @@
   "playerSkills": {
     "counts": {
       "implemented": 405,
-      "partial": 126,
+      "partial": 127,
       "marker": 34,
       "unresolved": 94
     },
@@ -4287,6 +4293,15 @@
         ]
       },
       {
+        "rawcode": "A113",
+        "name": "老练",
+        "status": "partial",
+        "kind": "veteran_source",
+        "unitRawcodes": [
+          "h00T"
+        ]
+      },
+      {
         "rawcode": "A116",
         "name": "Healing Ward Aura",
         "status": "unresolved",
@@ -7180,7 +7195,7 @@
   "battleSkills": {
     "counts": {
       "implemented": 455,
-      "partial": 132,
+      "partial": 133,
       "marker": 47,
       "unresolved": 110
     },
@@ -11577,6 +11592,15 @@
         "unitRawcodes": [
           "h08L",
           "h0WS"
+        ]
+      },
+      {
+        "rawcode": "A113",
+        "name": "老练",
+        "status": "partial",
+        "kind": "veteran_source",
+        "unitRawcodes": [
+          "h00T"
         ]
       },
       {

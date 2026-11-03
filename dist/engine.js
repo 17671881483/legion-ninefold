@@ -1,3 +1,4 @@
+import {veteranDeath,restoreVeteranIdentity} from './veteran-rules.js';
 import {buildAIArmy,actAI} from './ai-controller.js';
 import {restoreUnstableAlchemyUserData} from './unstable-alchemy-rules.js';
 import {prepareUndeadLegion,restoreUndeadLegionHandles} from './undead-legion-rules.js';
@@ -74,13 +75,14 @@ export class Game {
       mode: this.options.mode,
       phase: 'build', wave: 1, timer: this.buildDuration(1), time: 0, sourceVersion: RULES.sourceVersion, dataRevision: RULES.dataRevision ?? '5.0dJF-web9',
       speed: 1, paused: false, winner: null, difficulty: this.options.difficulty, seed: this.options.seed,
+      sourceHumanPlayerCount: 1, sourceVeteranCounts: {},
       players: names.map((name, id) => ({ id, name, team: id < 4 ? 0 : 1,
         gold: initialGold, wood: rule('initialWood', 40), income: rule('initialIncome', 5),
         workers: rule('initialWorkers', 1), lumberLevel: 0, technologies: { R0GK: 1 }, entitlements: {}, nagaFarmerGoldRate: 0, economyTasks: { workerQueue: [], lumberTask: null }, buildings: [], builderId: id === 0 ? this.options.builderId : this._pick(BUILDERS.filter(b=>b.mode!=='morph'))?.id ?? RULES.defaultBuilderId ?? BUILDERS[0]?.id, roster: [],
         mercStocks: Object.fromEntries(MERCENARIES.map(m => [m.id, { stock: this._mercenaryMaxStock(m), nextReadyAt: null }])),
         populationCap: rule('initialPopulation', 40), sourceFarmRawcode:'h024', popUsed: rule('initialWorkers', 1), heroId: null, heroAltarCount: 0, relocationsRemaining:3, healUsed: false, rerolls: 0, stats: { kills: 0, leaks: 0, warps: 0, sent: 0, damage: 0, goldEarned: 0, wavesHeld: 0 }
       })),
-      kings: [0, 1].map(team => ({ team, hp: rule('kingInitialHp', 12000), maxHp: rule('kingInitialHp', 12000),
+      kings: [0, 1].map(team => ({ team, sourceNativeOwnerId:8+team,userData:9+team,hp: rule('kingInitialHp', 12000), maxHp: rule('kingInitialHp', 12000),
         attack: rule('kingDamage', 135), regen: rule('kingRegen', 4), healCharges: rule('kingHealCharges', 4),
         armor: rule('kingArmor', 8), armorType: 'hero', attackType: 'hero', autoUpgradeCount: 0, healBlockedUntil: 0,
         id:`king-${team}`,unitId:'king',side:'defender',isKing:true,battleTeam:team,laneId:8+team,status:{},targetType:'structure',traits:['mechanical'],isBuilding:true,hpLevel: 0, attackLevel: 0, regenLevel: 0, attackCd: 0, worldX: kingWorld(team).x, worldY: kingWorld(team).y, radius: .8 })),
@@ -1044,7 +1046,7 @@ export class Game {
     if (!def || (isSourceUnit(def)&&!def.combatRawcode)) return;
     def=this._boxCombatDefinition(def,player.buildings.find(b=>b.id===buildingId));
     const e = this._entity(def, { team: player.team, side: 'defender', laneId: player.id,
-      ownerId: player.id, sourceLaneId: player.id, x, y, buildingId, isHero });
+      ownerId: player.id, sourceNativeOwnerId:8+player.team,userData:player.id+1,sourceLaneId: player.id, x, y, buildingId, isHero });
     initializeSourceClassCombat(this,player.buildings.find(b=>b.id===buildingId),e);
     if(e.combatRawcode==='h0JJ'||e.skillSpecs?.some(s=>s.id==='A0UA'))e.userData=player.id+1;
     // PassiveSkill copies A1PE from the persistent building on every deployment.
@@ -1428,6 +1430,7 @@ export class Game {
         } else if(p && p.team!==target.team){p.gold+=bounty;p.wood+=special?.wood??0;p.stats.kills++;p.stats.goldEarned+=bounty;recordBeastKingKill(p,attacker,units[attacker?.unitId]??UNIT_TEMPLATES[attacker?.combatRawcode]);}
         this.state.metrics.killed++;
       }
+      veteranDeath(this,target,attacker);
       this._event('death', target, target.side === 'monster' ? `+${target.reward}` : '阵亡', { color: target.color });
     }
   }
@@ -1586,7 +1589,7 @@ export class Game {
     const s=this.state;s.phase='combat';s.roundMode='arena';s.entities=[];s.sourceSkillJobs=[];s.nagaScriptCasters={};s.darkArthasCasters={};s.brightArthasHandles={};s.aesaraHandles={};s.soulToxinHandles={};s.livingBombHandles={};s.sourceAuraNextAt=Math.floor(s.time)+1;s.timer=0;s.arenaRemaining=rule('arenaBattleLimitSeconds',120);this._spawnQueue=[];this._roundTime=0;
     for(const p of s.players)for(const b of p.buildings.filter(b=>!b.construction)){
       let def=units[b.unitId];if(!def||(isSourceUnit(def)&&!def.combatRawcode))continue;def=this._boxCombatDefinition(def,b);const point=laneToWorld(0,1.2+(p.id%4)*1.1+(b.col-2.5)*.12,p.team===0?5+(b.row/8):9-(b.row/8));
-      const e=this._entity(def,{team:p.team,side:`arena${p.team}`,battleTeam:0,laneId:0,sourceLaneId:p.id,ownerId:p.id,buildingId:b.id,isArena:true,worldX:point.x,worldY:point.y});
+      const e=this._entity(def,{team:p.team,side:`arena${p.team}`,battleTeam:0,laneId:0,sourceLaneId:p.id,ownerId:p.id,sourceNativeOwnerId:8+p.team,userData:p.id+1,buildingId:b.id,isArena:true,worldX:point.x,worldY:point.y});
       initializeSourceClassCombat(this,b,e);
       if(e.combatRawcode==='h0JJ'||e.skillSpecs?.some(s=>s.id==='A0UA'))e.userData=p.id+1;
       e.armor+=number(b.treasureArmor,0);
@@ -1660,6 +1663,7 @@ export class Game {
     this._aiTimer = data.aiTimer ?? 0; this._roundTime = data.roundTime ?? 0; this._settledLanes = data.settledLanes ?? []; this._overtime = data.overtime ?? false; this._warpTimer = data.warpTimer ?? 0; this._monsterPressure = data.monsterPressure;
     this._spatial = null; this._worldEntities = null; this._battleAuras = [[], []];
     for (const k of this.state.kings) {
+      k.sourceNativeOwnerId??=8+k.team;k.userData??=9+k.team;
       k.armor ??= rule('kingArmor', 8); k.armorType ??= 'hero'; k.attackType ??= 'hero'; k.autoUpgradeCount ??= 0; k.healBlockedUntil ??= 0;k.status??={};k.id??=`king-${k.team}`;k.side='defender';k.isKing=true;k.battleTeam=k.team;k.laneId=8+k.team;k.targetType='structure';k.traits=['mechanical'];k.isBuilding=true;
     }
     if(revisionChanged){
@@ -1669,6 +1673,7 @@ export class Game {
       for(const e of this.state.entities){const id=alias(e.unitId),def=units[id];if(id!==e.unitId&&def){const ratio=e.maxHp>0?clamp(e.hp/e.maxHp,0,1):0;e.unitId=id;e.name=def.name;e.maxHp=def.hp;e.hp=def.hp*ratio;e.damage=def.damage;e.attackInterval=def.interval;e.range=def.range/100;e.moveSpeed=def.speed/100;e.armor=def.armor;e.attackType=def.attackType;e.armorType=def.armorType;e.ability=abilityOf(def)??null;attachSkills(e,def);}}
       this.state.dataRevision=RULES.dataRevision;this.state.migrationNotice='旧存档已按文档迁移，原始存档已备份；无法映射的历史Web单位继续标记为兼容单位。';
     }
+    this.state.sourceHumanPlayerCount??=1;this.state.sourceVeteranCounts??={};
     this.state.kingBountyPools ??= [0, 0]; this.state.sourceSkillJobs??=[]; this.state.nagaScriptCasters??={}; this.state.darkArthasCasters??={}; this.state.brightArthasHandles??={}; this.state.aesaraHandles??={}; this.state.soulToxinHandles??={}; this.state.livingBombHandles??={}; this.state.teamLeakFlags??=[false,false];
     if(!this.state.skeletonKingGate)skeletonKingGate(this).legacyUnknown=true;
     migrateBoxRewardProgress(this,{legacySnapshot:true});
@@ -1693,7 +1698,7 @@ export class Game {
       else if(def&&isV14(def)&&refreshSourceSkills(e,def)){e.status??={};e.status.sourceSkillsRestoredAt=this.state.time;}
       if(isV14(def)&&def.heroFamily)e.isNativeHero=['STR','AGI','INT'].includes(def.sourceRawFields?.Primary);
       e.skillStates??={};e.buffs??=[];
-      restoreUnstableAlchemyUserData(this,e);
+      restoreUnstableAlchemyUserData(this,e);restoreVeteranIdentity(this,e,units);
     }
     restoreUndeadLegionHandles(this);
     // JSON stores retained handles separately; surviving units must share the

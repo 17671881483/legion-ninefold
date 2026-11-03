@@ -11,9 +11,10 @@ const playerBuildingRuleCarriers=current.filter(u=>u.buildingAbilityIds?.some(id
 // This form is created by YseraAwakening at runtime, so it is not a separate
 // build-menu record. Its skills still belong to the player's combat coverage.
 const playerRuntimeForms=['h0YO','h0UD','h0UE','h2AE','n06V','n06W','h0CZ','h0CL','n07J','h03E','h0V2','h03K','h0SU','n0SD','h2AC'].map(code=>UNIT_TEMPLATES[code]);
-// Source callbacks inject these exact auxiliary abilities. Keep them visible
-// in coverage even though they are absent from the build-menu ability lists.
+// Source callbacks or building-only icons expose these auxiliary abilities.
+// Count their runtime rules even when the combat ability list omits the icon.
 const playerRuntimeAbilities=[
+  {sourceRawcode:'h00T',abilityIds:['A113']},
   {sourceRawcode:'h0M1',abilityIds:['A0LO','A0LQ']},
   {sourceRawcode:'h0VT',abilityIds:['A0LO','A0LQ']},
   {sourceRawcode:'n203',abilityIds:['A0LR']},

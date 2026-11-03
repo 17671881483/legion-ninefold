@@ -1,0 +1,199 @@
+{
+  "baselineCommit": "212acd8fcc87b355391456b6e8b8cbc4aa7991d3",
+  "candidateRevision": "v14-content-20261103-v54-1",
+  "baselineNote": "Same working source including the pending Phoenix revival implementation, but old AI controller copied before AI edits; isolates AI behavior from Phoenix changes.",
+  "metricsPlayers": [
+    4,
+    5,
+    6,
+    7
+  ],
+  "scenarios": {
+    "early": {
+      "lastWave": 3,
+      "before": [
+        {
+          "seed": 42,
+          "wave": 4,
+          "phase": "build",
+          "seconds": 375,
+          "enemyKing": 4000,
+          "leaks": 445,
+          "kills": 1458,
+          "military": 4435,
+          "workers": 16,
+          "lumber": 5,
+          "sent": 11
+        },
+        {
+          "seed": 173,
+          "wave": 4,
+          "phase": "build",
+          "seconds": 362,
+          "enemyKing": 4000,
+          "leaks": 252,
+          "kills": 1469,
+          "military": 4725,
+          "workers": 16,
+          "lumber": 6,
+          "sent": 18
+        },
+        {
+          "seed": 615,
+          "wave": 4,
+          "phase": "build",
+          "seconds": 380,
+          "enemyKing": 4000,
+          "leaks": 353,
+          "kills": 1458,
+          "military": 3285,
+          "workers": 12,
+          "lumber": 7,
+          "sent": 18
+        }
+      ],
+      "after": [
+        {
+          "seed": 42,
+          "wave": 4,
+          "phase": "build",
+          "seconds": 372,
+          "enemyKing": 4000,
+          "leaks": 200,
+          "kills": 1464,
+          "military": 4755,
+          "workers": 36,
+          "lumber": 8,
+          "sent": 33
+        },
+        {
+          "seed": 173,
+          "wave": 4,
+          "phase": "build",
+          "seconds": 355,
+          "enemyKing": 4000,
+          "leaks": 258,
+          "kills": 1467,
+          "military": 4830,
+          "workers": 36,
+          "lumber": 6,
+          "sent": 33
+        },
+        {
+          "seed": 615,
+          "wave": 4,
+          "phase": "build",
+          "seconds": 382,
+          "enemyKing": 4000,
+          "leaks": 319,
+          "kills": 1468,
+          "military": 3100,
+          "workers": 25,
+          "lumber": 7,
+          "sent": 20
+        }
+      ]
+    },
+    "extended": {
+      "lastWave": 8,
+      "before": [
+        {
+          "seed": 42,
+          "wave": 6,
+          "phase": "ended",
+          "seconds": 681,
+          "enemyKing": 5000,
+          "leaks": 891,
+          "kills": 2773,
+          "military": 10570,
+          "workers": 24,
+          "lumber": 15,
+          "sent": 43
+        },
+        {
+          "seed": 173,
+          "wave": 8,
+          "phase": "ended",
+          "seconds": 880,
+          "enemyKing": 0,
+          "leaks": 748,
+          "kills": 3445,
+          "military": 14025,
+          "workers": 28,
+          "lumber": 22,
+          "sent": 79
+        },
+        {
+          "seed": 615,
+          "wave": 4,
+          "phase": "ended",
+          "seconds": 487,
+          "enemyKing": 4000,
+          "leaks": 425,
+          "kills": 1879,
+          "military": 5420,
+          "workers": 17,
+          "lumber": 10,
+          "sent": 21
+        }
+      ],
+      "after": [
+        {
+          "seed": 42,
+          "wave": 9,
+          "phase": "build",
+          "seconds": 1061,
+          "enemyKing": 3165,
+          "leaks": 837,
+          "kills": 3452,
+          "military": 13985,
+          "workers": 40,
+          "lumber": 25,
+          "sent": 507
+        },
+        {
+          "seed": 173,
+          "wave": 8,
+          "phase": "ended",
+          "seconds": 971,
+          "enemyKing": 0,
+          "leaks": 1018,
+          "kills": 3298,
+          "military": 14135,
+          "workers": 40,
+          "lumber": 22,
+          "sent": 356
+        },
+        {
+          "seed": 615,
+          "wave": 4,
+          "phase": "ended",
+          "seconds": 485,
+          "enemyKing": 3467,
+          "leaks": 468,
+          "kills": 1767,
+          "military": 4020,
+          "workers": 27,
+          "lumber": 11,
+          "sent": 32
+        }
+      ]
+    }
+  },
+  "limits": [
+    "Normal 4v4, player zero receives the same test-only build assistance; both AI teams are upgraded.",
+    "Same seeds reproduce opening rosters but strategy changes alter later random draws and battle durations.",
+    "Extended seed 42 candidate completed wave 8; other matches ended earlier. These are not full-game win-rate or wave-35 results.",
+    "Early seed 173 leaks increased 252 to 258. Extended seed 173 leaks increased 748 to 1018; seed 615 leaks increased 425 to 468 and enemy king HP decreased. Durations and monster exposure differ.",
+    "Heuristics and troop choice are browser AI behavior, not recovered original-map AI rules."
+  ],
+  "validation": {
+    "aiChecks": 33,
+    "phoenixChecks": 26,
+    "browserChecks": 58,
+    "nodeChecks": 1570,
+    "customChecks": 91,
+    "smokeWaves": 35,
+    "smokeSecondsPerWave": 12
+  }
+}

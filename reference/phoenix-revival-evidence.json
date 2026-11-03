@@ -1,0 +1,1192 @@
+{
+  "source": {
+    "path": "reference/v14-source/raw_extracted/war3map.j",
+    "sha256": "e66c55b3b25b185c991be5613e21fbf5b2d598f3cc40f2f8cd01c23bcb828250",
+    "decoding": "Latin1; split LF only"
+  },
+  "sourceEvidence": [
+    {
+      "line": 31877,
+      "text": "function PhoenixReviveAction takes nothing returns nothing"
+    },
+    {
+      "line": 31878,
+      "text": "local trigger t=GetTriggeringTrigger()"
+    },
+    {
+      "line": 31879,
+      "text": "local unit Bc=LoadUnitHandle(O,GetHandleId(t),0)"
+    },
+    {
+      "line": 31880,
+      "text": "local unit Ki=LoadUnitHandle(O,GetHandleId(t),1)"
+    },
+    {
+      "line": 31881,
+      "text": "local integer y=LoadInteger(O,GetHandleId(t),2)+1"
+    },
+    {
+      "line": 31882,
+      "text": "local group DG"
+    },
+    {
+      "line": 31883,
+      "text": "local unit D6"
+    },
+    {
+      "line": 31884,
+      "text": "local integer BF=0"
+    },
+    {
+      "line": 31885,
+      "text": "local string QM"
+    },
+    {
+      "line": 31886,
+      "text": "local boolean KH=LoadBoolean(O,GetHandleId(t),3)"
+    },
+    {
+      "line": 31887,
+      "text": "if GetTriggerEventId()==EVENT_GAME_TIMER_EXPIRED then"
+    },
+    {
+      "line": 31888,
+      "text": "set QM=\"Phoenix.mdx\""
+    },
+    {
+      "line": 31889,
+      "text": "if KH then"
+    },
+    {
+      "line": 31890,
+      "text": "set QM=\"Phoenix_Blue.mdx\""
+    },
+    {
+      "line": 31891,
+      "text": "endif"
+    },
+    {
+      "line": 31892,
+      "text": "call SetUnitTypeModel($6830565A,QM,null)"
+    },
+    {
+      "line": 31893,
+      "text": "call KillUnit(Ki)"
+    },
+    {
+      "line": 31894,
+      "text": "set BF=GetUnitUserData(Ki)"
+    },
+    {
+      "line": 31895,
+      "text": "set Bc=CreateUnit(GetOwningPlayer(Ki),$6830565A,GetUnitX(Ki),GetUnitY(Ki),GetUnitFacing(Ki))"
+    },
+    {
+      "line": 31896,
+      "text": "if KH then"
+    },
+    {
+      "line": 31897,
+      "text": "call SaveBoolean(O,GetHandleId(Bc),$68305757,true)"
+    },
+    {
+      "line": 31898,
+      "text": "endif"
+    },
+    {
+      "line": 31899,
+      "text": "call SetUnitColor(Bc,GetPlayerColor(ConvertedPlayer(BF)))"
+    },
+    {
+      "line": 31900,
+      "text": "call GroupAddUnit(JW,Bc)"
+    },
+    {
+      "line": 31901,
+      "text": "call GroupAddUnit(JH[BF],Bc)"
+    },
+    {
+      "line": 31902,
+      "text": "call SetUnitUserData(Bc,BF)"
+    },
+    {
+      "line": 31903,
+      "text": "call RemoveUnit(Ki)"
+    },
+    {
+      "line": 31904,
+      "text": "if y<2 then"
+    },
+    {
+      "line": 31905,
+      "text": "call SaveUnitHandle(O,GetHandleId(t),0,Bc)"
+    },
+    {
+      "line": 31906,
+      "text": "call SaveInteger(O,GetHandleId(t),2,y)"
+    },
+    {
+      "line": 31907,
+      "text": "call UnitAddAbility(Bc,$41315345)"
+    },
+    {
+      "line": 31908,
+      "text": "call TriggerRegisterUnitEvent(t,Bc,EVENT_UNIT_DEATH)"
+    },
+    {
+      "line": 31909,
+      "text": "else"
+    },
+    {
+      "line": 31910,
+      "text": "call FlushChildHashtable(O,GetHandleId(t))"
+    },
+    {
+      "line": 31911,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 31912,
+      "text": "endif"
+    },
+    {
+      "line": 31913,
+      "text": "elseif GetUnitAbilityLevel(Bc,$41315345)>0 then"
+    },
+    {
+      "line": 31914,
+      "text": "set QM=\"Phoenix2.mdl\""
+    },
+    {
+      "line": 31915,
+      "text": "if KH then"
+    },
+    {
+      "line": 31916,
+      "text": "set QM=\"Phoenix2_Blue.mdx\""
+    },
+    {
+      "line": 31917,
+      "text": "endif"
+    },
+    {
+      "line": 31918,
+      "text": "call SetUnitTypeModel($68305659,QM,null)"
+    },
+    {
+      "line": 31919,
+      "text": "call DestroyEffect(AddSpecialEffect(\"Abilities\\\\Spells\\\\Human\\\\MarkOfChaos\\\\MarkOfChaosTarget.mdl\",GetUnitX(Bc),GetUnitY(Bc)))"
+    },
+    {
+      "line": 31920,
+      "text": "set DG=SelectRange(Bc,GetUnitX(Bc),GetUnitY(Bc),400)"
+    },
+    {
+      "line": 31921,
+      "text": "loop"
+    },
+    {
+      "line": 31922,
+      "text": "set D6=FirstOfGroup(DG)"
+    },
+    {
+      "line": 31923,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 31924,
+      "text": "call GroupRemoveUnit(DG,D6)"
+    },
+    {
+      "line": 31925,
+      "text": "call UnitDamageTargetBJ(Bc,D6,102,ATTACK_TYPE_CHAOS,DAMAGE_TYPE_UNIVERSAL)"
+    },
+    {
+      "line": 31926,
+      "text": "call DestroyEffect(AddSpecialEffect(\"Abilities\\\\Spells\\\\Human\\\\MarkOfChaos\\\\MarkOfChaosTarget.mdl\",GetUnitX(D6),GetUnitY(D6)))"
+    },
+    {
+      "line": 31927,
+      "text": "endloop"
+    },
+    {
+      "line": 31928,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 31929,
+      "text": "set DG=null"
+    },
+    {
+      "line": 31930,
+      "text": "set Bi=GetUnitUserData(Bc)"
+    },
+    {
+      "line": 31931,
+      "text": "set Ki=CreateUnit(GetOwningPlayer(Bc),$68305659,GetUnitX(Bc),GetUnitY(Bc),GetUnitFacing(Bc))"
+    },
+    {
+      "line": 31932,
+      "text": "call GroupAddUnit(JW,Ki)"
+    },
+    {
+      "line": 31933,
+      "text": "call GroupAddUnit(JH[Bi],Ki)"
+    },
+    {
+      "line": 31934,
+      "text": "call SetUnitUserData(Ki,GetUnitUserData(Bc))"
+    },
+    {
+      "line": 31935,
+      "text": "call SaveUnitHandle(O,GetHandleId(t),1,Ki)"
+    },
+    {
+      "line": 31936,
+      "text": "call RemoveUnit(Bc)"
+    },
+    {
+      "line": 31937,
+      "text": "call TriggerRegisterTimerEvent(t,3,false)"
+    },
+    {
+      "line": 31938,
+      "text": "else"
+    },
+    {
+      "line": 31939,
+      "text": "call FlushChildHashtable(O,GetHandleId(t))"
+    },
+    {
+      "line": 31940,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 31941,
+      "text": "endif"
+    },
+    {
+      "line": 31942,
+      "text": "set t=null"
+    },
+    {
+      "line": 31943,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 31944,
+      "text": "set Ki=null"
+    },
+    {
+      "line": 31945,
+      "text": "endfunction"
+    },
+    {
+      "line": 31946,
+      "text": "function PhoenixRevive takes unit Bc returns nothing"
+    },
+    {
+      "line": 31947,
+      "text": "local trigger t=CreateTrigger()"
+    },
+    {
+      "line": 31948,
+      "text": "if GetUnitTypeId(Bc)==$68305757 then"
+    },
+    {
+      "line": 31949,
+      "text": "call SaveBoolean(O,GetHandleId(t),3,true)"
+    },
+    {
+      "line": 31950,
+      "text": "call SaveBoolean(O,GetHandleId(Bc),$68305757,true)"
+    },
+    {
+      "line": 31951,
+      "text": "endif"
+    },
+    {
+      "line": 31952,
+      "text": "call SaveAgentHandle(O,GetHandleId(t),0,Bc)"
+    },
+    {
+      "line": 31953,
+      "text": "call TriggerRegisterUnitEvent(t,Bc,EVENT_UNIT_DEATH)"
+    },
+    {
+      "line": 31954,
+      "text": "call TriggerAddAction(t,function PhoenixReviveAction)"
+    },
+    {
+      "line": 31955,
+      "text": "set t=null"
+    },
+    {
+      "line": 31956,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 43637,
+      "text": "function PassiveSkill takes unit Bc,integer x,unit Pf returns nothing"
+    },
+    {
+      "line": 43638,
+      "text": "local integer RJ=0"
+    },
+    {
+      "line": 43818,
+      "text": "if GetUnitAbilityLevel(Pf,$41315345)>0 then"
+    },
+    {
+      "line": 43819,
+      "text": "call PhoenixRevive(Bc)"
+    },
+    {
+      "line": 43820,
+      "text": "endif"
+    },
+    {
+      "line": 43868,
+      "text": "function PassiveSkillJJC takes unit Pf,unit Bc returns nothing"
+    },
+    {
+      "line": 43869,
+      "text": "if GetUnitAbilityLevel(Bc,$4131554E)>0 then"
+    },
+    {
+      "line": 43870,
+      "text": "call UnitRemoveAbility(Bc,$4131554E)"
+    },
+    {
+      "line": 43871,
+      "text": "endif"
+    },
+    {
+      "line": 43872,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 43873,
+      "text": "set Pf=null"
+    },
+    {
+      "line": 43874,
+      "text": "endfunction"
+    },
+    {
+      "line": 43875,
+      "text": "function PassiveSkillNoArg takes nothing returns nothing"
+    },
+    {
+      "line": 43876,
+      "text": "local unit Bc=UT"
+    },
+    {
+      "line": 43877,
+      "text": "local integer x=Bi"
+    },
+    {
+      "line": 43878,
+      "text": "local unit Pf=bj_lastCreatedUnit"
+    },
+    {
+      "line": 43879,
+      "text": "call PassiveSkill(Bc,x,Pf)"
+    },
+    {
+      "line": 43880,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 43881,
+      "text": "set Pf=null"
+    },
+    {
+      "line": 43882,
+      "text": "endfunction"
+    },
+    {
+      "line": 43883,
+      "text": "function PassiveSkillNoArgJJC takes nothing returns nothing"
+    },
+    {
+      "line": 43884,
+      "text": "local unit Bc=Kc"
+    },
+    {
+      "line": 43885,
+      "text": "local integer x=Mk[Bi]"
+    },
+    {
+      "line": 43886,
+      "text": "local unit Pf=Nr"
+    },
+    {
+      "line": 43887,
+      "text": "call PassiveSkillJJC(Pf,Bc)"
+    },
+    {
+      "line": 43888,
+      "text": "if Bc!=null and x>0 then"
+    },
+    {
+      "line": 43889,
+      "text": "call UnitRemoveAbility(Bc,$4131374C)"
+    },
+    {
+      "line": 43890,
+      "text": "call UnitRemoveAbility(Bc,$41315134)"
+    },
+    {
+      "line": 43891,
+      "text": "call PassiveSkill(Bc,x,Pf)"
+    },
+    {
+      "line": 43892,
+      "text": "endif"
+    },
+    {
+      "line": 43893,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 43894,
+      "text": "set Pf=null"
+    },
+    {
+      "line": 42187,
+      "text": "function InitTrig_UnitDeath takes nothing returns nothing"
+    },
+    {
+      "line": 42188,
+      "text": "set bu=CreateTrigger()"
+    },
+    {
+      "line": 42189,
+      "text": "call TriggerRegisterAnyUnitEventBJ(bu,EVENT_PLAYER_UNIT_DEATH)"
+    },
+    {
+      "line": 42190,
+      "text": "call TriggerAddCondition(bu,Condition(function gg_trg_UnitDeathCondition))"
+    },
+    {
+      "line": 42191,
+      "text": "call TriggerAddAction(bu,function Trig_UnitDeathActions)"
+    },
+    {
+      "line": 42192,
+      "text": "endfunction"
+    },
+    {
+      "line": 42193,
+      "text": "function n04S_Skills takes nothing returns nothing"
+    },
+    {
+      "line": 49752,
+      "text": "call InitTrig_UnitSummon()"
+    },
+    {
+      "line": 49753,
+      "text": "call InitTrig_UnitDeath()"
+    },
+    {
+      "line": 49754,
+      "text": "call InitTrig_New_UnitAttack()"
+    },
+    {
+      "line": 49755,
+      "text": "call InitTrig_AtkReady()"
+    },
+    {
+      "line": 49669,
+      "text": "function Trig_CreateUnitHook_Conditions takes nothing returns boolean"
+    },
+    {
+      "line": 49670,
+      "text": "return C6"
+    },
+    {
+      "line": 49671,
+      "text": "endfunction"
+    },
+    {
+      "line": 49672,
+      "text": "function Trig_CreateUnitHookAddPermanentAbility takes unit Bc,integer at returns nothing"
+    },
+    {
+      "line": 49673,
+      "text": "call UnitAddAbility(Bc,at)"
+    },
+    {
+      "line": 49674,
+      "text": "call UnitMakeAbilityPermanent(Bc,true,at)"
+    },
+    {
+      "line": 49675,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 49676,
+      "text": "endfunction"
+    },
+    {
+      "line": 49677,
+      "text": "function Trig_CreateUnitHookGetBonusAbility takes integer x returns integer"
+    },
+    {
+      "line": 49678,
+      "text": "if x==$68305141 then"
+    },
+    {
+      "line": 49679,
+      "text": "return $4131544E"
+    },
+    {
+      "line": 49680,
+      "text": "elseif x==$68303039 then"
+    },
+    {
+      "line": 49681,
+      "text": "return $41315450"
+    },
+    {
+      "line": 49682,
+      "text": "elseif x==$6830334F and Dg==20 then"
+    },
+    {
+      "line": 49683,
+      "text": "return $41315451"
+    },
+    {
+      "line": 49684,
+      "text": "endif"
+    },
+    {
+      "line": 49685,
+      "text": "return 0"
+    },
+    {
+      "line": 49686,
+      "text": "endfunction"
+    }
+  ],
+  "abilities": {
+    "A1SE": {
+      "rawcode": "A1SE",
+      "name": "涅槃",
+      "tip": "涅槃",
+      "ubertip": "神·奥在生命值归零后在空中变成一个凤凰蛋，3s后复活可对范围400码单位造成102点伤害，并对范围内敌方单位造成灼烧效果，每秒对敌方单位造成56点伤害，可复活2次，第二次全体属性减半",
+      "alias": "A1SE",
+      "code": "Asth",
+      "levels": "1"
+    }
+  },
+  "units": {
+    "n083": {
+      "rawcode": "n083",
+      "name": "神·奥",
+      "tip": "升级到神·奥<P>",
+      "ubertip": "生命：3000\n攻击：296-375\n攻速：0.5\n护甲：3（英雄甲）\n魔法：30\n攻击类型：魔法\n攻击距离：500\n\n技能：\n1.烈焰打击、2.火之羽、3.涅槃",
+      "unitID": "n083",
+      "canFlee": "1",
+      "death": "2.34",
+      "deathType": "2",
+      "movetp": "fly",
+      "points": "1150",
+      "prio": "2",
+      "propWin": "60.0",
+      "race": "human",
+      "targType": "structure",
+      "unitBalanceID": "n083",
+      "bldtm": "2",
+      "collision": "72.0",
+      "defType": "hero",
+      "fused": "13",
+      "goldcost": "570",
+      "HP": "4000",
+      "level": "1",
+      "mana0": "30",
+      "nsight": "800",
+      "preventPlace": "unbuildable",
+      "regenMana": "1.6",
+      "regenType": "none",
+      "reptm": "1",
+      "sight": "1600",
+      "tilesets": "*",
+      "upgrades": "R009,R00A",
+      "unitUIID": "n083",
+      "armor": "Flesh",
+      "blend": "0.15",
+      "blue": "255",
+      "elevRad": "50.0",
+      "file": "Phoenix.mdx",
+      "green": "255",
+      "modelScale": "1.0",
+      "red": "255",
+      "run": "200.0",
+      "scale": "1.0",
+      "scaleBull": "1",
+      "shadowOnWater": "1",
+      "teamColor": "-1",
+      "unitSound": "Gnoll",
+      "walk": "200.0",
+      "unitAbilID": "n083",
+      "abilList": "A1SB,A1SC,A1SE,A008,A118",
+      "unitWeapID": "n083",
+      "acquire": "500.0",
+      "atkType1": "magic",
+      "atkType2": "normal",
+      "backSw1": "0.5",
+      "castbsw": "0.51",
+      "cool1": "0.5",
+      "dice1": "1",
+      "dmgpt1": "0.5",
+      "impactZ": "120.0",
+      "launchZ": "145.0",
+      "rangeN1": "500",
+      "RngBuff1": "250.0",
+      "showUI2": "1",
+      "sides1": "79",
+      "targCount1": "1",
+      "targCount2": "1",
+      "targs1": "enemies",
+      "weapsOn": "1",
+      "weapTp1": "missile",
+      "weapType1": "MetalMediumSlice",
+      "hotkey": "P",
+      "damage_min_1": "296.0",
+      "damage_max_1": "374.0",
+      "damage_avg_1": "335.0",
+      "dps_avg_1": "670.0",
+      "attack_type_zh": "魔法",
+      "armor_type_zh": "英雄甲",
+      "ability_ids": "A1SB,A1SC,A1SE,A008,A118",
+      "ability_names": "烈焰打击,火之羽,涅槃,出售,移位",
+      "def": "3.0",
+      "manaN": "30",
+      "type": "ancient",
+      "dmgplus1": "295",
+      "buildingShadow": "BuildingShadowSmall",
+      "moveHeight": "300.0",
+      "isbldg": "1",
+      "buffRadius": "15.0",
+      "buffType": "buffer",
+      "pathTex": "PathTextures\\4x4SimpleSolid.tga",
+      "elevPts": "4"
+    },
+    "n08N": {
+      "rawcode": "n08N",
+      "name": "凛冬神凰 神奥",
+      "tip": "使用 <凛冬神凰 神奥> 皮肤 - [P]",
+      "ubertip": ",",
+      "unitID": "n08N",
+      "canFlee": "1",
+      "death": "2.34",
+      "deathType": "2",
+      "movetp": "fly",
+      "points": "1150",
+      "prio": "2",
+      "propWin": "60.0",
+      "race": "human",
+      "targType": "structure",
+      "unitBalanceID": "n08N",
+      "bldtm": "2",
+      "collision": "72.0",
+      "defType": "hero",
+      "fused": "13",
+      "HP": "4000",
+      "level": "1",
+      "mana0": "30",
+      "nsight": "800",
+      "preventPlace": "unbuildable",
+      "regenMana": "1.6",
+      "regenType": "none",
+      "reptm": "1",
+      "sight": "1600",
+      "tilesets": "*",
+      "upgrades": "R009,R00A",
+      "unitUIID": "n08N",
+      "armor": "Flesh",
+      "blend": "0.15",
+      "blue": "255",
+      "elevRad": "50.0",
+      "file": "Phoenix_Blue.mdx",
+      "green": "255",
+      "modelScale": "1.0",
+      "red": "255",
+      "run": "200.0",
+      "scale": "1.0",
+      "scaleBull": "1",
+      "shadowOnWater": "1",
+      "teamColor": "-1",
+      "unitSound": "Gnoll",
+      "walk": "200.0",
+      "unitAbilID": "n08N",
+      "abilList": "A1SB,A1SC,A1SE,A008,A118",
+      "unitWeapID": "n08N",
+      "acquire": "500.0",
+      "atkType1": "magic",
+      "atkType2": "normal",
+      "backSw1": "0.5",
+      "castbsw": "0.51",
+      "cool1": "0.5",
+      "dice1": "1",
+      "dmgpt1": "0.5",
+      "impactZ": "120.0",
+      "launchZ": "145.0",
+      "rangeN1": "500",
+      "RngBuff1": "250.0",
+      "showUI2": "1",
+      "sides1": "79",
+      "targCount1": "1",
+      "targCount2": "1",
+      "targs1": "enemies",
+      "weapsOn": "1",
+      "weapTp1": "missile",
+      "weapType1": "MetalMediumSlice",
+      "hotkey": "P",
+      "damage_min_1": "296.0",
+      "damage_max_1": "374.0",
+      "damage_avg_1": "335.0",
+      "dps_avg_1": "670.0",
+      "attack_type_zh": "魔法",
+      "armor_type_zh": "英雄甲",
+      "ability_ids": "A1SB,A1SC,A1SE,A008,A118",
+      "ability_names": "烈焰打击,火之羽,涅槃,出售,移位",
+      "def": "3.0",
+      "manaN": "30",
+      "type": "ancient",
+      "dmgplus1": "295",
+      "buildingShadow": "BuildingShadowSmall",
+      "moveHeight": "300.0",
+      "isbldg": "1",
+      "buffRadius": "15.0",
+      "buffType": "buffer",
+      "pathTex": "PathTextures\\4x4SimpleSolid.tga",
+      "elevPts": "4"
+    },
+    "h0VX": {
+      "rawcode": "h0VX",
+      "name": "神·奥",
+      "ubertip": ",",
+      "unitID": "h0VX",
+      "canFlee": "1",
+      "cargoSize": "1",
+      "death": "3.04",
+      "deathType": "3",
+      "movetp": "fly",
+      "points": "100",
+      "prio": "6",
+      "propWin": "60.0",
+      "race": "human",
+      "targType": "ground",
+      "turnRate": "0.6",
+      "unitBalanceID": "h0VX",
+      "bldtm": "20",
+      "bountydice": "6",
+      "bountyplus": "20",
+      "bountysides": "3",
+      "collision": "12.0",
+      "defType": "hero",
+      "goldcost": "135",
+      "goldRep": "135",
+      "HP": "4000",
+      "level": "2",
+      "mana0": "30",
+      "nsight": "800",
+      "regenMana": "1.6",
+      "regenType": "none",
+      "reptm": "20",
+      "sight": "1400",
+      "spd": "340",
+      "stockMax": "3",
+      "stockRegen": "30",
+      "tilesets": "*",
+      "upgrades": "R00B,R00C,R009,R00A",
+      "unitUIID": "h0VX",
+      "armor": "Flesh",
+      "blend": "0.15",
+      "blue": "255",
+      "elevRad": "20.0",
+      "file": "Phoenix.mdx",
+      "green": "255",
+      "maxPitch": "10.0",
+      "maxRoll": "10.0",
+      "modelScale": "1.0",
+      "red": "255",
+      "run": "210.0",
+      "scale": "1.0",
+      "scaleBull": "1",
+      "shadowH": "140.0",
+      "shadowOnWater": "1",
+      "shadowW": "140.0",
+      "shadowX": "50.0",
+      "shadowY": "50.0",
+      "teamColor": "-1",
+      "unitShadow": "Shadow",
+      "unitSound": "Gnoll",
+      "walk": "210.0",
+      "unitAbilID": "h0VX",
+      "abilList": "A1SB,A1SC,A1SE",
+      "unitWeapID": "h0VX",
+      "acquire": "800.0",
+      "atkType1": "magic",
+      "atkType2": "normal",
+      "backSw1": "0.3",
+      "cool1": "0.5",
+      "dice1": "1",
+      "dmgpt1": "0.3",
+      "impactZ": "60.0",
+      "launchZ": "60.0",
+      "rangeN1": "500",
+      "RngBuff1": "250.0",
+      "showUI1": "1",
+      "showUI2": "1",
+      "sides1": "79",
+      "targCount1": "1",
+      "targCount2": "1",
+      "targs1": "enemies",
+      "weapsOn": "1",
+      "weapTp1": "missile",
+      "weapType1": "WoodLightBash",
+      "hotkey": "F",
+      "damage_min_1": "296.0",
+      "damage_max_1": "374.0",
+      "damage_avg_1": "335.0",
+      "dps_avg_1": "670.0",
+      "bounty_min": "26.0",
+      "bounty_max": "38.0",
+      "bounty_avg": "32.0",
+      "attack_type_zh": "魔法",
+      "armor_type_zh": "英雄甲",
+      "ability_ids": "A1SB,A1SC,A1SE",
+      "ability_names": "烈焰打击,火之羽,涅槃",
+      "def": "3.0",
+      "defUp": "2.0",
+      "manaN": "30",
+      "type": "giant",
+      "dmgplus1": "295",
+      "moveHeight": "300.0"
+    },
+    "h0WW": {
+      "rawcode": "h0WW",
+      "name": "凛冬神凰 神奥",
+      "ubertip": ",",
+      "unitID": "h0WW",
+      "canFlee": "1",
+      "cargoSize": "1",
+      "death": "3.04",
+      "deathType": "3",
+      "movetp": "fly",
+      "points": "100",
+      "prio": "6",
+      "propWin": "60.0",
+      "race": "human",
+      "targType": "ground",
+      "turnRate": "0.6",
+      "unitBalanceID": "h0WW",
+      "bldtm": "20",
+      "bountydice": "6",
+      "bountyplus": "20",
+      "bountysides": "3",
+      "collision": "12.0",
+      "defType": "hero",
+      "goldcost": "135",
+      "goldRep": "135",
+      "HP": "4000",
+      "level": "2",
+      "mana0": "30",
+      "nsight": "800",
+      "regenMana": "1.6",
+      "regenType": "none",
+      "reptm": "20",
+      "sight": "1400",
+      "spd": "340",
+      "stockMax": "3",
+      "stockRegen": "30",
+      "tilesets": "*",
+      "upgrades": "R00B,R00C,R009,R00A",
+      "unitUIID": "h0WW",
+      "armor": "Flesh",
+      "blend": "0.15",
+      "blue": "255",
+      "elevRad": "20.0",
+      "file": "Phoenix_Blue.mdx",
+      "green": "255",
+      "maxPitch": "10.0",
+      "maxRoll": "10.0",
+      "modelScale": "1.0",
+      "red": "255",
+      "run": "210.0",
+      "scale": "1.0",
+      "scaleBull": "1",
+      "shadowH": "140.0",
+      "shadowOnWater": "1",
+      "shadowW": "140.0",
+      "shadowX": "50.0",
+      "shadowY": "50.0",
+      "teamColor": "-1",
+      "unitShadow": "Shadow",
+      "unitSound": "Gnoll",
+      "walk": "210.0",
+      "unitAbilID": "h0WW",
+      "abilList": "A1SB,A1SC,A1SE",
+      "unitWeapID": "h0WW",
+      "acquire": "800.0",
+      "atkType1": "magic",
+      "atkType2": "normal",
+      "backSw1": "0.3",
+      "cool1": "0.5",
+      "dice1": "1",
+      "dmgpt1": "0.3",
+      "impactZ": "60.0",
+      "launchZ": "60.0",
+      "rangeN1": "500",
+      "RngBuff1": "250.0",
+      "showUI1": "1",
+      "showUI2": "1",
+      "sides1": "79",
+      "targCount1": "1",
+      "targCount2": "1",
+      "targs1": "enemies",
+      "weapsOn": "1",
+      "weapTp1": "missile",
+      "weapType1": "WoodLightBash",
+      "hotkey": "F",
+      "damage_min_1": "296.0",
+      "damage_max_1": "374.0",
+      "damage_avg_1": "335.0",
+      "dps_avg_1": "670.0",
+      "bounty_min": "26.0",
+      "bounty_max": "38.0",
+      "bounty_avg": "32.0",
+      "attack_type_zh": "魔法",
+      "armor_type_zh": "英雄甲",
+      "ability_ids": "A1SB,A1SC,A1SE",
+      "ability_names": "烈焰打击,火之羽,涅槃",
+      "def": "3.0",
+      "defUp": "2.0",
+      "manaN": "30",
+      "type": "giant",
+      "dmgplus1": "295",
+      "moveHeight": "300.0"
+    },
+    "h0VY": {
+      "rawcode": "h0VY",
+      "name": "神·奥",
+      "ubertip": ",",
+      "unitID": "h0VY",
+      "canFlee": "1",
+      "cargoSize": "1",
+      "death": "3.04",
+      "deathType": "3",
+      "movetp": "foot",
+      "points": "100",
+      "prio": "6",
+      "propWin": "60.0",
+      "race": "human",
+      "targType": "ground",
+      "turnRate": "0.6",
+      "unitBalanceID": "h0VY",
+      "bldtm": "20",
+      "bountydice": "6",
+      "bountyplus": "20",
+      "bountysides": "3",
+      "collision": "12.0",
+      "defType": "small",
+      "goldcost": "135",
+      "goldRep": "135",
+      "HP": "4000",
+      "level": "2",
+      "nsight": "800",
+      "regenMana": "1.6",
+      "regenType": "none",
+      "reptm": "20",
+      "sight": "1400",
+      "stockMax": "3",
+      "stockRegen": "30",
+      "tilesets": "*",
+      "upgrades": "R00B,R00C,R009,R00A",
+      "unitUIID": "h0VY",
+      "armor": "Flesh",
+      "blend": "0.15",
+      "blue": "255",
+      "elevRad": "20.0",
+      "file": "Phoenix2.mdl",
+      "green": "255",
+      "maxPitch": "10.0",
+      "maxRoll": "10.0",
+      "modelScale": "1.0",
+      "red": "255",
+      "run": "210.0",
+      "scale": "1.0",
+      "scaleBull": "1",
+      "shadowH": "140.0",
+      "shadowOnWater": "1",
+      "shadowW": "140.0",
+      "shadowX": "50.0",
+      "shadowY": "50.0",
+      "teamColor": "-1",
+      "unitShadow": "Shadow",
+      "unitSound": "Gnoll",
+      "walk": "210.0",
+      "unitAbilID": "h0VY",
+      "abilList": "Avul",
+      "unitWeapID": "h0VY",
+      "acquire": "500.0",
+      "atkType1": "normal",
+      "atkType2": "normal",
+      "backSw1": "0.3",
+      "cool1": "0.5",
+      "dice1": "1",
+      "dmgpt1": "0.3",
+      "impactZ": "60.0",
+      "launchZ": "60.0",
+      "rangeN1": "500",
+      "RngBuff1": "250.0",
+      "showUI1": "1",
+      "showUI2": "1",
+      "sides1": "79",
+      "targCount1": "1",
+      "targCount2": "1",
+      "targs1": "enemies",
+      "weapTp1": "missile",
+      "weapType1": "WoodLightBash",
+      "hotkey": "F",
+      "damage_min_1": "296.0",
+      "damage_max_1": "374.0",
+      "damage_avg_1": "335.0",
+      "dps_avg_1": "670.0",
+      "bounty_min": "26.0",
+      "bounty_max": "38.0",
+      "bounty_avg": "32.0",
+      "attack_type_zh": "普通",
+      "armor_type_zh": "轻甲",
+      "ability_ids": "Avul",
+      "ability_names": "无敌的",
+      "def": "3.0",
+      "defUp": "2.0",
+      "manaN": "30",
+      "type": "giant",
+      "dmgplus1": "295"
+    },
+    "h0VZ": {
+      "rawcode": "h0VZ",
+      "name": "神·奥",
+      "ubertip": ",",
+      "unitID": "h0VZ",
+      "canFlee": "1",
+      "cargoSize": "1",
+      "death": "3.04",
+      "deathType": "3",
+      "movetp": "fly",
+      "points": "100",
+      "prio": "6",
+      "propWin": "60.0",
+      "race": "human",
+      "targType": "ground",
+      "turnRate": "0.6",
+      "unitBalanceID": "h0VZ",
+      "bldtm": "20",
+      "bountydice": "6",
+      "bountyplus": "20",
+      "bountysides": "3",
+      "collision": "12.0",
+      "defType": "hero",
+      "goldcost": "135",
+      "goldRep": "135",
+      "HP": "2000",
+      "level": "2",
+      "mana0": "30",
+      "nsight": "800",
+      "regenMana": "1.6",
+      "regenType": "none",
+      "reptm": "20",
+      "sight": "1400",
+      "spd": "340",
+      "stockMax": "3",
+      "stockRegen": "30",
+      "tilesets": "*",
+      "upgrades": "R00B,R00C,R009,R00A",
+      "unitUIID": "h0VZ",
+      "armor": "Flesh",
+      "blend": "0.15",
+      "blue": "255",
+      "elevRad": "20.0",
+      "file": "Phoenix.mdx",
+      "green": "255",
+      "maxPitch": "10.0",
+      "maxRoll": "10.0",
+      "modelScale": "1.0",
+      "red": "255",
+      "run": "210.0",
+      "scale": "1.0",
+      "scaleBull": "1",
+      "shadowH": "140.0",
+      "shadowOnWater": "1",
+      "shadowW": "140.0",
+      "shadowX": "50.0",
+      "shadowY": "50.0",
+      "teamColor": "-1",
+      "unitShadow": "Shadow",
+      "unitSound": "Gnoll",
+      "walk": "210.0",
+      "unitAbilID": "h0VZ",
+      "abilList": "A1SB,A1SC",
+      "unitWeapID": "h0VZ",
+      "acquire": "800.0",
+      "atkType1": "magic",
+      "atkType2": "normal",
+      "backSw1": "0.3",
+      "cool1": "0.5",
+      "dice1": "1",
+      "dmgpt1": "0.3",
+      "impactZ": "60.0",
+      "launchZ": "60.0",
+      "rangeN1": "500",
+      "RngBuff1": "250.0",
+      "showUI1": "1",
+      "showUI2": "1",
+      "sides1": "79",
+      "targCount1": "1",
+      "targCount2": "1",
+      "targs1": "enemies",
+      "weapsOn": "1",
+      "weapTp1": "missile",
+      "weapType1": "WoodLightBash",
+      "hotkey": "F",
+      "damage_min_1": "151.0",
+      "damage_max_1": "229.0",
+      "damage_avg_1": "190.0",
+      "dps_avg_1": "380.0",
+      "bounty_min": "26.0",
+      "bounty_max": "38.0",
+      "bounty_avg": "32.0",
+      "attack_type_zh": "魔法",
+      "armor_type_zh": "英雄甲",
+      "ability_ids": "A1SB,A1SC",
+      "ability_names": "烈焰打击,火之羽",
+      "def": "3.0",
+      "defUp": "2.0",
+      "manaN": "30",
+      "type": "giant",
+      "dmgplus1": "150",
+      "moveHeight": "300.0"
+    }
+  },
+  "findings": [
+    "BuildingA1SE registers EVENT_UNIT_DEATH, not widget death. Registration persists until callback sees absence or second hatch.",
+    "Death BEFORE egg creation deals102 chaos/universal via BJ attack=true to SelectRange400. No extra56 burn in callback.",
+    "Each egg is freshh0VY withAvul. At+3s KillUnit egg THEN CreateUnith0VZ THEN copygroups,userData and RemoveUnit egg.",
+    "Both new bodies useh0VZ2000HP and190 mean base attack; first grantsA1SE and new unit-death event, second destroys trigger. No copied old bonuses, attack order or summon flag is specified.",
+    "No egg-alive condition at expiry. Early killed retained egg still supplies identity/position; removed-handle native result unresolved.",
+    "Blueflag is registered only when originalrawcodeh0WW, propagated to generic h0VZ and its eggs.",
+    "Packet does not supply eggspd/weapsOn. Existing importer uses270/1 defaults, not authoritative native values. New egg has explicit unresolved-action holding adapter."
+  ],
+  "partialBoundaries": [
+    "ANclA1SB/A1SC remain unresolved and are not marked complete by revival.",
+    "Egg native movement/weapon fields missing; fixed waiting is a visible host adapter, not proved PauseUnit or native0 speed.",
+    "CreateUnit native collision and player technology inheritance; same-timestamp death trigger ordering and removed handles need native execution.",
+    "Canvas egg/bird shapes stand in for missing original model assets."
+  ]
+}

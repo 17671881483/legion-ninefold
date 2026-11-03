@@ -11,6 +11,7 @@ import {sourceBarrageTargets,sourceBarrageHit} from './skills.js';
 import { UNITS, MERCENARIES, LEGACY_MERCENARIES, WAVES, RULES, HEROES, BUILDERS, PROPHET_POOLS, UNIT_TEMPLATES, TECHNOLOGIES, BOX_TRAINING_RULES } from './data.js';
 import { attachSkills, refreshSourceSkills, initializeSourceSkills, initializeSourceClassCombat, sourceClassAttackDamageEvent, tirionBondDamageEvent, sourceDamageListeners, sourceRegisteredDamageEvent, brightArthasEventDamage, compileSkills, sourceAuraEffects, hasSourceAura, tickSourceSkills, sourceAttackIssued, sourceAttackStart, sourceOnHit, modifyIncoming, beforeSourceDamage, afterSourceDamage, sourceDeath, trySourceReincarnation, sourceMoveFactor, canWeaponTarget, sourceWeapon, tickSourceScriptJobs, manualSourceSkills, castManualSourceSkill, stormLizardChanneling } from './skills.js';
 import {isReincarnating,countsForBattle,reincarnationLethal} from './reincarnation-rules.js';
+import {restorePhoenixRevival} from './phoenix-revival-rules.js';
 import { initializeSourceClassBuilding } from './source-class-rules.js';
 import { MAP, laneToWorld, worldToLane, kingWorld, spawnWarpWorld, supportWorld, routePoints, isWalkable, isSegmentWalkable, constrainPoint, closestWalkable, navigationPath } from './layout.js';
 import { recordEggCompletion, restoreEggHistory, finishEggWave, recordBeastKingKill, eggRequirementStatus, appearanceQualificationStatus } from './egg-rules.js';
@@ -1702,6 +1703,7 @@ export class Game {
       restoreUnstableAlchemyUserData(this,e);restoreVeteranIdentity(this,e,units);restoreSapperCreation(this,e,def);
     }
     restoreUndeadLegionHandles(this);
+    restorePhoenixRevival(this);
     // JSON stores retained handles separately; surviving units must share the
     // live object again so later healing, movement and death update one handle.
     for(const e of [...this.state.entities,...this.state.kings])if(this.state.brightArthasHandles[e.id])this.state.brightArthasHandles[e.id]=e;

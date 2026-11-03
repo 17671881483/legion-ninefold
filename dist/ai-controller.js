@@ -5,6 +5,7 @@ import {compileSkills, sourceWeapon} from './skills.js';
 
 const units=Object.fromEntries(UNITS.map(u=>[u.id,u]));
 const profiles=new WeakMap();
+const upgradePaths=new WeakMap(),matchupScores=new WeakMap();
 const n=(x,f=0)=>Number.isFinite(Number(x))?Number(x):f;
 const gold=(u,upgrade=false)=>n(upgrade?u.upgradeCost??u.upgradeGold??u.cost:u.cost);
 const wood=u=>n(u.woodCost);
@@ -13,6 +14,12 @@ const planWood=p=>(p.aiUpgradePlan?.targets??[]).reduce((sum,id)=>sum+wood(units
 const planGold=p=>(p.aiUpgradePlan?.targets??[]).reduce((sum,id)=>sum+gold(units[id]??{},true),0);
 const waveOf=g=>WAVES[Math.min(WAVES.length-1,Math.max(0,g.state.wave-1))];
 const effective=b=>units[b.construction?.targetId??b.unitId];
+function upgrades(g,u){if(!upgradePaths.has(u))upgradePaths.set(u,g._upgradeIds(u));return upgradePaths.get(u);}
+function matchup(g,u,wave=waveOf(g)){
+ let cache=matchupScores.get(g);if(!cache||cache.wave!==g.state.wave){cache={wave:g.state.wave,scores:new Map()};matchupScores.set(g,cache);}
+ const key=`${u.id}:${wave.wave??wave.id??wave.number}`;
+ if(!cache.scores.has(key))cache.scores.set(key,aiUnitScore(g,u,wave));return cache.scores.get(key);
+}
 function profile(u){
  if(!u)return {area:false,support:[]};
  if(!profiles.has(u)){
@@ -39,16 +46,23 @@ function army(g,p){
 }
 function utility(g,u,a){
  const front=g._isFront(u),needFront=!a.fronts.length||a.frontHp<Math.max(1,a.hp)*.3;
- let score=aiUnitScore(g,u)*(needFront?(front?1.6:.8):(front?.9:1.25));
+ const next=WAVES[Math.min(WAVES.length-1,g.state.wave)];
+ const outlook=g.state.wave>1?.2:0;
+ let score=(matchup(g,u)*(1-outlook)+matchup(g,u,next)*outlook)*(needFront?(front?1.6:.8):(front?.9:1.25));
  const support=profile(u).support;
  if(support.length)score*=support.some(k=>!a.support.has(k))?1+Math.min(.7,a.defs.length*.08):.72;
  // More copies of the same troop are useful, but a balanced army is harder to counter.
- score/=1+a.defs.filter(d=>d.id===u.id).length*.08;
+ score/=1+a.defs.filter(d=>d.id===u.id).length*(g.state.wave>1?.16:.08);
  return score;
 }
 const population=u=>n(u?.population,1);
-function payable(g,p,u,upgrade=false,old=null,reserve=0){
- return gold(u,upgrade)<=p.gold-reserve+1e-8&&wood(u)<=p.wood-(reserve?planWood(p):0)+1e-8&&g._population(p)-population(old)*(old?1:0)+population(u)<=p.populationCap&&!g._requirement(p,u);
+function planPopulation(p){
+ const b=p.buildings.find(b=>b.id===p.aiUpgradePlan?.buildingId);if(!b)return 0;
+ const occupied=Math.max(population(units[b.unitId]),population(effective(b)));
+ return Math.max(0,...(p.aiUpgradePlan.targets??[]).map(id=>population(units[id])-occupied));
+}
+function payable(g,p,u,upgrade=false,old=null,reserve=0,reservedWood=0,reservedPopulation=0){
+ return gold(u,upgrade)<=p.gold-reserve+1e-8&&wood(u)<=p.wood-reservedWood+1e-8&&g._population(p)-population(old)*(old?1:0)+population(u)+reservedPopulation<=p.populationCap&&!g._requirement(p,u);
 }
 
 function openingPlan(g,p){
@@ -59,7 +73,7 @@ function openingPlan(g,p){
    if(cost>p.gold||lumber>p.wood||population(u)+p.workers>p.populationCap||g._requirement(p,u))return;
    if(aiUnitScore(g,u)>0)plans.push({base,u,path,cost,lumber,score:utility(g,u,a)/Math.max(20,cost+lumber*.75)});
    if(path.length>=2)return;
-   for(const nextId of g._upgradeIds(u)){if(seen.has(nextId))continue;const next=units[nextId];if(next)visit(next,[...path,nextId],cost+gold(next,true),lumber+wood(next),new Set([...seen,nextId]));}
+   for(const nextId of upgrades(g,u)){if(seen.has(nextId))continue;const next=units[nextId];if(next)visit(next,[...path,nextId],cost+gold(next,true),lumber+wood(next),new Set([...seen,nextId]));}
   };visit(base,[],gold(base),wood(base),new Set([id]));
  }
  plans.sort((a,b)=>b.score-a.score);
@@ -70,7 +84,7 @@ function openingPlan(g,p){
 function plannedUpgrade(g,p){
  const plan=p.aiUpgradePlan;if(!plan)return 0;
  const b=p.buildings.find(b=>b.id===plan.buildingId),target=units[plan.targets?.[0]];
- if(!b||!target||!g._upgradeIds(effective(b)).includes(target.id)){delete p.aiUpgradePlan;return 0;}
+ if(!b||!target||!upgrades(g,effective(b)).includes(target.id)){delete p.aiUpgradePlan;return 0;}
  if(!b.construction){
   if(g._requirement(p,target)){delete p.aiUpgradePlan;return 0;}
   if(payable(g,p,target,true,units[b.unitId])&&g.command('upgrade',{playerId:p.id,buildingId:b.id,unitId:target.id}).ok){plan.targets.shift();if(!plan.targets.length){delete p.aiUpgradePlan;return 0;}}
@@ -78,35 +92,53 @@ function plannedUpgrade(g,p){
  return (plan.targets??[]).reduce((sum,id)=>sum+gold(units[id],true),0);
 }
 
+// Evaluate the final troop of a paid chain, including intermediate stages
+// with little standalone value. Reserve all remaining costs while it builds.
+function upgradeChoices(g,p,b,a,reserve){
+ const old=units[b.unitId],choices=[];
+ const visit=(u,path,cost,lumber,seen)=>{
+  if(path.length>=3)return;
+  for(const id of upgrades(g,u)){
+   const next=units[id];if(!next||seen.has(id)||g._requirement(p,next))continue;
+   const total=cost+gold(next,true),woodTotal=lumber+wood(next);
+   if(total>p.gold-reserve+1e-8||woodTotal>p.wood-planWood(p)+1e-8||g._population(p)-population(old)+population(next)+planPopulation(p)>p.populationCap)continue;
+   const targets=[...path,id],gain=utility(g,next,a)-utility(g,old,a);
+   if(gain>0)choices.push({type:'upgrade',u:units[targets[0]],b,targets,score:gain/Math.max(20,total+woodTotal*.75)*(a.defs.length>8?1.7:1.25)});
+   visit(next,targets,total,woodTotal,new Set([...seen,id]));
+  }
+ };
+ visit(old,[],0,0,new Set([old.id]));return choices;
+}
+
 export function buildAIArmy(g,p,opening=false){
  if(g.state.phase!=='build')return;
  if(opening)openingPlan(g,p);
- const reserve=plannedUpgrade(g,p);
+ let reserve=plannedUpgrade(g,p);
  const tasks=g._economyTasks(p);
- if(p.populationCap-g._population(p)<4&&!tasks.farmTask&&p.gold>=n(RULES.farmCost,24)&&p.wood>=n(RULES.farmWoodCost,80))g.command('farm',{playerId:p.id});
+ if(p.populationCap-g._population(p)-planPopulation(p)<4&&!tasks.farmTask&&p.gold-reserve>=n(RULES.farmCost,24)&&p.wood-planWood(p)>=n(RULES.farmWoodCost,80))g.command('farm',{playerId:p.id});
  if(!opening&&p.buildings.some(b=>!b.construction&&!units[b.unitId]?.hero)&&!p.buildings.some(b=>units[b.unitId]?.heroEntry)){
   const status=g.heroStatus(p.id),def=units[status.entries[0]],cell=def&&g._emptyCell(p,def);
-  if(status.canStart&&cell)g.command('build',{playerId:p.id,unitId:def.id,...cell});
+  if(status.canStart&&cell&&payable(g,p,def,false,null,reserve,planWood(p),planPopulation(p)))g.command('build',{playerId:p.id,unitId:def.id,...cell});
  }
  for(let attempt=0;attempt<(opening?8:4);attempt++){
   const a=army(g,p),choices=[];
-  for(const id of p.roster){const u=units[id];if(!u||u.heroEntry||!payable(g,p,u,false,null,reserve))continue;
+  for(const id of p.roster){const u=units[id];if(!u||u.heroEntry||!payable(g,p,u,false,null,reserve,planWood(p),planPopulation(p)))continue;
    const cell=g._emptyCell(p,u);if(!cell)continue;
    // A morph proxy has no combat form; value its known pool instead of ignoring the race.
    const options=u.morphProxy?(u.morphTargets??[]).map(v=>units[typeof v==='string'?v:v.id]).filter(Boolean):[u];
    const power=options.length?options.reduce((sum,d)=>sum+utility(g,d,a),0)/options.length:0;
    if(power>0)choices.push({type:'build',u,cell,score:power/paid(u)});
   }
-  for(const b of p.buildings){if(b.construction||p.aiUpgradePlan?.buildingId===b.id)continue;const old=units[b.unitId];
-   for(const id of g._upgradeIds(old)){const u=units[id];if(!u||!payable(g,p,u,true,old,reserve))continue;
-    const gain=utility(g,u,a)-utility(g,old,a),score=gain/Math.max(20,gold(u,true)+wood(u)*.75)*(a.defs.length>8?1.7:1.25);
-    if(gain>0)choices.push({type:'upgrade',u,b,score});
-   }
+  for(const b of p.buildings){if(b.construction||p.aiUpgradePlan?.buildingId===b.id)continue;
+   choices.push(...upgradeChoices(g,p,b,a,reserve).filter(c=>!p.aiUpgradePlan||c.targets.length===1));
   }
   choices.sort((a,b)=>b.score-a.score);
   let purchased=false;
   for(const choice of choices){const payload={playerId:p.id,unitId:choice.u.id,...(choice.b?{buildingId:choice.b.id}:choice.cell)};
-   if(g.command(choice.type,payload).ok){purchased=true;break;}
+   if(g.command(choice.type,payload).ok){
+    if(choice.targets?.length>1){p.aiUpgradePlan={buildingId:choice.b.id,targets:choice.targets.slice(1)};reserve=planGold(p);}
+    purchased=true;break;
+   }
   }
   if(!purchased)break;
  }
@@ -119,10 +151,23 @@ function developEconomy(g,p){
  // After leaking, first rebuild the defense by at least 20% before new economy.
  const repairing=(p.roundLeaks??0)>0&&g._military(p)<n(memory.combatMilitary,g._military(p))*1.2;
  if(repairing||king.hp<king.maxHp*.4)return;
- const targetWorkers=Math.min(n(RULES.maxWorkers,10),3+Math.floor(wave/2));
- if(p.workers+economy.worker.queued<targetWorkers&&economy.worker.canStart)g.command('worker',{playerId:p.id});
+ const targetWorkers=Math.min(n(RULES.maxWorkers,10),6+wave);
+ if(p.workers+economy.worker.queued<targetWorkers&&economy.worker.canStart&&g._population(p)+n(RULES.workerPopulation,1)+planPopulation(p)<=p.populationCap)g.command('worker',{playerId:p.id});
  const reserve=g.state.phase==='build'?Math.min(120,40+wave*8):60;
- if(p.lumberLevel<Math.min(n(RULES.maxLumberLevel,30),Math.max(0,wave-1))&&economy.lumber.canStart&&king.hp>=king.maxHp*.75&&p.gold>=economy.lumber.cost.gold+reserve+planGold(p)&&p.wood>=economy.lumber.cost.wood+planWood(p))g.command('lumber',{playerId:p.id});
+ if(p.lumberLevel<Math.min(n(RULES.maxLumberLevel,30),wave+1)&&economy.lumber.canStart&&king.hp>=king.maxHp*.75&&p.gold>=economy.lumber.cost.gold+reserve+planGold(p)&&p.wood>=economy.lumber.cost.wood+planWood(p))g.command('lumber',{playerId:p.id});
+}
+
+/** Real enemy armies are visible on the map; use their armor and air coverage. */
+export function aiMercenaryScore(g,p,m,defenders=g.state.players.filter(q=>q.team!==p.team).flatMap(q=>q.buildings.map(effective)).filter(u=>u?.combatRawcode)){
+ const price=Math.max(1,g._woodCost(m)),income=g.mercenaryStatus(m.id,p.id).income??m.income??0;
+ let outgoing=0,incoming=0;
+ for(const u of defenders){
+  outgoing+=g._typeMultiplier(m.attackType,u.armorType,u.sourceArmorTypeRaw);
+  const weapon=sourceWeapon({...u,side:'defender',skillSource:'v14.1A5',attackInterval:u.interval},{...m,side:'monster',hp:1,status:{},traits:m.traits??[]});
+  incoming+=weapon?g._typeMultiplier(weapon.attackType,m.armorType,m.sourceArmorTypeRaw):.15;
+ }
+ const attack=defenders.length?outgoing/defenders.length:1,defense=defenders.length?Math.max(.25,incoming/defenders.length):1;
+ return income/price*(g.state.wave<11?120:35)+(n(m.damage)/Math.max(.2,n(m.interval,1))*attack+n(m.hp)*.015/defense)/price;
 }
 function kingAndSends(g,p){
  const king=g.state.kings[p.team],cost=n(RULES.kingUpgradeCost,100),hurt=king.hp<king.maxHp*.75,leaking=g.state.players.some(q=>q.team===p.team&&(q.roundLeaks??0)>0);
@@ -132,14 +177,15 @@ function kingAndSends(g,p){
   for(const stat of order)if(king[stat+'Level']<g.kingUpgradeCap(stat)){if(g.command('king',{playerId:p.id,stat}).ok)break;}
  }
  if(g.state.mode==='sandbox'&&g.state.phase==='combat')return;
- const reserve=planWood(p)+(hurt||leaking?cost:g.economyStatus(p.id).lumber.task?0:40);
+ const economy=g.economyStatus(p.id),research=RULES.lumberLevels?.[p.lumberLevel];
+ const savingResearch=!hurt&&!leaking&&!economy.lumber.task&&p.lumberLevel<Math.min(n(RULES.maxLumberLevel,30),g.state.wave+1)&&g._military(p)>=n(research?.militaryRequirement)&&p.gold>=economy.lumber.cost.gold+planGold(p);
+ const reserve=planWood(p)+(hurt||leaking?cost:savingResearch?economy.lumber.cost.wood:0);
+ const defenders=g.state.players.filter(q=>q.team!==p.team).flatMap(q=>q.buildings.map(effective)).filter(u=>u?.combatRawcode),scores=new Map();
  for(let sent=0;sent<3;sent++){
   const budget=p.wood-reserve;
   const available=MERCENARIES.filter(m=>{const status=g.mercenaryStatus(m.id,p.id);return !status.locked&&status.stock>0&&g._woodCost(m)<=budget;});
-  available.sort((a,b)=>{
-   const score=m=>{const price=Math.max(1,g._woodCost(m)),income=g.mercenaryStatus(m.id,p.id).income??m.income??0;return income/price*(g.state.wave<11?120:35)+(n(m.damage)/Math.max(.2,n(m.interval,1))+n(m.hp)*.015)/price;};
-   return score(b)-score(a);
-  });
+  for(const m of available)if(!scores.has(m.id))scores.set(m.id,aiMercenaryScore(g,p,m,defenders));
+  available.sort((a,b)=>scores.get(b.id)-scores.get(a.id));
   const choice=available[0];if(!choice||!g.command('merc',{playerId:p.id,mercId:choice.id}).ok)break;
  }
 }

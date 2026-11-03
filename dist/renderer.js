@@ -31,7 +31,11 @@ function drawSprite(c,u,r,t,attack=0,portrait=false){
   const bob=Math.sin(t*3.1+(u.animationId||0))*(portrait?1:r*.07);
   c.save();c.translate(0,bob);c.lineJoin='round';
   ellipse(c,0,1,r*.9,r*.34,'#091a12aa');
-  if(u.isKing){
+  if(u.status?.phoenixEgg){
+    const shell=u.status.phoenixBlue?'#b2e6f2':'#ffd59c';
+    ellipse(c,0,-r*.55,r*.56,r*.8,shell);ellipse(c,-r*.15,-r*.77,r*.15,r*.3,'#ffffff66');
+    c.strokeStyle=u.status.phoenixBlue?'#77cce9':'#e6a14b';c.lineWidth=r*.09;c.beginPath();c.ellipse(0,-r*.52,r*.74,r*.34,0,0,Math.PI*2);c.stroke();
+  }else if(u.isKing){
     c.fillStyle='#353b2b';c.fillRect(-r*1.1,-r*.6,r*2.2,r*.7);
     poly(c,[[-r,-r*.6],[0,-r*1.15],[r,-r*.6],[0,0]],'#777457');
     poly(c,[[-r*.7,-r*1.2],[0,-r*1.6],[r*.7,-r*1.2],[r*.5,-r*.3],[-r*.5,-r*.3]],'#576968','#a7a578');
@@ -43,7 +47,7 @@ function drawSprite(c,u,r,t,attack=0,portrait=false){
     poly(c,[[-r*.8,-r*.6],[r*.25,-r*1.2],[r,-r*.7],[r*.2,-r*.1]],color);
     c.strokeStyle=light;c.lineWidth=r*.25;c.beginPath();c.moveTo(0,-r*.7);c.lineTo(r*.5+attack*r*.1,-r*1.8);c.stroke();
     for(let i=-1;i<=1;i++)ellipse(c,i*r*.48,-r*.04,r*.22,r*.18,'#1f3025');
-  }else if(/龙|凤凰|狮鹫|雷鸟|飞蛇/.test(u.name)){
+  }else if(/龙|凤凰|狮鹫|雷鸟|飞蛇/.test(u.name)||['h0VX','h0WW','h0VZ'].includes(u.combatRawcode)){
     const flap=Math.sin(t*5)*r*.2;
     poly(c,[[-r*.2,-r*.7],[-r*1.8,-r*1.5+flap],[-r*1.25,-r*.15],[-r*.2,-r*.1]],dark,'#233425');
     poly(c,[[r*.15,-r*.7],[r*1.7,-r*1.4-flap],[r*1.1,-r*.1],[r*.2,-r*.1]],dark,'#233425');

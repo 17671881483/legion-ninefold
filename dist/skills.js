@@ -1,3 +1,4 @@
+import {PHOENIX_REVIVAL_RULE,initializePhoenixRevival,phoenixUnitDeath,tickPhoenixRevival} from './phoenix-revival-rules.js';
 import {MUSKETEER_RULES,canMusketeerCast,castMusketeer,musketeerMainDamage,musketeerAttackDamage,initializeMusketeerDeployment,musketeerWidgetDeath,tickMusketeerJob} from './musketeer-rules.js';
 import {SAPPER_RULES,tickSapperTimers,sapperWidgetDeath} from './sapper-rules.js';
 import {SIEGE_TEAM_RULE,siegeTeamAttackDamage} from './siege-team-rules.js';
@@ -49,7 +50,7 @@ import { closestWalkable, isWalkable } from './layout.js';
 import { GARROSH_ACTIVE_RULES, GARROSH_PASSIVE_RULES, canGarroshCastAbility, castGarroshAbility, tryGarroshAutoCast, garroshActiveAfterDamage, sourceGarroshActiveDeath, tickGarroshActiveJob } from './garrosh-active-rules.js';
 import { ILLIDAN_RULES, ILLIDAN_ACTIVE_RULES, canIllidanCastAbility, castIllidanAbility, registerIllidanSource, tickIllidanSource, illidanOnAttackHit, tryIllidanAutoCast, illidanAfterDamage, sourceIllidanDeath, tickIllidanJob, isIllidanJobType } from './illidan-rules.js';
 
-export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261103-v52-1';
+export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261103-v54-1';
 
 // Values come from resolved object fields. Empty fields remain empty: a missing
 // native default is reported, rather than replacing it with tooltip numbers.
@@ -237,6 +238,7 @@ function compile(id,version='5.0dJF') {
   if(version==='v14.1A5'&&KODO_RULES[id]){const r=KODO_RULES[id];Object.assign(s,{kind:'kodo_source',status:r.status,runtimeImplemented:true,effectText:r.description+`【待核定：${r.partial}】`});}
   if(version==='v14.1A5'&&id==='A113')Object.assign(s,{kind:'veteran_source',status:VETERAN_RULE.status,runtimeImplemented:true,effectText:VETERAN_RULE.description+'【待核定：'+VETERAN_RULE.partial+'】'});
   if(version==='v14.1A5'&&id==='A20C')Object.assign(s,{kind:'siege_fragments_source',status:SIEGE_TEAM_RULE.status,runtimeImplemented:true,effectText:SIEGE_TEAM_RULE.description+'【待核定：'+SIEGE_TEAM_RULE.partial+'】'});
+  if(version==='v14.1A5'&&id==='A1SE')Object.assign(s,{kind:'phoenix_revival_source',status:PHOENIX_REVIVAL_RULE.status,runtimeImplemented:true,effectText:PHOENIX_REVIVAL_RULE.description+'【待核定：'+PHOENIX_REVIVAL_RULE.partial+'】'});
   if(version==='v14.1A5'&&MUSKETEER_RULES[id]){const r=MUSKETEER_RULES[id];Object.assign(s,{kind:r.status==='marker'?'marker':'musketeer_source',status:r.status,runtimeImplemented:r.status==='partial',effectText:r.description+(r.partial?'【待核定：'+r.partial+'】':'')});}
   if(version==='v14.1A5'&&TIRION_RULES[id]){const r=TIRION_RULES[id];Object.assign(s,{kind:r.nativeKind?s.kind:'tirion_source',status:r.status,runtimeImplemented:r.status==='partial',effectText:r.description+(r.partial?`【待核定：${r.partial}】`:'' )});}
   if(version==='v14.1A5'&&MUMMY_RULES[id]){const r=MUMMY_RULES[id];Object.assign(s,{kind:'mummy_source',status:r.status,runtimeImplemented:true,effectText:r.description+`【待核定：${r.partial}】`});}
@@ -594,7 +596,7 @@ export function sourceClassAttackDamageEvent(game,target,attacker,options={},amo
   try{darkArthasAttackDamage(attacker,amount);blademasterAttack(game,attacker,heroScriptApi);siegeTeamAttackDamage(game,attacker,target,heroScriptApi);musketeerAttackDamage(game,attacker,target,heroScriptApi);vashjOnAttackDamage(game,attacker,target,heroScriptApi);sourceClassOnAttackDamage(game,attacker,target,heroScriptApi);banditAttackOrders(game,attacker,target,heroScriptApi);amount=bronzeAttackDamage(game,attacker,target,amount,heroScriptApi);kodoAttackOrders(game,attacker,target,heroScriptApi);desertLizardAttackDamage(game,attacker,heroScriptApi);stormLizardAttackDamage(game,attacker,target,heroScriptApi);huskarAttackDamage(game,attacker,target,amount,heroScriptApi);const manaBranch=destroyerAttackDamage(game,attacker,heroScriptApi);const lateBranch=taurenAttackDamage(game,attacker,target,heroScriptApi,manaBranch?'A0IN':null)??(manaBranch?'A0IN':null);tirionAttackDamage(game,attacker,target,amount,heroScriptApi,lateBranch);return amount;}finally{attacker.status.sourceNativeAttackBusy=false;}
 }
 export function initializeSourceClassCombat(game,building,entity){
-  if(isV14(entity)){initializeTirionDeployment(game,building,entity,heroScriptApi);initializeMummyDeployment(game,building,entity);initializeBronzeDeployment(game,building,entity);initializeMusketeerDeployment(game,building,entity);initializeBlademaster(game,building,entity);initializeNightmareDeployment(game,entity);initializeBrightArthasDeployment(game,building,entity);initializeLichKingDeployment(game,entity);initializeVashjDeployment(game,building,entity);return initializeSourceClassDeployment(game,building,entity,heroScriptApi);}
+  if(isV14(entity)){initializeTirionDeployment(game,building,entity,heroScriptApi);initializeMummyDeployment(game,building,entity);initializeBronzeDeployment(game,building,entity);initializeMusketeerDeployment(game,building,entity);initializePhoenixRevival(game,building,entity);initializeBlademaster(game,building,entity);initializeNightmareDeployment(game,entity);initializeBrightArthasDeployment(game,building,entity);initializeLichKingDeployment(game,entity);initializeVashjDeployment(game,building,entity);return initializeSourceClassDeployment(game,building,entity,heroScriptApi);}
 }
 export function tirionBondDamageEvent(game,target,attacker,amount){tirionBondDamage(game,target,attacker,amount,heroScriptApi);}
 export function beforeSourceDamage(game,target,actual,attacker,options={}){
@@ -726,6 +728,7 @@ export function sourceDeath(game,target,killer) {
   }
   lichKingDeath(game,target,heroScriptApi);
   huskarDuelDeath(game,target,heroScriptApi);
+  if(isV14(target))phoenixUnitDeath(game,target,heroScriptApi);
 }
 function wf(w,key,fallback=0){return num(w[key]??w[key+'1'],fallback);}
 function weaponSecondary(game,e,target,battle,dealt) {
@@ -913,6 +916,7 @@ export function tickSourceScriptJobs(game,dt=0){
   tickLivingBombJobs(game,heroScriptApi);
   const now=game.state.time,remaining=[];
   for(const job of game.state.sourceSkillJobs??[]){
+    if(job.type==='phoenix_revive'){if(tickPhoenixRevival(game,job,heroScriptApi))remaining.push(job);continue;}
     if(job.type?.startsWith('musketeer_')){if(tickMusketeerJob(game,job,heroScriptApi))remaining.push(job);continue;}
     if(job.type?.startsWith('mummy_')){if(tickMummyJob(game,job,heroScriptApi))remaining.push(job);continue;}
     if(job.type==='bronze_fissure'){if(tickBronzeJob(game,job,heroScriptApi))remaining.push(job);continue;}

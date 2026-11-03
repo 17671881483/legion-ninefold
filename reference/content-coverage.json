@@ -1,6 +1,6 @@
 {
   "sourceVersion": "v14.1A5",
-  "skillImplementationRevision": "v14-content-20261103-v52-1",
+  "skillImplementationRevision": "v14-content-20261103-v54-1",
   "units": 534,
   "mercenaryRecords": 60,
   "mainWaves": 35,
@@ -24,7 +24,9 @@
     "h03K",
     "h0SU",
     "n0SD",
-    "h2AC"
+    "h2AC",
+    "h0VY",
+    "h0VZ"
   ],
   "playerRuntimeAbilities": [
     {
@@ -378,9 +380,9 @@
   "playerSkills": {
     "counts": {
       "implemented": 405,
-      "partial": 130,
+      "partial": 131,
       "marker": 36,
-      "unresolved": 90
+      "unresolved": 89
     },
     "abilities": [
       {
@@ -6258,6 +6260,7 @@
         "status": "unresolved",
         "kind": "pending",
         "unitRawcodes": [
+          "h0VZ",
           "n083",
           "n08N"
         ]
@@ -6268,6 +6271,7 @@
         "status": "unresolved",
         "kind": "pending",
         "unitRawcodes": [
+          "h0VZ",
           "n083",
           "n08N"
         ]
@@ -6275,8 +6279,8 @@
       {
         "rawcode": "A1SE",
         "name": "涅槃",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "phoenix_revival_source",
         "unitRawcodes": [
           "n083",
           "n08N"
@@ -7156,6 +7160,7 @@
         "kind": "invulnerability",
         "unitRawcodes": [
           "h0NE",
+          "h0VY",
           "n04B",
           "n04D",
           "n04F",
@@ -7209,9 +7214,9 @@
   "battleSkills": {
     "counts": {
       "implemented": 454,
-      "partial": 139,
+      "partial": 140,
       "marker": 49,
-      "unresolved": 104
+      "unresolved": 103
     },
     "abilities": [
       {
@@ -13875,6 +13880,7 @@
         "status": "unresolved",
         "kind": "pending",
         "unitRawcodes": [
+          "h0VZ",
           "n083",
           "n08N"
         ]
@@ -13885,6 +13891,7 @@
         "status": "unresolved",
         "kind": "pending",
         "unitRawcodes": [
+          "h0VZ",
           "n083",
           "n08N"
         ]
@@ -13892,8 +13899,8 @@
       {
         "rawcode": "A1SE",
         "name": "涅槃",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "phoenix_revival_source",
         "unitRawcodes": [
           "n083",
           "n08N"
@@ -14882,6 +14889,7 @@
         "kind": "invulnerability",
         "unitRawcodes": [
           "h0NE",
+          "h0VY",
           "n04B",
           "n04D",
           "n04F",

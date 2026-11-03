@@ -41,7 +41,7 @@ test('leaking army prioritizes rebuilding over another economic queue',()=>{
  const {g,p}=fixture();finish(g,p,'h01B');p.roundLeaks=5;p.aiMemory={combatMilitary:g._military(p)};g.state.phase='combat';g._aiAct(p);assert.equal(p.economyTasks.workerQueue.length,0);
 });
 test('worker target includes queued workers and never queues beyond it',()=>{
- const {g,p}=fixture();finish(g,p,'h01B');g.state.phase='combat';p.gold=500;p.wood=0;for(let i=0;i<8;i++)g._aiAct(p);assert.equal(p.workers+p.economyTasks.workerQueue.length,3);
+ const {g,p}=fixture();finish(g,p,'h01B');g.state.phase='combat';p.gold=500;p.wood=0;p.workers=6;for(let i=0;i<8;i++)g._aiAct(p);assert.equal(p.workers+p.economyTasks.workerQueue.length,7);
 });
 test('AI activity cannot control player zero or run with sandbox AI disabled',()=>{
  const {g,p}=fixture();g.state.sandbox.aiEnabled=false;let before=clone(g.snapshot());g._aiAct(p);assert.deepEqual(clone(g.snapshot()),before);g.state.sandbox.aiEnabled=true;before=clone(g.snapshot());g._aiAct(g.state.players[0]);assert.deepEqual(clone(g.snapshot()),before);

@@ -1,3 +1,4 @@
+import {restoreNozdormu} from './nozdormu-rules.js';
 import {restoreAlexstrasza} from './alexstrasza-rules.js';
 import {restoreVarian} from './varian-rules.js';
 import {restoreAnduin} from './anduin-rules.js';
@@ -15,7 +16,7 @@ import {resetLichKingRound} from './lich-king-rules.js';
 import {skeletonKingGate,beginSkeletonKingRoundFinish,tickSkeletonKingLifecycle,isSkeletonKingJobType} from './skeleton-king-rules.js';
 import {sourceBarrageTargets,sourceBarrageHit} from './skills.js';
 import { UNITS, MERCENARIES, LEGACY_MERCENARIES, WAVES, RULES, HEROES, BUILDERS, PROPHET_POOLS, UNIT_TEMPLATES, TECHNOLOGIES, BOX_TRAINING_RULES } from './data.js';
-import { attachSkills, refreshSourceSkills, initializeSourceSkills, initializeSourceClassCombat, sourceClassAttackDamageEvent, tirionBondDamageEvent, sourceDamageListeners, sourceRegisteredDamageEvent, brightArthasEventDamage, compileSkills, sourceAuraEffects, hasSourceAura, tickSourceSkills, sourceAttackIssued, sourceAttackStart, sourceOnHit, modifyIncoming, beforeSourceDamage, afterSourceDamage, sourceDeath, trySourceReincarnation, sourceMoveFactor, canWeaponTarget, sourceWeapon, tickSourceScriptJobs, manualSourceSkills, castManualSourceSkill, stormLizardChanneling } from './skills.js';
+import { attachSkills, refreshSourceSkills, initializeSourceSkills, initializeSourceClassCombat, sourceClassAttackDamageEvent, tirionBondDamageEvent, sourceDamageListeners, sourceRegisteredDamageEvent, compileSkills, sourceAuraEffects, hasSourceAura, tickSourceSkills, sourceAttackIssued, sourceAttackStart, sourceOnHit, modifyIncoming, beforeSourceDamage, afterSourceDamage, sourceDeath, trySourceReincarnation, sourceMoveFactor, canWeaponTarget, sourceWeapon, tickSourceScriptJobs, manualSourceSkills, castManualSourceSkill, stormLizardChanneling } from './skills.js';
 import {isReincarnating,countsForBattle,reincarnationLethal} from './reincarnation-rules.js';
 import {restorePhoenixRevival} from './phoenix-revival-rules.js';
 import { initializeSourceClassBuilding } from './source-class-rules.js';
@@ -1389,7 +1390,6 @@ export class Game {
     if ((target.status.shield ?? 0) > 0 && !legacyPure) { const absorbed = Math.min(actual, target.status.shield); target.status.shield -= absorbed; actual -= absorbed; }
     tirionBondDamageEvent(this,target,attacker,actual);
     actual=beforeSourceDamage(this,target,actual,attacker,options)??actual;
-    actual=brightArthasEventDamage(this,target,actual,attacker);
     // Main damage listener was registered before New_UnitAttack in the map.
     actual=sourceClassAttackDamageEvent(this,target,attacker,options,actual)??actual;
     actual=sourceRegisteredDamageEvent(this,target,registeredDamageListeners,actual);
@@ -1709,7 +1709,7 @@ export class Game {
       restoreUnstableAlchemyUserData(this,e);restoreVeteranIdentity(this,e,units);restoreSapperCreation(this,e,def);
     }
     restoreUndeadLegionHandles(this);
-    restorePhoenixRevival(this);restorePhoenixActive(this);restoreMalygos(this);restoreGuldan(this);restoreAnduin(this);restoreVarian(this);restoreAlexstrasza(this);
+    restorePhoenixRevival(this);restorePhoenixActive(this);restoreMalygos(this);restoreGuldan(this);restoreAnduin(this);restoreVarian(this);restoreAlexstrasza(this);restoreNozdormu(this);
     // JSON stores retained handles separately; surviving units must share the
     // live object again so later healing, movement and death update one handle.
     for(const e of [...this.state.entities,...this.state.kings])if(this.state.brightArthasHandles[e.id])this.state.brightArthasHandles[e.id]=e;

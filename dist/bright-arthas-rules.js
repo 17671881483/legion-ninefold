@@ -45,9 +45,9 @@ export function tryBrightArthasAutoCast(g,victim,attacker,amount,api){
     if(e)castBrightArthasAbility(g,e,id,{target:e===victim?attacker:victim},api);
   }
 }
-export function brightArthasEventDamage(g,target,amount,attacker){
-  if(!(amount>0)||!attacker||attacker.id===target.id||attacker.side===target.side||has(attacker,'A2Y7')||g._sourceDamageTriggerDepth)return amount;
-  return has(target,'A1W2')?amount*.8:amount;
+export function brightArthasEventDamage(g,target,amount,attacker,eventDamage=amount){
+  if(!(amount>0)||!attacker||attacker.id===target.id||attacker.side===target.side||has(attacker,'A2Y7')||g._sourceDamageTriggerDepth)return eventDamage;
+  return has(target,'A1W2')?amount*.8:eventDamage;
 }
 
 // common.j UnitRemoveBuffs(whichUnit, removePositive, removeNegative):

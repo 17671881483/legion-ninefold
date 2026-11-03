@@ -1,0 +1,1480 @@
+{
+  "source": {
+    "path": "reference/v14-source/raw_extracted/war3map.j",
+    "sha256": "e66c55b3b25b185c991be5613e21fbf5b2d598f3cc40f2f8cd01c23bcb828250",
+    "encoding": "latin1 split LF only"
+  },
+  "sourceEvidence": [
+    {
+      "line": 1438,
+      "text": "function Base__init takes nothing returns nothing"
+    },
+    {
+      "line": 1439,
+      "text": "set m[0]=$41305A51"
+    },
+    {
+      "line": 1440,
+      "text": "set m[1]=$41305948"
+    },
+    {
+      "line": 1441,
+      "text": "set m[2]=$41313538"
+    },
+    {
+      "line": 1442,
+      "text": "set m[3]=$41313732"
+    },
+    {
+      "line": 1443,
+      "text": "set m[4]=$41706878"
+    },
+    {
+      "line": 1444,
+      "text": "set m[5]=$4131374A"
+    },
+    {
+      "line": 1445,
+      "text": "set m[6]=$41313843"
+    },
+    {
+      "line": 1446,
+      "text": "set m[7]=$41305A55"
+    },
+    {
+      "line": 1447,
+      "text": "set m[8]=$41315345"
+    },
+    {
+      "line": 1448,
+      "text": "set n=o"
+    },
+    {
+      "line": 2168,
+      "text": "call SaveInteger(O,$6830514F,StringHash(\"box_train_upgrade_next\"),$68305150)"
+    },
+    {
+      "line": 2169,
+      "text": "call SaveInteger(O,$6830514F,StringHash(\"box_train_upgrade_count\"),1)"
+    },
+    {
+      "line": 2170,
+      "text": "call SaveInteger(O,$6830514F,StringHash(\"box_train_upgrade_1\"),$68305150)"
+    },
+    {
+      "line": 2171,
+      "text": "call SaveInteger(O,$68305150,StringHash(\"box_train_upgrade_next\"),$6E303634)"
+    },
+    {
+      "line": 2172,
+      "text": "call SaveInteger(O,$68305150,StringHash(\"box_train_upgrade_count\"),1)"
+    },
+    {
+      "line": 2173,
+      "text": "call SaveInteger(O,$68305150,StringHash(\"box_train_upgrade_1\"),$6E303634)"
+    },
+    {
+      "line": 2174,
+      "text": "call SaveInteger(O,$6E303736,StringHash(\"box_train_upgrade_next\"),$68324146)"
+    },
+    {
+      "line": 2175,
+      "text": "call SaveInteger(O,$6E303736,StringHash(\"box_train_upgrade_count\"),2)"
+    },
+    {
+      "line": 2176,
+      "text": "call SaveInteger(O,$6E303736,StringHash(\"box_train_upgrade_1\"),$68324146)"
+    },
+    {
+      "line": 2177,
+      "text": "call SaveInteger(O,$6E303736,StringHash(\"box_train_upgrade_2\"),$6E303737)"
+    },
+    {
+      "line": 3289,
+      "text": "call SaveInteger(O,$6E303634,StringHash(\"box_train_upgrade_require_count\"),2)"
+    },
+    {
+      "line": 3290,
+      "text": "call SaveInteger(O,$6E303634,StringHash(\"box_train_upgrade_require_1\"),$75303034)"
+    },
+    {
+      "line": 3291,
+      "text": "call SaveInteger(O,$6E303634,StringHash(\"box_train_upgrade_require_2\"),$52303846)"
+    },
+    {
+      "line": 8596,
+      "text": "function CreateRegions takes nothing returns nothing"
+    },
+    {
+      "line": 8597,
+      "text": "set Z=Rect(-6272.,3264.,-5120.,6464.)"
+    },
+    {
+      "line": 8598,
+      "text": "set a=Rect(-6272.,-864.,-5120.,2240.)"
+    },
+    {
+      "line": 8599,
+      "text": "set b=Rect(-1920.,3392.,-768.,6496.)"
+    },
+    {
+      "line": 8600,
+      "text": "set c=Rect(-1920.,-864.,-768.,2240.)"
+    },
+    {
+      "line": 8601,
+      "text": "set d=Rect(768.,3392.,1920.,6528.)"
+    },
+    {
+      "line": 8602,
+      "text": "set e=Rect(768.,-864.,1920.,2240.)"
+    },
+    {
+      "line": 8603,
+      "text": "set f=Rect(5120.,3392.,6272.,6496.)"
+    },
+    {
+      "line": 8604,
+      "text": "set g=Rect(5120.,-864.,6272.,2240.)"
+    },
+    {
+      "line": 8605,
+      "text": "endfunction"
+    },
+    {
+      "line": 18294,
+      "text": "set Mk[Bi]=$68305146"
+    },
+    {
+      "line": 18295,
+      "text": "set Ml[Bi]=$6E303633"
+    },
+    {
+      "line": 18296,
+      "text": "set Bi=Bi+1"
+    },
+    {
+      "line": 18297,
+      "text": "set Mk[Bi]=$68305153"
+    },
+    {
+      "line": 18298,
+      "text": "set Ml[Bi]=$6E303634"
+    },
+    {
+      "line": 18299,
+      "text": "set Bi=Bi+1"
+    },
+    {
+      "line": 18300,
+      "text": "set Mk[Bi]=$6830515A"
+    },
+    {
+      "line": 18301,
+      "text": "set Ml[Bi]=$6E303636"
+    },
+    {
+      "line": 29786,
+      "text": "function SelectRange takes unit Pf,real FF,real FG,real Px returns group"
+    },
+    {
+      "line": 29787,
+      "text": "local group DG=CreateGroup()"
+    },
+    {
+      "line": 29788,
+      "text": "local group Om=CreateGroup()"
+    },
+    {
+      "line": 29789,
+      "text": "local unit D6=null"
+    },
+    {
+      "line": 29790,
+      "text": "call GroupEnumUnitsInRange(DG,FF,FG,Px,null)"
+    },
+    {
+      "line": 29791,
+      "text": "loop"
+    },
+    {
+      "line": 29792,
+      "text": "set D6=FirstOfGroup(DG)"
+    },
+    {
+      "line": 29793,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 29794,
+      "text": "if IsUnitEnemy(D6,GetOwningPlayer(Pf)) and not IsUnitType(D6,UNIT_TYPE_DEAD) and GetUnitAbilityLevel(D6,$4176756C)==0 then"
+    },
+    {
+      "line": 29795,
+      "text": "call GroupAddUnit(Om,D6)"
+    },
+    {
+      "line": 29796,
+      "text": "endif"
+    },
+    {
+      "line": 29797,
+      "text": "call GroupRemoveUnit(DG,D6)"
+    },
+    {
+      "line": 29798,
+      "text": "endloop"
+    },
+    {
+      "line": 29799,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 29800,
+      "text": "set DG=null"
+    },
+    {
+      "line": 29801,
+      "text": "set D6=null"
+    },
+    {
+      "line": 29802,
+      "text": "set Pf=null"
+    },
+    {
+      "line": 29803,
+      "text": "set Py=Om"
+    },
+    {
+      "line": 29804,
+      "text": "set Om=null"
+    },
+    {
+      "line": 29805,
+      "text": "return Py"
+    },
+    {
+      "line": 39089,
+      "text": "function A159Group takes nothing returns nothing"
+    },
+    {
+      "line": 39090,
+      "text": "call UnitDamageTargetBJ(GetTriggerUnit(),GetEnumUnit(),400,ATTACK_TYPE_CHAOS,DAMAGE_TYPE_UNIVERSAL)"
+    },
+    {
+      "line": 39091,
+      "text": "endfunction"
+    },
+    {
+      "line": 39484,
+      "text": "elseif BF==$41313543 then"
+    },
+    {
+      "line": 39485,
+      "text": "call SuperAxe(i,Qf)"
+    },
+    {
+      "line": 39486,
+      "text": "elseif BF==$41313541 then"
+    },
+    {
+      "line": 39487,
+      "text": "set RL=LoadTriggerHandle(O,GetHandleId(i),$41313541)"
+    },
+    {
+      "line": 39488,
+      "text": "set P8=LoadReal(O,GetHandleId(RL),10+3)"
+    },
+    {
+      "line": 39489,
+      "text": "if P8==0 then"
+    },
+    {
+      "line": 39490,
+      "text": "set P8=100"
+    },
+    {
+      "line": 39491,
+      "text": "endif"
+    },
+    {
+      "line": 39492,
+      "text": "call YDWETimerDestroyEffect(2,AddSpecialEffect(\"LJQ_r_NZDM_02.mdx\",GetUnitX(i),GetUnitY(i)))"
+    },
+    {
+      "line": 39493,
+      "text": "call SetUnitLifePercentBJ(i,P8)"
+    },
+    {
+      "line": 39494,
+      "text": "elseif BF==$4131374E then"
+    },
+    {
+      "line": 39495,
+      "text": "call TheLordOfTheEarthDeter(i)"
+    },
+    {
+      "line": 39496,
+      "text": "elseif BF==$41313539 then"
+    },
+    {
+      "line": 39497,
+      "text": "set DE=AddSpecialEffect(\"LJQ_DMNZ_1.mdx\",GetUnitX(i),GetUnitY(i))"
+    },
+    {
+      "line": 39498,
+      "text": "set Pm=Atan2BJ(FG-GetUnitY(i),FF-GetUnitX(i))"
+    },
+    {
+      "line": 39499,
+      "text": "call EXSetEffectSize(DE,3)"
+    },
+    {
+      "line": 39500,
+      "text": "call EXEffectMatRotateZ(DE,Pm)"
+    },
+    {
+      "line": 39501,
+      "text": "set a7=Location(GetUnitX(i),GetUnitY(i))"
+    },
+    {
+      "line": 39502,
+      "text": "call EXSetEffectZ(DE,100+GetLocationZ(a7))"
+    },
+    {
+      "line": 39503,
+      "text": "call RemoveLocation(a7)"
+    },
+    {
+      "line": 39504,
+      "text": "set a7=null"
+    },
+    {
+      "line": 39505,
+      "text": "call YDWETimerDestroyEffect(2,DE)"
+    },
+    {
+      "line": 39506,
+      "text": "set DE=null"
+    },
+    {
+      "line": 39507,
+      "text": "set FF=GetUnitX(i)+CosBJ(Pm)*400"
+    },
+    {
+      "line": 39508,
+      "text": "set FG=GetUnitY(i)+SinBJ(Pm)*400"
+    },
+    {
+      "line": 39509,
+      "text": "set Uz=SelectRange(i,FF,FG,400)"
+    },
+    {
+      "line": 39510,
+      "text": "call ForGroup(Uz,function A159Group)"
+    },
+    {
+      "line": 39511,
+      "text": "call DestroyGroup(Uz)"
+    },
+    {
+      "line": 39512,
+      "text": "set Uz=null"
+    },
+    {
+      "line": 41099,
+      "text": "if GetUnitAbilityLevel(i,$41313534)>0 then"
+    },
+    {
+      "line": 41100,
+      "text": "if IssueImmediateOrder(i,\"parasite\") then"
+    },
+    {
+      "line": 41101,
+      "text": "call SetUnitManaBJ(i,GetUnitState(i,UNIT_STATE_MANA)-5)"
+    },
+    {
+      "line": 41102,
+      "text": "call YDWESetUnitAbilityState(i,$41313534,1,8)"
+    },
+    {
+      "line": 41103,
+      "text": "call YDWESetEventDamage(0)"
+    },
+    {
+      "line": 41104,
+      "text": "if RectContainsCoords(LoadRectHandle(O,GetHandleId(Player(GetUnitUserData(i)-1)),StringHash(\"building_rect\")),GetUnitX(i),GetUnitY(i)) then"
+    },
+    {
+      "line": 41105,
+      "text": "loop"
+    },
+    {
+      "line": 41106,
+      "text": "set a5=GetRandomReal(0,600)"
+    },
+    {
+      "line": 41107,
+      "text": "set Pm=GetRandomDirectionDeg()"
+    },
+    {
+      "line": 41108,
+      "text": "set FF=GetUnitX(i)+CosBJ(Pm)*a5"
+    },
+    {
+      "line": 41109,
+      "text": "set FG=GetUnitY(i)+SinBJ(Pm)*a5"
+    },
+    {
+      "line": 41110,
+      "text": "exitwhen RectContainsCoords(LoadRectHandle(O,GetHandleId(Player(GetUnitUserData(i)-1)),StringHash(\"building_rect\")),FF,FG)"
+    },
+    {
+      "line": 41111,
+      "text": "endloop"
+    },
+    {
+      "line": 41112,
+      "text": "set bk=AddSpecialEffect(\"LJQ_NZDM_MFZ.mdx\",GetUnitX(i),GetUnitY(i))"
+    },
+    {
+      "line": 41113,
+      "text": "call YDWETimerDestroyEffect(2,bk)"
+    },
+    {
+      "line": 41114,
+      "text": "call EXEffectMatRotateZ(bk,90)"
+    },
+    {
+      "line": 41115,
+      "text": "call SetUnitX(i,FF)"
+    },
+    {
+      "line": 41116,
+      "text": "call SetUnitY(i,FG)"
+    },
+    {
+      "line": 41117,
+      "text": "endif"
+    },
+    {
+      "line": 41118,
+      "text": "set bk=AddSpecialEffect(\"LJQ_NZDM_MFZ.mdx\",GetUnitX(i),GetUnitY(i))"
+    },
+    {
+      "line": 41119,
+      "text": "call YDWETimerDestroyEffect(2,bk)"
+    },
+    {
+      "line": 41120,
+      "text": "call EXEffectMatRotateZ(bk,90)"
+    },
+    {
+      "line": 41121,
+      "text": "call UnitRemoveBuffs(i,true,false)"
+    },
+    {
+      "line": 41122,
+      "text": "set bk=null"
+    },
+    {
+      "line": 41123,
+      "text": "endif"
+    },
+    {
+      "line": 41124,
+      "text": "endif"
+    },
+    {
+      "line": 41160,
+      "text": "if GetUnitAbilityLevel(bV,$41313541)>0 then"
+    },
+    {
+      "line": 41161,
+      "text": "call IssueImmediateOrder(bV,\"parasiteoff\")"
+    },
+    {
+      "line": 41162,
+      "text": "endif"
+    },
+    {
+      "line": 41163,
+      "text": "if GetUnitAbilityLevel(i,$41313539)>0 then"
+    },
+    {
+      "line": 41164,
+      "text": "call IssueTargetOrder(i,\"parasiteon\",bV)"
+    },
+    {
+      "line": 41165,
+      "text": "endif"
+    },
+    {
+      "line": 41166,
+      "text": "if GetUnitAbilityLevel(i,$41315732)>0 then"
+    },
+    {
+      "line": 41167,
+      "text": "call YDWESetEventDamage(P8*.8)"
+    },
+    {
+      "line": 41905,
+      "text": "function A158Group takes nothing returns nothing"
+    },
+    {
+      "line": 41906,
+      "text": "call UnitDamageTargetBJ(GetTriggerUnit(),GetEnumUnit(),1000,ATTACK_TYPE_NORMAL,DAMAGE_TYPE_NORMAL)"
+    },
+    {
+      "line": 41907,
+      "text": "endfunction"
+    },
+    {
+      "line": 41908,
+      "text": "function gg_trg_UnitDeathCondition takes nothing returns boolean"
+    },
+    {
+      "line": 41909,
+      "text": "return not IsUnitInGroup(GetTriggerUnit(),Ju)"
+    },
+    {
+      "line": 41910,
+      "text": "endfunction"
+    },
+    {
+      "line": 41911,
+      "text": "function Trig_UnitDeathActions takes nothing returns nothing"
+    },
+    {
+      "line": 41912,
+      "text": "local unit i=GetTriggerUnit()"
+    },
+    {
+      "line": 41913,
+      "text": "local unit bv=GetKillingUnit()"
+    },
+    {
+      "line": 41914,
+      "text": "local trigger Eb=GetTriggeringTrigger()"
+    },
+    {
+      "line": 41915,
+      "text": "local real FF=GetUnitX(i)"
+    },
+    {
+      "line": 41916,
+      "text": "local real FG=GetUnitY(i)"
+    },
+    {
+      "line": 41917,
+      "text": "local real P8=0"
+    },
+    {
+      "line": 41918,
+      "text": "local effect DE=null"
+    },
+    {
+      "line": 41919,
+      "text": "local timer t=null"
+    },
+    {
+      "line": 41920,
+      "text": "local group Uz=CreateGroup()"
+    },
+    {
+      "line": 41921,
+      "text": "local unit D6=null"
+    },
+    {
+      "line": 41922,
+      "text": "local unit Ki=null"
+    },
+    {
+      "line": 41923,
+      "text": "local player h"
+    },
+    {
+      "line": 41924,
+      "text": "local boolexpr Cd"
+    },
+    {
+      "line": 41925,
+      "text": "local integer BF"
+    },
+    {
+      "line": 41926,
+      "text": "local integer BU"
+    },
+    {
+      "line": 41927,
+      "text": "local real a5"
+    },
+    {
+      "line": 41928,
+      "text": "call DisableTrigger(Eb)"
+    },
+    {
+      "line": 41929,
+      "text": "call SingedAlchemyGold(bv,i)"
+    },
+    {
+      "line": 41930,
+      "text": "if GetUnitTypeId(i)==$75303444 then"
+    },
+    {
+      "line": 41931,
+      "text": "call NazuoOmenOfSummonDeath(i)"
+    },
+    {
+      "line": 41932,
+      "text": "endif"
+    },
+    {
+      "line": 42019,
+      "text": "if GetUnitAbilityLevel(i,$41313046)>0 then"
+    },
+    {
+      "line": 42020,
+      "text": "call ClawTearDeath(i)"
+    },
+    {
+      "line": 42021,
+      "text": "endif"
+    },
+    {
+      "line": 42022,
+      "text": "if GetUnitAbilityLevel(i,$41313538)>0 then"
+    },
+    {
+      "line": 42023,
+      "text": "set bj_lastCreatedUnit=CreateUnit(GetOwningPlayer(i),$68305154,FF,FG,GetUnitFacing(GetTriggerUnit()))"
+    },
+    {
+      "line": 42024,
+      "text": "call SetUnitColor(bj_lastCreatedUnit,GetPlayerColor(ConvertedPlayer(GetUnitUserData(i))))"
+    },
+    {
+      "line": 42025,
+      "text": "call GroupAddUnit(JW,bj_lastCreatedUnit)"
+    },
+    {
+      "line": 42026,
+      "text": "call SetUnitUserData(bj_lastCreatedUnit,GetUnitUserData(i))"
+    },
+    {
+      "line": 42027,
+      "text": "call GroupAddUnit(JH[GetUnitUserData(i)],bj_lastCreatedUnit)"
+    },
+    {
+      "line": 42028,
+      "text": "call DestroyGroup(Uz)"
+    },
+    {
+      "line": 42029,
+      "text": "call DestroyEffect(AddSpecialEffect(\"Abilities\\\\Spells\\\\NightElf\\\\BattleRoar\\\\RoarCaster.mdl\",FF,FG))"
+    },
+    {
+      "line": 42030,
+      "text": "set Uz=SelectRange(i,FF,FG,400)"
+    },
+    {
+      "line": 42031,
+      "text": "call ForGroup(Uz,function A158Group)"
+    },
+    {
+      "line": 42032,
+      "text": "endif"
+    },
+    {
+      "line": 42177,
+      "text": "call EnableTrigger(Eb)"
+    },
+    {
+      "line": 42178,
+      "text": "call DestroyGroup(Uz)"
+    },
+    {
+      "line": 42179,
+      "text": "set DE=null"
+    },
+    {
+      "line": 42180,
+      "text": "set i=null"
+    },
+    {
+      "line": 42181,
+      "text": "set Ki=null"
+    },
+    {
+      "line": 42182,
+      "text": "set bv=null"
+    },
+    {
+      "line": 42183,
+      "text": "set Eb=null"
+    },
+    {
+      "line": 42184,
+      "text": "set t=null"
+    },
+    {
+      "line": 42185,
+      "text": "set Uz=null"
+    },
+    {
+      "line": 42186,
+      "text": "endfunction"
+    },
+    {
+      "line": 43580,
+      "text": "function RegisterSpaceTimeFissureExAction takes nothing returns nothing"
+    },
+    {
+      "line": 43581,
+      "text": "local trigger t=GetTriggeringTrigger()"
+    },
+    {
+      "line": 43582,
+      "text": "local integer BF=GetHandleId(t)"
+    },
+    {
+      "line": 43583,
+      "text": "local unit Bc=LoadUnitHandle(O,BF,0)"
+    },
+    {
+      "line": 43584,
+      "text": "local real QY=LoadReal(O,BF,1)"
+    },
+    {
+      "line": 43585,
+      "text": "local real BB=QY"
+    },
+    {
+      "line": 43586,
+      "text": "loop"
+    },
+    {
+      "line": 43587,
+      "text": "exitwhen BB<=1"
+    },
+    {
+      "line": 43588,
+      "text": "call SaveReal(O,BF,10+R2I(BB),LoadReal(O,BF,10+R2I(BB-1)))"
+    },
+    {
+      "line": 43589,
+      "text": "set BB=BB-1"
+    },
+    {
+      "line": 43590,
+      "text": "endloop"
+    },
+    {
+      "line": 43591,
+      "text": "call SaveReal(O,BF,10+1,GetUnitLifePercent(Bc))"
+    },
+    {
+      "line": 43592,
+      "text": "if IsUnitType(Bc,UNIT_TYPE_DEAD) then"
+    },
+    {
+      "line": 43593,
+      "text": "call FlushChildHashtable(O,BF)"
+    },
+    {
+      "line": 43594,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 43595,
+      "text": "endif"
+    },
+    {
+      "line": 43596,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 43597,
+      "text": "set t=null"
+    },
+    {
+      "line": 43598,
+      "text": "endfunction"
+    },
+    {
+      "line": 43599,
+      "text": "function RegisterSpaceTimeFissureEx takes unit Bc,integer p,real QY,real DK returns nothing"
+    },
+    {
+      "line": 43600,
+      "text": "local trigger t=CreateTrigger()"
+    },
+    {
+      "line": 43601,
+      "text": "local integer BF=GetHandleId(t)"
+    },
+    {
+      "line": 43602,
+      "text": "call SaveAgentHandle(O,GetHandleId(Bc),p,t)"
+    },
+    {
+      "line": 43603,
+      "text": "call SaveAgentHandle(O,BF,0,Bc)"
+    },
+    {
+      "line": 43604,
+      "text": "call SaveReal(O,BF,1,QY)"
+    },
+    {
+      "line": 43605,
+      "text": "call TriggerRegisterTimerEvent(t,DK,true)"
+    },
+    {
+      "line": 43606,
+      "text": "call TriggerAddAction(t,function RegisterSpaceTimeFissureExAction)"
+    },
+    {
+      "line": 43607,
+      "text": "set t=null"
+    },
+    {
+      "line": 43608,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 43724,
+      "text": "if GetUnitAbilityLevel(Pf,$41313459)>0 then"
+    },
+    {
+      "line": 43725,
+      "text": "call RegisterSpaceTimeFissure(Bc,5,1,2)"
+    },
+    {
+      "line": 43726,
+      "text": "elseif GetUnitAbilityLevel(Pf,$4131345A)>0 then"
+    },
+    {
+      "line": 43727,
+      "text": "call RegisterSpaceTimeFissure(Bc,4,1,2)"
+    },
+    {
+      "line": 43728,
+      "text": "elseif GetUnitAbilityLevel(Pf,$41313541)>0 then"
+    },
+    {
+      "line": 43729,
+      "text": "call RegisterSpaceTimeFissureEx(Bc,$41313541,6,1)"
+    },
+    {
+      "line": 43730,
+      "text": "endif"
+    },
+    {
+      "line": 48608,
+      "text": "function AbilityInitSaveBuildingRects takes nothing returns nothing"
+    },
+    {
+      "line": 48609,
+      "text": "call SaveRectHandle(O,GetHandleId(Player(0)),StringHash(\"building_rect\"),Z)"
+    },
+    {
+      "line": 48610,
+      "text": "call SaveRectHandle(O,GetHandleId(Player(1)),StringHash(\"building_rect\"),a)"
+    },
+    {
+      "line": 48611,
+      "text": "call SaveRectHandle(O,GetHandleId(Player(2)),StringHash(\"building_rect\"),b)"
+    },
+    {
+      "line": 48612,
+      "text": "call SaveRectHandle(O,GetHandleId(Player(3)),StringHash(\"building_rect\"),c)"
+    },
+    {
+      "line": 48613,
+      "text": "call SaveRectHandle(O,GetHandleId(Player(4)),StringHash(\"building_rect\"),d)"
+    },
+    {
+      "line": 48614,
+      "text": "call SaveRectHandle(O,GetHandleId(Player(5)),StringHash(\"building_rect\"),e)"
+    },
+    {
+      "line": 48615,
+      "text": "call SaveRectHandle(O,GetHandleId(Player(6)),StringHash(\"building_rect\"),f)"
+    },
+    {
+      "line": 48616,
+      "text": "call SaveRectHandle(O,GetHandleId(Player(7)),StringHash(\"building_rect\"),g)"
+    },
+    {
+      "line": 48617,
+      "text": "endfunction"
+    }
+  ],
+  "abilities": {
+    "A154": {
+      "rawcode": "A154",
+      "name": "时间跳跃",
+      "tip": "时间跳跃(W)",
+      "ubertip": "在建造师可以移动范围的位置进行跳跃，每隔6s可位移一次",
+      "alias": "A154",
+      "code": "ANcl",
+      "DataC1": "1",
+      "levels": "1",
+      "Cost1": "5",
+      "Cool1": "6.0",
+      "checkDep": "1",
+      "reqLevel": "1",
+      "DataF1": "parasite"
+    },
+    "A155": {
+      "rawcode": "A155",
+      "name": "青铜龙军团的祝福",
+      "tip": "青铜龙军团的祝福",
+      "ubertip": "祝福600码范围内己方兵种，并赐予其青铜龙军团的力量。近战攻击，远程攻击和施法速度提高20%。移动速度提高20%。",
+      "alias": "A155",
+      "code": "Asth",
+      "levels": "1",
+      "checkDep": "1"
+    },
+    "A156": {
+      "rawcode": "A156",
+      "name": "青铜龙军团的祝福",
+      "tip": "青铜龙军团的祝福",
+      "ubertip": "攻击型科多兽半径600码内的友方单位攻击力提高5%",
+      "alias": "A156",
+      "code": "Aakb",
+      "Area1": "600.0",
+      "BuffID1": "B07D",
+      "DataA1": "0.2",
+      "DataB1": "1",
+      "DataC1": "1",
+      "levels": "1",
+      "targs1": "air,ground,friend,self,vuln,invu",
+      "checkDep": "1"
+    },
+    "A157": {
+      "rawcode": "A157",
+      "name": "青铜龙军团的祝福",
+      "tip": "青铜龙军团的祝福",
+      "ubertip": "增加附近友方单位20%的移动速度。",
+      "alias": "A157",
+      "code": "AOae",
+      "Area1": "600.0",
+      "BuffID1": "B07E",
+      "DataA1": "0.2",
+      "levels": "1",
+      "targs1": "friend,invulnerable,self,structure,vulnerable",
+      "checkDep": "1",
+      "reqLevel": "1"
+    },
+    "A158": {
+      "rawcode": "A158",
+      "name": "巨龙之力",
+      "tip": "巨龙之力",
+      "ubertip": "诺兹多姆死亡时变化为巨龙形态,对400范围的敌人造成1000点伤害\n攻击伤害: 500-600\n攻击速度: 0.6\n攻击距离: 600\n生命值: 7500\n攻击类型: 混乱\n防御类型: 王甲\n技能: \n时之吐息:对敌人造成400伤害\n时间之力:恢复自身3秒前的生命\n时间跳跃 ,青铜龙军团的祝福",
+      "alias": "A158",
+      "code": "Asth",
+      "levels": "1",
+      "checkDep": "1"
+    },
+    "A159": {
+      "rawcode": "A159",
+      "name": "时之吐息",
+      "tip": "时之吐息(Q)",
+      "ubertip": "对一片区域内的敌人造成400点伤害.冷却时间11秒",
+      "alias": "A159",
+      "code": "ANcl",
+      "DataB1": "3",
+      "DataC1": "1",
+      "levels": "1",
+      "Cost1": "10",
+      "Rng1": "1000.0",
+      "Cool1": "11.0",
+      "checkDep": "1",
+      "DataD1": "1.0",
+      "reqLevel": "1",
+      "DataF1": "parasiteon"
+    },
+    "A15A": {
+      "rawcode": "A15A",
+      "name": "时间之力",
+      "tip": "时间之力(E)",
+      "ubertip": "释放该技能后,自身生命回复到3s前的生命值",
+      "alias": "A15A",
+      "code": "ANcl",
+      "DataC1": "1",
+      "levels": "1",
+      "Cost1": "5",
+      "Cool1": "15.0",
+      "checkDep": "1",
+      "reqLevel": "1",
+      "DataF1": "parasiteoff"
+    },
+    "A201": {
+      "rawcode": "A201",
+      "name": "龙族荣耀",
+      "tip": "龙族荣耀",
+      "ubertip": "增加600范围内龙族11%攻击力，可以与任何光环叠加。",
+      "alias": "A201",
+      "code": "AEar",
+      "Area1": "600.0",
+      "BuffID1": "B201",
+      "DataA1": "0.11",
+      "DataB1": "1",
+      "DataC1": "1",
+      "levels": "1",
+      "targs1": "air,ground,friend,self,sapper"
+    },
+    "A202": {
+      "rawcode": "A202",
+      "name": "龙族荣耀",
+      "tip": "龙族荣耀",
+      "ubertip": "增加600范围内龙族13%移动速度，并令它们获得每秒14点生命恢复速度，可以与任何光环叠加。",
+      "alias": "A202",
+      "code": "AUau",
+      "Area1": "600.0",
+      "BuffID1": "B202",
+      "DataA1": "0.13",
+      "DataB1": "14.0",
+      "levels": "1",
+      "targs1": "air,ground,friend,self,sapper"
+    },
+    "A203": {
+      "rawcode": "A203",
+      "name": "龙族荣耀",
+      "tip": "龙族荣耀",
+      "ubertip": "增加600范围内龙族12%攻击速度，可以与任何光环叠加。",
+      "alias": "A203",
+      "code": "AOae",
+      "Area1": "600.0",
+      "BuffID1": "B203",
+      "DataB1": "0.12",
+      "levels": "1",
+      "targs1": "air,ground,friend,self,sapper"
+    },
+    "A204": {
+      "rawcode": "A204",
+      "name": "龙族荣耀",
+      "tip": "龙族荣耀",
+      "ubertip": "增加600范围内龙族1.0护甲，可以与任何光环叠加。",
+      "alias": "A204",
+      "code": "AHad",
+      "Area1": "600.0",
+      "BuffID1": "B204",
+      "DataA1": "1.0",
+      "levels": "1",
+      "targs1": "air,ground,friend,self,sapper"
+    },
+    "A206": {
+      "rawcode": "A206",
+      "name": "龙族荣耀",
+      "tip": "龙族荣耀",
+      "ubertip": "龙族是一个传说中不可战胜的种族，它们强大到让人畏惧。荣耀是龙族最看重的东西，圣龙的存在鼓舞了它们能力。\n\n增加600范围内龙族1.0护甲；\n增加600范围内龙族11%攻击力；\n增加600范围内龙族12%攻击速度；\n增加600范围内龙族13%移动速度；\n增加600范围内龙族每秒14点生命恢复速度；\n\n可以与任何光环叠加",
+      "alias": "A206",
+      "code": "Asth",
+      "levels": "1"
+    }
+  },
+  "units": {
+    "n064": {
+      "rawcode": "n064",
+      "name": "诺兹多姆",
+      "tip": "升级到 <诺兹多姆> - [P]",
+      "ubertip": "攻击伤害: 140-160\n攻击速度: 0.5\n攻击距离: 500\n生命值: 3000\n攻击类型: 混乱\n防御类型: 王甲\n技能: 时间跳跃, 龙族荣耀, 青铜龙军团的祝福\n\n最多可以建造1个",
+      "unitID": "n064",
+      "canFlee": "1",
+      "death": "2.34",
+      "deathType": "2",
+      "points": "1270",
+      "prio": "2",
+      "propWin": "60.0",
+      "race": "human",
+      "targType": "structure",
+      "unitBalanceID": "n064",
+      "bldtm": "2",
+      "collision": "72.0",
+      "defType": "hero",
+      "fused": "12",
+      "goldcost": "550",
+      "HP": "3000",
+      "level": "1",
+      "nsight": "500",
+      "preventPlace": "unbuildable",
+      "regenMana": "1.0",
+      "regenType": "none",
+      "reptm": "1",
+      "sight": "500",
+      "tilesets": "*",
+      "upgrades": "R009,R00A",
+      "unitUIID": "n064",
+      "armor": "Wood",
+      "blend": "0.15",
+      "blue": "255",
+      "elevRad": "50.0",
+      "file": "Nozdormu.mdl",
+      "green": "255",
+      "modelScale": "1.0",
+      "red": "255",
+      "run": "200.0",
+      "scale": "1.5",
+      "scaleBull": "1",
+      "shadowOnWater": "1",
+      "teamColor": "-1",
+      "unitSound": "AzureDragon",
+      "walk": "200.0",
+      "unitAbilID": "n064",
+      "abilList": "A008,A118,A206,A154,A155,A156,A157,A158",
+      "unitWeapID": "n064",
+      "acquire": "800.0",
+      "atkType1": "chaos",
+      "atkType2": "normal",
+      "backSw1": "0.5",
+      "castbsw": "0.51",
+      "castpt": "0.001",
+      "cool1": "0.5",
+      "dice1": "1",
+      "dmgpt1": "0.4",
+      "impactZ": "60.0",
+      "launchZ": "60.0",
+      "rangeN1": "500",
+      "RngBuff1": "250.0",
+      "showUI1": "1",
+      "showUI2": "1",
+      "sides1": "16",
+      "targCount1": "1",
+      "targCount2": "1",
+      "targs1": "ground,structure,debris,item,ward",
+      "weapsOn": "1",
+      "weapTp1": "missile",
+      "weapType1": "WoodLightBash",
+      "hotkey": "P",
+      "damage_min_1": "275.0",
+      "damage_max_1": "290.0",
+      "damage_avg_1": "282.5",
+      "dps_avg_1": "565.0",
+      "attack_type_zh": "混乱",
+      "armor_type_zh": "英雄甲",
+      "ability_ids": "A008,A118,A206,A154,A155,A156,A157,A158",
+      "ability_names": "出售,移位,龙族荣耀,时间跳跃,青铜龙军团的祝福,青铜龙军团的祝福,青铜龙军团的祝福,巨龙之力",
+      "def": "3.0",
+      "manaN": "10",
+      "type": "ancient,sapper",
+      "dmgplus1": "274",
+      "buildingShadow": "BuildingShadowSmall",
+      "isbldg": "1",
+      "buffRadius": "15.0",
+      "buffType": "buffer",
+      "pathTex": "PathTextures\\4x4SimpleSolid.tga",
+      "elevPts": "4"
+    },
+    "h0QS": {
+      "rawcode": "h0QS",
+      "name": "诺兹多姆",
+      "ubertip": ",",
+      "unitID": "h0QS",
+      "canFlee": "1",
+      "cargoSize": "1",
+      "death": "1.7",
+      "deathType": "3",
+      "points": "300",
+      "prio": "3",
+      "propWin": "60.0",
+      "race": "human",
+      "targType": "ground",
+      "turnRate": "0.6",
+      "unitBalanceID": "h0QS",
+      "bldtm": "26",
+      "bountydice": "6",
+      "bountyplus": "20",
+      "bountysides": "3",
+      "collision": "15.0",
+      "defType": "hero",
+      "fused": "2",
+      "goldcost": "70",
+      "goldRep": "205",
+      "HP": "3000",
+      "level": "3",
+      "lumberRep": "30",
+      "mana0": "10",
+      "nsight": "800",
+      "regenMana": "1.0",
+      "regenType": "always",
+      "reptm": "26",
+      "sight": "1400",
+      "spd": "270",
+      "stockMax": "3",
+      "stockRegen": "30",
+      "tilesets": "*",
+      "upgrades": "R00B,R00C,R009,R00A",
+      "unitUIID": "h0QS",
+      "armor": "Flesh",
+      "blend": "0.15",
+      "blue": "255",
+      "elevRad": "20.0",
+      "file": "Nozdormu.mdl",
+      "green": "255",
+      "maxPitch": "10.0",
+      "maxRoll": "10.0",
+      "modelScale": "1.0",
+      "red": "255",
+      "run": "240.0",
+      "scale": "1.0",
+      "scaleBull": "1",
+      "shadowH": "120.0",
+      "shadowOnWater": "1",
+      "shadowW": "120.0",
+      "shadowX": "50.0",
+      "shadowY": "50.0",
+      "teamColor": "-1",
+      "unitShadow": "Shadow",
+      "unitSound": "GoblinSapper",
+      "walk": "240.0",
+      "unitAbilID": "h0QS",
+      "abilList": "A201,A202,A203,A204,A206,A154,A155,A156,A157,A158",
+      "unitWeapID": "h0QS",
+      "acquire": "800.0",
+      "atkType1": "chaos",
+      "atkType2": "normal",
+      "backSw1": "0.5",
+      "castbsw": "0.51",
+      "castpt": "0.3",
+      "cool1": "0.5",
+      "dice1": "1",
+      "dmgpt1": "0.5",
+      "impactZ": "60.0",
+      "launchZ": "60.0",
+      "rangeN1": "500",
+      "RngBuff1": "250.0",
+      "showUI1": "1",
+      "showUI2": "1",
+      "sides1": "16",
+      "targCount1": "1",
+      "targCount2": "1",
+      "targs1": "enemies",
+      "weapsOn": "1",
+      "weapTp1": "missile",
+      "hotkey": "R",
+      "damage_min_1": "275.0",
+      "damage_max_1": "290.0",
+      "damage_avg_1": "282.5",
+      "dps_avg_1": "565.0",
+      "bounty_min": "26.0",
+      "bounty_max": "38.0",
+      "bounty_avg": "32.0",
+      "attack_type_zh": "混乱",
+      "armor_type_zh": "英雄甲",
+      "ability_ids": "A201,A202,A203,A204,A206,A154,A155,A156,A157,A158",
+      "ability_names": "龙族荣耀,龙族荣耀,龙族荣耀,龙族荣耀,龙族荣耀,时间跳跃,青铜龙军团的祝福,青铜龙军团的祝福,青铜龙军团的祝福,巨龙之力",
+      "formation": "2",
+      "def": "3.0",
+      "defUp": "2.0",
+      "manaN": "10",
+      "type": "giant,sapper",
+      "dmgplus1": "274"
+    },
+    "h0QT": {
+      "rawcode": "h0QT",
+      "name": "诺兹多姆",
+      "ubertip": ",",
+      "unitID": "h0QT",
+      "canFlee": "1",
+      "cargoSize": "1",
+      "death": "1.7",
+      "deathType": "3",
+      "movetp": "fly",
+      "points": "300",
+      "prio": "3",
+      "propWin": "60.0",
+      "race": "human",
+      "targType": "ground",
+      "turnRate": "0.6",
+      "unitBalanceID": "h0QT",
+      "bldtm": "26",
+      "bountydice": "6",
+      "bountyplus": "20",
+      "bountysides": "3",
+      "collision": "15.0",
+      "defType": "hero",
+      "fused": "2",
+      "goldcost": "70",
+      "goldRep": "205",
+      "HP": "7500",
+      "level": "3",
+      "lumberRep": "30",
+      "mana0": "30",
+      "nsight": "800",
+      "regenMana": "2.0",
+      "regenType": "always",
+      "reptm": "26",
+      "sight": "1400",
+      "spd": "270",
+      "stockMax": "3",
+      "stockRegen": "30",
+      "tilesets": "*",
+      "upgrades": "R00B,R00C,R009,R00A",
+      "unitUIID": "h0QT",
+      "armor": "Flesh",
+      "blend": "0.15",
+      "blue": "255",
+      "elevRad": "20.0",
+      "file": "Nozdormu_dragon.mdl",
+      "green": "255",
+      "maxPitch": "10.0",
+      "maxRoll": "10.0",
+      "modelScale": "0.3",
+      "red": "255",
+      "run": "240.0",
+      "scale": "1.0",
+      "scaleBull": "1",
+      "shadowH": "120.0",
+      "shadowOnWater": "1",
+      "shadowW": "120.0",
+      "shadowX": "50.0",
+      "shadowY": "50.0",
+      "teamColor": "-1",
+      "unitShadow": "Shadow",
+      "unitSound": "GoblinSapper",
+      "walk": "240.0",
+      "unitAbilID": "h0QT",
+      "abilList": "A159,A15A,A154,A155,A156",
+      "unitWeapID": "h0QT",
+      "acquire": "800.0",
+      "atkType1": "chaos",
+      "atkType2": "normal",
+      "backSw1": "0.5",
+      "castbsw": "0.51",
+      "castpt": "0.3",
+      "cool1": "0.6",
+      "dice1": "1",
+      "dmgpt1": "0.5",
+      "impactZ": "60.0",
+      "launchZ": "60.0",
+      "rangeN1": "600",
+      "RngBuff1": "250.0",
+      "showUI1": "1",
+      "showUI2": "1",
+      "sides1": "31",
+      "targCount1": "1",
+      "targCount2": "1",
+      "targs1": "enemies",
+      "weapsOn": "1",
+      "weapTp1": "missile",
+      "hotkey": "R",
+      "damage_min_1": "570.0",
+      "damage_max_1": "600.0",
+      "damage_avg_1": "585.0",
+      "dps_avg_1": "975.0",
+      "bounty_min": "26.0",
+      "bounty_max": "38.0",
+      "bounty_avg": "32.0",
+      "attack_type_zh": "混乱",
+      "armor_type_zh": "英雄甲",
+      "ability_ids": "A159,A15A,A154,A155,A156",
+      "ability_names": "时之吐息,时间之力,时间跳跃,青铜龙军团的祝福,青铜龙军团的祝福",
+      "formation": "2",
+      "def": "3.0",
+      "defUp": "2.0",
+      "manaN": "30",
+      "type": "giant,sapper,summoned",
+      "dmgplus1": "569"
+    },
+    "h0QP": {
+      "rawcode": "h0QP",
+      "name": "青铜龙守卫",
+      "tip": "升级到 <青铜龙守卫> - [P]",
+      "ubertip": "攻击伤害: 270-290\n攻击速度: 1.1\n攻击距离: 350\n生命值: 2000\n攻击类型: 穿刺\n防御类型: 无甲\n技能:  虫洞 时间停滞\n\n\n最多可以建造5个",
+      "unitID": "h0QP",
+      "canFlee": "1",
+      "death": "2.34",
+      "deathType": "2",
+      "points": "720",
+      "prio": "2",
+      "propWin": "60.0",
+      "race": "human",
+      "targType": "structure",
+      "unitBalanceID": "h0QP",
+      "bldtm": "2",
+      "collision": "72.0",
+      "defType": "none",
+      "fused": "5",
+      "goldcost": "400",
+      "HP": "2000",
+      "level": "1",
+      "nsight": "800",
+      "preventPlace": "unbuildable",
+      "regenHP": "3.0",
+      "regenType": "always",
+      "reptm": "1",
+      "sight": "1600",
+      "tilesets": "*",
+      "upgrades": "R009,R00A",
+      "unitUIID": "h0QP",
+      "armor": "Flesh",
+      "blend": "0.15",
+      "blue": "255",
+      "elevRad": "50.0",
+      "file": "greenDragonpf.mdl",
+      "green": "255",
+      "modelScale": "1.0",
+      "red": "255",
+      "run": "200.0",
+      "scale": "1.5",
+      "scaleBull": "1",
+      "shadowOnWater": "1",
+      "teamColor": "-1",
+      "unitSound": "GoblinSapper",
+      "walk": "200.0",
+      "unitAbilID": "h0QP",
+      "abilList": "A14Z,A151,A008,A118",
+      "unitWeapID": "h0QP",
+      "acquire": "650.0",
+      "atkType1": "pierce",
+      "atkType2": "normal",
+      "backSw1": "0.5",
+      "castbsw": "0.51",
+      "cool1": "1.1",
+      "dice1": "1",
+      "dmgpt1": "0.5",
+      "impactZ": "120.0",
+      "launchZ": "145.0",
+      "rangeN1": "350",
+      "RngBuff1": "250.0",
+      "showUI2": "1",
+      "sides1": "21",
+      "targCount1": "1",
+      "targCount2": "1",
+      "targs1": "enemies",
+      "weapsOn": "1",
+      "weapTp1": "missile",
+      "hotkey": "P",
+      "damage_min_1": "270.0",
+      "damage_max_1": "290.0",
+      "damage_avg_1": "280.0",
+      "dps_avg_1": "254.54545454545453",
+      "attack_type_zh": "穿刺",
+      "armor_type_zh": "无甲",
+      "ability_ids": "A14Z,A151,A008,A118",
+      "ability_names": "虫洞,时间停滞,出售,移位",
+      "def": "3.0",
+      "type": "ancient,sapper",
+      "dmgplus1": "269",
+      "buildingShadow": "ShadowGuardTower",
+      "moveHeight": "280.0",
+      "isbldg": "1",
+      "buffRadius": "15.0",
+      "buffType": "buffer",
+      "pathTex": "PathTextures\\4x4SimpleSolid.tga",
+      "elevPts": "4"
+    }
+  },
+  "historyRegistrationOccurrences": 1,
+  "findings": [
+    "A155/A206无直接JASS引用，分别说明A156/A157与A201/A202/A203/A204原生光环；不重复制造加成。",
+    "UnitRemoveBuffs(i,true,false)清除正面增益；已与本仓库圣光阿尔萨斯同一原生调用适配核对。",
+    "A154原生Cost1=5，命令成功分支另外扣5并设置8秒冷却；原生同帧命令费用尚无引擎实测，partial。",
+    "A15A历史仅由建筑A15A且无A14Y/A14Z时登记。n064没有A15A，A158新建h0QT后不调用PassiveSkill，因此默认读取0并回满。",
+    "A158处于禁用期间不重入的主单位死亡触发器，先创建新龙，再由原死亡句柄调用1000普通攻击/普通伤害。",
+    "h0QT有fly移动、ground目标及summoned分类；没有A157/A158或龙族荣耀四光环。",
+    "A159/15A的自动入口分别只在受伤者/攻击者，不对称。后置A1W2事件写入仍可覆盖A154归零。"
+  ]
+}

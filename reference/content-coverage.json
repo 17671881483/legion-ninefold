@@ -1,6 +1,6 @@
 {
   "sourceVersion": "v14.1A5",
-  "skillImplementationRevision": "v14-content-20261104-v64-1",
+  "skillImplementationRevision": "v14-content-20261104-v65-1",
   "units": 534,
   "mercenaryRecords": 60,
   "mainWaves": 35,
@@ -28,7 +28,8 @@
     "h0VY",
     "h0VZ",
     "e01G",
-    "h0R0"
+    "h0R0",
+    "h0QT"
   ],
   "playerRuntimeAbilities": [
     {
@@ -453,9 +454,9 @@
   "playerSkills": {
     "counts": {
       "implemented": 410,
-      "partial": 166,
-      "marker": 36,
-      "unresolved": 68
+      "partial": 170,
+      "marker": 38,
+      "unresolved": 64
     },
     "abilities": [
       {
@@ -5270,18 +5271,20 @@
       {
         "rawcode": "A154",
         "name": "时间跳跃",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "nozdormu_source",
         "unitRawcodes": [
+          "h0QT",
           "n064"
         ]
       },
       {
         "rawcode": "A155",
         "name": "青铜龙军团的祝福",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "marker",
+        "kind": "nozdormu_source",
         "unitRawcodes": [
+          "h0QT",
           "n064"
         ]
       },
@@ -5291,6 +5294,7 @@
         "status": "implemented",
         "kind": "aura_damage",
         "unitRawcodes": [
+          "h0QT",
           "n064"
         ]
       },
@@ -5306,10 +5310,28 @@
       {
         "rawcode": "A158",
         "name": "巨龙之力",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "nozdormu_source",
         "unitRawcodes": [
           "n064"
+        ]
+      },
+      {
+        "rawcode": "A159",
+        "name": "时之吐息",
+        "status": "partial",
+        "kind": "nozdormu_source",
+        "unitRawcodes": [
+          "h0QT"
+        ]
+      },
+      {
+        "rawcode": "A15A",
+        "name": "时间之力",
+        "status": "partial",
+        "kind": "nozdormu_source",
+        "unitRawcodes": [
+          "h0QT"
         ]
       },
       {
@@ -6904,8 +6926,8 @@
       {
         "rawcode": "A206",
         "name": "龙族荣耀",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "marker",
+        "kind": "nozdormu_source",
         "unitRawcodes": [
           "h0YM",
           "h0YO",
@@ -7475,9 +7497,9 @@
   "battleSkills": {
     "counts": {
       "implemented": 459,
-      "partial": 175,
-      "marker": 49,
-      "unresolved": 82
+      "partial": 179,
+      "marker": 51,
+      "unresolved": 78
     },
     "abilities": [
       {
@@ -12874,18 +12896,20 @@
       {
         "rawcode": "A154",
         "name": "时间跳跃",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "nozdormu_source",
         "unitRawcodes": [
+          "h0QT",
           "n064"
         ]
       },
       {
         "rawcode": "A155",
         "name": "青铜龙军团的祝福",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "marker",
+        "kind": "nozdormu_source",
         "unitRawcodes": [
+          "h0QT",
           "n064"
         ]
       },
@@ -12895,6 +12919,7 @@
         "status": "implemented",
         "kind": "aura_damage",
         "unitRawcodes": [
+          "h0QT",
           "n064"
         ]
       },
@@ -12910,10 +12935,28 @@
       {
         "rawcode": "A158",
         "name": "巨龙之力",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "nozdormu_source",
         "unitRawcodes": [
           "n064"
+        ]
+      },
+      {
+        "rawcode": "A159",
+        "name": "时之吐息",
+        "status": "partial",
+        "kind": "nozdormu_source",
+        "unitRawcodes": [
+          "h0QT"
+        ]
+      },
+      {
+        "rawcode": "A15A",
+        "name": "时间之力",
+        "status": "partial",
+        "kind": "nozdormu_source",
+        "unitRawcodes": [
+          "h0QT"
         ]
       },
       {
@@ -14752,8 +14795,8 @@
       {
         "rawcode": "A206",
         "name": "龙族荣耀",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "marker",
+        "kind": "nozdormu_source",
         "unitRawcodes": [
           "h0YM",
           "h0YO",
@@ -15586,6 +15629,7 @@
     }
   ],
   "remainingSourceGaps": [
+    "诺兹多姆A154受伤跳跃/扣费/正面驱散、A158主死亡变龙及1000爆炸、A159时之吐息、A15A历史与零值满血回退已接入。默认新龙没有A15A历史登记，不补造；A155/A206是原生光环说明，sapper目标分类已约束。原生ANcl时序、矩形映射、未知buff、回溯生命/枚举及飞行通行仍partial，见nozdormu-evidence.json。",
     "阿莱克斯塔萨生命赐福/绽放/生命链接、独立自然祝福请求、死亡h0R0变龙、三次烈焰打击、一次780净化烈焰及自然怒火25%附伤/共享护甲已接入。A170仅在建筑，普通与神圣战斗体均未授予，默认命令失败。未调用的旧白焰线不添加。原生生命/入圈事件、ANcl仲裁、枚举、动态攻击上下限及模型碰撞仍partial，见alexstrasza-evidence.json。",
     "瓦里安A11V/W/X/Y受伤姿态、原生动态属性、武器事件怒气与攻击改写、75次旋风及一次濒死分支已接入；原生施法缺省耗魔/前摇、生命设置同帧语义、目标枚举及光环边界仍partial，见varian-evidence.json。",
     "安度因A1SP/A1SV脚本雨云与六路骇人之魂、A1SQ事件30%减伤、A1SS同原生所有者/userData的一秒羁绊已接入；动态A1ST护甲50、A1SU自身1%恢复纳入。原生ANcl仲裁、B080驻留、A1SU目标许可及未实例化对象边界仍partial，见anduin-evidence.json。",

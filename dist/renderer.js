@@ -47,7 +47,7 @@ function drawSprite(c,u,r,t,attack=0,portrait=false){
     poly(c,[[-r*.8,-r*.6],[r*.25,-r*1.2],[r,-r*.7],[r*.2,-r*.1]],color);
     c.strokeStyle=light;c.lineWidth=r*.25;c.beginPath();c.moveTo(0,-r*.7);c.lineTo(r*.5+attack*r*.1,-r*1.8);c.stroke();
     for(let i=-1;i<=1;i++)ellipse(c,i*r*.48,-r*.04,r*.22,r*.18,'#1f3025');
-  }else if(/龙|凤凰|狮鹫|雷鸟|飞蛇/.test(u.name)||['h0VX','h0WW','h0VZ','h0R0'].includes(u.combatRawcode)){
+  }else if(/龙|凤凰|狮鹫|雷鸟|飞蛇/.test(u.name)||['h0VX','h0WW','h0VZ','h0R0','h0QT'].includes(u.combatRawcode)){
     const flap=Math.sin(t*5)*r*.2;
     poly(c,[[-r*.2,-r*.7],[-r*1.8,-r*1.5+flap],[-r*1.25,-r*.15],[-r*.2,-r*.1]],dark,'#233425');
     poly(c,[[r*.15,-r*.7],[r*1.7,-r*1.4-flap],[r*1.1,-r*.1],[r*.2,-r*.1]],dark,'#233425');
@@ -153,6 +153,7 @@ export class Battlefield{
       for(const item of sprites){const pt=this.project(item.x,item.y);if(pt.x<-40||pt.x>w+40||pt.y<-70||pt.y>h+30)continue;const selected=this.selected?.buildingId===item.b.id;if(selected)ellipse(c,pt.x,pt.y,s*.5,s*.24,'#e3cf7e55');c.save();c.translate(pt.x,pt.y);if(item.b.construction||this.relocationId===item.b.id)c.globalAlpha=.45;drawSprite(c,item.u,s*.36,now+hash(item.b.col,item.b.row)*4,0);c.restore();if(item.b.construction){const task=item.b.construction,remaining=Math.max(0,task.finishAt-state.time);this.bar(pt.x,pt.y-s*.9,Math.max(12,s*.75),1-remaining/task.duration,'#d9bc78');if(s>22){c.fillStyle='#e5d4a2';c.font='9px system-ui';c.textAlign='center';c.fillText(`${Math.ceil(remaining)}s`,pt.x,pt.y-s*1.1);}}}
       for(const p of state.players)if(p.heroId){const pos=this.world(p.id,3.5,9.5),pt=this.project(pos.x,pos.y);c.save();c.translate(pt.x,pt.y);drawSprite(c,definitions[p.heroId],s*.44,now);c.restore();}
     }else{
+      for(const e of state.entities){const breath=e.status?.nozdormu?.breath,age=breath?state.time-breath.at:2;if(age>=0&&age<1.2){const p=this.project(breath.center.x,breath.center.y),r=400*(e.distanceScale??1/3)/100*s;c.save();c.globalAlpha=(1-age/1.2)*.35;c.strokeStyle='#efcd82';c.lineWidth=2;ellipse(c,p.x,p.y,r,r*.78,'#dfb758');c.beginPath();c.ellipse(p.x,p.y,r,r*.78,0,0,Math.PI*2);c.stroke();c.restore();}}
       for(const job of state.sourceSkillJobs??[]){
         if(!job.done&&['alex_grant','alex_blossom','alex_fireball','alex_link','alex_purify'].includes(job.type)){
           const e=job.source,scale=(e.distanceScale??1/3)/100,spot=job.type==='alex_blossom'?job:job.dummy??e;

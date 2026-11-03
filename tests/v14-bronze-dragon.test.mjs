@@ -83,7 +83,7 @@ test('stasis consumes itsdraw before damage sample and primaryweapon bounds incl
  const f=fixture();skills(f.a,['A151','A150']);f.a.damage=120;const draws=[.99,.25];f.g._random=()=>draws.shift();near(f.event(4),57.5);assert.equal(draws.length,0);near(f.a.status.bronzeDamage.min,110);near(f.a.status.bronzeDamage.max,130);
 });
 test('unknown mixedP8 branches are explicitly retained rather than assumingeventdamage aslocal',()=>{
- for(const ids of [['A150','A16Z'],['A150','A11Y','A11S']]){const f=fixture();skills(f.a,ids);near(f.event(77),77);assert.equal(f.a.status.bronzeDamage.boundary,'unimplemented-prior-P8-branch');}
+ for(const ids of [['A150','A16Z']]){const f=fixture();skills(f.a,ids);near(f.event(77),77);assert.equal(f.a.status.bronzeDamage.boundary,'unimplemented-prior-P8-branch');}
 });
 test('missingattackbound fields do not silently coerce tozero',()=>{
  for(const missing of [undefined,'']){const f=fixture();skills(f.a,['A150']);f.a.sourceRawFields.damage_min_1=missing;near(f.event(66),66);assert.equal(f.a.status.bronzeDamage.boundary,'missing-native-attack-bounds');}

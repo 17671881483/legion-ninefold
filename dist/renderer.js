@@ -154,6 +154,7 @@ export class Battlefield{
       for(const p of state.players)if(p.heroId){const pos=this.world(p.id,3.5,9.5),pt=this.project(pos.x,pos.y);c.save();c.translate(pt.x,pt.y);drawSprite(c,definitions[p.heroId],s*.44,now);c.restore();}
     }else{
       for(const job of state.sourceSkillJobs??[]){
+        if(!job.done&&job.type==='varian_spin'){const e=job.source,p=this.project(e.worldX??e.x,e.worldY??e.y),r=300*(e.distanceScale??1/3)/100*s;c.save();c.strokeStyle='#eddb99';c.lineWidth=2;c.globalAlpha=.6;for(let n=0;n<3;n++){const angle=now*9+n*2.094;c.beginPath();c.ellipse(p.x,p.y,r,r*.78,0,angle,angle+1.5);c.stroke();}c.restore();continue;}
         if(!job.done&&['anduin_rain','anduin_soul'].includes(job.type)){
           const spot=job.dummy??job,p=this.project(spot.worldX??spot.x,spot.worldY??spot.y),scale=(job.source?.distanceScale??1/3)/100;
           c.save();c.strokeStyle='#d9c7fc';c.fillStyle='#b494df';c.lineWidth=1.5;

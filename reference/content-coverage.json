@@ -1,6 +1,6 @@
 {
   "sourceVersion": "v14.1A5",
-  "skillImplementationRevision": "v14-content-20261104-v61-1",
+  "skillImplementationRevision": "v14-content-20261104-v62-1",
   "units": 534,
   "mercenaryRecords": 60,
   "mainWaves": 35,
@@ -30,6 +30,34 @@
     "e01G"
   ],
   "playerRuntimeAbilities": [
+    {
+      "sourceRawcode": "h0PZ",
+      "abilityIds": [
+        "A11O",
+        "A11P",
+        "A11Q",
+        "A11R",
+        "A11S",
+        "A11T",
+        "A11U",
+        "A11Z",
+        "A121"
+      ]
+    },
+    {
+      "sourceRawcode": "h0XC",
+      "abilityIds": [
+        "A11O",
+        "A11P",
+        "A11Q",
+        "A11R",
+        "A11S",
+        "A11T",
+        "A11U",
+        "A11Z",
+        "A121"
+      ]
+    },
     {
       "sourceRawcode": "h0W3",
       "abilityIds": [
@@ -300,6 +328,7 @@
     {
       "sourceRawcode": "e008",
       "abilityIds": [
+        "A122",
         "A1CV",
         "A1CW",
         "A0IB",
@@ -414,10 +443,10 @@
   "playerBuildingCommandCarriers": 411,
   "playerSkills": {
     "counts": {
-      "implemented": 404,
-      "partial": 148,
+      "implemented": 409,
+      "partial": 157,
       "marker": 36,
-      "unresolved": 76
+      "unresolved": 72
     },
     "abilities": [
       {
@@ -4803,10 +4832,80 @@
         ]
       },
       {
+        "rawcode": "A11O",
+        "name": "瓦里安66以上护甲",
+        "status": "implemented",
+        "kind": "passive_stats",
+        "unitRawcodes": [
+          "h0PZ",
+          "h0XC"
+        ]
+      },
+      {
+        "rawcode": "A11P",
+        "name": "瓦里安生命恢复",
+        "status": "implemented",
+        "kind": "passive_stats",
+        "unitRawcodes": [
+          "h0PZ",
+          "h0XC"
+        ]
+      },
+      {
+        "rawcode": "A11Q",
+        "name": "瓦里安 怒吼",
+        "status": "partial",
+        "kind": "varian_source",
+        "unitRawcodes": [
+          "h0PZ",
+          "h0XC"
+        ]
+      },
+      {
+        "rawcode": "A11R",
+        "name": "瓦里安闪避",
+        "status": "implemented",
+        "kind": "evasion",
+        "unitRawcodes": [
+          "h0PZ",
+          "h0XC"
+        ]
+      },
+      {
+        "rawcode": "A11S",
+        "name": "瓦里安攻击力",
+        "status": "implemented",
+        "kind": "passive_stats",
+        "unitRawcodes": [
+          "h0PZ",
+          "h0XC"
+        ]
+      },
+      {
+        "rawcode": "A11T",
+        "name": "瓦里安攻速",
+        "status": "implemented",
+        "kind": "passive_stats",
+        "unitRawcodes": [
+          "h0PZ",
+          "h0XC"
+        ]
+      },
+      {
+        "rawcode": "A11U",
+        "name": "瓦里安吸血",
+        "status": "partial",
+        "kind": "aura_lifesteal",
+        "unitRawcodes": [
+          "h0PZ",
+          "h0XC"
+        ]
+      },
+      {
         "rawcode": "A11V",
         "name": "全副武装",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "varian_source",
         "unitRawcodes": [
           "h0Q0",
           "h0XD"
@@ -4815,8 +4914,8 @@
       {
         "rawcode": "A11W",
         "name": "武器精通",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "varian_source",
         "unitRawcodes": [
           "h0Q0",
           "h0XD"
@@ -4825,8 +4924,8 @@
       {
         "rawcode": "A11X",
         "name": "愤怒双刃",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "varian_source",
         "unitRawcodes": [
           "h0Q0",
           "h0XD"
@@ -4835,11 +4934,40 @@
       {
         "rawcode": "A11Y",
         "name": "形态转换",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "varian_source",
         "unitRawcodes": [
           "h0Q0",
           "h0XD"
+        ]
+      },
+      {
+        "rawcode": "A11Z",
+        "name": "瓦里安击晕1秒",
+        "status": "partial",
+        "kind": "bash",
+        "unitRawcodes": [
+          "h0PZ",
+          "h0XC"
+        ]
+      },
+      {
+        "rawcode": "A121",
+        "name": "咆哮",
+        "status": "partial",
+        "kind": "varian_source",
+        "unitRawcodes": [
+          "h0PZ",
+          "h0XC"
+        ]
+      },
+      {
+        "rawcode": "A122",
+        "name": "眩晕",
+        "status": "partial",
+        "kind": "varian_source",
+        "unitRawcodes": [
+          "e008"
         ]
       },
       {
@@ -7282,10 +7410,10 @@
   },
   "battleSkills": {
     "counts": {
-      "implemented": 453,
-      "partial": 157,
+      "implemented": 458,
+      "partial": 166,
       "marker": 49,
-      "unresolved": 90
+      "unresolved": 86
     },
     "abilities": [
       {
@@ -12243,10 +12371,80 @@
         ]
       },
       {
+        "rawcode": "A11O",
+        "name": "瓦里安66以上护甲",
+        "status": "implemented",
+        "kind": "passive_stats",
+        "unitRawcodes": [
+          "h0PZ",
+          "h0XC"
+        ]
+      },
+      {
+        "rawcode": "A11P",
+        "name": "瓦里安生命恢复",
+        "status": "implemented",
+        "kind": "passive_stats",
+        "unitRawcodes": [
+          "h0PZ",
+          "h0XC"
+        ]
+      },
+      {
+        "rawcode": "A11Q",
+        "name": "瓦里安 怒吼",
+        "status": "partial",
+        "kind": "varian_source",
+        "unitRawcodes": [
+          "h0PZ",
+          "h0XC"
+        ]
+      },
+      {
+        "rawcode": "A11R",
+        "name": "瓦里安闪避",
+        "status": "implemented",
+        "kind": "evasion",
+        "unitRawcodes": [
+          "h0PZ",
+          "h0XC"
+        ]
+      },
+      {
+        "rawcode": "A11S",
+        "name": "瓦里安攻击力",
+        "status": "implemented",
+        "kind": "passive_stats",
+        "unitRawcodes": [
+          "h0PZ",
+          "h0XC"
+        ]
+      },
+      {
+        "rawcode": "A11T",
+        "name": "瓦里安攻速",
+        "status": "implemented",
+        "kind": "passive_stats",
+        "unitRawcodes": [
+          "h0PZ",
+          "h0XC"
+        ]
+      },
+      {
+        "rawcode": "A11U",
+        "name": "瓦里安吸血",
+        "status": "partial",
+        "kind": "aura_lifesteal",
+        "unitRawcodes": [
+          "h0PZ",
+          "h0XC"
+        ]
+      },
+      {
         "rawcode": "A11V",
         "name": "全副武装",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "varian_source",
         "unitRawcodes": [
           "h0Q0",
           "h0XD"
@@ -12255,8 +12453,8 @@
       {
         "rawcode": "A11W",
         "name": "武器精通",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "varian_source",
         "unitRawcodes": [
           "h0Q0",
           "h0XD"
@@ -12265,8 +12463,8 @@
       {
         "rawcode": "A11X",
         "name": "愤怒双刃",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "varian_source",
         "unitRawcodes": [
           "h0Q0",
           "h0XD"
@@ -12275,11 +12473,40 @@
       {
         "rawcode": "A11Y",
         "name": "形态转换",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "varian_source",
         "unitRawcodes": [
           "h0Q0",
           "h0XD"
+        ]
+      },
+      {
+        "rawcode": "A11Z",
+        "name": "瓦里安击晕1秒",
+        "status": "partial",
+        "kind": "bash",
+        "unitRawcodes": [
+          "h0PZ",
+          "h0XC"
+        ]
+      },
+      {
+        "rawcode": "A121",
+        "name": "咆哮",
+        "status": "partial",
+        "kind": "varian_source",
+        "unitRawcodes": [
+          "h0PZ",
+          "h0XC"
+        ]
+      },
+      {
+        "rawcode": "A122",
+        "name": "眩晕",
+        "status": "partial",
+        "kind": "varian_source",
+        "unitRawcodes": [
+          "e008"
         ]
       },
       {
@@ -15240,6 +15467,7 @@
     }
   ],
   "remainingSourceGaps": [
+    "瓦里安A11V/W/X/Y受伤姿态、原生动态属性、武器事件怒气与攻击改写、75次旋风及一次濒死分支已接入；原生施法缺省耗魔/前摇、生命设置同帧语义、目标枚举及光环边界仍partial，见varian-evidence.json。",
     "安度因A1SP/A1SV脚本雨云与六路骇人之魂、A1SQ事件30%减伤、A1SS同原生所有者/userData的一秒羁绊已接入；动态A1ST护甲50、A1SU自身1%恢复纳入。原生ANcl仲裁、B080驻留、A1SU目标许可及未实例化对象边界仍partial，见anduin-evidence.json。",
     "古尔丹A1QL/A1QM/A1QN已接入三次邪能箭、16次固定酸雨及直接30%生命虹吸/6次固定中心600码均摊治疗；邪能箭控制函数没有调用，不按8%文案添加。原生ANcl时序、辅助碰撞/去重组句柄及未实例化对象仍partial，见guldan-evidence.json。",
     "玛里苟斯A1PZ/A1Q1/A1Q2/A1Q3主动脚本、A1Q4首次伤害汲魔及竞技移除、A1Q0独立武器事件20附伤和动态A1Q5已接入；776/6秒网、27处可重叠灼烧、护盾实际给施法者均按源码。原生ANcl仲裁、移动限值、抗性叠加、e008及未实体化建筑的全图汲魔仍partial，见malygos-evidence.json。",

@@ -1,3 +1,4 @@
+import {restoreVarian} from './varian-rules.js';
 import {restoreAnduin} from './anduin-rules.js';
 import {restoreGuldan} from './guldan-rules.js';
 import {restoreMalygos} from './malygos-rules.js';
@@ -1181,7 +1182,7 @@ export class Game {
       if (stormChannel || e.hp <= 0 || (st.stunUntil ?? 0) > now || (st.cycloneUntil ?? 0) > now) { e.pendingAttack = null; continue; }
       if (e.side === 'monster' && e.pendingAttack && this._advanceMonsterAttack(e, battle)) continue;
       const aggro = Math.max(e.range, number(e.acquisitionRange, Math.max(4.5, e.range + 1)));
-      let ordered=st.huskarAttackOrder?.targetId===e.targetId&&e.targetId!=null;
+      let ordered=(st.huskarAttackOrder?.targetId===e.targetId||st.varian?.attackOrder?.targetId===e.targetId)&&e.targetId!=null;
       if(!ordered)delete st.huskarAttackOrder;
       let target = this._worldEntities.get(e.targetId)??(ordered?this.state.kings.find(k=>k.id===e.targetId):null);
       if (target && (target.hp <= 0 || target.battleTeam !== e.battleTeam || target.side === e.side || !canWeaponTarget(e,target,now) || (!ordered&&(distance(e, target) > aggro * 1.25 || (e.nav?.mode === 'support' && distance(target, e.nav.anchor) > aggro * 1.25))))) target = null;
@@ -1707,7 +1708,7 @@ export class Game {
       restoreUnstableAlchemyUserData(this,e);restoreVeteranIdentity(this,e,units);restoreSapperCreation(this,e,def);
     }
     restoreUndeadLegionHandles(this);
-    restorePhoenixRevival(this);restorePhoenixActive(this);restoreMalygos(this);restoreGuldan(this);restoreAnduin(this);
+    restorePhoenixRevival(this);restorePhoenixActive(this);restoreMalygos(this);restoreGuldan(this);restoreAnduin(this);restoreVarian(this);
     // JSON stores retained handles separately; surviving units must share the
     // live object again so later healing, movement and death update one handle.
     for(const e of [...this.state.entities,...this.state.kings])if(this.state.brightArthasHandles[e.id])this.state.brightArthasHandles[e.id]=e;

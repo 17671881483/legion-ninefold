@@ -14,6 +14,7 @@ const playerRuntimeForms=['h0YO','h0UD','h0UE','h2AE','n06V','n06W','h0CZ','h0CL
 // Source callbacks or building-only icons expose these auxiliary abilities.
 // Count their runtime rules even when the combat ability list omits the icon.
 const playerRuntimeAbilities=[
+  ...['h0PZ','h0XC'].map(sourceRawcode=>({sourceRawcode,abilityIds:['A11O','A11P','A11Q','A11R','A11S','A11T','A11U','A11Z','A121']})),
   ...['h0W3','h0XB','h0PZ','h0XC'].map(sourceRawcode=>({sourceRawcode,abilityIds:['A1SU','A1ST']})),
   {sourceRawcode:'h0VP',abilityIds:['A1Q5']},
   {sourceRawcode:'h00T',abilityIds:['A113']},
@@ -45,7 +46,7 @@ const playerRuntimeAbilities=[
   {sourceRawcode:'h0UD',abilityIds:['A1CP']},
   {sourceRawcode:'h2AE',abilityIds:['A1CP']},
   {sourceRawcode:'e00O',abilityIds:['A0OZ']},
-  {sourceRawcode:'e008',abilityIds:['A1CV','A1CW','A0IB','A0I5','A0I7','A0J8','A0J9','A0JC','A0JD']},
+  {sourceRawcode:'e008',abilityIds:['A122','A1CV','A1CW','A0IB','A0I5','A0I7','A0J8','A0J9','A0JC','A0JD']},
   {sourceRawcode:'h0UG',abilityIds:['A1CG']},
   {sourceRawcode:'h0SY',abilityIds:['A1BD','A1BE','A1BF','A1BH']},
   {sourceRawcode:'h0SN',abilityIds:['A19Z']},
@@ -80,6 +81,7 @@ const result={
   battleSkills:collect([...current,...playerBuildingCommands,...playerBuildingRuleCarriers,...playerRuntimeForms,...playerRuntimeAbilities,...MERCENARIES,...WAVES,...specialCodes.map(c=>UNIT_TEMPLATES[c])]),
   sourceOnlyCombatForms:[{combatRawcode:'h0JR',buildingRawcode:'n00S',status:'entry-unresolved',evidence:'war3map.j:17544-17545 maps forms; line3644 ban dialog; 48355 barracks egg marker and 48750 monthly record do not provide acquisition',skills:collect([{...UNIT_TEMPLATES.h0JR,abilityIds:[...UNIT_TEMPLATES.h0JR.abilityIds,'A0J2','A0J3']}])},{combatRawcode:'h0VQ',buildingRawcode:'n07U',status:'entry-unresolved',evidence:'war3map.j:17436-17437 maps forms; line3638 ban limit1; no source creation/recipe/upgrade entry found in packet',skills:collect([{...UNIT_TEMPLATES.h0VQ,abilityIds:[...UNIT_TEMPLATES.h0VQ.abilityIds,'A1QI','A1D6']}])}],
   remainingSourceGaps:[
+    '瓦里安A11V/W/X/Y受伤姿态、原生动态属性、武器事件怒气与攻击改写、75次旋风及一次濒死分支已接入；原生施法缺省耗魔/前摇、生命设置同帧语义、目标枚举及光环边界仍partial，见varian-evidence.json。',
     '安度因A1SP/A1SV脚本雨云与六路骇人之魂、A1SQ事件30%减伤、A1SS同原生所有者/userData的一秒羁绊已接入；动态A1ST护甲50、A1SU自身1%恢复纳入。原生ANcl仲裁、B080驻留、A1SU目标许可及未实例化对象边界仍partial，见anduin-evidence.json。',
     '古尔丹A1QL/A1QM/A1QN已接入三次邪能箭、16次固定酸雨及直接30%生命虹吸/6次固定中心600码均摊治疗；邪能箭控制函数没有调用，不按8%文案添加。原生ANcl时序、辅助碰撞/去重组句柄及未实例化对象仍partial，见guldan-evidence.json。',
     '玛里苟斯A1PZ/A1Q1/A1Q2/A1Q3主动脚本、A1Q4首次伤害汲魔及竞技移除、A1Q0独立武器事件20附伤和动态A1Q5已接入；776/6秒网、27处可重叠灼烧、护盾实际给施法者均按源码。原生ANcl仲裁、移动限值、抗性叠加、e008及未实体化建筑的全图汲魔仍partial，见malygos-evidence.json。',

@@ -1,0 +1,2243 @@
+{
+  "source": {
+    "path": "reference/v14-source/raw_extracted/war3map.j",
+    "sha256": "e66c55b3b25b185c991be5613e21fbf5b2d598f3cc40f2f8cd01c23bcb828250"
+  },
+  "sourceEvidence": [
+    {
+      "line": 1194,
+      "text": "integer Ps=$41313156"
+    },
+    {
+      "line": 1195,
+      "text": "integer Pt=$41313157"
+    },
+    {
+      "line": 1196,
+      "text": "integer Pu=$41313158"
+    },
+    {
+      "line": 1197,
+      "text": "integer Pz=$4131314F"
+    },
+    {
+      "line": 1198,
+      "text": "integer P0=$41313150"
+    },
+    {
+      "line": 1199,
+      "text": "integer P6=$41313151"
+    },
+    {
+      "line": 1200,
+      "text": "integer P1=$41313152"
+    },
+    {
+      "line": 1201,
+      "text": "integer P5=$41313231"
+    },
+    {
+      "line": 1202,
+      "text": "integer P2=$41313153"
+    },
+    {
+      "line": 1203,
+      "text": "integer P3=$41313154"
+    },
+    {
+      "line": 1204,
+      "text": "integer P4=$41313155"
+    },
+    {
+      "line": 1205,
+      "text": "integer Pw=$41313159"
+    },
+    {
+      "line": 1944,
+      "text": "call SaveInteger(O,$6830384C,StringHash(\"box_train_upgrade_next\"),$68305130)"
+    },
+    {
+      "line": 1945,
+      "text": "call SaveInteger(O,$6830384C,StringHash(\"box_train_upgrade_count\"),3)"
+    },
+    {
+      "line": 1946,
+      "text": "call SaveInteger(O,$6830384C,StringHash(\"box_train_upgrade_1\"),$68305130)"
+    },
+    {
+      "line": 1947,
+      "text": "call SaveInteger(O,$6830384C,StringHash(\"box_train_upgrade_2\"),$6E303837)"
+    },
+    {
+      "line": 1948,
+      "text": "call SaveInteger(O,$6830384C,StringHash(\"box_train_upgrade_3\"),$68305753)"
+    },
+    {
+      "line": 1949,
+      "text": "call SaveInteger(O,$68305130,StringHash(\"box_train_upgrade_next\"),$68305844)"
+    },
+    {
+      "line": 1950,
+      "text": "call SaveInteger(O,$68305130,StringHash(\"box_train_upgrade_count\"),1)"
+    },
+    {
+      "line": 1951,
+      "text": "call SaveInteger(O,$68305130,StringHash(\"box_train_upgrade_1\"),$68305844)"
+    },
+    {
+      "line": 1952,
+      "text": "call SaveInteger(O,$6E303837,StringHash(\"box_train_upgrade_next\"),$6E303930)"
+    },
+    {
+      "line": 1953,
+      "text": "call SaveInteger(O,$6E303837,StringHash(\"box_train_upgrade_count\"),1)"
+    },
+    {
+      "line": 1954,
+      "text": "call SaveInteger(O,$6E303837,StringHash(\"box_train_upgrade_1\"),$6E303930)"
+    },
+    {
+      "line": 1955,
+      "text": "call SaveInteger(O,$68305753,StringHash(\"box_train_upgrade_next\"),$68305130)"
+    },
+    {
+      "line": 1956,
+      "text": "call SaveInteger(O,$68305753,StringHash(\"box_train_upgrade_count\"),2)"
+    },
+    {
+      "line": 1957,
+      "text": "call SaveInteger(O,$68305753,StringHash(\"box_train_upgrade_1\"),$68305130)"
+    },
+    {
+      "line": 3062,
+      "text": "call SaveInteger(O,$68305130,StringHash(\"box_train_upgrade_require_count\"),4)"
+    },
+    {
+      "line": 3063,
+      "text": "call SaveInteger(O,$68305130,StringHash(\"box_train_upgrade_require_1\"),$5230374D)"
+    },
+    {
+      "line": 3064,
+      "text": "call SaveInteger(O,$68305130,StringHash(\"box_train_upgrade_require_2\"),$5230374E)"
+    },
+    {
+      "line": 3065,
+      "text": "call SaveInteger(O,$68305130,StringHash(\"box_train_upgrade_require_3\"),$68323130)"
+    },
+    {
+      "line": 3066,
+      "text": "call SaveInteger(O,$68305130,StringHash(\"box_train_upgrade_require_4\"),$75303034)"
+    },
+    {
+      "line": 3074,
+      "text": "call SaveInteger(O,$68305844,StringHash(\"box_train_upgrade_require_count\"),5)"
+    },
+    {
+      "line": 3075,
+      "text": "call SaveInteger(O,$68305844,StringHash(\"box_train_upgrade_require_1\"),$5230374D)"
+    },
+    {
+      "line": 3076,
+      "text": "call SaveInteger(O,$68305844,StringHash(\"box_train_upgrade_require_2\"),$5230374E)"
+    },
+    {
+      "line": 3077,
+      "text": "call SaveInteger(O,$68305844,StringHash(\"box_train_upgrade_require_3\"),$68323130)"
+    },
+    {
+      "line": 3078,
+      "text": "call SaveInteger(O,$68305844,StringHash(\"box_train_upgrade_require_4\"),$75303034)"
+    },
+    {
+      "line": 3079,
+      "text": "call SaveInteger(O,$68305844,StringHash(\"box_train_upgrade_require_5\"),$52304851)"
+    },
+    {
+      "line": 18267,
+      "text": "set Mk[Bi]=$6830505A"
+    },
+    {
+      "line": 18268,
+      "text": "set Ml[Bi]=$68305130"
+    },
+    {
+      "line": 18588,
+      "text": "set Mk[Bi]=$68305843"
+    },
+    {
+      "line": 18589,
+      "text": "set Ml[Bi]=$68305844"
+    },
+    {
+      "line": 29645,
+      "text": "function DamageAoe takes unit i,real FF,real FG,real P7,real P8,attacktype P9,damagetype QB returns nothing"
+    },
+    {
+      "line": 29646,
+      "text": "local group DG=CreateGroup()"
+    },
+    {
+      "line": 29647,
+      "text": "local unit D6=null"
+    },
+    {
+      "line": 29648,
+      "text": "local player h=GetOwningPlayer(i)"
+    },
+    {
+      "line": 29649,
+      "text": "call GroupEnumUnitsInRange(DG,FF,FG,P7,null)"
+    },
+    {
+      "line": 29650,
+      "text": "loop"
+    },
+    {
+      "line": 29651,
+      "text": "set D6=FirstOfGroup(DG)"
+    },
+    {
+      "line": 29652,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 29653,
+      "text": "call GroupRemoveUnit(DG,D6)"
+    },
+    {
+      "line": 29654,
+      "text": "if IsUnitEnemy(D6,h) then"
+    },
+    {
+      "line": 29655,
+      "text": "call UnitDamageTarget(i,D6,P8,false,false,P9,QB,WEAPON_TYPE_WHOKNOWS)"
+    },
+    {
+      "line": 29656,
+      "text": "endif"
+    },
+    {
+      "line": 29657,
+      "text": "endloop"
+    },
+    {
+      "line": 29658,
+      "text": "call GroupClear(DG)"
+    },
+    {
+      "line": 29659,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 29660,
+      "text": "set DG=null"
+    },
+    {
+      "line": 29661,
+      "text": "set D6=null"
+    },
+    {
+      "line": 29662,
+      "text": "set h=null"
+    },
+    {
+      "line": 29663,
+      "text": "set i=null"
+    },
+    {
+      "line": 29664,
+      "text": "endfunction"
+    },
+    {
+      "line": 29665,
+      "text": "function AoeDamage takes unit i,real FF,real FG,real P7,real P8,attacktype P9,damagetype QB returns nothing"
+    },
+    {
+      "line": 29666,
+      "text": "call DamageAoe(i,FF,FG,P7,P8,P9,QB)"
+    },
+    {
+      "line": 29667,
+      "text": "set i=null"
+    },
+    {
+      "line": 29668,
+      "text": "endfunction"
+    },
+    {
+      "line": 29669,
+      "text": "function VertigoTarget takes unit Pf,unit Om,integer CC returns nothing"
+    },
+    {
+      "line": 29670,
+      "text": "set bj_lastCreatedUnit=CreateUnit(GetOwningPlayer(Pf),Pn,GetUnitX(Om),GetUnitY(Om),0)"
+    },
+    {
+      "line": 29671,
+      "text": "call UnitAddAbility(bj_lastCreatedUnit,$41304937)"
+    },
+    {
+      "line": 29672,
+      "text": "call UnitApplyTimedLife(bj_lastCreatedUnit,$42487765,1.)"
+    },
+    {
+      "line": 29673,
+      "text": "call SetUnitAbilityLevel(bj_lastCreatedUnit,$41304937,CC)"
+    },
+    {
+      "line": 29674,
+      "text": "call IssueTargetOrder(bj_lastCreatedUnit,\"thunderbolt\",Om)"
+    },
+    {
+      "line": 29675,
+      "text": "set Pf=null"
+    },
+    {
+      "line": 29676,
+      "text": "set Om=null"
+    },
+    {
+      "line": 29677,
+      "text": "endfunction"
+    },
+    {
+      "line": 29678,
+      "text": "function VertigoTargetEx takes unit Pf,unit Om,integer CC returns nothing"
+    },
+    {
+      "line": 29679,
+      "text": "set bj_lastCreatedUnit=CreateUnit(GetOwningPlayer(Pf),Pn,GetUnitX(Om),GetUnitY(Om),0)"
+    },
+    {
+      "line": 29680,
+      "text": "call UnitAddAbility(bj_lastCreatedUnit,$41313232)"
+    },
+    {
+      "line": 29681,
+      "text": "call UnitApplyTimedLife(bj_lastCreatedUnit,$42487765,1.)"
+    },
+    {
+      "line": 29682,
+      "text": "call SetUnitAbilityLevel(bj_lastCreatedUnit,$41313232,CC)"
+    },
+    {
+      "line": 29683,
+      "text": "call IssueTargetOrder(bj_lastCreatedUnit,\"thunderbolt\",Om)"
+    },
+    {
+      "line": 29684,
+      "text": "set Pf=null"
+    },
+    {
+      "line": 29685,
+      "text": "set Om=null"
+    },
+    {
+      "line": 29686,
+      "text": "endfunction"
+    },
+    {
+      "line": 29786,
+      "text": "function SelectRange takes unit Pf,real FF,real FG,real Px returns group"
+    },
+    {
+      "line": 29787,
+      "text": "local group DG=CreateGroup()"
+    },
+    {
+      "line": 29788,
+      "text": "local group Om=CreateGroup()"
+    },
+    {
+      "line": 29789,
+      "text": "local unit D6=null"
+    },
+    {
+      "line": 29790,
+      "text": "call GroupEnumUnitsInRange(DG,FF,FG,Px,null)"
+    },
+    {
+      "line": 29791,
+      "text": "loop"
+    },
+    {
+      "line": 29792,
+      "text": "set D6=FirstOfGroup(DG)"
+    },
+    {
+      "line": 29793,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 29794,
+      "text": "if IsUnitEnemy(D6,GetOwningPlayer(Pf)) and not IsUnitType(D6,UNIT_TYPE_DEAD) and GetUnitAbilityLevel(D6,$4176756C)==0 then"
+    },
+    {
+      "line": 29795,
+      "text": "call GroupAddUnit(Om,D6)"
+    },
+    {
+      "line": 29796,
+      "text": "endif"
+    },
+    {
+      "line": 29797,
+      "text": "call GroupRemoveUnit(DG,D6)"
+    },
+    {
+      "line": 29798,
+      "text": "endloop"
+    },
+    {
+      "line": 29799,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 29800,
+      "text": "set DG=null"
+    },
+    {
+      "line": 29801,
+      "text": "set D6=null"
+    },
+    {
+      "line": 29802,
+      "text": "set Pf=null"
+    },
+    {
+      "line": 29803,
+      "text": "set Py=Om"
+    },
+    {
+      "line": 29804,
+      "text": "set Om=null"
+    },
+    {
+      "line": 29805,
+      "text": "return Py"
+    },
+    {
+      "line": 42252,
+      "text": "function Trig_New_UnitAttackActions takes nothing returns boolean"
+    },
+    {
+      "line": 42253,
+      "text": "local unit Qf=GetTriggerUnit()"
+    },
+    {
+      "line": 42254,
+      "text": "local unit i=GetEventDamageSource()"
+    },
+    {
+      "line": 42255,
+      "text": "local integer BF=GetUnitTypeId(i)"
+    },
+    {
+      "line": 42256,
+      "text": "local integer b9=$6E305344"
+    },
+    {
+      "line": 42257,
+      "text": "local integer YY=0"
+    },
+    {
+      "line": 42258,
+      "text": "local unit Ki=null"
+    },
+    {
+      "line": 42259,
+      "text": "local unit D6=null"
+    },
+    {
+      "line": 42260,
+      "text": "local group Uz=null"
+    },
+    {
+      "line": 42261,
+      "text": "local real P8=0"
+    },
+    {
+      "line": 42262,
+      "text": "local unit cB=null"
+    },
+    {
+      "line": 42263,
+      "text": "local boolexpr Cd"
+    },
+    {
+      "line": 42264,
+      "text": "local timer DK"
+    },
+    {
+      "line": 42265,
+      "text": "local real FF"
+    },
+    {
+      "line": 42266,
+      "text": "local real FG"
+    },
+    {
+      "line": 42267,
+      "text": "local integer y=0"
+    },
+    {
+      "line": 42268,
+      "text": "local player h"
+    },
+    {
+      "line": 42269,
+      "text": "local effect DE"
+    },
+    {
+      "line": 42270,
+      "text": "if YDWEIsEventAttackDamage() and not LoadBoolean(O,GetHandleId(i),StringHash(\"Attack\")) then"
+    },
+    {
+      "line": 42271,
+      "text": "call SaveBoolean(O,GetHandleId(i),StringHash(\"Attack\"),true)"
+    },
+    {
+      "line": 42272,
+      "text": "if GetUnitAbilityLevel(i,$4131554B)>0 then"
+    },
+    {
+      "line": 42273,
+      "text": "call NazuoCurseAttack(i,Qf,GetUnitAbilityLevel(i,$4131554B))"
+    },
+    {
+      "line": 42383,
+      "text": "if GetUnitAbilityLevel(i,Pw)>0 then"
+    },
+    {
+      "line": 42384,
+      "text": "if LoadBoolean(O,GetHandleId(i),StringHash(\"angry double blades battle\")) then"
+    },
+    {
+      "line": 42385,
+      "text": "call SetUnitState(i,UNIT_STATE_MANA,GetUnitState(i,UNIT_STATE_MANA)+2)"
+    },
+    {
+      "line": 42386,
+      "text": "else"
+    },
+    {
+      "line": 42387,
+      "text": "call SetUnitState(i,UNIT_STATE_MANA,GetUnitState(i,UNIT_STATE_MANA)+1)"
+    },
+    {
+      "line": 42388,
+      "text": "endif"
+    },
+    {
+      "line": 42389,
+      "text": "if GetUnitAbilityLevel(i,P2)>0 then"
+    },
+    {
+      "line": 42390,
+      "text": "set P8=GetRandomReal(GetUnitState(i,ConvertUnitState(20)),GetUnitState(i,ConvertUnitState(21)))"
+    },
+    {
+      "line": 42391,
+      "text": "call YDWESetEventDamage(P8)"
+    },
+    {
+      "line": 42392,
+      "text": "call DestroyEffect(AddSpecialEffect(\"Abilities\\\\Spells\\\\Other\\\\Stampede\\\\StampedeMissileDeath.mdl\",GetUnitX(Qf),GetUnitY(Qf)))"
+    },
+    {
+      "line": 42393,
+      "text": "if GetRandomPercentageBJ()>=26 then"
+    },
+    {
+      "line": 42394,
+      "text": "call DestroyEffect(AddSpecialEffect(\"Abilities\\\\Spells\\\\Human\\\\Thunderclap\\\\ThunderClapCaster.mdl\",GetUnitX(Qf),GetUnitY(Qf)))"
+    },
+    {
+      "line": 42395,
+      "text": "set Uz=SelectRange(i,GetUnitX(Qf),GetUnitY(Qf),300)"
+    },
+    {
+      "line": 42396,
+      "text": "loop"
+    },
+    {
+      "line": 42397,
+      "text": "set D6=FirstOfGroup(Uz)"
+    },
+    {
+      "line": 42398,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 42399,
+      "text": "call GroupRemoveUnit(Uz,D6)"
+    },
+    {
+      "line": 42400,
+      "text": "call UnitDamageTargetBJ(i,D6,125,ATTACK_TYPE_CHAOS,DAMAGE_TYPE_UNIVERSAL)"
+    },
+    {
+      "line": 42401,
+      "text": "endloop"
+    },
+    {
+      "line": 42402,
+      "text": "call DestroyGroup(Uz)"
+    },
+    {
+      "line": 42403,
+      "text": "endif"
+    },
+    {
+      "line": 42404,
+      "text": "endif"
+    },
+    {
+      "line": 42405,
+      "text": "endif"
+    },
+    {
+      "line": 42406,
+      "text": "if GetUnitAbilityLevel(i,$41313845)>0 then"
+    },
+    {
+      "line": 42407,
+      "text": "call IssueImmediateOrder(i,\"wateryminion\")"
+    },
+    {
+      "line": 42408,
+      "text": "elseif GetUnitAbilityLevel(Qf,$41313845)>0 then"
+    },
+    {
+      "line": 42409,
+      "text": "call IssueImmediateOrder(Qf,\"wateryminion\")"
+    },
+    {
+      "line": 42410,
+      "text": "endif"
+    },
+    {
+      "line": 42411,
+      "text": "if GetUnitAbilityLevel(i,$41313847)>0 then"
+    },
+    {
+      "line": 42412,
+      "text": "call IssuePointOrder(i,\"unloadallcorpses\",GetUnitX(Qf),GetUnitY(Qf))"
+    },
+    {
+      "line": 42413,
+      "text": "elseif GetUnitAbilityLevel(Qf,$41313847)>0 then"
+    },
+    {
+      "line": 42414,
+      "text": "call IssuePointOrder(Qf,\"unloadallcorpses\",GetUnitX(i),GetUnitY(i))"
+    },
+    {
+      "line": 42415,
+      "text": "endif"
+    },
+    {
+      "line": 42416,
+      "text": "if GetUnitAbilityLevel(i,$4131365A)>0 then"
+    },
+    {
+      "line": 42417,
+      "text": "set P8=GetRandomReal(GetUnitState(i,ConvertUnitState(20)),GetUnitState(i,ConvertUnitState(21)))"
+    },
+    {
+      "line": 42418,
+      "text": "call UnitDamageTargetBJ(i,Qf,P8*.25,ATTACK_TYPE_CHAOS,DAMAGE_TYPE_UNIVERSAL)"
+    },
+    {
+      "line": 42419,
+      "text": "if GetUnitState(Qf,UNIT_STATE_LIFE)<=P8 then"
+    },
+    {
+      "line": 42420,
+      "text": "call SetUnitLifeBJ(i,GetUnitState(i,UNIT_STATE_LIFE)+100)"
+    },
+    {
+      "line": 42421,
+      "text": "set h=ConvertedPlayer(GetUnitUserData(i))"
+    },
+    {
+      "line": 42422,
+      "text": "if GetRandomPercentageBJ()>=45 and LoadInteger(O,GetHandleId(h),$4131365A)<40 then"
+    },
+    {
+      "line": 42423,
+      "text": "call SaveInteger(O,GetHandleId(h),$4131365A,LoadInteger(O,GetHandleId(h),$4131365A)+1)"
+    },
+    {
+      "line": 42424,
+      "text": "call SetUnitState(i,ConvertUnitState(32),GetUnitState(i,ConvertUnitState(32))+1)"
+    },
+    {
+      "line": 42425,
+      "text": "endif"
+    },
+    {
+      "line": 42426,
+      "text": "endif"
+    },
+    {
+      "line": 42427,
+      "text": "endif"
+    },
+    {
+      "line": 42428,
+      "text": "if GetUnitAbilityLevel(i,Zq)>0 then"
+    },
+    {
+      "line": 42429,
+      "text": "call YseraApplyDreamCorrosion(i,Qf)"
+    },
+    {
+      "line": 42430,
+      "text": "endif"
+    },
+    {
+      "line": 42431,
+      "text": "if GetUnitAbilityLevel(i,$41313531)>0 then"
+    },
+    {
+      "line": 42432,
+      "text": "if GetRandomPercentageBJ()<=20 then"
+    },
+    {
+      "line": 42433,
+      "text": "call PauseUnitEx(i,Qf,1.5)"
+    },
+    {
+      "line": 42434,
+      "text": "call YDWETimerDestroyEffect(1.5,AddSpecialEffect(\"effect_halo_qingtong.mdx\",GetUnitX(Qf),GetUnitY(Qf)))"
+    },
+    {
+      "line": 42435,
+      "text": "endif"
+    },
+    {
+      "line": 42436,
+      "text": "endif"
+    },
+    {
+      "line": 42437,
+      "text": "if GetUnitAbilityLevel(i,$41313530)>0 and GetUnitTypeId(i)==$68305152 then"
+    },
+    {
+      "line": 42438,
+      "text": "set P8=P8+GetRandomReal(GetUnitState(i,ConvertUnitState(20)),GetUnitState(i,ConvertUnitState(21)))*.5"
+    },
+    {
+      "line": 42439,
+      "text": "call YDWESetEventDamage(P8)"
+    },
+    {
+      "line": 42440,
+      "text": "endif"
+    },
+    {
+      "line": 42441,
+      "text": "if GetUnitAbilityLevel(i,$4131315A)>0 then"
+    },
+    {
+      "line": 42442,
+      "text": "call UnitRemoveAbility(i,$4131315A)"
+    },
+    {
+      "line": 42443,
+      "text": "endif"
+    },
+    {
+      "line": 43243,
+      "text": "function RegisterVarianSkillActionAction takes nothing returns nothing"
+    },
+    {
+      "line": 43244,
+      "text": "local trigger t=GetTriggeringTrigger()"
+    },
+    {
+      "line": 43245,
+      "text": "local unit Bc=LoadUnitHandle(O,GetHandleId(t),0)"
+    },
+    {
+      "line": 43246,
+      "text": "local real Pv=GetUnitLifePercent(Bc)"
+    },
+    {
+      "line": 43247,
+      "text": "local group DG"
+    },
+    {
+      "line": 43248,
+      "text": "local unit D6"
+    },
+    {
+      "line": 43249,
+      "text": "if Pv>=66 then"
+    },
+    {
+      "line": 43250,
+      "text": "if GetTriggerExecCount(t)==1 then"
+    },
+    {
+      "line": 43251,
+      "text": "call UnitAddAbility(Bc,P5)"
+    },
+    {
+      "line": 43252,
+      "text": "call IssueImmediateOrder(Bc,\"roar\")"
+    },
+    {
+      "line": 43253,
+      "text": "else"
+    },
+    {
+      "line": 43254,
+      "text": "call UnitRemoveAbility(Bc,P5)"
+    },
+    {
+      "line": 43255,
+      "text": "call UnitAddAbility(Bc,P6)"
+    },
+    {
+      "line": 43256,
+      "text": "call IssueImmediateOrder(Bc,\"howlofterror\")"
+    },
+    {
+      "line": 43257,
+      "text": "set DG=SelectRange(Bc,GetUnitX(Bc),GetUnitY(Bc),600)"
+    },
+    {
+      "line": 43258,
+      "text": "loop"
+    },
+    {
+      "line": 43259,
+      "text": "set D6=FirstOfGroup(DG)"
+    },
+    {
+      "line": 43260,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 43261,
+      "text": "call GroupRemoveUnit(DG,D6)"
+    },
+    {
+      "line": 43262,
+      "text": "call VertigoTargetEx(Bc,D6,1)"
+    },
+    {
+      "line": 43263,
+      "text": "endloop"
+    },
+    {
+      "line": 43264,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 43265,
+      "text": "set DG=null"
+    },
+    {
+      "line": 43266,
+      "text": "endif"
+    },
+    {
+      "line": 43267,
+      "text": "else"
+    },
+    {
+      "line": 43268,
+      "text": "call UnitRemoveAbility(Bc,P5)"
+    },
+    {
+      "line": 43269,
+      "text": "call UnitRemoveAbility(Bc,P6)"
+    },
+    {
+      "line": 43270,
+      "text": "call FlushChildHashtable(O,GetHandleId(t))"
+    },
+    {
+      "line": 43271,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 43272,
+      "text": "endif"
+    },
+    {
+      "line": 43273,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 43274,
+      "text": "set t=null"
+    },
+    {
+      "line": 43275,
+      "text": "endfunction"
+    },
+    {
+      "line": 43276,
+      "text": "function FullyArmedAction takes nothing returns nothing"
+    },
+    {
+      "line": 43277,
+      "text": "local trigger t=GetTriggeringTrigger()"
+    },
+    {
+      "line": 43278,
+      "text": "local unit Bc=LoadUnitHandle(O,GetHandleId(t),0)"
+    },
+    {
+      "line": 43279,
+      "text": "if GetTriggerEventId()==EVENT_UNIT_DEATH then"
+    },
+    {
+      "line": 43280,
+      "text": "call DestroyEffect(LoadEffectHandle(O,GetHandleId(t),1))"
+    },
+    {
+      "line": 43281,
+      "text": "call FlushChildHashtable(O,GetHandleId(t))"
+    },
+    {
+      "line": 43282,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 43283,
+      "text": "else"
+    },
+    {
+      "line": 43284,
+      "text": "call DamageAoe(Bc,GetUnitX(Bc),GetUnitY(Bc),300,150*.04,ATTACK_TYPE_CHAOS,DAMAGE_TYPE_UNIVERSAL)"
+    },
+    {
+      "line": 43285,
+      "text": "if .04*GetTriggerExecCount(t)>=3 then"
+    },
+    {
+      "line": 43286,
+      "text": "call DestroyEffect(LoadEffectHandle(O,GetHandleId(t),1))"
+    },
+    {
+      "line": 43287,
+      "text": "call FlushChildHashtable(O,GetHandleId(t))"
+    },
+    {
+      "line": 43288,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 43289,
+      "text": "endif"
+    },
+    {
+      "line": 43290,
+      "text": "endif"
+    },
+    {
+      "line": 43291,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 43292,
+      "text": "set t=null"
+    },
+    {
+      "line": 43293,
+      "text": "endfunction"
+    },
+    {
+      "line": 43294,
+      "text": "function AngryDoubleBladesAction takes nothing returns nothing"
+    },
+    {
+      "line": 43295,
+      "text": "local trigger t=GetTriggeringTrigger()"
+    },
+    {
+      "line": 43296,
+      "text": "local unit Bc=LoadUnitHandle(O,GetHandleId(t),0)"
+    },
+    {
+      "line": 43297,
+      "text": "call SaveBoolean(O,GetHandleId(Bc),StringHash(\"angry double blades battle\"),false)"
+    },
+    {
+      "line": 43298,
+      "text": "call FlushChildHashtable(O,GetHandleId(t))"
+    },
+    {
+      "line": 43299,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 43300,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 43301,
+      "text": "set t=null"
+    },
+    {
+      "line": 43302,
+      "text": "endfunction"
+    },
+    {
+      "line": 43303,
+      "text": "function RegisterVarianSkillActionCallBackAction takes nothing returns nothing"
+    },
+    {
+      "line": 43304,
+      "text": "local trigger t=GetTriggeringTrigger()"
+    },
+    {
+      "line": 43305,
+      "text": "local unit Bc=LoadUnitHandle(O,GetHandleId(t),0)"
+    },
+    {
+      "line": 43306,
+      "text": "call SetUnitInvulnerable(Bc,false)"
+    },
+    {
+      "line": 43307,
+      "text": "call FlushChildHashtable(O,GetHandleId(t))"
+    },
+    {
+      "line": 43308,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 43309,
+      "text": "set t=null"
+    },
+    {
+      "line": 43310,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 43311,
+      "text": "endfunction"
+    },
+    {
+      "line": 43312,
+      "text": "function RegisterVarianSkillActionCallBack takes unit Bc,unit Om returns nothing"
+    },
+    {
+      "line": 43313,
+      "text": "local trigger t=CreateTrigger()"
+    },
+    {
+      "line": 43314,
+      "text": "call UnitAddAbility(Bc,$4131315A)"
+    },
+    {
+      "line": 43315,
+      "text": "call IssueTargetOrder(Bc,\"attack\",Om)"
+    },
+    {
+      "line": 43316,
+      "text": "call VertigoTarget(Bc,Om,1)"
+    },
+    {
+      "line": 43317,
+      "text": "call SaveAgentHandle(O,GetHandleId(t),0,Bc)"
+    },
+    {
+      "line": 43318,
+      "text": "call SetUnitInvulnerable(Bc,true)"
+    },
+    {
+      "line": 43319,
+      "text": "call TriggerRegisterUnitEvent(t,Bc,EVENT_UNIT_DEATH)"
+    },
+    {
+      "line": 43320,
+      "text": "call TriggerRegisterTimerEvent(t,4,false)"
+    },
+    {
+      "line": 43321,
+      "text": "call TriggerAddAction(t,function RegisterVarianSkillActionCallBackAction)"
+    },
+    {
+      "line": 43322,
+      "text": "set t=null"
+    },
+    {
+      "line": 43323,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 43324,
+      "text": "set Om=null"
+    },
+    {
+      "line": 43325,
+      "text": "endfunction"
+    },
+    {
+      "line": 43326,
+      "text": "function RegisterVarianSkillAction takes nothing returns nothing"
+    },
+    {
+      "line": 43327,
+      "text": "local unit Bc=GetTriggerUnit()"
+    },
+    {
+      "line": 43328,
+      "text": "local real Pv=GetUnitLifePercent(Bc)"
+    },
+    {
+      "line": 43329,
+      "text": "local trigger t=null"
+    },
+    {
+      "line": 43330,
+      "text": "local group DG"
+    },
+    {
+      "line": 43331,
+      "text": "local unit D6"
+    },
+    {
+      "line": 43332,
+      "text": "local unit Om=null"
+    },
+    {
+      "line": 43333,
+      "text": "if GetTriggerEventId()==EVENT_UNIT_DAMAGED then"
+    },
+    {
+      "line": 43334,
+      "text": "if GetUnitAbilityLevel(Bc,Pw)>0 and not LoadBoolean(O,GetHandleId(Bc),StringHash(\"angry double blades death\")) and GetEventDamage()>=GetUnitState(Bc,UNIT_STATE_LIFE) then"
+    },
+    {
+      "line": 43335,
+      "text": "call SaveBoolean(O,GetHandleId(Bc),StringHash(\"angry double blades death\"),true)"
+    },
+    {
+      "line": 43336,
+      "text": "call SetUnitState(Bc,UNIT_STATE_LIFE,RMinBJ(1500,GetUnitState(Bc,UNIT_STATE_LIFE)+GetUnitState(Bc,UNIT_STATE_MANA)*20))"
+    },
+    {
+      "line": 43337,
+      "text": "call DestroyEffect(AddSpecialEffectTarget(\"Abilities\\\\Spells\\\\Items\\\\AIre\\\\AIreTarget.mdl\",Bc,\"chest\"))"
+    },
+    {
+      "line": 43338,
+      "text": "set DG=SelectRange(Bc,GetUnitX(Bc),GetUnitY(Bc),500)"
+    },
+    {
+      "line": 43339,
+      "text": "loop"
+    },
+    {
+      "line": 43340,
+      "text": "set D6=FirstOfGroup(DG)"
+    },
+    {
+      "line": 43341,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 43342,
+      "text": "call GroupRemoveUnit(DG,D6)"
+    },
+    {
+      "line": 43343,
+      "text": "if Om==null or GetUnitState(D6,ConvertUnitState(18))>=GetUnitState(Om,ConvertUnitState(18)) then"
+    },
+    {
+      "line": 43344,
+      "text": "set Om=D6"
+    },
+    {
+      "line": 43345,
+      "text": "endif"
+    },
+    {
+      "line": 43346,
+      "text": "endloop"
+    },
+    {
+      "line": 43347,
+      "text": "if Om!=null then"
+    },
+    {
+      "line": 43348,
+      "text": "call SetUnitPosition(Bc,GetUnitX(Om),GetUnitY(Om))"
+    },
+    {
+      "line": 43349,
+      "text": "call RegisterVarianSkillActionCallBack(Bc,Om)"
+    },
+    {
+      "line": 43350,
+      "text": "set Om=null"
+    },
+    {
+      "line": 43351,
+      "text": "endif"
+    },
+    {
+      "line": 43352,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 43353,
+      "text": "set DG=null"
+    },
+    {
+      "line": 43354,
+      "text": "elseif Pv>=66 then"
+    },
+    {
+      "line": 43355,
+      "text": "if not HaveSavedBoolean(O,GetHandleId(Bc),StringHash(\"fully armed\")) then"
+    },
+    {
+      "line": 43356,
+      "text": "call SaveBoolean(O,GetHandleId(Bc),StringHash(\"fully armed\"),true)"
+    },
+    {
+      "line": 43357,
+      "text": "call RemoveSavedBoolean(O,GetHandleId(Bc),StringHash(\"weapon mastery\"))"
+    },
+    {
+      "line": 43358,
+      "text": "call RemoveSavedBoolean(O,GetHandleId(Bc),StringHash(\"angry double blades\"))"
+    },
+    {
+      "line": 43359,
+      "text": "call RemoveSavedBoolean(O,GetHandleId(Bc),StringHash(\"angry double blades battle\"))"
+    },
+    {
+      "line": 43360,
+      "text": "call AddUnitAnimationProperties(Bc,\"alternate\",false)"
+    },
+    {
+      "line": 43361,
+      "text": "call AddUnitAnimationProperties(Bc,\"gold\",false)"
+    },
+    {
+      "line": 43362,
+      "text": "call UnitAddAbility(Bc,Pz)"
+    },
+    {
+      "line": 43363,
+      "text": "call UnitAddAbility(Bc,P0)"
+    },
+    {
+      "line": 43364,
+      "text": "call UnitAddAbility(Bc,P1)"
+    },
+    {
+      "line": 43365,
+      "text": "call UnitRemoveAbility(Bc,P2)"
+    },
+    {
+      "line": 43366,
+      "text": "call UnitRemoveAbility(Bc,P3)"
+    },
+    {
+      "line": 43367,
+      "text": "call UnitRemoveAbility(Bc,P4)"
+    },
+    {
+      "line": 43368,
+      "text": "if not HaveSavedHandle(O,GetHandleId(Bc),StringHash(\"fully armed\")) and GetUnitAbilityLevel(Bc,Pw)>0 then"
+    },
+    {
+      "line": 43369,
+      "text": "set t=CreateTrigger()"
+    },
+    {
+      "line": 43370,
+      "text": "call SaveAgentHandle(O,GetHandleId(t),0,Bc)"
+    },
+    {
+      "line": 43371,
+      "text": "call TriggerRegisterUnitEvent(t,Bc,EVENT_UNIT_DEATH)"
+    },
+    {
+      "line": 43372,
+      "text": "call TriggerRegisterTimerEvent(t,5,true)"
+    },
+    {
+      "line": 43373,
+      "text": "call TriggerRegisterTimerEvent(t,0,false)"
+    },
+    {
+      "line": 43374,
+      "text": "call TriggerAddAction(t,function RegisterVarianSkillActionAction)"
+    },
+    {
+      "line": 43375,
+      "text": "call SaveAgentHandle(O,GetHandleId(Bc),StringHash(\"fully armed\"),t)"
+    },
+    {
+      "line": 43376,
+      "text": "set t=null"
+    },
+    {
+      "line": 43377,
+      "text": "endif"
+    },
+    {
+      "line": 43378,
+      "text": "endif"
+    },
+    {
+      "line": 43379,
+      "text": "elseif Pv<66 and Pv>=33 then"
+    },
+    {
+      "line": 43380,
+      "text": "if not HaveSavedBoolean(O,GetHandleId(Bc),StringHash(\"weapon mastery\")) then"
+    },
+    {
+      "line": 43381,
+      "text": "call SaveBoolean(O,GetHandleId(Bc),StringHash(\"weapon mastery\"),true)"
+    },
+    {
+      "line": 43382,
+      "text": "call RemoveSavedBoolean(O,GetHandleId(Bc),StringHash(\"fully armed\"))"
+    },
+    {
+      "line": 43383,
+      "text": "call RemoveSavedBoolean(O,GetHandleId(Bc),StringHash(\"angry double blades\"))"
+    },
+    {
+      "line": 43384,
+      "text": "call RemoveSavedBoolean(O,GetHandleId(Bc),StringHash(\"angry double blades battle\"))"
+    },
+    {
+      "line": 43385,
+      "text": "call AddUnitAnimationProperties(Bc,\"alternate\",true)"
+    },
+    {
+      "line": 43386,
+      "text": "call AddUnitAnimationProperties(Bc,\"gold\",false)"
+    },
+    {
+      "line": 43387,
+      "text": "call UnitAddAbility(Bc,P2)"
+    },
+    {
+      "line": 43388,
+      "text": "call UnitRemoveAbility(Bc,Pz)"
+    },
+    {
+      "line": 43389,
+      "text": "call UnitRemoveAbility(Bc,P0)"
+    },
+    {
+      "line": 43390,
+      "text": "call UnitRemoveAbility(Bc,P1)"
+    },
+    {
+      "line": 43391,
+      "text": "call UnitRemoveAbility(Bc,P3)"
+    },
+    {
+      "line": 43392,
+      "text": "call UnitRemoveAbility(Bc,P4)"
+    },
+    {
+      "line": 43393,
+      "text": "if GetUnitAbilityLevel(Bc,Pw)>0 then"
+    },
+    {
+      "line": 43394,
+      "text": "set t=CreateTrigger()"
+    },
+    {
+      "line": 43395,
+      "text": "call SaveAgentHandle(O,GetHandleId(t),0,Bc)"
+    },
+    {
+      "line": 43396,
+      "text": "if GetUnitTypeId(Bc)==$68305843 then"
+    },
+    {
+      "line": 43397,
+      "text": "call SaveAgentHandle(O,GetHandleId(t),1,AddSpecialEffectTarget(\"Bjlwlassgw01_Spell01.mdx\",Bc,\"origin\"))"
+    },
+    {
+      "line": 43398,
+      "text": "else"
+    },
+    {
+      "line": 43399,
+      "text": "call SaveAgentHandle(O,GetHandleId(t),1,AddSpecialEffectTarget(\"war3mapImported\\\\JRFB14.mdx\",Bc,\"origin\"))"
+    },
+    {
+      "line": 43400,
+      "text": "endif"
+    },
+    {
+      "line": 43401,
+      "text": "call TriggerRegisterUnitEvent(t,Bc,EVENT_UNIT_DEATH)"
+    },
+    {
+      "line": 43402,
+      "text": "call TriggerRegisterTimerEvent(t,.04,true)"
+    },
+    {
+      "line": 43403,
+      "text": "call TriggerAddAction(t,function FullyArmedAction)"
+    },
+    {
+      "line": 43404,
+      "text": "endif"
+    },
+    {
+      "line": 43405,
+      "text": "endif"
+    },
+    {
+      "line": 43406,
+      "text": "elseif Pv<33 then"
+    },
+    {
+      "line": 43407,
+      "text": "if not HaveSavedBoolean(O,GetHandleId(Bc),StringHash(\"angry double blades\")) then"
+    },
+    {
+      "line": 43408,
+      "text": "call SaveBoolean(O,GetHandleId(Bc),StringHash(\"angry double blades\"),true)"
+    },
+    {
+      "line": 43409,
+      "text": "call RemoveSavedBoolean(O,GetHandleId(Bc),StringHash(\"fully armed\"))"
+    },
+    {
+      "line": 43410,
+      "text": "call RemoveSavedBoolean(O,GetHandleId(Bc),StringHash(\"weapon mastery\"))"
+    },
+    {
+      "line": 43411,
+      "text": "call AddUnitAnimationProperties(Bc,\"alternate\",false)"
+    },
+    {
+      "line": 43412,
+      "text": "call AddUnitAnimationProperties(Bc,\"gold\",true)"
+    },
+    {
+      "line": 43413,
+      "text": "call UnitAddAbility(Bc,P3)"
+    },
+    {
+      "line": 43414,
+      "text": "call UnitAddAbility(Bc,P4)"
+    },
+    {
+      "line": 43415,
+      "text": "call UnitRemoveAbility(Bc,P2)"
+    },
+    {
+      "line": 43416,
+      "text": "call UnitRemoveAbility(Bc,Pz)"
+    },
+    {
+      "line": 43417,
+      "text": "call UnitRemoveAbility(Bc,P0)"
+    },
+    {
+      "line": 43418,
+      "text": "call UnitRemoveAbility(Bc,P1)"
+    },
+    {
+      "line": 43419,
+      "text": "if GetUnitAbilityLevel(Bc,Pw)>0 then"
+    },
+    {
+      "line": 43420,
+      "text": "call SaveBoolean(O,GetHandleId(Bc),StringHash(\"angry double blades battle\"),true)"
+    },
+    {
+      "line": 43421,
+      "text": "set t=CreateTrigger()"
+    },
+    {
+      "line": 43422,
+      "text": "call SaveAgentHandle(O,GetHandleId(t),0,Bc)"
+    },
+    {
+      "line": 43423,
+      "text": "call TriggerRegisterUnitEvent(t,Bc,EVENT_UNIT_DEATH)"
+    },
+    {
+      "line": 43424,
+      "text": "call TriggerRegisterTimerEvent(t,5,false)"
+    },
+    {
+      "line": 43425,
+      "text": "call TriggerAddAction(t,function AngryDoubleBladesAction)"
+    },
+    {
+      "line": 43426,
+      "text": "set t=null"
+    },
+    {
+      "line": 43427,
+      "text": "endif"
+    },
+    {
+      "line": 43428,
+      "text": "endif"
+    },
+    {
+      "line": 43429,
+      "text": "endif"
+    },
+    {
+      "line": 43430,
+      "text": "else"
+    },
+    {
+      "line": 43431,
+      "text": "call FlushChildHashtable(O,GetHandleId(GetTriggeringTrigger()))"
+    },
+    {
+      "line": 43432,
+      "text": "call DestroyTrigger(GetTriggeringTrigger())"
+    },
+    {
+      "line": 43433,
+      "text": "endif"
+    },
+    {
+      "line": 43434,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 43435,
+      "text": "endfunction"
+    },
+    {
+      "line": 43436,
+      "text": "function RegisterVarianSkill takes unit Bc returns nothing"
+    },
+    {
+      "line": 43437,
+      "text": "local trigger t"
+    },
+    {
+      "line": 43438,
+      "text": "if GetUnitAbilityLevel(Bc,Ps)>0 and GetUnitAbilityLevel(Bc,Pt)>0 and GetUnitAbilityLevel(Bc,Pu)>0 then"
+    },
+    {
+      "line": 43439,
+      "text": "set t=CreateTrigger()"
+    },
+    {
+      "line": 43440,
+      "text": "call TriggerRegisterUnitEvent(t,Bc,EVENT_UNIT_DAMAGED)"
+    },
+    {
+      "line": 43441,
+      "text": "call TriggerRegisterUnitEvent(t,Bc,EVENT_UNIT_DEATH)"
+    },
+    {
+      "line": 43442,
+      "text": "call TriggerAddAction(t,function RegisterVarianSkillAction)"
+    },
+    {
+      "line": 43443,
+      "text": "set t=null"
+    },
+    {
+      "line": 43444,
+      "text": "endif"
+    },
+    {
+      "line": 43445,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 43446,
+      "text": "endfunction"
+    },
+    {
+      "line": 43637,
+      "text": "function PassiveSkill takes unit Bc,integer x,unit Pf returns nothing"
+    },
+    {
+      "line": 43638,
+      "text": "local integer RJ=0"
+    },
+    {
+      "line": 43639,
+      "text": "if GetUnitAbilityLevel(Bc,$41305A4E)>0 then"
+    },
+    {
+      "line": 43640,
+      "text": "call DeathAura(Bc,$41305A4E)"
+    },
+    {
+      "line": 43641,
+      "text": "call SetUnitState(Bc,UNIT_STATE_MANA,GetUnitState(Bc,UNIT_STATE_MAX_MANA))"
+    },
+    {
+      "line": 43642,
+      "text": "endif"
+    },
+    {
+      "line": 43643,
+      "text": "if GetUnitAbilityLevel(Bc,$41305A52)>0 then"
+    },
+    {
+      "line": 43644,
+      "text": "call KelThuzadsChains(Bc,$41305A52)"
+    },
+    {
+      "line": 43645,
+      "text": "endif"
+    },
+    {
+      "line": 43646,
+      "text": "if GetUnitAbilityLevel(Bc,$41305A51)>0 then"
+    },
+    {
+      "line": 43647,
+      "text": "call KelThuzadsAmuletBox(Bc,$41305A51)"
+    },
+    {
+      "line": 43648,
+      "text": "endif"
+    },
+    {
+      "line": 43649,
+      "text": "call RegisterVarianSkill(Bc)"
+    },
+    {
+      "line": 48289,
+      "text": "call RegisterBudingLimit($68305130,0,1)"
+    }
+  ],
+  "abilities": {
+    "A11V": {
+      "rawcode": "A11V",
+      "name": "全副武装",
+      "tip": "全副武装",
+      "ubertip": "瓦里安生命值高于66%时,将保持全副武装的防御姿势.全副武装状态下,瓦里安获得额外15点护甲和30/s的生命恢复速度,并且受到伤害时有30%几率招架免疫这次伤害,同时每5s会发出一阵刺耳怒吼,使600码半径内所有敌人眩晕0.1s同时减少30%攻击力持续2s.",
+      "alias": "A11V",
+      "code": "Asth",
+      "levels": "1"
+    },
+    "A11W": {
+      "rawcode": "A11W",
+      "name": "武器精通",
+      "tip": "武器精通",
+      "ubertip": "瓦里安生命值高于33%低于66%时，将切换为武器精通的进攻形态。武器精通状态下，瓦里安额外获得100点攻击力同时攻击无视敌方护甲攻击伤害转化为神圣伤害，并且攻击有26%的几率发动雷霆一击，对自身半径300码的敌人造成125点伤害同时减少其攻击/移动速度30%持续2s",
+      "alias": "A11W",
+      "code": "Asth",
+      "levels": "1"
+    },
+    "A11X": {
+      "rawcode": "A11X",
+      "name": "愤怒双刃",
+      "tip": "愤怒双刃",
+      "ubertip": "瓦里安生命值低于33%时，将进入愤怒双刃的狂暴形态。愤怒双刃状态下，瓦里安攻击速度提高100%，同时获得40%的物理吸血",
+      "alias": "A11X",
+      "code": "Asth",
+      "levels": "1"
+    },
+    "A11Y": {
+      "rawcode": "A11Y",
+      "name": "形态转换",
+      "tip": "形态转换",
+      "ubertip": "瓦里安乌瑞恩根据生命值高低拥有三种形态，每种形态都有着独特的技能和特性。瓦里安乌瑞恩每次攻击会获得1点怒气值。\n当瓦里安第一次进入全副武装状态时将使用出战斗怒吼，使半径700码内所有友军增加30%攻击力持续6s。\n当瓦里安第一次进入武器精通状态时，将化作一股具有毁灭性力量的旋转风暴，每秒对半径300码的敌人造成150点伤害持续3s，同时剑刃风暴期间瓦里安可以使用普通攻击。\n当瓦里安第一次进入愤怒双刃状态时，接下来的5s攻击会获得双倍怒气值。\n当瓦里安受到致命伤害时，将免疫这次伤害同时恢复当前怒气值*20的生命值（最多1500）随后无敌2s，并且冲锋至半径500码内攻击力最高的敌方单位身边，无视魔免地眩晕其1s并且攻击他",
+      "alias": "A11Y",
+      "code": "Asth",
+      "levels": "1"
+    },
+    "A11O": {
+      "rawcode": "A11O",
+      "name": "瓦里安66以上护甲",
+      "alias": "A11O",
+      "code": "AIde",
+      "DataA1": "15.0",
+      "levels": "1"
+    },
+    "A11P": {
+      "rawcode": "A11P",
+      "name": "瓦里安生命恢复",
+      "alias": "A11P",
+      "code": "Arel",
+      "DataA1": "30",
+      "levels": "1"
+    },
+    "A11Q": {
+      "rawcode": "A11Q",
+      "name": "瓦里安 怒吼",
+      "tip": "恐怖嚎叫(W)",
+      "ubertip": "发出恐怖的嚎叫，降低周围敌单位的攻击力25%，10秒。",
+      "alias": "A11Q",
+      "code": "ANht",
+      "Area1": "600.0",
+      "BuffID1": "BNht",
+      "DataA1": "0.3",
+      "levels": "1",
+      "targs1": "air,ground,enemy,neutral",
+      "Dur1": "2.0",
+      "HeroDur1": "2.0",
+      "Cool1": "5.0",
+      "checkDep": "1",
+      "DataE1": "1"
+    },
+    "A11R": {
+      "rawcode": "A11R",
+      "name": "瓦里安闪避",
+      "tip": "闪避",
+      "ubertip": "30%的几率闪避物理攻击。",
+      "alias": "A11R",
+      "code": "AEev",
+      "DataA1": "0.3",
+      "levels": "1"
+    },
+    "A11S": {
+      "rawcode": "A11S",
+      "name": "瓦里安攻击力",
+      "alias": "A11S",
+      "code": "AIat",
+      "DataA1": "100",
+      "levels": "1"
+    },
+    "A11T": {
+      "rawcode": "A11T",
+      "name": "瓦里安攻速",
+      "alias": "A11T",
+      "code": "AIas",
+      "DataA1": "1.5",
+      "levels": "1"
+    },
+    "A11U": {
+      "rawcode": "A11U",
+      "name": "瓦里安吸血",
+      "tip": "瓦里安吸血",
+      "ubertip": "25％吸血",
+      "alias": "A11U",
+      "code": "AUav",
+      "Area1": "900.0",
+      "BuffID1": "B076",
+      "DataA1": "0.4",
+      "levels": "1",
+      "targs1": "ground,vulnerable,air,invulnerable,organic,self"
+    },
+    "A11Z": {
+      "rawcode": "A11Z",
+      "name": "瓦里安击晕1秒",
+      "tip": "击晕",
+      "ubertip": "攻击时有25%几率造成额外25点伤害与1秒晕眩。",
+      "alias": "A11Z",
+      "code": "AHbh",
+      "BuffID1": "B044",
+      "DataA1": "100.0",
+      "levels": "1",
+      "targs1": "air,enemies,ground,structure",
+      "Dur1": "1.0",
+      "HeroDur1": "1.0"
+    },
+    "A121": {
+      "rawcode": "A121",
+      "name": "咆哮",
+      "tip": "咆哮(R)",
+      "ubertip": "增加周围友军单位25%的攻击力。\n持续45秒。",
+      "alias": "A121",
+      "code": "Aroa",
+      "Area1": "600.0",
+      "BuffID1": "Broa",
+      "DataA1": "0.3",
+      "levels": "1",
+      "targs1": "air,ground,friend,self",
+      "Dur1": "6.0",
+      "HeroDur1": "6.0",
+      "checkDep": "1"
+    },
+    "A122": {
+      "rawcode": "A122",
+      "name": "眩晕",
+      "tip": "风暴之锤(T) - [等级 1],风暴之锤(T) - [等级 2],风暴之锤(T) - [等级 3],风暴之锤(T) - [等级 4]",
+      "ubertip": "向目标投掷一巨大的魔法斧，对其造成100点伤害并使其5秒内处于眩晕状态。,向目标投掷一巨大的魔法斧，对其造成200 点伤害并使其7秒内处于眩晕状态。,向目标投掷一巨大的魔法斧，对其造成300点伤害并使其9秒内处于眩晕状态。,向目标投掷一巨大的魔法斧，对其造成450点伤害并使其12秒内处于眩晕状态。",
+      "alias": "A122",
+      "code": "AHtb",
+      "BuffID1": "BPSE",
+      "levels": "10",
+      "targs1": "air,ground,debris,enemy,neutral,organic",
+      "targs2": "air,ground,debris,enemy,neutral,organic",
+      "targs3": "air,ground,debris,enemy,neutral,organic",
+      "targs4": "air,ground,debris,enemy,neutral,organic",
+      "Dur1": "0.1",
+      "HeroDur1": "0.1",
+      "Rng1": "100000.0",
+      "checkDep": "1",
+      "BuffID2": "BPSE",
+      "BuffID3": "BPSE",
+      "reqLevel": "1",
+      "Dur2": "0.2",
+      "Dur3": "0.3",
+      "Rng2": "100000.0",
+      "Rng3": "100000.0",
+      "HeroDur2": "0.2",
+      "HeroDur3": "0.3",
+      "BuffID4": "BPSE",
+      "Dur4": "0.4",
+      "HeroDur4": "0.4",
+      "Rng4": "100000.0",
+      "Dur5": "0.5",
+      "Dur6": "0.6000000238418579",
+      "Dur7": "0.699999988079071",
+      "Dur8": "0.800000011920929",
+      "Dur9": "0.8999999761581421",
+      "Dur10": "1.0",
+      "HeroDur5": "0.5",
+      "HeroDur6": "0.6000000238418579",
+      "HeroDur7": "0.699999988079071",
+      "HeroDur8": "0.800000011920929",
+      "HeroDur9": "0.8999999761581421",
+      "HeroDur10": "1.0"
+    },
+    "A0I7": {
+      "rawcode": "A0I7",
+      "name": "眩晕",
+      "tip": "风暴之锤(T) - [等级 1],风暴之锤(T) - [等级 2],风暴之锤(T) - [等级 3],风暴之锤(T) - [等级 4]",
+      "ubertip": "向目标投掷一巨大的魔法斧，对其造成100点伤害并使其5秒内处于眩晕状态。,向目标投掷一巨大的魔法斧，对其造成200 点伤害并使其7秒内处于眩晕状态。,向目标投掷一巨大的魔法斧，对其造成300点伤害并使其9秒内处于眩晕状态。,向目标投掷一巨大的魔法斧，对其造成450点伤害并使其12秒内处于眩晕状态。",
+      "alias": "A0I7",
+      "code": "AHtb",
+      "BuffID1": "BPSE",
+      "levels": "10",
+      "targs1": "air,ground,debris,enemy,neutral,organic",
+      "targs2": "air,ground,debris,enemy,neutral,organic",
+      "targs3": "air,ground,debris,enemy,neutral,organic",
+      "targs4": "air,ground,debris,enemy,neutral,organic",
+      "Dur1": "1.0",
+      "HeroDur1": "0.5",
+      "Rng1": "100000.0",
+      "checkDep": "1",
+      "BuffID2": "BPSE",
+      "BuffID3": "BPSE",
+      "reqLevel": "1",
+      "Dur2": "2.0",
+      "Dur3": "3.0",
+      "Rng2": "100000.0",
+      "Rng3": "100000.0",
+      "HeroDur2": "1.0",
+      "HeroDur3": "1.5",
+      "BuffID4": "BPSE",
+      "Dur4": "4.0",
+      "HeroDur4": "2.0",
+      "Rng4": "100000.0",
+      "Dur5": "5.0",
+      "Dur6": "6.0",
+      "Dur7": "7.0",
+      "Dur8": "8.0",
+      "Dur9": "9.0",
+      "Dur10": "10.0",
+      "HeroDur5": "2.5",
+      "HeroDur6": "3.0",
+      "HeroDur7": "3.5",
+      "HeroDur8": "4.0",
+      "HeroDur9": "4.5",
+      "HeroDur10": "5.0"
+    }
+  },
+  "units": {
+    "h0Q0": {
+      "rawcode": "h0Q0",
+      "name": "瓦里安乌瑞恩",
+      "tip": "升级到 <瓦里安乌瑞恩> - [P]",
+      "ubertip": "攻击伤害: 402-411\n攻击速度: 1\n攻击距离: 180\n生命值: 4500\n攻击类型: 英雄 \n防御类型: 神圣 \n技能:  1,全副武装 2,武器精通 3,愤怒双刃 4,形态转换",
+      "unitID": "h0Q0",
+      "canFlee": "1",
+      "death": "2.34",
+      "deathType": "2",
+      "points": "850",
+      "prio": "2",
+      "propWin": "60.0",
+      "race": "human",
+      "targType": "structure",
+      "unitBalanceID": "h0Q0",
+      "bldtm": "2",
+      "collision": "72.0",
+      "defType": "divine",
+      "fused": "7",
+      "goldcost": "700",
+      "HP": "4500",
+      "level": "1",
+      "nsight": "800",
+      "preventPlace": "unbuildable",
+      "regenHP": "3.0",
+      "regenType": "always",
+      "reptm": "1",
+      "sight": "1600",
+      "tilesets": "*",
+      "upgrades": "R009,R00A",
+      "unitUIID": "h0Q0",
+      "armor": "Metal",
+      "blend": "0.15",
+      "blue": "255",
+      "elevRad": "50.0",
+      "file": "LJQ_VarianWrynn.mdl",
+      "green": "255",
+      "modelScale": "1.5",
+      "red": "255",
+      "run": "200.0",
+      "scale": "1.5",
+      "scaleBull": "1",
+      "shadowOnWater": "1",
+      "teamColor": "-1",
+      "unitSound": "Captain",
+      "walk": "200.0",
+      "unitAbilID": "h0Q0",
+      "abilList": "A11V,A11W,A11X,A11Y,A008,A118",
+      "unitWeapID": "h0Q0",
+      "acquire": "500.0",
+      "atkType1": "hero",
+      "atkType2": "normal",
+      "backSw1": "0.5",
+      "castbsw": "0.51",
+      "cool1": "1.0",
+      "dice1": "1",
+      "dmgpt1": "0.5",
+      "impactZ": "120.0",
+      "launchZ": "145.0",
+      "rangeN1": "180",
+      "RngBuff1": "250.0",
+      "showUI2": "1",
+      "sides1": "10",
+      "targCount1": "1",
+      "targCount2": "1",
+      "targs1": "enemies",
+      "weapsOn": "1",
+      "weapTp1": "normal",
+      "weapType1": "MetalMediumSlice",
+      "hotkey": "P",
+      "damage_min_1": "402.0",
+      "damage_max_1": "411.0",
+      "damage_avg_1": "406.5",
+      "dps_avg_1": "406.5",
+      "attack_type_zh": "英雄",
+      "armor_type_zh": "神圣甲",
+      "ability_ids": "A11V,A11W,A11X,A11Y,A008,A118",
+      "ability_names": "全副武装,武器精通,愤怒双刃,形态转换,出售,移位",
+      "def": "3.0",
+      "manaN": "120",
+      "type": "ancient",
+      "dmgplus1": "401",
+      "buildingShadow": "ShadowGuardTower",
+      "isbldg": "1",
+      "buffRadius": "15.0",
+      "buffType": "buffer",
+      "pathTex": "PathTextures\\4x4SimpleSolid.tga",
+      "elevPts": "4"
+    },
+    "h0PZ": {
+      "rawcode": "h0PZ",
+      "name": "瓦里安乌瑞恩",
+      "ubertip": ",",
+      "unitID": "h0PZ",
+      "canFlee": "1",
+      "cargoSize": "1",
+      "death": "3.04",
+      "deathType": "3",
+      "movetp": "foot",
+      "points": "100",
+      "prio": "6",
+      "propWin": "60.0",
+      "race": "human",
+      "targType": "ground",
+      "turnRate": "0.6",
+      "unitBalanceID": "h0PZ",
+      "bldtm": "20",
+      "bountydice": "6",
+      "bountyplus": "20",
+      "bountysides": "3",
+      "collision": "15.0",
+      "defType": "divine",
+      "goldcost": "135",
+      "goldRep": "135",
+      "HP": "4500",
+      "level": "2",
+      "nsight": "800",
+      "regenHP": "3.0",
+      "regenType": "always",
+      "reptm": "20",
+      "sight": "1400",
+      "spd": "270",
+      "stockMax": "3",
+      "stockRegen": "30",
+      "tilesets": "*",
+      "upgrades": "R00B,R00C,R009,R00A",
+      "unitUIID": "h0PZ",
+      "armor": "Metal",
+      "blend": "0.15",
+      "blue": "255",
+      "elevRad": "20.0",
+      "file": "LJQ_VarianWrynn.mdl",
+      "green": "255",
+      "maxPitch": "10.0",
+      "maxRoll": "10.0",
+      "modelScale": "1.5",
+      "red": "255",
+      "run": "210.0",
+      "scale": "1.0",
+      "scaleBull": "1",
+      "shadowH": "140.0",
+      "shadowOnWater": "1",
+      "shadowW": "140.0",
+      "shadowX": "50.0",
+      "shadowY": "50.0",
+      "teamColor": "-1",
+      "unitShadow": "Shadow",
+      "unitSound": "Captain",
+      "walk": "210.0",
+      "unitAbilID": "h0PZ",
+      "abilList": "A11V,A11X,A11W,A11Y",
+      "unitWeapID": "h0PZ",
+      "acquire": "500.0",
+      "atkType1": "hero",
+      "atkType2": "normal",
+      "backSw1": "0.5",
+      "castbsw": "0.51",
+      "castpt": "0.3",
+      "cool1": "1.0",
+      "dice1": "1",
+      "dmgpt1": "0.5",
+      "impactZ": "60.0",
+      "launchZ": "60.0",
+      "rangeN1": "180",
+      "RngBuff1": "250.0",
+      "showUI1": "1",
+      "showUI2": "1",
+      "sides1": "10",
+      "targCount1": "1",
+      "targCount2": "1",
+      "targs1": "enemies",
+      "weapsOn": "1",
+      "weapTp1": "normal",
+      "weapType1": "MetalMediumSlice",
+      "hotkey": "F",
+      "damage_min_1": "402.0",
+      "damage_max_1": "411.0",
+      "damage_avg_1": "406.5",
+      "dps_avg_1": "406.5",
+      "bounty_min": "26.0",
+      "bounty_max": "38.0",
+      "bounty_avg": "32.0",
+      "attack_type_zh": "英雄",
+      "armor_type_zh": "神圣甲",
+      "ability_ids": "A11V,A11X,A11W,A11Y",
+      "ability_names": "全副武装,愤怒双刃,武器精通,形态转换",
+      "def": "3.0",
+      "defUp": "2.0",
+      "manaN": "120",
+      "type": "giant",
+      "dmgplus1": "401"
+    },
+    "h0XD": {
+      "rawcode": "h0XD",
+      "name": "白镜璃_瓦里安_神圣国王",
+      "tip": "使用 <白镜璃_瓦里安_神圣国王> 皮肤 - [P]",
+      "ubertip": ",",
+      "unitID": "h0XD",
+      "canFlee": "1",
+      "death": "2.34",
+      "deathType": "2",
+      "points": "850",
+      "prio": "2",
+      "propWin": "60.0",
+      "race": "human",
+      "targType": "structure",
+      "unitBalanceID": "h0XD",
+      "bldtm": "2",
+      "collision": "72.0",
+      "defType": "divine",
+      "fused": "7",
+      "HP": "4500",
+      "level": "1",
+      "nsight": "800",
+      "preventPlace": "unbuildable",
+      "regenHP": "3.0",
+      "regenType": "always",
+      "reptm": "1",
+      "sight": "1600",
+      "tilesets": "*",
+      "upgrades": "R009,R00A",
+      "unitUIID": "h0XD",
+      "armor": "Metal",
+      "blend": "0.15",
+      "blue": "255",
+      "elevRad": "50.0",
+      "file": "Bjlwlassgw01.mdx",
+      "green": "255",
+      "modelScale": "1.5",
+      "red": "255",
+      "run": "200.0",
+      "scale": "1.5",
+      "scaleBull": "1",
+      "shadowOnWater": "1",
+      "teamColor": "-1",
+      "unitSound": "Captain",
+      "walk": "200.0",
+      "unitAbilID": "h0XD",
+      "abilList": "A11V,A11W,A11X,A11Y,A008,A118",
+      "unitWeapID": "h0XD",
+      "acquire": "500.0",
+      "atkType1": "hero",
+      "atkType2": "normal",
+      "backSw1": "0.5",
+      "castbsw": "0.51",
+      "cool1": "1.0",
+      "dice1": "1",
+      "dmgpt1": "0.5",
+      "impactZ": "120.0",
+      "launchZ": "145.0",
+      "rangeN1": "180",
+      "RngBuff1": "250.0",
+      "showUI2": "1",
+      "sides1": "10",
+      "targCount1": "1",
+      "targCount2": "1",
+      "targs1": "enemies",
+      "weapsOn": "1",
+      "weapTp1": "normal",
+      "weapType1": "MetalMediumSlice",
+      "hotkey": "P",
+      "damage_min_1": "402.0",
+      "damage_max_1": "411.0",
+      "damage_avg_1": "406.5",
+      "dps_avg_1": "406.5",
+      "attack_type_zh": "英雄",
+      "armor_type_zh": "神圣甲",
+      "ability_ids": "A11V,A11W,A11X,A11Y,A008,A118",
+      "ability_names": "全副武装,武器精通,愤怒双刃,形态转换,出售,移位",
+      "def": "3.0",
+      "manaN": "120",
+      "type": "ancient",
+      "dmgplus1": "401",
+      "buildingShadow": "ShadowGuardTower",
+      "isbldg": "1",
+      "buffRadius": "15.0",
+      "buffType": "buffer",
+      "pathTex": "PathTextures\\4x4SimpleSolid.tga",
+      "elevPts": "4"
+    },
+    "h0XC": {
+      "rawcode": "h0XC",
+      "name": "白镜璃_瓦里安_神圣国王",
+      "ubertip": ",",
+      "unitID": "h0XC",
+      "canFlee": "1",
+      "cargoSize": "1",
+      "death": "3.04",
+      "deathType": "3",
+      "movetp": "foot",
+      "points": "100",
+      "prio": "6",
+      "propWin": "60.0",
+      "race": "human",
+      "targType": "ground",
+      "turnRate": "0.6",
+      "unitBalanceID": "h0XC",
+      "bldtm": "20",
+      "bountydice": "6",
+      "bountyplus": "20",
+      "bountysides": "3",
+      "collision": "15.0",
+      "defType": "divine",
+      "goldcost": "135",
+      "goldRep": "135",
+      "HP": "4500",
+      "level": "2",
+      "nsight": "800",
+      "regenHP": "3.0",
+      "regenType": "always",
+      "reptm": "20",
+      "sight": "1400",
+      "spd": "270",
+      "stockMax": "3",
+      "stockRegen": "30",
+      "tilesets": "*",
+      "upgrades": "R00B,R00C,R009,R00A",
+      "unitUIID": "h0XC",
+      "armor": "Metal",
+      "blend": "0.15",
+      "blue": "255",
+      "elevRad": "20.0",
+      "file": "Bjlwlassgw01.mdx",
+      "green": "255",
+      "maxPitch": "10.0",
+      "maxRoll": "10.0",
+      "modelScale": "1.5",
+      "red": "255",
+      "run": "210.0",
+      "scale": "1.0",
+      "scaleBull": "1",
+      "shadowH": "140.0",
+      "shadowOnWater": "1",
+      "shadowW": "140.0",
+      "shadowX": "50.0",
+      "shadowY": "50.0",
+      "teamColor": "-1",
+      "unitShadow": "Shadow",
+      "unitSound": "Captain",
+      "walk": "210.0",
+      "unitAbilID": "h0XC",
+      "abilList": "A11V,A11X,A11W,A11Y",
+      "unitWeapID": "h0XC",
+      "acquire": "500.0",
+      "atkType1": "hero",
+      "atkType2": "normal",
+      "backSw1": "0.5",
+      "castbsw": "0.51",
+      "castpt": "0.3",
+      "cool1": "1.0",
+      "dice1": "1",
+      "dmgpt1": "0.5",
+      "impactZ": "60.0",
+      "launchZ": "60.0",
+      "rangeN1": "180",
+      "RngBuff1": "250.0",
+      "showUI1": "1",
+      "showUI2": "1",
+      "sides1": "10",
+      "targCount1": "1",
+      "targCount2": "1",
+      "targs1": "enemies",
+      "weapsOn": "1",
+      "weapTp1": "normal",
+      "weapType1": "MetalMediumSlice",
+      "hotkey": "F",
+      "damage_min_1": "402.0",
+      "damage_max_1": "411.0",
+      "damage_avg_1": "406.5",
+      "dps_avg_1": "406.5",
+      "bounty_min": "26.0",
+      "bounty_max": "38.0",
+      "bounty_avg": "32.0",
+      "attack_type_zh": "英雄",
+      "armor_type_zh": "神圣甲",
+      "ability_ids": "A11V,A11X,A11W,A11Y",
+      "ability_names": "全副武装,愤怒双刃,武器精通,形态转换",
+      "def": "3.0",
+      "defUp": "2.0",
+      "manaN": "120",
+      "type": "giant",
+      "dmgplus1": "401"
+    }
+  },
+  "boundaries": [
+    "Native command cost and cast defaults absent.",
+    "Source lethal branch does not set current event damage to zero; host preserves event subtraction after direct life assignment.",
+    "Armed timer saved handle is not removed when destroyed.",
+    "Mastery roll >=26; no slow call; spin repeats on each entry.",
+    "Native random attack bounds and event/handle enumeration remain partial."
+  ]
+}

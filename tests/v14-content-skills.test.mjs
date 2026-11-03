@@ -19,7 +19,7 @@ function fixture(){
 
 test('verified v14 markers compile with source mechanics and preserve old-version isolation',()=>{
  const ids=['A2Y1','A2Y5','A2Y6','A0TA','A0JO','A0IC','A1Q0','A0TH','A0YD'];
- for(const s of compileSkills(def(ids)))assert.equal(s.status,['A2Y1','A2Y5'].includes(s.id)?'partial':'implemented',s.id);
+ for(const s of compileSkills(def(ids)))assert.equal(s.status,['A2Y1','A2Y5','A1Q0'].includes(s.id)?'partial':'implemented',s.id);
  const [hurricane,ripple]=compileSkills(def(ids));near(hurricane.radius,350/300);near(hurricane.pull,20/300);assert.equal(hurricane.count,25);assert.equal(ripple.count,5);assert.equal(ripple.manaCost,15);
  assert.equal(compileSkills({abilityIds:['A0TA']})[0].status,'unresolved');
  assert.equal(compileSkills(def(['A2Y0']))[0].status,'unresolved');assert.equal(compileSkills(def(['A0BH']))[0].status,'partial');
@@ -96,7 +96,7 @@ test('source mana restores on actual enemy damage events rather than attack star
 });
 
 test('azure fire adds exactly twenty universal damage on a basic hit, including against magic immunity',()=>{
- const g=fixture(),dragon=g.add(def(['A1Q0'])),target=g.add(def(['Amim']),'monster',.1);g._typeMultiplier=()=>.1;g._armorFactor=()=>.1;
+ const g=fixture(),dragon=g.add(def(['A1Q0'])),target=g.add(def(['Amim']),'monster',.1);g._typeMultiplier=attack=>attack==='chaos'?1:.1;g._armorFactor=()=>.1;
  g.hit(dragon,target);near(target.hp,970);g._hurt(target,10,dragon,{spell:true});near(target.hp,960);
 });
 

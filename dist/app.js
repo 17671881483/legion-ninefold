@@ -141,7 +141,7 @@ function handleBattlefieldClick(hit,e){
   if(spellTargetMode){
     const pending=spellTargetMode,current=currentSpellTarget();if(!current){clearSpellTarget();updateUI();toast('单位或技能状态已变化，请重新选择技能',true);return;}
     const payload={entityId:pending.entityId,skillId:pending.skillId,playerId:0};
-    if(['enemy','unit'].includes(pending.targetKind)){const target=hit?.type==='entity'?game.state.entities.find(t=>t.id===hit.entityId&&isEntityVisible(t)):null;if(!target||pending.targetKind==='enemy'&&target.side===current.entity.side||target?.battleTeam!==current.entity.battleTeam){toast(pending.targetKind==='enemy'?'请选择敌方单位':'请选择有效单位',true);return;}payload.targetId=target.id;}
+    if(['enemy','unit'].includes(pending.targetKind)){let target=hit?.type==='entity'?game.state.entities.find(t=>t.id===hit.entityId&&isEntityVisible(t)):null;if(!target&&pending.targetKind==='unit'){const r=$('battlefield').getBoundingClientRect(),point=battlefield.unproject(e.clientX-r.left,e.clientY-r.top);target=game.state.kings.find(k=>k.hp>0&&k.battleTeam===current.entity.battleTeam&&Math.hypot(k.worldX-point.x,k.worldY-point.y)<=(k.radius??.8));}if(!target||pending.targetKind==='enemy'&&target.side===current.entity.side||target?.battleTeam!==current.entity.battleTeam){toast(pending.targetKind==='enemy'?'请选择敌方单位':'请选择有效单位',true);return;}payload.targetId=target.id;}
     else{const r=$('battlefield').getBoundingClientRect(),point=battlefield.unproject(e.clientX-r.left,e.clientY-r.top);payload.worldX=point.x;payload.worldY=point.y;}
     const result=command('cast',payload);if(result.ok){clearSpellTarget();updateUI();}return;
   }

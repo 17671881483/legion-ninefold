@@ -1,3 +1,4 @@
+import {restoreMalygos} from './malygos-rules.js';
 import {restorePhoenixActive} from './phoenix-active-rules.js';
 import {initializeSapperCreation,restoreSapperCreation} from './sapper-rules.js';
 import {veteranDeath,restoreVeteranIdentity} from './veteran-rules.js';
@@ -677,7 +678,7 @@ export class Game {
       case 'cast':{
         const e=this.state.entities.find(e=>e.id===payload.entityId),s=this.unitSkillStatus(payload.entityId,p.id).find(s=>s.id===payload.skillId);
         if(!s||!s.canStart)return this._result(false,s?.reason??'当前单位不能释放此技能');
-        const target=this.state.entities.find(e=>e.id===payload.targetId),point=Number.isFinite(payload.worldX)&&Number.isFinite(payload.worldY)?{x:payload.worldX,y:payload.worldY}:undefined;
+        const target=[...this.state.entities,...this.state.kings].find(e=>e.id===payload.targetId),point=Number.isFinite(payload.worldX)&&Number.isFinite(payload.worldY)?{x:payload.worldX,y:payload.worldY}:undefined;
         const result=castManualSourceSkill(this,e,payload.skillId,{target,point});return this._result(result.ok,result.message??result.reason??(result.ok?`已施放${s.name}`:'施法失败'));
       }
       case 'treasure': {
@@ -1032,13 +1033,13 @@ export class Game {
     const e = {
       id: this._uid(), unitId: def.id ?? 'unit', name: def.name ?? '战士', createdAt:this.state.time, provenance:def.provenance, sourceVersion:def.sourceVersion, sourceRawFields:def.sourceRawFields, sourceArmorTypeRaw:def.sourceArmorTypeRaw??def.sourceRawFields?.defType,
       x: 3, y: 6, hp, maxHp: hp, damage: value(def, ['damage', 'attack', 'attackDamage'], 18),
-      range: value(def, ['range', 'attackRange'], 65) / (value(def, ['range', 'attackRange'], 65) > 12 ? 100 : 1), attackCd: this._random() * .35,
+      range: value(def, ['range', 'attackRange'], 65) / (value(def, ['range', 'attackRange'], 65) > 12 ? 100 : 1), attackCd: overrides?.scriptAuxiliary ? 0 : this._random() * .35,
       attackInterval: value(def, ['interval', 'attackInterval', 'attackSpeed', 'cooldown'], 1),
       moveSpeed: value(def, ['moveSpeed', 'speed'], 75) / (value(def, ['moveSpeed', 'speed'], 75) > 12 ? (Number.isFinite(def.sourceSpeed) ? 100 : 75) : 1), armor: value(def, ['armor'], 0),
       attackType: def.attackType ?? 'normal', armorType: def.armorType ?? 'medium',
       race: def.race, shape: def.shape ?? 'circle', color: def.color ?? '#a9cce5', radius: value(def, ['radius'], .23),
       acquisitionRange: value(def, ['acquisitionRange', 'aggroRange'], Math.max(4.5, value(def, ['range'], 65) / 100 + 1)),
-      ability, status: {}, abilityCd: 1 + this._random() * 2, reward: 0, ...overrides,
+      ability, status: {}, abilityCd: overrides?.scriptAuxiliary ? 0 : 1 + this._random() * 2, reward: 0, ...overrides,
     };
     if (e.acquisitionRange > 12) e.acquisitionRange /= 100;
     if (ability?.type === 'shield') e.status.shield = ability.value > 1 ? ability.value : hp * number(ability.value, .2);
@@ -1704,7 +1705,7 @@ export class Game {
       restoreUnstableAlchemyUserData(this,e);restoreVeteranIdentity(this,e,units);restoreSapperCreation(this,e,def);
     }
     restoreUndeadLegionHandles(this);
-    restorePhoenixRevival(this);restorePhoenixActive(this);
+    restorePhoenixRevival(this);restorePhoenixActive(this);restoreMalygos(this);
     // JSON stores retained handles separately; surviving units must share the
     // live object again so later healing, movement and death update one handle.
     for(const e of [...this.state.entities,...this.state.kings])if(this.state.brightArthasHandles[e.id])this.state.brightArthasHandles[e.id]=e;

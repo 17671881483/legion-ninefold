@@ -1,0 +1,2804 @@
+{
+  "source": {
+    "path": "reference/v14-source/raw_extracted/war3map.j",
+    "sha256": "e66c55b3b25b185c991be5613e21fbf5b2d598f3cc40f2f8cd01c23bcb828250"
+  },
+  "sourceEvidence": [
+    {
+      "line": 1126,
+      "text": "integer Pn=$65303038"
+    },
+    {
+      "line": 1852,
+      "text": "call SaveInteger(O,$68304250,StringHash(\"box_train_upgrade_next\"),$6E303754)"
+    },
+    {
+      "line": 1853,
+      "text": "call SaveInteger(O,$68304250,StringHash(\"box_train_upgrade_count\"),1)"
+    },
+    {
+      "line": 1854,
+      "text": "call SaveInteger(O,$68304250,StringHash(\"box_train_upgrade_1\"),$6E303754)"
+    },
+    {
+      "line": 1855,
+      "text": "call SaveInteger(O,$6E30354D,StringHash(\"box_train_upgrade_next\"),$6E303754)"
+    },
+    {
+      "line": 1856,
+      "text": "call SaveInteger(O,$6E30354D,StringHash(\"box_train_upgrade_count\"),1)"
+    },
+    {
+      "line": 1857,
+      "text": "call SaveInteger(O,$6E30354D,StringHash(\"box_train_upgrade_1\"),$6E303754)"
+    },
+    {
+      "line": 2987,
+      "text": "call SaveInteger(O,$6E303754,StringHash(\"box_train_upgrade_require_count\"),3)"
+    },
+    {
+      "line": 2988,
+      "text": "call SaveInteger(O,$6E303754,StringHash(\"box_train_upgrade_require_1\"),$75303034)"
+    },
+    {
+      "line": 2989,
+      "text": "call SaveInteger(O,$6E303754,StringHash(\"box_train_upgrade_require_2\"),$52304541)"
+    },
+    {
+      "line": 2990,
+      "text": "call SaveInteger(O,$6E303754,StringHash(\"box_train_upgrade_require_3\"),$68323230)"
+    },
+    {
+      "line": 3637,
+      "text": "call DisableEggUnitTypeDialog___RegisterDialogEggUnitType($6E303754,\"çéèæ¯\",1)"
+    },
+    {
+      "line": 15465,
+      "text": "function CreateCreepWave takes nothing returns nothing"
+    },
+    {
+      "line": 15466,
+      "text": "local integer CT=Ik[Dg]"
+    },
+    {
+      "line": 15467,
+      "text": "if M8 then"
+    },
+    {
+      "line": 15468,
+      "text": "call CreateNUnitsAtLoc(CT,MB[Dg],Player(10),MG,bj_UNIT_FACING)"
+    },
+    {
+      "line": 15469,
+      "text": "endif"
+    },
+    {
+      "line": 15470,
+      "text": "if M9 then"
+    },
+    {
+      "line": 15471,
+      "text": "call CreateNUnitsAtLoc(CT,MB[Dg],Player(10),MH,bj_UNIT_FACING)"
+    },
+    {
+      "line": 15472,
+      "text": "endif"
+    },
+    {
+      "line": 15473,
+      "text": "if NB then"
+    },
+    {
+      "line": 15474,
+      "text": "call CreateNUnitsAtLoc(CT,MB[Dg],Player(10),MI,bj_UNIT_FACING)"
+    },
+    {
+      "line": 15475,
+      "text": "endif"
+    },
+    {
+      "line": 15476,
+      "text": "if NC then"
+    },
+    {
+      "line": 15477,
+      "text": "call CreateNUnitsAtLoc(CT,MB[Dg],Player(10),MJ,bj_UNIT_FACING)"
+    },
+    {
+      "line": 15478,
+      "text": "endif"
+    },
+    {
+      "line": 15479,
+      "text": "if ND then"
+    },
+    {
+      "line": 15480,
+      "text": "call CreateNUnitsAtLoc(CT,MB[Dg],Player(11),MK,bj_UNIT_FACING)"
+    },
+    {
+      "line": 15481,
+      "text": "endif"
+    },
+    {
+      "line": 15482,
+      "text": "if NE then"
+    },
+    {
+      "line": 15483,
+      "text": "call CreateNUnitsAtLoc(CT,MB[Dg],Player(11),ML,bj_UNIT_FACING)"
+    },
+    {
+      "line": 15484,
+      "text": "endif"
+    },
+    {
+      "line": 15485,
+      "text": "if NF then"
+    },
+    {
+      "line": 15486,
+      "text": "call CreateNUnitsAtLoc(CT,MB[Dg],Player(11),MM,bj_UNIT_FACING)"
+    },
+    {
+      "line": 15487,
+      "text": "endif"
+    },
+    {
+      "line": 15488,
+      "text": "if NG then"
+    },
+    {
+      "line": 15489,
+      "text": "call CreateNUnitsAtLoc(CT,MB[Dg],Player(11),MN,bj_UNIT_FACING)"
+    },
+    {
+      "line": 15490,
+      "text": "endif"
+    },
+    {
+      "line": 15952,
+      "text": "set Lr[1]=Player(8)"
+    },
+    {
+      "line": 15953,
+      "text": "set Lr[2]=Player(8)"
+    },
+    {
+      "line": 15954,
+      "text": "set Lr[3]=Player(8)"
+    },
+    {
+      "line": 15955,
+      "text": "set Lr[4]=Player(8)"
+    },
+    {
+      "line": 15956,
+      "text": "set Lr[5]=Player(9)"
+    },
+    {
+      "line": 15957,
+      "text": "set Lr[6]=Player(9)"
+    },
+    {
+      "line": 15958,
+      "text": "set Lr[7]=Player(9)"
+    },
+    {
+      "line": 15959,
+      "text": "set Lr[8]=Player(9)"
+    },
+    {
+      "line": 15960,
+      "text": "call SetPlayerName(Player(8),YDWETranslate(\"èçåå¢\"))"
+    },
+    {
+      "line": 15961,
+      "text": "call SetPlayerName(Player(9),YDWETranslate(\"é¨è½åå¢\"))"
+    },
+    {
+      "line": 15962,
+      "text": "set bj_forLoopAIndex=1"
+    },
+    {
+      "line": 15963,
+      "text": "set bj_forLoopAIndexEnd=4"
+    },
+    {
+      "line": 15964,
+      "text": "loop"
+    },
+    {
+      "line": 15965,
+      "text": "exitwhen bj_forLoopAIndex>bj_forLoopAIndexEnd"
+    },
+    {
+      "line": 15966,
+      "text": "call SetPlayerAllianceStateBJ(Player(-1+bj_forLoopAIndex),Player(11),2)"
+    },
+    {
+      "line": 15967,
+      "text": "call SetPlayerAllianceStateBJ(Player(11),Player(-1+bj_forLoopAIndex),2)"
+    },
+    {
+      "line": 15968,
+      "text": "call SetPlayerAllianceStateBJ(Player(-1+bj_forLoopAIndex),Player(10),0)"
+    },
+    {
+      "line": 15969,
+      "text": "call SetPlayerAllianceStateBJ(Player(10),Player(-1+bj_forLoopAIndex),0)"
+    },
+    {
+      "line": 15970,
+      "text": "set bj_forLoopAIndex=bj_forLoopAIndex+1"
+    },
+    {
+      "line": 15971,
+      "text": "endloop"
+    },
+    {
+      "line": 15972,
+      "text": "set bj_forLoopAIndex=5"
+    },
+    {
+      "line": 15973,
+      "text": "set bj_forLoopAIndexEnd=8"
+    },
+    {
+      "line": 15974,
+      "text": "loop"
+    },
+    {
+      "line": 15975,
+      "text": "exitwhen bj_forLoopAIndex>bj_forLoopAIndexEnd"
+    },
+    {
+      "line": 15976,
+      "text": "call SetPlayerAllianceStateBJ(Player(-1+bj_forLoopAIndex),Player(10),2)"
+    },
+    {
+      "line": 15977,
+      "text": "call SetPlayerAllianceStateBJ(Player(10),Player(-1+bj_forLoopAIndex),2)"
+    },
+    {
+      "line": 15978,
+      "text": "call SetPlayerAllianceStateBJ(Player(-1+bj_forLoopAIndex),Player(11),0)"
+    },
+    {
+      "line": 15979,
+      "text": "call SetPlayerAllianceStateBJ(Player(11),Player(-1+bj_forLoopAIndex),0)"
+    },
+    {
+      "line": 15980,
+      "text": "set bj_forLoopAIndex=bj_forLoopAIndex+1"
+    },
+    {
+      "line": 18459,
+      "text": "set Mk[Bi]=$68305650"
+    },
+    {
+      "line": 18460,
+      "text": "set Ml[Bi]=$6E303754"
+    },
+    {
+      "line": 28550,
+      "text": "if x==$68303431 or x==$68323031 or x==$68323034 then"
+    },
+    {
+      "line": 28551,
+      "text": "call SaveBoolean(O,GetHandleId(h),x,true)"
+    },
+    {
+      "line": 28552,
+      "text": "if LoadBoolean(O,GetHandleId(h),$68303431) and LoadBoolean(O,GetHandleId(h),$68323031) or LoadBoolean(O,GetHandleId(h),$68323034) then"
+    },
+    {
+      "line": 28553,
+      "text": "call SetPlayerTechResearchedSwap($52304541,1,h)"
+    },
+    {
+      "line": 28554,
+      "text": "endif"
+    },
+    {
+      "line": 28555,
+      "text": "endif"
+    },
+    {
+      "line": 28556,
+      "text": "if x==$6E303631 then"
+    },
+    {
+      "line": 29786,
+      "text": "function SelectRange takes unit Pf,real FF,real FG,real Px returns group"
+    },
+    {
+      "line": 29787,
+      "text": "local group DG=CreateGroup()"
+    },
+    {
+      "line": 29788,
+      "text": "local group Om=CreateGroup()"
+    },
+    {
+      "line": 29789,
+      "text": "local unit D6=null"
+    },
+    {
+      "line": 29790,
+      "text": "call GroupEnumUnitsInRange(DG,FF,FG,Px,null)"
+    },
+    {
+      "line": 29791,
+      "text": "loop"
+    },
+    {
+      "line": 29792,
+      "text": "set D6=FirstOfGroup(DG)"
+    },
+    {
+      "line": 29793,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 29794,
+      "text": "if IsUnitEnemy(D6,GetOwningPlayer(Pf)) and not IsUnitType(D6,UNIT_TYPE_DEAD) and GetUnitAbilityLevel(D6,$4176756C)==0 then"
+    },
+    {
+      "line": 29795,
+      "text": "call GroupAddUnit(Om,D6)"
+    },
+    {
+      "line": 29796,
+      "text": "endif"
+    },
+    {
+      "line": 29797,
+      "text": "call GroupRemoveUnit(DG,D6)"
+    },
+    {
+      "line": 29798,
+      "text": "endloop"
+    },
+    {
+      "line": 29799,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 29800,
+      "text": "set DG=null"
+    },
+    {
+      "line": 29801,
+      "text": "set D6=null"
+    },
+    {
+      "line": 29802,
+      "text": "set Pf=null"
+    },
+    {
+      "line": 29803,
+      "text": "set Py=Om"
+    },
+    {
+      "line": 29804,
+      "text": "set Om=null"
+    },
+    {
+      "line": 29805,
+      "text": "return Py"
+    },
+    {
+      "line": 29806,
+      "text": "endfunction"
+    },
+    {
+      "line": 29807,
+      "text": "function SelectRangeAlly takes unit Pf,real FF,real FG,real Px returns group"
+    },
+    {
+      "line": 29808,
+      "text": "local group DG=CreateGroup()"
+    },
+    {
+      "line": 29809,
+      "text": "local group Om=CreateGroup()"
+    },
+    {
+      "line": 29810,
+      "text": "local unit D6=null"
+    },
+    {
+      "line": 29811,
+      "text": "call GroupEnumUnitsInRange(DG,FF,FG,Px,null)"
+    },
+    {
+      "line": 29812,
+      "text": "loop"
+    },
+    {
+      "line": 29813,
+      "text": "set D6=FirstOfGroup(DG)"
+    },
+    {
+      "line": 29814,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 29815,
+      "text": "if IsUnitAlly(D6,GetOwningPlayer(Pf)) and not IsUnitType(D6,UNIT_TYPE_DEAD) and GetUnitAbilityLevel(D6,$4176756C)==0 then"
+    },
+    {
+      "line": 29816,
+      "text": "call GroupAddUnit(Om,D6)"
+    },
+    {
+      "line": 29817,
+      "text": "endif"
+    },
+    {
+      "line": 29818,
+      "text": "call GroupRemoveUnit(DG,D6)"
+    },
+    {
+      "line": 29819,
+      "text": "endloop"
+    },
+    {
+      "line": 29820,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 29821,
+      "text": "set DG=null"
+    },
+    {
+      "line": 29822,
+      "text": "set D6=null"
+    },
+    {
+      "line": 29823,
+      "text": "set Pf=null"
+    },
+    {
+      "line": 29824,
+      "text": "set Py=Om"
+    },
+    {
+      "line": 29825,
+      "text": "set Om=null"
+    },
+    {
+      "line": 29826,
+      "text": "return Py"
+    },
+    {
+      "line": 30160,
+      "text": "function ChargeDistanceCondition takes nothing returns boolean"
+    },
+    {
+      "line": 30161,
+      "text": "local trigger t=GetTriggeringTrigger()"
+    },
+    {
+      "line": 30162,
+      "text": "local integer Pr=GetHandleId(t)"
+    },
+    {
+      "line": 30163,
+      "text": "local real DK=LoadReal(O,Pr,3)"
+    },
+    {
+      "line": 30164,
+      "text": "local real QS=LoadReal(O,Pr,1)"
+    },
+    {
+      "line": 30165,
+      "text": "local real QN=LoadReal(O,Pr,2)"
+    },
+    {
+      "line": 30166,
+      "text": "local string QP=LoadStr(O,Pr,4)"
+    },
+    {
+      "line": 30167,
+      "text": "local string QQ=LoadStr(O,Pr,5)"
+    },
+    {
+      "line": 30168,
+      "text": "local unit Ki=LoadUnitHandle(O,Pr,6)"
+    },
+    {
+      "line": 30169,
+      "text": "local real Pm=LoadReal(O,Pr,7)"
+    },
+    {
+      "line": 30170,
+      "text": "local real QT=QS/DK*.04"
+    },
+    {
+      "line": 30171,
+      "text": "call SaveReal(O,Pr,10,QT)"
+    },
+    {
+      "line": 30172,
+      "text": "if GetTriggerEventId()==EVENT_WIDGET_DEATH then"
+    },
+    {
+      "line": 30173,
+      "text": "if QQ!=null then"
+    },
+    {
+      "line": 30174,
+      "text": "call ExecuteFunc(QQ)"
+    },
+    {
+      "line": 30175,
+      "text": "endif"
+    },
+    {
+      "line": 30176,
+      "text": "call FlushChildHashtable(O,Pr)"
+    },
+    {
+      "line": 30177,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 30178,
+      "text": "elseif GetTriggerEventId()==EVENT_GAME_TIMER_EXPIRED then"
+    },
+    {
+      "line": 30179,
+      "text": "if QN+QT>=QS then"
+    },
+    {
+      "line": 30180,
+      "text": "if QQ!=null then"
+    },
+    {
+      "line": 30181,
+      "text": "call ExecuteFunc(QQ)"
+    },
+    {
+      "line": 30182,
+      "text": "endif"
+    },
+    {
+      "line": 30183,
+      "text": "call FlushChildHashtable(O,Pr)"
+    },
+    {
+      "line": 30184,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 30185,
+      "text": "else"
+    },
+    {
+      "line": 30186,
+      "text": "call SaveReal(O,Pr,2,QN+QT)"
+    },
+    {
+      "line": 30187,
+      "text": "call SetUnitPosition(Ki,GetUnitX(Ki)+CosBJ(Pm)*QT,GetUnitY(Ki)+SinBJ(Pm)*QT)"
+    },
+    {
+      "line": 30188,
+      "text": "if QP!=null then"
+    },
+    {
+      "line": 30189,
+      "text": "call ExecuteFunc(QP)"
+    },
+    {
+      "line": 30190,
+      "text": "endif"
+    },
+    {
+      "line": 30191,
+      "text": "endif"
+    },
+    {
+      "line": 30192,
+      "text": "endif"
+    },
+    {
+      "line": 30193,
+      "text": "set t=null"
+    },
+    {
+      "line": 30194,
+      "text": "set Ki=null"
+    },
+    {
+      "line": 30195,
+      "text": "set QP=null"
+    },
+    {
+      "line": 30196,
+      "text": "set QQ=null"
+    },
+    {
+      "line": 30197,
+      "text": "return false"
+    },
+    {
+      "line": 30198,
+      "text": "endfunction"
+    },
+    {
+      "line": 30199,
+      "text": "function ChargeDistance takes unit Pf,unit Ki,real Pm,real QN,real QO,string QP,string QQ returns trigger"
+    },
+    {
+      "line": 30200,
+      "text": "local trigger t=CreateTrigger()"
+    },
+    {
+      "line": 30201,
+      "text": "local integer Pr=GetHandleId(t)"
+    },
+    {
+      "line": 30202,
+      "text": "call SaveReal(O,Pr,1,QN)"
+    },
+    {
+      "line": 30203,
+      "text": "call SaveReal(O,Pr,3,QO)"
+    },
+    {
+      "line": 30204,
+      "text": "call SaveStr(O,Pr,4,QP)"
+    },
+    {
+      "line": 30205,
+      "text": "call SaveStr(O,Pr,5,QQ)"
+    },
+    {
+      "line": 30206,
+      "text": "call SaveAgentHandle(O,Pr,6,Ki)"
+    },
+    {
+      "line": 30207,
+      "text": "call SaveReal(O,Pr,7,Pm)"
+    },
+    {
+      "line": 30208,
+      "text": "call SaveAgentHandle(O,Pr,9,Pf)"
+    },
+    {
+      "line": 30209,
+      "text": "call TriggerRegisterDeathEvent(t,Ki)"
+    },
+    {
+      "line": 30210,
+      "text": "call TriggerRegisterTimerEvent(t,0,false)"
+    },
+    {
+      "line": 30211,
+      "text": "call TriggerRegisterTimerEvent(t,.04,true)"
+    },
+    {
+      "line": 30212,
+      "text": "call TriggerAddCondition(t,Condition(function ChargeDistanceCondition))"
+    },
+    {
+      "line": 30213,
+      "text": "set QU=t"
+    },
+    {
+      "line": 30214,
+      "text": "set t=null"
+    },
+    {
+      "line": 30215,
+      "text": "set Ki=null"
+    },
+    {
+      "line": 30216,
+      "text": "set Pf=null"
+    },
+    {
+      "line": 30217,
+      "text": "set QP=null"
+    },
+    {
+      "line": 30218,
+      "text": "set QQ=null"
+    },
+    {
+      "line": 30219,
+      "text": "return QU"
+    },
+    {
+      "line": 30249,
+      "text": "function ChargeDistanceTargetCondition takes nothing returns boolean"
+    },
+    {
+      "line": 30250,
+      "text": "local trigger t=GetTriggeringTrigger()"
+    },
+    {
+      "line": 30251,
+      "text": "local integer Pr=GetHandleId(t)"
+    },
+    {
+      "line": 30252,
+      "text": "local real DK=LoadReal(O,Pr,3)"
+    },
+    {
+      "line": 30253,
+      "text": "local real QS=LoadReal(O,Pr,1)"
+    },
+    {
+      "line": 30254,
+      "text": "local real QN=LoadReal(O,Pr,2)"
+    },
+    {
+      "line": 30255,
+      "text": "local string QP=LoadStr(O,Pr,4)"
+    },
+    {
+      "line": 30256,
+      "text": "local string QQ=LoadStr(O,Pr,5)"
+    },
+    {
+      "line": 30257,
+      "text": "local unit Ki=LoadUnitHandle(O,Pr,6)"
+    },
+    {
+      "line": 30258,
+      "text": "local real QT=QS/DK*.04"
+    },
+    {
+      "line": 30259,
+      "text": "local unit Om=LoadUnitHandle(O,Pr,8)"
+    },
+    {
+      "line": 30260,
+      "text": "local real Pm=GetAngleFromUnit(Ki,Om)"
+    },
+    {
+      "line": 30261,
+      "text": "if GetTriggerEventId()==EVENT_WIDGET_DEATH then"
+    },
+    {
+      "line": 30262,
+      "text": "if QQ!=null then"
+    },
+    {
+      "line": 30263,
+      "text": "call ExecuteFunc(QQ)"
+    },
+    {
+      "line": 30264,
+      "text": "endif"
+    },
+    {
+      "line": 30265,
+      "text": "call FlushChildHashtable(O,Pr)"
+    },
+    {
+      "line": 30266,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 30267,
+      "text": "elseif GetTriggerEventId()==EVENT_GAME_TIMER_EXPIRED then"
+    },
+    {
+      "line": 30268,
+      "text": "if QN+QT>=QS or GetDisFromUnit(Ki,Om)<=QT then"
+    },
+    {
+      "line": 30269,
+      "text": "if QQ!=null then"
+    },
+    {
+      "line": 30270,
+      "text": "call ExecuteFunc(QQ)"
+    },
+    {
+      "line": 30271,
+      "text": "endif"
+    },
+    {
+      "line": 30272,
+      "text": "call FlushChildHashtable(O,Pr)"
+    },
+    {
+      "line": 30273,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 30274,
+      "text": "else"
+    },
+    {
+      "line": 30275,
+      "text": "call SaveReal(O,Pr,2,QN+QT)"
+    },
+    {
+      "line": 30276,
+      "text": "call SetUnitPosition(Ki,GetUnitX(Ki)+CosBJ(Pm)*QT,GetUnitY(Ki)+SinBJ(Pm)*QT)"
+    },
+    {
+      "line": 30277,
+      "text": "if QP!=null then"
+    },
+    {
+      "line": 30278,
+      "text": "call ExecuteFunc(QP)"
+    },
+    {
+      "line": 30279,
+      "text": "endif"
+    },
+    {
+      "line": 30280,
+      "text": "endif"
+    },
+    {
+      "line": 30281,
+      "text": "endif"
+    },
+    {
+      "line": 30282,
+      "text": "set t=null"
+    },
+    {
+      "line": 30283,
+      "text": "set Ki=null"
+    },
+    {
+      "line": 30284,
+      "text": "set Om=null"
+    },
+    {
+      "line": 30285,
+      "text": "set QP=null"
+    },
+    {
+      "line": 30286,
+      "text": "set QQ=null"
+    },
+    {
+      "line": 30287,
+      "text": "return false"
+    },
+    {
+      "line": 30288,
+      "text": "endfunction"
+    },
+    {
+      "line": 30289,
+      "text": "function ChargeDistanceTarget takes unit Pf,unit Ki,unit Om,real QN,real QO,string QP,string QQ returns trigger"
+    },
+    {
+      "line": 30290,
+      "text": "local trigger t=CreateTrigger()"
+    },
+    {
+      "line": 30291,
+      "text": "local integer Pr=GetHandleId(t)"
+    },
+    {
+      "line": 30292,
+      "text": "call SaveReal(O,Pr,1,GetDisFromUnit(Ki,Om))"
+    },
+    {
+      "line": 30293,
+      "text": "call SaveReal(O,Pr,3,QO)"
+    },
+    {
+      "line": 30294,
+      "text": "call SaveStr(O,Pr,4,QP)"
+    },
+    {
+      "line": 30295,
+      "text": "call SaveStr(O,Pr,5,QQ)"
+    },
+    {
+      "line": 30296,
+      "text": "call SaveAgentHandle(O,Pr,6,Ki)"
+    },
+    {
+      "line": 30297,
+      "text": "call SaveAgentHandle(O,Pr,8,Om)"
+    },
+    {
+      "line": 30298,
+      "text": "call SaveAgentHandle(O,Pr,9,Pf)"
+    },
+    {
+      "line": 30299,
+      "text": "call TriggerRegisterDeathEvent(t,Ki)"
+    },
+    {
+      "line": 30300,
+      "text": "call TriggerRegisterDeathEvent(t,Om)"
+    },
+    {
+      "line": 30301,
+      "text": "call TriggerRegisterTimerEvent(t,0,false)"
+    },
+    {
+      "line": 30302,
+      "text": "call TriggerRegisterTimerEvent(t,.04,true)"
+    },
+    {
+      "line": 30303,
+      "text": "call TriggerAddCondition(t,Condition(function ChargeDistanceTargetCondition))"
+    },
+    {
+      "line": 30304,
+      "text": "set QU=t"
+    },
+    {
+      "line": 30305,
+      "text": "set Pf=null"
+    },
+    {
+      "line": 30306,
+      "text": "set t=null"
+    },
+    {
+      "line": 30307,
+      "text": "set Ki=null"
+    },
+    {
+      "line": 30308,
+      "text": "set Om=null"
+    },
+    {
+      "line": 30309,
+      "text": "set QP=null"
+    },
+    {
+      "line": 30310,
+      "text": "set QQ=null"
+    },
+    {
+      "line": 30311,
+      "text": "return QU"
+    },
+    {
+      "line": 32443,
+      "text": "function GetRandomX takes real FF,real Pm,real Q5 returns real"
+    },
+    {
+      "line": 32444,
+      "text": "return FF+CosBJ(Pm)*Q5"
+    },
+    {
+      "line": 32445,
+      "text": "endfunction"
+    },
+    {
+      "line": 32446,
+      "text": "function GetRandomY takes real FG,real Pm,real Q5 returns real"
+    },
+    {
+      "line": 32447,
+      "text": "return FG+SinBJ(Pm)*Q5"
+    },
+    {
+      "line": 32448,
+      "text": "endfunction"
+    },
+    {
+      "line": 32449,
+      "text": "function MalygosArcaneMissilesCallback takes nothing returns nothing"
+    },
+    {
+      "line": 32450,
+      "text": "local timer t=GetExpiredTimer()"
+    },
+    {
+      "line": 32451,
+      "text": "local integer BQ=GetHandleId(t)"
+    },
+    {
+      "line": 32452,
+      "text": "local unit Ki=LoadUnitHandle(O,BQ,1)"
+    },
+    {
+      "line": 32453,
+      "text": "local unit Bc=LoadUnitHandle(O,BQ,0)"
+    },
+    {
+      "line": 32454,
+      "text": "local effect DE=LoadEffectHandle(O,GetHandleId(Ki),StringHash(\"effect\"))"
+    },
+    {
+      "line": 32455,
+      "text": "local group DG=SelectRange(Bc,GetUnitX(Ki),GetUnitY(Ki),250)"
+    },
+    {
+      "line": 32456,
+      "text": "local unit D6"
+    },
+    {
+      "line": 32457,
+      "text": "loop"
+    },
+    {
+      "line": 32458,
+      "text": "set D6=FirstOfGroup(DG)"
+    },
+    {
+      "line": 32459,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 32460,
+      "text": "call GroupRemoveUnit(DG,D6)"
+    },
+    {
+      "line": 32461,
+      "text": "call UnitDamageTargetBJ(Bc,D6,137,ATTACK_TYPE_CHAOS,DAMAGE_TYPE_UNIVERSAL)"
+    },
+    {
+      "line": 32462,
+      "text": "endloop"
+    },
+    {
+      "line": 32463,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 32464,
+      "text": "call DestroyEffect(AddSpecialEffect(\"LJQ_MLGS_A2.MDX\",GetUnitX(Ki),GetUnitY(Ki)))"
+    },
+    {
+      "line": 32465,
+      "text": "call DestroyEffect(DE)"
+    },
+    {
+      "line": 32466,
+      "text": "call FlushChildHashtable(O,GetHandleId(Ki))"
+    },
+    {
+      "line": 32467,
+      "text": "call RemoveUnit(Ki)"
+    },
+    {
+      "line": 32468,
+      "text": "call FlushChildHashtable(O,BQ)"
+    },
+    {
+      "line": 32469,
+      "text": "call DestroyTimer(t)"
+    },
+    {
+      "line": 32470,
+      "text": "set DG=null"
+    },
+    {
+      "line": 32471,
+      "text": "set DE=null"
+    },
+    {
+      "line": 32472,
+      "text": "set Ki=null"
+    },
+    {
+      "line": 32473,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 32474,
+      "text": "set t=null"
+    },
+    {
+      "line": 32475,
+      "text": "set D6=null"
+    },
+    {
+      "line": 32476,
+      "text": "endfunction"
+    },
+    {
+      "line": 32477,
+      "text": "function MalygosArcaneMissiles takes unit Bc,real FF,real FG returns nothing"
+    },
+    {
+      "line": 32478,
+      "text": "local integer QK=5"
+    },
+    {
+      "line": 32479,
+      "text": "local integer BB=0"
+    },
+    {
+      "line": 32480,
+      "text": "local real Qv"
+    },
+    {
+      "line": 32481,
+      "text": "local real Qw"
+    },
+    {
+      "line": 32482,
+      "text": "local real Pm"
+    },
+    {
+      "line": 32483,
+      "text": "local real Q5"
+    },
+    {
+      "line": 32484,
+      "text": "local unit Ki"
+    },
+    {
+      "line": 32485,
+      "text": "local timer t"
+    },
+    {
+      "line": 32486,
+      "text": "loop"
+    },
+    {
+      "line": 32487,
+      "text": "set BB=BB+1"
+    },
+    {
+      "line": 32488,
+      "text": "set Pm=GetRandomDirectionDeg()"
+    },
+    {
+      "line": 32489,
+      "text": "set Q5=GetRandomReal(0,350)"
+    },
+    {
+      "line": 32490,
+      "text": "set Qv=GetRandomX(FF,Pm,Q5)"
+    },
+    {
+      "line": 32491,
+      "text": "set Qw=GetRandomY(FG,Pm,Q5)"
+    },
+    {
+      "line": 32492,
+      "text": "set Ki=CreateUnit(GetOwningPlayer(Bc),Pn,Qv,Qw,Atan2BJ(Qw-FG,Qv-FF))"
+    },
+    {
+      "line": 32493,
+      "text": "call SetUnitScale(Ki,2,2,2)"
+    },
+    {
+      "line": 32494,
+      "text": "call SaveEffectHandle(O,GetHandleId(Ki),StringHash(\"effect\"),AddSpecialEffectTarget(\"LJQ_MLGS_A1.mdx\",Ki,\"chest\"))"
+    },
+    {
+      "line": 32495,
+      "text": "set t=CreateTimer()"
+    },
+    {
+      "line": 32496,
+      "text": "call SaveUnitHandle(O,GetHandleId(t),0,Bc)"
+    },
+    {
+      "line": 32497,
+      "text": "call SaveUnitHandle(O,GetHandleId(t),1,Ki)"
+    },
+    {
+      "line": 32498,
+      "text": "call TimerStart(t,.5,false,function MalygosArcaneMissilesCallback)"
+    },
+    {
+      "line": 32499,
+      "text": "exitwhen BB>=QK"
+    },
+    {
+      "line": 32500,
+      "text": "endloop"
+    },
+    {
+      "line": 32501,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 32502,
+      "text": "set Ki=null"
+    },
+    {
+      "line": 32503,
+      "text": "endfunction"
+    },
+    {
+      "line": 32504,
+      "text": "function MalygosAtk takes unit Bc,unit Om returns nothing"
+    },
+    {
+      "line": 32505,
+      "text": "call UnitDamageTargetBJ(Bc,Om,20,ATTACK_TYPE_CHAOS,DAMAGE_TYPE_UNIVERSAL)"
+    },
+    {
+      "line": 32506,
+      "text": "call DestroyEffect(AddSpecialEffectTarget(\"\",Om,\"origin\"))"
+    },
+    {
+      "line": 32507,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 32508,
+      "text": "set Om=null"
+    },
+    {
+      "line": 32509,
+      "text": "endfunction"
+    },
+    {
+      "line": 32510,
+      "text": "function MalygosMagicNetworkCallBackTimer takes nothing returns nothing"
+    },
+    {
+      "line": 32511,
+      "text": "local timer t=GetExpiredTimer()"
+    },
+    {
+      "line": 32512,
+      "text": "local unit D6=LoadUnitHandle(O,GetHandleId(t),0)"
+    },
+    {
+      "line": 32513,
+      "text": "local effect DE=LoadEffectHandle(O,GetHandleId(t),1)"
+    },
+    {
+      "line": 32514,
+      "text": "call SetUnitMoveSpeed(D6,GetUnitDefaultMoveSpeed(D6))"
+    },
+    {
+      "line": 32515,
+      "text": "call DestroyEffect(DE)"
+    },
+    {
+      "line": 32516,
+      "text": "call FlushChildHashtable(O,GetHandleId(t))"
+    },
+    {
+      "line": 32517,
+      "text": "call DestroyTimer(t)"
+    },
+    {
+      "line": 32518,
+      "text": "set t=null"
+    },
+    {
+      "line": 32519,
+      "text": "set D6=null"
+    },
+    {
+      "line": 32520,
+      "text": "set DE=null"
+    },
+    {
+      "line": 32521,
+      "text": "endfunction"
+    },
+    {
+      "line": 32522,
+      "text": "function MalygosMagicNetworkCallBack takes nothing returns nothing"
+    },
+    {
+      "line": 32523,
+      "text": "local unit Om=GetChargeTarget()"
+    },
+    {
+      "line": 32524,
+      "text": "local unit Bc=GetChargeSource()"
+    },
+    {
+      "line": 32525,
+      "text": "local group DG=SelectRange(Bc,GetUnitX(Om),GetUnitY(Om),400)"
+    },
+    {
+      "line": 32526,
+      "text": "local unit Ki=GetChargeDummy()"
+    },
+    {
+      "line": 32527,
+      "text": "local unit D6"
+    },
+    {
+      "line": 32528,
+      "text": "local timer t"
+    },
+    {
+      "line": 32529,
+      "text": "local effect DE=LoadEffectHandle(O,GetHandleId(Ki),StringHash(\"effect\"))"
+    },
+    {
+      "line": 32530,
+      "text": "call RemoveUnit(Ki)"
+    },
+    {
+      "line": 32531,
+      "text": "loop"
+    },
+    {
+      "line": 32532,
+      "text": "set D6=FirstOfGroup(DG)"
+    },
+    {
+      "line": 32533,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 32534,
+      "text": "call GroupRemoveUnit(DG,D6)"
+    },
+    {
+      "line": 32535,
+      "text": "call SetUnitMoveSpeed(D6,0)"
+    },
+    {
+      "line": 32536,
+      "text": "call UnitDamageTargetBJ(Bc,D6,776,ATTACK_TYPE_CHAOS,DAMAGE_TYPE_UNIVERSAL)"
+    },
+    {
+      "line": 32537,
+      "text": "set t=CreateTimer()"
+    },
+    {
+      "line": 32538,
+      "text": "call SaveAgentHandle(O,GetHandleId(t),0,D6)"
+    },
+    {
+      "line": 32539,
+      "text": "call SaveAgentHandle(O,GetHandleId(t),1,AddSpecialEffectTarget(\"LJQ_MLGS_B1.mdx\",D6,\"origin\"))"
+    },
+    {
+      "line": 32540,
+      "text": "call TimerStart(t,6,false,function MalygosMagicNetworkCallBackTimer)"
+    },
+    {
+      "line": 32541,
+      "text": "endloop"
+    },
+    {
+      "line": 32542,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 32543,
+      "text": "call DestroyEffect(DE)"
+    },
+    {
+      "line": 32544,
+      "text": "call FlushChildHashtable(O,GetHandleId(Ki))"
+    },
+    {
+      "line": 32545,
+      "text": "set DE=null"
+    },
+    {
+      "line": 32546,
+      "text": "set Ki=null"
+    },
+    {
+      "line": 32547,
+      "text": "set Om=null"
+    },
+    {
+      "line": 32548,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 32549,
+      "text": "set DG=null"
+    },
+    {
+      "line": 32550,
+      "text": "set t=null"
+    },
+    {
+      "line": 32551,
+      "text": "set D6=null"
+    },
+    {
+      "line": 32552,
+      "text": "endfunction"
+    },
+    {
+      "line": 32553,
+      "text": "function MalygosMagicNetwork takes unit Bc,unit Om returns nothing"
+    },
+    {
+      "line": 32554,
+      "text": "local unit Ki=CreateUnit(GetOwningPlayer(Bc),Pn,GetUnitX(Bc),GetUnitY(Bc),GetAngleFromUnit(Bc,Om))"
+    },
+    {
+      "line": 32555,
+      "text": "call SaveEffectHandle(O,GetHandleId(Ki),StringHash(\"effect\"),AddSpecialEffectTarget(\"LJQ_MLGS_B1.mdx\",Ki,\"chest\"))"
+    },
+    {
+      "line": 32556,
+      "text": "call ChargeDistanceTarget(Bc,Ki,Om,999999,.4,null,\"MalygosMagicNetworkCallBack\")"
+    },
+    {
+      "line": 32557,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 32558,
+      "text": "set Om=null"
+    },
+    {
+      "line": 32559,
+      "text": "set Ki=null"
+    },
+    {
+      "line": 32560,
+      "text": "endfunction"
+    },
+    {
+      "line": 32561,
+      "text": "function MalygosArcaneBombCallback takes nothing returns nothing"
+    },
+    {
+      "line": 32562,
+      "text": "local unit Ki=GetChargeDummy()"
+    },
+    {
+      "line": 32563,
+      "text": "local effect DE=LoadEffectHandle(O,GetHandleId(Ki),StringHash(\"effect\"))"
+    },
+    {
+      "line": 32564,
+      "text": "call DestroyEffect(DE)"
+    },
+    {
+      "line": 32565,
+      "text": "call FlushChildHashtable(O,GetHandleId(Ki))"
+    },
+    {
+      "line": 32566,
+      "text": "call RemoveUnit(Ki)"
+    },
+    {
+      "line": 32567,
+      "text": "set DE=null"
+    },
+    {
+      "line": 32568,
+      "text": "set Ki=null"
+    },
+    {
+      "line": 32569,
+      "text": "endfunction"
+    },
+    {
+      "line": 32570,
+      "text": "function MalygosArcaneBombChangeTimer takes nothing returns nothing"
+    },
+    {
+      "line": 32571,
+      "text": "local timer t=GetExpiredTimer()"
+    },
+    {
+      "line": 32572,
+      "text": "local integer BQ=GetHandleId(t)"
+    },
+    {
+      "line": 32573,
+      "text": "local unit Bc=LoadUnitHandle(O,BQ,0)"
+    },
+    {
+      "line": 32574,
+      "text": "local real FF=LoadReal(O,BQ,1)"
+    },
+    {
+      "line": 32575,
+      "text": "local real FG=LoadReal(O,BQ,2)"
+    },
+    {
+      "line": 32576,
+      "text": "local integer y=LoadInteger(O,BQ,3)+1"
+    },
+    {
+      "line": 32577,
+      "text": "local group DG=SelectRange(Bc,FF,FG,300)"
+    },
+    {
+      "line": 32578,
+      "text": "local unit D6"
+    },
+    {
+      "line": 32579,
+      "text": "loop"
+    },
+    {
+      "line": 32580,
+      "text": "set D6=FirstOfGroup(DG)"
+    },
+    {
+      "line": 32581,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 32582,
+      "text": "call GroupRemoveUnit(DG,D6)"
+    },
+    {
+      "line": 32583,
+      "text": "call UnitDamageTargetBJ(Bc,D6,189/3,ATTACK_TYPE_CHAOS,DAMAGE_TYPE_UNIVERSAL)"
+    },
+    {
+      "line": 32584,
+      "text": "endloop"
+    },
+    {
+      "line": 32585,
+      "text": "if y<3 then"
+    },
+    {
+      "line": 32586,
+      "text": "call SaveInteger(O,BQ,3,y)"
+    },
+    {
+      "line": 32587,
+      "text": "else"
+    },
+    {
+      "line": 32588,
+      "text": "call FlushChildHashtable(O,BQ)"
+    },
+    {
+      "line": 32589,
+      "text": "call DestroyTimer(t)"
+    },
+    {
+      "line": 32590,
+      "text": "endif"
+    },
+    {
+      "line": 32591,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 32592,
+      "text": "set DG=null"
+    },
+    {
+      "line": 32593,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 32594,
+      "text": "set t=null"
+    },
+    {
+      "line": 32595,
+      "text": "set D6=null"
+    },
+    {
+      "line": 32596,
+      "text": "endfunction"
+    },
+    {
+      "line": 32597,
+      "text": "function MalygosArcaneBombChange takes nothing returns nothing"
+    },
+    {
+      "line": 32598,
+      "text": "local unit Ki=GetChargeDummy()"
+    },
+    {
+      "line": 32599,
+      "text": "local unit Bc=GetChargeSource()"
+    },
+    {
+      "line": 32600,
+      "text": "local real FF=GetUnitX(Ki)"
+    },
+    {
+      "line": 32601,
+      "text": "local real FG=GetUnitY(Ki)"
+    },
+    {
+      "line": 32602,
+      "text": "local timer t=CreateTimer()"
+    },
+    {
+      "line": 32603,
+      "text": "call SaveReal(O,GetHandleId(t),1,FF)"
+    },
+    {
+      "line": 32604,
+      "text": "call SaveReal(O,GetHandleId(t),2,FG)"
+    },
+    {
+      "line": 32605,
+      "text": "call SaveUnitHandle(O,GetHandleId(t),0,Bc)"
+    },
+    {
+      "line": 32606,
+      "text": "call TimerStart(t,1.,true,function MalygosArcaneBombChangeTimer)"
+    },
+    {
+      "line": 32607,
+      "text": "call DestroyEffect(AddSpecialEffect(\"LJQ_MLGS_C2.mdx\",FF,FG))"
+    },
+    {
+      "line": 32608,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 32609,
+      "text": "set Ki=null"
+    },
+    {
+      "line": 32610,
+      "text": "set t=null"
+    },
+    {
+      "line": 32611,
+      "text": "endfunction"
+    },
+    {
+      "line": 32612,
+      "text": "function MalygosArcaneBomb takes unit Bc,real FF,real FG returns nothing"
+    },
+    {
+      "line": 32613,
+      "text": "local integer QK=3"
+    },
+    {
+      "line": 32614,
+      "text": "local integer BB=0"
+    },
+    {
+      "line": 32615,
+      "text": "local real Pm"
+    },
+    {
+      "line": 32616,
+      "text": "local unit Ki"
+    },
+    {
+      "line": 32617,
+      "text": "local real ak=Atan2BJ(FG-GetUnitY(Bc),FF-GetUnitX(Bc))-90"
+    },
+    {
+      "line": 32618,
+      "text": "loop"
+    },
+    {
+      "line": 32619,
+      "text": "set BB=BB+1"
+    },
+    {
+      "line": 32620,
+      "text": "set Pm=ak+181/(QK+1)*BB"
+    },
+    {
+      "line": 32621,
+      "text": "set Ki=CreateUnit(GetOwningPlayer(Bc),Pn,GetUnitX(Bc),GetUnitY(Bc),Pm)"
+    },
+    {
+      "line": 32622,
+      "text": "call SaveEffectHandle(O,GetHandleId(Ki),StringHash(\"effect\"),AddSpecialEffectTarget(\"LJQ_MLGS_C1.mdx\",Ki,\"chest\"))"
+    },
+    {
+      "line": 32623,
+      "text": "call ChargeDistance(Bc,Ki,Pm,600,.4,\"MalygosArcaneBombChange\",\"MalygosArcaneBombCallback\")"
+    },
+    {
+      "line": 32624,
+      "text": "exitwhen BB>=QK"
+    },
+    {
+      "line": 32625,
+      "text": "endloop"
+    },
+    {
+      "line": 32626,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 32627,
+      "text": "endfunction"
+    },
+    {
+      "line": 32628,
+      "text": "function MalygosShiderTimer takes nothing returns nothing"
+    },
+    {
+      "line": 32629,
+      "text": "local timer t=GetExpiredTimer()"
+    },
+    {
+      "line": 32630,
+      "text": "local unit i=LoadUnitHandle(O,GetHandleId(t),0)"
+    },
+    {
+      "line": 32631,
+      "text": "call DestroyEffect(LoadEffectHandle(O,GetHandleId(t),1))"
+    },
+    {
+      "line": 32632,
+      "text": "call UnitRemoveAbility(i,$41315135)"
+    },
+    {
+      "line": 32633,
+      "text": "call FlushChildHashtable(O,GetHandleId(t))"
+    },
+    {
+      "line": 32634,
+      "text": "call DestroyTimer(t)"
+    },
+    {
+      "line": 32635,
+      "text": "set t=null"
+    },
+    {
+      "line": 32636,
+      "text": "set i=null"
+    },
+    {
+      "line": 32637,
+      "text": "endfunction"
+    },
+    {
+      "line": 32638,
+      "text": "function MalygosShider takes unit Bc,unit Om returns nothing"
+    },
+    {
+      "line": 32639,
+      "text": "local timer t"
+    },
+    {
+      "line": 32640,
+      "text": "if Om==null then"
+    },
+    {
+      "line": 32641,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 32642,
+      "text": "return"
+    },
+    {
+      "line": 32643,
+      "text": "endif"
+    },
+    {
+      "line": 32644,
+      "text": "set t=CreateTimer()"
+    },
+    {
+      "line": 32645,
+      "text": "call UnitAddAbility(Bc,$41315135)"
+    },
+    {
+      "line": 32646,
+      "text": "call UnitMakeAbilityPermanent(Bc,true,$41315135)"
+    },
+    {
+      "line": 32647,
+      "text": "call SaveUnitHandle(O,GetHandleId(t),0,Bc)"
+    },
+    {
+      "line": 32648,
+      "text": "call SaveEffectHandle(O,GetHandleId(t),1,AddSpecialEffectTarget(\"LJQ_MLGS_D.MDX\",Om,\"chest\"))"
+    },
+    {
+      "line": 32649,
+      "text": "call TimerStart(t,6,false,function MalygosShiderTimer)"
+    },
+    {
+      "line": 32650,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 32651,
+      "text": "set Om=null"
+    },
+    {
+      "line": 32652,
+      "text": "set t=null"
+    },
+    {
+      "line": 32653,
+      "text": "endfunction"
+    },
+    {
+      "line": 32654,
+      "text": "function MalygosTakeMana takes unit Ei returns nothing"
+    },
+    {
+      "line": 32655,
+      "text": "local group aX=SelectRange(Ei,GetUnitX(Ei),GetUnitY(Ei),999999)"
+    },
+    {
+      "line": 32656,
+      "text": "local unit Om=FirstOfGroup(aX)"
+    },
+    {
+      "line": 32657,
+      "text": "call YDWETimerDestroyEffect(3,AddSpecialEffectTarget(\"Abilities\\\\Spells\\\\Other\\\\Drain\\\\ManaDrainTarget.mdl\",Ei,\"overhead\"))"
+    },
+    {
+      "line": 32658,
+      "text": "loop"
+    },
+    {
+      "line": 32659,
+      "text": "exitwhen Om==null"
+    },
+    {
+      "line": 32660,
+      "text": "if GetUnitState(Om,UNIT_STATE_MANA)>=5 then"
+    },
+    {
+      "line": 32661,
+      "text": "call SetUnitState(Om,UNIT_STATE_MANA,GetUnitState(Om,UNIT_STATE_MANA)-5)"
+    },
+    {
+      "line": 32662,
+      "text": "call SetUnitState(Ei,UNIT_STATE_MANA,GetUnitState(Ei,UNIT_STATE_MANA)+5)"
+    },
+    {
+      "line": 32663,
+      "text": "call YDWETimerDestroyEffect(3,AddSpecialEffectTarget(\"Abilities\\\\Spells\\\\Other\\\\Drain\\\\ManaDrainTarget.mdl\",Om,\"overhead\"))"
+    },
+    {
+      "line": 32664,
+      "text": "endif"
+    },
+    {
+      "line": 32665,
+      "text": "call GroupRemoveUnit(aX,Om)"
+    },
+    {
+      "line": 32666,
+      "text": "set Om=FirstOfGroup(aX)"
+    },
+    {
+      "line": 32667,
+      "text": "endloop"
+    },
+    {
+      "line": 32668,
+      "text": "call DestroyGroup(aX)"
+    },
+    {
+      "line": 32669,
+      "text": "set aX=null"
+    },
+    {
+      "line": 32670,
+      "text": "set Ei=null"
+    },
+    {
+      "line": 32671,
+      "text": "set Om=null"
+    },
+    {
+      "line": 32672,
+      "text": "endfunction"
+    },
+    {
+      "line": 39333,
+      "text": "if BF==$4131505A then"
+    },
+    {
+      "line": 39334,
+      "text": "call MalygosArcaneMissiles(i,FF,FG)"
+    },
+    {
+      "line": 39335,
+      "text": "endif"
+    },
+    {
+      "line": 39336,
+      "text": "if BF==$41315146 then"
+    },
+    {
+      "line": 39337,
+      "text": "call BlademasterDrawAKnifeAndChop(i)"
+    },
+    {
+      "line": 39338,
+      "text": "endif"
+    },
+    {
+      "line": 39339,
+      "text": "if BF==$41315147 then"
+    },
+    {
+      "line": 39340,
+      "text": "call BladeMasterSwordFire(i,Atan2BJ(FG-GetUnitY(i),FF-GetUnitX(i)))"
+    },
+    {
+      "line": 39341,
+      "text": "endif"
+    },
+    {
+      "line": 39342,
+      "text": "if BF==$41315131 then"
+    },
+    {
+      "line": 39343,
+      "text": "call MalygosMagicNetwork(i,Qf)"
+    },
+    {
+      "line": 39344,
+      "text": "endif"
+    },
+    {
+      "line": 39345,
+      "text": "if BF==$41315132 then"
+    },
+    {
+      "line": 39346,
+      "text": "call MalygosArcaneBomb(i,FF,FG)"
+    },
+    {
+      "line": 39347,
+      "text": "endif"
+    },
+    {
+      "line": 39348,
+      "text": "if BF==$41315133 then"
+    },
+    {
+      "line": 39349,
+      "text": "call MalygosShider(i,Qf)"
+    },
+    {
+      "line": 39350,
+      "text": "endif"
+    },
+    {
+      "line": 40529,
+      "text": "function Trig_UnitDamageActions takes nothing returns nothing"
+    },
+    {
+      "line": 40530,
+      "text": "local unit i=GetTriggerUnit()"
+    },
+    {
+      "line": 40531,
+      "text": "local unit bV=GetEventDamageSource()"
+    },
+    {
+      "line": 40532,
+      "text": "local real P8=GetEventDamage()"
+    },
+    {
+      "line": 40533,
+      "text": "local boolean bW=YDWEIsEventAttackDamage()"
+    },
+    {
+      "line": 40534,
+      "text": "local real FF=GetUnitX(i)"
+    },
+    {
+      "line": 40535,
+      "text": "local real FG=GetUnitY(i)"
+    },
+    {
+      "line": 40536,
+      "text": "local trigger Eb=GetTriggeringTrigger()"
+    },
+    {
+      "line": 40537,
+      "text": "local group Uz=null"
+    },
+    {
+      "line": 40538,
+      "text": "local player h=GetOwningPlayer(bV)"
+    },
+    {
+      "line": 40539,
+      "text": "local integer BB=0"
+    },
+    {
+      "line": 40540,
+      "text": "local unit D6"
+    },
+    {
+      "line": 40541,
+      "text": "local trigger bn=null"
+    },
+    {
+      "line": 40542,
+      "text": "local timer t=null"
+    },
+    {
+      "line": 40543,
+      "text": "local integer YY=0"
+    },
+    {
+      "line": 40544,
+      "text": "local integer bj=$68305544"
+    },
+    {
+      "line": 40545,
+      "text": "local boolean Cd"
+    },
+    {
+      "line": 40546,
+      "text": "local boolexpr bs"
+    },
+    {
+      "line": 40547,
+      "text": "local texttag Bj"
+    },
+    {
+      "line": 40548,
+      "text": "local real a5=0"
+    },
+    {
+      "line": 40549,
+      "text": "local real Pm=0"
+    },
+    {
+      "line": 40550,
+      "text": "local effect bk=null"
+    },
+    {
+      "line": 40551,
+      "text": "local unit Ki"
+    },
+    {
+      "line": 40552,
+      "text": "local group DG"
+    },
+    {
+      "line": 40553,
+      "text": "if P8<=0 or bV==i or bV==null or IsUnitAlly(bV,GetOwningPlayer(i)) then"
+    },
+    {
+      "line": 40554,
+      "text": "set i=null"
+    },
+    {
+      "line": 40555,
+      "text": "set bV=null"
+    },
+    {
+      "line": 40556,
+      "text": "set Eb=null"
+    },
+    {
+      "line": 40557,
+      "text": "set h=null"
+    },
+    {
+      "line": 40558,
+      "text": "set Uz=null"
+    },
+    {
+      "line": 40559,
+      "text": "return"
+    },
+    {
+      "line": 40560,
+      "text": "endif"
+    },
+    {
+      "line": 40561,
+      "text": "if GetUnitAbilityLevel(bV,$41325937)>0 then"
+    },
+    {
+      "line": 40562,
+      "text": "set i=null"
+    },
+    {
+      "line": 40563,
+      "text": "set bV=null"
+    },
+    {
+      "line": 40564,
+      "text": "set Eb=null"
+    },
+    {
+      "line": 40565,
+      "text": "set h=null"
+    },
+    {
+      "line": 40566,
+      "text": "set Uz=null"
+    },
+    {
+      "line": 40567,
+      "text": "return"
+    },
+    {
+      "line": 40568,
+      "text": "endif"
+    },
+    {
+      "line": 40569,
+      "text": "if GetUnitAbilityLevel(i,QC)>0 then"
+    },
+    {
+      "line": 40570,
+      "text": "set P8=P8*.85"
+    },
+    {
+      "line": 40571,
+      "text": "call YDWESetEventDamage(P8)"
+    },
+    {
+      "line": 40572,
+      "text": "endif"
+    },
+    {
+      "line": 40573,
+      "text": "set Uz=CreateGroup()"
+    },
+    {
+      "line": 40574,
+      "text": "call DisableTrigger(Eb)"
+    },
+    {
+      "line": 40600,
+      "text": "if GetUnitAbilityLevel(bV,$41315134)>0 then"
+    },
+    {
+      "line": 40601,
+      "text": "call UnitRemoveAbility(bV,$41315134)"
+    },
+    {
+      "line": 40602,
+      "text": "call MalygosTakeMana(bV)"
+    },
+    {
+      "line": 40603,
+      "text": "endif"
+    },
+    {
+      "line": 40804,
+      "text": "if GetUnitAbilityLevel(i,$4131505A)>0 then"
+    },
+    {
+      "line": 40805,
+      "text": "call IssueTargetOrder(i,\"unloadall\",bV)"
+    },
+    {
+      "line": 40806,
+      "text": "elseif GetUnitAbilityLevel(bV,$4131505A)>0 then"
+    },
+    {
+      "line": 40807,
+      "text": "call IssueTargetOrder(bV,\"unloadall\",i)"
+    },
+    {
+      "line": 40808,
+      "text": "endif"
+    },
+    {
+      "line": 40809,
+      "text": "if GetUnitAbilityLevel(i,$41315131)>0 then"
+    },
+    {
+      "line": 40810,
+      "text": "call IssueTargetOrder(i,\"unloadallcorpses\",bV)"
+    },
+    {
+      "line": 40811,
+      "text": "elseif GetUnitAbilityLevel(bV,$41315131)>0 then"
+    },
+    {
+      "line": 40812,
+      "text": "call IssueTargetOrder(bV,\"unloadallcorpses\",i)"
+    },
+    {
+      "line": 40813,
+      "text": "endif"
+    },
+    {
+      "line": 40814,
+      "text": "if GetUnitAbilityLevel(i,$41315132)>0 then"
+    },
+    {
+      "line": 40815,
+      "text": "call IssueTargetOrder(i,\"unpoisonarrows\",bV)"
+    },
+    {
+      "line": 40816,
+      "text": "elseif GetUnitAbilityLevel(bV,$41315132)>0 then"
+    },
+    {
+      "line": 40817,
+      "text": "call IssueTargetOrder(bV,\"unpoisonarrows\",i)"
+    },
+    {
+      "line": 40818,
+      "text": "endif"
+    },
+    {
+      "line": 40819,
+      "text": "if GetUnitAbilityLevel(i,$41315133)>0 then"
+    },
+    {
+      "line": 40820,
+      "text": "set DG=SelectRangeAlly(i,FF,FG,500)"
+    },
+    {
+      "line": 40821,
+      "text": "set D6=GroupPickRandomUnit(DG)"
+    },
+    {
+      "line": 40822,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 40823,
+      "text": "if D6!=null then"
+    },
+    {
+      "line": 40824,
+      "text": "call IssueTargetOrder(i,\"unravenform\",D6)"
+    },
+    {
+      "line": 40825,
+      "text": "endif"
+    },
+    {
+      "line": 40826,
+      "text": "set DG=null"
+    },
+    {
+      "line": 40827,
+      "text": "elseif GetUnitAbilityLevel(bV,$41315133)>0 then"
+    },
+    {
+      "line": 40828,
+      "text": "set DG=SelectRangeAlly(bV,FF,FG,500)"
+    },
+    {
+      "line": 40829,
+      "text": "set D6=GroupPickRandomUnit(DG)"
+    },
+    {
+      "line": 40830,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 40831,
+      "text": "if D6!=null then"
+    },
+    {
+      "line": 40832,
+      "text": "call IssueTargetOrder(bV,\"unravenform\",D6)"
+    },
+    {
+      "line": 40833,
+      "text": "endif"
+    },
+    {
+      "line": 40834,
+      "text": "set DG=null"
+    },
+    {
+      "line": 40835,
+      "text": "endif"
+    },
+    {
+      "line": 42270,
+      "text": "if YDWEIsEventAttackDamage() and not LoadBoolean(O,GetHandleId(i),StringHash(\"Attack\")) then"
+    },
+    {
+      "line": 42271,
+      "text": "call SaveBoolean(O,GetHandleId(i),StringHash(\"Attack\"),true)"
+    },
+    {
+      "line": 42272,
+      "text": "if GetUnitAbilityLevel(i,$4131554B)>0 then"
+    },
+    {
+      "line": 42273,
+      "text": "call NazuoCurseAttack(i,Qf,GetUnitAbilityLevel(i,$4131554B))"
+    },
+    {
+      "line": 42274,
+      "text": "endif"
+    },
+    {
+      "line": 42275,
+      "text": "if GetUnitAbilityLevel(i,$41315652)>0 then"
+    },
+    {
+      "line": 42276,
+      "text": "call ArthasAttack(i,Qf,GetEventDamage())"
+    },
+    {
+      "line": 42277,
+      "text": "call ArthasReadyAttack(i,GetEventDamage())"
+    },
+    {
+      "line": 42278,
+      "text": "endif"
+    },
+    {
+      "line": 42279,
+      "text": "if GetUnitAbilityLevel(i,$4131444F)>0 then"
+    },
+    {
+      "line": 42280,
+      "text": "call NagaAttack(i,Qf)"
+    },
+    {
+      "line": 42281,
+      "text": "endif"
+    },
+    {
+      "line": 42282,
+      "text": "if GetUnitAbilityLevel(Qf,$41325936)>0 then"
+    },
+    {
+      "line": 42283,
+      "text": "call NagaShamanTideBoon(Qf)"
+    },
+    {
+      "line": 42284,
+      "text": "endif"
+    },
+    {
+      "line": 42285,
+      "text": "if GetUnitAbilityLevel(i,$41315145)>0 then"
+    },
+    {
+      "line": 42286,
+      "text": "call BlademasterCriticalStrike(i)"
+    },
+    {
+      "line": 42287,
+      "text": "endif"
+    },
+    {
+      "line": 42288,
+      "text": "if GetUnitAbilityLevel(i,$41315130)>0 then"
+    },
+    {
+      "line": 42289,
+      "text": "call MalygosAtk(i,Qf)"
+    },
+    {
+      "line": 42290,
+      "text": "endif"
+    },
+    {
+      "line": 42291,
+      "text": "if GetUnitAbilityLevel(i,$41323043)>0 then"
+    },
+    {
+      "line": 43883,
+      "text": "function PassiveSkillNoArgJJC takes nothing returns nothing"
+    },
+    {
+      "line": 43884,
+      "text": "local unit Bc=Kc"
+    },
+    {
+      "line": 43885,
+      "text": "local integer x=Mk[Bi]"
+    },
+    {
+      "line": 43886,
+      "text": "local unit Pf=Nr"
+    },
+    {
+      "line": 43887,
+      "text": "call PassiveSkillJJC(Pf,Bc)"
+    },
+    {
+      "line": 43888,
+      "text": "if Bc!=null and x>0 then"
+    },
+    {
+      "line": 43889,
+      "text": "call UnitRemoveAbility(Bc,$4131374C)"
+    },
+    {
+      "line": 43890,
+      "text": "call UnitRemoveAbility(Bc,$41315134)"
+    },
+    {
+      "line": 43891,
+      "text": "call PassiveSkill(Bc,x,Pf)"
+    },
+    {
+      "line": 43892,
+      "text": "endif"
+    },
+    {
+      "line": 43893,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 43894,
+      "text": "set Pf=null"
+    },
+    {
+      "line": 43895,
+      "text": "endfunction"
+    },
+    {
+      "line": 48287,
+      "text": "call RegisterBudingLimit($6E303754,0,1)"
+    }
+  ],
+  "abilities": {
+    "A1PZ": {
+      "rawcode": "A1PZ",
+      "name": "奥术风暴",
+      "tip": "奥术风暴",
+      "ubertip": "玛里苟斯召唤5颗奥术飞弹，奥术飞弹落地后，对落地100*300码范围内的系统怪与木怪造成137点伤害，效果持续5s。",
+      "alias": "A1PZ",
+      "code": "ANcl",
+      "DataB1": "3",
+      "DataC1": "1",
+      "levels": "1",
+      "Cost1": "10",
+      "Rng1": "500.0",
+      "Cool1": "8.0",
+      "checkDep": "1",
+      "reqLevel": "1",
+      "DataE1": "1",
+      "DataF1": "unloadall"
+    },
+    "A1Q0": {
+      "rawcode": "A1Q0",
+      "name": "碧蓝之火",
+      "tip": "碧蓝之火",
+      "ubertip": "玛里苟斯的普通攻击对敌方单位可造成额外的20点魔法伤害",
+      "alias": "A1Q0",
+      "code": "Asth",
+      "levels": "1"
+    },
+    "A1Q1": {
+      "rawcode": "A1Q1",
+      "name": "魔法之网",
+      "tip": "魔法之网",
+      "ubertip": "玛里苟斯释放一道魔法网，将300*300范围敌方单位定身，并且对网内敌方单位造成116点伤害，持续3s",
+      "alias": "A1Q1",
+      "code": "ANcl",
+      "DataB1": "1",
+      "DataC1": "1",
+      "levels": "1",
+      "targs1": "enemies",
+      "Cost1": "20",
+      "Rng1": "500.0",
+      "Cool1": "12.0",
+      "checkDep": "1",
+      "reqLevel": "1",
+      "DataE1": "1",
+      "DataF1": "unloadallcorpses"
+    },
+    "A1Q2": {
+      "rawcode": "A1Q2",
+      "name": "奥术炸弹",
+      "tip": "奥术炸弹",
+      "ubertip": "以自身为中心吐出3枚奥术炸弹，在轨迹上留下火焰持续3秒.共造成189点伤害",
+      "alias": "A1Q2",
+      "code": "ANcl",
+      "DataB1": "3",
+      "DataC1": "1",
+      "levels": "1",
+      "Cost1": "10",
+      "Rng1": "500.0",
+      "Cool1": "16.0",
+      "checkDep": "1",
+      "reqLevel": "1",
+      "DataE1": "1",
+      "DataF1": "unpoisonarrows"
+    },
+    "A1Q3": {
+      "rawcode": "A1Q3",
+      "name": "蓝龙护盾",
+      "tip": "蓝龙护盾",
+      "ubertip": "为附近500码范围的友军单位提供一个护盾，该护盾可将单位附近的敌方单位振飞，并提供18%的减伤效果，护盾效果持续6s",
+      "alias": "A1Q3",
+      "code": "ANcl",
+      "DataB1": "1",
+      "DataC1": "1",
+      "levels": "1",
+      "targs1": "friend,self",
+      "Cost1": "13",
+      "Rng1": "500.0",
+      "Cool1": "8.0",
+      "checkDep": "1",
+      "reqLevel": "1",
+      "DataE1": "1",
+      "DataF1": "unravenform"
+    },
+    "A1Q4": {
+      "rawcode": "A1Q4",
+      "name": "魔法汲取",
+      "tip": "魔法汲取",
+      "ubertip": "玛里苟斯在竞技场中汲取敌方拥有魔法单位各5点的魔法值,为自己所用.",
+      "alias": "A1Q4",
+      "code": "Asth",
+      "levels": "1"
+    },
+    "A1Q5": {
+      "rawcode": "A1Q5",
+      "name": "魔法伤害减少",
+      "alias": "A1Q5",
+      "code": "AIsr",
+      "DataB1": "0.18",
+      "levels": "1"
+    }
+  },
+  "units": {
+    "e008": {
+      "rawcode": "e008",
+      "name": "万能",
+      "tip": "训练小精灵(W)",
+      "ubertip": "暗夜精灵族基本的工人单位。能采集金矿和木材。还能建造精灵族的建筑物并进行修理更新。\n能自我爆炸从而伤害到周围被召唤出来的单位并吸收一定范围内所有单位的魔法值。",
+      "unitID": "e008",
+      "canFlee": "1",
+      "cargoSize": "1",
+      "death": "3.0",
+      "prio": "1",
+      "propWin": "60.0",
+      "race": "nightelf",
+      "targType": "ground",
+      "turnRate": "0.6",
+      "unitBalanceID": "e008",
+      "bldtm": "14",
+      "bountydice": "5",
+      "bountyplus": "15",
+      "bountysides": "3",
+      "defType": "medium",
+      "goldcost": "60",
+      "goldRep": "60",
+      "HP": "60",
+      "level": "1",
+      "mana0": "100000",
+      "regenHP": "-1.0",
+      "regenMana": "1000.0",
+      "regenType": "always",
+      "reptm": "14",
+      "stockMax": "3",
+      "stockRegen": "30",
+      "tilesets": "*",
+      "unitUIID": "e008",
+      "armor": "Ethereal",
+      "blue": "255",
+      "elevRad": "50.0",
+      "file": "war3mapImported\\aaaaa.mdl",
+      "green": "255",
+      "maxPitch": "25.0",
+      "maxRoll": "25.0",
+      "modelScale": "1.0",
+      "red": "255",
+      "run": "200.0",
+      "scale": "1.0",
+      "scaleBull": "1",
+      "shadowOnWater": "1",
+      "teamColor": "-1",
+      "unitSound": "Wisp",
+      "walk": "200.0",
+      "unitAbilID": "e008",
+      "abilList": "Aloc",
+      "unitWeapID": "e008",
+      "atkType1": "normal",
+      "atkType2": "normal",
+      "impactZ": "60.0",
+      "launchZ": "60.0",
+      "showUI1": "1",
+      "showUI2": "1",
+      "targCount2": "1",
+      "hotkey": "W",
+      "bounty_min": "20.0",
+      "bounty_max": "30.0",
+      "bounty_avg": "25.0",
+      "attack_type_zh": "普通",
+      "armor_type_zh": "中甲",
+      "ability_ids": "Aloc",
+      "ability_names": "蝗虫",
+      "formation": "4",
+      "defUp": "2.0",
+      "manaN": "100000"
+    },
+    "h0VP": {
+      "rawcode": "h0VP",
+      "name": "玛里苟斯",
+      "ubertip": ",",
+      "unitID": "h0VP",
+      "canFlee": "1",
+      "cargoSize": "1",
+      "death": "3.04",
+      "deathType": "3",
+      "movetp": "foot",
+      "points": "100",
+      "prio": "6",
+      "propWin": "60.0",
+      "race": "human",
+      "targType": "ground",
+      "turnRate": "0.6",
+      "unitBalanceID": "h0VP",
+      "bldtm": "20",
+      "bountydice": "6",
+      "bountyplus": "20",
+      "bountysides": "3",
+      "collision": "12.0",
+      "defType": "hero",
+      "goldcost": "135",
+      "goldRep": "135",
+      "HP": "5000",
+      "level": "2",
+      "mana0": "18",
+      "nsight": "800",
+      "regenMana": "2.0",
+      "regenType": "none",
+      "reptm": "20",
+      "sight": "1400",
+      "spd": "340",
+      "stockMax": "3",
+      "stockRegen": "30",
+      "tilesets": "*",
+      "upgrades": "R00B,R00C,R009,R00A",
+      "unitUIID": "h0VP",
+      "armor": "Flesh",
+      "blend": "0.15",
+      "blue": "255",
+      "elevRad": "20.0",
+      "file": "Malygos0000001.mdx",
+      "green": "255",
+      "maxPitch": "10.0",
+      "maxRoll": "10.0",
+      "modelScale": "1.0",
+      "red": "255",
+      "run": "210.0",
+      "scale": "1.0",
+      "scaleBull": "1",
+      "shadowH": "140.0",
+      "shadowOnWater": "1",
+      "shadowW": "140.0",
+      "shadowX": "50.0",
+      "shadowY": "50.0",
+      "teamColor": "-1",
+      "unitShadow": "Shadow",
+      "unitSound": "Gnoll",
+      "walk": "210.0",
+      "unitAbilID": "h0VP",
+      "abilList": "A1PZ,A1Q0,A1Q1,A1Q2,A1Q3,A1Q4",
+      "unitWeapID": "h0VP",
+      "acquire": "500.0",
+      "atkType1": "magic",
+      "atkType2": "normal",
+      "backSw1": "0.3",
+      "cool1": "0.4",
+      "dice1": "1",
+      "dmgpt1": "0.3",
+      "impactZ": "60.0",
+      "launchZ": "60.0",
+      "rangeN1": "500",
+      "RngBuff1": "250.0",
+      "showUI1": "1",
+      "showUI2": "1",
+      "sides1": "31",
+      "targCount1": "1",
+      "targCount2": "1",
+      "targs1": "enemies",
+      "weapsOn": "1",
+      "weapTp1": "missile",
+      "weapType1": "WoodLightBash",
+      "hotkey": "F",
+      "damage_min_1": "390.0",
+      "damage_max_1": "420.0",
+      "damage_avg_1": "405.0",
+      "dps_avg_1": "1012.5",
+      "bounty_min": "26.0",
+      "bounty_max": "38.0",
+      "bounty_avg": "32.0",
+      "attack_type_zh": "魔法",
+      "armor_type_zh": "英雄甲",
+      "ability_ids": "A1PZ,A1Q0,A1Q1,A1Q2,A1Q3,A1Q4",
+      "ability_names": "奥术风暴,碧蓝之火,魔法之网,奥术炸弹,蓝龙护盾,魔法汲取",
+      "def": "3.0",
+      "defUp": "2.0",
+      "manaN": "40",
+      "type": "giant,sapper",
+      "dmgplus1": "389"
+    }
+  },
+  "acquisition": {
+    "targetRawcode": "n07T",
+    "fromRawcodes": [
+      "h0BP",
+      "n05M"
+    ],
+    "mentionedRawcodes": [
+      "h0BP",
+      "n05M",
+      "n07T",
+      "h041",
+      "h201",
+      "h204"
+    ],
+    "status": "confirmed",
+    "requirements": [
+      {
+        "kind": "battle",
+        "text": "等到本波战斗结束",
+        "rawcode": "u004"
+      },
+      {
+        "kind": "gameplay",
+        "rawcode": "R0EA",
+        "text": "曾完成过以下任一组：中子＋圣龙；或圣龙（外观形态记录）；完成记录保留",
+        "status": "confirmed",
+        "lines": [
+          28553
+        ],
+        "mentions": [
+          "h041",
+          "h201",
+          "h204"
+        ],
+        "literalCondition": "LoadBoolean(O,GetHandleId(h),$68303431) and LoadBoolean(O,GetHandleId(h),$68323031) or LoadBoolean(O,GetHandleId(h),$68323034)",
+        "groups": [
+          [
+            "h041",
+            "h201"
+          ],
+          [
+            "h204"
+          ]
+        ]
+      },
+      {
+        "kind": "qualification",
+        "text": "需要军团战争超级赞助资格",
+        "rawcode": "h220",
+        "status": "confirmed"
+      }
+    ],
+    "edgeSources": [
+      {
+        "table": "unit_upgrade_edges.csv",
+        "row": 165,
+        "rawcode": "n07T"
+      },
+      {
+        "table": "unit_upgrade_edges.csv",
+        "row": 267,
+        "rawcode": "n07T"
+      }
+    ],
+    "literalGrantEvidence": [
+      {
+        "rawcode": "R0EA",
+        "line": 28553,
+        "condition": "LoadBoolean(O,GetHandleId(h),$68303431) and LoadBoolean(O,GetHandleId(h),$68323031) or LoadBoolean(O,GetHandleId(h),$68323034)",
+        "stack": [
+          "x==$68303431 or x==$68323031 or x==$68323034",
+          "LoadBoolean(O,GetHandleId(h),$68303431) and LoadBoolean(O,GetHandleId(h),$68323031) or LoadBoolean(O,GetHandleId(h),$68323034)"
+        ]
+      }
+    ],
+    "sourceLabel": "青龙",
+    "targetLabel": "玛里苟斯",
+    "conditionText": "等到本波战斗结束；曾完成过以下任一组：中子＋圣龙；或圣龙（外观形态记录）；完成记录保留",
+    "limitText": "每位玩家最多1个（普通升级后仍占此类名额）；需要军团战争超级赞助资格"
+  },
+  "findings": [
+    "Arcane missiles draw direction then radius five times. No web combat-jitter RNG is consumed by script auxiliary creation.",
+    "Network damage is776 then independent6second default-speed restores; target or dummy widget death resolves current-target-centered impact.",
+    "Bombs move9 times600/0.4*0.04=60 units, producing27 independent63damage-per-second zones with3ticks each.",
+    "Shield grants A1Q5 to caster while effect attaches to chosen ally; each6second timer independently removes it.",
+    "A1Q0 is a separate weapon-event listener, including BJ attack=true damage.",
+    "A1Q4 removes itself before first eligible damage drain; arena deployment removes it before combat."
+  ],
+  "partialBoundaries": [
+    "ANcl native cast/channel/order arbitration and native effect assets",
+    "Native SetUnitPosition terrain/pathing, default-speed clamps and timer float precision",
+    "AIsr overlap with other native spell resistance abilities",
+    "Native group enumeration and uninstantiated buildings/shops/builders mana state",
+    "Auxiliary native creation hooks and global cross-trigger ordering"
+  ]
+}

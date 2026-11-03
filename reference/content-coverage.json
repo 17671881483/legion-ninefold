@@ -1,6 +1,6 @@
 {
   "sourceVersion": "v14.1A5",
-  "skillImplementationRevision": "v14-content-20261103-v55-1",
+  "skillImplementationRevision": "v14-content-20261103-v58-1",
   "units": 534,
   "mercenaryRecords": 60,
   "mainWaves": 35,
@@ -30,6 +30,12 @@
     "e01G"
   ],
   "playerRuntimeAbilities": [
+    {
+      "sourceRawcode": "h0VP",
+      "abilityIds": [
+        "A1Q5"
+      ]
+    },
     {
       "sourceRawcode": "h00T",
       "abilityIds": [
@@ -380,10 +386,10 @@
   "playerBuildingCommandCarriers": 411,
   "playerSkills": {
     "counts": {
-      "implemented": 405,
-      "partial": 133,
+      "implemented": 404,
+      "partial": 140,
       "marker": 36,
-      "unresolved": 87
+      "unresolved": 82
     },
     "abilities": [
       {
@@ -6137,8 +6143,8 @@
       {
         "rawcode": "A1PZ",
         "name": "奥术风暴",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "malygos_source",
         "unitRawcodes": [
           "n07T"
         ]
@@ -6146,8 +6152,8 @@
       {
         "rawcode": "A1Q0",
         "name": "碧蓝之火",
-        "status": "implemented",
-        "kind": "azure_fire",
+        "status": "partial",
+        "kind": "malygos_source",
         "unitRawcodes": [
           "n07T"
         ]
@@ -6155,8 +6161,8 @@
       {
         "rawcode": "A1Q1",
         "name": "魔法之网",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "malygos_source",
         "unitRawcodes": [
           "n07T"
         ]
@@ -6164,8 +6170,8 @@
       {
         "rawcode": "A1Q2",
         "name": "奥术炸弹",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "malygos_source",
         "unitRawcodes": [
           "n07T"
         ]
@@ -6173,8 +6179,8 @@
       {
         "rawcode": "A1Q3",
         "name": "蓝龙护盾",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "malygos_source",
         "unitRawcodes": [
           "n07T"
         ]
@@ -6182,10 +6188,19 @@
       {
         "rawcode": "A1Q4",
         "name": "魔法汲取",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "malygos_source",
         "unitRawcodes": [
           "n07T"
+        ]
+      },
+      {
+        "rawcode": "A1Q5",
+        "name": "魔法伤害减少",
+        "status": "partial",
+        "kind": "malygos_source",
+        "unitRawcodes": [
+          "h0VP"
         ]
       },
       {
@@ -7215,10 +7230,10 @@
   },
   "battleSkills": {
     "counts": {
-      "implemented": 454,
-      "partial": 142,
+      "implemented": 453,
+      "partial": 149,
       "marker": 49,
-      "unresolved": 101
+      "unresolved": 96
     },
     "abilities": [
       {
@@ -13758,8 +13773,8 @@
       {
         "rawcode": "A1PZ",
         "name": "奥术风暴",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "malygos_source",
         "unitRawcodes": [
           "n07T"
         ]
@@ -13767,8 +13782,8 @@
       {
         "rawcode": "A1Q0",
         "name": "碧蓝之火",
-        "status": "implemented",
-        "kind": "azure_fire",
+        "status": "partial",
+        "kind": "malygos_source",
         "unitRawcodes": [
           "n07T"
         ]
@@ -13776,8 +13791,8 @@
       {
         "rawcode": "A1Q1",
         "name": "魔法之网",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "malygos_source",
         "unitRawcodes": [
           "n07T"
         ]
@@ -13785,8 +13800,8 @@
       {
         "rawcode": "A1Q2",
         "name": "奥术炸弹",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "malygos_source",
         "unitRawcodes": [
           "n07T"
         ]
@@ -13794,8 +13809,8 @@
       {
         "rawcode": "A1Q3",
         "name": "蓝龙护盾",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "malygos_source",
         "unitRawcodes": [
           "n07T"
         ]
@@ -13803,10 +13818,19 @@
       {
         "rawcode": "A1Q4",
         "name": "魔法汲取",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "malygos_source",
         "unitRawcodes": [
           "n07T"
+        ]
+      },
+      {
+        "rawcode": "A1Q5",
+        "name": "魔法伤害减少",
+        "status": "partial",
+        "kind": "malygos_source",
+        "unitRawcodes": [
+          "h0VP"
         ]
       },
       {
@@ -15140,6 +15164,7 @@
     }
   ],
   "remainingSourceGaps": [
+    "玛里苟斯A1PZ/A1Q1/A1Q2/A1Q3主动脚本、A1Q4首次伤害汲魔及竞技移除、A1Q0独立武器事件20附伤和动态A1Q5已接入；776/6秒网、27处可重叠灼烧、护盾实际给施法者均按源码。原生ANcl仲裁、移动限值、抗性叠加、e008及未实体化建筑的全图汲魔仍partial，见malygos-evidence.json。",
     "科多吞噬/暴食施法脚本实际造成99999混乱/通用或普通/普通伤害后return，不执行旧消化、恢复及吐出；自动门槛400/3000，手动主目标无血量门槛，暴食预先保存组再取首个合格第二目标。ANcl即时命令适配及默认耗魔/引导仍partial；见kodo-evidence.json。",
     "提里奥灰烬使者附伤/独立击杀回血与R01Y历史羁绊及出战授予已接入；A0LR独立伤害监听保留先回血、低血3秒任务及Af01附伤。A0LO/A0LR攻速DataA缺失，神圣愤怒h0M1标记/105附伤/先回血及1秒灼烧已接入，但原生ANpi首次跳和事件类别仍待实测；其他泰兰规则仍待还原，见tirion-evidence.json及tirion-holy-evidence.json。",
     "木乃伊/法老王按建筑登记：A14F每5秒蓄水池抽样，命令接受才授予永久A14E，4次成功或widget死亡终止；已登记句柄死亡后2.01秒移除A14E。普通n061只有A1BL，不伪造一次性移除。ANcl资源/仲裁为部分适配，ACrn已补2秒同句柄复生、240秒冷却与终结死亡分流，耗魔默认继承、资源恢复和buff仍partial；见mummy-evidence.json及reincarnation-evidence.json。",

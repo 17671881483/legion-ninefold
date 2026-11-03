@@ -2,9 +2,13 @@
 
 日期：2026-10-27；基线：`bdb91a4f6826306a94226fc569e89d40f38d1f8f`；内容版本：`v14-content-20261027-v27-1`。
 
-返回[总待办](RESTORATION_TODO.md)。下表与 [content-coverage.json](../reference/content-coverage.json) 的 battleSkills 逐项一致，共 137 项待核定、76 项部分实现；另有 47 项标记需要语义复核。每行是独立核查项，携带者采用覆盖清单中的 sourceRawcode，可能是建筑体；不能直接作为 JASS 战斗类型。
+返回[总待办](RESTORATION_TODO.md)。下表保留 v27 拆分时的任务编号与状态，和当时的 battleSkills 逐项一致；最新状态以 [content-coverage.json](../reference/content-coverage.json) 为准，共 137 项待核定、76 项部分实现；另有 47 项标记需要语义复核。每行是独立核查项，携带者采用覆盖清单中的 sourceRawcode，可能是建筑体；不能直接作为 JASS 战斗类型。
 
 所有条目当前均未通过本清单的最终验收。状态从 unresolved 变为 partial 表示接入了一部分，不能勾选全部完成。仅角色名称相同或原生基础能力相同也不能自动合并规则。
+
+## 最新核对（v58，2026-11-03）
+
+玛里苟斯 A1PZ、A1Q1—A1Q4 从待核定进入部分适配；A1Q0 从旧普攻实现改为独立武器事件部分适配；新增动态 A1Q5。全战斗当前为 96 项待核定、149 项部分适配、49 项标记，详见[本批归档](parallel-development/integration-v58.md)。以下历史表格不表示已接入的机制仍完全缺失，也不表示部分适配已完成原生验收。
 
 ## 额外纠错项
 

@@ -154,6 +154,24 @@ export class Battlefield{
       for(const p of state.players)if(p.heroId){const pos=this.world(p.id,3.5,9.5),pt=this.project(pos.x,pos.y);c.save();c.translate(pt.x,pt.y);drawSprite(c,definitions[p.heroId],s*.44,now);c.restore();}
     }else{
       for(const job of state.sourceSkillJobs??[]){
+        if(!job.done&&job.type?.startsWith('malygos_')){
+          const scale=(job.source?.distanceScale??1/3)/100,handle=job.dummy??job.target,spot=job.type==='malygos_burn'?job:handle;
+          if(spot&&Number.isFinite(spot.worldX??spot.x)){
+            const p=this.project(spot.worldX??spot.x,spot.worldY??spot.y);c.save();c.strokeStyle='#92e4f4';c.fillStyle='#70cde7';c.lineWidth=1.5;
+            if(job.type==='malygos_burn'){
+              c.globalAlpha=.2;c.beginPath();c.ellipse(p.x,p.y,300*scale*s,300*scale*s*.78,0,0,Math.PI*2);c.fill();c.globalAlpha=.45;c.stroke();
+            }else if(job.type==='malygos_net_restore'){
+              c.globalAlpha=.7;for(const offset of [-.25,0,.25]){c.beginPath();c.moveTo(p.x-s*.38,p.y+s*offset-s*.2);c.lineTo(p.x+s*.38,p.y-s*offset-s*.2);c.moveTo(p.x+s*offset,p.y-s*.55);c.lineTo(p.x-s*offset,p.y+s*.15);c.stroke();}
+            }else if(job.type==='malygos_shield'){
+              c.globalAlpha=.55;c.beginPath();c.ellipse(p.x,p.y-s*.24,s*.48,s*.62,0,0,Math.PI*2);c.stroke();c.globalAlpha=.08;c.fill();
+            }else{
+              c.shadowColor='#9ce9ff';c.shadowBlur=10;const r=Math.max(3,s*(job.type==='malygos_missile'?.17:.12));c.beginPath();c.arc(p.x,p.y,r,0,Math.PI*2);c.fill();
+              if(job.type==='malygos_bomb'){c.beginPath();c.moveTo(p.x,p.y);c.lineTo(p.x-Math.cos(job.angle)*s*.4,p.y-Math.sin(job.angle)*s*.4*.78);c.stroke();}
+            }
+            c.restore();
+          }
+          continue;
+        }
         if(!job.done&&['phoenix_circle','phoenix_burn','phoenix_orbit','phoenix_feather'].includes(job.type)){
           const blue=job.source?.status?.phoenixBlue,color=blue?'#9ce1f4':'#ffc785';c.save();c.strokeStyle=color;c.fillStyle=color;
           if(job.type==='phoenix_circle'||job.type==='phoenix_burn'){

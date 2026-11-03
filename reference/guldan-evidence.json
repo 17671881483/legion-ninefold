@@ -1,0 +1,2097 @@
+{
+  "source": {
+    "path": "reference/v14-source/raw_extracted/war3map.j",
+    "sha256": "e66c55b3b25b185c991be5613e21fbf5b2d598f3cc40f2f8cd01c23bcb828250"
+  },
+  "sourceEvidence": [
+    {
+      "line": 1126,
+      "text": "integer Pn=$65303038"
+    },
+    {
+      "line": 1999,
+      "text": "call SaveInteger(O,$68304334,StringHash(\"box_train_upgrade_count\"),2)"
+    },
+    {
+      "line": 2000,
+      "text": "call SaveInteger(O,$68304334,StringHash(\"box_train_upgrade_1\"),$68304332)"
+    },
+    {
+      "line": 2001,
+      "text": "call SaveInteger(O,$68304334,StringHash(\"box_train_upgrade_2\"),$68314332)"
+    },
+    {
+      "line": 2002,
+      "text": "call SaveInteger(O,$68304332,StringHash(\"box_train_upgrade_next\"),$68324332)"
+    },
+    {
+      "line": 2003,
+      "text": "call SaveInteger(O,$68304332,StringHash(\"box_train_upgrade_count\"),2)"
+    },
+    {
+      "line": 2004,
+      "text": "call SaveInteger(O,$68304332,StringHash(\"box_train_upgrade_1\"),$68324332)"
+    },
+    {
+      "line": 2005,
+      "text": "call SaveInteger(O,$68304332,StringHash(\"box_train_upgrade_2\"),$6E303756)"
+    },
+    {
+      "line": 2006,
+      "text": "call SaveInteger(O,$68324332,StringHash(\"box_train_upgrade_next\"),$6830564C)"
+    },
+    {
+      "line": 2007,
+      "text": "call SaveInteger(O,$68324332,StringHash(\"box_train_upgrade_count\"),1)"
+    },
+    {
+      "line": 2008,
+      "text": "call SaveInteger(O,$68324332,StringHash(\"box_train_upgrade_1\"),$6830564C)"
+    },
+    {
+      "line": 2009,
+      "text": "call SaveInteger(O,$68314332,StringHash(\"box_train_upgrade_next\"),$68324332)"
+    },
+    {
+      "line": 2010,
+      "text": "call SaveInteger(O,$68314332,StringHash(\"box_train_upgrade_count\"),2)"
+    },
+    {
+      "line": 2011,
+      "text": "call SaveInteger(O,$68314332,StringHash(\"box_train_upgrade_1\"),$68324332)"
+    },
+    {
+      "line": 2012,
+      "text": "call SaveInteger(O,$68314332,StringHash(\"box_train_upgrade_2\"),$6E303756)"
+    },
+    {
+      "line": 2013,
+      "text": "call SaveInteger(O,$68304335,StringHash(\"box_train_upgrade_next\"),$68304338)"
+    },
+    {
+      "line": 2488,
+      "text": "call SaveInteger(O,$68304334,StringHash(\"box_train_select_1\"),$68304332)"
+    },
+    {
+      "line": 2489,
+      "text": "call SaveInteger(O,$68304334,StringHash(\"box_train_select_2\"),$68314332)"
+    },
+    {
+      "line": 2490,
+      "text": "call SaveInteger(O,$68304332,StringHash(\"box_train_select_count\"),2)"
+    },
+    {
+      "line": 2491,
+      "text": "call SaveInteger(O,$68304332,StringHash(\"box_train_select_1\"),$68324332)"
+    },
+    {
+      "line": 2492,
+      "text": "call SaveInteger(O,$68304332,StringHash(\"box_train_select_2\"),$6E303756)"
+    },
+    {
+      "line": 2493,
+      "text": "call SaveInteger(O,$68314332,StringHash(\"box_train_select_count\"),2)"
+    },
+    {
+      "line": 2494,
+      "text": "call SaveInteger(O,$68314332,StringHash(\"box_train_select_1\"),$68324332)"
+    },
+    {
+      "line": 2495,
+      "text": "call SaveInteger(O,$68314332,StringHash(\"box_train_select_2\"),$6E303756)"
+    },
+    {
+      "line": 2496,
+      "text": "call SaveInteger(O,$68304335,StringHash(\"box_train_select_count\"),1)"
+    },
+    {
+      "line": 3128,
+      "text": "call SaveInteger(O,$6E303756,StringHash(\"box_train_upgrade_require_count\"),3)"
+    },
+    {
+      "line": 3129,
+      "text": "call SaveInteger(O,$6E303756,StringHash(\"box_train_upgrade_require_1\"),$75303034)"
+    },
+    {
+      "line": 3130,
+      "text": "call SaveInteger(O,$6E303756,StringHash(\"box_train_upgrade_require_2\"),$5230414B)"
+    },
+    {
+      "line": 3131,
+      "text": "call SaveInteger(O,$6E303756,StringHash(\"box_train_upgrade_require_3\"),$68323230)"
+    },
+    {
+      "line": 3623,
+      "text": "call DisableEggUnitTypeDialog___RegisterDialogEggUnitType($6E303756,\"å¤å°ä¸¹Max\",1)"
+    },
+    {
+      "line": 17238,
+      "text": "set Mk[Bi]=$68305652"
+    },
+    {
+      "line": 17239,
+      "text": "set Ml[Bi]=$6E303756"
+    },
+    {
+      "line": 28577,
+      "text": "if x==$68683032 or x==$6E303246 then"
+    },
+    {
+      "line": 28578,
+      "text": "call SetPlayerTechResearchedSwap($5230414A,1,h)"
+    },
+    {
+      "line": 28579,
+      "text": "endif"
+    },
+    {
+      "line": 28580,
+      "text": "if x==$68314343 then"
+    },
+    {
+      "line": 28581,
+      "text": "call SetPlayerTechResearchedSwap($5230414B,1,h)"
+    },
+    {
+      "line": 28582,
+      "text": "endif"
+    },
+    {
+      "line": 29786,
+      "text": "function SelectRange takes unit Pf,real FF,real FG,real Px returns group"
+    },
+    {
+      "line": 29787,
+      "text": "local group DG=CreateGroup()"
+    },
+    {
+      "line": 29788,
+      "text": "local group Om=CreateGroup()"
+    },
+    {
+      "line": 29789,
+      "text": "local unit D6=null"
+    },
+    {
+      "line": 29790,
+      "text": "call GroupEnumUnitsInRange(DG,FF,FG,Px,null)"
+    },
+    {
+      "line": 29791,
+      "text": "loop"
+    },
+    {
+      "line": 29792,
+      "text": "set D6=FirstOfGroup(DG)"
+    },
+    {
+      "line": 29793,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 29794,
+      "text": "if IsUnitEnemy(D6,GetOwningPlayer(Pf)) and not IsUnitType(D6,UNIT_TYPE_DEAD) and GetUnitAbilityLevel(D6,$4176756C)==0 then"
+    },
+    {
+      "line": 29795,
+      "text": "call GroupAddUnit(Om,D6)"
+    },
+    {
+      "line": 29796,
+      "text": "endif"
+    },
+    {
+      "line": 29797,
+      "text": "call GroupRemoveUnit(DG,D6)"
+    },
+    {
+      "line": 29798,
+      "text": "endloop"
+    },
+    {
+      "line": 29799,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 29800,
+      "text": "set DG=null"
+    },
+    {
+      "line": 29801,
+      "text": "set D6=null"
+    },
+    {
+      "line": 29802,
+      "text": "set Pf=null"
+    },
+    {
+      "line": 29803,
+      "text": "set Py=Om"
+    },
+    {
+      "line": 29804,
+      "text": "set Om=null"
+    },
+    {
+      "line": 29805,
+      "text": "return Py"
+    },
+    {
+      "line": 29806,
+      "text": "endfunction"
+    },
+    {
+      "line": 29807,
+      "text": "function SelectRangeAlly takes unit Pf,real FF,real FG,real Px returns group"
+    },
+    {
+      "line": 29808,
+      "text": "local group DG=CreateGroup()"
+    },
+    {
+      "line": 29809,
+      "text": "local group Om=CreateGroup()"
+    },
+    {
+      "line": 29810,
+      "text": "local unit D6=null"
+    },
+    {
+      "line": 29811,
+      "text": "call GroupEnumUnitsInRange(DG,FF,FG,Px,null)"
+    },
+    {
+      "line": 29812,
+      "text": "loop"
+    },
+    {
+      "line": 29813,
+      "text": "set D6=FirstOfGroup(DG)"
+    },
+    {
+      "line": 29814,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 29815,
+      "text": "if IsUnitAlly(D6,GetOwningPlayer(Pf)) and not IsUnitType(D6,UNIT_TYPE_DEAD) and GetUnitAbilityLevel(D6,$4176756C)==0 then"
+    },
+    {
+      "line": 29816,
+      "text": "call GroupAddUnit(Om,D6)"
+    },
+    {
+      "line": 29817,
+      "text": "endif"
+    },
+    {
+      "line": 29818,
+      "text": "call GroupRemoveUnit(DG,D6)"
+    },
+    {
+      "line": 29819,
+      "text": "endloop"
+    },
+    {
+      "line": 29820,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 29821,
+      "text": "set DG=null"
+    },
+    {
+      "line": 29822,
+      "text": "set D6=null"
+    },
+    {
+      "line": 29823,
+      "text": "set Pf=null"
+    },
+    {
+      "line": 29824,
+      "text": "set Py=Om"
+    },
+    {
+      "line": 29825,
+      "text": "set Om=null"
+    },
+    {
+      "line": 29826,
+      "text": "return Py"
+    },
+    {
+      "line": 30160,
+      "text": "function ChargeDistanceCondition takes nothing returns boolean"
+    },
+    {
+      "line": 30161,
+      "text": "local trigger t=GetTriggeringTrigger()"
+    },
+    {
+      "line": 30162,
+      "text": "local integer Pr=GetHandleId(t)"
+    },
+    {
+      "line": 30163,
+      "text": "local real DK=LoadReal(O,Pr,3)"
+    },
+    {
+      "line": 30164,
+      "text": "local real QS=LoadReal(O,Pr,1)"
+    },
+    {
+      "line": 30165,
+      "text": "local real QN=LoadReal(O,Pr,2)"
+    },
+    {
+      "line": 30166,
+      "text": "local string QP=LoadStr(O,Pr,4)"
+    },
+    {
+      "line": 30167,
+      "text": "local string QQ=LoadStr(O,Pr,5)"
+    },
+    {
+      "line": 30168,
+      "text": "local unit Ki=LoadUnitHandle(O,Pr,6)"
+    },
+    {
+      "line": 30169,
+      "text": "local real Pm=LoadReal(O,Pr,7)"
+    },
+    {
+      "line": 30170,
+      "text": "local real QT=QS/DK*.04"
+    },
+    {
+      "line": 30171,
+      "text": "call SaveReal(O,Pr,10,QT)"
+    },
+    {
+      "line": 30172,
+      "text": "if GetTriggerEventId()==EVENT_WIDGET_DEATH then"
+    },
+    {
+      "line": 30173,
+      "text": "if QQ!=null then"
+    },
+    {
+      "line": 30174,
+      "text": "call ExecuteFunc(QQ)"
+    },
+    {
+      "line": 30175,
+      "text": "endif"
+    },
+    {
+      "line": 30176,
+      "text": "call FlushChildHashtable(O,Pr)"
+    },
+    {
+      "line": 30177,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 30178,
+      "text": "elseif GetTriggerEventId()==EVENT_GAME_TIMER_EXPIRED then"
+    },
+    {
+      "line": 30179,
+      "text": "if QN+QT>=QS then"
+    },
+    {
+      "line": 30180,
+      "text": "if QQ!=null then"
+    },
+    {
+      "line": 30181,
+      "text": "call ExecuteFunc(QQ)"
+    },
+    {
+      "line": 30182,
+      "text": "endif"
+    },
+    {
+      "line": 30183,
+      "text": "call FlushChildHashtable(O,Pr)"
+    },
+    {
+      "line": 30184,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 30185,
+      "text": "else"
+    },
+    {
+      "line": 30186,
+      "text": "call SaveReal(O,Pr,2,QN+QT)"
+    },
+    {
+      "line": 30187,
+      "text": "call SetUnitPosition(Ki,GetUnitX(Ki)+CosBJ(Pm)*QT,GetUnitY(Ki)+SinBJ(Pm)*QT)"
+    },
+    {
+      "line": 30188,
+      "text": "if QP!=null then"
+    },
+    {
+      "line": 30189,
+      "text": "call ExecuteFunc(QP)"
+    },
+    {
+      "line": 30190,
+      "text": "endif"
+    },
+    {
+      "line": 30191,
+      "text": "endif"
+    },
+    {
+      "line": 30192,
+      "text": "endif"
+    },
+    {
+      "line": 30193,
+      "text": "set t=null"
+    },
+    {
+      "line": 30194,
+      "text": "set Ki=null"
+    },
+    {
+      "line": 30195,
+      "text": "set QP=null"
+    },
+    {
+      "line": 30196,
+      "text": "set QQ=null"
+    },
+    {
+      "line": 30197,
+      "text": "return false"
+    },
+    {
+      "line": 30198,
+      "text": "endfunction"
+    },
+    {
+      "line": 30199,
+      "text": "function ChargeDistance takes unit Pf,unit Ki,real Pm,real QN,real QO,string QP,string QQ returns trigger"
+    },
+    {
+      "line": 30200,
+      "text": "local trigger t=CreateTrigger()"
+    },
+    {
+      "line": 30201,
+      "text": "local integer Pr=GetHandleId(t)"
+    },
+    {
+      "line": 30202,
+      "text": "call SaveReal(O,Pr,1,QN)"
+    },
+    {
+      "line": 30203,
+      "text": "call SaveReal(O,Pr,3,QO)"
+    },
+    {
+      "line": 30204,
+      "text": "call SaveStr(O,Pr,4,QP)"
+    },
+    {
+      "line": 30205,
+      "text": "call SaveStr(O,Pr,5,QQ)"
+    },
+    {
+      "line": 30206,
+      "text": "call SaveAgentHandle(O,Pr,6,Ki)"
+    },
+    {
+      "line": 30207,
+      "text": "call SaveReal(O,Pr,7,Pm)"
+    },
+    {
+      "line": 30208,
+      "text": "call SaveAgentHandle(O,Pr,9,Pf)"
+    },
+    {
+      "line": 30209,
+      "text": "call TriggerRegisterDeathEvent(t,Ki)"
+    },
+    {
+      "line": 30210,
+      "text": "call TriggerRegisterTimerEvent(t,0,false)"
+    },
+    {
+      "line": 30211,
+      "text": "call TriggerRegisterTimerEvent(t,.04,true)"
+    },
+    {
+      "line": 30212,
+      "text": "call TriggerAddCondition(t,Condition(function ChargeDistanceCondition))"
+    },
+    {
+      "line": 30213,
+      "text": "set QU=t"
+    },
+    {
+      "line": 30214,
+      "text": "set t=null"
+    },
+    {
+      "line": 30215,
+      "text": "set Ki=null"
+    },
+    {
+      "line": 30216,
+      "text": "set Pf=null"
+    },
+    {
+      "line": 30217,
+      "text": "set QP=null"
+    },
+    {
+      "line": 30218,
+      "text": "set QQ=null"
+    },
+    {
+      "line": 30219,
+      "text": "return QU"
+    },
+    {
+      "line": 31958,
+      "text": "function NewGuldanSetOwner takes unit i,unit Qf returns nothing"
+    },
+    {
+      "line": 31959,
+      "text": "local unit Ki"
+    },
+    {
+      "line": 31960,
+      "text": "local integer gC=GetUnitTypeId(Qf)"
+    },
+    {
+      "line": 31961,
+      "text": "local real gE=GetUnitX(Qf)"
+    },
+    {
+      "line": 31962,
+      "text": "local real gH=GetUnitY(Qf)"
+    },
+    {
+      "line": 31963,
+      "text": "local real gI=GetUnitState(Qf,UNIT_STATE_LIFE)"
+    },
+    {
+      "line": 31964,
+      "text": "local real gJ=GetUnitState(Qf,UNIT_STATE_MANA)"
+    },
+    {
+      "line": 31965,
+      "text": "call RemoveUnit(Qf)"
+    },
+    {
+      "line": 31966,
+      "text": "set Ki=CreateUnit(GetOwningPlayer(i),gC,gE,gH,0)"
+    },
+    {
+      "line": 31967,
+      "text": "call SetUnitLifeBJ(Ki,gI)"
+    },
+    {
+      "line": 31968,
+      "text": "call SetUnitManaBJ(Ki,gJ)"
+    },
+    {
+      "line": 31969,
+      "text": "call DestroyEffect(AddSpecialEffectTarget(\"Abilities\\\\Spells\\\\Other\\\\Charm\\\\CharmTarget.mdl\",Ki,\"origin\"))"
+    },
+    {
+      "line": 31970,
+      "text": "call UnitAddType(Ki,UNIT_TYPE_GIANT)"
+    },
+    {
+      "line": 31971,
+      "text": "call UnitAddType(Ki,UNIT_TYPE_SUMMONED)"
+    },
+    {
+      "line": 31972,
+      "text": "call SetUnitOwner(Ki,GetOwningPlayer(i),true)"
+    },
+    {
+      "line": 31973,
+      "text": "call SetUnitUserData(Ki,GetUnitUserData(i))"
+    },
+    {
+      "line": 31974,
+      "text": "call IssuePointOrder(Ki,\"attack\",GetPlayerStartLocationX(Player(GetUnitUserData(i)-1)),GetPlayerStartLocationY(Player(GetUnitUserData(i)-1)))"
+    },
+    {
+      "line": 31975,
+      "text": "call SetUnitColor(Ki,GetPlayerColor(Player(GetUnitUserData(i)-1)))"
+    },
+    {
+      "line": 31976,
+      "text": "call GroupAddUnit(JH[GetUnitUserData(i)],Ki)"
+    },
+    {
+      "line": 31977,
+      "text": "call GroupAddUnit(JW,Ki)"
+    },
+    {
+      "line": 31978,
+      "text": "call SaveBoolean(O,GetHandleId(Ki),$4131514C,true)"
+    },
+    {
+      "line": 31979,
+      "text": "set i=null"
+    },
+    {
+      "line": 31980,
+      "text": "set Qf=null"
+    },
+    {
+      "line": 31981,
+      "text": "set Ki=null"
+    },
+    {
+      "line": 31982,
+      "text": "endfunction"
+    },
+    {
+      "line": 31983,
+      "text": "function NewGuldanEvilEnergyArrowCollideTimerFinish takes nothing returns nothing"
+    },
+    {
+      "line": 31984,
+      "text": "local unit Bc=GetChargeSource()"
+    },
+    {
+      "line": 31985,
+      "text": "local group Uz=LoadGroupHandle(O,GetHandleId(Bc),$4131514C)"
+    },
+    {
+      "line": 31986,
+      "text": "call DestroyGroup(Uz)"
+    },
+    {
+      "line": 31987,
+      "text": "set Uz=null"
+    },
+    {
+      "line": 31988,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 31989,
+      "text": "endfunction"
+    },
+    {
+      "line": 31990,
+      "text": "function NewGuldanEvilEnergyArrowCollideTimerCallback takes nothing returns nothing"
+    },
+    {
+      "line": 31991,
+      "text": "local unit Bc=GetChargeSource()"
+    },
+    {
+      "line": 31992,
+      "text": "local unit Ki=GetChargeDummy()"
+    },
+    {
+      "line": 31993,
+      "text": "local group DG=SelectRange(Bc,GetUnitX(Ki),GetUnitY(Ki),200)"
+    },
+    {
+      "line": 31994,
+      "text": "local group Uz=LoadGroupHandle(O,GetHandleId(Bc),$4131514C)"
+    },
+    {
+      "line": 31995,
+      "text": "local unit D6=null"
+    },
+    {
+      "line": 31996,
+      "text": "loop"
+    },
+    {
+      "line": 31997,
+      "text": "set D6=FirstOfGroup(DG)"
+    },
+    {
+      "line": 31998,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 31999,
+      "text": "if not IsUnitInGroup(D6,Uz) then"
+    },
+    {
+      "line": 32000,
+      "text": "call UnitDamageTarget(Bc,D6,101,false,false,ATTACK_TYPE_NORMAL,DAMAGE_TYPE_MAGIC,null)"
+    },
+    {
+      "line": 32001,
+      "text": "call GroupAddUnit(Uz,D6)"
+    },
+    {
+      "line": 32002,
+      "text": "endif"
+    },
+    {
+      "line": 32003,
+      "text": "call GroupRemoveUnit(DG,D6)"
+    },
+    {
+      "line": 32004,
+      "text": "endloop"
+    },
+    {
+      "line": 32005,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 32006,
+      "text": "set D6=null"
+    },
+    {
+      "line": 32007,
+      "text": "set Uz=null"
+    },
+    {
+      "line": 32008,
+      "text": "set Ki=null"
+    },
+    {
+      "line": 32009,
+      "text": "set DG=null"
+    },
+    {
+      "line": 32010,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 32011,
+      "text": "endfunction"
+    },
+    {
+      "line": 32012,
+      "text": "function NewGuldanEvilEnergyArrowCollideTimer takes nothing returns nothing"
+    },
+    {
+      "line": 32013,
+      "text": "local timer t=GetExpiredTimer()"
+    },
+    {
+      "line": 32014,
+      "text": "local integer BQ=GetHandleId(t)"
+    },
+    {
+      "line": 32015,
+      "text": "local unit Bc=LoadUnitHandle(O,BQ,0)"
+    },
+    {
+      "line": 32016,
+      "text": "local real FF=LoadReal(O,BQ,1)"
+    },
+    {
+      "line": 32017,
+      "text": "local real FG=LoadReal(O,BQ,2)"
+    },
+    {
+      "line": 32018,
+      "text": "local real Pm=Atan2BJ(FG-GetUnitY(Bc),FF-GetUnitX(Bc))"
+    },
+    {
+      "line": 32019,
+      "text": "local string QM=\"Abilities\\\\Spells\\\\Other\\\\BlackArrow\\\\BlackArrowMissile.mdl\""
+    },
+    {
+      "line": 32020,
+      "text": "local unit Ki=CreateUnit(GetOwningPlayer(Bc),Pn,GetUnitX(Bc),GetUnitY(Bc),Pm)"
+    },
+    {
+      "line": 32021,
+      "text": "local real DK=.2"
+    },
+    {
+      "line": 32022,
+      "text": "call SaveGroupHandle(O,GetHandleId(Bc),$4131514C,CreateGroup())"
+    },
+    {
+      "line": 32023,
+      "text": "call YDWETimerDestroyEffect(DK,AddSpecialEffectTarget(QM,Ki,\"chest\"))"
+    },
+    {
+      "line": 32024,
+      "text": "call YDWETimerRemoveUnit(DK,Ki)"
+    },
+    {
+      "line": 32025,
+      "text": "call ChargeDistance(Bc,Ki,Pm,800,DK,\"NewGuldanEvilEnergyArrowCollideTimerCallback\",\"NewGuldanEvilEnergyArrowCollideTimerFinish\")"
+    },
+    {
+      "line": 32026,
+      "text": "call FlushChildHashtable(O,BQ)"
+    },
+    {
+      "line": 32027,
+      "text": "call DestroyTimer(t)"
+    },
+    {
+      "line": 32028,
+      "text": "set t=null"
+    },
+    {
+      "line": 32029,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 32030,
+      "text": "set Ki=null"
+    },
+    {
+      "line": 32031,
+      "text": "set QM=null"
+    },
+    {
+      "line": 32032,
+      "text": "endfunction"
+    },
+    {
+      "line": 32033,
+      "text": "function NewGuldanEvilShootEnergyArrow takes unit Bc,real FF,real FG,integer aV returns nothing"
+    },
+    {
+      "line": 32034,
+      "text": "local timer t=CreateTimer()"
+    },
+    {
+      "line": 32035,
+      "text": "call SaveUnitHandle(O,GetHandleId(t),0,Bc)"
+    },
+    {
+      "line": 32036,
+      "text": "call SaveReal(O,GetHandleId(t),1,FF)"
+    },
+    {
+      "line": 32037,
+      "text": "call SaveReal(O,GetHandleId(t),2,FG)"
+    },
+    {
+      "line": 32038,
+      "text": "call TimerStart(t,1*(aV-1),false,function NewGuldanEvilEnergyArrowCollideTimer)"
+    },
+    {
+      "line": 32039,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 32040,
+      "text": "set t=null"
+    },
+    {
+      "line": 32041,
+      "text": "endfunction"
+    },
+    {
+      "line": 32042,
+      "text": "function NewGuldanEvilEnergyArrow takes unit Bc,real FF,real FG returns nothing"
+    },
+    {
+      "line": 32043,
+      "text": "local integer BB=0"
+    },
+    {
+      "line": 32044,
+      "text": "if IsUnitType(Bc,UNIT_TYPE_ANCIENT) then"
+    },
+    {
+      "line": 32045,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 32046,
+      "text": "return"
+    },
+    {
+      "line": 32047,
+      "text": "endif"
+    },
+    {
+      "line": 32048,
+      "text": "loop"
+    },
+    {
+      "line": 32049,
+      "text": "exitwhen BB>=3"
+    },
+    {
+      "line": 32050,
+      "text": "set BB=BB+1"
+    },
+    {
+      "line": 32051,
+      "text": "call NewGuldanEvilShootEnergyArrow(Bc,FF,FG,BB)"
+    },
+    {
+      "line": 32052,
+      "text": "endloop"
+    },
+    {
+      "line": 32053,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 32054,
+      "text": "endfunction"
+    },
+    {
+      "line": 32055,
+      "text": "function NewGuldanAcidRainDamage takes nothing returns nothing"
+    },
+    {
+      "line": 32056,
+      "text": "local timer t=GetExpiredTimer()"
+    },
+    {
+      "line": 32057,
+      "text": "local integer BQ=GetHandleId(t)"
+    },
+    {
+      "line": 32058,
+      "text": "local unit Bc=LoadUnitHandle(O,BQ,0)"
+    },
+    {
+      "line": 32059,
+      "text": "local real FF=LoadReal(O,BQ,1)"
+    },
+    {
+      "line": 32060,
+      "text": "local real FG=LoadReal(O,BQ,2)"
+    },
+    {
+      "line": 32061,
+      "text": "local integer Ez=LoadInteger(O,BQ,3)"
+    },
+    {
+      "line": 32062,
+      "text": "local group DG=SelectRange(Bc,FF,FG,400)"
+    },
+    {
+      "line": 32063,
+      "text": "local unit D6=null"
+    },
+    {
+      "line": 32064,
+      "text": "loop"
+    },
+    {
+      "line": 32065,
+      "text": "set D6=FirstOfGroup(DG)"
+    },
+    {
+      "line": 32066,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 32067,
+      "text": "if IsUnitEnemy(D6,GetOwningPlayer(Bc)) then"
+    },
+    {
+      "line": 32068,
+      "text": "call UnitDamageTarget(Bc,D6,26,false,false,ATTACK_TYPE_NORMAL,DAMAGE_TYPE_MAGIC,null)"
+    },
+    {
+      "line": 32069,
+      "text": "endif"
+    },
+    {
+      "line": 32070,
+      "text": "call GroupRemoveUnit(DG,D6)"
+    },
+    {
+      "line": 32071,
+      "text": "endloop"
+    },
+    {
+      "line": 32072,
+      "text": "set Ez=Ez-1"
+    },
+    {
+      "line": 32073,
+      "text": "call SaveInteger(O,BQ,3,Ez)"
+    },
+    {
+      "line": 32074,
+      "text": "if Ez<=0 then"
+    },
+    {
+      "line": 32075,
+      "text": "call DestroyEffect(LoadEffectHandle(O,BQ,4))"
+    },
+    {
+      "line": 32076,
+      "text": "call FlushChildHashtable(O,BQ)"
+    },
+    {
+      "line": 32077,
+      "text": "call DestroyTimer(t)"
+    },
+    {
+      "line": 32078,
+      "text": "endif"
+    },
+    {
+      "line": 32079,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 32080,
+      "text": "set D6=null"
+    },
+    {
+      "line": 32081,
+      "text": "set DG=null"
+    },
+    {
+      "line": 32082,
+      "text": "set t=null"
+    },
+    {
+      "line": 32083,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 32084,
+      "text": "endfunction"
+    },
+    {
+      "line": 32085,
+      "text": "function NewGuldanBladeMasterAcidRain takes unit Bc,real FF,real FG returns nothing"
+    },
+    {
+      "line": 32086,
+      "text": "local timer t"
+    },
+    {
+      "line": 32087,
+      "text": "if IsUnitType(Bc,UNIT_TYPE_ANCIENT) then"
+    },
+    {
+      "line": 32088,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 32089,
+      "text": "set t=null"
+    },
+    {
+      "line": 32090,
+      "text": "return"
+    },
+    {
+      "line": 32091,
+      "text": "endif"
+    },
+    {
+      "line": 32092,
+      "text": "set t=CreateTimer()"
+    },
+    {
+      "line": 32093,
+      "text": "call SaveUnitHandle(O,GetHandleId(t),0,Bc)"
+    },
+    {
+      "line": 32094,
+      "text": "call SaveReal(O,GetHandleId(t),1,FF)"
+    },
+    {
+      "line": 32095,
+      "text": "call SaveReal(O,GetHandleId(t),2,FG)"
+    },
+    {
+      "line": 32096,
+      "text": "call SaveInteger(O,GetHandleId(t),3,16)"
+    },
+    {
+      "line": 32097,
+      "text": "call SaveAgentHandle(O,GetHandleId(t),4,AddSpecialEffect(\"LJQ_Rain01_Green.mdx\",FF,FG))"
+    },
+    {
+      "line": 32098,
+      "text": "call TimerStart(t,1.,true,function NewGuldanAcidRainDamage)"
+    },
+    {
+      "line": 32099,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 32100,
+      "text": "set t=null"
+    },
+    {
+      "line": 32101,
+      "text": "endfunction"
+    },
+    {
+      "line": 32102,
+      "text": "function NewGuldanAbsorbLife takes unit Bc,real FF,real FG returns real"
+    },
+    {
+      "line": 32103,
+      "text": "local real aW=0."
+    },
+    {
+      "line": 32104,
+      "text": "local group aX=SelectRange(Bc,FF,FG,400)"
+    },
+    {
+      "line": 32105,
+      "text": "local unit aZ=null"
+    },
+    {
+      "line": 32106,
+      "text": "local real aa"
+    },
+    {
+      "line": 32107,
+      "text": "local location Z8=GetUnitLoc(Bc)"
+    },
+    {
+      "line": 32108,
+      "text": "local real aY=GetLocationZ(Z8)+GetUnitFlyHeight(Bc)+100"
+    },
+    {
+      "line": 32109,
+      "text": "local real ab"
+    },
+    {
+      "line": 32110,
+      "text": "call RemoveLocation(Z8)"
+    },
+    {
+      "line": 32111,
+      "text": "loop"
+    },
+    {
+      "line": 32112,
+      "text": "set aZ=FirstOfGroup(aX)"
+    },
+    {
+      "line": 32113,
+      "text": "exitwhen aZ==null"
+    },
+    {
+      "line": 32114,
+      "text": "set aa=GetUnitState(aZ,UNIT_STATE_LIFE)*.3"
+    },
+    {
+      "line": 32115,
+      "text": "call SetUnitState(aZ,UNIT_STATE_LIFE,GetUnitState(aZ,UNIT_STATE_LIFE)-aa)"
+    },
+    {
+      "line": 32116,
+      "text": "set aW=aW+aa"
+    },
+    {
+      "line": 32117,
+      "text": "call GroupRemoveUnit(aX,aZ)"
+    },
+    {
+      "line": 32118,
+      "text": "set Z8=GetUnitLoc(aZ)"
+    },
+    {
+      "line": 32119,
+      "text": "set ab=GetLocationZ(Z8)+GetUnitFlyHeight(aZ)+100"
+    },
+    {
+      "line": 32120,
+      "text": "call RemoveLocation(Z8)"
+    },
+    {
+      "line": 32121,
+      "text": "call YDWETimerDestroyLightning(.2,AddLightningEx(\"DRAB\",false,GetUnitX(Bc),GetUnitY(Bc),aY,GetUnitX(aZ),GetUnitY(aZ),ab))"
+    },
+    {
+      "line": 32122,
+      "text": "endloop"
+    },
+    {
+      "line": 32123,
+      "text": "call DestroyGroup(aX)"
+    },
+    {
+      "line": 32124,
+      "text": "set aZ=null"
+    },
+    {
+      "line": 32125,
+      "text": "set aX=null"
+    },
+    {
+      "line": 32126,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 32127,
+      "text": "set Z8=null"
+    },
+    {
+      "line": 32128,
+      "text": "return aW"
+    },
+    {
+      "line": 32129,
+      "text": "endfunction"
+    },
+    {
+      "line": 32130,
+      "text": "function NewGuldanHealAllies takes nothing returns nothing"
+    },
+    {
+      "line": 32131,
+      "text": "local timer t=GetExpiredTimer()"
+    },
+    {
+      "line": 32132,
+      "text": "local integer BQ=GetHandleId(t)"
+    },
+    {
+      "line": 32133,
+      "text": "local unit Bc=LoadUnitHandle(O,BQ,0)"
+    },
+    {
+      "line": 32134,
+      "text": "local real FF=LoadReal(O,BQ,1)"
+    },
+    {
+      "line": 32135,
+      "text": "local real FG=LoadReal(O,BQ,2)"
+    },
+    {
+      "line": 32136,
+      "text": "local real aW=LoadReal(O,BQ,3)"
+    },
+    {
+      "line": 32137,
+      "text": "local integer Ez=LoadInteger(O,BQ,4)"
+    },
+    {
+      "line": 32138,
+      "text": "local group ac=SelectRangeAlly(Bc,FF,FG,600)"
+    },
+    {
+      "line": 32139,
+      "text": "local unit af=null"
+    },
+    {
+      "line": 32140,
+      "text": "local integer ad=CountUnitsInGroup(ac)"
+    },
+    {
+      "line": 32141,
+      "text": "local real ae=LoadReal(O,BQ,5)"
+    },
+    {
+      "line": 32142,
+      "text": "if ad>0 then"
+    },
+    {
+      "line": 32143,
+      "text": "set ae=ae/ad"
+    },
+    {
+      "line": 32144,
+      "text": "loop"
+    },
+    {
+      "line": 32145,
+      "text": "set af=FirstOfGroup(ac)"
+    },
+    {
+      "line": 32146,
+      "text": "exitwhen af==null"
+    },
+    {
+      "line": 32147,
+      "text": "call SetUnitState(af,UNIT_STATE_LIFE,GetUnitState(af,UNIT_STATE_LIFE)+ae)"
+    },
+    {
+      "line": 32148,
+      "text": "call GroupRemoveUnit(ac,af)"
+    },
+    {
+      "line": 32149,
+      "text": "if Bc!=af then"
+    },
+    {
+      "line": 32150,
+      "text": "call YDWETimerDestroyEffect(1,AddSpecialEffectTarget(\"Abilities\\\\Spells\\\\Other\\\\Drain\\\\DrainCaster.mdl\",Bc,\"origin\"))"
+    },
+    {
+      "line": 32151,
+      "text": "endif"
+    },
+    {
+      "line": 32152,
+      "text": "endloop"
+    },
+    {
+      "line": 32153,
+      "text": "endif"
+    },
+    {
+      "line": 32154,
+      "text": "call DestroyGroup(ac)"
+    },
+    {
+      "line": 32155,
+      "text": "set Ez=Ez-1"
+    },
+    {
+      "line": 32156,
+      "text": "call SaveInteger(O,BQ,4,Ez)"
+    },
+    {
+      "line": 32157,
+      "text": "if Ez<=0 then"
+    },
+    {
+      "line": 32158,
+      "text": "call DestroyEffect(LoadEffectHandle(O,BQ,6))"
+    },
+    {
+      "line": 32159,
+      "text": "call FlushChildHashtable(O,BQ)"
+    },
+    {
+      "line": 32160,
+      "text": "call DestroyTimer(t)"
+    },
+    {
+      "line": 32161,
+      "text": "endif"
+    },
+    {
+      "line": 32162,
+      "text": "set af=null"
+    },
+    {
+      "line": 32163,
+      "text": "set ac=null"
+    },
+    {
+      "line": 32164,
+      "text": "set t=null"
+    },
+    {
+      "line": 32165,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 32166,
+      "text": "endfunction"
+    },
+    {
+      "line": 32167,
+      "text": "function NewGuldanBladeMasterLifeDrain takes unit Bc returns nothing"
+    },
+    {
+      "line": 32168,
+      "text": "local real FF=GetUnitX(Bc)"
+    },
+    {
+      "line": 32169,
+      "text": "local real FG=GetUnitY(Bc)"
+    },
+    {
+      "line": 32170,
+      "text": "local real aW"
+    },
+    {
+      "line": 32171,
+      "text": "local timer t"
+    },
+    {
+      "line": 32172,
+      "text": "local integer DK=6"
+    },
+    {
+      "line": 32173,
+      "text": "if IsUnitType(Bc,UNIT_TYPE_ANCIENT) then"
+    },
+    {
+      "line": 32174,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 32175,
+      "text": "set t=null"
+    },
+    {
+      "line": 32176,
+      "text": "return"
+    },
+    {
+      "line": 32177,
+      "text": "endif"
+    },
+    {
+      "line": 32178,
+      "text": "set t=CreateTimer()"
+    },
+    {
+      "line": 32179,
+      "text": "set aW=NewGuldanAbsorbLife(Bc,FF,FG)"
+    },
+    {
+      "line": 32180,
+      "text": "call SaveUnitHandle(O,GetHandleId(t),0,Bc)"
+    },
+    {
+      "line": 32181,
+      "text": "call SaveReal(O,GetHandleId(t),1,FF)"
+    },
+    {
+      "line": 32182,
+      "text": "call SaveReal(O,GetHandleId(t),2,FG)"
+    },
+    {
+      "line": 32183,
+      "text": "call SaveReal(O,GetHandleId(t),3,aW)"
+    },
+    {
+      "line": 32184,
+      "text": "call SaveInteger(O,GetHandleId(t),4,DK)"
+    },
+    {
+      "line": 32185,
+      "text": "call SaveReal(O,GetHandleId(t),5,aW/DK)"
+    },
+    {
+      "line": 32186,
+      "text": "call SaveEffectHandle(O,GetHandleId(t),6,AddSpecialEffectTarget(\"Abilities\\\\Spells\\\\Other\\\\Drain\\\\DrainCaster.mdl\",Bc,\"origin\"))"
+    },
+    {
+      "line": 32187,
+      "text": "call TimerStart(t,1.,true,function NewGuldanHealAllies)"
+    },
+    {
+      "line": 32188,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 32189,
+      "text": "set t=null"
+    },
+    {
+      "line": 32190,
+      "text": "endfunction"
+    },
+    {
+      "line": 39324,
+      "text": "if BF==$4131514C then"
+    },
+    {
+      "line": 39325,
+      "text": "call NewGuldanEvilEnergyArrow(i,FF,FG)"
+    },
+    {
+      "line": 39326,
+      "text": "endif"
+    },
+    {
+      "line": 39327,
+      "text": "if BF==$4131514D then"
+    },
+    {
+      "line": 39328,
+      "text": "call NewGuldanBladeMasterAcidRain(i,FF,FG)"
+    },
+    {
+      "line": 39329,
+      "text": "endif"
+    },
+    {
+      "line": 39330,
+      "text": "if BF==$4131514E then"
+    },
+    {
+      "line": 39331,
+      "text": "call NewGuldanBladeMasterLifeDrain(i)"
+    },
+    {
+      "line": 39332,
+      "text": "endif"
+    },
+    {
+      "line": 40553,
+      "text": "if P8<=0 or bV==i or bV==null or IsUnitAlly(bV,GetOwningPlayer(i)) then"
+    },
+    {
+      "line": 40554,
+      "text": "set i=null"
+    },
+    {
+      "line": 40555,
+      "text": "set bV=null"
+    },
+    {
+      "line": 40556,
+      "text": "set Eb=null"
+    },
+    {
+      "line": 40557,
+      "text": "set h=null"
+    },
+    {
+      "line": 40558,
+      "text": "set Uz=null"
+    },
+    {
+      "line": 40559,
+      "text": "return"
+    },
+    {
+      "line": 40560,
+      "text": "endif"
+    },
+    {
+      "line": 40561,
+      "text": "if GetUnitAbilityLevel(bV,$41325937)>0 then"
+    },
+    {
+      "line": 40562,
+      "text": "set i=null"
+    },
+    {
+      "line": 40563,
+      "text": "set bV=null"
+    },
+    {
+      "line": 40564,
+      "text": "set Eb=null"
+    },
+    {
+      "line": 40565,
+      "text": "set h=null"
+    },
+    {
+      "line": 40566,
+      "text": "set Uz=null"
+    },
+    {
+      "line": 40567,
+      "text": "return"
+    },
+    {
+      "line": 40568,
+      "text": "endif"
+    },
+    {
+      "line": 40569,
+      "text": "if GetUnitAbilityLevel(i,QC)>0 then"
+    },
+    {
+      "line": 40570,
+      "text": "set P8=P8*.85"
+    },
+    {
+      "line": 40571,
+      "text": "call YDWESetEventDamage(P8)"
+    },
+    {
+      "line": 40572,
+      "text": "endif"
+    },
+    {
+      "line": 40573,
+      "text": "set Uz=CreateGroup()"
+    },
+    {
+      "line": 40574,
+      "text": "call DisableTrigger(Eb)"
+    },
+    {
+      "line": 40744,
+      "text": "if GetUnitAbilityLevel(i,$4131514C)>0 then"
+    },
+    {
+      "line": 40745,
+      "text": "call IssueTargetOrder(i,\"unloadall\",bV)"
+    },
+    {
+      "line": 40746,
+      "text": "elseif GetUnitAbilityLevel(bV,$4131514C)>0 then"
+    },
+    {
+      "line": 40747,
+      "text": "call IssueTargetOrder(bV,\"unloadall\",i)"
+    },
+    {
+      "line": 40748,
+      "text": "endif"
+    },
+    {
+      "line": 40749,
+      "text": "if GetUnitAbilityLevel(i,$41315342)>0 then"
+    },
+    {
+      "line": 40750,
+      "text": "call IssueTargetOrder(i,\"unloadall\",bV)"
+    },
+    {
+      "line": 40751,
+      "text": "elseif GetUnitAbilityLevel(bV,$41315342)>0 then"
+    },
+    {
+      "line": 40752,
+      "text": "call IssueTargetOrder(bV,\"unloadall\",i)"
+    },
+    {
+      "line": 40753,
+      "text": "endif"
+    },
+    {
+      "line": 40754,
+      "text": "if GetUnitAbilityLevel(i,$41315343)>0 then"
+    },
+    {
+      "line": 40755,
+      "text": "call IssueTargetOrder(i,\"unloadallcorpses\",bV)"
+    },
+    {
+      "line": 40756,
+      "text": "elseif GetUnitAbilityLevel(bV,$41315343)>0 then"
+    },
+    {
+      "line": 40757,
+      "text": "call IssueTargetOrder(bV,\"unloadallcorpses\",i)"
+    },
+    {
+      "line": 40758,
+      "text": "endif"
+    },
+    {
+      "line": 40759,
+      "text": "if GetUnitAbilityLevel(i,$4131514D)>0 then"
+    },
+    {
+      "line": 40760,
+      "text": "call IssueTargetOrder(i,\"unravenform\",bV)"
+    },
+    {
+      "line": 40761,
+      "text": "elseif GetUnitAbilityLevel(bV,$4131514D)>0 then"
+    },
+    {
+      "line": 40762,
+      "text": "call IssueTargetOrder(bV,\"unravenform\",i)"
+    },
+    {
+      "line": 40784,
+      "text": "if GetUnitAbilityLevel(i,$4131514E)>0 then"
+    },
+    {
+      "line": 40785,
+      "text": "call IssueImmediateOrder(i,\"unrobogoblin\")"
+    },
+    {
+      "line": 40786,
+      "text": "elseif GetUnitAbilityLevel(bV,$4131514E)>0 then"
+    },
+    {
+      "line": 40787,
+      "text": "call IssueImmediateOrder(bV,\"unrobogoblin\")"
+    },
+    {
+      "line": 40788,
+      "text": "endif"
+    },
+    {
+      "line": 48288,
+      "text": "call RegisterBudingLimit($6E303756,0,1)"
+    }
+  ],
+  "abilities": {
+    "A1QL": {
+      "rawcode": "A1QL",
+      "name": "邪能箭",
+      "tip": "邪能箭",
+      "ubertip": "射出3道能量箭，每隔1s射出一道，每道能量箭可对敌方单位造成101点伤害，伤害范围为400码，并且有8%的几率控制该敌方单位200码附近的3个单位为己方所用",
+      "alias": "A1QL",
+      "code": "ANcl",
+      "DataB1": "3",
+      "DataC1": "1",
+      "levels": "1",
+      "Cost1": "15",
+      "Rng1": "500.0",
+      "Cool1": "13.0",
+      "checkDep": "1",
+      "reqLevel": "1",
+      "DataE1": "1",
+      "DataF1": "unloadall"
+    },
+    "A1QM": {
+      "rawcode": "A1QM",
+      "name": "破坏之雨",
+      "tip": "破坏之雨",
+      "ubertip": "召唤一片酸雨云，对技能范围内的敌方单位造成每秒26点的伤害，该技能效果持续16s",
+      "alias": "A1QM",
+      "code": "ANcl",
+      "DataB1": "3",
+      "DataC1": "1",
+      "levels": "1",
+      "Cost1": "16",
+      "Rng1": "500.0",
+      "Cool1": "16.0",
+      "checkDep": "1",
+      "reqLevel": "1",
+      "DataE1": "1",
+      "DataF1": "unravenform"
+    },
+    "A1QN": {
+      "rawcode": "A1QN",
+      "name": "灵魂虹吸",
+      "tip": "灵魂虹吸",
+      "ubertip": "吸收附近400码敌方单位生命值的30%为己方400码友军单位平均恢复生命值，效果持续6s",
+      "alias": "A1QN",
+      "code": "ANcl",
+      "DataC1": "1",
+      "levels": "1",
+      "Cost1": "11",
+      "Rng1": "500.0",
+      "Cool1": "9.0",
+      "checkDep": "1",
+      "reqLevel": "1",
+      "DataE1": "1",
+      "DataF1": "unrobogoblin"
+    }
+  },
+  "units": {
+    "h0VR": {
+      "rawcode": "h0VR",
+      "name": "古尔丹MAX",
+      "ubertip": ",",
+      "unitID": "h0VR",
+      "canFlee": "1",
+      "cargoSize": "1",
+      "death": "3.04",
+      "deathType": "3",
+      "movetp": "foot",
+      "points": "100",
+      "prio": "6",
+      "propWin": "60.0",
+      "race": "human",
+      "targType": "ground",
+      "turnRate": "0.6",
+      "unitBalanceID": "h0VR",
+      "bldtm": "20",
+      "bountydice": "6",
+      "bountyplus": "20",
+      "bountysides": "3",
+      "collision": "12.0",
+      "defType": "hero",
+      "goldcost": "135",
+      "goldRep": "135",
+      "HP": "2005",
+      "level": "2",
+      "nsight": "800",
+      "regenMana": "2.0",
+      "regenType": "none",
+      "reptm": "20",
+      "sight": "1400",
+      "spd": "340",
+      "stockMax": "3",
+      "stockRegen": "30",
+      "tilesets": "*",
+      "upgrades": "R00B,R00C,R009,R00A",
+      "unitUIID": "h0VR",
+      "armor": "Flesh",
+      "blend": "0.15",
+      "blue": "255",
+      "elevRad": "20.0",
+      "file": "guldan.mdl",
+      "green": "255",
+      "maxPitch": "10.0",
+      "maxRoll": "10.0",
+      "modelScale": "1.0",
+      "red": "255",
+      "run": "210.0",
+      "scale": "1.0",
+      "scaleBull": "1",
+      "shadowH": "140.0",
+      "shadowOnWater": "1",
+      "shadowW": "140.0",
+      "shadowX": "50.0",
+      "shadowY": "50.0",
+      "teamColor": "-1",
+      "unitShadow": "Shadow",
+      "unitSound": "Gnoll",
+      "walk": "210.0",
+      "unitAbilID": "h0VR",
+      "abilList": "A1QL,A1QM,A1QN",
+      "unitWeapID": "h0VR",
+      "acquire": "500.0",
+      "atkType1": "magic",
+      "atkType2": "normal",
+      "backSw1": "0.3",
+      "cool1": "0.5",
+      "dice1": "1",
+      "dmgpt1": "0.3",
+      "impactZ": "60.0",
+      "launchZ": "60.0",
+      "rangeN1": "400",
+      "RngBuff1": "250.0",
+      "showUI1": "1",
+      "showUI2": "1",
+      "sides1": "8",
+      "targCount1": "1",
+      "targCount2": "1",
+      "targs1": "enemies",
+      "weapsOn": "1",
+      "weapTp1": "missile",
+      "weapType1": "WoodLightBash",
+      "hotkey": "F",
+      "damage_min_1": "284.0",
+      "damage_max_1": "291.0",
+      "damage_avg_1": "287.5",
+      "dps_avg_1": "575.0",
+      "bounty_min": "26.0",
+      "bounty_max": "38.0",
+      "bounty_avg": "32.0",
+      "attack_type_zh": "魔法",
+      "armor_type_zh": "英雄甲",
+      "ability_ids": "A1QL,A1QM,A1QN",
+      "ability_names": "邪能箭,破坏之雨,灵魂虹吸",
+      "def": "3.0",
+      "defUp": "2.0",
+      "manaN": "30",
+      "type": "giant",
+      "dmgplus1": "283"
+    },
+    "n07V": {
+      "rawcode": "n07V",
+      "name": "古尔丹MAX",
+      "tip": "升级到<古尔丹MAX>",
+      "ubertip": "生命：2005\n攻击：284-292\n攻速：0.5\n护甲：英雄甲\n攻击类型：魔法\n攻击距离：400\n\n技能：\n1.邪能箭、2.破坏之雨、3.灵魂虹吸",
+      "unitID": "n07V",
+      "canFlee": "1",
+      "death": "2.34",
+      "deathType": "2",
+      "points": "820",
+      "prio": "2",
+      "propWin": "60.0",
+      "race": "human",
+      "targType": "structure",
+      "unitBalanceID": "n07V",
+      "bldtm": "2",
+      "collision": "72.0",
+      "defType": "hero",
+      "fused": "5",
+      "goldcost": "520",
+      "HP": "2005",
+      "level": "1",
+      "nsight": "800",
+      "preventPlace": "unbuildable",
+      "regenMana": "2.0",
+      "regenType": "none",
+      "reptm": "1",
+      "sight": "1600",
+      "tilesets": "*",
+      "upgrades": "R009,R00A",
+      "unitUIID": "n07V",
+      "armor": "Flesh",
+      "blend": "0.15",
+      "blue": "255",
+      "elevRad": "50.0",
+      "file": "guldan.mdl",
+      "green": "255",
+      "modelScale": "1.0",
+      "red": "255",
+      "run": "200.0",
+      "scale": "1.0",
+      "scaleBull": "1",
+      "shadowOnWater": "1",
+      "teamColor": "-1",
+      "unitSound": "Gnoll",
+      "walk": "200.0",
+      "unitAbilID": "n07V",
+      "abilList": "A1QL,A1QM,A1QN,A008,A118",
+      "unitWeapID": "n07V",
+      "acquire": "500.0",
+      "atkType1": "magic",
+      "atkType2": "normal",
+      "backSw1": "0.5",
+      "castbsw": "0.51",
+      "cool1": "0.5",
+      "dice1": "1",
+      "dmgpt1": "0.5",
+      "impactZ": "120.0",
+      "launchZ": "145.0",
+      "rangeN1": "400",
+      "RngBuff1": "250.0",
+      "showUI2": "1",
+      "sides1": "8",
+      "targCount1": "1",
+      "targCount2": "1",
+      "targs1": "enemies",
+      "weapsOn": "1",
+      "weapTp1": "missile",
+      "weapType1": "MetalMediumSlice",
+      "hotkey": "Q",
+      "damage_min_1": "284.0",
+      "damage_max_1": "291.0",
+      "damage_avg_1": "287.5",
+      "dps_avg_1": "575.0",
+      "attack_type_zh": "魔法",
+      "armor_type_zh": "英雄甲",
+      "ability_ids": "A1QL,A1QM,A1QN,A008,A118",
+      "ability_names": "邪能箭,破坏之雨,灵魂虹吸,出售,移位",
+      "def": "3.0",
+      "manaN": "30",
+      "type": "ancient",
+      "dmgplus1": "283",
+      "buildingShadow": "BuildingShadowSmall",
+      "isbldg": "1",
+      "buffRadius": "15.0",
+      "buffType": "buffer",
+      "pathTex": "PathTextures\\4x4SimpleSolid.tga",
+      "elevPts": "4"
+    },
+    "e008": {
+      "rawcode": "e008",
+      "name": "万能",
+      "tip": "训练小精灵(W)",
+      "ubertip": "暗夜精灵族基本的工人单位。能采集金矿和木材。还能建造精灵族的建筑物并进行修理更新。\n能自我爆炸从而伤害到周围被召唤出来的单位并吸收一定范围内所有单位的魔法值。",
+      "unitID": "e008",
+      "canFlee": "1",
+      "cargoSize": "1",
+      "death": "3.0",
+      "prio": "1",
+      "propWin": "60.0",
+      "race": "nightelf",
+      "targType": "ground",
+      "turnRate": "0.6",
+      "unitBalanceID": "e008",
+      "bldtm": "14",
+      "bountydice": "5",
+      "bountyplus": "15",
+      "bountysides": "3",
+      "defType": "medium",
+      "goldcost": "60",
+      "goldRep": "60",
+      "HP": "60",
+      "level": "1",
+      "mana0": "100000",
+      "regenHP": "-1.0",
+      "regenMana": "1000.0",
+      "regenType": "always",
+      "reptm": "14",
+      "stockMax": "3",
+      "stockRegen": "30",
+      "tilesets": "*",
+      "unitUIID": "e008",
+      "armor": "Ethereal",
+      "blue": "255",
+      "elevRad": "50.0",
+      "file": "war3mapImported\\aaaaa.mdl",
+      "green": "255",
+      "maxPitch": "25.0",
+      "maxRoll": "25.0",
+      "modelScale": "1.0",
+      "red": "255",
+      "run": "200.0",
+      "scale": "1.0",
+      "scaleBull": "1",
+      "shadowOnWater": "1",
+      "teamColor": "-1",
+      "unitSound": "Wisp",
+      "walk": "200.0",
+      "unitAbilID": "e008",
+      "abilList": "Aloc",
+      "unitWeapID": "e008",
+      "atkType1": "normal",
+      "atkType2": "normal",
+      "impactZ": "60.0",
+      "launchZ": "60.0",
+      "showUI1": "1",
+      "showUI2": "1",
+      "targCount2": "1",
+      "hotkey": "W",
+      "bounty_min": "20.0",
+      "bounty_max": "30.0",
+      "bounty_avg": "25.0",
+      "attack_type_zh": "普通",
+      "armor_type_zh": "中甲",
+      "ability_ids": "Aloc",
+      "ability_names": "蝗虫",
+      "formation": "4",
+      "defUp": "2.0",
+      "manaN": "100000"
+    }
+  },
+  "findings": {
+    "arrow": {
+      "casts": [
+        0,
+        1,
+        2
+      ],
+      "damage": 101,
+      "radius": 200,
+      "distanceParameter": 800,
+      "duration": 0.2,
+      "step": 160,
+      "moves": 4,
+      "actualTravel": 640,
+      "finishAt": 0.16,
+      "removeAt": 0.2,
+      "hitGroup": "caster-owned; replaced per launch; destroyed by finish",
+      "charmFunctionReferences": 1,
+      "charmCalled": false
+    },
+    "rain": {
+      "damage": 26,
+      "radius": 400,
+      "ticks": 16,
+      "firstAt": 1
+    },
+    "drain": {
+      "currentHealthFraction": 0.3,
+      "damageEvent": false,
+      "enemyRadius": 400,
+      "allyRadius": 600,
+      "ticks": 6,
+      "firstAt": 1,
+      "fixedCenter": true,
+      "includesFullHealthAllies": true
+    },
+    "acquisition": {
+      "building": "n07V",
+      "combat": "h0VR",
+      "from": [
+        "h0C2",
+        "h1C2"
+      ],
+      "gold": 520,
+      "requires": [
+        "u004",
+        "R0AK",
+        "h220"
+      ],
+      "techCompletion": "h1CC",
+      "limit": 1
+    }
+  },
+  "boundaries": [
+    "Native ANcl cast/backswing/channel and same-frame order arbitration are not verified.",
+    "ChargeDistance native placement, timer precision, group enumeration and destroyed-group handle behavior remain partial.",
+    "Direct life writes cover instantiated units and kings; uninstantiated buildings and removed handles remain outside this adapter.",
+    "Original models and effects are absent."
+  ]
+}

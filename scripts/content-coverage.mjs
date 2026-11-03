@@ -79,6 +79,7 @@ const result={
   battleSkills:collect([...current,...playerBuildingCommands,...playerBuildingRuleCarriers,...playerRuntimeForms,...playerRuntimeAbilities,...MERCENARIES,...WAVES,...specialCodes.map(c=>UNIT_TEMPLATES[c])]),
   sourceOnlyCombatForms:[{combatRawcode:'h0JR',buildingRawcode:'n00S',status:'entry-unresolved',evidence:'war3map.j:17544-17545 maps forms; line3644 ban dialog; 48355 barracks egg marker and 48750 monthly record do not provide acquisition',skills:collect([{...UNIT_TEMPLATES.h0JR,abilityIds:[...UNIT_TEMPLATES.h0JR.abilityIds,'A0J2','A0J3']}])},{combatRawcode:'h0VQ',buildingRawcode:'n07U',status:'entry-unresolved',evidence:'war3map.j:17436-17437 maps forms; line3638 ban limit1; no source creation/recipe/upgrade entry found in packet',skills:collect([{...UNIT_TEMPLATES.h0VQ,abilityIds:[...UNIT_TEMPLATES.h0VQ.abilityIds,'A1QI','A1D6']}])}],
   remainingSourceGaps:[
+    '古尔丹A1QL/A1QM/A1QN已接入三次邪能箭、16次固定酸雨及直接30%生命虹吸/6次固定中心600码均摊治疗；邪能箭控制函数没有调用，不按8%文案添加。原生ANcl时序、辅助碰撞/去重组句柄及未实例化对象仍partial，见guldan-evidence.json。',
     '玛里苟斯A1PZ/A1Q1/A1Q2/A1Q3主动脚本、A1Q4首次伤害汲魔及竞技移除、A1Q0独立武器事件20附伤和动态A1Q5已接入；776/6秒网、27处可重叠灼烧、护盾实际给施法者均按源码。原生ANcl仲裁、移动限值、抗性叠加、e008及未实体化建筑的全图汲魔仍partial，见malygos-evidence.json。',
     '科多吞噬/暴食施法脚本实际造成99999混乱/通用或普通/普通伤害后return，不执行旧消化、恢复及吐出；自动门槛400/3000，手动主目标无血量门槛，暴食预先保存组再取首个合格第二目标。ANcl即时命令适配及默认耗魔/引导仍partial；见kodo-evidence.json。',
     '提里奥灰烬使者附伤/独立击杀回血与R01Y历史羁绊及出战授予已接入；A0LR独立伤害监听保留先回血、低血3秒任务及Af01附伤。A0LO/A0LR攻速DataA缺失，神圣愤怒h0M1标记/105附伤/先回血及1秒灼烧已接入，但原生ANpi首次跳和事件类别仍待实测；其他泰兰规则仍待还原，见tirion-evidence.json及tirion-holy-evidence.json。',

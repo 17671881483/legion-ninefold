@@ -1,3 +1,4 @@
+import {restoreNerzhul,nerzhulBuildingCompleted,restoreNerzhulBuilding,initializeNerzhulDeployment} from './nerzhul-rules.js';
 import {restoreSavis} from './savis-rules.js';
 import {restoreNozdormu} from './nozdormu-rules.js';
 import {restoreAlexstrasza} from './alexstrasza-rules.js';
@@ -104,6 +105,7 @@ export class Game {
       // Initialize the same empty journal saved/restored for players who have
       // not finished a troop yet; restoring must not add new progression data.
       restoreEggHistory(p,{wave:this.state.wave,buildings:p.buildings,unitsById:units});
+      for(const b of p.buildings)restoreNerzhulBuilding(p,b,units[b.unitId]);
     }
     this._log(`${RULES.title}：按来源建造军团，发展木材，与队友共同守护国王。`);
     this._log('采用v14.1A5九倍实怪数量和HP；静态数据与Web近似、原脚本冲突均保留来源说明。');
@@ -436,6 +438,7 @@ export class Game {
   }
   _recordEggCompletion(p, def, building) {
     this._initializeSourceClassBuilding(building);
+    nerzhulBuildingCompleted(building,def);
     return recordEggCompletion(p,def,{buildingId:building?.id,wave:this.state.wave,buildings:p.buildings,unitsById:units});
   }
   _recordSourceCompletion(p, def) {
@@ -1695,6 +1698,7 @@ export class Game {
       for(const b of p.buildings.filter(b=>!b.construction))this._recordSourceCompletion(p,units[b.unitId]);
       for(const b of p.buildings.filter(b=>!b.construction))this._initializeSourceClassBuilding(b);
       restoreEggHistory(p,{wave:this.state.wave,buildings:p.buildings,unitsById:units});
+      for(const b of p.buildings)restoreNerzhulBuilding(p,b,units[b.unitId]);
       for(const b of p.buildings)if(!b.construction&&!b.boxLimitTransferred)this._recordLimitOrigins(b,units[b.unitId]);
       if(p.workers>rule('maxWorkers',7)||p.lumberLevel>rule('maxLumberLevel',15)){p.workers=Math.min(p.workers,rule('maxWorkers',7));p.lumberLevel=Math.min(p.lumberLevel,rule('maxLumberLevel',15));this.state.migrationNotice=`旧存档已限制为${RULES.maxWorkers}小精灵、${RULES.maxLumberLevel}级科技；原进度已保留备份。`;}
       const tasks=this._economyTasks(p);tasks.workerQueue=tasks.workerQueue.slice(0,Math.max(0,rule('maxWorkers',7)-p.workers));if(tasks.lumberTask?.targetLevel>rule('maxLumberLevel',15))tasks.lumberTask=null;
@@ -1707,10 +1711,11 @@ export class Game {
       else if(def&&isV14(def)&&refreshSourceSkills(e,def)){e.status??={};e.status.sourceSkillsRestoredAt=this.state.time;}
       if(isV14(def)&&def.heroFamily)e.isNativeHero=['STR','AGI','INT'].includes(def.sourceRawFields?.Primary);
       e.skillStates??={};e.buffs??=[];
+      if(isV14(def))initializeNerzhulDeployment(this,this.state.players[e.ownerId]?.buildings.find(b=>b.id===e.buildingId),e,{restoring:true});
       restoreUnstableAlchemyUserData(this,e);restoreVeteranIdentity(this,e,units);restoreSapperCreation(this,e,def);
     }
     restoreUndeadLegionHandles(this);
-    restorePhoenixRevival(this);restorePhoenixActive(this);restoreMalygos(this);restoreGuldan(this);restoreAnduin(this);restoreVarian(this);restoreAlexstrasza(this);restoreNozdormu(this);restoreSavis(this);
+    restorePhoenixRevival(this);restorePhoenixActive(this);restoreMalygos(this);restoreGuldan(this);restoreAnduin(this);restoreVarian(this);restoreAlexstrasza(this);restoreNozdormu(this);restoreSavis(this);restoreNerzhul(this);
     // JSON stores retained handles separately; surviving units must share the
     // live object again so later healing, movement and death update one handle.
     for(const e of [...this.state.entities,...this.state.kings])if(this.state.brightArthasHandles[e.id])this.state.brightArthasHandles[e.id]=e;

@@ -10,7 +10,7 @@ const playerBuildingCommands=current.filter(u=>u.buildingAbilityIds?.includes('A
 const playerBuildingRuleCarriers=current.filter(u=>u.buildingAbilityIds?.some(id=>['A0RF','A0JE','A1BL','A1PK','A170','A1UH'].includes(id))).map(u=>({...u,abilityIds:u.buildingAbilityIds.filter(id=>['A0RF','A0JE','A1BL','A1PK','A170','A1UH'].includes(id))}));
 // This form is created by YseraAwakening at runtime, so it is not a separate
 // build-menu record. Its skills still belong to the player's combat coverage.
-const playerRuntimeForms=['h0YO','h0UD','h0UE','h2AE','n06V','n06W','h0CZ','h0CL','n07J','h03E','h0V2','h03K','h0SU','n0SD','h2AC','h0VY','h0VZ','e01G','h0R0','h0QT','u011'].map(code=>UNIT_TEMPLATES[code]);
+const playerRuntimeForms=['h0YO','h0UD','h0UE','h2AE','n06V','n06W','h0CZ','h0CL','n07J','h03E','h0V2','h03K','h0SU','n0SD','h2AC','h0VY','h0VZ','e01G','h0R0','h0QT','u011','u04D','u04E'].map(code=>UNIT_TEMPLATES[code]);
 // Source callbacks or building-only icons expose these auxiliary abilities.
 // Count their runtime rules even when the combat ability list omits the icon.
 const playerRuntimeAbilities=[
@@ -47,7 +47,7 @@ const playerRuntimeAbilities=[
   {sourceRawcode:'h0UD',abilityIds:['A1CP']},
   {sourceRawcode:'h2AE',abilityIds:['A1CP']},
   {sourceRawcode:'e00O',abilityIds:['A0OZ']},
-  {sourceRawcode:'e008',abilityIds:['A122','A1CV','A1CW','A0IB','A0I5','A0I7','A0J8','A0J9','A0JC','A0JD']},
+  {sourceRawcode:'e008',abilityIds:['A1UL','A122','A1CV','A1CW','A0IB','A0I5','A0I7','A0J8','A0J9','A0JC','A0JD']},
   {sourceRawcode:'h0UG',abilityIds:['A1CG']},
   {sourceRawcode:'h0SY',abilityIds:['A1BD','A1BE','A1BF','A1BH']},
   {sourceRawcode:'h0SN',abilityIds:['A19Z']},
@@ -75,13 +75,14 @@ const result={
   sourceOnly:{items:Object.keys(ITEMS).length,technologies:Object.keys(TECHNOLOGIES).length},
   playerRuntimeForms:playerRuntimeForms.map(u=>u.sourceRawcode??u.combatRawcode),
   playerRuntimeAbilities:playerRuntimeAbilities.map(({sourceRawcode,abilityIds})=>({sourceRawcode,abilityIds})),
-  unitScriptBindings:['n050','n06R'].map(combatRawcode=>({combatRawcode,rule:'DemonStatueBounce',status:'partial',source:'war3map.j:41293-41294',displayAbility:'A0RF',abilityRequired:false})).concat([{combatRawcode:'h0JU',rule:'MalfurionTwilight',status:'partial',source:'war3map.j:41366-41411',displayAbility:'A0JE',requiredAbility:'A0JA',abilityRequired:false}]),
+  unitScriptBindings:['n050','n06R'].map(combatRawcode=>({combatRawcode,rule:'DemonStatueBounce',status:'partial',source:'war3map.j:41293-41294',displayAbility:'A0RF',abilityRequired:false})).concat([{combatRawcode:'h0JU',rule:'MalfurionTwilight',status:'partial',source:'war3map.j:41366-41411',displayAbility:'A0JE',requiredAbility:'A0JA',abilityRequired:false},{combatRawcode:'u04D',rule:'NazuoOmenOfSummonDeath',status:'partial',source:'war3map.j:41930-41932',abilityRequired:false}]),
   playerBuildingRuleCarriers:playerBuildingRuleCarriers.map(u=>u.sourceRawcode),
   playerBuildingCommandCarriers:playerBuildingCommands.length,
   playerSkills:collect([...current,...playerBuildingCommands,...playerBuildingRuleCarriers,...playerRuntimeForms,...playerRuntimeAbilities]),
   battleSkills:collect([...current,...playerBuildingCommands,...playerBuildingRuleCarriers,...playerRuntimeForms,...playerRuntimeAbilities,...MERCENARIES,...WAVES,...specialCodes.map(c=>UNIT_TEMPLATES[c])]),
   sourceOnlyCombatForms:[{combatRawcode:'h0JR',buildingRawcode:'n00S',status:'entry-unresolved',evidence:'war3map.j:17544-17545 maps forms; line3644 ban dialog; 48355 barracks egg marker and 48750 monthly record do not provide acquisition',skills:collect([{...UNIT_TEMPLATES.h0JR,abilityIds:[...UNIT_TEMPLATES.h0JR.abilityIds,'A0J2','A0J3']}])},{combatRawcode:'h0VQ',buildingRawcode:'n07U',status:'entry-unresolved',evidence:'war3map.j:17436-17437 maps forms; line3638 ban limit1; no source creation/recipe/upgrade entry found in packet',skills:collect([{...UNIT_TEMPLATES.h0VQ,abilityIds:[...UNIT_TEMPLATES.h0VQ.abilityIds,'A1QI','A1D6']}])}],
   remainingSourceGaps:[
+    '耐奥祖怨毒固定300范围五次55/82.5/110、死亡之兆延迟1秒以尸体当时位置600范围105/157.5/525、u04D死亡预选目标后五次80及完工/部署等级已接入。诅咒仅e008/A1UL命令请求，缺失原生参数不猜伤害；仪式枯骨手动按4/6/10随机总数生成且无1秒生命。原生召唤时序/分布/AI入口、诅咒结算与原版阶段连边仍partial，见nerzhul-evidence.json。',
     '萨维斯A1UD三目标每秒305感染、A1UE固定400范围七次去重检查、A1UF恐魔3秒生命/175初伤/125死亡爆炸及10次10伤害、A1UG延迟0.5秒425流星已接入。A1UH仅说明，SavisSummon无调用；A1UI命令错配及缺失耗魔不再按免费自动召唤处理。原生时序、枚举、移除句柄、导航及特效仍partial，见savis-evidence.json。',
     '诺兹多姆A154受伤跳跃/扣费/正面驱散、A158主死亡变龙及1000爆炸、A159时之吐息、A15A历史与零值满血回退已接入。默认新龙没有A15A历史登记，不补造；A155/A206是原生光环说明，sapper目标分类已约束。原生ANcl时序、矩形映射、未知buff、回溯生命/枚举及飞行通行仍partial，见nozdormu-evidence.json。',
     '阿莱克斯塔萨生命赐福/绽放/生命链接、独立自然祝福请求、死亡h0R0变龙、三次烈焰打击、一次780净化烈焰及自然怒火25%附伤/共享护甲已接入。A170仅在建筑，普通与神圣战斗体均未授予，默认命令失败。未调用的旧白焰线不添加。原生生命/入圈事件、ANcl仲裁、枚举、动态攻击上下限及模型碰撞仍partial，见alexstrasza-evidence.json。',

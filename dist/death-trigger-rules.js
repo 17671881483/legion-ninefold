@@ -25,11 +25,13 @@ export function runMainUnitDeath(g,dead,killer,api){
     // SingedAlchemyGold draws once even for a non-alchemist. Suppressed death
     // events must not consume that draw or award this trigger's extra gold.
     api.alchemyGold(g,dead,killer);
+    if(isV14(dead))api.nerzhulSummonDeath?.(g,dead);
     if(isV14(dead)&&has(dead,'A20D')){
       for(const t of enumerate(g,dead,center,400*scale(dead),true))api.universalDamage(g,t,200,dead);
       g._event?.('splash',dead,'死亡爆发',{skillId:'A20D',radius:400*scale(dead)});
     }
     if(isV14(killer))api.blademasterKill?.(g,killer);
+    if(isV14(dead))api.nerzhulMainDeath?.(g,dead);
     if(isV14(dead))api.classDeath(g,dead,killer,true);
     // Independent if at 42006 precedes the fire/bone-dragon elseif chain.
     if(isV14(killer))api.nightmareKill?.(g,killer);

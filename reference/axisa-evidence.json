@@ -1,0 +1,3859 @@
+{
+  "scope": "v74 阿茜萨十一阶段：A1CF完工计数/部署复制、A1CH与A1CI原生光环、A1CJ女王联动，以及Qs=A1CU误别名对应A1CG永久抗性的旧实现迁移。",
+  "status": "partial",
+  "source": {
+    "path": "reference/v14-source/raw_extracted/war3map.j",
+    "sha256": "e66c55b3b25b185c991be5613e21fbf5b2d598f3cc40f2f8cd01c23bcb828250",
+    "encoding": "latin1 split LF only; sourceEvidence.text preserves original bytes as Latin-1 codepoints"
+  },
+  "objectSources": [
+    {
+      "path": "reference/v14-source/data/all_abilities.csv",
+      "sha256": "e192876a736b6c5d666da7d11663cd8623732902433cb553b18de694e886729c"
+    },
+    {
+      "path": "reference/v14-source/data/war3map_w3a_modifications.csv",
+      "sha256": "16e07e07a174e804b7a8cdd7cad8771b38c673925538fe94d71944f232aa103c"
+    },
+    {
+      "path": "reference/v14-source/data/all_units.csv",
+      "sha256": "552f04bfc10e412b8d9b4fec485dd85cfd1f6316487fb4fd4d63d398879e9921"
+    },
+    {
+      "path": "reference/v14-source/data/all_buffs.csv",
+      "sha256": "c42a1afa603e6afccaf864e63d08fc0260207b68561547c5c1abfb6ac69e30c8"
+    }
+  ],
+  "sourceEvidence": [
+    {
+      "line": 1151,
+      "text": "integer Qs=$41314355"
+    },
+    {
+      "line": 1152,
+      "text": "integer Qu=$42303754"
+    },
+    {
+      "line": 1153,
+      "text": "integer Qt=$41314347"
+    },
+    {
+      "line": 2597,
+      "text": "call SaveInteger(O,$68305532,StringHash(\"box_train_select_count\"),1)"
+    },
+    {
+      "line": 2598,
+      "text": "call SaveInteger(O,$68305532,StringHash(\"box_train_select_1\"),$6E303749)"
+    },
+    {
+      "line": 8924,
+      "text": "call SetPlayerTechMaxAllowedSwap($68305533,0,Player(BB))"
+    },
+    {
+      "line": 18417,
+      "text": "set Mk[Bi]=$68305454"
+    },
+    {
+      "line": 18418,
+      "text": "set Ml[Bi]=$68305533"
+    },
+    {
+      "line": 18419,
+      "text": "set Bi=Bi+1"
+    },
+    {
+      "line": 18420,
+      "text": "set Mk[Bi]=$68305543"
+    },
+    {
+      "line": 18421,
+      "text": "set Ml[Bi]=$68305534"
+    },
+    {
+      "line": 18422,
+      "text": "set Bi=Bi+1"
+    },
+    {
+      "line": 18423,
+      "text": "set Mk[Bi]=$68305455"
+    },
+    {
+      "line": 18424,
+      "text": "set Ml[Bi]=$68305531"
+    },
+    {
+      "line": 18425,
+      "text": "set Bi=Bi+1"
+    },
+    {
+      "line": 18426,
+      "text": "set Mk[Bi]=$68305456"
+    },
+    {
+      "line": 18427,
+      "text": "set Ml[Bi]=$68305542"
+    },
+    {
+      "line": 18428,
+      "text": "set Bi=Bi+1"
+    },
+    {
+      "line": 18429,
+      "text": "set Mk[Bi]=$68305457"
+    },
+    {
+      "line": 18430,
+      "text": "set Ml[Bi]=$68305541"
+    },
+    {
+      "line": 18431,
+      "text": "set Bi=Bi+1"
+    },
+    {
+      "line": 18432,
+      "text": "set Mk[Bi]=$68305458"
+    },
+    {
+      "line": 18433,
+      "text": "set Ml[Bi]=$68305539"
+    },
+    {
+      "line": 18434,
+      "text": "set Bi=Bi+1"
+    },
+    {
+      "line": 18435,
+      "text": "set Mk[Bi]=$68305453"
+    },
+    {
+      "line": 18436,
+      "text": "set Ml[Bi]=$68305538"
+    },
+    {
+      "line": 18437,
+      "text": "set Bi=Bi+1"
+    },
+    {
+      "line": 18438,
+      "text": "set Mk[Bi]=$68305459"
+    },
+    {
+      "line": 18439,
+      "text": "set Ml[Bi]=$68305537"
+    },
+    {
+      "line": 18440,
+      "text": "set Bi=Bi+1"
+    },
+    {
+      "line": 18441,
+      "text": "set Mk[Bi]=$68305452"
+    },
+    {
+      "line": 18442,
+      "text": "set Ml[Bi]=$68305536"
+    },
+    {
+      "line": 18443,
+      "text": "set Bi=Bi+1"
+    },
+    {
+      "line": 18444,
+      "text": "set Mk[Bi]=$68305530"
+    },
+    {
+      "line": 18445,
+      "text": "set Ml[Bi]=$68305535"
+    },
+    {
+      "line": 18446,
+      "text": "set Bi=Bi+1"
+    },
+    {
+      "line": 18447,
+      "text": "set Mk[Bi]=$6830545A"
+    },
+    {
+      "line": 18448,
+      "text": "set Ml[Bi]=$68305532"
+    },
+    {
+      "line": 20159,
+      "text": "if GetUnitTypeId(Nr)==Ml[bj_forLoopAIndex] then"
+    },
+    {
+      "line": 20160,
+      "text": "set Bi=bj_forLoopAIndex"
+    },
+    {
+      "line": 20161,
+      "text": "endif"
+    },
+    {
+      "line": 20162,
+      "text": "set bj_forLoopAIndex=bj_forLoopAIndex+1"
+    },
+    {
+      "line": 20163,
+      "text": "endloop"
+    },
+    {
+      "line": 20164,
+      "text": "if GetUnitAbilityLevel(i,$41304C50)>0 and GetPlayerTechCountSimple($52303159,GetOwningPlayer(i))==1 then"
+    },
+    {
+      "line": 20165,
+      "text": "set Pd=1"
+    },
+    {
+      "line": 20166,
+      "text": "endif"
+    },
+    {
+      "line": 20167,
+      "text": "if LoadBoolean(O,GetHandleId(i),StringHash(\"A0Z1\")) then"
+    },
+    {
+      "line": 20168,
+      "text": "set Pe=1"
+    },
+    {
+      "line": 20169,
+      "text": "endif"
+    },
+    {
+      "line": 20170,
+      "text": "if LoadBoolean(O,GetHandleId(i),StringHash(\"A0Z2\")) then"
+    },
+    {
+      "line": 20171,
+      "text": "set Pe=2"
+    },
+    {
+      "line": 20172,
+      "text": "endif"
+    },
+    {
+      "line": 20173,
+      "text": "set Kc=CreateUnit(Pc,Mk[Bi],GetLocationX(Pb),GetLocationY(Pb),bj_UNIT_FACING)"
+    },
+    {
+      "line": 20174,
+      "text": "call SetUnitUserData(Kc,1+GetPlayerId(GetOwningPlayer(Nr)))"
+    },
+    {
+      "line": 20175,
+      "text": "call ExecuteFunc(\"PassiveSkillNoArgJJC\")"
+    },
+    {
+      "line": 21336,
+      "text": "set bj_lastCreatedUnit=GetEnumUnit()"
+    },
+    {
+      "line": 21337,
+      "text": "set Bi=0"
+    },
+    {
+      "line": 21338,
+      "text": "call ShowUnit(i,false)"
+    },
+    {
+      "line": 21339,
+      "text": "if IsPlayerAlly(BF,Player(8)) then"
+    },
+    {
+      "line": 21340,
+      "text": "set Pc=Player(8)"
+    },
+    {
+      "line": 21341,
+      "text": "else"
+    },
+    {
+      "line": 21342,
+      "text": "set Pc=Player(9)"
+    },
+    {
+      "line": 21343,
+      "text": "endif"
+    },
+    {
+      "line": 21344,
+      "text": "set Bi=LoadInteger(K,515,GetUnitTypeId(i))"
+    },
+    {
+      "line": 21345,
+      "text": "if Bi>0 then"
+    },
+    {
+      "line": 21346,
+      "text": "if GetUnitAbilityLevel(i,$41304C50)>0 and GetPlayerTechCountSimple($52303159,GetOwningPlayer(i))==1 then"
+    },
+    {
+      "line": 21347,
+      "text": "set BB=1"
+    },
+    {
+      "line": 21348,
+      "text": "endif"
+    },
+    {
+      "line": 21349,
+      "text": "if LoadBoolean(O,GetHandleId(i),StringHash(\"A0Z1\")) then"
+    },
+    {
+      "line": 21350,
+      "text": "set Pe=1"
+    },
+    {
+      "line": 21351,
+      "text": "endif"
+    },
+    {
+      "line": 21352,
+      "text": "if LoadBoolean(O,GetHandleId(i),StringHash(\"A0Z2\")) then"
+    },
+    {
+      "line": 21353,
+      "text": "set Pe=2"
+    },
+    {
+      "line": 21354,
+      "text": "endif"
+    },
+    {
+      "line": 21355,
+      "text": "set i=CreateUnit(Pc,Bi,GetUnitX(i),GetUnitY(i),MP[GetPlayerId(BF)])"
+    },
+    {
+      "line": 21356,
+      "text": "set UT=i"
+    },
+    {
+      "line": 21357,
+      "text": "call SetUnitUserData(i,GetPlayerId(BF)+1)"
+    },
+    {
+      "line": 21358,
+      "text": "call ExecuteFunc(\"PassiveSkillNoArg\")"
+    },
+    {
+      "line": 28485,
+      "text": "function EggWhiteEx takes unit i,integer x,player h,integer BB,integer BF,boolean Yt returns nothing"
+    },
+    {
+      "line": 28486,
+      "text": "local unit Ki"
+    },
+    {
+      "line": 28487,
+      "text": "local boolexpr Cd=null"
+    },
+    {
+      "line": 28488,
+      "text": "local integer Bj=0"
+    },
+    {
+      "line": 28489,
+      "text": "local integer Yy=0"
+    },
+    {
+      "line": 28490,
+      "text": "local string Yz=null"
+    },
+    {
+      "line": 28491,
+      "text": "local integer De=0"
+    },
+    {
+      "line": 28492,
+      "text": "local integer Df=0"
+    },
+    {
+      "line": 28493,
+      "text": "local timer t"
+    },
+    {
+      "line": 28494,
+      "text": "local group DG"
+    },
+    {
+      "line": 28495,
+      "text": "local group Uz"
+    },
+    {
+      "line": 28496,
+      "text": "local integer KI=0"
+    },
+    {
+      "line": 28497,
+      "text": "call UnitAddAbility(i,$4162756E)"
+    },
+    {
+      "line": 28541,
+      "text": "if GetUnitAbilityLevel(i,$41314346)>0 then"
+    },
+    {
+      "line": 28542,
+      "text": "call SaveInteger(O,GetHandleId(i),$41314346,LoadInteger(O,GetHandleId(i),$41314346)+1)"
+    },
+    {
+      "line": 28543,
+      "text": "call SetUnitAbilityLevel(i,$41314346,LoadInteger(O,GetHandleId(i),$41314346))"
+    },
+    {
+      "line": 28544,
+      "text": "endif"
+    },
+    {
+      "line": 29198,
+      "text": "function EggWhite takes unit i,integer x,player h,integer BB,integer BF returns nothing"
+    },
+    {
+      "line": 29199,
+      "text": "call EggWhiteEx(i,x,h,BB,BF,EVENT_PLAYER_UNIT_CONSTRUCT_FINISH==GetTriggerEventId()==true)"
+    },
+    {
+      "line": 29200,
+      "text": "set i=null"
+    },
+    {
+      "line": 29201,
+      "text": "set h=null"
+    },
+    {
+      "line": 29202,
+      "text": "endfunction"
+    },
+    {
+      "line": 29203,
+      "text": "function LimitHeroTypeCount takes player h,integer BF,boolean KH returns nothing"
+    },
+    {
+      "line": 29204,
+      "text": "if KH then"
+    },
+    {
+      "line": 29205,
+      "text": "if not LoadBoolean(O,BF,StringHash(\"ban\")) and LoadInteger(O,GetHandleId(h),StringHash(\"last_hero\"))!=BF then"
+    },
+    {
+      "line": 29206,
+      "text": "call SetPlayerTechMaxAllowed(h,BF,1)"
+    },
+    {
+      "line": 29207,
+      "text": "endif"
+    },
+    {
+      "line": 29208,
+      "text": "else"
+    },
+    {
+      "line": 29209,
+      "text": "call SetPlayerTechMaxAllowed(h,BF,0)"
+    },
+    {
+      "line": 29210,
+      "text": "endif"
+    },
+    {
+      "line": 29211,
+      "text": "set h=null"
+    },
+    {
+      "line": 29213,
+      "text": "function InitHeroPage takes nothing returns nothing"
+    },
+    {
+      "line": 29214,
+      "text": "local integer BB=0"
+    },
+    {
+      "line": 29215,
+      "text": "local player h"
+    },
+    {
+      "line": 29216,
+      "text": "loop"
+    },
+    {
+      "line": 29217,
+      "text": "set h=Player(BB)"
+    },
+    {
+      "line": 29218,
+      "text": "call LimitHeroTypeCount(h,$68683031,false)"
+    },
+    {
+      "line": 29219,
+      "text": "call LimitHeroTypeCount(h,$68304E33,false)"
+    },
+    {
+      "line": 29220,
+      "text": "call LimitHeroTypeCount(h,$6E303637,false)"
+    },
+    {
+      "line": 29221,
+      "text": "call LimitHeroTypeCount(h,$68305533,false)"
+    },
+    {
+      "line": 29222,
+      "text": "call LimitHeroTypeCount(h,$6E303355,false)"
+    },
+    {
+      "line": 29223,
+      "text": "call LimitHeroTypeCount(h,$6E30384A,false)"
+    },
+    {
+      "line": 29224,
+      "text": "call LimitHeroTypeCount(h,$6E303931,false)"
+    },
+    {
+      "line": 29225,
+      "text": "exitwhen BB>=10"
+    },
+    {
+      "line": 29226,
+      "text": "set BB=BB+1"
+    },
+    {
+      "line": 29227,
+      "text": "endloop"
+    },
+    {
+      "line": 29245,
+      "text": "call LimitHeroTypeCount(h,$68683031,true)"
+    },
+    {
+      "line": 29246,
+      "text": "call LimitHeroTypeCount(h,$68304E33,true)"
+    },
+    {
+      "line": 29247,
+      "text": "call LimitHeroTypeCount(h,$6E303637,true)"
+    },
+    {
+      "line": 29248,
+      "text": "call LimitHeroTypeCount(h,$68305533,true)"
+    },
+    {
+      "line": 29249,
+      "text": "call LimitHeroTypeCount(h,$6E303355,true)"
+    },
+    {
+      "line": 29250,
+      "text": "call LimitHeroTypeCount(h,$6E30384A,true)"
+    },
+    {
+      "line": 29251,
+      "text": "call LimitHeroTypeCount(h,$6E303931,true)"
+    },
+    {
+      "line": 29263,
+      "text": "call LimitHeroTypeCount(h,$68683031,false)"
+    },
+    {
+      "line": 29264,
+      "text": "call LimitHeroTypeCount(h,$68304E33,false)"
+    },
+    {
+      "line": 29265,
+      "text": "call LimitHeroTypeCount(h,$6E303637,false)"
+    },
+    {
+      "line": 29266,
+      "text": "call LimitHeroTypeCount(h,$68305533,false)"
+    },
+    {
+      "line": 29267,
+      "text": "call LimitHeroTypeCount(h,$6E303355,false)"
+    },
+    {
+      "line": 29268,
+      "text": "call LimitHeroTypeCount(h,$6E30384A,false)"
+    },
+    {
+      "line": 29269,
+      "text": "call LimitHeroTypeCount(h,$6E303931,false)"
+    },
+    {
+      "line": 29807,
+      "text": "function SelectRangeAlly takes unit Pf,real FF,real FG,real Px returns group"
+    },
+    {
+      "line": 29808,
+      "text": "local group DG=CreateGroup()"
+    },
+    {
+      "line": 29809,
+      "text": "local group Om=CreateGroup()"
+    },
+    {
+      "line": 29810,
+      "text": "local unit D6=null"
+    },
+    {
+      "line": 29811,
+      "text": "call GroupEnumUnitsInRange(DG,FF,FG,Px,null)"
+    },
+    {
+      "line": 29812,
+      "text": "loop"
+    },
+    {
+      "line": 29813,
+      "text": "set D6=FirstOfGroup(DG)"
+    },
+    {
+      "line": 29814,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 29815,
+      "text": "if IsUnitAlly(D6,GetOwningPlayer(Pf)) and not IsUnitType(D6,UNIT_TYPE_DEAD) and GetUnitAbilityLevel(D6,$4176756C)==0 then"
+    },
+    {
+      "line": 29816,
+      "text": "call GroupAddUnit(Om,D6)"
+    },
+    {
+      "line": 29817,
+      "text": "endif"
+    },
+    {
+      "line": 29818,
+      "text": "call GroupRemoveUnit(DG,D6)"
+    },
+    {
+      "line": 29819,
+      "text": "endloop"
+    },
+    {
+      "line": 29820,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 29821,
+      "text": "set DG=null"
+    },
+    {
+      "line": 29822,
+      "text": "set D6=null"
+    },
+    {
+      "line": 29823,
+      "text": "set Pf=null"
+    },
+    {
+      "line": 29824,
+      "text": "set Py=Om"
+    },
+    {
+      "line": 29825,
+      "text": "set Om=null"
+    },
+    {
+      "line": 29826,
+      "text": "return Py"
+    },
+    {
+      "line": 29827,
+      "text": "endfunction"
+    },
+    {
+      "line": 32922,
+      "text": "function VashjSwapTimer takes nothing returns nothing"
+    },
+    {
+      "line": 32923,
+      "text": "local timer t=GetExpiredTimer()"
+    },
+    {
+      "line": 32924,
+      "text": "local integer BQ=GetHandleId(t)"
+    },
+    {
+      "line": 32925,
+      "text": "local unit Bc=LoadUnitHandle(O,BQ,0)"
+    },
+    {
+      "line": 32926,
+      "text": "local group DG=YDWEGetUnitsOfTypeIdAllNull($68304F56)"
+    },
+    {
+      "line": 32927,
+      "text": "local unit D6"
+    },
+    {
+      "line": 32928,
+      "text": "loop"
+    },
+    {
+      "line": 32929,
+      "text": "set D6=FirstOfGroup(DG)"
+    },
+    {
+      "line": 32930,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 32931,
+      "text": "call GroupRemoveUnit(DG,D6)"
+    },
+    {
+      "line": 32932,
+      "text": "if IsUnitAlly(D6,GetOwningPlayer(Bc)) then"
+    },
+    {
+      "line": 32933,
+      "text": "if GetUnitAbilityLevel(Bc,$4131434B)==0 then"
+    },
+    {
+      "line": 32934,
+      "text": "call UnitAddAbility(Bc,$4131434B)"
+    },
+    {
+      "line": 32935,
+      "text": "call SetUnitAbilityLevel(Bc,$4131434B,2)"
+    },
+    {
+      "line": 32936,
+      "text": "call UnitMakeAbilityPermanent(Bc,true,$4131434B)"
+    },
+    {
+      "line": 32937,
+      "text": "elseif GetUnitAbilityLevel(Bc,$4131434B)==3 then"
+    },
+    {
+      "line": 32938,
+      "text": "call SetUnitAbilityLevel(Bc,$4131434B,4)"
+    },
+    {
+      "line": 32939,
+      "text": "endif"
+    },
+    {
+      "line": 32940,
+      "text": "elseif IsUnitEnemy(D6,GetOwningPlayer(Bc)) then"
+    },
+    {
+      "line": 32941,
+      "text": "if GetUnitAbilityLevel(Bc,$4131434B)==0 then"
+    },
+    {
+      "line": 32942,
+      "text": "call UnitAddAbility(Bc,$4131434B)"
+    },
+    {
+      "line": 32943,
+      "text": "call SetUnitAbilityLevel(Bc,$4131434B,3)"
+    },
+    {
+      "line": 32944,
+      "text": "call UnitMakeAbilityPermanent(Bc,true,$4131434B)"
+    },
+    {
+      "line": 32945,
+      "text": "elseif GetUnitAbilityLevel(Bc,$4131434B)==2 then"
+    },
+    {
+      "line": 32946,
+      "text": "call SetUnitAbilityLevel(Bc,$4131434B,4)"
+    },
+    {
+      "line": 32947,
+      "text": "endif"
+    },
+    {
+      "line": 32948,
+      "text": "if GetUnitAbilityLevel(Bc,$41314F45)==0 then"
+    },
+    {
+      "line": 32949,
+      "text": "call UnitAddAbility(Bc,$41314F45)"
+    },
+    {
+      "line": 32950,
+      "text": "call UnitMakeAbilityPermanent(Bc,true,$41314F45)"
+    },
+    {
+      "line": 32951,
+      "text": "endif"
+    },
+    {
+      "line": 32952,
+      "text": "endif"
+    },
+    {
+      "line": 32953,
+      "text": "endloop"
+    },
+    {
+      "line": 32954,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 32955,
+      "text": "call FlushChildHashtable(O,BQ)"
+    },
+    {
+      "line": 32956,
+      "text": "call DestroyTimer(t)"
+    },
+    {
+      "line": 32957,
+      "text": "set t=null"
+    },
+    {
+      "line": 32958,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 32959,
+      "text": "set DG=null"
+    },
+    {
+      "line": 32960,
+      "text": "set D6=null"
+    },
+    {
+      "line": 32961,
+      "text": "endfunction"
+    },
+    {
+      "line": 32962,
+      "text": "function VashjSwap takes unit Bc returns nothing"
+    },
+    {
+      "line": 32963,
+      "text": "local timer t=CreateTimer()"
+    },
+    {
+      "line": 32964,
+      "text": "call SaveUnitHandle(O,GetHandleId(t),0,Bc)"
+    },
+    {
+      "line": 32965,
+      "text": "call TimerStart(t,0,false,function VashjSwapTimer)"
+    },
+    {
+      "line": 32966,
+      "text": "set t=null"
+    },
+    {
+      "line": 32967,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 33186,
+      "text": "function RegisterAxisaHaloAction takes nothing returns nothing"
+    },
+    {
+      "line": 33187,
+      "text": "local trigger t=GetTriggeringTrigger()"
+    },
+    {
+      "line": 33188,
+      "text": "local integer Pr=GetHandleId(t)"
+    },
+    {
+      "line": 33189,
+      "text": "local unit Bc=LoadUnitHandle(O,Pr,0)"
+    },
+    {
+      "line": 33190,
+      "text": "local real Px=LoadReal(O,Pr,1)"
+    },
+    {
+      "line": 33191,
+      "text": "local group DG"
+    },
+    {
+      "line": 33192,
+      "text": "local unit D6"
+    },
+    {
+      "line": 33193,
+      "text": "if GetTriggerEventId()==EVENT_WIDGET_DEATH then"
+    },
+    {
+      "line": 33194,
+      "text": "call FlushChildHashtable(O,Pr)"
+    },
+    {
+      "line": 33195,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 33196,
+      "text": "else"
+    },
+    {
+      "line": 33197,
+      "text": "set DG=SelectRangeAlly(Bc,GetUnitX(Bc),GetUnitY(Bc),Px)"
+    },
+    {
+      "line": 33198,
+      "text": "loop"
+    },
+    {
+      "line": 33199,
+      "text": "set D6=FirstOfGroup(DG)"
+    },
+    {
+      "line": 33200,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 33201,
+      "text": "call GroupRemoveUnit(DG,D6)"
+    },
+    {
+      "line": 33202,
+      "text": "if UnitHasBuffBJ(D6,Qu) and D6!=Bc then"
+    },
+    {
+      "line": 33203,
+      "text": "if GetUnitAbilityLevel(D6,Qt)==0 then"
+    },
+    {
+      "line": 33204,
+      "text": "call UnitAddAbility(D6,Qt)"
+    },
+    {
+      "line": 33205,
+      "text": "call UnitMakeAbilityPermanent(D6,true,Qt)"
+    },
+    {
+      "line": 33206,
+      "text": "call SetUnitAbilityLevel(D6,Qt,GetUnitAbilityLevel(Bc,Qs))"
+    },
+    {
+      "line": 33207,
+      "text": "endif"
+    },
+    {
+      "line": 33208,
+      "text": "endif"
+    },
+    {
+      "line": 33209,
+      "text": "endloop"
+    },
+    {
+      "line": 33210,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 33211,
+      "text": "set DG=null"
+    },
+    {
+      "line": 33212,
+      "text": "endif"
+    },
+    {
+      "line": 33213,
+      "text": "set t=null"
+    },
+    {
+      "line": 33214,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 33215,
+      "text": "set D6=null"
+    },
+    {
+      "line": 33216,
+      "text": "endfunction"
+    },
+    {
+      "line": 33217,
+      "text": "function RegisterAxisaHalo takes unit Bc,real Px returns nothing"
+    },
+    {
+      "line": 33218,
+      "text": "local trigger t=CreateTrigger()"
+    },
+    {
+      "line": 33219,
+      "text": "local integer Pr=GetHandleId(t)"
+    },
+    {
+      "line": 33220,
+      "text": "call UnitAddAbility(Bc,Qt)"
+    },
+    {
+      "line": 33221,
+      "text": "call UnitMakeAbilityPermanent(Bc,true,Qt)"
+    },
+    {
+      "line": 33222,
+      "text": "call SetUnitAbilityLevel(Bc,Qt,GetUnitAbilityLevel(Bc,Qs))"
+    },
+    {
+      "line": 33223,
+      "text": "call SaveAgentHandle(O,Pr,0,Bc)"
+    },
+    {
+      "line": 33224,
+      "text": "call SaveReal(O,Pr,1,Px)"
+    },
+    {
+      "line": 33225,
+      "text": "call TriggerRegisterTimerEvent(t,0,false)"
+    },
+    {
+      "line": 33226,
+      "text": "call TriggerRegisterTimerEvent(t,1,true)"
+    },
+    {
+      "line": 33227,
+      "text": "call TriggerRegisterDeathEvent(t,Bc)"
+    },
+    {
+      "line": 33228,
+      "text": "call TriggerAddAction(t,function RegisterAxisaHaloAction)"
+    },
+    {
+      "line": 33229,
+      "text": "set t=null"
+    },
+    {
+      "line": 33230,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 33231,
+      "text": "endfunction"
+    },
+    {
+      "line": 33232,
+      "text": "function AxisaSwapTimer takes nothing returns nothing"
+    },
+    {
+      "line": 33233,
+      "text": "local timer t=GetExpiredTimer()"
+    },
+    {
+      "line": 33234,
+      "text": "local integer BQ=GetHandleId(t)"
+    },
+    {
+      "line": 33235,
+      "text": "local unit Bc=LoadUnitHandle(O,BQ,0)"
+    },
+    {
+      "line": 33236,
+      "text": "local group DG=YDWEGetUnitsOfTypeIdAllNull($68304F56)"
+    },
+    {
+      "line": 33237,
+      "text": "local unit D6"
+    },
+    {
+      "line": 33238,
+      "text": "loop"
+    },
+    {
+      "line": 33239,
+      "text": "set D6=FirstOfGroup(DG)"
+    },
+    {
+      "line": 33240,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 33241,
+      "text": "call GroupRemoveUnit(DG,D6)"
+    },
+    {
+      "line": 33242,
+      "text": "if IsUnitAlly(D6,GetOwningPlayer(Bc)) then"
+    },
+    {
+      "line": 33243,
+      "text": "call UnitAddAbility(Bc,$4131434B)"
+    },
+    {
+      "line": 33244,
+      "text": "call UnitMakeAbilityPermanent(Bc,true,$4131434B)"
+    },
+    {
+      "line": 33245,
+      "text": "elseif IsUnitEnemy(D6,GetOwningPlayer(Bc)) then"
+    },
+    {
+      "line": 33246,
+      "text": "call SetUnitAbilityLevel(Bc,Qt,GetUnitAbilityLevel(Bc,Qt)-1)"
+    },
+    {
+      "line": 33247,
+      "text": "endif"
+    },
+    {
+      "line": 33248,
+      "text": "endloop"
+    },
+    {
+      "line": 33249,
+      "text": "call FlushChildHashtable(O,BQ)"
+    },
+    {
+      "line": 33250,
+      "text": "call DestroyTimer(t)"
+    },
+    {
+      "line": 33251,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 33252,
+      "text": "set t=null"
+    },
+    {
+      "line": 33253,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 33254,
+      "text": "set DG=null"
+    },
+    {
+      "line": 33255,
+      "text": "set D6=null"
+    },
+    {
+      "line": 33256,
+      "text": "endfunction"
+    },
+    {
+      "line": 33257,
+      "text": "function AxisaSwap takes unit Bc returns nothing"
+    },
+    {
+      "line": 33258,
+      "text": "local timer t=CreateTimer()"
+    },
+    {
+      "line": 33259,
+      "text": "call SaveUnitHandle(O,GetHandleId(t),0,Bc)"
+    },
+    {
+      "line": 33260,
+      "text": "call TimerStart(t,0,false,function AxisaSwapTimer)"
+    },
+    {
+      "line": 33261,
+      "text": "set t=null"
+    },
+    {
+      "line": 33262,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 33263,
+      "text": "endfunction"
+    },
+    {
+      "line": 43637,
+      "text": "function PassiveSkill takes unit Bc,integer x,unit Pf returns nothing"
+    },
+    {
+      "line": 43638,
+      "text": "local integer RJ=0"
+    },
+    {
+      "line": 43800,
+      "text": "if GetUnitAbilityLevel(Pf,Qs)>0 then"
+    },
+    {
+      "line": 43801,
+      "text": "call SetUnitAbilityLevel(Bc,Qs,GetUnitAbilityLevel(Pf,Qs))"
+    },
+    {
+      "line": 43802,
+      "text": "endif"
+    },
+    {
+      "line": 43803,
+      "text": "if GetUnitAbilityLevel(Pf,Qs)>0 then"
+    },
+    {
+      "line": 43804,
+      "text": "call RegisterAxisaHalo(Bc,600)"
+    },
+    {
+      "line": 43805,
+      "text": "endif"
+    },
+    {
+      "line": 43806,
+      "text": "if GetUnitAbilityLevel(Pf,$4131434A)>0 then"
+    },
+    {
+      "line": 43807,
+      "text": "call AxisaSwap(Bc)"
+    },
+    {
+      "line": 43808,
+      "text": "endif"
+    },
+    {
+      "line": 43809,
+      "text": "if GetUnitAbilityLevel(Pf,$41314F43)>0 then"
+    },
+    {
+      "line": 43810,
+      "text": "call VashjSwap(Bc)"
+    },
+    {
+      "line": 43811,
+      "text": "endif"
+    },
+    {
+      "line": 43862,
+      "text": "if GetUnitAbilityLevel(Pf,$41314346)>0 then"
+    },
+    {
+      "line": 43863,
+      "text": "call SetUnitAbilityLevel(Bc,$41314346,GetUnitAbilityLevel(Pf,$41314346))"
+    },
+    {
+      "line": 43864,
+      "text": "endif"
+    },
+    {
+      "line": 43865,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 43866,
+      "text": "set Pf=null"
+    },
+    {
+      "line": 43867,
+      "text": "endfunction"
+    },
+    {
+      "line": 43868,
+      "text": "function PassiveSkillJJC takes unit Pf,unit Bc returns nothing"
+    },
+    {
+      "line": 43869,
+      "text": "if GetUnitAbilityLevel(Bc,$4131554E)>0 then"
+    },
+    {
+      "line": 43870,
+      "text": "call UnitRemoveAbility(Bc,$4131554E)"
+    },
+    {
+      "line": 43871,
+      "text": "endif"
+    },
+    {
+      "line": 43872,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 43873,
+      "text": "set Pf=null"
+    },
+    {
+      "line": 43874,
+      "text": "endfunction"
+    },
+    {
+      "line": 43875,
+      "text": "function PassiveSkillNoArg takes nothing returns nothing"
+    },
+    {
+      "line": 43876,
+      "text": "local unit Bc=UT"
+    },
+    {
+      "line": 43877,
+      "text": "local integer x=Bi"
+    },
+    {
+      "line": 43878,
+      "text": "local unit Pf=bj_lastCreatedUnit"
+    },
+    {
+      "line": 43879,
+      "text": "call PassiveSkill(Bc,x,Pf)"
+    },
+    {
+      "line": 43880,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 43881,
+      "text": "set Pf=null"
+    },
+    {
+      "line": 43882,
+      "text": "endfunction"
+    },
+    {
+      "line": 43883,
+      "text": "function PassiveSkillNoArgJJC takes nothing returns nothing"
+    },
+    {
+      "line": 43884,
+      "text": "local unit Bc=Kc"
+    },
+    {
+      "line": 43885,
+      "text": "local integer x=Mk[Bi]"
+    },
+    {
+      "line": 43886,
+      "text": "local unit Pf=Nr"
+    },
+    {
+      "line": 43887,
+      "text": "call PassiveSkillJJC(Pf,Bc)"
+    },
+    {
+      "line": 43888,
+      "text": "if Bc!=null and x>0 then"
+    },
+    {
+      "line": 43889,
+      "text": "call UnitRemoveAbility(Bc,$4131374C)"
+    },
+    {
+      "line": 43890,
+      "text": "call UnitRemoveAbility(Bc,$41315134)"
+    },
+    {
+      "line": 43891,
+      "text": "call PassiveSkill(Bc,x,Pf)"
+    },
+    {
+      "line": 43892,
+      "text": "endif"
+    },
+    {
+      "line": 43893,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 43894,
+      "text": "set Pf=null"
+    },
+    {
+      "line": 43895,
+      "text": "endfunction"
+    },
+    {
+      "line": 47244,
+      "text": "function AllBuildingStartApplyEggWhiteEx takes unit i,integer x,integer BF,boolean Yt returns nothing"
+    },
+    {
+      "line": 47245,
+      "text": "local player h=GetOwningPlayer(i)"
+    },
+    {
+      "line": 47246,
+      "text": "call EggWhiteEx(i,x,h,GetPlayerId(h),BF,Yt)"
+    },
+    {
+      "line": 47247,
+      "text": "set h=null"
+    },
+    {
+      "line": 47248,
+      "text": "set i=null"
+    },
+    {
+      "line": 47249,
+      "text": "endfunction"
+    },
+    {
+      "line": 47250,
+      "text": "function AllBuildingStartApplyEggWhite takes unit i,integer x,integer BF returns nothing"
+    },
+    {
+      "line": 47251,
+      "text": "call AllBuildingStartApplyEggWhiteEx(i,x,BF,EVENT_PLAYER_UNIT_CONSTRUCT_FINISH==GetTriggerEventId()==true)"
+    },
+    {
+      "line": 47252,
+      "text": "set i=null"
+    },
+    {
+      "line": 47253,
+      "text": "endfunction"
+    },
+    {
+      "line": 47254,
+      "text": "function AllBuildingStartApplyBuildUpgradeFinish takes unit i,boolean Yt,boolean dW returns nothing"
+    },
+    {
+      "line": 47255,
+      "text": "local integer x=0"
+    },
+    {
+      "line": 47256,
+      "text": "local integer BF=0"
+    },
+    {
+      "line": 47257,
+      "text": "if i!=null then"
+    },
+    {
+      "line": 47258,
+      "text": "if dW then"
+    },
+    {
+      "line": 47259,
+      "text": "call Limit_D()"
+    },
+    {
+      "line": 47260,
+      "text": "endif"
+    },
+    {
+      "line": 47261,
+      "text": "if Yt or dW then"
+    },
+    {
+      "line": 47262,
+      "text": "set x=GetUnitTypeId(i)"
+    },
+    {
+      "line": 47263,
+      "text": "set BF=GetUnitUserData(i)"
+    },
+    {
+      "line": 47264,
+      "text": "call AllBuildingStartApplyEggWhiteEx(i,x,BF,Yt)"
+    },
+    {
+      "line": 47265,
+      "text": "endif"
+    },
+    {
+      "line": 47266,
+      "text": "endif"
+    },
+    {
+      "line": 47267,
+      "text": "set i=null"
+    },
+    {
+      "line": 47268,
+      "text": "endfunction"
+    },
+    {
+      "line": 47269,
+      "text": "function AllBuildingStartApplyManualUpgradeFinishByUnit takes unit i,integer x,integer BF returns nothing"
+    },
+    {
+      "line": 47270,
+      "text": "if i!=null then"
+    },
+    {
+      "line": 47271,
+      "text": "call AllBuildingStartApplyVipLimit(i)"
+    },
+    {
+      "line": 47272,
+      "text": "call EasterBuildingCreate(i)"
+    },
+    {
+      "line": 47273,
+      "text": "call Limit_D()"
+    },
+    {
+      "line": 47274,
+      "text": "call AllBuildingStartApplyEggWhiteEx(i,x,BF,false)"
+    },
+    {
+      "line": 47275,
+      "text": "endif"
+    },
+    {
+      "line": 47276,
+      "text": "set i=null"
+    },
+    {
+      "line": 47277,
+      "text": "endfunction"
+    },
+    {
+      "line": 47278,
+      "text": "function Trig_EggWhiteActions takes nothing returns nothing"
+    },
+    {
+      "line": 47279,
+      "text": "local unit i=GetTriggerUnit()"
+    },
+    {
+      "line": 47280,
+      "text": "local integer x=0"
+    },
+    {
+      "line": 47281,
+      "text": "call EasterBuildingCreate(i)"
+    },
+    {
+      "line": 47282,
+      "text": "if EVENT_PLAYER_UNIT_UPGRADE_START==GetTriggerEventId() then"
+    },
+    {
+      "line": 47283,
+      "text": "call AllBuildingStartApplyVipLimit(i)"
+    },
+    {
+      "line": 47284,
+      "text": "endif"
+    },
+    {
+      "line": 47285,
+      "text": "call AllBuildingStartApplyBuildUpgradeFinish(i,EVENT_PLAYER_UNIT_CONSTRUCT_FINISH==GetTriggerEventId()==true,EVENT_PLAYER_UNIT_UPGRADE_FINISH==GetTriggerEventId()==true)"
+    },
+    {
+      "line": 47286,
+      "text": "if GetTriggerEventId()==EVENT_PLAYER_UNIT_RESEARCH_FINISH then"
+    },
+    {
+      "line": 47287,
+      "text": "set x=GetResearched()"
+    },
+    {
+      "line": 47288,
+      "text": "call AllBuildingStartApplyEggWhite(i,x,0)"
+    },
+    {
+      "line": 47289,
+      "text": "endif"
+    },
+    {
+      "line": 47290,
+      "text": "if GetTriggerEventId()==EVENT_PLAYER_UNIT_TRAIN_START and GetTrainedUnitType()==$65303033 then"
+    },
+    {
+      "line": 47291,
+      "text": "call BoxGiftTryConsumeBuildFreeWithCost(GetOwningPlayer(i),GetUnitGoldCost($65303033),GetUnitWoodCost($65303033))"
+    },
+    {
+      "line": 47292,
+      "text": "endif"
+    },
+    {
+      "line": 47293,
+      "text": "if GetTriggerEventId()==EVENT_PLAYER_UNIT_TRAIN_FINISH then"
+    },
+    {
+      "line": 47294,
+      "text": "set i=GetTrainedUnit()"
+    },
+    {
+      "line": 47295,
+      "text": "set x=GetUnitTypeId(i)"
+    },
+    {
+      "line": 47296,
+      "text": "call AllBuildingStartApplyEggWhite(i,x,0)"
+    },
+    {
+      "line": 47297,
+      "text": "endif"
+    },
+    {
+      "line": 47298,
+      "text": "set i=null"
+    },
+    {
+      "line": 47299,
+      "text": "endfunction"
+    },
+    {
+      "line": 47310,
+      "text": "function InitTrig_AllBuildingStart takes nothing returns nothing"
+    },
+    {
+      "line": 47311,
+      "text": "local trigger t=CreateTrigger()"
+    },
+    {
+      "line": 47312,
+      "text": "call TriggerRegisterAnyUnitEventBJ(t,EVENT_PLAYER_UNIT_UPGRADE_START)"
+    },
+    {
+      "line": 47313,
+      "text": "call TriggerRegisterAnyUnitEventBJ(t,EVENT_PLAYER_UNIT_CONSTRUCT_FINISH)"
+    },
+    {
+      "line": 47314,
+      "text": "call TriggerRegisterAnyUnitEventBJ(t,EVENT_PLAYER_UNIT_CONSTRUCT_START)"
+    },
+    {
+      "line": 47315,
+      "text": "call TriggerRegisterAnyUnitEventBJ(t,EVENT_PLAYER_UNIT_UPGRADE_FINISH)"
+    },
+    {
+      "line": 47316,
+      "text": "call TriggerRegisterAnyUnitEventBJ(t,EVENT_PLAYER_UNIT_RESEARCH_START)"
+    },
+    {
+      "line": 47317,
+      "text": "call TriggerRegisterAnyUnitEventBJ(t,EVENT_PLAYER_UNIT_RESEARCH_FINISH)"
+    },
+    {
+      "line": 47318,
+      "text": "call TriggerRegisterAnyUnitEventBJ(t,EVENT_PLAYER_UNIT_TRAIN_START)"
+    },
+    {
+      "line": 47319,
+      "text": "call TriggerRegisterAnyUnitEventBJ(t,EVENT_PLAYER_UNIT_TRAIN_FINISH)"
+    },
+    {
+      "line": 47320,
+      "text": "call TriggerAddAction(t,function Trig_EggWhiteActions)"
+    },
+    {
+      "line": 47321,
+      "text": "set t=CreateTrigger()"
+    },
+    {
+      "line": 47322,
+      "text": "set dX=Rect(4960.,2112.,6272.,3520.)"
+    },
+    {
+      "line": 47323,
+      "text": "set dY=Rect(-6272.,2080.,-4960.,3520.)"
+    },
+    {
+      "line": 47324,
+      "text": "set dZ=Rect(-2080.,2112.,-768.,3520.)"
+    }
+  ],
+  "abilities": [
+    {
+      "rawcode": "A1CF",
+      "name": "潮汐之力",
+      "baseCode": "AUau",
+      "resolvedFields": {
+        "rawcode": "A1CF",
+        "name": "潮汐之力",
+        "alias": "A1CF",
+        "code": "AUau",
+        "Area1": "600.0",
+        "BuffID1": "B07T",
+        "DataB1": "1.0",
+        "levels": "11",
+        "targs1": "air,ground,friend,self,vuln,invu",
+        "targs2": "air,ground,friend,self,vuln,invu",
+        "targs3": "air,ground,friend,self,vuln,invu",
+        "targs4": "air,ground,friend,self,vuln,invu",
+        "checkDep": "1",
+        "Area2": "600.0",
+        "Area3": "600.0",
+        "BuffID2": "B07T",
+        "BuffID3": "B07T",
+        "DataB2": "2.0",
+        "DataB3": "3.0",
+        "reqLevel": "1",
+        "BuffID4": "B07T",
+        "Area4": "600.0",
+        "DataB4": "4.0",
+        "DataB5": "5.0",
+        "DataB6": "6.0",
+        "DataB7": "7.0",
+        "DataB8": "8.0",
+        "DataB9": "9.0",
+        "DataB10": "10.0",
+        "DataB11": "10.0"
+      },
+      "objectOverrides": [
+        {
+          "field": "Uau2",
+          "level": 5,
+          "dataPointer": 2,
+          "value": "5.0",
+          "resolvedValue": "5.0",
+          "resolvedField": "DataB5",
+          "source": {
+            "table": "war3map_w3a_modifications.csv",
+            "row": 820,
+            "rawcode": "A1CF"
+          }
+        },
+        {
+          "field": "Uau2",
+          "level": 6,
+          "dataPointer": 2,
+          "value": "6.0",
+          "resolvedValue": "6.0",
+          "resolvedField": "DataB6",
+          "source": {
+            "table": "war3map_w3a_modifications.csv",
+            "row": 821,
+            "rawcode": "A1CF"
+          }
+        },
+        {
+          "field": "Uau2",
+          "level": 7,
+          "dataPointer": 2,
+          "value": "7.0",
+          "resolvedValue": "7.0",
+          "resolvedField": "DataB7",
+          "source": {
+            "table": "war3map_w3a_modifications.csv",
+            "row": 822,
+            "rawcode": "A1CF"
+          }
+        },
+        {
+          "field": "Uau2",
+          "level": 8,
+          "dataPointer": 2,
+          "value": "8.0",
+          "resolvedValue": "8.0",
+          "resolvedField": "DataB8",
+          "source": {
+            "table": "war3map_w3a_modifications.csv",
+            "row": 823,
+            "rawcode": "A1CF"
+          }
+        },
+        {
+          "field": "Uau2",
+          "level": 9,
+          "dataPointer": 2,
+          "value": "9.0",
+          "resolvedValue": "9.0",
+          "resolvedField": "DataB9",
+          "source": {
+            "table": "war3map_w3a_modifications.csv",
+            "row": 824,
+            "rawcode": "A1CF"
+          }
+        },
+        {
+          "field": "Uau2",
+          "level": 10,
+          "dataPointer": 2,
+          "value": "10.0",
+          "resolvedValue": "10.0",
+          "resolvedField": "DataB10",
+          "source": {
+            "table": "war3map_w3a_modifications.csv",
+            "row": 825,
+            "rawcode": "A1CF"
+          }
+        },
+        {
+          "field": "Uau2",
+          "level": 11,
+          "dataPointer": 2,
+          "value": "10.0",
+          "resolvedValue": "10.0",
+          "resolvedField": "DataB11",
+          "source": {
+            "table": "war3map_w3a_modifications.csv",
+            "row": 826,
+            "rawcode": "A1CF"
+          }
+        }
+      ],
+      "source": {
+        "path": "reference/v14-source/data/all_abilities.csv",
+        "row": 2010
+      }
+    },
+    {
+      "rawcode": "A1CH",
+      "name": "海浪赞歌",
+      "baseCode": "Aakb",
+      "resolvedFields": {
+        "rawcode": "A1CH",
+        "name": "海浪赞歌",
+        "alias": "A1CH",
+        "code": "Aakb",
+        "Area1": "500.0",
+        "BuffID1": "B07U",
+        "DataA1": "0.13",
+        "DataB1": "1",
+        "DataC1": "1",
+        "levels": "1",
+        "targs1": "air,ground,friend,self,vuln,invu",
+        "checkDep": "1"
+      },
+      "objectOverrides": [],
+      "source": {
+        "path": "reference/v14-source/data/all_abilities.csv",
+        "row": 2012
+      }
+    },
+    {
+      "rawcode": "A1CI",
+      "name": "海浪赞歌",
+      "baseCode": "AHad",
+      "resolvedFields": {
+        "rawcode": "A1CI",
+        "name": "海浪赞歌",
+        "alias": "A1CI",
+        "code": "AHad",
+        "Area1": "500.0",
+        "BuffID1": "B07V",
+        "DataA1": "2.0",
+        "levels": "1",
+        "targs1": "air,ground,friend,self,vuln,invu",
+        "checkDep": "1",
+        "reqLevel": "1"
+      },
+      "objectOverrides": [],
+      "source": {
+        "path": "reference/v14-source/data/all_abilities.csv",
+        "row": 2013
+      }
+    },
+    {
+      "rawcode": "A1CJ",
+      "name": "女王的祝福与惩戒",
+      "baseCode": "Asth",
+      "resolvedFields": {
+        "rawcode": "A1CJ",
+        "name": "女王的祝福与惩戒",
+        "alias": "A1CJ",
+        "code": "Asth",
+        "levels": "1",
+        "checkDep": "1"
+      },
+      "objectOverrides": [],
+      "source": {
+        "path": "reference/v14-source/data/all_abilities.csv",
+        "row": 2014
+      }
+    },
+    {
+      "rawcode": "A1CG",
+      "name": "潮汐之力伤害减少",
+      "baseCode": "AIsr",
+      "resolvedFields": {
+        "rawcode": "A1CG",
+        "name": "潮汐之力伤害减少",
+        "alias": "A1CG",
+        "code": "AIsr",
+        "DataB1": "0.1",
+        "levels": "10",
+        "DataB2": "0.2",
+        "DataB3": "0.3",
+        "DataB4": "0.4",
+        "DataB5": "0.5",
+        "DataB6": "0.6000000238418579",
+        "DataB7": "0.699999988079071",
+        "DataB8": "0.800000011920929",
+        "DataB9": "0.8999999761581421",
+        "DataB10": "1.0"
+      },
+      "objectOverrides": [
+        {
+          "field": "isr2",
+          "level": 5,
+          "dataPointer": 2,
+          "value": "0.5",
+          "resolvedValue": "0.5",
+          "resolvedField": "DataB5",
+          "source": {
+            "table": "war3map_w3a_modifications.csv",
+            "row": 827,
+            "rawcode": "A1CG"
+          }
+        },
+        {
+          "field": "isr2",
+          "level": 6,
+          "dataPointer": 2,
+          "value": "0.6000000238418579",
+          "resolvedValue": "0.6000000238418579",
+          "resolvedField": "DataB6",
+          "source": {
+            "table": "war3map_w3a_modifications.csv",
+            "row": 828,
+            "rawcode": "A1CG"
+          }
+        },
+        {
+          "field": "isr2",
+          "level": 7,
+          "dataPointer": 2,
+          "value": "0.699999988079071",
+          "resolvedValue": "0.699999988079071",
+          "resolvedField": "DataB7",
+          "source": {
+            "table": "war3map_w3a_modifications.csv",
+            "row": 829,
+            "rawcode": "A1CG"
+          }
+        },
+        {
+          "field": "isr2",
+          "level": 8,
+          "dataPointer": 2,
+          "value": "0.800000011920929",
+          "resolvedValue": "0.800000011920929",
+          "resolvedField": "DataB8",
+          "source": {
+            "table": "war3map_w3a_modifications.csv",
+            "row": 830,
+            "rawcode": "A1CG"
+          }
+        },
+        {
+          "field": "isr2",
+          "level": 9,
+          "dataPointer": 2,
+          "value": "0.8999999761581421",
+          "resolvedValue": "0.8999999761581421",
+          "resolvedField": "DataB9",
+          "source": {
+            "table": "war3map_w3a_modifications.csv",
+            "row": 831,
+            "rawcode": "A1CG"
+          }
+        },
+        {
+          "field": "isr2",
+          "level": 10,
+          "dataPointer": 2,
+          "value": "1.0",
+          "resolvedValue": "1.0",
+          "resolvedField": "DataB10",
+          "source": {
+            "table": "war3map_w3a_modifications.csv",
+            "row": 832,
+            "rawcode": "A1CG"
+          }
+        }
+      ],
+      "source": {
+        "path": "reference/v14-source/data/all_abilities.csv",
+        "row": 2011
+      }
+    },
+    {
+      "rawcode": "A1CU",
+      "name": "潮汐之泉",
+      "baseCode": "ANcl",
+      "resolvedFields": {
+        "rawcode": "A1CU",
+        "name": "潮汐之泉",
+        "alias": "A1CU",
+        "code": "ANcl",
+        "DataC1": "1",
+        "levels": "1",
+        "Cost1": "13",
+        "Rng1": "800.0",
+        "Cool1": "10.0",
+        "checkDep": "1",
+        "reqLevel": "1",
+        "DataE1": "1",
+        "DataF1": "unloadallinstant"
+      },
+      "objectOverrides": [],
+      "source": {
+        "path": "reference/v14-source/data/all_abilities.csv",
+        "row": 2025
+      }
+    },
+    {
+      "rawcode": "A1CK",
+      "name": "女王的祝福与惩戒",
+      "baseCode": "AEar",
+      "resolvedFields": {
+        "rawcode": "A1CK",
+        "name": "女王的祝福与惩戒",
+        "alias": "A1CK",
+        "code": "AEar",
+        "Area1": "900.0",
+        "BuffID1": "B07W",
+        "DataA1": "0.1",
+        "DataB1": "1",
+        "DataC1": "1",
+        "levels": "4",
+        "targs1": "ground,vulnerable,air,invulnerable,self",
+        "targs2": "ground,vulnerable,air,invulnerable,self",
+        "targs3": "ground,vulnerable,air,invulnerable,self",
+        "targs4": "ground,vulnerable,air,invulnerable,self",
+        "checkDep": "1",
+        "BuffID2": "B07W",
+        "BuffID3": "B07W",
+        "DataA2": "0.15",
+        "DataA3": "-0.11",
+        "DataB2": "1",
+        "DataB3": "1",
+        "reqLevel": "1",
+        "DataC2": "1",
+        "DataC3": "1",
+        "DataA4": "0.04",
+        "BuffID4": "B07W",
+        "DataB4": "1",
+        "DataC4": "1"
+      },
+      "objectOverrides": [],
+      "source": {
+        "path": "reference/v14-source/data/all_abilities.csv",
+        "row": 2015
+      }
+    },
+    {
+      "rawcode": "A1OC",
+      "name": "女王的祝福与惩戒2",
+      "baseCode": "Asth",
+      "resolvedFields": {
+        "rawcode": "A1OC",
+        "name": "女王的祝福与惩戒2",
+        "alias": "A1OC",
+        "code": "Asth",
+        "levels": "1",
+        "checkDep": "1"
+      },
+      "objectOverrides": [],
+      "source": {
+        "path": "reference/v14-source/data/all_abilities.csv",
+        "row": 2435
+      }
+    },
+    {
+      "rawcode": "A1OE",
+      "name": "攻速",
+      "baseCode": "AIas",
+      "resolvedFields": {
+        "rawcode": "A1OE",
+        "name": "攻速",
+        "alias": "A1OE",
+        "code": "AIas",
+        "DataA1": "-0.08",
+        "levels": "1"
+      },
+      "objectOverrides": [],
+      "source": {
+        "path": "reference/v14-source/data/all_abilities.csv",
+        "row": 2436
+      }
+    }
+  ],
+  "units": [
+    {
+      "rawcode": "h0U3",
+      "source": {
+        "path": "reference/v14-source/data/all_units.csv",
+        "row": 1351
+      },
+      "fields": {
+        "name": "阿茜萨 - [等级 1]",
+        "unitID": "h0U3",
+        "abilList": "A1CF",
+        "auto": "_",
+        "heroAbilList": "",
+        "HP": "90",
+        "regenHP": "",
+        "mana0": "",
+        "manaN": "20",
+        "regenMana": "1.0",
+        "Primary": "_",
+        "type": "ancient,tauren",
+        "isbldg": "1",
+        "movetp": "",
+        "targType": "structure",
+        "atkType1": "chaos",
+        "weapTp1": "normal",
+        "cool1": "0.5",
+        "rangeN1": "500",
+        "damage_min_1": "10.0",
+        "damage_max_1": "10.0",
+        "damage_avg_1": "10.0",
+        "def": "3.0",
+        "defType": "hero",
+        "goldcost": "25",
+        "lumbercost": "",
+        "bldtm": "3",
+        "fused": "1",
+        "points": "25",
+        "castpt": "",
+        "castbsw": "0.51"
+      }
+    },
+    {
+      "rawcode": "h0TT",
+      "source": {
+        "path": "reference/v14-source/data/all_units.csv",
+        "row": 1341
+      },
+      "fields": {
+        "name": "阿茜萨 - [等级 1]",
+        "unitID": "h0TT",
+        "abilList": "A1CF",
+        "auto": "_",
+        "heroAbilList": "",
+        "HP": "90",
+        "regenHP": "",
+        "mana0": "10",
+        "manaN": "20",
+        "regenMana": "1.0",
+        "Primary": "_",
+        "type": "giant",
+        "isbldg": "",
+        "movetp": "foot",
+        "targType": "ground",
+        "atkType1": "chaos",
+        "weapTp1": "normal",
+        "cool1": "0.5",
+        "rangeN1": "500",
+        "damage_min_1": "10.0",
+        "damage_max_1": "10.0",
+        "damage_avg_1": "10.0",
+        "def": "3.0",
+        "defType": "hero",
+        "goldcost": "205",
+        "lumbercost": "",
+        "bldtm": "26",
+        "fused": "",
+        "points": "100",
+        "castpt": "0.1",
+        "castbsw": "0.51"
+      }
+    },
+    {
+      "rawcode": "h0U4",
+      "source": {
+        "path": "reference/v14-source/data/all_units.csv",
+        "row": 1352
+      },
+      "fields": {
+        "name": "阿茜萨 - [等级 2]",
+        "unitID": "h0U4",
+        "abilList": "A1CF",
+        "auto": "_",
+        "heroAbilList": "",
+        "HP": "180",
+        "regenHP": "",
+        "mana0": "",
+        "manaN": "20",
+        "regenMana": "1.0",
+        "Primary": "_",
+        "type": "ancient,tauren",
+        "isbldg": "1",
+        "movetp": "",
+        "targType": "structure",
+        "atkType1": "chaos",
+        "weapTp1": "normal",
+        "cool1": "0.5",
+        "rangeN1": "500",
+        "damage_min_1": "20.0",
+        "damage_max_1": "20.0",
+        "damage_avg_1": "20.0",
+        "def": "3.0",
+        "defType": "hero",
+        "goldcost": "25",
+        "lumbercost": "",
+        "bldtm": "4",
+        "fused": "2",
+        "points": "50",
+        "castpt": "",
+        "castbsw": "0.51"
+      }
+    },
+    {
+      "rawcode": "h0UC",
+      "source": {
+        "path": "reference/v14-source/data/all_units.csv",
+        "row": 1360
+      },
+      "fields": {
+        "name": "阿茜萨 - [等级 2]",
+        "unitID": "h0UC",
+        "abilList": "A1CF",
+        "auto": "_",
+        "heroAbilList": "",
+        "HP": "180",
+        "regenHP": "",
+        "mana0": "10",
+        "manaN": "20",
+        "regenMana": "1.0",
+        "Primary": "_",
+        "type": "giant",
+        "isbldg": "",
+        "movetp": "foot",
+        "targType": "ground",
+        "atkType1": "chaos",
+        "weapTp1": "normal",
+        "cool1": "0.5",
+        "rangeN1": "500",
+        "damage_min_1": "20.0",
+        "damage_max_1": "20.0",
+        "damage_avg_1": "20.0",
+        "def": "3.0",
+        "defType": "hero",
+        "goldcost": "205",
+        "lumbercost": "",
+        "bldtm": "26",
+        "fused": "",
+        "points": "100",
+        "castpt": "0.1",
+        "castbsw": "0.51"
+      }
+    },
+    {
+      "rawcode": "h0U1",
+      "source": {
+        "path": "reference/v14-source/data/all_units.csv",
+        "row": 1349
+      },
+      "fields": {
+        "name": "阿茜萨 - [等级 3]",
+        "unitID": "h0U1",
+        "abilList": "A1CF",
+        "auto": "_",
+        "heroAbilList": "",
+        "HP": "270",
+        "regenHP": "",
+        "mana0": "",
+        "manaN": "20",
+        "regenMana": "1.0",
+        "Primary": "_",
+        "type": "ancient,tauren",
+        "isbldg": "1",
+        "movetp": "",
+        "targType": "structure",
+        "atkType1": "chaos",
+        "weapTp1": "normal",
+        "cool1": "0.5",
+        "rangeN1": "500",
+        "damage_min_1": "30.0",
+        "damage_max_1": "30.0",
+        "damage_avg_1": "30.0",
+        "def": "3.0",
+        "defType": "hero",
+        "goldcost": "25",
+        "lumbercost": "",
+        "bldtm": "1",
+        "fused": "3",
+        "points": "75",
+        "castpt": "",
+        "castbsw": "0.51"
+      }
+    },
+    {
+      "rawcode": "h0TU",
+      "source": {
+        "path": "reference/v14-source/data/all_units.csv",
+        "row": 1342
+      },
+      "fields": {
+        "name": "阿茜萨 - [等级 3]",
+        "unitID": "h0TU",
+        "abilList": "A1CF",
+        "auto": "_",
+        "heroAbilList": "",
+        "HP": "270",
+        "regenHP": "",
+        "mana0": "10",
+        "manaN": "20",
+        "regenMana": "1.0",
+        "Primary": "_",
+        "type": "giant",
+        "isbldg": "",
+        "movetp": "foot",
+        "targType": "ground",
+        "atkType1": "chaos",
+        "weapTp1": "normal",
+        "cool1": "0.5",
+        "rangeN1": "500",
+        "damage_min_1": "30.0",
+        "damage_max_1": "30.0",
+        "damage_avg_1": "30.0",
+        "def": "3.0",
+        "defType": "hero",
+        "goldcost": "205",
+        "lumbercost": "",
+        "bldtm": "26",
+        "fused": "",
+        "points": "100",
+        "castpt": "0.1",
+        "castbsw": "0.51"
+      }
+    },
+    {
+      "rawcode": "h0UB",
+      "source": {
+        "path": "reference/v14-source/data/all_units.csv",
+        "row": 1359
+      },
+      "fields": {
+        "name": "阿茜萨 - [等级 4]",
+        "unitID": "h0UB",
+        "abilList": "A1CF",
+        "auto": "_",
+        "heroAbilList": "",
+        "HP": "360",
+        "regenHP": "",
+        "mana0": "",
+        "manaN": "20",
+        "regenMana": "1.0",
+        "Primary": "_",
+        "type": "ancient,tauren",
+        "isbldg": "1",
+        "movetp": "",
+        "targType": "structure",
+        "atkType1": "chaos",
+        "weapTp1": "normal",
+        "cool1": "0.5",
+        "rangeN1": "500",
+        "damage_min_1": "40.0",
+        "damage_max_1": "40.0",
+        "damage_avg_1": "40.0",
+        "def": "3.0",
+        "defType": "hero",
+        "goldcost": "25",
+        "lumbercost": "",
+        "bldtm": "11",
+        "fused": "4",
+        "points": "100",
+        "castpt": "",
+        "castbsw": "0.51"
+      }
+    },
+    {
+      "rawcode": "h0TV",
+      "source": {
+        "path": "reference/v14-source/data/all_units.csv",
+        "row": 1343
+      },
+      "fields": {
+        "name": "阿茜萨 - [等级 4]",
+        "unitID": "h0TV",
+        "abilList": "A1CF",
+        "auto": "_",
+        "heroAbilList": "",
+        "HP": "360",
+        "regenHP": "",
+        "mana0": "10",
+        "manaN": "20",
+        "regenMana": "1.0",
+        "Primary": "_",
+        "type": "giant",
+        "isbldg": "",
+        "movetp": "foot",
+        "targType": "ground",
+        "atkType1": "chaos",
+        "weapTp1": "normal",
+        "cool1": "0.5",
+        "rangeN1": "500",
+        "damage_min_1": "40.0",
+        "damage_max_1": "40.0",
+        "damage_avg_1": "40.0",
+        "def": "3.0",
+        "defType": "hero",
+        "goldcost": "205",
+        "lumbercost": "",
+        "bldtm": "26",
+        "fused": "",
+        "points": "100",
+        "castpt": "0.1",
+        "castbsw": "0.51"
+      }
+    },
+    {
+      "rawcode": "h0UA",
+      "source": {
+        "path": "reference/v14-source/data/all_units.csv",
+        "row": 1358
+      },
+      "fields": {
+        "name": "阿茜萨 - [等级 5]",
+        "unitID": "h0UA",
+        "abilList": "A1CF",
+        "auto": "_",
+        "heroAbilList": "",
+        "HP": "450",
+        "regenHP": "",
+        "mana0": "",
+        "manaN": "20",
+        "regenMana": "1.0",
+        "Primary": "_",
+        "type": "ancient,tauren",
+        "isbldg": "1",
+        "movetp": "",
+        "targType": "structure",
+        "atkType1": "chaos",
+        "weapTp1": "normal",
+        "cool1": "0.5",
+        "rangeN1": "500",
+        "damage_min_1": "50.0",
+        "damage_max_1": "50.0",
+        "damage_avg_1": "50.0",
+        "def": "3.0",
+        "defType": "hero",
+        "goldcost": "25",
+        "lumbercost": "",
+        "bldtm": "10",
+        "fused": "5",
+        "points": "125",
+        "castpt": "",
+        "castbsw": "0.51"
+      }
+    },
+    {
+      "rawcode": "h0TW",
+      "source": {
+        "path": "reference/v14-source/data/all_units.csv",
+        "row": 1344
+      },
+      "fields": {
+        "name": "阿茜萨 - [等级 5]",
+        "unitID": "h0TW",
+        "abilList": "A1CF",
+        "auto": "_",
+        "heroAbilList": "",
+        "HP": "450",
+        "regenHP": "",
+        "mana0": "10",
+        "manaN": "20",
+        "regenMana": "1.0",
+        "Primary": "_",
+        "type": "giant",
+        "isbldg": "",
+        "movetp": "foot",
+        "targType": "ground",
+        "atkType1": "chaos",
+        "weapTp1": "normal",
+        "cool1": "0.5",
+        "rangeN1": "500",
+        "damage_min_1": "50.0",
+        "damage_max_1": "50.0",
+        "damage_avg_1": "50.0",
+        "def": "3.0",
+        "defType": "hero",
+        "goldcost": "205",
+        "lumbercost": "",
+        "bldtm": "26",
+        "fused": "",
+        "points": "100",
+        "castpt": "0.1",
+        "castbsw": "0.51"
+      }
+    },
+    {
+      "rawcode": "h0U9",
+      "source": {
+        "path": "reference/v14-source/data/all_units.csv",
+        "row": 1357
+      },
+      "fields": {
+        "name": "阿茜萨 - [等级 6]",
+        "unitID": "h0U9",
+        "abilList": "A1CF",
+        "auto": "_",
+        "heroAbilList": "",
+        "HP": "540",
+        "regenHP": "",
+        "mana0": "",
+        "manaN": "20",
+        "regenMana": "1.0",
+        "Primary": "_",
+        "type": "ancient,tauren",
+        "isbldg": "1",
+        "movetp": "",
+        "targType": "structure",
+        "atkType1": "chaos",
+        "weapTp1": "normal",
+        "cool1": "0.5",
+        "rangeN1": "500",
+        "damage_min_1": "60.0",
+        "damage_max_1": "60.0",
+        "damage_avg_1": "60.0",
+        "def": "3.0",
+        "defType": "hero",
+        "goldcost": "25",
+        "lumbercost": "",
+        "bldtm": "9",
+        "fused": "6",
+        "points": "150",
+        "castpt": "",
+        "castbsw": "0.51"
+      }
+    },
+    {
+      "rawcode": "h0TX",
+      "source": {
+        "path": "reference/v14-source/data/all_units.csv",
+        "row": 1345
+      },
+      "fields": {
+        "name": "阿茜萨 - [等级 6]",
+        "unitID": "h0TX",
+        "abilList": "A1CF",
+        "auto": "_",
+        "heroAbilList": "",
+        "HP": "540",
+        "regenHP": "",
+        "mana0": "10",
+        "manaN": "20",
+        "regenMana": "1.0",
+        "Primary": "_",
+        "type": "giant",
+        "isbldg": "",
+        "movetp": "foot",
+        "targType": "ground",
+        "atkType1": "chaos",
+        "weapTp1": "normal",
+        "cool1": "0.5",
+        "rangeN1": "500",
+        "damage_min_1": "60.0",
+        "damage_max_1": "60.0",
+        "damage_avg_1": "60.0",
+        "def": "3.0",
+        "defType": "hero",
+        "goldcost": "205",
+        "lumbercost": "",
+        "bldtm": "26",
+        "fused": "",
+        "points": "100",
+        "castpt": "0.1",
+        "castbsw": "0.51"
+      }
+    },
+    {
+      "rawcode": "h0U8",
+      "source": {
+        "path": "reference/v14-source/data/all_units.csv",
+        "row": 1356
+      },
+      "fields": {
+        "name": "阿茜萨 - [等级 7]",
+        "unitID": "h0U8",
+        "abilList": "A1CF",
+        "auto": "_",
+        "heroAbilList": "",
+        "HP": "630",
+        "regenHP": "",
+        "mana0": "",
+        "manaN": "20",
+        "regenMana": "1.0",
+        "Primary": "_",
+        "type": "ancient,tauren",
+        "isbldg": "1",
+        "movetp": "",
+        "targType": "structure",
+        "atkType1": "chaos",
+        "weapTp1": "normal",
+        "cool1": "0.5",
+        "rangeN1": "500",
+        "damage_min_1": "70.0",
+        "damage_max_1": "70.0",
+        "damage_avg_1": "70.0",
+        "def": "3.0",
+        "defType": "hero",
+        "goldcost": "25",
+        "lumbercost": "",
+        "bldtm": "8",
+        "fused": "7",
+        "points": "175",
+        "castpt": "",
+        "castbsw": "0.51"
+      }
+    },
+    {
+      "rawcode": "h0TS",
+      "source": {
+        "path": "reference/v14-source/data/all_units.csv",
+        "row": 1340
+      },
+      "fields": {
+        "name": "阿茜萨 - [等级 7]",
+        "unitID": "h0TS",
+        "abilList": "A1CF",
+        "auto": "_",
+        "heroAbilList": "",
+        "HP": "630",
+        "regenHP": "",
+        "mana0": "10",
+        "manaN": "20",
+        "regenMana": "1.0",
+        "Primary": "_",
+        "type": "giant",
+        "isbldg": "",
+        "movetp": "foot",
+        "targType": "ground",
+        "atkType1": "chaos",
+        "weapTp1": "normal",
+        "cool1": "0.5",
+        "rangeN1": "500",
+        "damage_min_1": "70.0",
+        "damage_max_1": "70.0",
+        "damage_avg_1": "70.0",
+        "def": "3.0",
+        "defType": "hero",
+        "goldcost": "205",
+        "lumbercost": "",
+        "bldtm": "26",
+        "fused": "",
+        "points": "100",
+        "castpt": "0.1",
+        "castbsw": "0.51"
+      }
+    },
+    {
+      "rawcode": "h0U7",
+      "source": {
+        "path": "reference/v14-source/data/all_units.csv",
+        "row": 1355
+      },
+      "fields": {
+        "name": "阿茜萨 - [等级 8]",
+        "unitID": "h0U7",
+        "abilList": "A1CF",
+        "auto": "_",
+        "heroAbilList": "",
+        "HP": "720",
+        "regenHP": "",
+        "mana0": "",
+        "manaN": "20",
+        "regenMana": "1.0",
+        "Primary": "_",
+        "type": "ancient,tauren",
+        "isbldg": "1",
+        "movetp": "",
+        "targType": "structure",
+        "atkType1": "chaos",
+        "weapTp1": "normal",
+        "cool1": "0.5",
+        "rangeN1": "500",
+        "damage_min_1": "80.0",
+        "damage_max_1": "80.0",
+        "damage_avg_1": "80.0",
+        "def": "3.0",
+        "defType": "hero",
+        "goldcost": "25",
+        "lumbercost": "",
+        "bldtm": "7",
+        "fused": "8",
+        "points": "200",
+        "castpt": "",
+        "castbsw": "0.51"
+      }
+    },
+    {
+      "rawcode": "h0TY",
+      "source": {
+        "path": "reference/v14-source/data/all_units.csv",
+        "row": 1346
+      },
+      "fields": {
+        "name": "阿茜萨 - [等级 8]",
+        "unitID": "h0TY",
+        "abilList": "A1CF",
+        "auto": "_",
+        "heroAbilList": "",
+        "HP": "720",
+        "regenHP": "",
+        "mana0": "10",
+        "manaN": "20",
+        "regenMana": "1.0",
+        "Primary": "_",
+        "type": "giant",
+        "isbldg": "",
+        "movetp": "foot",
+        "targType": "ground",
+        "atkType1": "chaos",
+        "weapTp1": "normal",
+        "cool1": "0.5",
+        "rangeN1": "500",
+        "damage_min_1": "80.0",
+        "damage_max_1": "80.0",
+        "damage_avg_1": "80.0",
+        "def": "3.0",
+        "defType": "hero",
+        "goldcost": "205",
+        "lumbercost": "",
+        "bldtm": "26",
+        "fused": "",
+        "points": "100",
+        "castpt": "0.1",
+        "castbsw": "0.51"
+      }
+    },
+    {
+      "rawcode": "h0U6",
+      "source": {
+        "path": "reference/v14-source/data/all_units.csv",
+        "row": 1354
+      },
+      "fields": {
+        "name": "阿茜萨 - [等级 9]",
+        "unitID": "h0U6",
+        "abilList": "A1CF",
+        "auto": "_",
+        "heroAbilList": "",
+        "HP": "810",
+        "regenHP": "",
+        "mana0": "",
+        "manaN": "20",
+        "regenMana": "1.0",
+        "Primary": "_",
+        "type": "ancient,tauren",
+        "isbldg": "1",
+        "movetp": "",
+        "targType": "structure",
+        "atkType1": "chaos",
+        "weapTp1": "normal",
+        "cool1": "0.5",
+        "rangeN1": "500",
+        "damage_min_1": "90.0",
+        "damage_max_1": "90.0",
+        "damage_avg_1": "90.0",
+        "def": "3.0",
+        "defType": "hero",
+        "goldcost": "25",
+        "lumbercost": "",
+        "bldtm": "6",
+        "fused": "9",
+        "points": "225",
+        "castpt": "",
+        "castbsw": "0.51"
+      }
+    },
+    {
+      "rawcode": "h0TR",
+      "source": {
+        "path": "reference/v14-source/data/all_units.csv",
+        "row": 1339
+      },
+      "fields": {
+        "name": "阿茜萨 - [等级 9]",
+        "unitID": "h0TR",
+        "abilList": "A1CF",
+        "auto": "_",
+        "heroAbilList": "",
+        "HP": "810",
+        "regenHP": "",
+        "mana0": "10",
+        "manaN": "20",
+        "regenMana": "1.0",
+        "Primary": "_",
+        "type": "giant",
+        "isbldg": "",
+        "movetp": "foot",
+        "targType": "ground",
+        "atkType1": "chaos",
+        "weapTp1": "normal",
+        "cool1": "0.5",
+        "rangeN1": "500",
+        "damage_min_1": "90.0",
+        "damage_max_1": "90.0",
+        "damage_avg_1": "90.0",
+        "def": "3.0",
+        "defType": "hero",
+        "goldcost": "",
+        "lumbercost": "",
+        "bldtm": "26",
+        "fused": "",
+        "points": "100",
+        "castpt": "0.1",
+        "castbsw": "0.51"
+      }
+    },
+    {
+      "rawcode": "h0U5",
+      "source": {
+        "path": "reference/v14-source/data/all_units.csv",
+        "row": 1353
+      },
+      "fields": {
+        "name": "阿茜萨 - [等级 10]",
+        "unitID": "h0U5",
+        "abilList": "A1CF",
+        "auto": "_",
+        "heroAbilList": "",
+        "HP": "900",
+        "regenHP": "",
+        "mana0": "",
+        "manaN": "20",
+        "regenMana": "1.0",
+        "Primary": "_",
+        "type": "ancient,tauren",
+        "isbldg": "1",
+        "movetp": "",
+        "targType": "structure",
+        "atkType1": "chaos",
+        "weapTp1": "normal",
+        "cool1": "0.5",
+        "rangeN1": "500",
+        "damage_min_1": "100.0",
+        "damage_max_1": "100.0",
+        "damage_avg_1": "100.0",
+        "def": "3.0",
+        "defType": "hero",
+        "goldcost": "25",
+        "lumbercost": "",
+        "bldtm": "5",
+        "fused": "10",
+        "points": "250",
+        "castpt": "",
+        "castbsw": "0.51"
+      }
+    },
+    {
+      "rawcode": "h0U0",
+      "source": {
+        "path": "reference/v14-source/data/all_units.csv",
+        "row": 1348
+      },
+      "fields": {
+        "name": "阿茜萨 - [等级 10]",
+        "unitID": "h0U0",
+        "abilList": "A1CF",
+        "auto": "_",
+        "heroAbilList": "",
+        "HP": "900",
+        "regenHP": "",
+        "mana0": "",
+        "manaN": "20",
+        "regenMana": "1.0",
+        "Primary": "_",
+        "type": "giant",
+        "isbldg": "",
+        "movetp": "foot",
+        "targType": "ground",
+        "atkType1": "chaos",
+        "weapTp1": "normal",
+        "cool1": "0.5",
+        "rangeN1": "500",
+        "damage_min_1": "100.0",
+        "damage_max_1": "100.0",
+        "damage_avg_1": "100.0",
+        "def": "3.0",
+        "defType": "hero",
+        "goldcost": "205",
+        "lumbercost": "",
+        "bldtm": "26",
+        "fused": "",
+        "points": "100",
+        "castpt": "0.1",
+        "castbsw": "0.51"
+      }
+    },
+    {
+      "rawcode": "h0U2",
+      "source": {
+        "path": "reference/v14-source/data/all_units.csv",
+        "row": 1350
+      },
+      "fields": {
+        "name": "阿茜萨 - [等级 11]",
+        "unitID": "h0U2",
+        "abilList": "A1CF,A1CH,A1CI,A1CJ,A118",
+        "auto": "_",
+        "heroAbilList": "",
+        "HP": "1350",
+        "regenHP": "",
+        "mana0": "",
+        "manaN": "20",
+        "regenMana": "1.0",
+        "Primary": "_",
+        "type": "ancient,tauren",
+        "isbldg": "1",
+        "movetp": "",
+        "targType": "structure",
+        "atkType1": "chaos",
+        "weapTp1": "normal",
+        "cool1": "0.5",
+        "rangeN1": "500",
+        "damage_min_1": "155.0",
+        "damage_max_1": "175.0",
+        "damage_avg_1": "165.0",
+        "def": "3.0",
+        "defType": "hero",
+        "goldcost": "125",
+        "lumbercost": "",
+        "bldtm": "2",
+        "fused": "11",
+        "points": "375",
+        "castpt": "",
+        "castbsw": "0.51"
+      }
+    },
+    {
+      "rawcode": "h0TZ",
+      "source": {
+        "path": "reference/v14-source/data/all_units.csv",
+        "row": 1347
+      },
+      "fields": {
+        "name": "阿茜萨 - [等级 11]",
+        "unitID": "h0TZ",
+        "abilList": "A1CF,A1CH,A1CI,A1CJ",
+        "auto": "_",
+        "heroAbilList": "",
+        "HP": "1350",
+        "regenHP": "",
+        "mana0": "10",
+        "manaN": "20",
+        "regenMana": "1.0",
+        "Primary": "_",
+        "type": "giant",
+        "isbldg": "",
+        "movetp": "foot",
+        "targType": "ground",
+        "atkType1": "chaos",
+        "weapTp1": "normal",
+        "cool1": "0.5",
+        "rangeN1": "500",
+        "damage_min_1": "155.0",
+        "damage_max_1": "175.0",
+        "damage_avg_1": "165.0",
+        "def": "3.0",
+        "defType": "hero",
+        "goldcost": "205",
+        "lumbercost": "",
+        "bldtm": "26",
+        "fused": "",
+        "points": "100",
+        "castpt": "0.1",
+        "castbsw": "0.51"
+      }
+    },
+    {
+      "rawcode": "h0OV",
+      "source": {
+        "path": "reference/v14-source/data/all_units.csv",
+        "row": 1170
+      },
+      "fields": {
+        "name": "艾萨拉女王",
+        "unitID": "h0OV",
+        "abilList": "A0VW,A0W1,A0VX,A0VY,A0VZ",
+        "auto": "_",
+        "heroAbilList": "",
+        "HP": "3000",
+        "regenHP": "5.0",
+        "mana0": "60",
+        "manaN": "60",
+        "regenMana": "3.0",
+        "Primary": "_",
+        "type": "giant",
+        "isbldg": "",
+        "movetp": "foot",
+        "targType": "ground",
+        "atkType1": "chaos",
+        "weapTp1": "missile",
+        "cool1": "0.5",
+        "rangeN1": "500",
+        "damage_min_1": "286.0",
+        "damage_max_1": "321.0",
+        "damage_avg_1": "303.5",
+        "def": "3.0",
+        "defType": "hero",
+        "goldcost": "205",
+        "lumbercost": "",
+        "bldtm": "26",
+        "fused": "",
+        "points": "100",
+        "castpt": "0.1",
+        "castbsw": "0.51"
+      }
+    },
+    {
+      "rawcode": "h0UG",
+      "source": {
+        "path": "reference/v14-source/data/all_units.csv",
+        "row": 1364
+      },
+      "fields": {
+        "name": "鱼人生命法师",
+        "unitID": "h0UG",
+        "abilList": "A1CU,A1CT",
+        "auto": "_",
+        "heroAbilList": "",
+        "HP": "1000",
+        "regenHP": "",
+        "mana0": "",
+        "manaN": "25",
+        "regenMana": "1.0",
+        "Primary": "_",
+        "type": "giant",
+        "isbldg": "",
+        "movetp": "foot",
+        "targType": "ground",
+        "atkType1": "normal",
+        "weapTp1": "normal",
+        "cool1": "0.6",
+        "rangeN1": "400",
+        "damage_min_1": "105.0",
+        "damage_max_1": "124.0",
+        "damage_avg_1": "114.5",
+        "def": "3.0",
+        "defType": "small",
+        "goldcost": "135",
+        "lumbercost": "",
+        "bldtm": "20",
+        "fused": "",
+        "points": "100",
+        "castpt": "0.3",
+        "castbsw": "0.51"
+      }
+    },
+    {
+      "rawcode": "n079",
+      "source": {
+        "path": "reference/v14-source/data/all_units.csv",
+        "row": 1862
+      },
+      "fields": {
+        "name": "鱼人生命法师",
+        "unitID": "n079",
+        "abilList": "A1CU,A1CT,A008,A118",
+        "auto": "_",
+        "heroAbilList": "",
+        "HP": "1000",
+        "regenHP": "",
+        "mana0": "",
+        "manaN": "25",
+        "regenMana": "1.0",
+        "Primary": "_",
+        "type": "ancient",
+        "isbldg": "1",
+        "movetp": "",
+        "targType": "structure",
+        "atkType1": "normal",
+        "weapTp1": "normal",
+        "cool1": "0.6",
+        "rangeN1": "400",
+        "damage_min_1": "105.0",
+        "damage_max_1": "124.0",
+        "damage_avg_1": "114.5",
+        "def": "3.0",
+        "defType": "small",
+        "goldcost": "350",
+        "lumbercost": "",
+        "bldtm": "2",
+        "fused": "3",
+        "points": "490",
+        "castpt": "",
+        "castbsw": "0.51"
+      }
+    }
+  ],
+  "buffs": [
+    {
+      "rawcode": "B07T",
+      "source": {
+        "path": "reference/v14-source/data/all_buffs.csv",
+        "row": 422
+      },
+      "fields": {
+        "rawcode": "B07T",
+        "name": "",
+        "alias": "B07T"
+      }
+    },
+    {
+      "rawcode": "B07U",
+      "source": {
+        "path": "reference/v14-source/data/all_buffs.csv",
+        "row": 423
+      },
+      "fields": {
+        "rawcode": "B07U",
+        "name": "",
+        "alias": "B07U"
+      }
+    },
+    {
+      "rawcode": "B07V",
+      "source": {
+        "path": "reference/v14-source/data/all_buffs.csv",
+        "row": 424
+      },
+      "fields": {
+        "rawcode": "B07V",
+        "name": "",
+        "alias": "B07V"
+      }
+    },
+    {
+      "rawcode": "B07W",
+      "source": {
+        "path": "reference/v14-source/data/all_buffs.csv",
+        "row": 425
+      },
+      "fields": {
+        "rawcode": "B07W",
+        "name": "",
+        "alias": "B07W"
+      }
+    }
+  ],
+  "family": [
+    {
+      "building": "h0U3",
+      "combat": "h0TT",
+      "stage": 1,
+      "name": "阿茜萨 - [等级 1]",
+      "webCost": 25,
+      "webUpgrades": [
+        "v14_h0U4"
+      ],
+      "sourceEvidence": {
+        "combatMapping": {
+          "combat": "h0TT",
+          "building": "h0U3",
+          "line": 18417
+        },
+        "heroPage": {
+          "file": "war3map.j",
+          "line": 29248,
+          "rawcode": "h0U3"
+        },
+        "progressionPolicy": "Web reconstruction of numbered stages in the current contiguous Mk/Ml hero-family registration; native Upgrade/Requires fields are absent from the CSV packet.",
+        "progressionMappingLines": [
+          18417,
+          18420,
+          18423,
+          18426,
+          18429,
+          18432,
+          18435,
+          18438,
+          18441,
+          18444,
+          18447
+        ]
+      }
+    },
+    {
+      "building": "h0U4",
+      "combat": "h0UC",
+      "stage": 2,
+      "name": "阿茜萨 - [等级 2]",
+      "webCost": 25,
+      "webUpgrades": [
+        "v14_h0U1"
+      ],
+      "sourceEvidence": {
+        "combatMapping": {
+          "combat": "h0UC",
+          "building": "h0U4",
+          "line": 18420
+        },
+        "heroPage": {
+          "file": "war3map.j",
+          "line": 29248,
+          "rawcode": "h0U3"
+        },
+        "progressionPolicy": "Web reconstruction of numbered stages in the current contiguous Mk/Ml hero-family registration; native Upgrade/Requires fields are absent from the CSV packet.",
+        "progressionMappingLines": [
+          18417,
+          18420,
+          18423,
+          18426,
+          18429,
+          18432,
+          18435,
+          18438,
+          18441,
+          18444,
+          18447
+        ]
+      }
+    },
+    {
+      "building": "h0U1",
+      "combat": "h0TU",
+      "stage": 3,
+      "name": "阿茜萨 - [等级 3]",
+      "webCost": 25,
+      "webUpgrades": [
+        "v14_h0UB"
+      ],
+      "sourceEvidence": {
+        "combatMapping": {
+          "combat": "h0TU",
+          "building": "h0U1",
+          "line": 18423
+        },
+        "heroPage": {
+          "file": "war3map.j",
+          "line": 29248,
+          "rawcode": "h0U3"
+        },
+        "progressionPolicy": "Web reconstruction of numbered stages in the current contiguous Mk/Ml hero-family registration; native Upgrade/Requires fields are absent from the CSV packet.",
+        "progressionMappingLines": [
+          18417,
+          18420,
+          18423,
+          18426,
+          18429,
+          18432,
+          18435,
+          18438,
+          18441,
+          18444,
+          18447
+        ]
+      }
+    },
+    {
+      "building": "h0UB",
+      "combat": "h0TV",
+      "stage": 4,
+      "name": "阿茜萨 - [等级 4]",
+      "webCost": 25,
+      "webUpgrades": [
+        "v14_h0UA"
+      ],
+      "sourceEvidence": {
+        "combatMapping": {
+          "combat": "h0TV",
+          "building": "h0UB",
+          "line": 18426
+        },
+        "heroPage": {
+          "file": "war3map.j",
+          "line": 29248,
+          "rawcode": "h0U3"
+        },
+        "progressionPolicy": "Web reconstruction of numbered stages in the current contiguous Mk/Ml hero-family registration; native Upgrade/Requires fields are absent from the CSV packet.",
+        "progressionMappingLines": [
+          18417,
+          18420,
+          18423,
+          18426,
+          18429,
+          18432,
+          18435,
+          18438,
+          18441,
+          18444,
+          18447
+        ]
+      }
+    },
+    {
+      "building": "h0UA",
+      "combat": "h0TW",
+      "stage": 5,
+      "name": "阿茜萨 - [等级 5]",
+      "webCost": 25,
+      "webUpgrades": [
+        "v14_h0U9"
+      ],
+      "sourceEvidence": {
+        "combatMapping": {
+          "combat": "h0TW",
+          "building": "h0UA",
+          "line": 18429
+        },
+        "heroPage": {
+          "file": "war3map.j",
+          "line": 29248,
+          "rawcode": "h0U3"
+        },
+        "progressionPolicy": "Web reconstruction of numbered stages in the current contiguous Mk/Ml hero-family registration; native Upgrade/Requires fields are absent from the CSV packet.",
+        "progressionMappingLines": [
+          18417,
+          18420,
+          18423,
+          18426,
+          18429,
+          18432,
+          18435,
+          18438,
+          18441,
+          18444,
+          18447
+        ]
+      }
+    },
+    {
+      "building": "h0U9",
+      "combat": "h0TX",
+      "stage": 6,
+      "name": "阿茜萨 - [等级 6]",
+      "webCost": 25,
+      "webUpgrades": [
+        "v14_h0U8"
+      ],
+      "sourceEvidence": {
+        "combatMapping": {
+          "combat": "h0TX",
+          "building": "h0U9",
+          "line": 18432
+        },
+        "heroPage": {
+          "file": "war3map.j",
+          "line": 29248,
+          "rawcode": "h0U3"
+        },
+        "progressionPolicy": "Web reconstruction of numbered stages in the current contiguous Mk/Ml hero-family registration; native Upgrade/Requires fields are absent from the CSV packet.",
+        "progressionMappingLines": [
+          18417,
+          18420,
+          18423,
+          18426,
+          18429,
+          18432,
+          18435,
+          18438,
+          18441,
+          18444,
+          18447
+        ]
+      }
+    },
+    {
+      "building": "h0U8",
+      "combat": "h0TS",
+      "stage": 7,
+      "name": "阿茜萨 - [等级 7]",
+      "webCost": 25,
+      "webUpgrades": [
+        "v14_h0U7"
+      ],
+      "sourceEvidence": {
+        "combatMapping": {
+          "combat": "h0TS",
+          "building": "h0U8",
+          "line": 18435
+        },
+        "heroPage": {
+          "file": "war3map.j",
+          "line": 29248,
+          "rawcode": "h0U3"
+        },
+        "progressionPolicy": "Web reconstruction of numbered stages in the current contiguous Mk/Ml hero-family registration; native Upgrade/Requires fields are absent from the CSV packet.",
+        "progressionMappingLines": [
+          18417,
+          18420,
+          18423,
+          18426,
+          18429,
+          18432,
+          18435,
+          18438,
+          18441,
+          18444,
+          18447
+        ]
+      }
+    },
+    {
+      "building": "h0U7",
+      "combat": "h0TY",
+      "stage": 8,
+      "name": "阿茜萨 - [等级 8]",
+      "webCost": 25,
+      "webUpgrades": [
+        "v14_h0U6"
+      ],
+      "sourceEvidence": {
+        "combatMapping": {
+          "combat": "h0TY",
+          "building": "h0U7",
+          "line": 18438
+        },
+        "heroPage": {
+          "file": "war3map.j",
+          "line": 29248,
+          "rawcode": "h0U3"
+        },
+        "progressionPolicy": "Web reconstruction of numbered stages in the current contiguous Mk/Ml hero-family registration; native Upgrade/Requires fields are absent from the CSV packet.",
+        "progressionMappingLines": [
+          18417,
+          18420,
+          18423,
+          18426,
+          18429,
+          18432,
+          18435,
+          18438,
+          18441,
+          18444,
+          18447
+        ]
+      }
+    },
+    {
+      "building": "h0U6",
+      "combat": "h0TR",
+      "stage": 9,
+      "name": "阿茜萨 - [等级 9]",
+      "webCost": 25,
+      "webUpgrades": [
+        "v14_h0U5"
+      ],
+      "sourceEvidence": {
+        "combatMapping": {
+          "combat": "h0TR",
+          "building": "h0U6",
+          "line": 18441
+        },
+        "heroPage": {
+          "file": "war3map.j",
+          "line": 29248,
+          "rawcode": "h0U3"
+        },
+        "progressionPolicy": "Web reconstruction of numbered stages in the current contiguous Mk/Ml hero-family registration; native Upgrade/Requires fields are absent from the CSV packet.",
+        "progressionMappingLines": [
+          18417,
+          18420,
+          18423,
+          18426,
+          18429,
+          18432,
+          18435,
+          18438,
+          18441,
+          18444,
+          18447
+        ]
+      }
+    },
+    {
+      "building": "h0U5",
+      "combat": "h0U0",
+      "stage": 10,
+      "name": "阿茜萨 - [等级 10]",
+      "webCost": 25,
+      "webUpgrades": [
+        "v14_h0U2"
+      ],
+      "sourceEvidence": {
+        "combatMapping": {
+          "combat": "h0U0",
+          "building": "h0U5",
+          "line": 18444
+        },
+        "heroPage": {
+          "file": "war3map.j",
+          "line": 29248,
+          "rawcode": "h0U3"
+        },
+        "progressionPolicy": "Web reconstruction of numbered stages in the current contiguous Mk/Ml hero-family registration; native Upgrade/Requires fields are absent from the CSV packet.",
+        "progressionMappingLines": [
+          18417,
+          18420,
+          18423,
+          18426,
+          18429,
+          18432,
+          18435,
+          18438,
+          18441,
+          18444,
+          18447
+        ]
+      }
+    },
+    {
+      "building": "h0U2",
+      "combat": "h0TZ",
+      "stage": 11,
+      "name": "阿茜萨 - [等级 11]",
+      "webCost": 125,
+      "webUpgrades": [
+        "v14_n07I"
+      ],
+      "sourceEvidence": {
+        "combatMapping": {
+          "combat": "h0TZ",
+          "building": "h0U2",
+          "line": 18447
+        },
+        "heroPage": {
+          "file": "war3map.j",
+          "line": 29248,
+          "rawcode": "h0U3"
+        },
+        "progressionPolicy": "Web reconstruction of numbered stages in the current contiguous Mk/Ml hero-family registration; native Upgrade/Requires fields are absent from the CSV packet.",
+        "progressionMappingLines": [
+          18417,
+          18420,
+          18423,
+          18426,
+          18429,
+          18432,
+          18435,
+          18438,
+          18441,
+          18444,
+          18447
+        ]
+      }
+    }
+  ],
+  "globalAliases": {
+    "Qs": "A1CU",
+    "Qt": "A1CG",
+    "Qu": "B07T",
+    "lines": [
+      1151,
+      1152,
+      1153
+    ],
+    "warning": "The literal source binds Qs to the life-mage fountain skill. Do not silently repair it to A1CF or give every Axisa stage a permanent spell-resistance aura."
+  },
+  "levelRules": {
+    "completion": {
+      "lines": [
+        28541,
+        28542,
+        28543
+      ],
+      "condition": "GetUnitAbilityLevel(i,A1CF)>0",
+      "counterKey": "O / GetHandleId(i) / A1CF integer",
+      "operation": "Increment the stored integer then request that ability level. No UnitMakeAbilityPermanent in this branch.",
+      "firstCompletion": "A new handle at any named stage starts the counter at0 and first requests level1. A stage label is not a counter.",
+      "outOfRange": "The raw completion counter can exceed11; host uses the supported11-level boundary. Original out-of-range SetUnitAbilityLevel behavior is not established."
+    },
+    "dispatch": {
+      "lines": [
+        47254,
+        47265,
+        47269,
+        47275,
+        47278,
+        47297
+      ],
+      "paths": [
+        "construction finish",
+        "native upgrade finish",
+        "manual upgrade completion via AllBuildingStartApplyManualUpgradeFinishByUnit",
+        "research/train finishes that explicitly invoke EggWhiteEx"
+      ],
+      "boundary": "A1CF increment is not gated by the Yt construction boolean inside EggWhiteEx. The Web current completion journal covers supported completed building actions; it does not reconstruct all historical original handles."
+    },
+    "deployment": {
+      "lines": [
+        43862,
+        43863,
+        43864
+      ],
+      "operation": "If building Pf has A1CF, SetUnitAbilityLevel on the already-existing combat skill to its building level. This call does not add a missing skill."
+    },
+    "regenerationByLevel": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      10
+    ],
+    "regenerationOverrideRows": [
+      820,
+      821,
+      822,
+      823,
+      824,
+      825,
+      826
+    ],
+    "regenerationMode": "Host applies known DataB as flat HP/s using the base AUau DataC=0 reference. The original map omitted DataC; custom inherited flags are not independently proven. In this host levels10 and11 each grant10HP/s.",
+    "legacyRestore": "Recover only exact buildingId journal entries with A1CF-bearing rawcodes; do not infer unseen stages from name/heroLevel. Preserve explicit saved levels/counters, never replay completion during restore. Repeated same-stage events absent from a legacy deduplicated journal cannot be recovered.",
+    "handleBoundary": "The eleven Web stage links are a reconstruction from contiguous Mk/Ml mappings; native Upgrade/Requires data are absent. Web same-buildingId continuity does not prove original Warcraft upgrade versus replacement handle continuity."
+  },
+  "deploymentAndArena": {
+    "normal": {
+      "lines": [
+        21336,
+        21358,
+        43875,
+        43882
+      ],
+      "flow": "Hide building, create mapped combat unit, set userData, then PassiveSkill(Bc,x,Pf)."
+    },
+    "arena": {
+      "lines": [
+        20159,
+        20175,
+        43883,
+        43895
+      ],
+      "flow": "Create mapped combat unit; PassiveSkillJJC(Pf,Bc) runs before the normal PassiveSkill. The explicit arena pass removes A1UN, and wrapper removes A17L/A1Q4; it does not remove A1CF/CH/CI/CJ/CG/CK."
+    },
+    "withinPassiveSkill": {
+      "lines": [
+        43800,
+        43811,
+        43862,
+        43864
+      ],
+      "flow": "If Pf has Qs/A1CU: request its level on Bc, register AxisaHalo immediately (Qt grant plus0-second and1-second timers). If Pf has A1CJ: queue AxisaSwap at0. If Pf has A1OC: queue VashjSwap at0. Copy A1CF near the end. Timer callbacks run later; registration order is preserved by host."
+    },
+    "entry": "h0U3 is on the hero page at29248, subject to LimitHeroTypeCount and existing hero rules. Existing direct hero upgrades remain; no new troop-training prerequisite. Level11 h0U2 has an explicit select edge to n07I at2597–2598, beyond this eleven-stage audit."
+  },
+  "haloRules": {
+    "registration": {
+      "lines": [
+        33217,
+        33228
+      ],
+      "gatedBy": "building Pf has Qs=A1CU in PassiveSkill",
+      "selfGrant": "Add permanent Qt=A1CG to Bc, then request GetUnitAbilityLevel(Bc,Qs). Missing Bc Qs is not implicitly added.",
+      "timers": "0-second one-shot and1-second repeat, plus EVENT_WIDGET_DEATH registration on Bc."
+    },
+    "pulse": {
+      "lines": [
+        33186,
+        33216,
+        29807,
+        29827
+      ],
+      "selection": "SelectRangeAlly around current caster position within600: ally, not UNIT_TYPE_DEAD, GetUnitAbilityLevel(Avul)==0. Then require existing buff B07T and D6!=caster.",
+      "grant": "Only when recipient Qt level==0: add/permanently retain Qt and request current caster Qs level. Existing Qt is not refreshed or upgraded.",
+      "duration": "Permanent ability remains when recipient leaves radius, loses B07T or source dies. Widget death destroys the grant trigger, not previously granted recipient abilities."
+    },
+    "buffBoundary": "B07T is an aura buff, not an A1CF ownership check. Host may observe an explicit active buff or reconstruct current aura coverage; exact native aura propagation, lingering/dispel behavior and same-frame refresh timing remain partial.",
+    "resistanceByLevel": [
+      0.1,
+      0.2,
+      0.3,
+      0.4,
+      0.5,
+      0.6000000238418579,
+      0.699999988079071,
+      0.800000011920929,
+      0.8999999761581421,
+      1.0
+    ],
+    "resistanceOverrideRows": [
+      827,
+      828,
+      829,
+      830,
+      831,
+      832
+    ],
+    "damageScope": "A1CG is native AIsr DataB spell reduction, not generic all-damage reduction or magic weapon reduction. Universal script damage remains excluded. Mixed AIsr abilities and other native resistance stacking have not been proven for this map.",
+    "legacyMigration": {
+      "provenOldGrant": 0.1,
+      "tolerance": 1e-08,
+      "operation": "Only a legacy status-only value within tolerance of0.1 becomes an actual permanent A1CG level1. Preserve explicit saved ability levels. Existing modern ability removal does not re-create Qt.",
+      "unknownPercentages": "Other positive old values are preserved as nagaResistanceLegacyUnresolved evidence; no A1CG is created and no level is inferred. Actual A19A/A1Q5 overlap decisions read current Qt presence and positive level, so unknown stale percentages cannot suppress their real mitigation.",
+      "reviewFix": "Initial migration accepted any positive percentage and changed0.3/0.7 into0.1 with Qt1. Independent snapshot reproduction identified this, then root constrained migration and added actual damage checks."
+    },
+    "zeroLevelGrantRequest": "Registration/grants explicitly record requestedLevel/effectiveLevel and a nonpositiveRequestUnverified flag. A building carrying A1CU does not inject missing combat A1CU; UnitAddAbility(Qt) happens before the unresolved level0 write, and the host preserves its current valid/default level."
+  },
+  "queenSwap": {
+    "axisa": {
+      "ability": "A1CJ",
+      "lines": [
+        33232,
+        33263
+      ],
+      "timing": "One0-second timer at deployment, no ongoing queen proximity listener.",
+      "enumeration": "All units of exact rawcode h0OV across the map. No range, alive, battleTeam, hidden, illusion or once-per-team filters in the source loop.",
+      "ally": "UnitAddAbility(A1CK), UnitMakeAbilityPermanent; no SetUnitAbilityLevel. If absent, new default level1 gives host+10%self attack. If already present its current level remains.",
+      "enemy": "For every enemy queen separately request current Qt level minus1. There is no call to remove Qt and no A1CK penalty or A1OE addition.",
+      "zeroOrNegative": "Native SetUnitAbilityLevel on missing Qt or level<=0 is unverified. Host must record the request and preserve an existing valid ability rather than deleting it."
+    },
+    "vashjComparison": {
+      "ability": "A1OC",
+      "lines": [
+        32922,
+        32967
+      ],
+      "ally": "A1CK absent→2,3→4.",
+      "enemy": "A1CK absent→3,2→4, plus permanent A1OE if absent.",
+      "note": "These2/3/4 state transitions are exclusive to VashjSwap; do not reuse them for AxisaSwap."
+    }
+  },
+  "auraSemantics": {
+    "A1CF": {
+      "base": "AUau",
+      "radius": 600,
+      "buff": "B07T",
+      "targets": "air,ground,friend,self,vuln,invu",
+      "known": "DataB level1..11 only; levels5..11 override values recorded.",
+      "missing": [
+        "DataA movement",
+        "DataC percent mode",
+        "explicit Area/BuffID/targets fields at levels5..11"
+      ],
+      "hostBoundary": "Reuse known radius/target/buff group for higher supported levels and flat regen; native inheritance remains partial."
+    },
+    "A1CH": {
+      "base": "Aakb",
+      "radius": 500,
+      "buff": "B07U",
+      "damage": 0.13,
+      "melee": true,
+      "ranged": true,
+      "missing": [
+        "DataD flat flag"
+      ],
+      "hostBoundary": "13%damage adapter with both explicit attack-category flags. Base Aakb D0 supports percent interpretation but is not map runtime proof."
+    },
+    "A1CI": {
+      "base": "AHad",
+      "radius": 500,
+      "buff": "B07V",
+      "armor": 2,
+      "missing": [
+        "DataB percent mode"
+      ],
+      "hostBoundary": "Host adds2flat armor; base AHad B0 is reference only."
+    },
+    "A1CK": {
+      "base": "AEar",
+      "radius": 900,
+      "buff": "B07W",
+      "targets": "ground,vulnerable,air,invulnerable,self",
+      "damageByLevel": [
+        0.1,
+        0.15,
+        -0.11,
+        0.04
+      ],
+      "melee": true,
+      "ranged": true,
+      "missing": [
+        "DataD flat flag",
+        "explicit radius fields for levels2..4"
+      ],
+      "hostBoundary": "Self-only aura, not nearby allied attack bonus. Current valid ability level determines its known damage value."
+    },
+    "stacking": "B07T/U/V/W are separate buff groups. Multiple copies of the same group use the host strongest-group policy rather than adding all copies; distinct groups contribute independently. Native equal/mixed aura arbitration and linger timing remain partial.",
+    "nativeHeroClassification": "Family unit Primary fields are underscore; Web hero altar classification is separate from native UNIT_TYPE_HERO tests."
+  },
+  "nativeReferences": [
+    {
+      "url": "https://github.com/nvs/gem/blob/master/lib/patch/1.31.1/common.j",
+      "scope": "1.31.1 field-name declarations, not this map patch/default inheritance.",
+      "fields": {
+        "Uau1": "movement speed increase",
+        "Uau2": "life regeneration increase",
+        "Uau3": "percent bonus flag",
+        "Had2": "percent armor bonus flag",
+        "Ear2": "melee bonus",
+        "Ear3": "ranged bonus",
+        "Ear4": "flat bonus flag",
+        "isr2": "damage reduction"
+      }
+    },
+    {
+      "url": "https://github.com/sumneko/w3x2lni/blob/master/data/enUS-1.27.1/prebuilt/Custom/ability.ini#L22241-L22258",
+      "base": "AUau",
+      "fields": {
+        "datac": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "scope": "Flat regen mode reference only. The table also has movement bonuses; those absent custom fields are not silently imported."
+    },
+    {
+      "url": "https://github.com/sumneko/w3x2lni/blob/master/data/enUS-1.27.1/prebuilt/Custom/ability.ini#L5953-L5969",
+      "base": "AHad",
+      "fields": {
+        "datab": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "scope": "Flat armor mode reference only; no other default values imported."
+    },
+    {
+      "url": "https://github.com/sumneko/w3x2lni/blob/master/data/enUS-1.27.1/prebuilt/Custom/ability.ini#L23332-L23350",
+      "base": "Aakb",
+      "fields": {
+        "datab": [
+          1,
+          0,
+          0,
+          0
+        ],
+        "datac": [
+          1,
+          0,
+          0,
+          0
+        ],
+        "datad": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "scope": "Both attack categories and percent attack mode reference, not map runtime validation."
+    }
+  ],
+  "boundaries": [
+    "A1CF level10 and11 each have explicit DataB value10; no invented11HP/s or10/11-level A1CG grants from the named hero stage.",
+    "Do not repair Qs=A1CU to A1CF. Ordinary Axisa carries A1CF and therefore does not by itself register the permanent-resistance grant trigger.",
+    "Qt decrement requests reaching0/negative are not evidence of ability removal. Previously accepted valid levels remain until native behavior is independently established.",
+    "Source original-handle continuity, completion counts beyond supported ability levels, legacy repeated-stage histories and missing ability rewrites remain unrecoverable.",
+    "Native buff application/linger/dispel, same-frame0-second callback ordering, widget death vs ordinary death, hidden/removed handles and complete world enumeration remain partial host adapters.",
+    "Missing aura percent/flat flags, movement speed, higher-level radius/targets and cross-ability resistance stacking are not established by tooltip or base-reference agreement.",
+    "Tests and browser QA, when recorded, validate the Web host only; they are not original Warcraft runtime captures."
+  ],
+  "validation": {
+    "sourceEvidence": {
+      "status": "passed",
+      "jassSha256": "e66c55b3b25b185c991be5613e21fbf5b2d598f3cc40f2f8cd01c23bcb828250",
+      "exactLfAnchors": 402,
+      "objectSourceHashes": 4,
+      "abilityObjects": 9,
+      "unitObjects": 25,
+      "buffObjects": 4,
+      "verifiedOverrideRows": 13,
+      "checks": [
+        "Exact one-based LF text and JASS SHA256",
+        "All four CSV SHA256 hashes",
+        "CSV logical rows and selected raw ability/unit/buff fields",
+        "A1CF DataB5–11 and A1CG DataB5–10 each match original w3a modification row"
+      ]
+    },
+    "targeted": {
+      "passed": 77,
+      "files": {
+        "tests/v14-axisa.test.mjs": 29,
+        "tests/v14-axisa-levels.test.mjs": 25,
+        "tests/v14-axisa-integration.test.mjs": 23
+      },
+      "command": "node --test tests/v14-axisa.test.mjs tests/v14-axisa-levels.test.mjs tests/v14-axisa-integration.test.mjs",
+      "log": "/private/tmp/legion-v74-evidence-targeted.log",
+      "scope": "Independent rerun after final unknown-legacy-value migration fix."
+    },
+    "relatedRegression": {
+      "passed": 178,
+      "files": [
+        "tests/v14-axisa.test.mjs",
+        "tests/v14-axisa-levels.test.mjs",
+        "tests/v14-axisa-integration.test.mjs",
+        "tests/v14-naga-active.test.mjs",
+        "tests/v14-naga-retained-caster.test.mjs",
+        "tests/v14-vashj.test.mjs",
+        "tests/v14-malygos.test.mjs"
+      ],
+      "command": "node --test tests/v14-axisa.test.mjs tests/v14-axisa-levels.test.mjs tests/v14-axisa-integration.test.mjs tests/v14-naga-active.test.mjs tests/v14-naga-retained-caster.test.mjs tests/v14-vashj.test.mjs tests/v14-malygos.test.mjs",
+      "log": "/private/tmp/legion-v74-independent-final.log",
+      "scope": "Includes the77 targeted tests; totals are not additive."
+    },
+    "independentReview": "Passed after constraining legacy status-only migration to the only proven historical0.1 grant, preserving unknown values and checking resistance overlap from actual Qt. Completion/restore, normal+arena deployment, Qs typo, B07T reach/explicit buff, widget-death cancellation and Vashj separation reviewed. No unresolved implementation blocker within the documented host boundary.",
+    "syntax": "node --check for both new modules passed; git diff --check passed",
+    "browser": "not run by this audit",
+    "fullSuite": "not run by this audit",
+    "publication": "not recorded by this audit"
+  }
+}

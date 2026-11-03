@@ -1,3 +1,5 @@
+import {axisaBuildingCompleted,restoreAxisaBuilding,initializeAxisaLevels} from './axisa-levels.js';
+import {restoreAxisa} from './axisa-rules.js';
 import {restoreDeathwingHuman} from './deathwing-human.js';
 import {restoreDeathwingDragon,hasPendingDeathwingRevival} from './deathwing-dragon.js';
 import {earthLordBuildingCompleted,restoreEarthLordBuilding,initializeEarthLordLevels} from './earth-lord-levels.js';
@@ -23,7 +25,7 @@ import {resetLichKingRound} from './lich-king-rules.js';
 import {skeletonKingGate,beginSkeletonKingRoundFinish,tickSkeletonKingLifecycle,isSkeletonKingJobType} from './skeleton-king-rules.js';
 import {sourceBarrageTargets,sourceBarrageHit} from './skills.js';
 import { UNITS, MERCENARIES, LEGACY_MERCENARIES, WAVES, RULES, HEROES, BUILDERS, PROPHET_POOLS, UNIT_TEMPLATES, TECHNOLOGIES, BOX_TRAINING_RULES } from './data.js';
-import { attachSkills, refreshSourceSkills, initializeSourceSkills, initializeSourceClassCombat, sourceClassAttackDamageEvent, tirionBondDamageEvent, sourceDamageListeners, sourceRegisteredDamageEvent, compileSkills, sourceAuraEffects, hasSourceAura, tickSourceSkills, sourceAttackIssued, sourceAttackStart, sourceOnHit, modifyIncoming, beforeSourceDamage, afterSourceDamage, sourceDeath, trySourceReincarnation, sourceMoveFactor, canWeaponTarget, sourceWeapon, tickSourceScriptJobs, manualSourceSkills, castManualSourceSkill, stormLizardChanneling } from './skills.js';
+import { attachSkills, refreshSourceSkills, restoreNagaHaloState, initializeSourceSkills, initializeSourceClassCombat, sourceClassAttackDamageEvent, tirionBondDamageEvent, sourceDamageListeners, sourceRegisteredDamageEvent, compileSkills, sourceAuraEffects, hasSourceAura, tickSourceSkills, sourceAttackIssued, sourceAttackStart, sourceOnHit, modifyIncoming, beforeSourceDamage, afterSourceDamage, sourceDeath, trySourceReincarnation, sourceMoveFactor, canWeaponTarget, sourceWeapon, tickSourceScriptJobs, manualSourceSkills, castManualSourceSkill, stormLizardChanneling } from './skills.js';
 import {isReincarnating,countsForBattle as countsForNativeBattle,reincarnationLethal} from './reincarnation-rules.js';
 const countsForBattle=e=>countsForNativeBattle(e)||hasPendingDeathwingRevival(e);
 import {restorePhoenixRevival} from './phoenix-revival-rules.js';
@@ -111,7 +113,7 @@ export class Game {
       // Initialize the same empty journal saved/restored for players who have
       // not finished a troop yet; restoring must not add new progression data.
       restoreEggHistory(p,{wave:this.state.wave,buildings:p.buildings,unitsById:units});
-      for(const b of p.buildings){restoreNerzhulBuilding(p,b,units[b.unitId]);restoreEarthLordBuilding(p,b,units[b.unitId]);}
+      for(const b of p.buildings){restoreNerzhulBuilding(p,b,units[b.unitId]);restoreEarthLordBuilding(p,b,units[b.unitId]);restoreAxisaBuilding(p,b,units[b.unitId]);}
     }
     this._log(`${RULES.title}：按来源建造军团，发展木材，与队友共同守护国王。`);
     this._log('采用v14.1A5九倍实怪数量和HP；静态数据与Web近似、原脚本冲突均保留来源说明。');
@@ -444,7 +446,7 @@ export class Game {
   }
   _recordEggCompletion(p, def, building) {
     this._initializeSourceClassBuilding(building);
-    nerzhulBuildingCompleted(building,def);earthLordBuildingCompleted(building,def);
+    nerzhulBuildingCompleted(building,def);earthLordBuildingCompleted(building,def);axisaBuildingCompleted(building,def);
     return recordEggCompletion(p,def,{buildingId:building?.id,wave:this.state.wave,buildings:p.buildings,unitsById:units});
   }
   _recordSourceCompletion(p, def) {
@@ -1704,7 +1706,7 @@ export class Game {
       for(const b of p.buildings.filter(b=>!b.construction))this._recordSourceCompletion(p,units[b.unitId]);
       for(const b of p.buildings.filter(b=>!b.construction))this._initializeSourceClassBuilding(b);
       restoreEggHistory(p,{wave:this.state.wave,buildings:p.buildings,unitsById:units});
-      for(const b of p.buildings){restoreNerzhulBuilding(p,b,units[b.unitId]);restoreEarthLordBuilding(p,b,units[b.unitId]);}
+      for(const b of p.buildings){restoreNerzhulBuilding(p,b,units[b.unitId]);restoreEarthLordBuilding(p,b,units[b.unitId]);restoreAxisaBuilding(p,b,units[b.unitId]);}
       for(const b of p.buildings)if(!b.construction&&!b.boxLimitTransferred)this._recordLimitOrigins(b,units[b.unitId]);
       if(p.workers>rule('maxWorkers',7)||p.lumberLevel>rule('maxLumberLevel',15)){p.workers=Math.min(p.workers,rule('maxWorkers',7));p.lumberLevel=Math.min(p.lumberLevel,rule('maxLumberLevel',15));this.state.migrationNotice=`旧存档已限制为${RULES.maxWorkers}小精灵、${RULES.maxLumberLevel}级科技；原进度已保留备份。`;}
       const tasks=this._economyTasks(p);tasks.workerQueue=tasks.workerQueue.slice(0,Math.max(0,rule('maxWorkers',7)-p.workers));if(tasks.lumberTask?.targetLevel>rule('maxLumberLevel',15))tasks.lumberTask=null;
@@ -1717,12 +1719,13 @@ export class Game {
       else if(def&&isV14(def)&&refreshSourceSkills(e,def)){e.status??={};e.status.sourceSkillsRestoredAt=this.state.time;}
       if(isV14(def)&&def.heroFamily)e.isNativeHero=['STR','AGI','INT'].includes(def.sourceRawFields?.Primary);
       e.skillStates??={};e.buffs??=[];
+      if(isV14(def))initializeAxisaLevels(this,this.state.players[e.ownerId]?.buildings.find(b=>b.id===e.buildingId),e,{restoring:true});
       if(isV14(def))initializeEarthLordLevels(this,this.state.players[e.ownerId]?.buildings.find(b=>b.id===e.buildingId),e,{restoring:true});
       if(isV14(def))initializeNerzhulDeployment(this,this.state.players[e.ownerId]?.buildings.find(b=>b.id===e.buildingId),e,{restoring:true});
       restoreUnstableAlchemyUserData(this,e);restoreVeteranIdentity(this,e,units);restoreSapperCreation(this,e,def);
     }
     restoreUndeadLegionHandles(this);
-    restoreDeathwingHuman(this);restoreDeathwingDragon(this);restoreEarthLord(this);restorePhoenixRevival(this);restorePhoenixActive(this);restoreMalygos(this);restoreGuldan(this);restoreAnduin(this);restoreVarian(this);restoreAlexstrasza(this);restoreNozdormu(this);restoreSavis(this);restoreNerzhul(this);restoreMaiev(this);
+    restoreAxisa(this);restoreNagaHaloState(this);restoreDeathwingHuman(this);restoreDeathwingDragon(this);restoreEarthLord(this);restorePhoenixRevival(this);restorePhoenixActive(this);restoreMalygos(this);restoreGuldan(this);restoreAnduin(this);restoreVarian(this);restoreAlexstrasza(this);restoreNozdormu(this);restoreSavis(this);restoreNerzhul(this);restoreMaiev(this);
     // JSON stores retained handles separately; surviving units must share the
     // live object again so later healing, movement and death update one handle.
     for(const e of [...this.state.entities,...this.state.kings])if(this.state.brightArthasHandles[e.id])this.state.brightArthasHandles[e.id]=e;

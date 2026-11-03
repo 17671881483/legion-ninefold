@@ -1,3 +1,5 @@
+import {AXISA_RULES,initializeAxisaDeployment,tickAxisaJob} from './axisa-rules.js';
+import {initializeAxisaLevels} from './axisa-levels.js';
 import {DEATHWING_HUMAN_RULES,canDeathwingHumanCast,castDeathwingHuman,deathwingHumanMainDamage,tickDeathwingHumanJobs} from './deathwing-human.js';
 import {DEATHWING_DRAGON_RULES,canDeathwingDragonCast,castDeathwingDragon,deathwingDragonMainDamage,deathwingDragonMainDeath,tickDeathwingDragonJobs} from './deathwing-dragon.js';
 import {EARTH_LORD_RULES,canEarthLordCast,castEarthLord,initializeEarthLordDeployment,earthLordMainDamage,earthLordLifeChanged,earthLordWidgetDeath,earthLordUnitDeath,tickEarthLordJobs} from './earth-lord-rules.js';
@@ -59,12 +61,12 @@ import { V14_ABILITIES, V14_UNIT_TEMPLATES } from './v14-reference.js';
 import { ALCHEMIST_ACTIVE_RULES, alchemistAfterDamage, tryAlchemistAutoCast, castAlchemistAbility, tickAlchemistJob, sourceAlchemistDeath, alchemistDeathReward } from './alchemist-rules.js';
 import { garroshAfterDamage, garroshOnHit, tickGarroshJobs } from './garrosh-rules.js';
 import { YSERA_ACTIVE_RULES, canYseraCastAbility, tryYseraAutoCast, castYseraAbility, tickYseraJob, sourceYseraMainDeath, sourceYseraDeath } from './ysera-rules.js';
-import { NAGA_ACTIVE_RULES, initializeNagaUnit, nagaBeforeDamage, nagaIncomingDamage, nagaOnHit, tickNagaUnit, castNagaAbility, tickNagaJob, sourceNagaDeath } from './naga-active-rules.js';
+import { NAGA_ACTIVE_RULES, initializeNagaUnit, initializeNagaDeployment, nagaHaloWidgetDeath, restoreNagaHalo, nagaBeforeDamage, nagaIncomingDamage, nagaOnHit, tickNagaUnit, castNagaAbility, tickNagaJob, sourceNagaDeath } from './naga-active-rules.js';
 import { closestWalkable, isWalkable } from './layout.js';
 import { GARROSH_ACTIVE_RULES, GARROSH_PASSIVE_RULES, canGarroshCastAbility, castGarroshAbility, tryGarroshAutoCast, garroshActiveAfterDamage, sourceGarroshActiveDeath, tickGarroshActiveJob } from './garrosh-active-rules.js';
 import { ILLIDAN_RULES, ILLIDAN_ACTIVE_RULES, canIllidanCastAbility, castIllidanAbility, registerIllidanSource, tickIllidanSource, illidanOnAttackHit, tryIllidanAutoCast, illidanAfterDamage, sourceIllidanDeath, tickIllidanJob, isIllidanJobType } from './illidan-rules.js';
 
-export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261104-v73-1';
+export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261104-v74-1';
 
 // Values come from resolved object fields. Empty fields remain empty: a missing
 // native default is reported, rather than replacing it with tooltip numbers.
@@ -195,7 +197,7 @@ function compile(id,version='5.0dJF') {
     if(id==='A0SA'){s.kind='death_explosion';s.status='implemented';s.effectText='沙丘之虫战斗体n0SC死亡时，300范围敌军受到8点普通攻击/火焰伤害；死亡结算统一执行，不重复叠加同名技能';}
     if(id==='A2YJ'){s.kind='form_description';s.status='marker';s.effectText='巨龙之梦为形态说明标记；实际人形、临时龙形、死亡苏醒由A2YC及对应源脚本统一处理，不额外叠加效果';}
     if(id==='A19Z'){s.kind='script_attack_level';s.status='implemented';s.effectText='致命挥砍动态攻击层：每级1点平攻、最高100级，由A1A1死亡监听和建筑部署统一应用；不重复添加常驻数值';}
-    if(id==='A1CG'){s.kind='naga_spell_resistance';s.status='implemented';s.effectText='生命法师出生及光环授予的永久法术抗性，第1级降低10%法术伤害；状态随实体保存，由娜迦伤害入口统一执行，不降低普通魔法攻击或通用伤害';}
+    if(id==='A1CG'){s.kind='naga_spell_resistance';s.status='implemented';s.effectText='生命法师建筑出战及已登记光环授予的永久法术抗性；按实际A1CG等级DataB减少法术伤害，第1级10%、第10级100%。保留实体技能与等级，不降低普通魔法攻击或通用伤害';}
     if(id==='A2Z2'){s.kind='alchemist_rage';s.status='implemented';s.effectText='本次伤害后生命不高于25%时触发药剂狂暴：1/2/3级分别获得50%/100%/150%攻速与2/3/5护甲，持续5秒；期间不刷新，结束后可再次触发，不免死';}
     if(id==='A2Z3'){s.kind='economic_marker';s.status='implemented';s.effectText='击杀敌人时单次1—100整数抽奖：1级2%得5金/5%得2金/10%得1金，2级2%/8%/12%，3级4%/10%/15%；互斥结算，31波后仍生效';}
     if(id==='A1A5'){s.kind='garrosh_armor';s.status='implemented';s.effectText='首次受伤登记1级护甲；伤害事件前生命比例比上次记录下降至少2个百分点时，本事件最多再升1级。护甲不因治疗撤销，并同步保留在建筑，下次出战恢复；最多100级';}
@@ -251,6 +253,7 @@ function compile(id,version='5.0dJF') {
   if(version==='v14.1A5'&&KODO_RULES[id]){const r=KODO_RULES[id];Object.assign(s,{kind:'kodo_source',status:r.status,runtimeImplemented:true,effectText:r.description+`【待核定：${r.partial}】`});}
   if(version==='v14.1A5'&&id==='A113')Object.assign(s,{kind:'veteran_source',status:VETERAN_RULE.status,runtimeImplemented:true,effectText:VETERAN_RULE.description+'【待核定：'+VETERAN_RULE.partial+'】'});
   if(version==='v14.1A5'&&id==='A20C')Object.assign(s,{kind:'siege_fragments_source',status:SIEGE_TEAM_RULE.status,runtimeImplemented:true,effectText:SIEGE_TEAM_RULE.description+'【待核定：'+SIEGE_TEAM_RULE.partial+'】'});
+  if(version==='v14.1A5'&&AXISA_RULES[id]){const r=AXISA_RULES[id];Object.assign(s,{...(r.nativeKind?{}:{kind:'axisa_source'}),status:r.status,runtimeImplemented:true,effectText:r.description+(r.partial?'【待核定：'+r.partial+'】':'')});}
   if(version==='v14.1A5'&&(DEATHWING_HUMAN_RULES[id]??DEATHWING_DRAGON_RULES[id])){const r=DEATHWING_HUMAN_RULES[id]??DEATHWING_DRAGON_RULES[id];Object.assign(s,{...(r.preserveNativeKind?{}:{kind:'deathwing_source'}),status:r.status,runtimeImplemented:true,manaCost:r.manaCost??s.manaCost,cooldown:r.cooldown??s.cooldown,effectText:r.description+(r.partial?'【待核定：'+r.partial+'】':'')});if(r.range!==undefined)s.range=r.range/100;}
   if(version==='v14.1A5'&&EARTH_LORD_RULES[id]){const r=EARTH_LORD_RULES[id];Object.assign(s,{...(r.nativeKind?{}:{kind:'earth_lord_source'}),status:r.status,runtimeImplemented:true,effectText:r.description+(r.partial?'【待核定：'+r.partial+'】':'')});}
   if(version==='v14.1A5'&&MAIEV_RULES[id]){const r=MAIEV_RULES[id];Object.assign(s,{kind:'maiev_source',status:r.status,runtimeImplemented:r.status!=='unresolved',effectText:r.description+'【待核定：'+r.partial+'】'});}
@@ -327,7 +330,7 @@ const V14_ECONOMY_DESCRIPTIONS={
   farmer:{name:'淘金（玩家级经济）',rawcodes:['n085','h0W1'],text:'首座娜迦农夫从开始建造时为玩家注册15%击杀额外获得1金币的概率，每新增一座再加0.5个百分点；该概率影响玩家的击杀结算，农夫本身没有对战技能。升级完成后注销该农夫的注册；出售按原脚本不会注销已注册概率。'},
   master:{name:'压榨（回合经济）',rawcodes:['n084','h0W0'],text:'回合结算时，每座存活的娜迦农场主获得3×本波农夫数量的金币。原脚本条件会把原型h0W1的尸体也计入农夫数，皮肤农夫则要求存活；经济模块按这一源逻辑结算。'},
 };
-export function compileSkills(def) {const scale=def.distanceScale??1,version=versionOf(def);return [...new Set(def.abilityIds??def.sourceAbilityIds??(def.sourceAbilities??[]).map(a=>a.rawcode??a.id))].filter(Boolean).map(id=>compile(id,version)).map(s=>({...s,...(version==='v14.1A5'&&['A0J2','A0J3'].includes(s.id)?{haste:num(s.fields['DataA'+(def.abilityLevels?.[s.id]??1)]),effectText:`亡灵军团授予攻速：等级${def.abilityLevels?.[s.id]??1}，+${num(s.fields['DataA'+(def.abilityLevels?.[s.id]??1)])*100}%`}:{}),...(version==='v14.1A5'&&s.id==='A0YE'?{regen:num(s.fields['DataB'+(def.abilityLevels?.A0YE??1)])}:{}),...(version==='v14.1A5'&&s.id==='A0II'?{haste:num(s.fields['DataB'+(def.abilityLevels?.A0II??1)])}:{}),...(version==='v14.1A5'&&s.id==='A0I4'?{flatDamage:num(s.fields['DataA'+(def.abilityLevels?.A0I4??1)])}:{}),...(version==='v14.1A5'&&s.id==='A17H'?{damage:num(s.fields['DataA'+Math.max(1,Math.min(3,def.abilityLevels?.A17H??1))])}:{}),...(version==='v14.1A5'&&s.id==='A1CK'?{damage:num(s.fields['DataA'+(def.abilityLevels?.A1CK??1)])}:{}),...Object.fromEntries(['range','radius','length','width','inner','outer','outerRadius','deathRadius','pull'].filter(k=>s[k]!==undefined).map(k=>[k,s[k]*scale]))}));}
+export function compileSkills(def) {const scale=def.distanceScale??1,version=versionOf(def);return [...new Set(def.abilityIds??def.sourceAbilityIds??(def.sourceAbilities??[]).map(a=>a.rawcode??a.id))].filter(Boolean).map(id=>compile(id,version)).map(s=>({...s,...(version==='v14.1A5'&&['A0J2','A0J3'].includes(s.id)?{haste:num(s.fields['DataA'+(def.abilityLevels?.[s.id]??1)]),effectText:`亡灵军团授予攻速：等级${def.abilityLevels?.[s.id]??1}，+${num(s.fields['DataA'+(def.abilityLevels?.[s.id]??1)])*100}%`}:{}),...(version==='v14.1A5'&&s.id==='A1CF'?{regen:num(s.fields['DataB'+Math.max(1,Math.min(11,def.abilityLevels?.A1CF??1))])}:{}),...(version==='v14.1A5'&&s.id==='A0YE'?{regen:num(s.fields['DataB'+(def.abilityLevels?.A0YE??1)])}:{}),...(version==='v14.1A5'&&s.id==='A0II'?{haste:num(s.fields['DataB'+(def.abilityLevels?.A0II??1)])}:{}),...(version==='v14.1A5'&&s.id==='A0I4'?{flatDamage:num(s.fields['DataA'+(def.abilityLevels?.A0I4??1)])}:{}),...(version==='v14.1A5'&&s.id==='A17H'?{damage:num(s.fields['DataA'+Math.max(1,Math.min(3,def.abilityLevels?.A17H??1))])}:{}),...(version==='v14.1A5'&&s.id==='A1CK'?{damage:num(s.fields['DataA'+(def.abilityLevels?.A1CK??1)])}:{}),...Object.fromEntries(['range','radius','length','width','inner','outer','outerRadius','deathRadius','pull'].filter(k=>s[k]!==undefined).map(k=>[k,s[k]*scale]))}));}
 export function describeSkills(def) {const displayed=isV14(def)&&(def.buildingAbilityIds??[]).includes('A113')?{...def,abilityIds:[...new Set([...(def.abilityIds??def.sourceAbilityIds??[]),'A113'])]}:def;const list=compileSkills(displayed).map(s=>({id:s.id,name:s.name,description:s.description,status:s.status,effectText:s.effectText,cooldown:s.cooldown,manaCost:s.manaCost,duration:s.duration,range:s.range,radius:s.radius}));const r=raw(def),descriptions=isV14(def)?V14_TRIGGER_DESCRIPTIONS:TRIGGER_DESCRIPTIONS;if(descriptions[r])list.push({id:'trigger:'+r,name:'脚本机制',description:descriptions[r],effectText:descriptions[r],status:'implemented',cooldown:0,manaCost:0});const sourceGap=isV14(def)&&V14_PARTIAL_TRIGGER_DESCRIPTIONS[r];if(sourceGap)list.push({id:'trigger:'+r,name:'脚本机制（部分实现）',description:sourceGap.text,effectText:sourceGap.text,status:sourceGap.status,cooldown:0,manaCost:0});if(isV14(def))for(const [key,rule] of Object.entries(V14_ECONOMY_DESCRIPTIONS))if(rule.rawcodes.includes(r))list.push({id:'economy:'+key,name:rule.name,description:rule.text,effectText:rule.text,status:'implemented',cooldown:0,manaCost:0});return list;}
 export function skillCoverage(def) {const list=describeSkills(def);return {implemented:list.filter(s=>s.status==='implemented').length,partial:list.filter(s=>s.status==='partial').length,markers:list.filter(s=>s.status==='marker').length,unresolved:list.filter(s=>s.status==='unresolved').length};}
 export function attachSkills(e,def) {
@@ -391,13 +394,13 @@ export function sourceWeapon(source,target,now=0){
 }
 export function canWeaponTarget(source,target,now=0){return !!sourceWeapon(source,target,now);}
 
-function active(e){return (e.skillSpecs??[]).filter(s=>s.status==='implemented'||s.status==='partial'&&s.runtimeImplemented&&['A2Y1','A2Y5','A0YE','A0II','A0I2','A0J8','A0J9','A1QE','A1QI','A10G','A12I','A0LG','A1SQ','A1SU','A11U','A11Z','A16Y'].includes(s.id));}
+function active(e){return (e.skillSpecs??[]).filter(s=>s.status==='implemented'||s.status==='partial'&&s.runtimeImplemented&&['A1CF','A1CH','A1CI','A1CK','A2Y1','A2Y5','A0YE','A0II','A0I2','A0J8','A0J9','A1QE','A1QI','A10G','A12I','A0LG','A1SQ','A1SU','A11U','A11Z','A16Y'].includes(s.id));}
 export function hasSourceAura(e){return active(e).some(s=>s.kind.startsWith('aura_'));}
 function state(e,s){return (e.skillStates??={})[s.id]??=( {readyAt:0,casts:0});}
 function buff(e,s,source,now,extra={}){if(source.side!==e.side&&active(e).some(a=>a.kind==='immunity')&&(['Aslo','AEer','Acri','ANdh','Auhf','AUfn','ANcs','AHtb','AOcl'].includes(s.base)))return false;e.buffs??=[];const key=extra.key??s.buffKey??s.id;const b={key,skillId:s.id,ownerId:source.ownerId,sourceId:source.id,expiresAt:now+(isNativeHero(e)?s.heroDuration||s.duration:s.duration),damage:s.damage??0,armor:s.armor??0,move:s.move??0,haste:s.haste??0,regen:s.regen??0,dps:s.dps??0,miss:s.miss??0,incoming:s.incoming??0,disarm:s.base==='AEer',...extra};const old=e.buffs.findIndex(v=>v.key===key);if(old>=0)e.buffs[old]=b;else e.buffs.push(b);}
 export function sourceAuraEffects(game,target,auras) {
   const effects={damage:0,haste:0,move:0,armor:0,healRate:0,manaRate:0,lifesteal:0,thorns:0,thornsFlat:0};const groups=new Map();
-  for(const source of [...(auras??[]),...malfurionAuraSources(game).filter(e=>e.battleTeam===target.battleTeam)]){if(source.hp<=0)continue;for(const base of active(source)){const s=base.id==='A17H'?{...base,damage:num(base.fields['DataA'+Math.max(1,Math.min(3,source.abilityLevels?.A17H??1))])}:base.id==='A0YE'?{...base,regen:num(base.fields['DataB'+(source.abilityLevels?.A0YE??1)])}:base;if(base.id==='A17H'&&source.abilityLevels?.A17H===0)continue;if(!s.kind.startsWith('aura_')||dist(source,target)>s.radius+1e-8||!matchesTargets(s,source,target)||(s.rangedOnly&&target.range<=1.28))continue;
+  for(const source of [...(auras??[]),...malfurionAuraSources(game).filter(e=>e.battleTeam===target.battleTeam)]){if(source.hp<=0)continue;for(const base of active(source)){const s=base.id==='A17H'?{...base,damage:num(base.fields['DataA'+Math.max(1,Math.min(3,source.abilityLevels?.A17H??1))])}:base.id==='A1CF'?{...base,regen:num(base.fields['DataB'+Math.max(1,Math.min(11,source.abilityLevels?.A1CF??1))])}:base.id==='A0YE'?{...base,regen:num(base.fields['DataB'+(source.abilityLevels?.A0YE??1)])}:base;if(['A17H','A1CF'].includes(base.id)&&source.abilityLevels?.[base.id]===0)continue;if(!s.kind.startsWith('aura_')||dist(source,target)>s.radius+1e-8||!matchesTargets(s,source,target)||(s.rangedOnly&&target.range<=1.28))continue;
       const key=s.buffKey||s.id,old=groups.get(key);if(!old||Math.abs(s.damage??s.armor??s.haste??s.regen??s.fraction??0)>Math.abs(old.s.damage??old.s.armor??old.s.haste??old.s.regen??old.s.fraction??0))groups.set(key,{s,source});}}
   for(const {s}of groups.values()){
     if(s.kind==='aura_damage')effects.damage+=s.damage;
@@ -595,7 +598,7 @@ export function modifyIncoming(game,target,damage,attacker,options={}) {
   // universal script damage. Mixed native resistance stacking is unresolved;
   // keep the existing A1CG host authoritative rather than invent a stack rule.
   if(isV14(target)&&(target.skillSpecs??[]).some(s=>s.id==='A19A')&&!options.universal&&(options.magic&&options.spell||options.nativeDamageType==='magic'||options.attackType==='spells')){
-    if(target.status?.nagaSpellResistance)target.status.sourceClassResistanceOverlapUnresolved=true;
+    if(target.skillSpecs?.some(s=>s.id==='A1CG')&&(target.abilityLevels?.A1CG??1)>0)target.status.sourceClassResistanceOverlapUnresolved=true;
     else result*=.6;
   }
   if(isV14(target))result=malygosIncoming(target,result,options);
@@ -624,7 +627,7 @@ export function sourceClassAttackDamageEvent(game,target,attacker,options={},amo
   try{nerzhulAttackDamage(game,attacker,target,heroScriptApi);darkArthasAttackDamage(attacker,amount);blademasterAttack(game,attacker,heroScriptApi);malygosAttackDamage(game,attacker,target,heroScriptApi);siegeTeamAttackDamage(game,attacker,target,heroScriptApi);musketeerAttackDamage(game,attacker,target,heroScriptApi);vashjOnAttackDamage(game,attacker,target,heroScriptApi);sourceClassOnAttackDamage(game,attacker,target,heroScriptApi);banditAttackOrders(game,attacker,target,heroScriptApi);const varianEvent=varianAttackDamage(game,attacker,target,amount,heroScriptApi);const localP8=alexstraszaAttackDamage(game,attacker,target,heroScriptApi,varianEvent.localP8);amount=bronzeAttackDamage(game,attacker,target,varianEvent.amount,heroScriptApi,localP8);varianAfterAttack(game,attacker,heroScriptApi);kodoAttackOrders(game,attacker,target,heroScriptApi);desertLizardAttackDamage(game,attacker,heroScriptApi);stormLizardAttackDamage(game,attacker,target,heroScriptApi);huskarAttackDamage(game,attacker,target,amount,heroScriptApi);const manaBranch=destroyerAttackDamage(game,attacker,heroScriptApi);const lateBranch=taurenAttackDamage(game,attacker,target,heroScriptApi,manaBranch?'A0IN':null)??(manaBranch?'A0IN':null);tirionAttackDamage(game,attacker,target,amount,heroScriptApi,lateBranch);return amount;}finally{attacker.status.sourceNativeAttackBusy=false;}
 }
 export function initializeSourceClassCombat(game,building,entity){
-  if(isV14(entity)){initializeEarthLordLevels(game,building,entity);initializeEarthLordDeployment(game,building,entity,heroScriptApi);initializeNerzhulDeployment(game,building,entity);initializeNozdormuDeployment(game,building,entity);initializeAlexstraszaDeployment(game,building,entity);initializeVarianDeployment(game,building,entity);initializeAnduinDeployment(game,building,entity);initializeMalygosDeployment(game,entity,heroScriptApi);initializeTirionDeployment(game,building,entity,heroScriptApi);initializeMummyDeployment(game,building,entity);initializeBronzeDeployment(game,building,entity);initializeMusketeerDeployment(game,building,entity);initializePhoenixRevival(game,building,entity);initializeBlademaster(game,building,entity);initializeNightmareDeployment(game,entity);initializeBrightArthasDeployment(game,building,entity);initializeLichKingDeployment(game,entity);initializeVashjDeployment(game,building,entity);return initializeSourceClassDeployment(game,building,entity,heroScriptApi);}
+  if(isV14(entity)){initializeNagaDeployment(game,building,entity,heroScriptApi);initializeAxisaDeployment(game,building,entity);initializeAxisaLevels(game,building,entity);initializeEarthLordLevels(game,building,entity);initializeEarthLordDeployment(game,building,entity,heroScriptApi);initializeNerzhulDeployment(game,building,entity);initializeNozdormuDeployment(game,building,entity);initializeAlexstraszaDeployment(game,building,entity);initializeVarianDeployment(game,building,entity);initializeAnduinDeployment(game,building,entity);initializeMalygosDeployment(game,entity,heroScriptApi);initializeTirionDeployment(game,building,entity,heroScriptApi);initializeMummyDeployment(game,building,entity);initializeBronzeDeployment(game,building,entity);initializeMusketeerDeployment(game,building,entity);initializePhoenixRevival(game,building,entity);initializeBlademaster(game,building,entity);initializeNightmareDeployment(game,entity);initializeBrightArthasDeployment(game,building,entity);initializeLichKingDeployment(game,entity);initializeVashjDeployment(game,building,entity);return initializeSourceClassDeployment(game,building,entity,heroScriptApi);}
 }
 export function tirionBondDamageEvent(game,target,attacker,amount){tirionBondDamage(game,target,attacker,amount,heroScriptApi);}
 export function beforeSourceDamage(game,target,actual,attacker,options={}){
@@ -723,12 +726,12 @@ export function afterSourceDamage(game,target,actual,attacker,options={}) {
 export function trySourceReincarnation(game,target) {
   if(isReincarnating(target))return true;
   if(!beginReincarnation(game,target))return false;
-  earthLordWidgetDeath(game,target);maievWidgetDeath(game,target);nerzhulWidgetDeath(game,target);savisWidgetDeath(game,target,heroScriptApi);sapperWidgetDeath(game,target,heroScriptApi);mummyWidgetDeath(game,target,heroScriptApi);musketeerWidgetDeath(game,target,heroScriptApi);phoenixWidgetDeath(game,target,heroScriptApi);malygosWidgetDeath(game,target,heroScriptApi);guldanWidgetDeath(game,target);anduinWidgetDeath(game,target,heroScriptApi);varianWidgetDeath(game,target,heroScriptApi);alexstraszaWidgetDeath(game,target,heroScriptApi);
+  nagaHaloWidgetDeath(game,target);earthLordWidgetDeath(game,target);maievWidgetDeath(game,target);nerzhulWidgetDeath(game,target);savisWidgetDeath(game,target,heroScriptApi);sapperWidgetDeath(game,target,heroScriptApi);mummyWidgetDeath(game,target,heroScriptApi);musketeerWidgetDeath(game,target,heroScriptApi);phoenixWidgetDeath(game,target,heroScriptApi);malygosWidgetDeath(game,target,heroScriptApi);guldanWidgetDeath(game,target);anduinWidgetDeath(game,target,heroScriptApi);varianWidgetDeath(game,target,heroScriptApi);alexstraszaWidgetDeath(game,target,heroScriptApi);
   return true;
 }
 export function sourceDeath(game,target,killer) {
   if(target.status?.sourceDeathHandled)return;target.status.sourceDeathHandled=true;
-  earthLordWidgetDeath(game,target);maievWidgetDeath(game,target);nerzhulWidgetDeath(game,target);savisWidgetDeath(game,target,heroScriptApi);
+  nagaHaloWidgetDeath(game,target);earthLordWidgetDeath(game,target);maievWidgetDeath(game,target);nerzhulWidgetDeath(game,target);savisWidgetDeath(game,target,heroScriptApi);
   if(isV14(target)){sapperWidgetDeath(game,target,heroScriptApi);mummyWidgetDeath(game,target,heroScriptApi);musketeerWidgetDeath(game,target,heroScriptApi);phoenixWidgetDeath(game,target,heroScriptApi);malygosWidgetDeath(game,target,heroScriptApi);guldanWidgetDeath(game,target);anduinWidgetDeath(game,target,heroScriptApi);varianWidgetDeath(game,target,heroScriptApi);alexstraszaWidgetDeath(game,target,heroScriptApi);}
   const mainDeathRan=runMainUnitDeath(game,target,killer,mainDeathApi);
   if(isV14(target)&&!mainDeathRan)sourceClassDeath(game,target,killer,heroScriptApi,false);
@@ -821,6 +824,7 @@ function applyAttackLevel(game,e,id,oldLevel,newLevel){
   if(typeof id==='number'){e.damage+=id-(oldLevel??0);return;}
   const f=V14_ABILITIES[id]?.resolved_fields??{},value=level=>level>0?num(f['DataA'+level]):0;e.damage+=value(newLevel)-value(oldLevel);
 }
+export function restoreNagaHaloState(game){restoreNagaHalo(game,heroScriptApi);}
 export function initializeSourceSkills(game,e){if(!isV14(e))return;initializeNagaUnit(game,e,heroScriptApi);registerIllidanSource(game,e,heroScriptApi);initializeTrollUnit(game,e,heroScriptApi);registerKelthuzadSource(game,e,heroScriptApi);applyKelthuzadBuildingAlliance(game,e,getBuilding(game,e),heroScriptApi);}
 function pauseUnitEx(game,source,target,seconds){
   // PauseUnitEx uses a thunderbolt dummy at R2I(seconds), rather than a
@@ -980,6 +984,7 @@ export function tickSourceScriptJobs(game,dt=0){
   tickSavisJobs(game,heroScriptApi);
   const now=game.state.time,remaining=[];
   for(const job of game.state.sourceSkillJobs??[]){
+    if(job.type==='axisa_swap'){if(tickAxisaJob(game,job,heroScriptApi))remaining.push(job);continue;}
     if(job.type?.startsWith('deathwing_')){if(!job.done)remaining.push(job);continue;}
     if(job.type?.startsWith('earth_')){if(!job.done)remaining.push(job);continue;}
     if(job.type?.startsWith('maiev_')){if(!job.done)remaining.push(job);continue;}

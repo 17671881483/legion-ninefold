@@ -5,7 +5,7 @@ import { Game } from '../dist/engine.js';
 import { UNIT_TEMPLATES } from '../dist/data.js';
 import { V14_ABILITIES } from '../dist/v14-reference.js';
 import { compileSkills, sourceAuraEffects } from '../dist/skills.js';
-import { NAGA_ACTIVE_RULES, isNagaActiveAbility, initializeNagaUnit, nagaBeforeDamage, nagaIncomingDamage, nagaOnHit,
+import { NAGA_ACTIVE_RULES, isNagaActiveAbility, initializeNagaUnit, initializeNagaDeployment, nagaBeforeDamage, nagaIncomingDamage, nagaOnHit,
   tickNagaUnit, castNagaAbility, tickNagaJob, sourceNagaDeath } from '../dist/naga-active-rules.js';
 
 function fixture(code = 'h0UE') {
@@ -42,6 +42,7 @@ function fixture(code = 'h0UE') {
     game.state.sourceSkillJobs = remaining;
   };
   initializeNagaUnit(game, actor, api);
+  if(code==='h0UG')initializeNagaDeployment(game,{unitId:'v14_n079'},actor,api);
   return { game, actor, api, add, tick, hits, summons };
 }
 

@@ -94,7 +94,7 @@ export function malygosAttackDamage(g,e,t,api){if(has(e,'A1Q0'))api.nativeDamage
 export function initializeMalygosDeployment(g,e,api){if(e.isArena&&has(e,'A1Q4')){api.removeAbility(g,e,'A1Q4');report(e,'malygosArenaManaRemoved',true);}}
 export function malygosIncoming(e,amount,options){
  if(!has(e,'A1Q5')||options.universal||!(options.magic&&options.spell||options.nativeDamageType==='magic'||options.attackType==='spells'))return amount;
- if(has(e,'A19A')||e.status?.nagaSpellResistance){report(e,'malygosResistanceOverlapUnresolved',true);return amount;}return amount*.82;
+ if(has(e,'A19A')||has(e,'A1CG')){report(e,'malygosResistanceOverlapUnresolved',true);return amount;}return amount*.82;
 }
 export function malygosWidgetDeath(g,e,api){
  for(const j of [...jobs(g)])if(!j.done&&j.type?.startsWith('malygos_')){

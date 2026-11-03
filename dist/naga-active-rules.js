@@ -1,4 +1,4 @@
-import { V14_ABILITIES } from './v14-reference.js';
+import { V14_ABILITIES, V14_UNIT_TEMPLATES } from './v14-reference.js';
 
 // Four closed source units: h0UE, h0UF, h0UG and h0UH/h2A4. Remaining
 // Naga abilities stay outside this registry until their native effects close.
@@ -30,7 +30,7 @@ const descriptions = {
   A1CQ: '首次受到有效敌对伤害时移除本技能，直接将生命设为最大值50%，召唤3只鱼人掠夺者；当前伤害随后继续扣除。',
   A1CS: '部署后首次有敌人进入600范围时只发令一次；追踪目标冲锋约1秒，结束在目标当前坐标300范围造成77点混乱攻击/通用伤害。任一参与者死亡也执行结束伤害。',
   A1CT: '敌对伤害事件中优先让受害者发出原生施法指令；700范围存活非无敌友军恢复5%最大生命，10魔法、14秒原生冷却，手动共用冷却。',
-  A1CU: '敌对伤害事件中按受害者优先原生发令；在当前位置召唤5秒固定潮汐之泉，500范围15点每秒回血、5%攻击光环。出生脚本还因Qs别名给予自身10%法术抗性，并向600内已有潮汐之力光环的友军永久发放同级抗性。',
+  A1CU: '敌对伤害事件中按受害者优先原生发令；在当前位置召唤5秒固定潮汐之泉，500范围15点每秒回血、5%攻击光环。建筑出战脚本因Qs=A1CU给自身永久A1CG第1级抗性，并向600内已有B07T且没有A1CG的友军永久授予同级技能；当前原生光环buff存在与滞留按宿主范围适配。',
   A1D7: '敌对伤害事件中按受害者优先原生发令，13魔法、15秒冷却。获得5秒伤害免疫，仍可攻击；与手动施法共用冷却。',
   A1D8: '向指定方向同时产生7路幻影骑士，横向间隔150；沿800长度按0.04秒推进、末步前销毁，实际最远回调720。每一路对沿途250范围每名敌人各造成一次137点通用伤害，幸存者使用A0I7第1级眩晕。施法者死亡不取消幻影。',
   A1D9: '实际攻击命中时16%概率追加受害者当前攻击状态值70%的混乱攻击/通用伤害。该技能是攻击触发，未执行文案中的受到伤害反伤。',
@@ -97,12 +97,56 @@ function stun(g, source, target, level, api, at = g.state.time) {
   } else target.status.stunUntil = Math.max(target.status.stunUntil ?? 0, at + duration);
 }
 
-/** PassiveSkill's Qs typo is A1CU: its owner permanently receives A1CG lv1. */
-export function initializeNagaUnit(g, e) {
-  e.status ??= {};
-  if (has(e, 'A1CU') && !e.status.nagaHaloInitialized) {
-    e.status.nagaHaloInitialized = true; e.status.nagaSpellResistance = .1;
-    enqueue(g, { ...jobBase(g, e, 'naga_active_halo'), radius: 600 * scale(e), nextAt: g.state.time, interval: 1 });
+// RegisterAxisaHalo uses Qs=A1CU, Qt=A1CG and Qu=B07T. A1CF alone
+// never registers this listener. Keep the actual native ability and its level
+// observable to AxisaSwap, rather than representing it only as a .1 flag.
+const resistanceId='A1CG';
+const abilityLevel=(e,id)=>has(e,id)?(e.abilityLevels?.[id]??1):0;
+function grantResistance(g,e,level,api){
+  inject(g,e,resistanceId,api);
+  if(level>0)(e.abilityLevels??={})[resistanceId]=Math.min(10,level);
+  e.permanentAbilityIds=[...new Set([...(e.permanentAbilityIds??[]),resistanceId])];
+  e.status??={};e.status.nagaResistanceAbilityRevision=1;
+  e.status.nagaSpellResistance=Number(V14_ABILITIES.A1CG.resolved_fields['DataB'+abilityLevel(e,resistanceId)]??0);
+  e.status.nagaResistanceGrant={requestedLevel:level,effectiveLevel:abilityLevel(e,resistanceId),nonpositiveRequestUnverified:level<=0};
+}
+/** Migrate proven old grants only; ordinary creation does not run PassiveSkill. */
+export function initializeNagaUnit(g,e,api={}){
+  e.status??={};
+  if(!e.status.nagaResistanceAbilityRevision&&e.status.nagaSpellResistance>0&&!has(e,resistanceId)){
+    // The previous implementation granted only level one. Do not infer an
+    // arbitrary higher level from an imported percentage or hero stage.
+    if(Math.abs(e.status.nagaSpellResistance-.1)<1e-8){grantResistance(g,e,1,api);e.status.nagaResistanceLegacyMigration=true;}
+    else e.status.nagaResistanceLegacyUnresolved={value:e.status.nagaSpellResistance,reason:'unknown-prior-resistance-without-ability'};
+  }
+  if(has(e,resistanceId)){
+    e.status.nagaResistanceAbilityRevision=1;
+    e.status.nagaSpellResistance=Number(V14_ABILITIES.A1CG.resolved_fields['DataB'+abilityLevel(e,resistanceId)]??0);
+  }else if(e.status.nagaResistanceAbilityRevision)e.status.nagaSpellResistance=0;
+}
+export function initializeNagaDeployment(g,building,e,api={}){
+  if(!building||e.status?.nagaHaloInitialized)return;
+  const code=building.unitId?.replace(/^v14_/,'')??building.sourceRawcode;
+  const ids=[...(V14_UNIT_TEMPLATES[code]?.abilityIds??building.abilityIds??[]),...(building.permanentAbilityIds??[]),...(building.skillSpecs??[]).map(s=>s.id)];
+  const requested=ids.includes('A1CU')?(building.abilityLevels?.A1CU??1):0;
+  if(!(requested>0))return;
+  // SetUnitAbilityLevel does not add a missing ability. RegisterHalo still
+  // executes, but a zero-level Qt write is explicitly left unverified.
+  if(has(e,'A1CU'))(e.abilityLevels??={}).A1CU=Math.min(1,requested);
+  const level=abilityLevel(e,'A1CU');grantResistance(g,e,level,api);
+  e.status.nagaHaloInitialized=true;e.status.nagaHaloRegistration={at:g.state.time,buildingRawcode:code,sourceLevel:level,zeroLevelRequestUnverified:level<=0};
+  enqueue(g,{...jobBase(g,e,'naga_active_halo'),radius:600*scale(e),nextAt:g.state.time,interval:1});
+}
+export function nagaHaloWidgetDeath(g,e){
+  for(const j of g.state.sourceSkillJobs??[])if(j.type==='naga_active_halo'&&j.sourceId===e.id)j.completed=true;
+  if(e.status?.nagaHaloInitialized)e.status.nagaHaloWidgetEnded=true;
+}
+export function restoreNagaHalo(g,api={}){
+  for(const e of units(g))initializeNagaUnit(g,e,api);
+  // Existing saves retain their registered timer. Do not create one merely
+  // because an arbitrary summoned/template unit carries A1CU.
+  for(const j of g.state.sourceSkillJobs??[])if(j.type==='naga_active_halo'){
+    const e=find(g,j.sourceId);if(e){j.source=e;e.status.nagaHaloInitialized=true;}
   }
 }
 
@@ -132,7 +176,7 @@ export function nagaBeforeDamage(g, target, actual, attacker, api = {}) {
 export function nagaIncomingDamage(g, target, amount, attacker, options = {}) {
   if ((target.status?.nagaPhantomUntil ?? 0) > g.state.time) return 0;
   let result = amount;
-  if (!options.universal && (options.magic && options.spell || options.nativeDamageType === 'magic' || options.attackType === 'spells') && target.status?.nagaSpellResistance) result *= 1 - target.status.nagaSpellResistance;
+  if (!options.universal && (options.magic && options.spell || options.nativeDamageType === 'magic' || options.attackType === 'spells') && abilityLevel(target,resistanceId)>0) result *= 1 - Number(V14_ABILITIES.A1CG.resolved_fields['DataB'+abilityLevel(target,resistanceId)]??0);
   if ((target.status?.nagaIceShieldUntil ?? 0) > g.state.time && !options.universal) {
     const attackType = options.attackType ?? (!options.spell ? attacker?.attackType : undefined);
     result *= NAGA_ACTIVE_RULES.A1DR.attackFactors[attackType] ?? 1;
@@ -225,11 +269,16 @@ export function tickNagaJob(g, job, api = {}) {
   if (!job?.type?.startsWith('naga_active_') || job.completed) return false;
   const live = find(g, job.sourceId), source = live ?? job.source, now = g.state.time;
   if (job.type === 'naga_active_halo') {
-    if (!alive(live)) return false;
+    if (!alive(live)||live.status?.nagaHaloWidgetEnded) return false;
     while (job.nextAt <= now + 1e-8) {
-      for (const ally of range(g, source, source, job.radius, true)) if (ally.id !== source.id && !ally.status?.nagaSpellResistance) {
-        const hasTideBuff = units(g).some(aura => alive(aura) && aura.team === ally.team && has(aura, 'A1CF') && dist(aura, ally) <= 600 * scale(aura));
-        if (hasTideBuff) { ally.status ??= {}; ally.status.nagaSpellResistance = .1; }
+      for (const ally of range(g,source,source,job.radius,true)) if(ally.id!==source.id&&abilityLevel(ally,resistanceId)===0&&!ally.status?.sourceHidden&&!ally.status?.yseraHidden&&!has(ally,'Aloc')){
+        const explicitBuff=ally.buffs?.some(b=>(b.key==='B07T'||b.buffId==='B07T')&&b.expiresAt>job.nextAt);
+        const currentAura=units(g).some(aura=>{
+          const skill=aura.skillSpecs?.find(s=>s.id==='A1CF');
+          return alive(aura)&&!aura.status?.sourceHidden&&!aura.status?.yseraHidden&&aura.battleTeam===ally.battleTeam&&abilityLevel(aura,'A1CF')>0&&
+            (api.matchesTargets?api.matchesTargets(skill,aura,ally):aura.team===ally.team)&&dist(aura,ally)<=(skill?.radius??600*scale(aura))+1e-8;
+        });
+        if(explicitBuff||currentAura){grantResistance(g,ally,abilityLevel(source,'A1CU'),api);ally.status.nagaHaloBuffAdapter={at:job.nextAt,explicitBuff:!!explicitBuff,unverifiedNativeAuraLingering:!explicitBuff};}
       }
       job.nextAt += job.interval;
     }

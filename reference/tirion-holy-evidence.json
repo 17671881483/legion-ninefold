@@ -1,0 +1,381 @@
+{
+  "source": {
+    "file": "reference/v14-source/raw_extracted/war3map.j",
+    "sha256": "e66c55b3b25b185c991be5613e21fbf5b2d598f3cc40f2f8cd01c23bcb828250",
+    "lineEncoding": "latin1/LF"
+  },
+  "ability": {
+    "rawcode": "A0LG",
+    "name": "神圣愤怒",
+    "tip": "神圣愤怒",
+    "ubertip": "使附近的敌人每秒受到10+敌方0.5%最大生命值伤害.",
+    "alias": "A0LG",
+    "code": "ANpi",
+    "Area1": "350.0",
+    "BuffID1": "BNpi",
+    "DataA1": "15.0",
+    "levels": "1",
+    "targs1": "enemies,ground",
+    "Dur1": "1.0",
+    "HeroDur1": "1.0"
+  },
+  "sourceEvidence": [
+    {
+      "line": 40553,
+      "text": "if P8<=0 or bV==i or bV==null or IsUnitAlly(bV,GetOwningPlayer(i)) then"
+    },
+    {
+      "line": 40561,
+      "text": "if GetUnitAbilityLevel(bV,$41325937)>0 then"
+    },
+    {
+      "line": 40567,
+      "text": "return"
+    },
+    {
+      "line": 40574,
+      "text": "call DisableTrigger(Eb)"
+    },
+    {
+      "line": 41337,
+      "text": "if GetUnitAbilityLevel(i,$41304945)>0 and P8>GetUnitState(i,UNIT_STATE_LIFE) then"
+    },
+    {
+      "line": 41340,
+      "text": "call SaveBoolean(O,GetHandleId(i),$41304945,true)"
+    },
+    {
+      "line": 41346,
+      "text": "elseif LoadBoolean(O,GetHandleId(i),$41304945) and P8>GetUnitState(i,UNIT_STATE_LIFE) then"
+    },
+    {
+      "line": 41348,
+      "text": "elseif GetUnitAbilityLevel(i,$41304949)>0 then"
+    },
+    {
+      "line": 41353,
+      "text": "elseif GetUnitAbilityLevel(bV,$41304A41)>0 and not LoadBoolean(O,GetHandleId(bV),StringHash(\"cd\")) then"
+    },
+    {
+      "line": 41355,
+      "text": "call SaveBoolean(O,GetHandleId(bV),StringHash(\"cd\"),true)"
+    },
+    {
+      "line": 41366,
+      "text": "elseif GetUnitAbilityLevel(i,$41304A41)>0 and GetUnitLifePercent(i)<=10. and not LoadBoolean(O,GetHandleId(i),GetHandleId(i)) then"
+    },
+    {
+      "line": 41367,
+      "text": "call SaveBoolean(O,GetHandleId(i),GetHandleId(i),true)"
+    },
+    {
+      "line": 41374,
+      "text": "call SetUnitLifeBJ(i,GetUnitStateSwap(UNIT_STATE_LIFE,i)+200.)"
+    },
+    {
+      "line": 41379,
+      "text": "call UnitDamageTarget(i,D6,225,true,false,ATTACK_TYPE_NORMAL,DAMAGE_TYPE_NORMAL,WEAPON_TYPE_WHOKNOWS)"
+    },
+    {
+      "line": 41387,
+      "text": "if GetLocationY(VV)<=3292. then"
+    },
+    {
+      "line": 41397,
+      "text": "if GetLocationY(VV)>=2340. then"
+    },
+    {
+      "line": 41412,
+      "text": "elseif GetUnitTypeId(bV)==$68303246 and GetEventDamage()<750 and GetEventDamage()>450 then"
+    },
+    {
+      "line": 41417,
+      "text": "if IsUnitEnemy(LoadUnitHandle(O,GetHandleId(bV),425),GetOwningPlayer(bV)) then"
+    },
+    {
+      "line": 41418,
+      "text": "call UnitDamageTargetBJ(bV,LoadUnitHandle(O,GetHandleId(bV),425),150,ATTACK_TYPE_CHAOS,DAMAGE_TYPE_UNIVERSAL)"
+    },
+    {
+      "line": 41419,
+      "text": "if GetUnitState(LoadUnitHandle(O,GetHandleId(bV),425),UNIT_STATE_LIFE)>1 then"
+    },
+    {
+      "line": 41421,
+      "text": "if LoadUnitHandle(O,GetHandleId(bV),425)==i then"
+    },
+    {
+      "line": 41435,
+      "text": "elseif GetUnitTypeId(bV)==$68303535 and GetRandomInt(1,5)==3 then"
+    },
+    {
+      "line": 41439,
+      "text": "if GetUnitAbilityLevel(bV,$41304A47)==0 then"
+    },
+    {
+      "line": 41442,
+      "text": "if i!=Bh and i!=Bd then"
+    },
+    {
+      "line": 41444,
+      "text": "call UnitDamageTarget(bV,i,GetEventDamage()*2.2,false,false,ATTACK_TYPE_NORMAL,DAMAGE_TYPE_UNIVERSAL,WEAPON_TYPE_WHOKNOWS)"
+    },
+    {
+      "line": 41456,
+      "text": "elseif GetUnitTypeId(i)==$68304F37 and GetRandomReal(1,100)<21 then"
+    },
+    {
+      "line": 41465,
+      "text": "elseif GetUnitAbilityLevel(bV,$41304C4E)==1 then"
+    },
+    {
+      "line": 41467,
+      "text": "elseif GetUnitTypeId(bV)==$68304D31 and GetEventDamage()==15 and LoadBoolean(O,GetHandleId(i),1) then"
+    },
+    {
+      "line": 41468,
+      "text": "call SaveBoolean(O,GetHandleId(bV),2,true)"
+    },
+    {
+      "line": 41469,
+      "text": "call UnitDamageTargetBJ(bV,i,105,ATTACK_TYPE_CHAOS,DAMAGE_TYPE_UNIVERSAL)"
+    },
+    {
+      "line": 41470,
+      "text": "call SaveBoolean(O,GetHandleId(bV),2,false)"
+    },
+    {
+      "line": 41471,
+      "text": "elseif GetUnitTypeId(i)==$68304D31 and LoadBoolean(O,GetHandleId(i),1) then"
+    },
+    {
+      "line": 41472,
+      "text": "call SetUnitLifeBJ(i,GetUnitState(i,UNIT_STATE_LIFE)+GetEventDamage()*.5)"
+    },
+    {
+      "line": 47498,
+      "text": "function Trig_AttackTrigegrConditions takes nothing returns boolean"
+    },
+    {
+      "line": 47499,
+      "text": "local integer x=GetUnitTypeId(GetTriggerUnit())"
+    },
+    {
+      "line": 47500,
+      "text": "local integer dk=GetUnitTypeId(GetAttacker())"
+    },
+    {
+      "line": 47501,
+      "text": "return LoadInteger(Q,x,x)==x or LoadInteger(Q,dk,dk)==dk or LoadStr(Q,dk,10000)!=null"
+    },
+    {
+      "line": 47573,
+      "text": "local unit i=GetTriggerUnit()"
+    },
+    {
+      "line": 47575,
+      "text": "local unit Pf=GetAttacker()"
+    },
+    {
+      "line": 47600,
+      "text": "if GetUnitTypeId(i)==$6E30304B and GetUnitState(Pf,UNIT_STATE_MANA)>=20. then"
+    },
+    {
+      "line": 47604,
+      "text": "elseif GetUnitTypeId(i)==$68303259 then"
+    },
+    {
+      "line": 47606,
+      "text": "elseif GetUnitTypeId(Pf)==$68304F53 then"
+    },
+    {
+      "line": 47608,
+      "text": "elseif GetUnitAbilityLevel(Pf,$53303036)>0 and GetUnitState(Pf,UNIT_STATE_MANA)>=17 and LoadTimerHandle(O,GetHandleId(Pf),$53303036)==null then"
+    },
+    {
+      "line": 47610,
+      "text": "elseif GetUnitAbilityLevel(Pf,$41305442)>0 then"
+    },
+    {
+      "line": 47612,
+      "text": "elseif GetUnitTypeId(Pf)==$68303838 or GetUnitTypeId(Pf)==$68305349 then"
+    },
+    {
+      "line": 47614,
+      "text": "elseif GetUnitTypeId(Pf)==$68303842 and UnitHasBuffBJ(Pf,$42303259)==false then"
+    },
+    {
+      "line": 47616,
+      "text": "elseif GetUnitTypeId(Pf)==$68303255 and GetUnitManaPercent(Pf)==100. then"
+    },
+    {
+      "line": 47618,
+      "text": "elseif GetUnitTypeId(Pf)==$6830344D or GetUnitTypeId(Pf)==$68305039 or GetUnitTypeId(Pf)==$6830344E or GetUnitTypeId(Pf)==$6E323035 or GetUnitTypeId(Pf)==$68303647 or GetUnitTypeId(Pf)==$68313647 or GetUnitTypeId(Pf)==$6E315332 or GetUnitTypeId(Pf)==$6E315334 then"
+    },
+    {
+      "line": 47619,
+      "text": "if GetUnitStateSwap(UNIT_STATE_MANA,Pf)>=4. and UnitHasBuffBJ(Pf,$4230304F)==false and UnitHasBuffBJ(Pf,$4230315A)==false and UnitHasBuffBJ(Pf,$42305233)==false and UnitHasBuffBJ(Pf,$42315230)==false then"
+    },
+    {
+      "line": 47620,
+      "text": "if GetUnitTypeId(Pf)!=$6E315332 and GetUnitTypeId(Pf)!=$6E315334 then"
+    },
+    {
+      "line": 47621,
+      "text": "if GetUnitAbilityLevel(Pf,$41305233)!=0 then"
+    },
+    {
+      "line": 47624,
+      "text": "elseif GetUnitAbilityLevel(Pf,$41315230)!=0 then"
+    },
+    {
+      "line": 47630,
+      "text": "if GetUnitTypeId(Pf)==$6E315332 then"
+    },
+    {
+      "line": 47640,
+      "text": "elseif GetUnitTypeId(Pf)==$68304344 and GetUnitStateSwap(UNIT_STATE_MANA,Pf)>=3. then"
+    },
+    {
+      "line": 47644,
+      "text": "if GetUnitLifePercent(Pf)<=30. then"
+    },
+    {
+      "line": 47649,
+      "text": "if GetUnitLifePercent(Pf)<=50. then"
+    },
+    {
+      "line": 47654,
+      "text": "if GetUnitLifePercent(Pf)<=70. then"
+    },
+    {
+      "line": 47663,
+      "text": "elseif GetUnitTypeId(Pf)==$68303342 or GetUnitTypeId(Pf)==$68304F43 then"
+    },
+    {
+      "line": 47664,
+      "text": "if UnitHasBuffBJ(Pf,$42303133)==false and GetRandomInt(1,R2I(100))<=30 then"
+    },
+    {
+      "line": 47678,
+      "text": "elseif GetUnitAbilityLevel(Pf,$4130364F)>0 then"
+    },
+    {
+      "line": 47679,
+      "text": "if GetUnitStateSwap(UNIT_STATE_MANA,Pf)==GetUnitStateSwap(UNIT_STATE_MAX_MANA,Pf) then"
+    },
+    {
+      "line": 47688,
+      "text": "elseif GetUnitTypeId(i)==$68303832 then"
+    },
+    {
+      "line": 47689,
+      "text": "if GetUnitLifePercent(i)<=10 then"
+    },
+    {
+      "line": 47693,
+      "text": "elseif GetUnitTypeId(Pf)==$6E303037 then"
+    },
+    {
+      "line": 47695,
+      "text": "elseif GetUnitTypeId(Pf)==$68303330 and GetUnitAbilityLevelSwapped($41303555,Pf)==0 then"
+    },
+    {
+      "line": 47698,
+      "text": "elseif GetUnitTypeId(Pf)==$6E305342 then"
+    },
+    {
+      "line": 47701,
+      "text": "elseif GetUnitTypeId(Pf)==$6830365A then"
+    },
+    {
+      "line": 47702,
+      "text": "if GetRandomInt(1,R2I(100))<=20 and UnitHasBuffBJ(Pf,$42303239)==false then"
+    },
+    {
+      "line": 47705,
+      "text": "elseif GetUnitTypeId(Pf)==$68303734 and GetUnitManaPercent(Pf)==100. then"
+    },
+    {
+      "line": 47707,
+      "text": "elseif GetUnitTypeId(Pf)==$68303735 and GetUnitManaPercent(Pf)==100. then"
+    },
+    {
+      "line": 47709,
+      "text": "elseif GetUnitTypeId(Pf)==$68303950 or GetUnitTypeId(Pf)==$68313950 then"
+    },
+    {
+      "line": 47711,
+      "text": "elseif GetUnitTypeId(Pf)==$68304137 or GetUnitTypeId(Pf)==$68304156 or GetUnitTypeId(Pf)==$68304157 then"
+    },
+    {
+      "line": 47713,
+      "text": "elseif GetUnitTypeId(Pf)==$68303643 then"
+    },
+    {
+      "line": 47714,
+      "text": "if GetRandomInt(1,R2I(100))<=25 and UnitHasBuffBJ(Pf,$42303155)==false then"
+    },
+    {
+      "line": 47723,
+      "text": "elseif GetUnitTypeId(Pf)==$68303639 or GetUnitTypeId(Pf)==$68303641 or GetUnitTypeId(Pf)==$68304F39 or GetUnitTypeId(Pf)==$68304F45 then"
+    },
+    {
+      "line": 47725,
+      "text": "elseif GetUnitTypeId(Pf)==$68303854 then"
+    },
+    {
+      "line": 47726,
+      "text": "if GetUnitStateSwap(UNIT_STATE_MANA,Pf)>=30. then"
+    },
+    {
+      "line": 47729,
+      "text": "elseif GetUnitTypeId(Pf)==$68303932 and GetUnitManaPercent(Pf)==100. then"
+    },
+    {
+      "line": 47731,
+      "text": "elseif GetUnitTypeId(Pf)==$68303244 or GetUnitTypeId(Pf)==$68305034 or GetUnitTypeId(Pf)==$68324141 then"
+    },
+    {
+      "line": 47732,
+      "text": "if GetUnitStateSwap(UNIT_STATE_MANA,Pf)<10 then"
+    },
+    {
+      "line": 47735,
+      "text": "elseif GetUnitTypeId(i)==$68304D31 then"
+    },
+    {
+      "line": 47736,
+      "text": "call SaveBoolean(O,GetHandleId(Pf),1,true)"
+    },
+    {
+      "line": 47818,
+      "text": "call TriggerRegisterPlayerUnitEventSimple(dj,Player(8),EVENT_PLAYER_UNIT_ATTACKED)"
+    },
+    {
+      "line": 47819,
+      "text": "call TriggerRegisterPlayerUnitEventSimple(dj,Player(9),EVENT_PLAYER_UNIT_ATTACKED)"
+    },
+    {
+      "line": 47820,
+      "text": "call TriggerRegisterPlayerUnitEventSimple(dj,Player(10),EVENT_PLAYER_UNIT_ATTACKED)"
+    },
+    {
+      "line": 47821,
+      "text": "call TriggerRegisterPlayerUnitEventSimple(dj,Player(11),EVENT_PLAYER_UNIT_ATTACKED)"
+    },
+    {
+      "line": 47822,
+      "text": "call TriggerRegisterPlayerUnitEventSimple(dj,Player(12),EVENT_PLAYER_UNIT_ATTACKED)"
+    },
+    {
+      "line": 48453,
+      "text": "call SaveInteger(Q,$68304D31,$68304D31,$68304D31)"
+    }
+  ],
+  "boundaries": [
+    "1-second full pulses follow explicit ANpi fields; first pulse phase and native damage class/control-state ticking remain an adapter, not native-engine evidence.",
+    "Native status and exact preceding effects outside the Tirion branch remain partial.",
+    "h0VT shares A0LG base burn but does not satisfy exact h0M1 scripts."
+  ]
+}

@@ -1,4 +1,4 @@
-import {TIRION_RULES,initializeTirionDeployment,tirionAttackDamage,tirionKillBranch,tirionBondDamage,tickTirionJob} from './tirion-rules.js';
+import {TIRION_RULES,initializeTirionDeployment,tirionAttackDamage,tirionKillBranch,tirionBondDamage,tickTirionJob,tirionAttackIssued,tirionHolyDamage} from './tirion-rules.js';
 import {KODO_RULES,canKodoCast,castKodo,kodoAttackOrders} from './kodo-rules.js';
 import {beginReincarnation,tickReincarnations,isReincarnating} from './reincarnation-rules.js';
 import {MUMMY_RULES,initializeMummyDeployment,tickMummyJob,mummyWidgetDeath} from './mummy-rules.js';
@@ -45,7 +45,7 @@ import { closestWalkable, isWalkable } from './layout.js';
 import { GARROSH_ACTIVE_RULES, GARROSH_PASSIVE_RULES, canGarroshCastAbility, castGarroshAbility, tryGarroshAutoCast, garroshActiveAfterDamage, sourceGarroshActiveDeath, tickGarroshActiveJob } from './garrosh-active-rules.js';
 import { ILLIDAN_RULES, ILLIDAN_ACTIVE_RULES, canIllidanCastAbility, castIllidanAbility, registerIllidanSource, tickIllidanSource, illidanOnAttackHit, tryIllidanAutoCast, illidanAfterDamage, sourceIllidanDeath, tickIllidanJob, isIllidanJobType } from './illidan-rules.js';
 
-export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261030-v45-1';
+export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261103-v46-1';
 
 // Values come from resolved object fields. Empty fields remain empty: a missing
 // native default is reported, rather than replacing it with tooltip numbers.
@@ -354,7 +354,7 @@ export function sourceWeapon(source,target,now=0){
 }
 export function canWeaponTarget(source,target,now=0){return !!sourceWeapon(source,target,now);}
 
-function active(e){return (e.skillSpecs??[]).filter(s=>s.status==='implemented'||s.status==='partial'&&s.runtimeImplemented&&['A2Y1','A2Y5','A0II','A0I2','A0J8','A0J9','A1QE','A1QI','A10G','A12I'].includes(s.id));}
+function active(e){return (e.skillSpecs??[]).filter(s=>s.status==='implemented'||s.status==='partial'&&s.runtimeImplemented&&['A2Y1','A2Y5','A0II','A0I2','A0J8','A0J9','A1QE','A1QI','A10G','A12I','A0LG'].includes(s.id));}
 export function hasSourceAura(e){return active(e).some(s=>s.kind.startsWith('aura_'));}
 function state(e,s){return (e.skillStates??={})[s.id]??=( {readyAt:0,casts:0});}
 function buff(e,s,source,now,extra={}){if(source.side!==e.side&&active(e).some(a=>a.kind==='immunity')&&(['Aslo','AEer','Acri','ANdh','Auhf','AUfn','ANcs','AHtb','AOcl'].includes(s.base)))return false;e.buffs??=[];const key=extra.key??s.buffKey??s.id;const b={key,skillId:s.id,ownerId:source.ownerId,sourceId:source.id,expiresAt:now+(isNativeHero(e)?s.heroDuration||s.duration:s.duration),damage:s.damage??0,armor:s.armor??0,move:s.move??0,haste:s.haste??0,regen:s.regen??0,dps:s.dps??0,miss:s.miss??0,incoming:s.incoming??0,disarm:s.base==='AEer',...extra};const old=e.buffs.findIndex(v=>v.key===key);if(old>=0)e.buffs[old]=b;else e.buffs.push(b);}
@@ -419,6 +419,14 @@ export function tickSourceSkills(game,e,battle,dt) {
     if(s.kind==='disease'){for(const t of targets(e,{...s,range:0},battle))buff(t,s,e,now,{damage:0});continue;}
     if(s.kind==='immolation'){
       if(s.toggle&&e.mana<s.manaCost)continue;
+      if(isV14(e)&&s.id==='A0LG'){
+        if((e.abilityLevels?.A0LG??1)<=0)continue;
+        // Do not split the native15-point event into frame-sized fractions:
+        // the source's h0M1 listener compares GetEventDamage() exactly to15.
+        const interval=Number(s.fields.Dur1);st.tirionBurnElapsed=(st.tirionBurnElapsed??0)+dt;
+        while(st.tirionBurnElapsed+1e-8>=interval){st.tirionBurnElapsed=Math.max(0,st.tirionBurnElapsed-interval);for(const t of targets(e,{...s,range:0},battle))sourceDamage(game,t,Number(s.fields.DataA1),e,true);}
+        continue;
+      }
       const enemies=targets(e,{...s,range:0},battle);for(const t of enemies)sourceDamage(game,t,s.dps*dt,e,true);continue;
     }
     if(['shield','defend'].includes(s.kind))continue;
@@ -459,7 +467,7 @@ export function tickSourceSkills(game,e,battle,dt) {
     for(const t of affected){const hit=s.kind==='nova'?(t.id===target.id?s.damage:0)+s.areaDamage:s.kind==='cluster'?s.damage*s.count:s.damage;sourceDamage(game,t,Math.min(hit,budget),e,true);budget-=hit;if(s.stun)buff(t,s,e,now,{stun:true,dps:0});else if(s.duration)buff(t,s,e,now,{damage:0});if(budget<=0)break;}
   }
 }
-export function sourceAttackIssued(game,e,target){if(isV14(e)){iceExplosionAttackIssued(game,e,heroScriptApi);bronzeAttackIssued(game,e,target,heroScriptApi);}}
+export function sourceAttackIssued(game,e,target){if(isV14(e)){iceExplosionAttackIssued(game,e,heroScriptApi);bronzeAttackIssued(game,e,target,heroScriptApi);}tirionAttackIssued(game,e,target);}
 export function sourceAttackStart(game,e,target) {
   applyYseraCorrosion(game,e,target);
   if(isV14(e)&&['h09P','h19P'].includes(e.combatRawcode))for(const s of active(e))if(s.kind==='defend'&&s.activation==='captain_attack')state(e,s).active=true;
@@ -622,6 +630,7 @@ export function beforeSourceDamage(game,target,actual,attacker,options={}){
       huskarDuelDamage(game,target,attacker,actual,prefix.selected);
       let prior=huskarMainDamage(game,target,attacker,prefix.localDamage,heroScriptApi);
       prior=malfurionMainDamage(game,target,attacker,prefix.localDamage,heroScriptApi,prior);
+      prior=tirionHolyDamage(game,target,attacker,eventDamage,heroScriptApi,prior);
       aesaraDamageCleanup(game,target,attacker,prefix.localDamage,heroScriptApi,prior);
     }
     if(isV14(target))banditMainDamage(game,target,attacker,actual,heroScriptApi);

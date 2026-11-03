@@ -2,8 +2,8 @@ import {V14_UNIT_TEMPLATES} from './v14-reference.js';
 import {earlierTaurenAttackBranch} from './tauren-rules.js';
 
 export const TIRION_RULES={
- A0LG:{status:'partial',nativeKind:true,description:'保留ANpi显式350范围、每秒15基础灼烧。h0M1另有攻击启动共享键1、主伤害链追加105及回复事件伤害50%的分支，尚未接入；外观h0VT没有这些精确原型条件。',partial:'原生ANpi伤害事件类型与时序、共享键1/2和相关前置elseif链待核定，不把基础灼烧视为整个神圣愤怒已还原。'},
- A0LH:{status:'partial',description:'独立武器伤害监听到达灰烬使者分支时，追加150＋目标最大生命15%的混乱攻击/通用伤害。独立死亡监听到达击杀分支时回复自身最大生命18%，法术击杀也可触发；前置死亡分支优先，复生等待不结算。',partial:'原生监听先后、共享布尔键2及其他未实现分支效果仍有边界。神圣愤怒的h0M1受击标记/反伤分支另待还原，不把本项视为提里奥全技能完成。'},
+ A0LG:{status:'partial',nativeKind:true,description:'基础灼烧按ANpi显式1秒周期产生15点伤害，范围350。攻击h0M1提里奥时，到达原始攻击分支便将攻击者共享键1置真。h0M1造成的事件伤害恰为15且目标键1为真时追加105通用伤害；否则被伤害者为h0M1且自身键1为真时，先回复事件伤害50%。保留前置elseif；h0VT外观不满足精确原型条件。',partial:'ANpi首次跳时刻、原生伤害类别与控制状态下周期仍需实测；其他共享键写入、未实现前置分支效果和原生事件改伤顺序仍有边界。'},
+ A0LH:{status:'partial',description:'独立武器伤害监听到达灰烬使者分支时，追加150＋目标最大生命15%的混乱攻击/通用伤害。独立死亡监听到达击杀分支时回复自身最大生命18%，法术击杀也可触发；前置死亡分支优先，复生等待不结算。',partial:'原生监听先后、共享布尔键2及其他未实现分支效果仍有边界。神圣愤怒h0M1标记/附伤已接入，原生周期与事件仍待实测，不把本项视为提里奥全技能完成。'},
  A0LP:{status:'partial',description:'同一玩家曾实际完成h0M2提里奥与h203泰兰后授予R01Y，记录永久保留。新出战时要求建筑有羁绊且科技恰为1：战斗体仍有羁绊则加A0LO/A0LQ，否则加A0LR；普通战与竞技相同。',partial:'A0LO/A0LR的原生AIas攻速字段缺失，不按名称猜30%。缺失原生能力依赖/默认继承和创建顺序保留边界。'},
  A0LQ:{status:'implemented',description:'羁绊动态授予的AIde，物编DataA1=15，增加自身15点护甲。',nativeKind:true},
  A0LO:{status:'unresolved',description:'羁绊授予的AIas攻速能力已保留，但对象DataA1缺失。',partial:'技能名写30%，不能代替原生数值，不产生虚构攻速。'},
@@ -15,6 +15,50 @@ const raw=e=>e?.combatRawcode??e?.sourceRawcode;
 const v14=e=>e?.skillVersion==='v14.1A5';
 const removed=e=>!e||e.status?.sourceRemoved||e.status?.yseraRemoved;
 const heal=(e,n)=>{const before=e?.hp??0;if(before>0&&!removed(e))e.hp=Math.min(e.maxHp,before+n);return (e?.hp??0)-before;};
+
+// EVENT_PLAYER_UNIT_ATTACKED: i is the victim, Pf the attacker. h0M1 is
+// explicitly in Q (48453), so this exact victim satisfies the registry gate.
+export function tirionAttackIssued(g,e,t){
+ if(!v14(t)||raw(t)!=='h0M1'||!e||g._sourceAttackIssuedTriggerDisabled)return;
+ const owner=t.sourceNativeOwnerId;
+ if(owner===undefined?(t.isBuilding||!Number.isInteger(t.battleTeam)):(owner<8||owner>12))return;
+ const a=raw(e),full=e.mana===e.maxMana,has=id=>level(e,id)>0;
+ const buff=id=>e.buffs?.some(b=>(b.key===id||b.buffId===id)&&(b.expiresAt===undefined||b.expiresAt>g.state.time));
+ // All branches before47735; nested failed rolls still consume their elseif.
+ const prior=a==='h0OS'||has('S006')&&e.mana>=17&&!e.status?.sourceS006Timer||has('A0TB')||
+ ['h088','h0SI','h04M','h0P9','h04N','n205','h06G','h16G','n1S2','n1S4','h03B','h0OC','n007','n0SB','h06Z','h09P','h19P','h0A7','h0AV','h0AW','h06C','h069','h06A','h0O9','h0OE','h08T','h02D','h0P4','h2AA'].includes(a)||
+ a==='h08B'&&!buff('B02Y')||a==='h02U'&&full||a==='h0CD'&&e.mana>=3||has('A06O')||a==='h030'&&!has('A05U')||['h074','h075','h092'].includes(a)&&full;
+ if(prior)return;
+ (e.status??={}).sourceHashtableBoolean1=true;
+ e.status.tirionAttackMark={at:g.state.time,targetId:t.id};
+}
+
+// Continuation of the separate41337 elseif chain; earlier P8 branches do
+// not consume this chain. GetEventDamage here is NOT the mutated local P8.
+export function tirionHolyDamage(g,t,e,eventDamage,api,prior){
+ if(prior)return prior;
+ if(!(v14(t)||v14(e))||!e||!(eventDamage>0)||t.id===e.id||t.side===e.side||level(e,'A2Y7')>0)return null;
+ if(raw(e)!=='h0M1'&&raw(t)!=='h0M1')return null;
+ let selected=null;
+ if(raw(e)==='h02F'&&eventDamage>450&&eventDamage<750)selected='h02F';
+ else if(raw(e)==='h055'&&1+Math.floor(g._random()*5)===3)selected='h055';
+ else if(raw(t)==='h0O7'&&1+99*g._random()<21)selected='h0O7';
+ else if(level(e,'A0LN')===1)selected='A0LN';
+ if(selected){(t.status??={}).tirionHolySkipped=selected;return selected;}
+ if(raw(e)==='h0M1'&&eventDamage===15&&t.status?.sourceHashtableBoolean1){
+  (e.status??={}).sourceHashtableBoolean2=true;
+  try{api.universalDamage(g,t,105,e);}finally{e.status.sourceHashtableBoolean2=false;}
+  e.status.tirionHolyBonus={at:g.state.time,targetId:t.id,damage:105};
+  g._event?.('cast',t,'神圣愤怒',{skillId:'A0LG',sourceId:e.id,damage:105});
+  return 'h0M1-holy-bonus';
+ }
+ if(raw(t)==='h0M1'&&t.status?.sourceHashtableBoolean1){
+  const restored=heal(t,eventDamage*.5);
+  (t.status??={}).tirionHolyHeal={at:g.state.time,requested:eventDamage*.5,restored};
+  return 'h0M1-holy-heal';
+ }
+ return null;
+}
 
 export function initializeTirionDeployment(g,building,e,api){
  if(!building||e.status?.tirionBondDeployment)return;

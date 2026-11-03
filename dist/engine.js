@@ -1,3 +1,4 @@
+import {buildAIArmy,actAI} from './ai-controller.js';
 import {restoreUnstableAlchemyUserData} from './unstable-alchemy-rules.js';
 import {prepareUndeadLegion,restoreUndeadLegionHandles} from './undead-legion-rules.js';
 import {queueBroodmotherAlliance,retainBroodmotherAlliance} from './broodmother-rules.js';
@@ -1525,7 +1526,7 @@ export class Game {
           if (RULES.webKingSplashEnabled===true && this.state.wave >= 7) for (const e of enemies.slice(1, 5)) if (distance(e, target) < 1.4) this._hurt(e, k.attack * kingAuras.damageMultiplier * .35 * this._typeMultiplier(k.attackType ?? 'hero', e.armorType, e.sourceArmorTypeRaw) * this._armorFactor(this._effectiveArmor(e, this._auraEffects(e, auras).armor)), k);
         }
       }
-      if (this._aiEnabled() && k.hp < k.maxHp * .16 && k.healCharges > 0) {
+      if (this._aiEnabled() && k.hp > 0 && k.hp < k.maxHp * .4 && k.healCharges > 0) {
         const ai = this.state.players.find(p => p.id !== 0 && p.team === k.team && !p.healUsed);
         if (ai) this.command('heal', { playerId: ai.id });
       }
@@ -1639,85 +1640,8 @@ export class Game {
     for (const row of rows) for (const col of [2,3,1,4,0,5]) if (!p.buildings.some(b=>b.col===col&&b.row===row)) return {col,row};
     return null;
   }
-  _aiOpeningCore(p) {
-    if (p.buildings.length) return;
-    const roster = p.roster.map(id=>units[id]).filter(Boolean), fronts = roster.filter(u=>this._isFront(u));
-    const minimumFront = fronts.length ? Math.min(...fronts.map(u=>this._cost(u))) : 0;
-    const plans = [];
-    for (const base of roster) {
-      const options = [base, ...this._upgradeIds(base).map(id=>units[id])];
-      for (const u of options) {
-        const cost = this._cost(base) + (u.id===base.id ? 0 : this._cost(u));
-        const reserve = this._isFront(u) ? 0 : minimumFront;
-        if (this._combatPower(u)>0 && !this._requirement(p,u) && cost + reserve <= p.gold && value(u,['population'],1)+p.workers <= p.populationCap)
-          plans.push({base,u,cost,score:this._combatPower(u)/Math.max(1,cost) * (this._hasArea(u)?4:1) * (!this._isFront(u)?1.1:1)});
-      }
-    }
-    plans.sort((a,b)=>b.score-a.score);
-    const plan=plans[0]; if(!plan)return;
-    const cell=this._emptyCell(p,plan.u);
-    if (!cell || !this.command('build',{playerId:p.id,unitId:plan.base.id,...cell}).ok)return;
-    if(plan.u.id!==plan.base.id)this.command('upgrade',{playerId:p.id,buildingId:p.buildings[p.buildings.length-1].id,unitId:plan.u.id});
-  }
-  _aiBuild(p, opening = false) {
-    if(p.populationCap-this._population(p)<5&&p.gold>=rule('farmCost',75)+100)this.command('farm',{playerId:p.id});
-    if(opening)this._aiOpeningCore(p);
-    if(!opening&&p.buildings.some(b=>!b.construction&&!units[b.unitId]?.hero)&&!p.buildings.some(b=>units[b.unitId]?.heroEntry)){
-      const altar=this.heroStatus(p.id),def=units[altar.entries[0]],cell=def&&this._emptyCell(p,def);
-      if(altar.canStart&&cell)this.command('build',{playerId:p.id,unitId:def.id,...cell});
-    }
-    let attempts=opening?8:2;
-    while(attempts-->0){
-      const built=p.buildings.map(b=>units[b.unitId]), frontCount=built.filter(u=>this._isFront(u)).length;
-      const frontHp=built.filter(u=>this._isFront(u)).reduce((n,u)=>n+u.hp,0);
-      const damage=built.reduce((n,u)=>n+this._combatPower(u),0);
-      const needFront=frontCount<Math.max(1,Math.ceil(built.length*.35)) || frontHp<damage*2.1;
-      const hasArea=built.some(u=>this._hasArea(u)), options=[];
-      const reserve=this.state.wave<=2?0:35;
-      for(const id of p.roster){const u=units[id];if(u&&this._combatPower(u)>0&&!this._requirement(p,u)&&this._cost(u)<=p.gold-reserve&&this._population(p)+u.population<=p.populationCap){
-        let score=this._combatPower(u)/this._cost(u);
-        if(needFront)score*=this._isFront(u)?3:.25;else score*=this._isFront(u)?.8:1.4;
-        if(!hasArea&&this._hasArea(u))score*=2.8;
-        if(u.ability?.type?.startsWith('aura_'))score*=built.length>=6?1.5:.6;
-        options.push({type:'build',u,cost:this._cost(u),score});
-      }}
-      for(const b of p.buildings)for(const id of this._upgradeIds(units[b.unitId])){const u=units[id],old=units[b.unitId];
-        if(b.construction||this._combatPower(u)<=0||this._requirement(p,u)||this._cost(u)>p.gold-reserve||this._population(p)-old.population+u.population>p.populationCap)continue;
-        let score=(this._combatPower(u)-this._combatPower(old))/this._cost(u)*(built.length>=9?1.9:1.1);
-        if(needFront)score*=this._isFront(u)?2.3:.4;else score*=this._isFront(u)?.8:1.4;
-        if(!hasArea&&this._hasArea(u))score*=3;
-        options.push({type:'upgrade',u,b,cost:this._cost(u),score});
-      }
-      options.sort((a,b)=>b.score-a.score);const choice=options[0];if(!choice)break;
-      if(choice.type==='upgrade'){if(!this.command('upgrade',{playerId:p.id,buildingId:choice.b.id,unitId:choice.u.id}).ok)break;}
-      else{const cell=this._emptyCell(p,choice.u);if(!cell||!this.command('build',{playerId:p.id,unitId:choice.u.id,...cell}).ok)break;}
-    }
-  }
-  _aiAct(p) {
-    if (!this._aiEnabled()) return;
-    const treasure=this.treasureStatus(p.id)[0];
-    if(treasure)this.command('treasure',{playerId:p.id,treasureId:treasure.id,reward:treasure.lumberAvailable?'lumber':'gold'});
-    if (this.state.phase === 'build') {
-      const economy = this.economyStatus(p.id);
-      if (p.workers + economy.worker.queued < Math.min(rule('maxWorkers', 10), 2 + Math.floor(this.state.wave / 2)) && economy.worker.canStart && p.gold > economy.worker.cost.gold + 80 && this._random() < .34) this.command('worker', { playerId: p.id });
-      if (p.lumberLevel < this.state.wave && economy.lumber.canStart && p.wood > economy.lumber.cost.wood + 80 && p.gold > economy.lumber.cost.gold + 80 && this._random() < .24) this.command('lumber', { playerId: p.id });
-      if (!p.buildings.some(b=>this._hasArea(units[b.unitId])) && p.wood>=rule('rerollCost',25) && p.gold>150 && p.rerolls<2 && this.state.wave<=4) this.command('reroll',{playerId:p.id});
-      this._aiBuild(p);
-    }
-    if (p.wood >= rule('kingUpgradeCost', 80) && this._random() < .18) {
-      const k = this.state.kings[p.team]; this.command('king', { playerId: p.id, stat: k.hp < k.maxHp * .75 ? 'hp' : this._pick(['attack', 'hp', 'regen']) });
-    }
-    const ownKing=this.state.kings[p.team];
-    const defenseReserve=(this.state.wave<=2||ownKing.hp<ownKing.maxHp*.8)?rule('kingUpgradeCost',180):0;
-    if (p.wood > 60+defenseReserve && this._random() < .3) {
-      const available = MERCENARIES.filter(m => value(m, ['unlock', 'unlockWave', 'wave', 'minWave'], 1) <= this.state.wave && this._woodCost(m) <= p.wood-defenseReserve && this.mercenaryStatus(m.id, p.id).stock > 0);
-      const m = this._pick(available); if (m) this.command('merc', { playerId: p.id, mercId: m.id });
-    }
-    if (RULES.interfereEnabled && this.state.phase === 'combat' && this.state.roundMode !== 'arena' && !this.state.paused && (p.interfereUntil ?? 0) <= this.state.time && this._random() < .06) {
-      const winding = this.state.entities.find(e => e.side === 'monster' && e.hp > 0 && e.battleTeam === p.team && e.pendingAttack);
-      if (winding) this.command('interfere', { playerId: p.id, worldX: winding.worldX, worldY: winding.worldY });
-    }
-  }
+  _aiBuild(p, opening = false) { return buildAIArmy(this,p,opening); }
+  _aiAct(p) { return actAI(this,p); }
 
   snapshot() {
     return copy({ version: 2, mapId: MAP.id, mapVersion: MAP.version, options: this.options, state: this.state, rng: this._rng >>> 0, id: this._id,

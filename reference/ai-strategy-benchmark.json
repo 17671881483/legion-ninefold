@@ -1,0 +1,106 @@
+{
+  "baselineCommit": "b4dc2ec78f5019a567035935cd7a0295229c8451",
+  "candidateRevision": "v14-content-20261103-v48-1",
+  "scenario": "normal mode, seeds 42/173/615, until wave 4, match end or 1200 seconds; player zero receives test-only build assistance in both revisions",
+  "metricsPlayers": [
+    4,
+    5,
+    6,
+    7
+  ],
+  "before": [
+    {
+      "seed": 42,
+      "wave": 4,
+      "phase": "build",
+      "seconds": 377,
+      "enemyKing": 4000,
+      "leaks": 254,
+      "kills": 1456,
+      "military": 4370,
+      "workers": 8,
+      "lumber": 0,
+      "sent": 7
+    },
+    {
+      "seed": 173,
+      "wave": 4,
+      "phase": "build",
+      "seconds": 344,
+      "enemyKing": 4450,
+      "leaks": 272,
+      "kills": 1454,
+      "military": 4660,
+      "workers": 6,
+      "lumber": 0,
+      "sent": 5
+    },
+    {
+      "seed": 615,
+      "wave": 3,
+      "phase": "ended",
+      "seconds": 392,
+      "enemyKing": 728,
+      "leaks": 688,
+      "kills": 1381,
+      "military": 2500,
+      "workers": 5,
+      "lumber": 0,
+      "sent": 4
+    }
+  ],
+  "after": [
+    {
+      "seed": 42,
+      "wave": 4,
+      "phase": "build",
+      "seconds": 372,
+      "enemyKing": 4000,
+      "leaks": 337,
+      "kills": 1458,
+      "military": 3920,
+      "workers": 16,
+      "lumber": 5,
+      "sent": 10
+    },
+    {
+      "seed": 173,
+      "wave": 4,
+      "phase": "build",
+      "seconds": 363,
+      "enemyKing": 4000,
+      "leaks": 264,
+      "kills": 1469,
+      "military": 4615,
+      "workers": 16,
+      "lumber": 6,
+      "sent": 22
+    },
+    {
+      "seed": 615,
+      "wave": 4,
+      "phase": "build",
+      "seconds": 380,
+      "enemyKing": 4000,
+      "leaks": 408,
+      "kills": 1458,
+      "military": 3290,
+      "workers": 12,
+      "lumber": 5,
+      "sent": 18
+    }
+  ],
+  "limits": [
+    "Early-game samples only, not all 35 waves or every builder.",
+    "Seed 615 baseline ends during wave 3, so observation durations and exposure differ.",
+    "AI consumes different random draws; identical seeds ensure opening roster reproducibility, not identical combat event sequences.",
+    "Seed 42 leak count increases; do not claim uniformly stronger defense."
+  ],
+  "testResults": {
+    "newNodeChecks": 19,
+    "fullChecks": 1528,
+    "browserChecks": 19,
+    "smokeWaves": 35,
+    "smokeSecondsPerWave": 12
+  }
+}

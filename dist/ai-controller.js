@@ -4,6 +4,7 @@ import {UNITS, MERCENARIES, WAVES, RULES} from './data.js';
 import {compileSkills, sourceWeapon, matchesTargets} from './skills.js';
 import {BOX_REWARD_RULES, BOX_RANDOM_FIGHTER_RULES} from './box-training-rules.js';
 import {laneToWorld} from './layout.js';
+import {castAICombat} from './ai-combat.js';
 
 const units=Object.fromEntries(UNITS.map(u=>[u.id,u]));
 const profiles=new WeakMap();
@@ -356,6 +357,7 @@ function kingAndSends(g,p){
 }
 export function actAI(g,p){
  if(!g._aiEnabled()||p.id===0||g.state.phase==='ended'||g.state.paused)return;
+ castAICombat(g,p);
  const treasure=g.treasureStatus(p.id)[0];
  if(treasure)g.command('treasure',{playerId:p.id,treasureId:treasure.id,reward:treasure.lumberAvailable?'lumber':'gold'});
  claimAIReward(g,p);

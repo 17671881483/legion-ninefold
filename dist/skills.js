@@ -783,6 +783,8 @@ function applyYseraCorrosion(game,source,target){
   const s=active(source).find(s=>s.kind==='ysera_corrosion');if(s)buff(target,s,source,game.state.time,{key:'A2YH',damage:0,armor:-2});
 }
 function scriptInvulnerable(e){return e.invulnerable||e.status?.yseraHidden||active(e).some(s=>s.kind==='invulnerability');}
+// Read-only target gates shared by tactical planning and native cast validation.
+export function sourceSpellTargetState(e){return {invulnerable:!!scriptInvulnerable(e),magicImmune:active(e).some(s=>s.kind==='immunity')};}
 function scriptSource(e){return {id:e.id,ownerId:e.ownerId,side:e.side,team:e.team,battleTeam:e.battleTeam,combatRawcode:e.combatRawcode,skillVersion:e.skillVersion,attackType:'chaos',hp:e.hp};}
 function retainNagaScriptCaster(game,e){
   if(e?.id===undefined||!Number.isFinite(e.mana)||!e.skillSpecs?.some(s=>nagaScriptCasterAbilities.has(s.id)))return null;

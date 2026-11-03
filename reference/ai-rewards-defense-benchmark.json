@@ -1,0 +1,206 @@
+{
+  "baselineCommit": "908939b79f7a5d8ba4231fb1d66b6d3cc7ea4a02",
+  "candidate": "v56-ai-rewards-defense",
+  "fixedLane": {
+    "command": "node scripts/benchmark-ai-rewards.mjs [checkout-root]",
+    "wave": 8,
+    "durationSeconds": 180,
+    "troops": [
+      "h100",
+      "h100",
+      "h01B",
+      "h01B"
+    ],
+    "offer": [
+      "A136"
+    ],
+    "lane": 4,
+    "before": [
+      {
+        "seed": 42,
+        "wave": 8,
+        "seconds": 180,
+        "cleared": false,
+        "rewardUsed": false,
+        "leaks": 96,
+        "kills": 12,
+        "damage": 8278,
+        "kingDamage": 181876
+      },
+      {
+        "seed": 173,
+        "wave": 8,
+        "seconds": 180,
+        "cleared": false,
+        "rewardUsed": false,
+        "leaks": 93,
+        "kills": 15,
+        "damage": 9488,
+        "kingDamage": 177961
+      },
+      {
+        "seed": 615,
+        "wave": 8,
+        "seconds": 180,
+        "cleared": false,
+        "rewardUsed": false,
+        "leaks": 91,
+        "kills": 17,
+        "damage": 12696,
+        "kingDamage": 160663
+      }
+    ],
+    "after": [
+      {
+        "seed": 42,
+        "wave": 8,
+        "seconds": 180,
+        "cleared": false,
+        "rewardUsed": true,
+        "leaks": 91,
+        "kills": 17,
+        "damage": 11626,
+        "kingDamage": 165114
+      },
+      {
+        "seed": 173,
+        "wave": 8,
+        "seconds": 180,
+        "cleared": false,
+        "rewardUsed": true,
+        "leaks": 93,
+        "kills": 15,
+        "damage": 9374,
+        "kingDamage": 175224
+      },
+      {
+        "seed": 615,
+        "wave": 8,
+        "seconds": 180,
+        "cleared": false,
+        "rewardUsed": true,
+        "leaks": 81,
+        "kills": 27,
+        "damage": 14249,
+        "kingDamage": 142306
+      }
+    ],
+    "notes": [
+      "Zero gold/wood; one earned offer is the fixture input, identical between revisions.",
+      "Only lane 4 spawns; all later AI decisions are disabled. King HP is raised to 1000000 in both fixtures to prevent early termination; king attack remains unchanged.",
+      "All trials reached the 180-second cap without clearing. The metrics are fixed-fixture defense results, not natural progression or victory rates."
+    ]
+  },
+  "natural4v4": {
+    "command": "node scripts/benchmark-ai.mjs [checkout-root] 8",
+    "lastWave": 8,
+    "metricsPlayers": [
+      4,
+      5,
+      6,
+      7
+    ],
+    "before": [
+      {
+        "seed": 42,
+        "wave": 9,
+        "phase": "build",
+        "seconds": 1061,
+        "enemyKing": 3165,
+        "leaks": 837,
+        "kills": 3452,
+        "military": 13985,
+        "workers": 40,
+        "lumber": 25,
+        "sent": 507
+      },
+      {
+        "seed": 173,
+        "wave": 8,
+        "phase": "ended",
+        "seconds": 971,
+        "enemyKing": 0,
+        "leaks": 1018,
+        "kills": 3298,
+        "military": 14135,
+        "workers": 40,
+        "lumber": 22,
+        "sent": 356
+      },
+      {
+        "seed": 615,
+        "wave": 4,
+        "phase": "ended",
+        "seconds": 485,
+        "enemyKing": 3467,
+        "leaks": 468,
+        "kills": 1767,
+        "military": 4020,
+        "workers": 27,
+        "lumber": 11,
+        "sent": 32
+      }
+    ],
+    "after": [
+      {
+        "seed": 42,
+        "wave": 8,
+        "phase": "ended",
+        "seconds": 1010,
+        "enemyKing": 0,
+        "leaks": 862,
+        "kills": 3421,
+        "military": 15675,
+        "workers": 40,
+        "lumber": 25,
+        "sent": 437
+      },
+      {
+        "seed": 173,
+        "wave": 8,
+        "phase": "ended",
+        "seconds": 944,
+        "enemyKing": 0,
+        "leaks": 959,
+        "kills": 3353,
+        "military": 14125,
+        "workers": 40,
+        "lumber": 22,
+        "sent": 322
+      },
+      {
+        "seed": 615,
+        "wave": 4,
+        "phase": "ended",
+        "seconds": 485,
+        "enemyKing": 3467,
+        "leaks": 468,
+        "kills": 1767,
+        "military": 4020,
+        "workers": 27,
+        "lumber": 11,
+        "sent": 32
+      }
+    ],
+    "notes": [
+      "Both AI teams use the selected revision. Player zero receives the same test-only build assistance.",
+      "Seed 42 regressed from completing wave 8 to losing in wave 8; leaks increased 837 to 862.",
+      "Seed 173 still lost in wave 8, with leaks reduced 1018 to 959; seed 615 is unchanged and ends before the first gift.",
+      "Strategy changes affect later random draws, durations, sends and exposure. Do not interpret these as an overall win-rate improvement."
+    ]
+  },
+  "validation": {
+    "aiChecks": 54,
+    "newChecks": 21,
+    "nodeChecks": 1621,
+    "customChecks": 91,
+    "browserChecks": 54,
+    "smokeWaves": 35,
+    "smokeSecondsPerWave": 12
+  },
+  "limits": [
+    "AI heuristics are browser opponent behavior, not recovered original-map AI.",
+    "Swap, demolition, unsupported builder active spells and free-build coupons remain unautomated.",
+    "Later proactive king floors begin at wave 11; natural full-game benefit remains unmeasured."
+  ]
+}

@@ -2,6 +2,8 @@
 // Every purchase goes through Game.command and pays the player's real resources.
 import {UNITS, MERCENARIES, WAVES, RULES} from './data.js';
 import {compileSkills, sourceWeapon} from './skills.js';
+import {BOX_REWARD_RULES, BOX_RANDOM_FIGHTER_RULES} from './box-training-rules.js';
+import {laneToWorld} from './layout.js';
 
 const units=Object.fromEntries(UNITS.map(u=>[u.id,u]));
 const profiles=new WeakMap();
@@ -169,12 +171,69 @@ export function aiMercenaryScore(g,p,m,defenders=g.state.players.filter(q=>q.tea
  const attack=defenders.length?outgoing/defenders.length:1,defense=defenders.length?Math.max(.25,incoming/defenders.length):1;
  return income/price*(g.state.wave<11?120:35)+(n(m.damage)/Math.max(.2,n(m.interval,1))*attack+n(m.hp)*.015/defense)/price;
 }
+
+// Only spend an already-earned offer. Planning never rolls or grants rewards.
+function claimAIReward(g,p){
+ if(g.state.phase!=='build')return;
+ const offers=g.boxRewardStatus(p.id)?.offers;if(!offers?.length)return;
+ const a=army(g,p),choices=[];
+ const efficiency=Math.max(.1,...p.roster.map(id=>units[id]).filter(u=>u?.combatRawcode).map(u=>utility(g,u,a)/paid(u)));
+ const add=(offer,value,payload={},type='boxReward')=>{if(value>0)choices.push({value,type,payload:{playerId:p.id,abilityId:offer.id,...payload}});};
+ for(const offer of offers){
+  if(!offer.canStart)continue;const rule=BOX_REWARD_RULES[offer.id];if(!rule)continue;
+  if(rule.handler==='gold')add(offer,rule.gold);
+  if(rule.handler==='wood')add(offer,rule.wood*.65);
+  if(rule.handler==='lumber'){const cost=g.economyStatus(p.id).lumber.cost;add(offer,cost.gold+cost.wood*.65);}
+  if(rule.handler==='farm'&&p.populationCap<n(RULES.maxPopulation,300))add(offer,(p.populationCap-g._population(p)<8?1.5:.4)*(n(RULES.farmCost,24)+n(RULES.farmWoodCost,80)*.65));
+  if(rule.handler==='randomFighter'){
+   const pool=BOX_RANDOM_FIGHTER_RULES.byAbility[offer.id]?.rawcodes.map(raw=>units[`v14_${raw}`]).filter(Boolean)??[],cell=g._emptyCell(p,{role:'frontline'});
+   if(pool.length&&cell){const point=laneToWorld(p.id,cell.col+.5,cell.row+4.5);add(offer,pool.reduce((sum,u)=>sum+utility(g,u,a),0)/pool.length/efficiency,{worldX:point.x,worldY:point.y});}
+  }
+  for(const target of offer.targets??[]){
+   const b=p.buildings.find(b=>b.id===target.buildingId),u=units[b?.unitId];if(!u?.combatRawcode||b.construction)continue;
+   if(rule.handler==='training'){
+    // ReplaceUnit discards these earned bonuses; keep the enhanced carrier.
+    if(n(b.treasureArmor)>0||(b.permanentAbilityIds??[]).some(id=>!['A2ZG','A18P'].includes(id)&&!(b.sourceClassGrantedAbilityIds??[]).includes(id)))continue;
+    for(const next of g.boxTrainingStatus(b.id,p.id).targets){
+     const def=units[next.unitId],reserved=p.aiUpgradePlan?.buildingId!==b.id;
+     if(!def||!next.canStart||p.gold-next.cost.gold<(reserved?planGold(p):0)||p.wood-next.cost.wood<(reserved?planWood(p):0))continue;
+     add(offer,(utility(g,def,a)-utility(g,u,a))/efficiency-next.cost.gold-next.cost.wood*.65,{buildingId:b.id,unitId:def.id},'boxTrain');
+    }
+   }
+   if(rule.handler==='unitAbilities'){
+    const owned=new Set([...(u.abilityIds??[]),...(b.permanentAbilityIds??[])]),ids=rule.abilityIds.filter(id=>!owned.has(id));if(!ids.length)continue;
+    // Estimate the actual permanent grant, favoring fast/area attackers and
+    // durable frontliners. Grants already present have zero marginal value.
+    let gain=0;const base=utility(g,u,a),rate=1/Math.max(.2,n(u.interval,1)),area=profile(u).area?3:1;
+    if(ids.includes('A139'))gain+=30*rate*area;
+    if(ids.includes('A13X'))gain+=80*rate*area;
+    if(ids.includes('A13B'))gain+=n(u.damage)*rate*area*.1;
+    if(ids.includes('A13W'))gain+=n(u.damage)*rate*area*.2;
+    if(ids.includes('A13Y'))gain+=n(u.damage)*rate*area*.4;
+    if(ids.includes('A138'))gain+=300*.025;
+    if(ids.includes('A13T'))gain+=800*.025;
+    if(ids.includes('A13V'))gain+=40*10*.025;
+    if(ids.includes('A13A')||ids.includes('A13U'))gain+=base*.05;
+    if(ids.includes('A2ZG'))gain+=base*.15;
+    add(offer,gain/efficiency,{buildingId:b.id});
+   }
+  }
+ }
+ choices.sort((a,b)=>b.value-a.value);
+ for(const choice of choices)if(g.command(choice.type,choice.payload).ok){
+  if(choice.type==='boxTrain'&&p.aiUpgradePlan?.buildingId===choice.payload.buildingId)delete p.aiUpgradePlan;
+  break;
+ }
+}
 function kingAndSends(g,p){
  const king=g.state.kings[p.team],cost=n(RULES.kingUpgradeCost,100),hurt=king.hp<king.maxHp*.75,leaking=g.state.players.some(q=>q.team===p.team&&(q.roundLeaks??0)>0);
- const targetLevel=Math.min(g.kingUpgradeCap('attack'),Math.ceil(g.state.wave/2));
- if(p.wood>=cost+planWood(p)&&(hurt||leaking||king.attackLevel<targetLevel)){
-  const order=hurt?['hp','attack','regen']:['attack','hp','regen'];
-  for(const stat of order)if(king[stat+'Level']<g.kingUpgradeCap(stat)){if(g.command('king',{playerId:p.id,stat}).ok)break;}
+ // Preserve early income growth; after the first boss, establish a shared
+ // hp/regen floor before the next leak. Urgent defense retains its priority.
+ const defenseFloor=g.state.wave>=11?Math.floor(g.state.wave/4):0;
+ const targets={attack:Math.min(g.kingUpgradeCap('attack'),Math.ceil(g.state.wave/2)),hp:Math.min(g.kingUpgradeCap('hp'),defenseFloor),regen:Math.min(g.kingUpgradeCap('regen'),defenseFloor)};
+ if(p.wood>=cost+planWood(p)){
+  const order=hurt?['hp','attack','regen']:leaking?['attack','hp','regen']:['attack','regen','hp'];
+  for(const stat of order)if(king[stat+'Level']<(hurt||leaking?g.kingUpgradeCap(stat):targets[stat])){if(g.command('king',{playerId:p.id,stat}).ok)break;}
  }
  if(g.state.mode==='sandbox'&&g.state.phase==='combat')return;
  const economy=g.economyStatus(p.id),research=RULES.lumberLevels?.[p.lumberLevel];
@@ -193,6 +252,7 @@ export function actAI(g,p){
  if(!g._aiEnabled()||p.id===0||g.state.phase==='ended'||g.state.paused)return;
  const treasure=g.treasureStatus(p.id)[0];
  if(treasure)g.command('treasure',{playerId:p.id,treasureId:treasure.id,reward:treasure.lumberAvailable?'lumber':'gold'});
+ claimAIReward(g,p);
  developEconomy(g,p);
  if(g.state.phase==='build')buildAIArmy(g,p);
  kingAndSends(g,p);

@@ -44,7 +44,7 @@ test('AI banks the actual later research wood price instead of spending it on sm
  p.wood=price;g._aiAct(p);assert.ok(p.economyTasks.lumberTask);assert.equal(p.wood,0);
 });
 test('max-level lumber does not reserve wood for an impossible level31 research',()=>{
- const {g,p}=fixture();g.state.mode='normal';g.state.phase='combat';g.state.wave=35;p.lumberLevel=RULES.maxLumberLevel;p.workers=10;p.gold=10000;p.wood=100;g.state.kings[p.team].attackLevel=g.kingUpgradeCap('attack');g._aiAct(p);assert.ok(p.stats.sent>0);assert.equal(p.economyTasks.lumberTask,null);
+ const {g,p}=fixture();g.state.mode='normal';g.state.phase='combat';g.state.wave=35;p.lumberLevel=RULES.maxLumberLevel;p.workers=10;p.gold=10000;p.wood=100;for(const stat of ['attack','hp','regen'])g.state.kings[p.team][stat+'Level']=g.kingUpgradeCap(stat);g._aiAct(p);assert.ok(p.stats.sent>0);assert.equal(p.economyTasks.lumberTask,null);
 });
 test('mercenary selection values armor counters against visible enemy troops',()=>{
  const {g,p}=fixture(),m=MERCENARIES[0],d={...unit('h00M'),armorType:'heavy',sourceArmorTypeRaw:undefined};

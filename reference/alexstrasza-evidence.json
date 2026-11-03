@@ -1,0 +1,3544 @@
+{
+  "batch": "v64",
+  "source": {
+    "path": "reference/v14-source/raw_extracted/war3map.j",
+    "sha256": "e66c55b3b25b185c991be5613e21fbf5b2d598f3cc40f2f8cd01c23bcb828250",
+    "encoding": "latin1 split LF only"
+  },
+  "abilities": {
+    "A16S": {
+      "rawcode": "A16S",
+      "name": "生命赐福",
+      "tip": "生命赐福",
+      "ubertip": "当己方任意一兵种生命值下降至65%时，阿莱克丝塔萨牺牲50%的当前生命值，为其附近600范围内的己方兵种持续恢复该数值的15%生命值，持续时间3s",
+      "alias": "A16S",
+      "code": "Asth",
+      "levels": "1",
+      "checkDep": "1"
+    },
+    "A16T": {
+      "rawcode": "A16T",
+      "name": "生机绽放",
+      "tip": "生机绽放",
+      "ubertip": "在600范围内随机种下一颗治疗之种，在2秒后绽放，为附近600码范围的己方兵每秒恢复20点生命值，持续时间8s",
+      "alias": "A16T",
+      "code": "ANcl",
+      "DataB1": "3",
+      "DataC1": "1",
+      "levels": "1",
+      "Cost1": "10",
+      "Rng1": "600.0",
+      "Cool1": "15.0",
+      "checkDep": "1",
+      "reqLevel": "1",
+      "DataF1": "tranquility"
+    },
+    "A16U": {
+      "rawcode": "A16U",
+      "name": "生命誓言",
+      "tip": "生命誓言",
+      "ubertip": "建造出阿莱克斯塔萨后，其释放一条锁链使英雄丛林守护者连接，共享生命值；龙形态后生命共享取消连接（英雄丛林守护者生命值回满）",
+      "alias": "A16U",
+      "code": "Asth",
+      "levels": "1",
+      "checkDep": "1"
+    },
+    "A16V": {
+      "rawcode": "A16V",
+      "name": "烈焰打击",
+      "tip": "烈焰打击",
+      "ubertip": "吐出4枚火球随机点燃600*600范围内的系统怪与木怪，在6秒内造成每秒200点伤害。击中已经在燃烧的敌人时，使其减速40%，减速效果在4秒后递减",
+      "alias": "A16V",
+      "code": "ANcl",
+      "DataB1": "1",
+      "DataC1": "1",
+      "levels": "1",
+      "Cost1": "10",
+      "Rng1": "800.0",
+      "Cool1": "13.0",
+      "checkDep": "1",
+      "reqLevel": "1",
+      "DataF1": "unload"
+    },
+    "A16W": {
+      "rawcode": "A16W",
+      "name": "净化烈焰",
+      "tip": "净化烈焰",
+      "ubertip": "20秒变龙后飞上天空，在其前方800*400码范围内发射3枚火球，持续6秒。每个火球为附近的己方兵种恢复300点生命值，并对附近的系统怪与木怪造成300点伤害",
+      "alias": "A16W",
+      "code": "ANcl",
+      "DataB1": "3",
+      "DataC1": "1",
+      "levels": "1",
+      "targs1": "enemies",
+      "Cost1": "20",
+      "Rng1": "800.0",
+      "Cool1": "999.0",
+      "checkDep": "1",
+      "reqLevel": "1",
+      "DataE1": "1",
+      "DataF1": "unholyfrenzy"
+    },
+    "A16X": {
+      "rawcode": "A16X",
+      "name": "不屈龙族",
+      "tip": "虔诚光环 - [等级 11]",
+      "ubertip": "为己方兵种增加1点护甲，增加己方兵种30%攻击速度",
+      "alias": "A16X",
+      "code": "AHad",
+      "Area1": "99999.0",
+      "BuffID1": "B07G",
+      "DataA1": "1.0",
+      "levels": "1",
+      "targs1": "ground,structure,vulnerable,air,invulnerable,friend,self",
+      "checkDep": "1",
+      "reqLevel": "1"
+    },
+    "A16Y": {
+      "rawcode": "A16Y",
+      "name": "不屈龙族",
+      "tip": "耐久光环 - [等级 1]",
+      "ubertip": "增加周围单位10%的移动速度和5%的攻击速度。",
+      "alias": "A16Y",
+      "code": "AOae",
+      "Area1": "600.0",
+      "BuffID1": "B07H",
+      "DataB1": "0.3",
+      "levels": "1",
+      "targs1": "air,ground,friend,self,vuln,invu",
+      "checkDep": "1",
+      "reqLevel": "1"
+    },
+    "A16Z": {
+      "rawcode": "A16Z",
+      "name": "自然的怒火",
+      "tip": "自然的怒火",
+      "ubertip": "普攻额外造成35%伤害，击杀目标后恢复100点生命且有45%的几率提升1点护甲，最高提升40点护甲永久有效",
+      "alias": "A16Z",
+      "code": "Asth",
+      "levels": "1",
+      "checkDep": "1"
+    },
+    "A170": {
+      "rawcode": "A170",
+      "name": "自然祝福",
+      "tip": "自然祝福",
+      "ubertip": "消耗自身15%生命值,恢复友方生命至100%",
+      "alias": "A170",
+      "code": "ANcl",
+      "DataB1": "1",
+      "DataC1": "1",
+      "levels": "1",
+      "Cost1": "15",
+      "Rng1": "600.0",
+      "Cool1": "18.0",
+      "checkDep": "1",
+      "reqLevel": "1",
+      "DataF1": "transmute"
+    },
+    "A171": {
+      "rawcode": "A171",
+      "name": "A-阿莱克斯塔萨",
+      "tip": "阿莱克斯塔萨彩蛋",
+      "ubertip": "阿莱克斯塔萨彩蛋\n\n配方：11级英雄丛林守护者+生命树+红龙\n\n属性：\n攻击：320-350\n攻击速度：0.5\n攻击距离：600\n生命值：3000\n攻击类型：混乱\n防御类型：王甲\n精灵形态技能：生命赐福  生机绽放  生命誓言  自然祝福\n龙形态技能：\n红龙女王 烈焰打击 净化烈焰 不屈龙族 自然的怒火",
+      "alias": "A171",
+      "code": "Asth",
+      "levels": "1"
+    },
+    "A172": {
+      "rawcode": "A172",
+      "name": "巨龙之力",
+      "tip": "巨龙之力",
+      "ubertip": "龙形态：\n1.烈焰打击：\n吐出一道火焰光线对1500*200范围内的系统怪与木怪造成每秒160点的伤害\n2.净化烈焰：\n释放三道白色火焰线，对其前方1500*200范围内的敌方单位造成260点伤害\n3.不屈龙族：\n为己方兵种增加1点护甲，增加己方兵种的30%攻击速度\n4.自然怒火：\n攻击时对目标额外造成35%伤害，击杀目标后恢复100点生命且有45%的几率提升1点护甲，最高提升40点护甲永久有效。",
+      "alias": "A172",
+      "code": "Asth",
+      "levels": "1",
+      "checkDep": "1"
+    }
+  },
+  "units": {
+    "n066": {
+      "rawcode": "n066",
+      "name": "阿莱克斯塔萨",
+      "tip": "升级到 <阿莱克斯塔萨> - [R]",
+      "ubertip": "阿莱克斯塔萨彩蛋\n\n配方：11级英雄丛林守护者+生命树+红龙\n\n属性：\n攻击：320-350\n攻击速度：0.5\n攻击距离：600\n生命值：3000\n攻击类型：混乱\n防御类型：王甲\n精灵形态技能：生命赐福  生机绽放  生命誓言  自然祝福\n龙形态技能：\n红龙女王 烈焰打击 净化烈焰 不屈龙族 自然的怒火",
+      "unitID": "n066",
+      "canFlee": "1",
+      "death": "2.34",
+      "deathType": "2",
+      "points": "1185",
+      "prio": "2",
+      "propWin": "60.0",
+      "race": "human",
+      "targType": "structure",
+      "unitBalanceID": "n066",
+      "bldtm": "2",
+      "collision": "72.0",
+      "defType": "hero",
+      "fused": "10",
+      "goldcost": "600",
+      "HP": "3000",
+      "level": "1",
+      "mana0": "20",
+      "nsight": "500",
+      "preventPlace": "unbuildable",
+      "regenMana": "2.0",
+      "regenType": "none",
+      "reptm": "1",
+      "sight": "500",
+      "tilesets": "*",
+      "upgrades": "R009,R00A",
+      "unitUIID": "n066",
+      "armor": "Wood",
+      "blend": "0.15",
+      "blue": "255",
+      "elevRad": "50.0",
+      "file": "Alex.mdl",
+      "green": "255",
+      "modelScale": "1.0",
+      "red": "255",
+      "run": "200.0",
+      "scale": "1.5",
+      "scaleBull": "1",
+      "shadowOnWater": "1",
+      "teamColor": "-1",
+      "unitSound": "AzureDragon",
+      "walk": "200.0",
+      "unitAbilID": "n066",
+      "abilList": "A172,A170,A16S,A16T,A16U,A008,A118",
+      "unitWeapID": "n066",
+      "acquire": "1000.0",
+      "atkType1": "normal",
+      "atkType2": "normal",
+      "backSw1": "0.5",
+      "castbsw": "0.51",
+      "castpt": "0.001",
+      "cool1": "0.3",
+      "dice1": "1",
+      "dmgpt1": "0.4",
+      "impactZ": "60.0",
+      "launchZ": "60.0",
+      "rangeN1": "600",
+      "RngBuff1": "250.0",
+      "showUI1": "1",
+      "showUI2": "1",
+      "sides1": "26",
+      "targCount1": "1",
+      "targCount2": "1",
+      "targs1": "ground,structure,debris,item,ward",
+      "weapsOn": "1",
+      "weapTp1": "missile",
+      "weapType1": "WoodLightBash",
+      "hotkey": "R",
+      "damage_min_1": "250.0",
+      "damage_max_1": "275.0",
+      "damage_avg_1": "262.5",
+      "dps_avg_1": "875.0",
+      "attack_type_zh": "普通",
+      "armor_type_zh": "英雄甲",
+      "ability_ids": "A172,A170,A16S,A16T,A16U,A008,A118",
+      "ability_names": "巨龙之力,自然祝福,生命赐福,生机绽放,生命誓言,出售,移位",
+      "def": "3.0",
+      "manaN": "30",
+      "type": "ancient,sapper",
+      "dmgplus1": "249",
+      "buildingShadow": "BuildingShadowSmall",
+      "isbldg": "1",
+      "buffRadius": "15.0",
+      "buffType": "buffer",
+      "pathTex": "PathTextures\\4x4SimpleSolid.tga",
+      "elevPts": "4"
+    },
+    "n08E": {
+      "rawcode": "n08E",
+      "name": "神圣阿莱克斯塔萨",
+      "tip": "使用 <神圣阿莱克斯塔萨> 皮肤 - [P]",
+      "ubertip": ",",
+      "unitID": "n08E",
+      "canFlee": "1",
+      "death": "2.34",
+      "deathType": "2",
+      "points": "1185",
+      "prio": "2",
+      "propWin": "60.0",
+      "race": "human",
+      "targType": "structure",
+      "unitBalanceID": "n08E",
+      "bldtm": "2",
+      "collision": "72.0",
+      "defType": "hero",
+      "fused": "10",
+      "HP": "3000",
+      "level": "1",
+      "mana0": "20",
+      "nsight": "500",
+      "preventPlace": "unbuildable",
+      "regenMana": "2.0",
+      "regenType": "none",
+      "reptm": "1",
+      "sight": "500",
+      "tilesets": "*",
+      "upgrades": "R009,R00A",
+      "unitUIID": "n08E",
+      "armor": "Wood",
+      "blend": "0.15",
+      "blue": "255",
+      "elevRad": "50.0",
+      "file": "LJQ_Alex02.mdx",
+      "green": "255",
+      "modelScale": "1.0",
+      "red": "255",
+      "run": "200.0",
+      "scale": "1.5",
+      "scaleBull": "1",
+      "shadowOnWater": "1",
+      "teamColor": "-1",
+      "unitSound": "AzureDragon",
+      "walk": "200.0",
+      "unitAbilID": "n08E",
+      "abilList": "A172,A170,A16S,A16T,A16U,A008,A118",
+      "unitWeapID": "n08E",
+      "acquire": "1000.0",
+      "atkType1": "normal",
+      "atkType2": "normal",
+      "backSw1": "0.5",
+      "castbsw": "0.51",
+      "castpt": "0.001",
+      "cool1": "0.3",
+      "dice1": "1",
+      "dmgpt1": "0.4",
+      "impactZ": "60.0",
+      "launchZ": "60.0",
+      "rangeN1": "600",
+      "RngBuff1": "250.0",
+      "showUI1": "1",
+      "showUI2": "1",
+      "sides1": "26",
+      "targCount1": "1",
+      "targCount2": "1",
+      "targs1": "ground,structure,debris,item,ward",
+      "weapsOn": "1",
+      "weapTp1": "missile",
+      "weapType1": "WoodLightBash",
+      "hotkey": "R",
+      "damage_min_1": "250.0",
+      "damage_max_1": "275.0",
+      "damage_avg_1": "262.5",
+      "dps_avg_1": "875.0",
+      "attack_type_zh": "普通",
+      "armor_type_zh": "英雄甲",
+      "ability_ids": "A172,A170,A16S,A16T,A16U,A008,A118",
+      "ability_names": "巨龙之力,自然祝福,生命赐福,生机绽放,生命誓言,出售,移位",
+      "def": "3.0",
+      "manaN": "30",
+      "type": "ancient,sapper",
+      "dmgplus1": "249",
+      "buildingShadow": "BuildingShadowSmall",
+      "isbldg": "1",
+      "buffRadius": "15.0",
+      "buffType": "buffer",
+      "pathTex": "PathTextures\\4x4SimpleSolid.tga",
+      "elevPts": "4"
+    },
+    "h0QZ": {
+      "rawcode": "h0QZ",
+      "name": "阿莱克斯塔萨",
+      "tip": "阿莱克斯塔萨",
+      "ubertip": "阿莱克斯塔萨彩蛋\n\n配方：11级英雄丛林守护者+生命树+红龙\n\n属性：\n攻击：320-350\n攻击速度：0.5\n攻击距离：600\n生命值：3000\n攻击类型：混乱\n防御类型：王甲\n精灵形态技能：生命赐福  生机绽放  生命誓言  自然祝福\n龙形态技能：\n红龙女王 烈焰打击 净化烈焰 不屈龙族 自然的怒火",
+      "unitID": "h0QZ",
+      "canFlee": "1",
+      "cargoSize": "1",
+      "death": "3.04",
+      "deathType": "3",
+      "movetp": "foot",
+      "points": "100",
+      "prio": "6",
+      "propWin": "60.0",
+      "race": "human",
+      "targType": "ground",
+      "turnRate": "0.6",
+      "unitBalanceID": "h0QZ",
+      "bldtm": "20",
+      "bountydice": "6",
+      "bountyplus": "20",
+      "bountysides": "3",
+      "collision": "26.0",
+      "defType": "hero",
+      "goldRep": "135",
+      "HP": "3000",
+      "level": "2",
+      "mana0": "20",
+      "nsight": "800",
+      "regenHP": "20.0",
+      "regenMana": "2.0",
+      "regenType": "none",
+      "reptm": "20",
+      "sight": "1400",
+      "spd": "270",
+      "tilesets": "*",
+      "upgrades": "R00B,R00C,R009,R00A",
+      "unitUIID": "h0QZ",
+      "armor": "Metal",
+      "blend": "0.15",
+      "blue": "255",
+      "elevRad": "20.0",
+      "file": "Alex.mdl",
+      "green": "255",
+      "maxPitch": "10.0",
+      "maxRoll": "10.0",
+      "modelScale": "1.0",
+      "red": "255",
+      "run": "210.0",
+      "scale": "1.8",
+      "scaleBull": "1",
+      "shadowH": "140.0",
+      "shadowOnWater": "1",
+      "shadowW": "140.0",
+      "shadowX": "50.0",
+      "shadowY": "50.0",
+      "teamColor": "-1",
+      "unitShadow": "Shadow",
+      "unitSound": "Captain",
+      "walk": "210.0",
+      "unitAbilID": "h0QZ",
+      "abilList": "A16S,A16T,A16U,A172",
+      "unitWeapID": "h0QZ",
+      "acquire": "800.0",
+      "atkType1": "pierce",
+      "atkType2": "normal",
+      "backSw1": "0.5",
+      "castbsw": "0.51",
+      "castpt": "0.3",
+      "cool1": "0.3",
+      "dice1": "1",
+      "dmgpt1": "0.5",
+      "impactZ": "60.0",
+      "launchZ": "60.0",
+      "rangeN1": "600",
+      "RngBuff1": "250.0",
+      "showUI1": "1",
+      "showUI2": "1",
+      "sides1": "26",
+      "targCount1": "1",
+      "targCount2": "1",
+      "targs1": "enemies",
+      "weapsOn": "1",
+      "weapTp1": "missile",
+      "weapType1": "MetalMediumSlice",
+      "hotkey": "F",
+      "damage_min_1": "250.0",
+      "damage_max_1": "275.0",
+      "damage_avg_1": "262.5",
+      "dps_avg_1": "875.0",
+      "bounty_min": "26.0",
+      "bounty_max": "38.0",
+      "bounty_avg": "32.0",
+      "attack_type_zh": "穿刺",
+      "armor_type_zh": "英雄甲",
+      "ability_ids": "A16S,A16T,A16U,A172",
+      "ability_names": "生命赐福,生机绽放,生命誓言,巨龙之力",
+      "def": "3.0",
+      "defUp": "2.0",
+      "manaN": "30",
+      "type": "giant,sapper,summoned",
+      "dmgplus1": "249"
+    },
+    "h0WG": {
+      "rawcode": "h0WG",
+      "name": "神圣阿莱克斯塔萨",
+      "tip": "阿莱克斯塔萨",
+      "ubertip": "阿莱克斯塔萨彩蛋\n\n配方：11级英雄丛林守护者+生命树+红龙\n\n属性：\n攻击：320-350\n攻击速度：0.5\n攻击距离：600\n生命值：3000\n攻击类型：混乱\n防御类型：王甲\n精灵形态技能：生命赐福  生机绽放  生命誓言  自然祝福\n龙形态技能：\n红龙女王 烈焰打击 净化烈焰 不屈龙族 自然的怒火",
+      "unitID": "h0WG",
+      "canFlee": "1",
+      "cargoSize": "1",
+      "death": "3.04",
+      "deathType": "3",
+      "movetp": "foot",
+      "points": "100",
+      "prio": "6",
+      "propWin": "60.0",
+      "race": "human",
+      "targType": "ground",
+      "turnRate": "0.6",
+      "unitBalanceID": "h0WG",
+      "bldtm": "20",
+      "bountydice": "6",
+      "bountyplus": "20",
+      "bountysides": "3",
+      "collision": "26.0",
+      "defType": "hero",
+      "goldRep": "135",
+      "HP": "3000",
+      "level": "2",
+      "mana0": "20",
+      "nsight": "800",
+      "regenHP": "20.0",
+      "regenMana": "2.0",
+      "regenType": "none",
+      "reptm": "20",
+      "sight": "1400",
+      "spd": "270",
+      "tilesets": "*",
+      "upgrades": "R00B,R00C,R009,R00A",
+      "unitUIID": "h0WG",
+      "armor": "Metal",
+      "blend": "0.15",
+      "blue": "255",
+      "elevRad": "20.0",
+      "file": "LJQ_Alex02.mdx",
+      "green": "255",
+      "maxPitch": "10.0",
+      "maxRoll": "10.0",
+      "modelScale": "1.0",
+      "red": "255",
+      "run": "210.0",
+      "scale": "1.8",
+      "scaleBull": "1",
+      "shadowH": "140.0",
+      "shadowOnWater": "1",
+      "shadowW": "140.0",
+      "shadowX": "50.0",
+      "shadowY": "50.0",
+      "teamColor": "-1",
+      "unitShadow": "Shadow",
+      "unitSound": "Captain",
+      "walk": "210.0",
+      "unitAbilID": "h0WG",
+      "abilList": "A16S,A16T,A16U,A172",
+      "unitWeapID": "h0WG",
+      "acquire": "800.0",
+      "atkType1": "pierce",
+      "atkType2": "normal",
+      "backSw1": "0.5",
+      "castbsw": "0.51",
+      "castpt": "0.3",
+      "cool1": "0.3",
+      "dice1": "1",
+      "dmgpt1": "0.5",
+      "impactZ": "60.0",
+      "launchZ": "60.0",
+      "rangeN1": "600",
+      "RngBuff1": "250.0",
+      "showUI1": "1",
+      "showUI2": "1",
+      "sides1": "26",
+      "targCount1": "1",
+      "targCount2": "1",
+      "targs1": "enemies",
+      "weapsOn": "1",
+      "weapTp1": "missile",
+      "weapType1": "MetalMediumSlice",
+      "hotkey": "F",
+      "damage_min_1": "250.0",
+      "damage_max_1": "275.0",
+      "damage_avg_1": "262.5",
+      "dps_avg_1": "875.0",
+      "bounty_min": "26.0",
+      "bounty_max": "38.0",
+      "bounty_avg": "32.0",
+      "attack_type_zh": "穿刺",
+      "armor_type_zh": "英雄甲",
+      "ability_ids": "A16S,A16T,A16U,A172",
+      "ability_names": "生命赐福,生机绽放,生命誓言,巨龙之力",
+      "def": "3.0",
+      "defUp": "2.0",
+      "manaN": "30",
+      "type": "giant,sapper,summoned",
+      "dmgplus1": "249"
+    },
+    "h0R0": {
+      "rawcode": "h0R0",
+      "name": "阿莱克斯塔萨",
+      "tip": "阿莱克斯塔萨",
+      "ubertip": "阿莱克斯塔萨彩蛋\n\n配方：11级英雄丛林守护者+生命树+红龙\n\n属性：\n攻击：320-350\n攻击速度：0.5\n攻击距离：600\n生命值：3000\n攻击类型：混乱\n防御类型：王甲\n精灵形态技能：生命赐福  生机绽放  生命誓言  自然祝福\n龙形态技能：\n红龙女王 烈焰打击 净化烈焰 不屈龙族 自然的怒火",
+      "unitID": "h0R0",
+      "canFlee": "1",
+      "cargoSize": "1",
+      "death": "3.04",
+      "deathType": "3",
+      "movetp": "foot",
+      "points": "100",
+      "prio": "6",
+      "propWin": "60.0",
+      "race": "human",
+      "targType": "ground",
+      "turnRate": "0.6",
+      "unitBalanceID": "h0R0",
+      "bldtm": "20",
+      "bountydice": "6",
+      "bountyplus": "20",
+      "bountysides": "3",
+      "collision": "26.0",
+      "defType": "hero",
+      "goldRep": "135",
+      "HP": "5000",
+      "level": "2",
+      "mana0": "20",
+      "nsight": "800",
+      "regenHP": "20.0",
+      "regenMana": "2.0",
+      "regenType": "none",
+      "reptm": "20",
+      "sight": "1400",
+      "spd": "270",
+      "tilesets": "*",
+      "upgrades": "R00B,R00C,R009,R00A",
+      "unitUIID": "h0R0",
+      "armor": "Metal",
+      "blend": "0.15",
+      "blue": "255",
+      "elevRad": "20.0",
+      "file": "alexstrasza.mdl",
+      "green": "255",
+      "maxPitch": "10.0",
+      "maxRoll": "10.0",
+      "modelScale": "0.5",
+      "red": "255",
+      "run": "210.0",
+      "scale": "1.8",
+      "scaleBull": "1",
+      "shadowH": "140.0",
+      "shadowOnWater": "1",
+      "shadowW": "140.0",
+      "shadowX": "50.0",
+      "shadowY": "50.0",
+      "teamColor": "-1",
+      "unitShadow": "Shadow",
+      "unitSound": "Captain",
+      "walk": "210.0",
+      "unitAbilID": "h0R0",
+      "abilList": "A16V,A16Y,A16X,A16Z",
+      "unitWeapID": "h0R0",
+      "acquire": "600.0",
+      "atkType1": "pierce",
+      "atkType2": "normal",
+      "backSw1": "0.5",
+      "castbsw": "0.51",
+      "castpt": "0.3",
+      "cool1": "0.5",
+      "dice1": "1",
+      "dmgpt1": "0.5",
+      "impactZ": "60.0",
+      "launchZ": "60.0",
+      "rangeN1": "300",
+      "RngBuff1": "250.0",
+      "showUI1": "1",
+      "showUI2": "1",
+      "sides1": "25",
+      "targCount1": "1",
+      "targCount2": "1",
+      "targs1": "enemies",
+      "weapsOn": "1",
+      "weapTp1": "normal",
+      "weapType1": "MetalMediumSlice",
+      "hotkey": "F",
+      "damage_min_1": "495.0",
+      "damage_max_1": "519.0",
+      "damage_avg_1": "507.0",
+      "dps_avg_1": "1014.0",
+      "bounty_min": "26.0",
+      "bounty_max": "38.0",
+      "bounty_avg": "32.0",
+      "attack_type_zh": "穿刺",
+      "armor_type_zh": "英雄甲",
+      "ability_ids": "A16V,A16Y,A16X,A16Z",
+      "ability_names": "烈焰打击,不屈龙族,不屈龙族,自然的怒火",
+      "def": "3.0",
+      "defUp": "2.0",
+      "manaN": "30",
+      "type": "giant,sapper",
+      "dmgplus1": "494"
+    },
+    "h0MY": {
+      "rawcode": "h0MY",
+      "name": "丛林守护者 - 血神枯萎者 [等级 Max]",
+      "ubertip": ",",
+      "unitID": "h0MY",
+      "canFlee": "1",
+      "cargoSize": "1",
+      "death": "1.7",
+      "deathType": "3",
+      "movetp": "foot",
+      "points": "100",
+      "prio": "1",
+      "propWin": "60.0",
+      "race": "nightelf",
+      "targType": "ground",
+      "turnRate": "0.6",
+      "unitBalanceID": "h0MY",
+      "bldtm": "26",
+      "bountydice": "6",
+      "bountyplus": "20",
+      "bountysides": "3",
+      "collision": "50.0",
+      "defType": "hero",
+      "goldcost": "205",
+      "goldRep": "205",
+      "HP": "1650",
+      "level": "3",
+      "lumberRep": "30",
+      "mana0": "11",
+      "nsight": "800",
+      "regenMana": "1.0",
+      "regenType": "none",
+      "reptm": "26",
+      "sight": "1400",
+      "spd": "270",
+      "stockMax": "3",
+      "stockRegen": "30",
+      "tilesets": "*",
+      "upgrades": "R00B,R00C,R009,R00A",
+      "unitUIID": "h0MY",
+      "armor": "Wood",
+      "blend": "0.15",
+      "blue": "255",
+      "elevRad": "20.0",
+      "file": "Cenarius2_Nightmare31.mdl",
+      "green": "255",
+      "maxPitch": "10.0",
+      "maxRoll": "10.0",
+      "modelScale": "0.9",
+      "red": "255",
+      "run": "240.0",
+      "scale": "1.5",
+      "scaleBull": "1",
+      "shadowH": "120.0",
+      "shadowOnWater": "1",
+      "shadowW": "120.0",
+      "shadowX": "50.0",
+      "shadowY": "50.0",
+      "teamColor": "-1",
+      "unitShadow": "Shadow",
+      "unitSound": "HeroKeeperOfTheGrove",
+      "walk": "240.0",
+      "unitAbilID": "h0MY",
+      "abilList": "A0J6,A0J4",
+      "unitWeapID": "h0MY",
+      "acquire": "600.0",
+      "atkType1": "chaos",
+      "atkType2": "normal",
+      "backSw1": "0.5",
+      "castbsw": "0.51",
+      "castpt": "0.1",
+      "cool1": "0.9",
+      "dice1": "1",
+      "dmgpt1": "0.4",
+      "impactZ": "60.0",
+      "launchZ": "60.0",
+      "rangeN1": "500",
+      "RngBuff1": "250.0",
+      "showUI1": "1",
+      "showUI2": "1",
+      "sides1": "1",
+      "targCount1": "1",
+      "targCount2": "1",
+      "targs1": "enemies",
+      "weapsOn": "1",
+      "weapTp1": "missile",
+      "hotkey": "R",
+      "damage_min_1": "150.0",
+      "damage_max_1": "150.0",
+      "damage_avg_1": "150.0",
+      "dps_avg_1": "166.66666666666666",
+      "bounty_min": "26.0",
+      "bounty_max": "38.0",
+      "bounty_avg": "32.0",
+      "attack_type_zh": "混乱",
+      "armor_type_zh": "英雄甲",
+      "ability_ids": "A0J6,A0J4",
+      "ability_names": "群体缠绕,荆棘光环",
+      "formation": "2",
+      "def": "3.0",
+      "defUp": "2.0",
+      "manaN": "11",
+      "type": "giant",
+      "dmgplus1": "149"
+    },
+    "h0F1": {
+      "rawcode": "h0F1",
+      "name": "丛林守护者 - [等级 Max]",
+      "ubertip": ",",
+      "unitID": "h0F1",
+      "canFlee": "1",
+      "cargoSize": "1",
+      "death": "1.7",
+      "deathType": "3",
+      "movetp": "foot",
+      "points": "100",
+      "prio": "1",
+      "propWin": "60.0",
+      "race": "nightelf",
+      "targType": "ground",
+      "turnRate": "0.6",
+      "unitBalanceID": "h0F1",
+      "bldtm": "26",
+      "bountydice": "6",
+      "bountyplus": "20",
+      "bountysides": "3",
+      "collision": "50.0",
+      "defType": "hero",
+      "goldcost": "205",
+      "goldRep": "205",
+      "HP": "1650",
+      "level": "3",
+      "lumberRep": "30",
+      "mana0": "11",
+      "nsight": "800",
+      "regenMana": "1.0",
+      "regenType": "none",
+      "reptm": "26",
+      "sight": "1400",
+      "spd": "270",
+      "stockMax": "3",
+      "stockRegen": "30",
+      "tilesets": "*",
+      "upgrades": "R00B,R00C,R009,R00A",
+      "unitUIID": "h0F1",
+      "armor": "Wood",
+      "blend": "0.15",
+      "blue": "255",
+      "elevRad": "20.0",
+      "file": "units\\nightelf\\HeroKeeperoftheGrove\\HeroKeeperoftheGrove.mdl",
+      "green": "255",
+      "maxPitch": "10.0",
+      "maxRoll": "10.0",
+      "modelScale": "0.9",
+      "red": "255",
+      "run": "240.0",
+      "scale": "1.5",
+      "scaleBull": "1",
+      "shadowH": "120.0",
+      "shadowOnWater": "1",
+      "shadowW": "120.0",
+      "shadowX": "50.0",
+      "shadowY": "50.0",
+      "teamColor": "-1",
+      "unitShadow": "Shadow",
+      "unitSound": "HeroKeeperOfTheGrove",
+      "walk": "240.0",
+      "unitAbilID": "h0F1",
+      "abilList": "A0J6,A0J4",
+      "unitWeapID": "h0F1",
+      "acquire": "600.0",
+      "atkType1": "chaos",
+      "atkType2": "normal",
+      "backSw1": "0.5",
+      "castbsw": "0.51",
+      "castpt": "0.1",
+      "cool1": "0.9",
+      "dice1": "1",
+      "dmgpt1": "0.4",
+      "impactZ": "60.0",
+      "launchZ": "60.0",
+      "rangeN1": "500",
+      "RngBuff1": "250.0",
+      "showUI1": "1",
+      "showUI2": "1",
+      "sides1": "1",
+      "targCount1": "1",
+      "targCount2": "1",
+      "targs1": "enemies",
+      "weapsOn": "1",
+      "weapTp1": "missile",
+      "hotkey": "R",
+      "damage_min_1": "150.0",
+      "damage_max_1": "150.0",
+      "damage_avg_1": "150.0",
+      "dps_avg_1": "166.66666666666666",
+      "bounty_min": "26.0",
+      "bounty_max": "38.0",
+      "bounty_avg": "32.0",
+      "attack_type_zh": "混乱",
+      "armor_type_zh": "英雄甲",
+      "ability_ids": "A0J6,A0J4",
+      "ability_names": "群体缠绕,荆棘光环",
+      "formation": "2",
+      "def": "3.0",
+      "defUp": "2.0",
+      "manaN": "11",
+      "type": "giant",
+      "dmgplus1": "149"
+    },
+    "e008": {
+      "rawcode": "e008",
+      "name": "万能",
+      "tip": "训练小精灵(W)",
+      "ubertip": "暗夜精灵族基本的工人单位。能采集金矿和木材。还能建造精灵族的建筑物并进行修理更新。\n能自我爆炸从而伤害到周围被召唤出来的单位并吸收一定范围内所有单位的魔法值。",
+      "unitID": "e008",
+      "canFlee": "1",
+      "cargoSize": "1",
+      "death": "3.0",
+      "prio": "1",
+      "propWin": "60.0",
+      "race": "nightelf",
+      "targType": "ground",
+      "turnRate": "0.6",
+      "unitBalanceID": "e008",
+      "bldtm": "14",
+      "bountydice": "5",
+      "bountyplus": "15",
+      "bountysides": "3",
+      "defType": "medium",
+      "goldcost": "60",
+      "goldRep": "60",
+      "HP": "60",
+      "level": "1",
+      "mana0": "100000",
+      "regenHP": "-1.0",
+      "regenMana": "1000.0",
+      "regenType": "always",
+      "reptm": "14",
+      "stockMax": "3",
+      "stockRegen": "30",
+      "tilesets": "*",
+      "unitUIID": "e008",
+      "armor": "Ethereal",
+      "blue": "255",
+      "elevRad": "50.0",
+      "file": "war3mapImported\\aaaaa.mdl",
+      "green": "255",
+      "maxPitch": "25.0",
+      "maxRoll": "25.0",
+      "modelScale": "1.0",
+      "red": "255",
+      "run": "200.0",
+      "scale": "1.0",
+      "scaleBull": "1",
+      "shadowOnWater": "1",
+      "teamColor": "-1",
+      "unitSound": "Wisp",
+      "walk": "200.0",
+      "unitAbilID": "e008",
+      "abilList": "Aloc",
+      "unitWeapID": "e008",
+      "atkType1": "normal",
+      "atkType2": "normal",
+      "impactZ": "60.0",
+      "launchZ": "60.0",
+      "showUI1": "1",
+      "showUI2": "1",
+      "targCount2": "1",
+      "hotkey": "W",
+      "bounty_min": "20.0",
+      "bounty_max": "30.0",
+      "bounty_avg": "25.0",
+      "attack_type_zh": "普通",
+      "armor_type_zh": "中甲",
+      "ability_ids": "Aloc",
+      "ability_names": "蝗虫",
+      "formation": "4",
+      "defUp": "2.0",
+      "manaN": "100000"
+    }
+  },
+  "sourceEvidence": [
+    {
+      "line": 1156,
+      "text": "integer Qb=$41313653"
+    },
+    {
+      "line": 2644,
+      "text": "call SaveInteger(O,$6E303636,StringHash(\"box_train_upgrade_require_count\"),3)"
+    },
+    {
+      "line": 2645,
+      "text": "call SaveInteger(O,$6E303636,StringHash(\"box_train_upgrade_require_1\"),$75303034)"
+    },
+    {
+      "line": 2646,
+      "text": "call SaveInteger(O,$6E303636,StringHash(\"box_train_upgrade_require_2\"),$68323230)"
+    },
+    {
+      "line": 2647,
+      "text": "call SaveInteger(O,$6E303636,StringHash(\"box_train_upgrade_require_3\"),$52303944)"
+    },
+    {
+      "line": 2648,
+      "text": "call SaveInteger(O,$6E303845,StringHash(\"box_train_upgrade_require_count\"),4)"
+    },
+    {
+      "line": 2649,
+      "text": "call SaveInteger(O,$6E303845,StringHash(\"box_train_upgrade_require_1\"),$75303034)"
+    },
+    {
+      "line": 2650,
+      "text": "call SaveInteger(O,$6E303845,StringHash(\"box_train_upgrade_require_2\"),$68323230)"
+    },
+    {
+      "line": 2651,
+      "text": "call SaveInteger(O,$6E303845,StringHash(\"box_train_upgrade_require_3\"),$52303944)"
+    },
+    {
+      "line": 2652,
+      "text": "call SaveInteger(O,$6E303845,StringHash(\"box_train_upgrade_require_4\"),$52304746)"
+    },
+    {
+      "line": 3631,
+      "text": "call DisableEggUnitTypeDialog___RegisterDialogEggUnitType($6E303636,\"çº¢é¾\",1)"
+    },
+    {
+      "line": 18300,
+      "text": "set Mk[Bi]=$6830515A"
+    },
+    {
+      "line": 18301,
+      "text": "set Ml[Bi]=$6E303636"
+    },
+    {
+      "line": 18546,
+      "text": "set Mk[Bi]=$68305747"
+    },
+    {
+      "line": 18547,
+      "text": "set Ml[Bi]=$6E303845"
+    },
+    {
+      "line": 28634,
+      "text": "call SetPlayerTechResearchedSwap($52303944,1,h)"
+    },
+    {
+      "line": 29645,
+      "text": "function DamageAoe takes unit i,real FF,real FG,real P7,real P8,attacktype P9,damagetype QB returns nothing"
+    },
+    {
+      "line": 29646,
+      "text": "local group DG=CreateGroup()"
+    },
+    {
+      "line": 29647,
+      "text": "local unit D6=null"
+    },
+    {
+      "line": 29648,
+      "text": "local player h=GetOwningPlayer(i)"
+    },
+    {
+      "line": 29649,
+      "text": "call GroupEnumUnitsInRange(DG,FF,FG,P7,null)"
+    },
+    {
+      "line": 29650,
+      "text": "loop"
+    },
+    {
+      "line": 29651,
+      "text": "set D6=FirstOfGroup(DG)"
+    },
+    {
+      "line": 29652,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 29653,
+      "text": "call GroupRemoveUnit(DG,D6)"
+    },
+    {
+      "line": 29654,
+      "text": "if IsUnitEnemy(D6,h) then"
+    },
+    {
+      "line": 29655,
+      "text": "call UnitDamageTarget(i,D6,P8,false,false,P9,QB,WEAPON_TYPE_WHOKNOWS)"
+    },
+    {
+      "line": 29656,
+      "text": "endif"
+    },
+    {
+      "line": 29657,
+      "text": "endloop"
+    },
+    {
+      "line": 29658,
+      "text": "call GroupClear(DG)"
+    },
+    {
+      "line": 29659,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 29660,
+      "text": "set DG=null"
+    },
+    {
+      "line": 29661,
+      "text": "set D6=null"
+    },
+    {
+      "line": 29662,
+      "text": "set h=null"
+    },
+    {
+      "line": 29663,
+      "text": "set i=null"
+    },
+    {
+      "line": 29664,
+      "text": "endfunction"
+    },
+    {
+      "line": 29807,
+      "text": "function SelectRangeAlly takes unit Pf,real FF,real FG,real Px returns group"
+    },
+    {
+      "line": 29808,
+      "text": "local group DG=CreateGroup()"
+    },
+    {
+      "line": 29809,
+      "text": "local group Om=CreateGroup()"
+    },
+    {
+      "line": 29810,
+      "text": "local unit D6=null"
+    },
+    {
+      "line": 29811,
+      "text": "call GroupEnumUnitsInRange(DG,FF,FG,Px,null)"
+    },
+    {
+      "line": 29812,
+      "text": "loop"
+    },
+    {
+      "line": 29813,
+      "text": "set D6=FirstOfGroup(DG)"
+    },
+    {
+      "line": 29814,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 29815,
+      "text": "if IsUnitAlly(D6,GetOwningPlayer(Pf)) and not IsUnitType(D6,UNIT_TYPE_DEAD) and GetUnitAbilityLevel(D6,$4176756C)==0 then"
+    },
+    {
+      "line": 29816,
+      "text": "call GroupAddUnit(Om,D6)"
+    },
+    {
+      "line": 29817,
+      "text": "endif"
+    },
+    {
+      "line": 29818,
+      "text": "call GroupRemoveUnit(DG,D6)"
+    },
+    {
+      "line": 29819,
+      "text": "endloop"
+    },
+    {
+      "line": 29820,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 29821,
+      "text": "set DG=null"
+    },
+    {
+      "line": 29822,
+      "text": "set D6=null"
+    },
+    {
+      "line": 29823,
+      "text": "set Pf=null"
+    },
+    {
+      "line": 29824,
+      "text": "set Py=Om"
+    },
+    {
+      "line": 29825,
+      "text": "set Om=null"
+    },
+    {
+      "line": 29826,
+      "text": "return Py"
+    },
+    {
+      "line": 29827,
+      "text": "endfunction"
+    },
+    {
+      "line": 30160,
+      "text": "function ChargeDistanceCondition takes nothing returns boolean"
+    },
+    {
+      "line": 30161,
+      "text": "local trigger t=GetTriggeringTrigger()"
+    },
+    {
+      "line": 30162,
+      "text": "local integer Pr=GetHandleId(t)"
+    },
+    {
+      "line": 30163,
+      "text": "local real DK=LoadReal(O,Pr,3)"
+    },
+    {
+      "line": 30164,
+      "text": "local real QS=LoadReal(O,Pr,1)"
+    },
+    {
+      "line": 30165,
+      "text": "local real QN=LoadReal(O,Pr,2)"
+    },
+    {
+      "line": 30166,
+      "text": "local string QP=LoadStr(O,Pr,4)"
+    },
+    {
+      "line": 30167,
+      "text": "local string QQ=LoadStr(O,Pr,5)"
+    },
+    {
+      "line": 30168,
+      "text": "local unit Ki=LoadUnitHandle(O,Pr,6)"
+    },
+    {
+      "line": 30169,
+      "text": "local real Pm=LoadReal(O,Pr,7)"
+    },
+    {
+      "line": 30170,
+      "text": "local real QT=QS/DK*.04"
+    },
+    {
+      "line": 30171,
+      "text": "call SaveReal(O,Pr,10,QT)"
+    },
+    {
+      "line": 30172,
+      "text": "if GetTriggerEventId()==EVENT_WIDGET_DEATH then"
+    },
+    {
+      "line": 30173,
+      "text": "if QQ!=null then"
+    },
+    {
+      "line": 30174,
+      "text": "call ExecuteFunc(QQ)"
+    },
+    {
+      "line": 30175,
+      "text": "endif"
+    },
+    {
+      "line": 30176,
+      "text": "call FlushChildHashtable(O,Pr)"
+    },
+    {
+      "line": 30177,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 30178,
+      "text": "elseif GetTriggerEventId()==EVENT_GAME_TIMER_EXPIRED then"
+    },
+    {
+      "line": 30179,
+      "text": "if QN+QT>=QS then"
+    },
+    {
+      "line": 30180,
+      "text": "if QQ!=null then"
+    },
+    {
+      "line": 30181,
+      "text": "call ExecuteFunc(QQ)"
+    },
+    {
+      "line": 30182,
+      "text": "endif"
+    },
+    {
+      "line": 30183,
+      "text": "call FlushChildHashtable(O,Pr)"
+    },
+    {
+      "line": 30184,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 30185,
+      "text": "else"
+    },
+    {
+      "line": 30186,
+      "text": "call SaveReal(O,Pr,2,QN+QT)"
+    },
+    {
+      "line": 30187,
+      "text": "call SetUnitPosition(Ki,GetUnitX(Ki)+CosBJ(Pm)*QT,GetUnitY(Ki)+SinBJ(Pm)*QT)"
+    },
+    {
+      "line": 30188,
+      "text": "if QP!=null then"
+    },
+    {
+      "line": 30189,
+      "text": "call ExecuteFunc(QP)"
+    },
+    {
+      "line": 30190,
+      "text": "endif"
+    },
+    {
+      "line": 30191,
+      "text": "endif"
+    },
+    {
+      "line": 30192,
+      "text": "endif"
+    },
+    {
+      "line": 30193,
+      "text": "set t=null"
+    },
+    {
+      "line": 30194,
+      "text": "set Ki=null"
+    },
+    {
+      "line": 30195,
+      "text": "set QP=null"
+    },
+    {
+      "line": 30196,
+      "text": "set QQ=null"
+    },
+    {
+      "line": 30197,
+      "text": "return false"
+    },
+    {
+      "line": 30198,
+      "text": "endfunction"
+    },
+    {
+      "line": 30199,
+      "text": "function ChargeDistance takes unit Pf,unit Ki,real Pm,real QN,real QO,string QP,string QQ returns trigger"
+    },
+    {
+      "line": 30200,
+      "text": "local trigger t=CreateTrigger()"
+    },
+    {
+      "line": 30201,
+      "text": "local integer Pr=GetHandleId(t)"
+    },
+    {
+      "line": 30202,
+      "text": "call SaveReal(O,Pr,1,QN)"
+    },
+    {
+      "line": 30203,
+      "text": "call SaveReal(O,Pr,3,QO)"
+    },
+    {
+      "line": 30204,
+      "text": "call SaveStr(O,Pr,4,QP)"
+    },
+    {
+      "line": 30205,
+      "text": "call SaveStr(O,Pr,5,QQ)"
+    },
+    {
+      "line": 30206,
+      "text": "call SaveAgentHandle(O,Pr,6,Ki)"
+    },
+    {
+      "line": 30207,
+      "text": "call SaveReal(O,Pr,7,Pm)"
+    },
+    {
+      "line": 30208,
+      "text": "call SaveAgentHandle(O,Pr,9,Pf)"
+    },
+    {
+      "line": 30209,
+      "text": "call TriggerRegisterDeathEvent(t,Ki)"
+    },
+    {
+      "line": 30210,
+      "text": "call TriggerRegisterTimerEvent(t,0,false)"
+    },
+    {
+      "line": 30211,
+      "text": "call TriggerRegisterTimerEvent(t,.04,true)"
+    },
+    {
+      "line": 30212,
+      "text": "call TriggerAddCondition(t,Condition(function ChargeDistanceCondition))"
+    },
+    {
+      "line": 30213,
+      "text": "set QU=t"
+    },
+    {
+      "line": 30214,
+      "text": "set t=null"
+    },
+    {
+      "line": 30215,
+      "text": "set Ki=null"
+    },
+    {
+      "line": 30216,
+      "text": "set Pf=null"
+    },
+    {
+      "line": 30217,
+      "text": "set QP=null"
+    },
+    {
+      "line": 30218,
+      "text": "set QQ=null"
+    },
+    {
+      "line": 30219,
+      "text": "return QU"
+    },
+    {
+      "line": 33981,
+      "text": "function AlexstraszaLifeGrantSkillAction takes nothing returns nothing"
+    },
+    {
+      "line": 33982,
+      "text": "local trigger t=GetTriggeringTrigger()"
+    },
+    {
+      "line": 33983,
+      "text": "local unit Bc=LoadUnitHandle(O,GetHandleId(t),0)"
+    },
+    {
+      "line": 33984,
+      "text": "local real Pv=LoadReal(O,GetHandleId(t),1)"
+    },
+    {
+      "line": 33985,
+      "text": "local group DG=SelectRangeAlly(Bc,GetUnitX(Bc),GetUnitY(Bc),600)"
+    },
+    {
+      "line": 33986,
+      "text": "local unit D6"
+    },
+    {
+      "line": 33987,
+      "text": "loop"
+    },
+    {
+      "line": 33988,
+      "text": "set D6=FirstOfGroup(DG)"
+    },
+    {
+      "line": 33989,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 33990,
+      "text": "call SetUnitState(D6,UNIT_STATE_LIFE,GetUnitState(D6,UNIT_STATE_LIFE)+Pv*.15)"
+    },
+    {
+      "line": 33991,
+      "text": "call GroupRemoveUnit(DG,D6)"
+    },
+    {
+      "line": 33992,
+      "text": "endloop"
+    },
+    {
+      "line": 33993,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 33994,
+      "text": "if GetTriggerExecCount(t)>=4 then"
+    },
+    {
+      "line": 33995,
+      "text": "call PauseUnit(Bc,false)"
+    },
+    {
+      "line": 33996,
+      "text": "call FlushChildHashtable(O,GetHandleId(t))"
+    },
+    {
+      "line": 33997,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 33998,
+      "text": "endif"
+    },
+    {
+      "line": 33999,
+      "text": "set t=null"
+    },
+    {
+      "line": 34000,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 34001,
+      "text": "set DG=null"
+    },
+    {
+      "line": 34002,
+      "text": "endfunction"
+    },
+    {
+      "line": 34003,
+      "text": "function AlexstraszaLifeGrantSkillCoolTimer takes nothing returns nothing"
+    },
+    {
+      "line": 34004,
+      "text": "local timer t=GetExpiredTimer()"
+    },
+    {
+      "line": 34005,
+      "text": "local unit Bc=LoadUnitHandle(O,GetHandleId(t),0)"
+    },
+    {
+      "line": 34006,
+      "text": "call SaveBoolean(O,GetHandleId(Bc),Qb,false)"
+    },
+    {
+      "line": 34007,
+      "text": "call FlushChildHashtable(O,GetHandleId(t))"
+    },
+    {
+      "line": 34008,
+      "text": "call DestroyTimer(t)"
+    },
+    {
+      "line": 34009,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 34010,
+      "text": "set t=null"
+    },
+    {
+      "line": 34011,
+      "text": "endfunction"
+    },
+    {
+      "line": 34012,
+      "text": "function AlexstraszaLifeGrantSkillCool takes unit Bc,real Qd returns nothing"
+    },
+    {
+      "line": 34013,
+      "text": "local timer t=CreateTimer()"
+    },
+    {
+      "line": 34014,
+      "text": "call SaveAgentHandle(O,GetHandleId(t),0,Bc)"
+    },
+    {
+      "line": 34015,
+      "text": "call TimerStart(t,Qd,false,function AlexstraszaLifeGrantSkillCoolTimer)"
+    },
+    {
+      "line": 34016,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 34017,
+      "text": "set t=null"
+    },
+    {
+      "line": 34018,
+      "text": "endfunction"
+    },
+    {
+      "line": 34019,
+      "text": "function AlexstraszaLifeGrantSkill takes unit Bc returns boolean"
+    },
+    {
+      "line": 34020,
+      "text": "local boolean Qc=LoadBoolean(O,GetHandleId(Bc),Qb)"
+    },
+    {
+      "line": 34021,
+      "text": "local real Pv=GetUnitState(Bc,UNIT_STATE_LIFE)*.5"
+    },
+    {
+      "line": 34022,
+      "text": "local trigger t"
+    },
+    {
+      "line": 34023,
+      "text": "local effect DE"
+    },
+    {
+      "line": 34024,
+      "text": "if Qc then"
+    },
+    {
+      "line": 34025,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 34026,
+      "text": "return false"
+    },
+    {
+      "line": 34027,
+      "text": "endif"
+    },
+    {
+      "line": 34028,
+      "text": "call SaveBoolean(O,GetHandleId(Bc),Qb,true)"
+    },
+    {
+      "line": 34029,
+      "text": "call AlexstraszaLifeGrantSkillCool(Bc,15)"
+    },
+    {
+      "line": 34030,
+      "text": "set DE=AddSpecialEffect(\"Abilities\\\\Spells\\\\NightElf\\\\Tranquility\\\\Tranquility.mdl\",GetUnitX(Bc),GetUnitY(Bc))"
+    },
+    {
+      "line": 34031,
+      "text": "call YDWETimerDestroyEffect(3,DE)"
+    },
+    {
+      "line": 34032,
+      "text": "call PauseUnit(Bc,true)"
+    },
+    {
+      "line": 34033,
+      "text": "set t=CreateTrigger()"
+    },
+    {
+      "line": 34034,
+      "text": "call SaveAgentHandle(O,GetHandleId(t),0,Bc)"
+    },
+    {
+      "line": 34035,
+      "text": "call SaveReal(O,GetHandleId(t),1,Pv)"
+    },
+    {
+      "line": 34036,
+      "text": "call TriggerRegisterTimerEvent(t,1,true)"
+    },
+    {
+      "line": 34037,
+      "text": "call TriggerRegisterTimerEvent(t,0,false)"
+    },
+    {
+      "line": 34038,
+      "text": "call TriggerAddAction(t,function AlexstraszaLifeGrantSkillAction)"
+    },
+    {
+      "line": 34039,
+      "text": "call SetUnitState(Bc,UNIT_STATE_LIFE,Pv)"
+    },
+    {
+      "line": 34040,
+      "text": "set DE=null"
+    },
+    {
+      "line": 34041,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 34042,
+      "text": "set t=null"
+    },
+    {
+      "line": 34043,
+      "text": "return true"
+    },
+    {
+      "line": 34044,
+      "text": "endfunction"
+    },
+    {
+      "line": 34045,
+      "text": "function RegisterAlexstraszaLifeGrantEventAction takes nothing returns nothing"
+    },
+    {
+      "line": 34046,
+      "text": "local trigger t=GetTriggeringTrigger()"
+    },
+    {
+      "line": 34047,
+      "text": "local unit Bc=LoadUnitHandle(O,GetHandleId(t),0)"
+    },
+    {
+      "line": 34048,
+      "text": "local unit Om=LoadUnitHandle(O,GetHandleId(t),1)"
+    },
+    {
+      "line": 34049,
+      "text": "if GetTriggerEventId()==EVENT_WIDGET_DEATH or Om==null or Bc==null or IsUnitType(Bc,UNIT_TYPE_DEAD) or IsUnitType(Om,UNIT_TYPE_DEAD) then"
+    },
+    {
+      "line": 34050,
+      "text": "call RemoveSavedBoolean(O,GetHandleId(Om),GetHandleId(Bc))"
+    },
+    {
+      "line": 34051,
+      "text": "call FlushChildHashtable(O,GetHandleId(t))"
+    },
+    {
+      "line": 34052,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 34053,
+      "text": "else"
+    },
+    {
+      "line": 34054,
+      "text": "if AlexstraszaLifeGrantSkill(Bc) then"
+    },
+    {
+      "line": 34055,
+      "text": "call RemoveSavedBoolean(O,GetHandleId(Om),GetHandleId(Bc))"
+    },
+    {
+      "line": 34056,
+      "text": "call FlushChildHashtable(O,GetHandleId(t))"
+    },
+    {
+      "line": 34057,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 34058,
+      "text": "endif"
+    },
+    {
+      "line": 34059,
+      "text": "endif"
+    },
+    {
+      "line": 34060,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 34061,
+      "text": "set Om=null"
+    },
+    {
+      "line": 34062,
+      "text": "set t=null"
+    },
+    {
+      "line": 34063,
+      "text": "endfunction"
+    },
+    {
+      "line": 34064,
+      "text": "function RegisterAlexstraszaLifeGrantEvent takes unit Bc,unit Om returns nothing"
+    },
+    {
+      "line": 34065,
+      "text": "local trigger t=CreateTrigger()"
+    },
+    {
+      "line": 34066,
+      "text": "if LoadBoolean(O,GetHandleId(Om),GetHandleId(Bc)) then"
+    },
+    {
+      "line": 34067,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 34068,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 34069,
+      "text": "set Om=null"
+    },
+    {
+      "line": 34070,
+      "text": "set t=null"
+    },
+    {
+      "line": 34071,
+      "text": "return"
+    },
+    {
+      "line": 34072,
+      "text": "endif"
+    },
+    {
+      "line": 34073,
+      "text": "call SaveBoolean(O,GetHandleId(Om),GetHandleId(Bc),true)"
+    },
+    {
+      "line": 34074,
+      "text": "call SaveAgentHandle(O,GetHandleId(t),0,Bc)"
+    },
+    {
+      "line": 34075,
+      "text": "call SaveAgentHandle(O,GetHandleId(t),1,Om)"
+    },
+    {
+      "line": 34076,
+      "text": "call TriggerRegisterUnitLifeEvent(t,Om,LESS_THAN_OR_EQUAL,GetUnitState(Om,UNIT_STATE_MAX_LIFE)*.65)"
+    },
+    {
+      "line": 34077,
+      "text": "call TriggerRegisterDeathEvent(t,Bc)"
+    },
+    {
+      "line": 34078,
+      "text": "call TriggerRegisterDeathEvent(t,Om)"
+    },
+    {
+      "line": 34079,
+      "text": "call TriggerAddAction(t,function RegisterAlexstraszaLifeGrantEventAction)"
+    },
+    {
+      "line": 34080,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 34081,
+      "text": "set Om=null"
+    },
+    {
+      "line": 34082,
+      "text": "set t=null"
+    },
+    {
+      "line": 34083,
+      "text": "endfunction"
+    },
+    {
+      "line": 34084,
+      "text": "function RegisterAlexstraszaLifeGrantAction takes nothing returns nothing"
+    },
+    {
+      "line": 34085,
+      "text": "local trigger t=GetTriggeringTrigger()"
+    },
+    {
+      "line": 34086,
+      "text": "local unit Bc=LoadUnitHandle(O,GetHandleId(t),0)"
+    },
+    {
+      "line": 34087,
+      "text": "if GetTriggerEventId()==EVENT_WIDGET_DEATH or Bc==null then"
+    },
+    {
+      "line": 34088,
+      "text": "call FlushChildHashtable(O,GetHandleId(t))"
+    },
+    {
+      "line": 34089,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 34090,
+      "text": "elseif IsUnitAlly(GetTriggerUnit(),GetOwningPlayer(Bc)) then"
+    },
+    {
+      "line": 34091,
+      "text": "call RegisterAlexstraszaLifeGrantEvent(Bc,GetTriggerUnit())"
+    },
+    {
+      "line": 34092,
+      "text": "endif"
+    },
+    {
+      "line": 34093,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 34094,
+      "text": "set t=null"
+    },
+    {
+      "line": 34095,
+      "text": "endfunction"
+    },
+    {
+      "line": 34096,
+      "text": "function RegisterAlexstraszaLifeGrant takes unit Bc returns nothing"
+    },
+    {
+      "line": 34097,
+      "text": "local trigger t=CreateTrigger()"
+    },
+    {
+      "line": 34098,
+      "text": "local real Px=600"
+    },
+    {
+      "line": 34099,
+      "text": "local group DG=SelectRangeAlly(Bc,GetUnitX(Bc),GetUnitY(Bc),Px)"
+    },
+    {
+      "line": 34100,
+      "text": "local unit D6"
+    },
+    {
+      "line": 34101,
+      "text": "loop"
+    },
+    {
+      "line": 34102,
+      "text": "set D6=FirstOfGroup(DG)"
+    },
+    {
+      "line": 34103,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 34104,
+      "text": "call RegisterAlexstraszaLifeGrantEvent(Bc,D6)"
+    },
+    {
+      "line": 34105,
+      "text": "call GroupRemoveUnit(DG,D6)"
+    },
+    {
+      "line": 34106,
+      "text": "endloop"
+    },
+    {
+      "line": 34107,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 34108,
+      "text": "call SaveAgentHandle(O,GetHandleId(t),0,Bc)"
+    },
+    {
+      "line": 34109,
+      "text": "call TriggerRegisterUnitInRange(t,Bc,Px,null)"
+    },
+    {
+      "line": 34110,
+      "text": "call TriggerRegisterDeathEvent(t,Bc)"
+    },
+    {
+      "line": 34111,
+      "text": "call TriggerAddAction(t,function RegisterAlexstraszaLifeGrantAction)"
+    },
+    {
+      "line": 34112,
+      "text": "set t=null"
+    },
+    {
+      "line": 34113,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 34114,
+      "text": "set DG=null"
+    },
+    {
+      "line": 34115,
+      "text": "endfunction"
+    },
+    {
+      "line": 34116,
+      "text": "function AlexstraszaLifeBlossomAction takes nothing returns nothing"
+    },
+    {
+      "line": 34117,
+      "text": "local trigger t=GetTriggeringTrigger()"
+    },
+    {
+      "line": 34118,
+      "text": "local unit Bc=LoadUnitHandle(O,GetHandleId(t),0)"
+    },
+    {
+      "line": 34119,
+      "text": "local effect DE=LoadEffectHandle(O,GetHandleId(t),1)"
+    },
+    {
+      "line": 34120,
+      "text": "local real FF=LoadReal(O,GetHandleId(t),2)"
+    },
+    {
+      "line": 34121,
+      "text": "local real FG=LoadReal(O,GetHandleId(t),3)"
+    },
+    {
+      "line": 34122,
+      "text": "local group DG=SelectRangeAlly(Bc,FF,FG,600)"
+    },
+    {
+      "line": 34123,
+      "text": "local unit D6"
+    },
+    {
+      "line": 34124,
+      "text": "loop"
+    },
+    {
+      "line": 34125,
+      "text": "set D6=FirstOfGroup(DG)"
+    },
+    {
+      "line": 34126,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 34127,
+      "text": "call SetUnitState(D6,UNIT_STATE_LIFE,GetUnitState(D6,UNIT_STATE_LIFE)+60)"
+    },
+    {
+      "line": 34128,
+      "text": "call GroupRemoveUnit(DG,D6)"
+    },
+    {
+      "line": 34129,
+      "text": "endloop"
+    },
+    {
+      "line": 34130,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 34131,
+      "text": "if GetTriggerExecCount(t)>=8 then"
+    },
+    {
+      "line": 34132,
+      "text": "call DestroyEffect(DE)"
+    },
+    {
+      "line": 34133,
+      "text": "call FlushChildHashtable(O,GetHandleId(t))"
+    },
+    {
+      "line": 34134,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 34135,
+      "text": "endif"
+    },
+    {
+      "line": 34136,
+      "text": "set t=null"
+    },
+    {
+      "line": 34137,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 34138,
+      "text": "set DE=null"
+    },
+    {
+      "line": 34139,
+      "text": "set DG=null"
+    },
+    {
+      "line": 34140,
+      "text": "endfunction"
+    },
+    {
+      "line": 34141,
+      "text": "function AlexstraszaLifeBlossom takes unit Bc,real FF,real FG returns nothing"
+    },
+    {
+      "line": 34142,
+      "text": "local trigger t=CreateTrigger()"
+    },
+    {
+      "line": 34143,
+      "text": "call SaveAgentHandle(O,GetHandleId(t),0,Bc)"
+    },
+    {
+      "line": 34144,
+      "text": "call SaveAgentHandle(O,GetHandleId(t),1,AddSpecialEffect(\"chanrao_target.mdx\",FF,FG))"
+    },
+    {
+      "line": 34145,
+      "text": "call SaveReal(O,GetHandleId(t),2,FF)"
+    },
+    {
+      "line": 34146,
+      "text": "call SaveReal(O,GetHandleId(t),3,FG)"
+    },
+    {
+      "line": 34147,
+      "text": "call TriggerRegisterTimerEvent(t,0,false)"
+    },
+    {
+      "line": 34148,
+      "text": "call TriggerRegisterTimerEvent(t,1,true)"
+    },
+    {
+      "line": 34149,
+      "text": "call TriggerAddAction(t,function AlexstraszaLifeBlossomAction)"
+    },
+    {
+      "line": 34150,
+      "text": "set t=null"
+    },
+    {
+      "line": 34151,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 34152,
+      "text": "endfunction"
+    },
+    {
+      "line": 34153,
+      "text": "function AlexstraszaShareLifeActionTimer takes nothing returns nothing"
+    },
+    {
+      "line": 34154,
+      "text": "local timer t=GetExpiredTimer()"
+    },
+    {
+      "line": 34155,
+      "text": "local unit Bc=LoadUnitHandle(O,GetHandleId(t),0)"
+    },
+    {
+      "line": 34156,
+      "text": "call UnitAddAbility(Bc,$41313657)"
+    },
+    {
+      "line": 34157,
+      "text": "call FlushChildHashtable(O,GetHandleId(t))"
+    },
+    {
+      "line": 34158,
+      "text": "call DestroyTimer(t)"
+    },
+    {
+      "line": 34159,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 34160,
+      "text": "set t=null"
+    },
+    {
+      "line": 34161,
+      "text": "endfunction"
+    },
+    {
+      "line": 34162,
+      "text": "function AlexstraszaShareLifeAction takes nothing returns nothing"
+    },
+    {
+      "line": 34163,
+      "text": "local trigger t=GetTriggeringTrigger()"
+    },
+    {
+      "line": 34164,
+      "text": "local unit Bc=LoadUnitHandle(O,GetHandleId(t),1)"
+    },
+    {
+      "line": 34165,
+      "text": "local unit Om=LoadUnitHandle(O,GetHandleId(t),2)"
+    },
+    {
+      "line": 34166,
+      "text": "local real Pv=0"
+    },
+    {
+      "line": 34167,
+      "text": "if GetTriggerEventId()==EVENT_UNIT_DEATH or IsUnitType(Bc,UNIT_TYPE_DEAD) or IsUnitType(Om,UNIT_TYPE_DEAD) then"
+    },
+    {
+      "line": 34168,
+      "text": "if GetTriggerUnit()==Bc then"
+    },
+    {
+      "line": 34169,
+      "text": "call SetUnitState(Om,UNIT_STATE_MAX_LIFE,LoadReal(O,GetHandleId(t),3))"
+    },
+    {
+      "line": 34170,
+      "text": "call SetUnitLifePercentBJ(Om,100)"
+    },
+    {
+      "line": 34171,
+      "text": "elseif GetTriggerUnit()==Om then"
+    },
+    {
+      "line": 34172,
+      "text": "call KillUnit(Bc)"
+    },
+    {
+      "line": 34173,
+      "text": "endif"
+    },
+    {
+      "line": 34174,
+      "text": "call FlushChildHashtable(O,GetHandleId(t))"
+    },
+    {
+      "line": 34175,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 34176,
+      "text": "elseif GetTriggerEventId()==EVENT_UNIT_DAMAGED then"
+    },
+    {
+      "line": 34177,
+      "text": "set Pv=(GetUnitState(Bc,UNIT_STATE_LIFE)+GetUnitState(Om,UNIT_STATE_LIFE))/2"
+    },
+    {
+      "line": 34178,
+      "text": "call SetUnitState(Bc,UNIT_STATE_LIFE,Pv)"
+    },
+    {
+      "line": 34179,
+      "text": "call SetUnitState(Om,UNIT_STATE_LIFE,Pv)"
+    },
+    {
+      "line": 34180,
+      "text": "else"
+    },
+    {
+      "line": 34181,
+      "text": "endif"
+    },
+    {
+      "line": 34182,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 34183,
+      "text": "set Om=null"
+    },
+    {
+      "line": 34184,
+      "text": "endfunction"
+    },
+    {
+      "line": 34185,
+      "text": "function AlexstraszaShareLife takes unit Bc,unit Om returns nothing"
+    },
+    {
+      "line": 34186,
+      "text": "local trigger t=CreateTrigger()"
+    },
+    {
+      "line": 34187,
+      "text": "local real Qe=GetUnitState(Bc,UNIT_STATE_MAX_LIFE)+GetUnitState(Om,UNIT_STATE_MAX_LIFE)"
+    },
+    {
+      "line": 34188,
+      "text": "call SaveReal(O,GetHandleId(t),3,GetUnitState(Om,UNIT_STATE_MAX_LIFE))"
+    },
+    {
+      "line": 34189,
+      "text": "call SetUnitState(Bc,UNIT_STATE_MAX_LIFE,Qe)"
+    },
+    {
+      "line": 34190,
+      "text": "call SetUnitState(Bc,UNIT_STATE_LIFE,GetUnitState(Bc,UNIT_STATE_MAX_LIFE))"
+    },
+    {
+      "line": 34191,
+      "text": "call SetUnitState(Om,UNIT_STATE_MAX_LIFE,Qe)"
+    },
+    {
+      "line": 34192,
+      "text": "call SetUnitState(Om,UNIT_STATE_LIFE,GetUnitState(Om,UNIT_STATE_MAX_LIFE))"
+    },
+    {
+      "line": 34193,
+      "text": "call SaveAgentHandle(O,GetHandleId(t),1,Bc)"
+    },
+    {
+      "line": 34194,
+      "text": "call SaveAgentHandle(O,GetHandleId(t),2,Om)"
+    },
+    {
+      "line": 34195,
+      "text": "call TriggerRegisterUnitEvent(t,Bc,EVENT_UNIT_DAMAGED)"
+    },
+    {
+      "line": 34196,
+      "text": "call TriggerRegisterUnitEvent(t,Om,EVENT_UNIT_DAMAGED)"
+    },
+    {
+      "line": 34197,
+      "text": "call TriggerRegisterUnitEvent(t,Bc,EVENT_UNIT_DEATH)"
+    },
+    {
+      "line": 34198,
+      "text": "call TriggerRegisterUnitEvent(t,Om,EVENT_UNIT_DEATH)"
+    },
+    {
+      "line": 34199,
+      "text": "call TriggerRegisterTimerEvent(t,.03,true)"
+    },
+    {
+      "line": 34200,
+      "text": "call TriggerAddAction(t,function AlexstraszaShareLifeAction)"
+    },
+    {
+      "line": 34201,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 34202,
+      "text": "set Om=null"
+    },
+    {
+      "line": 34203,
+      "text": "set t=null"
+    },
+    {
+      "line": 34204,
+      "text": "endfunction"
+    },
+    {
+      "line": 34205,
+      "text": "function AlexstraszaShareLifeFindTargetTimer takes nothing returns nothing"
+    },
+    {
+      "line": 34206,
+      "text": "local timer t=GetExpiredTimer()"
+    },
+    {
+      "line": 34207,
+      "text": "local unit Bc=LoadUnitHandle(O,GetHandleId(t),0)"
+    },
+    {
+      "line": 34208,
+      "text": "local integer x=LoadInteger(O,GetHandleId(t),1)"
+    },
+    {
+      "line": 34209,
+      "text": "local group DG=YDWEGetUnitsOfPlayerAndTypeIdNull(GetOwningPlayer(Bc),x)"
+    },
+    {
+      "line": 34210,
+      "text": "local unit D6"
+    },
+    {
+      "line": 34211,
+      "text": "loop"
+    },
+    {
+      "line": 34212,
+      "text": "set D6=FirstOfGroup(DG)"
+    },
+    {
+      "line": 34213,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 34214,
+      "text": "if GetUnitUserData(Bc)==GetUnitUserData(D6) then"
+    },
+    {
+      "line": 34215,
+      "text": "call AlexstraszaShareLife(Bc,D6)"
+    },
+    {
+      "line": 34216,
+      "text": "exitwhen true"
+    },
+    {
+      "line": 34217,
+      "text": "endif"
+    },
+    {
+      "line": 34218,
+      "text": "call GroupRemoveUnit(DG,D6)"
+    },
+    {
+      "line": 34219,
+      "text": "endloop"
+    },
+    {
+      "line": 34220,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 34221,
+      "text": "call FlushChildHashtable(O,GetHandleId(t))"
+    },
+    {
+      "line": 34222,
+      "text": "call DestroyTimer(t)"
+    },
+    {
+      "line": 34223,
+      "text": "set t=null"
+    },
+    {
+      "line": 34224,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 34225,
+      "text": "set DG=null"
+    },
+    {
+      "line": 34226,
+      "text": "set D6=null"
+    },
+    {
+      "line": 34227,
+      "text": "endfunction"
+    },
+    {
+      "line": 34228,
+      "text": "function AlexstraszaShareLifeFindTarget takes unit Bc,integer x returns nothing"
+    },
+    {
+      "line": 34229,
+      "text": "local timer t=CreateTimer()"
+    },
+    {
+      "line": 34230,
+      "text": "call SaveAgentHandle(O,GetHandleId(t),0,Bc)"
+    },
+    {
+      "line": 34231,
+      "text": "call SaveInteger(O,GetHandleId(t),1,x)"
+    },
+    {
+      "line": 34232,
+      "text": "call TimerStart(t,.1,false,function AlexstraszaShareLifeFindTargetTimer)"
+    },
+    {
+      "line": 34233,
+      "text": "set t=null"
+    },
+    {
+      "line": 34234,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 34235,
+      "text": "endfunction"
+    },
+    {
+      "line": 34236,
+      "text": "function AlexstraszaShootTargetCallBack takes nothing returns nothing"
+    },
+    {
+      "line": 34237,
+      "text": "local unit Bc=GetChargeSource()"
+    },
+    {
+      "line": 34238,
+      "text": "local unit Ki=GetChargeDummy()"
+    },
+    {
+      "line": 34239,
+      "text": "call YDWETimerDestroyEffect(.6,AddSpecialEffect(\"MoonFire_yin.mdx\",GetUnitX(Ki),GetUnitY(Ki)))"
+    },
+    {
+      "line": 34240,
+      "text": "call DestroyEffect(AddSpecialEffect(\"Abilities\\\\Weapons\\\\AncientProtectorMissile\\\\AncientProtectorMissile.mdl\",GetUnitX(Ki),GetUnitY(Ki)))"
+    },
+    {
+      "line": 34241,
+      "text": "call DamageAoe(Bc,GetUnitX(Ki),GetUnitY(Ki),150,160,ATTACK_TYPE_NORMAL,DAMAGE_TYPE_FIRE)"
+    },
+    {
+      "line": 34242,
+      "text": "set Ki=null"
+    },
+    {
+      "line": 34243,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 34244,
+      "text": "endfunction"
+    },
+    {
+      "line": 34245,
+      "text": "function AlexstraszaShootTargetAction takes nothing returns nothing"
+    },
+    {
+      "line": 34246,
+      "text": "local trigger t=GetTriggeringTrigger()"
+    },
+    {
+      "line": 34247,
+      "text": "local unit Bc=LoadUnitHandle(O,GetHandleId(t),0)"
+    },
+    {
+      "line": 34248,
+      "text": "local real Pm=LoadReal(O,GetHandleId(t),1)"
+    },
+    {
+      "line": 34249,
+      "text": "local unit Ki=CreateUnit(GetOwningPlayer(Bc),$65303038,GetUnitX(Bc),GetUnitY(Bc),Pm)"
+    },
+    {
+      "line": 34250,
+      "text": "local effect DE=AddSpecialEffectTarget(\"Abilities\\\\Weapons\\\\FireBallMissile\\\\FireBallMissile.mdl\",Ki,\"chest\")"
+    },
+    {
+      "line": 34251,
+      "text": "call YDWEFlyEnable(Ki)"
+    },
+    {
+      "line": 34252,
+      "text": "call SetUnitFlyHeight(Ki,100,10000)"
+    },
+    {
+      "line": 34253,
+      "text": "call ChargeDistance(Bc,Ki,Pm,1500,1.2,\"AlexstraszaShootTargetCallBack\",null)"
+    },
+    {
+      "line": 34254,
+      "text": "call YDWETimerRemoveUnit(1.2,Ki)"
+    },
+    {
+      "line": 34255,
+      "text": "call YDWETimerDestroyEffect(1.2,DE)"
+    },
+    {
+      "line": 34256,
+      "text": "if GetTriggerExecCount(t)>=3 then"
+    },
+    {
+      "line": 34257,
+      "text": "call PauseUnit(Bc,false)"
+    },
+    {
+      "line": 34258,
+      "text": "call FlushChildHashtable(O,GetHandleId(t))"
+    },
+    {
+      "line": 34259,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 34260,
+      "text": "endif"
+    },
+    {
+      "line": 34261,
+      "text": "set DE=null"
+    },
+    {
+      "line": 34262,
+      "text": "set t=null"
+    },
+    {
+      "line": 34263,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 34264,
+      "text": "set Ki=null"
+    },
+    {
+      "line": 34265,
+      "text": "endfunction"
+    },
+    {
+      "line": 34266,
+      "text": "function AlexstraszaShootTarget takes unit Bc,unit Om returns nothing"
+    },
+    {
+      "line": 34267,
+      "text": "local real Pm=GetAngleFromUnit(Bc,Om)"
+    },
+    {
+      "line": 34268,
+      "text": "local trigger t=CreateTrigger()"
+    },
+    {
+      "line": 34269,
+      "text": "call PauseUnit(Bc,true)"
+    },
+    {
+      "line": 34270,
+      "text": "call SetUnitFacing(Bc,Pm)"
+    },
+    {
+      "line": 34271,
+      "text": "call SaveAgentHandle(O,GetHandleId(t),0,Bc)"
+    },
+    {
+      "line": 34272,
+      "text": "call SaveReal(O,GetHandleId(t),1,Pm)"
+    },
+    {
+      "line": 34273,
+      "text": "call TriggerRegisterTimerEvent(t,1.2,true)"
+    },
+    {
+      "line": 34274,
+      "text": "call TriggerRegisterTimerEvent(t,0,false)"
+    },
+    {
+      "line": 34275,
+      "text": "call TriggerAddAction(t,function AlexstraszaShootTargetAction)"
+    },
+    {
+      "line": 34276,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 34277,
+      "text": "set Om=null"
+    },
+    {
+      "line": 34278,
+      "text": "set t=null"
+    },
+    {
+      "line": 34279,
+      "text": "endfunction"
+    },
+    {
+      "line": 34280,
+      "text": "function AlexstraszaPurifyFireActionAction takes nothing returns nothing"
+    },
+    {
+      "line": 34281,
+      "text": "local trigger t=GetTriggeringTrigger()"
+    },
+    {
+      "line": 34282,
+      "text": "local unit Bc=LoadUnitHandle(O,GetHandleId(t),0)"
+    },
+    {
+      "line": 34283,
+      "text": "local real Pm=LoadReal(O,GetHandleId(t),1)"
+    },
+    {
+      "line": 34284,
+      "text": "local lightning gM=LoadLightningHandle(O,GetHandleId(t),2)"
+    },
+    {
+      "line": 34285,
+      "text": "local real Qx=LoadReal(O,GetHandleId(t),3)"
+    },
+    {
+      "line": 34286,
+      "text": "local real a6=50"
+    },
+    {
+      "line": 34287,
+      "text": "local real Qv=GetUnitX(Bc)+CosBJ(Pm)*a6"
+    },
+    {
+      "line": 34288,
+      "text": "local real Qw=GetUnitY(Bc)+SinBJ(Pm)*a6"
+    },
+    {
+      "line": 34289,
+      "text": "local location Z8"
+    },
+    {
+      "line": 34290,
+      "text": "local location gN"
+    },
+    {
+      "line": 34291,
+      "text": "local real FF"
+    },
+    {
+      "line": 34292,
+      "text": "local real FG"
+    },
+    {
+      "line": 34293,
+      "text": "local group DG"
+    },
+    {
+      "line": 34294,
+      "text": "local unit D6"
+    },
+    {
+      "line": 34295,
+      "text": "if GetTriggerEventId()==EVENT_WIDGET_DEATH or Qx>=1800 then"
+    },
+    {
+      "line": 34296,
+      "text": "call SetUnitFlyHeight(Bc,0,1000)"
+    },
+    {
+      "line": 34297,
+      "text": "call PauseUnit(Bc,false)"
+    },
+    {
+      "line": 34298,
+      "text": "call ResetUnitAnimation(Bc)"
+    },
+    {
+      "line": 34299,
+      "text": "if gM!=null then"
+    },
+    {
+      "line": 34300,
+      "text": "call DestroyLightning(gM)"
+    },
+    {
+      "line": 34301,
+      "text": "endif"
+    },
+    {
+      "line": 34302,
+      "text": "call FlushChildHashtable(O,GetHandleId(t))"
+    },
+    {
+      "line": 34303,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 34304,
+      "text": "else"
+    },
+    {
+      "line": 34305,
+      "text": "set Qx=Qx+60"
+    },
+    {
+      "line": 34306,
+      "text": "call SaveReal(O,GetHandleId(t),3,Qx)"
+    },
+    {
+      "line": 34307,
+      "text": "set Z8=Location(Qv,Qw)"
+    },
+    {
+      "line": 34308,
+      "text": "set gN=PolarProjectionBJ(Z8,Qx,Pm)"
+    },
+    {
+      "line": 34309,
+      "text": "set FF=GetLocationX(gN)"
+    },
+    {
+      "line": 34310,
+      "text": "set FG=GetLocationY(gN)"
+    },
+    {
+      "line": 34311,
+      "text": "call YDWETimerDestroyEffect(.6,AddSpecialEffect(\"MoonFire_yin.mdx\",FF,FG))"
+    },
+    {
+      "line": 34312,
+      "text": "call DamageAoe(Bc,FF,FG,300,260,ATTACK_TYPE_NORMAL,DAMAGE_TYPE_FIRE)"
+    },
+    {
+      "line": 34313,
+      "text": "set DG=SelectRangeAlly(Bc,FF,FG,300)"
+    },
+    {
+      "line": 34314,
+      "text": "loop"
+    },
+    {
+      "line": 34315,
+      "text": "set D6=FirstOfGroup(DG)"
+    },
+    {
+      "line": 34316,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 34317,
+      "text": "call GroupRemoveUnit(DG,D6)"
+    },
+    {
+      "line": 34318,
+      "text": "endloop"
+    },
+    {
+      "line": 34319,
+      "text": "if gM!=null then"
+    },
+    {
+      "line": 34320,
+      "text": "call MoveLightningEx(gM,false,Qv,Qw,GetLocationZ(Z8)+GetUnitFlyHeight(Bc),FF,FG,GetLocationZ(gN))"
+    },
+    {
+      "line": 34321,
+      "text": "endif"
+    },
+    {
+      "line": 34322,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 34323,
+      "text": "call RemoveLocation(Z8)"
+    },
+    {
+      "line": 34324,
+      "text": "call RemoveLocation(gN)"
+    },
+    {
+      "line": 34325,
+      "text": "set DG=null"
+    },
+    {
+      "line": 34326,
+      "text": "set Z8=null"
+    },
+    {
+      "line": 34327,
+      "text": "set gN=null"
+    },
+    {
+      "line": 34328,
+      "text": "endif"
+    },
+    {
+      "line": 34329,
+      "text": "set Z8=null"
+    },
+    {
+      "line": 34330,
+      "text": "set gN=null"
+    },
+    {
+      "line": 34331,
+      "text": "endfunction"
+    },
+    {
+      "line": 34332,
+      "text": "function AlexstraszaPurifyFireAction takes nothing returns nothing"
+    },
+    {
+      "line": 34333,
+      "text": "local trigger t=GetTriggeringTrigger()"
+    },
+    {
+      "line": 34334,
+      "text": "local unit Bc=LoadUnitHandle(O,GetHandleId(t),0)"
+    },
+    {
+      "line": 34335,
+      "text": "local real Pm=LoadReal(O,GetHandleId(t),1)"
+    },
+    {
+      "line": 34336,
+      "text": "local location Z8=GetUnitLoc(Bc)"
+    },
+    {
+      "line": 34337,
+      "text": "local real ab=GetLocationZ(Z8)"
+    },
+    {
+      "line": 34338,
+      "text": "local real a6=900"
+    },
+    {
+      "line": 34339,
+      "text": "local real Qv=GetUnitX(Bc)+CosBJ(Pm)*a6"
+    },
+    {
+      "line": 34340,
+      "text": "local real Qw=GetUnitY(Bc)+SinBJ(Pm)*a6"
+    },
+    {
+      "line": 34341,
+      "text": "local effect DE=AddSpecialEffect(\"AZ_TheCaptainpf_F.mdx\",GetUnitX(Bc),GetUnitY(Bc))"
+    },
+    {
+      "line": 34342,
+      "text": "call EXEffectMatRotateZ(DE,Pm)"
+    },
+    {
+      "line": 34343,
+      "text": "call EXSetEffectSize(DE,3)"
+    },
+    {
+      "line": 34344,
+      "text": "call YDWETimerDestroyEffect(.6,AddSpecialEffect(\"MoonFire_yin.mdx\",Qv,Qw))"
+    },
+    {
+      "line": 34345,
+      "text": "call DamageAoe(Bc,Qv,Qw,a6,260*3,ATTACK_TYPE_NORMAL,DAMAGE_TYPE_FIRE)"
+    },
+    {
+      "line": 34346,
+      "text": "call SetUnitFlyHeight(Bc,0,1000)"
+    },
+    {
+      "line": 34347,
+      "text": "call PauseUnit(Bc,false)"
+    },
+    {
+      "line": 34348,
+      "text": "call ResetUnitAnimation(Bc)"
+    },
+    {
+      "line": 34349,
+      "text": "call FlushChildHashtable(O,GetHandleId(t))"
+    },
+    {
+      "line": 34350,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 34351,
+      "text": "call RemoveLocation(Z8)"
+    },
+    {
+      "line": 34352,
+      "text": "set DE=null"
+    },
+    {
+      "line": 34353,
+      "text": "set Z8=null"
+    },
+    {
+      "line": 34354,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 34355,
+      "text": "set t=null"
+    },
+    {
+      "line": 34356,
+      "text": "endfunction"
+    },
+    {
+      "line": 34357,
+      "text": "function AlexstraszaPurifyFire takes unit Bc,real FF,real FG returns nothing"
+    },
+    {
+      "line": 34358,
+      "text": "local real Pm=Atan2BJ(FG-GetUnitY(Bc),FF-GetUnitX(Bc))"
+    },
+    {
+      "line": 34359,
+      "text": "local trigger t=CreateTrigger()"
+    },
+    {
+      "line": 34360,
+      "text": "local effect DE"
+    },
+    {
+      "line": 34361,
+      "text": "call UnitRemoveAbility(Bc,GetSpellAbilityId())"
+    },
+    {
+      "line": 34362,
+      "text": "call SaveAgentHandle(O,GetHandleId(t),0,Bc)"
+    },
+    {
+      "line": 34363,
+      "text": "call SaveReal(O,GetHandleId(t),1,Pm)"
+    },
+    {
+      "line": 34364,
+      "text": "call PauseUnit(Bc,true)"
+    },
+    {
+      "line": 34365,
+      "text": "call YDWEFlyEnable(Bc)"
+    },
+    {
+      "line": 34366,
+      "text": "call SetUnitAnimation(Bc,\"spell alternate\")"
+    },
+    {
+      "line": 34367,
+      "text": "set DE=AddSpecialEffect(\"106.mdx\",GetUnitX(Bc),GetUnitY(Bc))"
+    },
+    {
+      "line": 34368,
+      "text": "call EXSetEffectZ(DE,500)"
+    },
+    {
+      "line": 34369,
+      "text": "call EXSetEffectSize(DE,3)"
+    },
+    {
+      "line": 34370,
+      "text": "call DestroyEffect(DE)"
+    },
+    {
+      "line": 34371,
+      "text": "call SetUnitFacing(Bc,Pm)"
+    },
+    {
+      "line": 34372,
+      "text": "call TriggerRegisterTimerEvent(t,1,false)"
+    },
+    {
+      "line": 34373,
+      "text": "call TriggerAddAction(t,function AlexstraszaPurifyFireAction)"
+    },
+    {
+      "line": 34374,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 34375,
+      "text": "set t=null"
+    },
+    {
+      "line": 34376,
+      "text": "set DE=null"
+    },
+    {
+      "line": 34377,
+      "text": "endfunction"
+    },
+    {
+      "line": 34378,
+      "text": "function AlexstraszaNaturalBlessingAction takes nothing returns nothing"
+    },
+    {
+      "line": 34379,
+      "text": "local trigger t=GetTriggeringTrigger()"
+    },
+    {
+      "line": 34380,
+      "text": "local unit Bc=LoadUnitHandle(O,GetHandleId(t),0)"
+    },
+    {
+      "line": 34381,
+      "text": "local unit Om=GetTriggerUnit()"
+    },
+    {
+      "line": 34382,
+      "text": "if GetTriggerEventId()==EVENT_WIDGET_DEATH then"
+    },
+    {
+      "line": 34383,
+      "text": "call FlushChildHashtable(O,GetHandleId(t))"
+    },
+    {
+      "line": 34384,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 34385,
+      "text": "elseif IsUnitAlly(Bc,GetOwningPlayer(Om)) and IsUnitInRange(Bc,Om,600) then"
+    },
+    {
+      "line": 34386,
+      "text": "if IssueTargetOrder(Bc,\"transmute\",Om) and GetUnitLifePercent(Om)<=50 and GetUnitLifePercent(Bc)>15 then"
+    },
+    {
+      "line": 34387,
+      "text": "call SetUnitLifePercentBJ(Bc,GetUnitLifePercent(Bc)-15)"
+    },
+    {
+      "line": 34388,
+      "text": "call SetUnitLifePercentBJ(Om,100)"
+    },
+    {
+      "line": 34389,
+      "text": "call DestroyEffect(AddSpecialEffect(\"Abilities\\\\Spells\\\\Items\\\\AIre\\\\AIreTarget.mdl\",GetUnitX(Om),GetUnitY(Om)))"
+    },
+    {
+      "line": 34390,
+      "text": "endif"
+    },
+    {
+      "line": 34391,
+      "text": "endif"
+    },
+    {
+      "line": 34392,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 34393,
+      "text": "set Om=null"
+    },
+    {
+      "line": 34394,
+      "text": "set t=null"
+    },
+    {
+      "line": 34395,
+      "text": "endfunction"
+    },
+    {
+      "line": 34396,
+      "text": "function AlexstraszaNaturalBlessing takes unit Bc returns nothing"
+    },
+    {
+      "line": 34397,
+      "text": "local trigger t=CreateTrigger()"
+    },
+    {
+      "line": 34398,
+      "text": "call SaveAgentHandle(O,GetHandleId(t),0,Bc)"
+    },
+    {
+      "line": 34399,
+      "text": "call YDWESyStemAnyUnitDamagedRegistTrigger(t)"
+    },
+    {
+      "line": 34400,
+      "text": "call TriggerRegisterDeathEvent(t,Bc)"
+    },
+    {
+      "line": 34401,
+      "text": "call TriggerAddAction(t,function AlexstraszaNaturalBlessingAction)"
+    },
+    {
+      "line": 34402,
+      "text": "set t=null"
+    },
+    {
+      "line": 34403,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 34404,
+      "text": "endfunction"
+    },
+    {
+      "line": 34405,
+      "text": "function AlexstraszaReviveAction takes nothing returns nothing"
+    },
+    {
+      "line": 34406,
+      "text": "local trigger t=GetTriggeringTrigger()"
+    },
+    {
+      "line": 34407,
+      "text": "local unit Bc=LoadUnitHandle(O,GetHandleId(t),1)"
+    },
+    {
+      "line": 34408,
+      "text": "local unit Ki"
+    },
+    {
+      "line": 34409,
+      "text": "local player h"
+    },
+    {
+      "line": 34410,
+      "text": "local timer Qi"
+    },
+    {
+      "line": 34411,
+      "text": "if GetTriggerEventId()==EVENT_UNIT_DEATH then"
+    },
+    {
+      "line": 34412,
+      "text": "if GetUnitTypeId(Bc)==$68305747 then"
+    },
+    {
+      "line": 34413,
+      "text": "call SetUnitTypeModel($68305230,\"LJQ_alexstrasza02.mdx\",null)"
+    },
+    {
+      "line": 34414,
+      "text": "else"
+    },
+    {
+      "line": 34415,
+      "text": "call SetUnitTypeModel($68305230,\"alexstrasza.mdl\",null)"
+    },
+    {
+      "line": 34416,
+      "text": "endif"
+    },
+    {
+      "line": 34417,
+      "text": "set Ki=CreateUnit(GetOwningPlayer(Bc),$68305230,GetUnitX(Bc),GetUnitY(Bc),GetUnitFacing(Bc))"
+    },
+    {
+      "line": 34418,
+      "text": "if GetUnitTypeId(Bc)==$68305747 then"
+    },
+    {
+      "line": 34419,
+      "text": "call DoNothing()"
+    },
+    {
+      "line": 34420,
+      "text": "else"
+    },
+    {
+      "line": 34421,
+      "text": "call SetUnitScale(Ki,.25,.25,.25)"
+    },
+    {
+      "line": 34422,
+      "text": "endif"
+    },
+    {
+      "line": 34423,
+      "text": "call SetUnitColor(Ki,GetPlayerColor(GetOwningPlayer(Bc)))"
+    },
+    {
+      "line": 34424,
+      "text": "call GroupAddUnit(JW,Ki)"
+    },
+    {
+      "line": 34425,
+      "text": "call SetUnitUserData(Ki,GetUnitUserData(Bc))"
+    },
+    {
+      "line": 34426,
+      "text": "call GroupAddUnit(JH[GetUnitUserData(Bc)],Ki)"
+    },
+    {
+      "line": 34427,
+      "text": "set h=ConvertedPlayer(GetUnitUserData(Bc))"
+    },
+    {
+      "line": 34428,
+      "text": "call SetUnitState(Ki,ConvertUnitState(32),GetUnitState(Ki,ConvertUnitState(32))+LoadInteger(O,GetHandleId(h),$4131365A))"
+    },
+    {
+      "line": 34429,
+      "text": "set Qi=CreateTimer()"
+    },
+    {
+      "line": 34430,
+      "text": "call SaveUnitHandle(O,GetHandleId(Qi),0,Ki)"
+    },
+    {
+      "line": 34431,
+      "text": "call TimerStart(Qi,20,false,function AlexstraszaShareLifeActionTimer)"
+    },
+    {
+      "line": 34432,
+      "text": "call FlushChildHashtable(O,GetHandleId(t))"
+    },
+    {
+      "line": 34433,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 34434,
+      "text": "else"
+    },
+    {
+      "line": 34435,
+      "text": "call DestroyTriggerForTime(t,.5)"
+    },
+    {
+      "line": 34436,
+      "text": "endif"
+    },
+    {
+      "line": 34437,
+      "text": "set Qi=null"
+    },
+    {
+      "line": 34438,
+      "text": "set t=null"
+    },
+    {
+      "line": 34439,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 34440,
+      "text": "set Ki=null"
+    },
+    {
+      "line": 34441,
+      "text": "endfunction"
+    },
+    {
+      "line": 34442,
+      "text": "function AlexstraszaRevive takes unit Bc returns nothing"
+    },
+    {
+      "line": 34443,
+      "text": "local trigger t=CreateTrigger()"
+    },
+    {
+      "line": 34444,
+      "text": "call SaveAgentHandle(O,GetHandleId(t),1,Bc)"
+    },
+    {
+      "line": 34445,
+      "text": "call TriggerRegisterUnitEvent(t,Bc,EVENT_UNIT_DEATH)"
+    },
+    {
+      "line": 34446,
+      "text": "call TriggerRegisterDeathEvent(t,Bc)"
+    },
+    {
+      "line": 34447,
+      "text": "call TriggerAddAction(t,function AlexstraszaReviveAction)"
+    },
+    {
+      "line": 34448,
+      "text": "set t=null"
+    },
+    {
+      "line": 34449,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 34450,
+      "text": "endfunction"
+    },
+    {
+      "line": 39478,
+      "text": "elseif BF==$41313657 then"
+    },
+    {
+      "line": 39479,
+      "text": "call AlexstraszaPurifyFire(i,GetUnitX(Qf),GetUnitY(Qf))"
+    },
+    {
+      "line": 39480,
+      "text": "elseif BF==$41313654 then"
+    },
+    {
+      "line": 39481,
+      "text": "call AlexstraszaLifeBlossom(i,FF,FG)"
+    },
+    {
+      "line": 39482,
+      "text": "elseif BF==$41313656 then"
+    },
+    {
+      "line": 39483,
+      "text": "call AlexstraszaShootTarget(i,Qf)"
+    },
+    {
+      "line": 41059,
+      "text": "if GetUnitAbilityLevel(i,$41313654)>0 then"
+    },
+    {
+      "line": 41060,
+      "text": "call IssuePointOrder(i,\"tranquility\",GetUnitX(bV),GetUnitY(bV))"
+    },
+    {
+      "line": 41061,
+      "text": "elseif GetUnitAbilityLevel(bV,$41313654)>0 then"
+    },
+    {
+      "line": 41062,
+      "text": "call IssuePointOrder(bV,\"tranquility\",GetUnitX(i),GetUnitY(i))"
+    },
+    {
+      "line": 41063,
+      "text": "endif"
+    },
+    {
+      "line": 41064,
+      "text": "if GetUnitAbilityLevel(i,$41313656)>0 then"
+    },
+    {
+      "line": 41065,
+      "text": "call IssueTargetOrder(i,\"unload\",bV)"
+    },
+    {
+      "line": 41066,
+      "text": "elseif GetUnitAbilityLevel(bV,$41313656)>0 then"
+    },
+    {
+      "line": 41067,
+      "text": "call IssueTargetOrder(bV,\"unload\",i)"
+    },
+    {
+      "line": 41068,
+      "text": "endif"
+    },
+    {
+      "line": 41069,
+      "text": "if GetUnitAbilityLevel(i,$41313657)>0 then"
+    },
+    {
+      "line": 41070,
+      "text": "call IssueTargetOrder(i,\"unholyfrenzy\",bV)"
+    },
+    {
+      "line": 41071,
+      "text": "elseif GetUnitAbilityLevel(bV,$41313657)>0 then"
+    },
+    {
+      "line": 41072,
+      "text": "call IssueTargetOrder(bV,\"unholyfrenzy\",i)"
+    },
+    {
+      "line": 41073,
+      "text": "endif"
+    },
+    {
+      "line": 42416,
+      "text": "if GetUnitAbilityLevel(i,$4131365A)>0 then"
+    },
+    {
+      "line": 42417,
+      "text": "set P8=GetRandomReal(GetUnitState(i,ConvertUnitState(20)),GetUnitState(i,ConvertUnitState(21)))"
+    },
+    {
+      "line": 42418,
+      "text": "call UnitDamageTargetBJ(i,Qf,P8*.25,ATTACK_TYPE_CHAOS,DAMAGE_TYPE_UNIVERSAL)"
+    },
+    {
+      "line": 42419,
+      "text": "if GetUnitState(Qf,UNIT_STATE_LIFE)<=P8 then"
+    },
+    {
+      "line": 42420,
+      "text": "call SetUnitLifeBJ(i,GetUnitState(i,UNIT_STATE_LIFE)+100)"
+    },
+    {
+      "line": 42421,
+      "text": "set h=ConvertedPlayer(GetUnitUserData(i))"
+    },
+    {
+      "line": 42422,
+      "text": "if GetRandomPercentageBJ()>=45 and LoadInteger(O,GetHandleId(h),$4131365A)<40 then"
+    },
+    {
+      "line": 42423,
+      "text": "call SaveInteger(O,GetHandleId(h),$4131365A,LoadInteger(O,GetHandleId(h),$4131365A)+1)"
+    },
+    {
+      "line": 42424,
+      "text": "call SetUnitState(i,ConvertUnitState(32),GetUnitState(i,ConvertUnitState(32))+1)"
+    },
+    {
+      "line": 42425,
+      "text": "endif"
+    },
+    {
+      "line": 42426,
+      "text": "endif"
+    },
+    {
+      "line": 42427,
+      "text": "endif"
+    },
+    {
+      "line": 42428,
+      "text": "if GetUnitAbilityLevel(i,Zq)>0 then"
+    },
+    {
+      "line": 42429,
+      "text": "call YseraApplyDreamCorrosion(i,Qf)"
+    },
+    {
+      "line": 42430,
+      "text": "endif"
+    },
+    {
+      "line": 42431,
+      "text": "if GetUnitAbilityLevel(i,$41313531)>0 then"
+    },
+    {
+      "line": 42432,
+      "text": "if GetRandomPercentageBJ()<=20 then"
+    },
+    {
+      "line": 42433,
+      "text": "call PauseUnitEx(i,Qf,1.5)"
+    },
+    {
+      "line": 42434,
+      "text": "call YDWETimerDestroyEffect(1.5,AddSpecialEffect(\"effect_halo_qingtong.mdx\",GetUnitX(Qf),GetUnitY(Qf)))"
+    },
+    {
+      "line": 42435,
+      "text": "endif"
+    },
+    {
+      "line": 42436,
+      "text": "endif"
+    },
+    {
+      "line": 42437,
+      "text": "if GetUnitAbilityLevel(i,$41313530)>0 and GetUnitTypeId(i)==$68305152 then"
+    },
+    {
+      "line": 42438,
+      "text": "set P8=P8+GetRandomReal(GetUnitState(i,ConvertUnitState(20)),GetUnitState(i,ConvertUnitState(21)))*.5"
+    },
+    {
+      "line": 42439,
+      "text": "call YDWESetEventDamage(P8)"
+    },
+    {
+      "line": 42440,
+      "text": "endif"
+    },
+    {
+      "line": 43731,
+      "text": "if GetUnitAbilityLevel(Pf,$41313653)>0 then"
+    },
+    {
+      "line": 43732,
+      "text": "call RegisterAlexstraszaLifeGrant(Bc)"
+    },
+    {
+      "line": 43733,
+      "text": "endif"
+    },
+    {
+      "line": 43734,
+      "text": "if GetUnitAbilityLevel(Pf,$41313655)>0 then"
+    },
+    {
+      "line": 43735,
+      "text": "call AlexstraszaShareLifeFindTarget(Bc,$68304D59)"
+    },
+    {
+      "line": 43736,
+      "text": "call AlexstraszaShareLifeFindTarget(Bc,$68304631)"
+    },
+    {
+      "line": 43737,
+      "text": "endif"
+    },
+    {
+      "line": 43738,
+      "text": "if GetUnitAbilityLevel(Pf,$41315148)>0 then"
+    },
+    {
+      "line": 43739,
+      "text": "call BlademasterClass(Bc,$65303048)"
+    },
+    {
+      "line": 43740,
+      "text": "call BlademasterClass(Bc,$6530304D)"
+    },
+    {
+      "line": 43741,
+      "text": "call BlademasterClass(Bc,$6E303648)"
+    },
+    {
+      "line": 43742,
+      "text": "endif"
+    },
+    {
+      "line": 43743,
+      "text": "if GetUnitAbilityLevel(Pf,$41313730)>0 then"
+    },
+    {
+      "line": 43744,
+      "text": "call AlexstraszaNaturalBlessing(Bc)"
+    },
+    {
+      "line": 43745,
+      "text": "endif"
+    },
+    {
+      "line": 43746,
+      "text": "if GetUnitAbilityLevel(Pf,$41313732)>0 then"
+    },
+    {
+      "line": 43747,
+      "text": "call AlexstraszaRevive(Bc)"
+    }
+  ],
+  "findings": [
+    "A170仅见建筑PassiveSkill登记，没有显式UnitAddAbility授予；h0QZ/h0WG不携带该能力，默认战斗命令失败。",
+    "AlexstraszaPurifyFireActionAction只有定义没有调用，实际注册AlexstraszaPurifyFireAction；一次780伤害，不添加旧函数白焰路径或治疗。",
+    "h0R0初始没有A16W；死亡创建后20秒授予一次。模型是外观状态，原始资产仍缺失。",
+    "A16Z抽样25%附伤、伤后生命<=抽样攻击触发100恢复、百分数>=45提升护甲、玩家共享40上限。",
+    "生命监听为一次成功后注销；冷却期间跨阈值失败保留，冷却结束本身不重新触发。范围与直接生命事件依赖宿主帧观察，原生时序继续partial。"
+  ],
+  "unusedPurifyFunctionOccurrences": 1
+}

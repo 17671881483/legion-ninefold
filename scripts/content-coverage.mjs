@@ -7,13 +7,14 @@ import { compileSkills, SKILL_IMPLEMENTATION_REVISION } from '../dist/skills.js'
 const current=UNITS.filter(u=>!u.legacy);
 // Building commands are absent from many combat-form ability lists.
 const playerBuildingCommands=current.filter(u=>u.buildingAbilityIds?.includes('A118')).map(u=>({...u,abilityIds:u.buildingAbilityIds.filter(id=>['A118','A0IH'].includes(id))}));
-const playerBuildingRuleCarriers=current.filter(u=>u.buildingAbilityIds?.some(id=>['A0RF','A0JE','A1BL','A1PK'].includes(id))).map(u=>({...u,abilityIds:u.buildingAbilityIds.filter(id=>['A0RF','A0JE','A1BL','A1PK'].includes(id))}));
+const playerBuildingRuleCarriers=current.filter(u=>u.buildingAbilityIds?.some(id=>['A0RF','A0JE','A1BL','A1PK','A170'].includes(id))).map(u=>({...u,abilityIds:u.buildingAbilityIds.filter(id=>['A0RF','A0JE','A1BL','A1PK','A170'].includes(id))}));
 // This form is created by YseraAwakening at runtime, so it is not a separate
 // build-menu record. Its skills still belong to the player's combat coverage.
-const playerRuntimeForms=['h0YO','h0UD','h0UE','h2AE','n06V','n06W','h0CZ','h0CL','n07J','h03E','h0V2','h03K','h0SU','n0SD','h2AC','h0VY','h0VZ','e01G'].map(code=>UNIT_TEMPLATES[code]);
+const playerRuntimeForms=['h0YO','h0UD','h0UE','h2AE','n06V','n06W','h0CZ','h0CL','n07J','h03E','h0V2','h03K','h0SU','n0SD','h2AC','h0VY','h0VZ','e01G','h0R0'].map(code=>UNIT_TEMPLATES[code]);
 // Source callbacks or building-only icons expose these auxiliary abilities.
 // Count their runtime rules even when the combat ability list omits the icon.
 const playerRuntimeAbilities=[
+  {sourceRawcode:'h0R0',abilityIds:['A16W']},
   ...['h0PZ','h0XC'].map(sourceRawcode=>({sourceRawcode,abilityIds:['A11O','A11P','A11Q','A11R','A11S','A11T','A11U','A11Z','A121']})),
   ...['h0W3','h0XB','h0PZ','h0XC'].map(sourceRawcode=>({sourceRawcode,abilityIds:['A1SU','A1ST']})),
   {sourceRawcode:'h0VP',abilityIds:['A1Q5']},
@@ -81,6 +82,7 @@ const result={
   battleSkills:collect([...current,...playerBuildingCommands,...playerBuildingRuleCarriers,...playerRuntimeForms,...playerRuntimeAbilities,...MERCENARIES,...WAVES,...specialCodes.map(c=>UNIT_TEMPLATES[c])]),
   sourceOnlyCombatForms:[{combatRawcode:'h0JR',buildingRawcode:'n00S',status:'entry-unresolved',evidence:'war3map.j:17544-17545 maps forms; line3644 ban dialog; 48355 barracks egg marker and 48750 monthly record do not provide acquisition',skills:collect([{...UNIT_TEMPLATES.h0JR,abilityIds:[...UNIT_TEMPLATES.h0JR.abilityIds,'A0J2','A0J3']}])},{combatRawcode:'h0VQ',buildingRawcode:'n07U',status:'entry-unresolved',evidence:'war3map.j:17436-17437 maps forms; line3638 ban limit1; no source creation/recipe/upgrade entry found in packet',skills:collect([{...UNIT_TEMPLATES.h0VQ,abilityIds:[...UNIT_TEMPLATES.h0VQ.abilityIds,'A1QI','A1D6']}])}],
   remainingSourceGaps:[
+    '阿莱克斯塔萨生命赐福/绽放/生命链接、独立自然祝福请求、死亡h0R0变龙、三次烈焰打击、一次780净化烈焰及自然怒火25%附伤/共享护甲已接入。A170仅在建筑，普通与神圣战斗体均未授予，默认命令失败。未调用的旧白焰线不添加。原生生命/入圈事件、ANcl仲裁、枚举、动态攻击上下限及模型碰撞仍partial，见alexstrasza-evidence.json。',
     '瓦里安A11V/W/X/Y受伤姿态、原生动态属性、武器事件怒气与攻击改写、75次旋风及一次濒死分支已接入；原生施法缺省耗魔/前摇、生命设置同帧语义、目标枚举及光环边界仍partial，见varian-evidence.json。',
     '安度因A1SP/A1SV脚本雨云与六路骇人之魂、A1SQ事件30%减伤、A1SS同原生所有者/userData的一秒羁绊已接入；动态A1ST护甲50、A1SU自身1%恢复纳入。原生ANcl仲裁、B080驻留、A1SU目标许可及未实例化对象边界仍partial，见anduin-evidence.json。',
     '古尔丹A1QL/A1QM/A1QN已接入三次邪能箭、16次固定酸雨及直接30%生命虹吸/6次固定中心600码均摊治疗；邪能箭控制函数没有调用，不按8%文案添加。原生ANcl时序、辅助碰撞/去重组句柄及未实例化对象仍partial，见guldan-evidence.json。',

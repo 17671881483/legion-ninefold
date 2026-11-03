@@ -1,3 +1,4 @@
+import {ALEXSTRASZA_RULES,initializeAlexstraszaDeployment,canAlexstraszaCast,castAlexstrasza,alexstraszaMainDamage,alexstraszaDamageListener,alexstraszaLifeChanged,alexstraszaAttackDamage,alexstraszaWidgetDeath,alexstraszaUnitDeath,tickAlexstraszaJobs} from './alexstrasza-rules.js';
 import {VARIAN_RULES,initializeVarianDeployment,varianDamageEvent,varianAttackDamage,varianAfterAttack,varianWidgetDeath,tickVarianJobs} from './varian-rules.js';
 import {ANDUIN_RULES,canAnduinCast,castAnduin,anduinMainDamage,anduinMainIncoming,initializeAnduinDeployment,anduinWidgetDeath,tickAnduinJobs} from './anduin-rules.js';
 import {GULDAN_RULES,canGuldanCast,castGuldan,guldanMainDamage,guldanWidgetDeath,tickGuldanJobs} from './guldan-rules.js';
@@ -55,7 +56,7 @@ import { closestWalkable, isWalkable } from './layout.js';
 import { GARROSH_ACTIVE_RULES, GARROSH_PASSIVE_RULES, canGarroshCastAbility, castGarroshAbility, tryGarroshAutoCast, garroshActiveAfterDamage, sourceGarroshActiveDeath, tickGarroshActiveJob } from './garrosh-active-rules.js';
 import { ILLIDAN_RULES, ILLIDAN_ACTIVE_RULES, canIllidanCastAbility, castIllidanAbility, registerIllidanSource, tickIllidanSource, illidanOnAttackHit, tryIllidanAutoCast, illidanAfterDamage, sourceIllidanDeath, tickIllidanJob, isIllidanJobType } from './illidan-rules.js';
 
-export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261104-v62-1';
+export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261104-v64-1';
 
 // Values come from resolved object fields. Empty fields remain empty: a missing
 // native default is reported, rather than replacing it with tooltip numbers.
@@ -242,6 +243,7 @@ function compile(id,version='5.0dJF') {
   if(version==='v14.1A5'&&KODO_RULES[id]){const r=KODO_RULES[id];Object.assign(s,{kind:'kodo_source',status:r.status,runtimeImplemented:true,effectText:r.description+`【待核定：${r.partial}】`});}
   if(version==='v14.1A5'&&id==='A113')Object.assign(s,{kind:'veteran_source',status:VETERAN_RULE.status,runtimeImplemented:true,effectText:VETERAN_RULE.description+'【待核定：'+VETERAN_RULE.partial+'】'});
   if(version==='v14.1A5'&&id==='A20C')Object.assign(s,{kind:'siege_fragments_source',status:SIEGE_TEAM_RULE.status,runtimeImplemented:true,effectText:SIEGE_TEAM_RULE.description+'【待核定：'+SIEGE_TEAM_RULE.partial+'】'});
+  if(version==='v14.1A5'&&ALEXSTRASZA_RULES[id]){const r=ALEXSTRASZA_RULES[id];Object.assign(s,{kind:r.nativeKind?s.kind:'alexstrasza_source',status:r.status,runtimeImplemented:true,effectText:r.description+(r.partial?'【待核定：'+r.partial+'】':'')});}
   if(version==='v14.1A5'&&VARIAN_RULES[id]){const r=VARIAN_RULES[id];Object.assign(s,{kind:r.nativeKind?s.kind:'varian_source',status:r.status,runtimeImplemented:true,effectText:r.description+(r.partial?'【待核定：'+r.partial+'】':'')});if(r.flatDamage!==undefined)Object.assign(s,{kind:'passive_stats',flatDamage:r.flatDamage});if(r.selfRegen!==undefined)Object.assign(s,{kind:'passive_stats',selfRegen:r.selfRegen});}
   if(version==='v14.1A5'&&ANDUIN_RULES[id]){const r=ANDUIN_RULES[id];Object.assign(s,{kind:r.nativeKind?s.kind:'anduin_source',status:r.status,runtimeImplemented:true,effectText:r.description+(r.partial?'【待核定：'+r.partial+'】':'')});}
   if(version==='v14.1A5'&&GULDAN_RULES[id]){const r=GULDAN_RULES[id];Object.assign(s,{kind:'guldan_source',status:r.status,runtimeImplemented:true,effectText:r.description+'【待核定：'+r.partial+'】'});}
@@ -372,7 +374,7 @@ export function sourceWeapon(source,target,now=0){
 }
 export function canWeaponTarget(source,target,now=0){return !!sourceWeapon(source,target,now);}
 
-function active(e){return (e.skillSpecs??[]).filter(s=>s.status==='implemented'||s.status==='partial'&&s.runtimeImplemented&&['A2Y1','A2Y5','A0II','A0I2','A0J8','A0J9','A1QE','A1QI','A10G','A12I','A0LG','A1SQ','A1SU','A11U','A11Z'].includes(s.id));}
+function active(e){return (e.skillSpecs??[]).filter(s=>s.status==='implemented'||s.status==='partial'&&s.runtimeImplemented&&['A2Y1','A2Y5','A0II','A0I2','A0J8','A0J9','A1QE','A1QI','A10G','A12I','A0LG','A1SQ','A1SU','A11U','A11Z','A16Y'].includes(s.id));}
 export function hasSourceAura(e){return active(e).some(s=>s.kind.startsWith('aura_'));}
 function state(e,s){return (e.skillStates??={})[s.id]??=( {readyAt:0,casts:0});}
 function buff(e,s,source,now,extra={}){if(source.side!==e.side&&active(e).some(a=>a.kind==='immunity')&&(['Aslo','AEer','Acri','ANdh','Auhf','AUfn','ANcs','AHtb','AOcl'].includes(s.base)))return false;e.buffs??=[];const key=extra.key??s.buffKey??s.id;const b={key,skillId:s.id,ownerId:source.ownerId,sourceId:source.id,expiresAt:now+(isNativeHero(e)?s.heroDuration||s.duration:s.duration),damage:s.damage??0,armor:s.armor??0,move:s.move??0,haste:s.haste??0,regen:s.regen??0,dps:s.dps??0,miss:s.miss??0,incoming:s.incoming??0,disarm:s.base==='AEer',...extra};const old=e.buffs.findIndex(v=>v.key===key);if(old>=0)e.buffs[old]=b;else e.buffs.push(b);}
@@ -602,10 +604,10 @@ export function modifyIncoming(game,target,damage,attacker,options={}) {
 export function sourceClassAttackDamageEvent(game,target,attacker,options={},amount=0){
   if(!isV14(attacker)||options.spell&&!options.weapon||attacker.status?.sourceNativeAttackBusy)return;
   (attacker.status??={}).sourceNativeAttackBusy=true;
-  try{darkArthasAttackDamage(attacker,amount);blademasterAttack(game,attacker,heroScriptApi);malygosAttackDamage(game,attacker,target,heroScriptApi);siegeTeamAttackDamage(game,attacker,target,heroScriptApi);musketeerAttackDamage(game,attacker,target,heroScriptApi);vashjOnAttackDamage(game,attacker,target,heroScriptApi);sourceClassOnAttackDamage(game,attacker,target,heroScriptApi);banditAttackOrders(game,attacker,target,heroScriptApi);const varianEvent=varianAttackDamage(game,attacker,target,amount,heroScriptApi);amount=bronzeAttackDamage(game,attacker,target,varianEvent.amount,heroScriptApi,varianEvent.localP8);varianAfterAttack(game,attacker,heroScriptApi);kodoAttackOrders(game,attacker,target,heroScriptApi);desertLizardAttackDamage(game,attacker,heroScriptApi);stormLizardAttackDamage(game,attacker,target,heroScriptApi);huskarAttackDamage(game,attacker,target,amount,heroScriptApi);const manaBranch=destroyerAttackDamage(game,attacker,heroScriptApi);const lateBranch=taurenAttackDamage(game,attacker,target,heroScriptApi,manaBranch?'A0IN':null)??(manaBranch?'A0IN':null);tirionAttackDamage(game,attacker,target,amount,heroScriptApi,lateBranch);return amount;}finally{attacker.status.sourceNativeAttackBusy=false;}
+  try{darkArthasAttackDamage(attacker,amount);blademasterAttack(game,attacker,heroScriptApi);malygosAttackDamage(game,attacker,target,heroScriptApi);siegeTeamAttackDamage(game,attacker,target,heroScriptApi);musketeerAttackDamage(game,attacker,target,heroScriptApi);vashjOnAttackDamage(game,attacker,target,heroScriptApi);sourceClassOnAttackDamage(game,attacker,target,heroScriptApi);banditAttackOrders(game,attacker,target,heroScriptApi);const varianEvent=varianAttackDamage(game,attacker,target,amount,heroScriptApi);const localP8=alexstraszaAttackDamage(game,attacker,target,heroScriptApi,varianEvent.localP8);amount=bronzeAttackDamage(game,attacker,target,varianEvent.amount,heroScriptApi,localP8);varianAfterAttack(game,attacker,heroScriptApi);kodoAttackOrders(game,attacker,target,heroScriptApi);desertLizardAttackDamage(game,attacker,heroScriptApi);stormLizardAttackDamage(game,attacker,target,heroScriptApi);huskarAttackDamage(game,attacker,target,amount,heroScriptApi);const manaBranch=destroyerAttackDamage(game,attacker,heroScriptApi);const lateBranch=taurenAttackDamage(game,attacker,target,heroScriptApi,manaBranch?'A0IN':null)??(manaBranch?'A0IN':null);tirionAttackDamage(game,attacker,target,amount,heroScriptApi,lateBranch);return amount;}finally{attacker.status.sourceNativeAttackBusy=false;}
 }
 export function initializeSourceClassCombat(game,building,entity){
-  if(isV14(entity)){initializeVarianDeployment(game,building,entity);initializeAnduinDeployment(game,building,entity);initializeMalygosDeployment(game,entity,heroScriptApi);initializeTirionDeployment(game,building,entity,heroScriptApi);initializeMummyDeployment(game,building,entity);initializeBronzeDeployment(game,building,entity);initializeMusketeerDeployment(game,building,entity);initializePhoenixRevival(game,building,entity);initializeBlademaster(game,building,entity);initializeNightmareDeployment(game,entity);initializeBrightArthasDeployment(game,building,entity);initializeLichKingDeployment(game,entity);initializeVashjDeployment(game,building,entity);return initializeSourceClassDeployment(game,building,entity,heroScriptApi);}
+  if(isV14(entity)){initializeAlexstraszaDeployment(game,building,entity);initializeVarianDeployment(game,building,entity);initializeAnduinDeployment(game,building,entity);initializeMalygosDeployment(game,entity,heroScriptApi);initializeTirionDeployment(game,building,entity,heroScriptApi);initializeMummyDeployment(game,building,entity);initializeBronzeDeployment(game,building,entity);initializeMusketeerDeployment(game,building,entity);initializePhoenixRevival(game,building,entity);initializeBlademaster(game,building,entity);initializeNightmareDeployment(game,entity);initializeBrightArthasDeployment(game,building,entity);initializeLichKingDeployment(game,entity);initializeVashjDeployment(game,building,entity);return initializeSourceClassDeployment(game,building,entity,heroScriptApi);}
 }
 export function tirionBondDamageEvent(game,target,attacker,amount){tirionBondDamage(game,target,attacker,amount,heroScriptApi);}
 export function beforeSourceDamage(game,target,actual,attacker,options={}){
@@ -652,11 +654,12 @@ export function beforeSourceDamage(game,target,actual,attacker,options={}){
     }
     if(isV14(target))banditMainDamage(game,target,attacker,actual,heroScriptApi);
     if(isV14(target)&&!(attacker.skillSpecs??[]).some(s=>s.id==='A2Y7'))sourceClassBeforeDamage(game,target,actual,attacker,heroScriptApi);
-    if(isV14(target)||isV14(attacker)){anduinMainDamage(game,target,attacker,actual,heroScriptApi);guldanMainDamage(game,target,attacker,actual,heroScriptApi,['A1QL']);phoenixMainDamage(game,target,attacker,actual,heroScriptApi);guldanMainDamage(game,target,attacker,actual,heroScriptApi,['A1QM','A1QN']);malygosMainDamage(game,target,attacker,actual,heroScriptApi);musketeerMainDamage(game,target,attacker,actual,heroScriptApi);}
+    if(isV14(target)||isV14(attacker)){anduinMainDamage(game,target,attacker,actual,heroScriptApi);guldanMainDamage(game,target,attacker,actual,heroScriptApi,['A1QL']);phoenixMainDamage(game,target,attacker,actual,heroScriptApi);guldanMainDamage(game,target,attacker,actual,heroScriptApi,['A1QM','A1QN']);malygosMainDamage(game,target,attacker,actual,heroScriptApi);alexstraszaMainDamage(game,target,attacker,actual,heroScriptApi);musketeerMainDamage(game,target,attacker,actual,heroScriptApi);}
   }finally{game._sourceDamageTriggerDepth--;}
   return eventDamage;
 }
 export function afterSourceDamage(game,target,actual,attacker,options={}) {
+  alexstraszaLifeChanged(game,target,heroScriptApi,options.sourcePreDamageHp);
   if(isV14(target)){const armor=garroshAfterDamage(game,target,actual);if(armor)target.armor+=armor.addedLevel;}
   if(isV14(target)){
     garroshActiveAfterDamage(game,target,actual,heroScriptApi);
@@ -699,18 +702,19 @@ export function afterSourceDamage(game,target,actual,attacker,options={}) {
 export function trySourceReincarnation(game,target) {
   if(isReincarnating(target))return true;
   if(!beginReincarnation(game,target))return false;
-  sapperWidgetDeath(game,target,heroScriptApi);mummyWidgetDeath(game,target,heroScriptApi);musketeerWidgetDeath(game,target,heroScriptApi);phoenixWidgetDeath(game,target,heroScriptApi);malygosWidgetDeath(game,target,heroScriptApi);guldanWidgetDeath(game,target);anduinWidgetDeath(game,target,heroScriptApi);varianWidgetDeath(game,target,heroScriptApi);
+  sapperWidgetDeath(game,target,heroScriptApi);mummyWidgetDeath(game,target,heroScriptApi);musketeerWidgetDeath(game,target,heroScriptApi);phoenixWidgetDeath(game,target,heroScriptApi);malygosWidgetDeath(game,target,heroScriptApi);guldanWidgetDeath(game,target);anduinWidgetDeath(game,target,heroScriptApi);varianWidgetDeath(game,target,heroScriptApi);alexstraszaWidgetDeath(game,target,heroScriptApi);
   return true;
 }
 export function sourceDeath(game,target,killer) {
   if(target.status?.sourceDeathHandled)return;target.status.sourceDeathHandled=true;
-  if(isV14(target)){sapperWidgetDeath(game,target,heroScriptApi);mummyWidgetDeath(game,target,heroScriptApi);musketeerWidgetDeath(game,target,heroScriptApi);phoenixWidgetDeath(game,target,heroScriptApi);malygosWidgetDeath(game,target,heroScriptApi);guldanWidgetDeath(game,target);anduinWidgetDeath(game,target,heroScriptApi);varianWidgetDeath(game,target,heroScriptApi);}
+  if(isV14(target)){sapperWidgetDeath(game,target,heroScriptApi);mummyWidgetDeath(game,target,heroScriptApi);musketeerWidgetDeath(game,target,heroScriptApi);phoenixWidgetDeath(game,target,heroScriptApi);malygosWidgetDeath(game,target,heroScriptApi);guldanWidgetDeath(game,target);anduinWidgetDeath(game,target,heroScriptApi);varianWidgetDeath(game,target,heroScriptApi);alexstraszaWidgetDeath(game,target,heroScriptApi);}
   const mainDeathRan=runMainUnitDeath(game,target,killer,mainDeathApi);
   if(isV14(target)&&!mainDeathRan)sourceClassDeath(game,target,killer,heroScriptApi,false);
   // JSON restoration breaks live-object aliases. Rebind the retained script
   // handle before corpse cleanup so its final mana/cooldowns remain authoritative.
   if(game.state.nagaScriptCasters?.[target.id])game.state.nagaScriptCasters[target.id]=target;
   for(const job of game.state.sourceSkillJobs??[])if(['bronze_fissure','tirion_bond_heal'].includes(job.type)&&job.sourceId===target.id)job.source=target;
+  alexstraszaUnitDeath(game,target,heroScriptApi);
   phoenixActiveUnitDeath(game,target,heroScriptApi);
   blademasterDeath(game,target,killer,heroScriptApi);
   banditIndependentDeath(game,target);
@@ -854,18 +858,18 @@ const heroScriptApi={matchesTargets,magicImmune:e=>active(e).some(s=>s.kind==='i
 };
 export {darkArthasDamageListeners,brightArthasEventDamage};
 export function sourceDamageListeners(game,target){
-  return (game.state.sourceSkillJobs??[]).filter(j=>!j.done&&j.sourceId===target.id&&['dark_arthas_army','bandit_shield','varian_listener'].includes(j.type));
+  return (game.state.sourceSkillJobs??[]).filter(j=>!j.done&&(j.type==='alex_blessing'||j.type==='alex_link'&&(j.sourceId===target.id||j.targetId===target.id)||j.sourceId===target.id&&['dark_arthas_army','bandit_shield','varian_listener'].includes(j.type)));
 }
 export function sourceRegisteredDamageEvent(game,target,listeners,amount=0){
-  for(const j of listeners)if(j.type==='varian_listener')amount=varianDamageEvent(game,target,j,amount,heroScriptApi);else if(j.type==='bandit_shield')amount=banditShieldEvent(game,target,j,amount);else darkArthasIncomingEvent(game,target,[j],heroScriptApi);
+  for(const j of listeners)if(j.type.startsWith('alex_'))alexstraszaDamageListener(game,target,j,heroScriptApi);else if(j.type==='varian_listener')amount=varianDamageEvent(game,target,j,amount,heroScriptApi);else if(j.type==='bandit_shield')amount=banditShieldEvent(game,target,j,amount);else darkArthasIncomingEvent(game,target,[j],heroScriptApi);
   return amount;
 }
 export function manualSourceSkills(game,e){
   if(!e||!isV14(e))return [];
-  return (e.skillSpecs??[]).filter(s=>canAnduinCast(e,s.id)||canGuldanCast(e,s.id)||canMalygosCast(e,s.id)||canPhoenixCast(e,s.id)||canMusketeerCast(e,s.id)||canKodoCast(e,s.id)||canStormLizardCast(e,s.id)||canLivingBombCast(e,s.id)||canBlademasterCast(e,s.id)||canBanditCast(e,s.id)||canMalfurionCast(e,s.id)||ALCHEMIST_ACTIVE_RULES[s.id]||canYseraCastAbility(e,s.id)||NAGA_ACTIVE_RULES[s.id]?.active||canVashjCastAbility(e,s.id)||canAesaraCastAbility(e,s.id)||canBrightArthasCastAbility(e,s.id)||canDarkArthasCastAbility(e,s.id)||canLichKingCastAbility(e,s.id)||canGarroshCastAbility(e,s.id)||canIllidanCastAbility(e,s.id)||canIceHeroCastAbility(e,s.id)||canTrollCastAbility(e,s.id)||canKelthuzadCastAbility(e,s.id)).map(s=>{
+  return (e.skillSpecs??[]).filter(s=>canAlexstraszaCast(e,s.id)||canAnduinCast(e,s.id)||canGuldanCast(e,s.id)||canMalygosCast(e,s.id)||canPhoenixCast(e,s.id)||canMusketeerCast(e,s.id)||canKodoCast(e,s.id)||canStormLizardCast(e,s.id)||canLivingBombCast(e,s.id)||canBlademasterCast(e,s.id)||canBanditCast(e,s.id)||canMalfurionCast(e,s.id)||ALCHEMIST_ACTIVE_RULES[s.id]||canYseraCastAbility(e,s.id)||NAGA_ACTIVE_RULES[s.id]?.active||canVashjCastAbility(e,s.id)||canAesaraCastAbility(e,s.id)||canBrightArthasCastAbility(e,s.id)||canDarkArthasCastAbility(e,s.id)||canLichKingCastAbility(e,s.id)||canGarroshCastAbility(e,s.id)||canIllidanCastAbility(e,s.id)||canIceHeroCastAbility(e,s.id)||canTrollCastAbility(e,s.id)||canKelthuzadCastAbility(e,s.id)).map(s=>{
     if(AESARA_RULES[s.id])return aesaraManualSkill(game,e,s);
-    const alchemy=!!ALCHEMIST_ACTIVE_RULES[s.id],family=NAGA_ACTIVE_RULES[s.id]?.active?NAGA_ACTIVE_RULES[s.id]:ANDUIN_RULES[s.id]??GULDAN_RULES[s.id]??MALYGOS_RULES[s.id]??PHOENIX_ACTIVE_RULES[s.id]??MUSKETEER_RULES[s.id]??KODO_RULES[s.id]??STORM_LIZARD_RULES[s.id]??LIVING_BOMB_RULES[s.id]??BLADEMASTER_RULES[s.id]??BANDIT_LORD_RULES[s.id]??MALFURION_RULES[s.id]??BRIGHT_ARTHAS_RULES[s.id]??DARK_ARTHAS_RULES[s.id]??VASHJ_RULES[s.id]??LICH_KING_RULES[s.id]??GARROSH_ACTIVE_RULES[s.id]??ILLIDAN_ACTIVE_RULES[s.id]??ICE_HERO_RULES[s.id]??TROLL_ACTIVE_RULES[s.id]??KELTHUZAD_ACTIVE_RULES[s.id]??(s.id==='A0ZO'?KELTHUZAD_RULES.A0ZO:null),shared=!!family,st=e.skillStates?.[s.id]??{},remaining=Math.max(0,(st[alchemy?'manualReadyAt':'readyAt']??0)-game.state.time),autoRemaining=shared?Math.max(0,(st.readyAt??0)-game.state.time):Math.max(0,(st[alchemy?'readyAt':'yseraAutoReadyAt']??0)-game.state.time);
-    const reason=e.hp<=.405?'单位已阵亡':e.status?.yseraHidden||e.status?.yseraPaused||e.status?.sourcePaused||e.status?.illidanPaused||e.status?.stunUntil>game.state.time||e.status?.cycloneUntil>game.state.time||(MUSKETEER_RULES[s.id]?.active||PHOENIX_ACTIVE_RULES[s.id]?.active||MALYGOS_RULES[s.id]?.active||GULDAN_RULES[s.id]?.active||ANDUIN_RULES[s.id]?.active)&&e.status?.silenceUntil>game.state.time?'单位当前无法施法':remaining>1e-8?'技能冷却中':e.mana<s.manaCost?'魔法不足':'';
+    const alchemy=!!ALCHEMIST_ACTIVE_RULES[s.id],family=NAGA_ACTIVE_RULES[s.id]?.active?NAGA_ACTIVE_RULES[s.id]:ALEXSTRASZA_RULES[s.id]??ANDUIN_RULES[s.id]??GULDAN_RULES[s.id]??MALYGOS_RULES[s.id]??PHOENIX_ACTIVE_RULES[s.id]??MUSKETEER_RULES[s.id]??KODO_RULES[s.id]??STORM_LIZARD_RULES[s.id]??LIVING_BOMB_RULES[s.id]??BLADEMASTER_RULES[s.id]??BANDIT_LORD_RULES[s.id]??MALFURION_RULES[s.id]??BRIGHT_ARTHAS_RULES[s.id]??DARK_ARTHAS_RULES[s.id]??VASHJ_RULES[s.id]??LICH_KING_RULES[s.id]??GARROSH_ACTIVE_RULES[s.id]??ILLIDAN_ACTIVE_RULES[s.id]??ICE_HERO_RULES[s.id]??TROLL_ACTIVE_RULES[s.id]??KELTHUZAD_ACTIVE_RULES[s.id]??(s.id==='A0ZO'?KELTHUZAD_RULES.A0ZO:null),shared=!!family,st=e.skillStates?.[s.id]??{},remaining=Math.max(0,(st[alchemy?'manualReadyAt':'readyAt']??0)-game.state.time),autoRemaining=shared?Math.max(0,(st.readyAt??0)-game.state.time):Math.max(0,(st[alchemy?'readyAt':'yseraAutoReadyAt']??0)-game.state.time);
+    const reason=e.hp<=.405?'单位已阵亡':e.status?.yseraHidden||e.status?.yseraPaused||e.status?.sourcePaused||e.status?.illidanPaused||e.status?.stunUntil>game.state.time||e.status?.cycloneUntil>game.state.time||(ALEXSTRASZA_RULES[s.id]?.active||MUSKETEER_RULES[s.id]?.active||PHOENIX_ACTIVE_RULES[s.id]?.active||MALYGOS_RULES[s.id]?.active||GULDAN_RULES[s.id]?.active||ANDUIN_RULES[s.id]?.active)&&e.status?.silenceUntil>game.state.time?'单位当前无法施法':remaining>1e-8?'技能冷却中':e.mana<s.manaCost?'魔法不足':'';
     return {id:s.id,name:s.name,status:s.status,manaCost:s.manaCost,manaCostKnown:!BANDIT_LORD_RULES[s.id]?.active&&!KODO_RULES[s.id]?.active,cooldown:s.cooldown,remaining,autoRemaining,cooldownMode:shared?'shared_native':'independent',targetKind:family?family.targetKind:s.id==='A2YA'?'point':s.id==='A2YD'?'enemy':'none',range:s.range,radius:s.radius,canStart:!reason,reason};
   });
 }
@@ -876,6 +880,7 @@ export function castManualSourceSkill(game,e,id,params={}){
   if(s.targetKind==='enemy'&&(!params.target||params.target.hp<=0||params.target.side===e.side||params.target.battleTeam!==e.battleTeam||scriptInvulnerable(params.target)))return {ok:false,message:'请选择可攻击的敌人'};
   if(s.targetKind==='unit'&&(!params.target||params.target.hp<=0||params.target.battleTeam!==e.battleTeam))return {ok:false,message:'请选择有效单位目标'};
   if(params.point&&s.targetKind==='point'||params.target&&s.targetKind==='enemy'){const p=params.point??pos(params.target),v=pos(e);if(dist(v,p)>1e-8)e.facing=Math.atan2(p.y-v.y,p.x-v.x)*180/Math.PI;}
+  if(canAlexstraszaCast(e,id))return castAlexstrasza(game,e,id,params,heroScriptApi);
   if(canAnduinCast(e,id))return castAnduin(game,e,id,params,heroScriptApi);
   if(canGuldanCast(e,id))return castGuldan(game,e,id,params,heroScriptApi);
   if(canMalygosCast(e,id))return castMalygos(game,e,id,params,heroScriptApi);
@@ -932,8 +937,10 @@ export function tickSourceScriptJobs(game,dt=0){
   tickGuldanJobs(game,heroScriptApi);
   tickAnduinJobs(game,heroScriptApi);
   tickVarianJobs(game,heroScriptApi);
+  tickAlexstraszaJobs(game,heroScriptApi);
   const now=game.state.time,remaining=[];
   for(const job of game.state.sourceSkillJobs??[]){
+    if(job.type?.startsWith('alex_')){if(!job.done)remaining.push(job);continue;}
     if(job.type?.startsWith('varian_')){if(!job.done)remaining.push(job);continue;}
     if(job.type?.startsWith('anduin_')){if(!job.done)remaining.push(job);continue;}
     if(job.type?.startsWith('guldan_')){if(!job.done)remaining.push(job);continue;}

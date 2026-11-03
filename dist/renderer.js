@@ -47,7 +47,7 @@ function drawSprite(c,u,r,t,attack=0,portrait=false){
     poly(c,[[-r*.8,-r*.6],[r*.25,-r*1.2],[r,-r*.7],[r*.2,-r*.1]],color);
     c.strokeStyle=light;c.lineWidth=r*.25;c.beginPath();c.moveTo(0,-r*.7);c.lineTo(r*.5+attack*r*.1,-r*1.8);c.stroke();
     for(let i=-1;i<=1;i++)ellipse(c,i*r*.48,-r*.04,r*.22,r*.18,'#1f3025');
-  }else if(/龙|凤凰|狮鹫|雷鸟|飞蛇/.test(u.name)||['h0VX','h0WW','h0VZ'].includes(u.combatRawcode)){
+  }else if(/龙|凤凰|狮鹫|雷鸟|飞蛇/.test(u.name)||['h0VX','h0WW','h0VZ','h0R0'].includes(u.combatRawcode)){
     const flap=Math.sin(t*5)*r*.2;
     poly(c,[[-r*.2,-r*.7],[-r*1.8,-r*1.5+flap],[-r*1.25,-r*.15],[-r*.2,-r*.1]],dark,'#233425');
     poly(c,[[r*.15,-r*.7],[r*1.7,-r*1.4-flap],[r*1.1,-r*.1],[r*.2,-r*.1]],dark,'#233425');
@@ -154,6 +154,18 @@ export class Battlefield{
       for(const p of state.players)if(p.heroId){const pos=this.world(p.id,3.5,9.5),pt=this.project(pos.x,pos.y);c.save();c.translate(pt.x,pt.y);drawSprite(c,definitions[p.heroId],s*.44,now);c.restore();}
     }else{
       for(const job of state.sourceSkillJobs??[]){
+        if(!job.done&&['alex_grant','alex_blossom','alex_fireball','alex_link','alex_purify'].includes(job.type)){
+          const e=job.source,scale=(e.distanceScale??1/3)/100,spot=job.type==='alex_blossom'?job:job.dummy??e;
+          const x=spot.worldX??spot.x,y=spot.worldY??spot.y,p=this.project(x,y);c.save();c.lineWidth=1.5;
+          if(job.type==='alex_link'){
+            const t=job.target;if(e.hp>0&&t?.hp>0){const q=this.project(t.worldX??t.x,t.worldY??t.y);c.strokeStyle='#b8df96';c.globalAlpha=.5;c.setLineDash([4,5]);c.beginPath();c.moveTo(p.x,p.y);c.lineTo(q.x,q.y);c.stroke();}
+          }else if(job.type==='alex_fireball'){
+            const q=this.project(x-Math.cos(job.angle)*.4,y-Math.sin(job.angle)*.4);c.strokeStyle='#ffb16c';c.shadowColor='#ff9b55';c.shadowBlur=10;c.lineWidth=3;c.beginPath();c.moveTo(q.x,q.y);c.lineTo(p.x,p.y);c.stroke();ellipse(c,p.x,p.y,Math.max(3,s*.14),Math.max(2,s*.11),'#ffe5ae');
+          }else{
+            const fire=job.type==='alex_purify',center=fire?this.project(x+Math.cos(job.angle)*900*scale,y+Math.sin(job.angle)*900*scale):p,r=(fire?900:600)*scale*s;
+            c.strokeStyle=fire?'#ffdb9e':'#afe69e';c.globalAlpha=.1;ellipse(c,center.x,center.y,r,r*.78,fire?'#ffba71':'#9ed492');c.globalAlpha=.5;c.beginPath();c.ellipse(center.x,center.y,r,r*.78,0,0,Math.PI*2);c.stroke();
+          }c.restore();continue;
+        }
         if(!job.done&&job.type==='varian_spin'){const e=job.source,p=this.project(e.worldX??e.x,e.worldY??e.y),r=300*(e.distanceScale??1/3)/100*s;c.save();c.strokeStyle='#eddb99';c.lineWidth=2;c.globalAlpha=.6;for(let n=0;n<3;n++){const angle=now*9+n*2.094;c.beginPath();c.ellipse(p.x,p.y,r,r*.78,0,angle,angle+1.5);c.stroke();}c.restore();continue;}
         if(!job.done&&['anduin_rain','anduin_soul'].includes(job.type)){
           const spot=job.dummy??job,p=this.project(spot.worldX??spot.x,spot.worldY??spot.y),scale=(job.source?.distanceScale??1/3)/100;

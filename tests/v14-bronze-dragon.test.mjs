@@ -82,8 +82,8 @@ test('weapon event replacement ignores alreadycomputed armor factor and applies 
 test('stasis consumes itsdraw before damage sample and primaryweapon bounds include directattack changes',()=>{
  const f=fixture();skills(f.a,['A151','A150']);f.a.damage=120;const draws=[.99,.25];f.g._random=()=>draws.shift();near(f.event(4),57.5);assert.equal(draws.length,0);near(f.a.status.bronzeDamage.min,110);near(f.a.status.bronzeDamage.max,130);
 });
-test('unknown mixedP8 branches are explicitly retained rather than assumingeventdamage aslocal',()=>{
- for(const ids of [['A150','A16Z']]){const f=fixture();skills(f.a,ids);near(f.event(77),77);assert.equal(f.a.status.bronzeDamage.boundary,'unimplemented-prior-P8-branch');}
+test('red-dragon P8 now feeds the later bronze rewrite without replacing it with event damage',()=>{
+ const f=fixture();skills(f.a,['A150','A16Z']);f.g._random=()=>.5;near(f.event(77),150);near(f.a.status.bronzeDamage.localP8,100);assert.equal(f.a.status.bronzeDamage.boundary,undefined);
 });
 test('missingattackbound fields do not silently coerce tozero',()=>{
  for(const missing of [undefined,'']){const f=fixture();skills(f.a,['A150']);f.a.sourceRawFields.damage_min_1=missing;near(f.event(66),66);assert.equal(f.a.status.bronzeDamage.boundary,'missing-native-attack-bounds');}

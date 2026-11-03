@@ -124,6 +124,18 @@ function payable(g,p,u,upgrade=false,old=null,reserve=0,reservedWood=0,reservedP
  return gold(u,upgrade)<=p.gold-reserve+1e-8&&wood(u)<=p.wood-reservedWood+1e-8&&g._population(p)-population(old)*(old?1:0)+population(u)+reservedPopulation<=p.populationCap&&!g._requirement(p,u);
 }
 
+// Once core army expansion starts, prefer a rear formation: melee ahead of
+// ranged troops, while additional melee fill toward the spawn. This leaves
+// more travel time for a wave to gather before area attackers engage it.
+// Only new placements use this policy; existing buildings keep their cells
+// and the player's finite relocation charges are never consumed or bypassed.
+function formationCell(g,p,u){
+ if(g.state.wave<4)return g._emptyCell(p,u);
+ const rows=g._isFront(u)?[5,4,3,2,6,1,7,0]:[6,7,5,4,3,2,1,0];
+ for(const row of rows)for(const col of [2,3,1,4,0,5])if(!p.buildings.some(b=>b.col===col&&b.row===row))return {col,row};
+ return null;
+}
+
 function openingPlan(g,p){
  if(p.buildings.length)return;
  const plans=[],a=army(g,p);
@@ -136,7 +148,7 @@ function openingPlan(g,p){
   };visit(base,[],gold(base),wood(base),new Set([id]));
  }
  plans.sort((a,b)=>b.score-a.score);
- for(const plan of plans){const cell=g._emptyCell(p,plan.u);if(!cell)break;
+ for(const plan of plans){const cell=formationCell(g,p,plan.u);if(!cell)break;
   if(g.command('build',{playerId:p.id,unitId:plan.base.id,...cell}).ok){if(plan.path.length)p.aiUpgradePlan={buildingId:p.buildings.at(-1).id,targets:plan.path};return;}
  }
 }
@@ -148,7 +160,7 @@ function buildChoices(g,p,a,reserve,opening){
   const base=units[id];if(!base||base.heroEntry)continue;
   const visit=(u,path,cost,lumber,seen)=>{
    if(cost>p.gold-reserve+1e-8||lumber>p.wood-planWood(p)+1e-8||g._population(p)+population(u)+planPopulation(p)>p.populationCap||g._requirement(p,u))return;
-   const cell=g._emptyCell(p,u);if(!cell)return;
+   const cell=formationCell(g,p,u);if(!cell)return;
    const options=u.morphProxy?(u.morphTargets??[]).map(v=>units[typeof v==='string'?v:v.id]).filter(Boolean):[u];
    const power=options.length?options.reduce((sum,d)=>sum+utility(g,d,a),0)/options.length:0;
    if(power>0&&(!path.length||g._isFront(u)||a.fronts.length))choices.push({type:'build',u:base,cell,targets:path,score:power/Math.max(20,cost+lumber*.75)});
@@ -198,7 +210,7 @@ export function buildAIArmy(g,p,opening=false){
  const tasks=g._economyTasks(p);
  if(p.populationCap-g._population(p)-planPopulation(p)<4&&!tasks.farmTask&&p.gold-reserve>=n(RULES.farmCost,24)&&p.wood-planWood(p)>=n(RULES.farmWoodCost,80))g.command('farm',{playerId:p.id});
  if(!opening&&p.buildings.some(b=>!b.construction&&!units[b.unitId]?.hero)&&!p.buildings.some(b=>units[b.unitId]?.heroEntry)){
-  const status=g.heroStatus(p.id),def=units[status.entries[0]],cell=def&&g._emptyCell(p,def);
+  const status=g.heroStatus(p.id),def=units[status.entries[0]],cell=def&&formationCell(g,p,def);
   if(status.canStart&&cell&&payable(g,p,def,false,null,reserve,planWood(p),planPopulation(p)))g.command('build',{playerId:p.id,unitId:def.id,...cell});
  }
  for(let attempt=0;attempt<(opening?8:4);attempt++){
@@ -262,7 +274,7 @@ function claimAIReward(g,p){
   if(rule.handler==='lumber'){const cost=g.economyStatus(p.id).lumber.cost;add(offer,cost.gold+cost.wood*.65);}
   if(rule.handler==='farm'&&p.populationCap<n(RULES.maxPopulation,300))add(offer,(p.populationCap-g._population(p)<8?1.5:.4)*(n(RULES.farmCost,24)+n(RULES.farmWoodCost,80)*.65));
   if(rule.handler==='randomFighter'){
-   const pool=BOX_RANDOM_FIGHTER_RULES.byAbility[offer.id]?.rawcodes.map(raw=>units[`v14_${raw}`]).filter(Boolean)??[],cell=g._emptyCell(p,{role:'frontline'});
+   const pool=BOX_RANDOM_FIGHTER_RULES.byAbility[offer.id]?.rawcodes.map(raw=>units[`v14_${raw}`]).filter(Boolean)??[],cell=formationCell(g,p,{role:'frontline'});
    if(pool.length&&cell){const point=laneToWorld(p.id,cell.col+.5,cell.row+4.5);add(offer,pool.reduce((sum,u)=>sum+utility(g,u,a),0)/pool.length/efficiency,{worldX:point.x,worldY:point.y});}
   }
   for(const target of offer.targets??[]){

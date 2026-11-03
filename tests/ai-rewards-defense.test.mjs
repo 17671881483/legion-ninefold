@@ -36,7 +36,7 @@ test('sandbox disable and player-zero ownership remain respected for gifts',()=>
  const {g,p}=fixture();offer(p,'A133');g.state.sandbox.aiEnabled=false;g._aiAct(p);assert.equal(p.boxRewards.consumed,false);const human=g.state.players[0];offer(human,'A133');g.state.sandbox.aiEnabled=true;g._aiAct(human);assert.equal(human.boxRewards.consumed,false);
 });
 test('random fighter reward creates one real unit in the AI own free cell',()=>{
- const {g,p}=fixture();offer(p,'A132');const rng=g._rng;g._aiAct(p);assert.equal(p.boxRewards.selectedAbilityId,'A132');assert.equal(p.buildings.length,1);const b=p.buildings[0];assert.equal(b.sourceGift.abilityId,'A132');assert.equal(b.col,2);assert.equal(b.row,4);assert.notEqual(g._rng,rng);assert.equal(p.gold,0);assert.equal(p.wood,0);
+ const {g,p}=fixture();offer(p,'A132');const rng=g._rng;g._aiAct(p);assert.equal(p.boxRewards.selectedAbilityId,'A132');assert.equal(p.buildings.length,1);const b=p.buildings[0];assert.equal(b.sourceGift.abilityId,'A132');assert.equal(b.col,2);assert.equal(b.row,5);assert.notEqual(g._rng,rng);assert.equal(p.gold,0);assert.equal(p.wood,0);
 });
 test('a full formation falls back to a resource offer without rolling a fighter',()=>{
  const {g,p}=fixture();for(let i=0;i<48;i++)finish(g,p);offer(p,'A132','A133');const rng=g._rng;g._aiAct(p);assert.equal(p.boxRewards.selectedAbilityId,'A133');assert.equal(p.buildings.length,48);assert.equal(g._rng,rng);
@@ -81,4 +81,21 @@ test('king development cannot steal wood from a pending troop chain',()=>{
 });
 test('reward choice and king investments continue identically after save restore',()=>{
  const {g,p}=fixture();finish(g,p,'h01B');offer(p,'A136','A133','A134');p.wood=400;const saved=Game.fromSnapshot(clone(g.snapshot()));g._aiAct(p);saved._aiAct(saved.state.players[p.id]);assert.deepEqual(clone(saved.snapshot()),clone(g.snapshot()));
+});
+
+test('random fighter placement remains in each AI owner lane without moving old buildings',()=>{
+ for(let id=1;id<8;id++){
+  const {g}=fixture(),p=g.state.players[id];p.heroAltarCount=2;p.populationCap=300;p.gold=p.wood=0;p.roster=[];p.workers=10;p.lumberLevel=30;p.relocationsRemaining=0;
+  const existing=finish(g,p),before=clone(existing);offer(p,'A132');g._aiAct(p);
+  assert.equal(p.buildings.length,2);assert.deepEqual(existing,before);assert.equal(p.relocationsRemaining,0);
+  const b=p.buildings.at(-1);assert.equal(b.sourceGift.abilityId,'A132');assert.ok(b.row>=0&&b.row<8&&b.col>=0&&b.col<6);
+  assert.equal(g.state.players.filter(q=>q.id!==id).reduce((sum,q)=>sum+q.buildings.length,0),0);
+ }
+});
+test('gift placement uses the last free cell while occupied construction retains its position',()=>{
+ const {g,p}=fixture();
+ for(let i=1;i<48;i++){const b=finish(g,p);b.col=i%6;b.row=Math.floor(i/6);b.construction={targetId:b.unitId,startAt:0,finishAt:100,duration:100};}
+ const before=clone(p.buildings);offer(p,'A132');g._aiAct(p);
+ assert.equal(p.buildings.length,48);assert.deepEqual(p.buildings.slice(0,47),before);
+ assert.equal(p.buildings.at(-1).col,0);assert.equal(p.buildings.at(-1).row,0);
 });

@@ -67,3 +67,21 @@ test('autonomous stronger purchases respect human ownership, pause and disabled 
   const before=clone(g.snapshot());g._aiAct(mode==='human'?g.state.players[0]:p);assert.deepEqual(clone(g.snapshot()),before);
  }
 });
+
+test('new ranged core takes a rear position without relocating the existing saved army',()=>{
+ const {g,p}=fixture();p.relocationsRemaining=0;
+ const positions=p.buildings.map(b=>[b.id,b.col,b.row]),human=clone(g.state.players[0]);
+ g._aiBuild(p);const added=p.buildings.at(-1);
+ assert.ok(added.row>p.buildings.find(b=>b.unitId==='v14_h09O').row);
+ for(let i=0;i<100;i++){g._aiBuild(p);g.tick(.2);}
+ assert.equal(added.unitId,'v14_h0A0');assert.equal(added.construction,null);
+ assert.deepEqual(p.buildings.slice(0,positions.length).map(b=>[b.id,b.col,b.row]),positions);
+ assert.equal(p.relocationsRemaining,0);for(const key of ['gold','wood','buildings','workers','lumberLevel'])assert.deepEqual(g.state.players[0][key],human[key]);
+});
+test('the first three waves preserve the established opening placement',()=>{
+ for(const wave of [1,2,3]){
+  const {g,p}=fixture();p.buildings=[];p.gold=265;p.roster=['v14_h01A'];g.state.wave=wave;
+  const cell=g._emptyCell(p,unit('h01A'));g._aiBuild(p,true);
+  assert.equal(p.buildings.length,1);assert.equal(p.buildings[0].col,cell.col);assert.equal(p.buildings[0].row,cell.row);assert.equal(p.gold,0);
+ }
+});

@@ -1,6 +1,6 @@
 {
   "sourceVersion": "v14.1A5",
-  "skillImplementationRevision": "v14-content-20261103-v54-1",
+  "skillImplementationRevision": "v14-content-20261103-v55-1",
   "units": 534,
   "mercenaryRecords": 60,
   "mainWaves": 35,
@@ -26,7 +26,8 @@
     "n0SD",
     "h2AC",
     "h0VY",
-    "h0VZ"
+    "h0VZ",
+    "e01G"
   ],
   "playerRuntimeAbilities": [
     {
@@ -380,9 +381,9 @@
   "playerSkills": {
     "counts": {
       "implemented": 405,
-      "partial": 131,
+      "partial": 133,
       "marker": 36,
-      "unresolved": 89
+      "unresolved": 87
     },
     "abilities": [
       {
@@ -6257,8 +6258,8 @@
       {
         "rawcode": "A1SB",
         "name": "烈焰打击",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "phoenix_active_source",
         "unitRawcodes": [
           "h0VZ",
           "n083",
@@ -6268,8 +6269,8 @@
       {
         "rawcode": "A1SC",
         "name": "火之羽",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "phoenix_active_source",
         "unitRawcodes": [
           "h0VZ",
           "n083",
@@ -7113,6 +7114,7 @@
         "status": "partial",
         "kind": "tauren_source",
         "unitRawcodes": [
+          "e01G",
           "h0NE"
         ]
       },
@@ -7214,9 +7216,9 @@
   "battleSkills": {
     "counts": {
       "implemented": 454,
-      "partial": 140,
+      "partial": 142,
       "marker": 49,
-      "unresolved": 103
+      "unresolved": 101
     },
     "abilities": [
       {
@@ -13877,8 +13879,8 @@
       {
         "rawcode": "A1SB",
         "name": "烈焰打击",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "phoenix_active_source",
         "unitRawcodes": [
           "h0VZ",
           "n083",
@@ -13888,8 +13890,8 @@
       {
         "rawcode": "A1SC",
         "name": "火之羽",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "phoenix_active_source",
         "unitRawcodes": [
           "h0VZ",
           "n083",
@@ -14806,6 +14808,7 @@
         "status": "partial",
         "kind": "tauren_source",
         "unitRawcodes": [
+          "e01G",
           "h0NE"
         ]
       },

@@ -1,7 +1,7 @@
 import {V14_UNIT_TEMPLATES} from './v14-reference.js';
 import {laneToWorld} from './layout.js';
 
-export const PHOENIX_REVIVAL_RULE={status:'partial',description:'涅槃由建筑A1SE登记普通单位死亡监听。死亡时先对400码内敌人造成102点混乱／通用武器伤害，再生成无敌凤凰蛋h0VY并移除旧体；3秒后先KillUnit凤凰蛋，再创建h0VZ并移除蛋。两次新生均为2000生命、190平均基础攻击的h0VZ，只有第一次重新授予A1SE并继续监听。没有复活时102伤害或额外56灼烧。',partial:'凤凰蛋缺spd/weapsOn原生字段，不能使用导入器270移速/开启武器的回退值；当前宿主保留静止等待并标记未知原生行动。CreateUnit碰撞、原生科技对新体属性、已移除蛋句柄、死亡监听先后与原始模型资源仍待核定。A1SB/A1SC另属未实现技能，不随本项标完成。'};
+export const PHOENIX_REVIVAL_RULE={status:'partial',description:'涅槃由建筑A1SE登记普通单位死亡监听。死亡时先对400码内敌人造成102点混乱／通用武器伤害，再生成无敌凤凰蛋h0VY并移除旧体；3秒后先KillUnit凤凰蛋，再创建h0VZ并移除蛋。两次新生均为2000生命、190平均基础攻击的h0VZ，只有第一次重新授予A1SE并继续监听。没有复活时102伤害或额外56灼烧。',partial:'凤凰蛋缺spd/weapsOn原生字段，不能使用导入器270移速/开启武器的回退值；当前宿主保留静止等待并标记未知原生行动。CreateUnit碰撞、原生科技对新体属性、已移除蛋句柄、死亡监听先后与原始模型资源仍待核定。A1SB/A1SC主动技能另按实际脚本绑定实现并保留原生边界，不与复活机制混算。'};
 const raw=e=>e?.combatRawcode??e?.sourceRawcode;
 const has=(e,id)=>e?.skillSpecs?.some(s=>s.id===id)&&(e.abilityLevels?.[id]??1)>0;
 const removed=e=>!e||e.status?.sourceRemoved||e.status?.yseraRemoved;

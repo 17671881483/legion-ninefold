@@ -1,3 +1,4 @@
+import {restorePhoenixActive} from './phoenix-active-rules.js';
 import {initializeSapperCreation,restoreSapperCreation} from './sapper-rules.js';
 import {veteranDeath,restoreVeteranIdentity} from './veteran-rules.js';
 import {buildAIArmy,actAI} from './ai-controller.js';
@@ -1703,7 +1704,7 @@ export class Game {
       restoreUnstableAlchemyUserData(this,e);restoreVeteranIdentity(this,e,units);restoreSapperCreation(this,e,def);
     }
     restoreUndeadLegionHandles(this);
-    restorePhoenixRevival(this);
+    restorePhoenixRevival(this);restorePhoenixActive(this);
     // JSON stores retained handles separately; surviving units must share the
     // live object again so later healing, movement and death update one handle.
     for(const e of [...this.state.entities,...this.state.kings])if(this.state.brightArthasHandles[e.id])this.state.brightArthasHandles[e.id]=e;

@@ -1,0 +1,2186 @@
+{
+  "source": {
+    "path": "reference/v14-source/raw_extracted/war3map.j",
+    "sha256": "e66c55b3b25b185c991be5613e21fbf5b2d598f3cc40f2f8cd01c23bcb828250"
+  },
+  "sourceEvidence": [
+    {
+      "line": 29786,
+      "text": "function SelectRange takes unit Pf,real FF,real FG,real Px returns group"
+    },
+    {
+      "line": 29787,
+      "text": "local group DG=CreateGroup()"
+    },
+    {
+      "line": 29788,
+      "text": "local group Om=CreateGroup()"
+    },
+    {
+      "line": 29789,
+      "text": "local unit D6=null"
+    },
+    {
+      "line": 29790,
+      "text": "call GroupEnumUnitsInRange(DG,FF,FG,Px,null)"
+    },
+    {
+      "line": 29791,
+      "text": "loop"
+    },
+    {
+      "line": 29792,
+      "text": "set D6=FirstOfGroup(DG)"
+    },
+    {
+      "line": 29793,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 29794,
+      "text": "if IsUnitEnemy(D6,GetOwningPlayer(Pf)) and not IsUnitType(D6,UNIT_TYPE_DEAD) and GetUnitAbilityLevel(D6,$4176756C)==0 then"
+    },
+    {
+      "line": 29795,
+      "text": "call GroupAddUnit(Om,D6)"
+    },
+    {
+      "line": 29796,
+      "text": "endif"
+    },
+    {
+      "line": 29797,
+      "text": "call GroupRemoveUnit(DG,D6)"
+    },
+    {
+      "line": 29798,
+      "text": "endloop"
+    },
+    {
+      "line": 29799,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 29800,
+      "text": "set DG=null"
+    },
+    {
+      "line": 29801,
+      "text": "set D6=null"
+    },
+    {
+      "line": 29802,
+      "text": "set Pf=null"
+    },
+    {
+      "line": 29803,
+      "text": "set Py=Om"
+    },
+    {
+      "line": 29804,
+      "text": "set Om=null"
+    },
+    {
+      "line": 29805,
+      "text": "return Py"
+    },
+    {
+      "line": 29930,
+      "text": "function LoopDamageRangeAction takes nothing returns nothing"
+    },
+    {
+      "line": 29931,
+      "text": "local trigger t=GetTriggeringTrigger()"
+    },
+    {
+      "line": 29932,
+      "text": "local integer BF=GetHandleId(t)"
+    },
+    {
+      "line": 29933,
+      "text": "local unit Pf=LoadUnitHandle(O,BF,0)"
+    },
+    {
+      "line": 29934,
+      "text": "local real Px=LoadReal(O,BF,1)"
+    },
+    {
+      "line": 29935,
+      "text": "local real DK=LoadReal(O,BF,2)"
+    },
+    {
+      "line": 29936,
+      "text": "local real Zp=LoadReal(O,BF,3)"
+    },
+    {
+      "line": 29937,
+      "text": "local unit D6"
+    },
+    {
+      "line": 29938,
+      "text": "local group DG"
+    },
+    {
+      "line": 29939,
+      "text": "if GetTriggerEventId()==EVENT_GAME_TIMER_EXPIRED then"
+    },
+    {
+      "line": 29940,
+      "text": "set DG=SelectRange(Pf,LoadReal(O,BF,5),LoadReal(O,BF,6),Px)"
+    },
+    {
+      "line": 29941,
+      "text": "loop"
+    },
+    {
+      "line": 29942,
+      "text": "set D6=FirstOfGroup(DG)"
+    },
+    {
+      "line": 29943,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 29944,
+      "text": "call GroupRemoveUnit(DG,D6)"
+    },
+    {
+      "line": 29945,
+      "text": "call UnitDamageTargetBJ(Pf,D6,LoadReal(O,BF,4),ATTACK_TYPE_CHAOS,DAMAGE_TYPE_UNIVERSAL)"
+    },
+    {
+      "line": 29946,
+      "text": "endloop"
+    },
+    {
+      "line": 29947,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 29948,
+      "text": "set DG=null"
+    },
+    {
+      "line": 29949,
+      "text": "if GetTriggerExecCount(t)*Zp>=DK then"
+    },
+    {
+      "line": 29950,
+      "text": "call FlushChildHashtable(O,BF)"
+    },
+    {
+      "line": 29951,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 29952,
+      "text": "endif"
+    },
+    {
+      "line": 29953,
+      "text": "else"
+    },
+    {
+      "line": 29954,
+      "text": "call FlushChildHashtable(O,BF)"
+    },
+    {
+      "line": 29955,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 29956,
+      "text": "endif"
+    },
+    {
+      "line": 29957,
+      "text": "set Pf=null"
+    },
+    {
+      "line": 29958,
+      "text": "set t=null"
+    },
+    {
+      "line": 29959,
+      "text": "set D6=null"
+    },
+    {
+      "line": 29960,
+      "text": "set DG=null"
+    },
+    {
+      "line": 29961,
+      "text": "endfunction"
+    },
+    {
+      "line": 29962,
+      "text": "function LoopDamageRange takes unit Pf,real Px,real FF,real FG,real Tz,real Zp,real DK returns nothing"
+    },
+    {
+      "line": 29963,
+      "text": "local trigger t=CreateTrigger()"
+    },
+    {
+      "line": 29964,
+      "text": "call SaveUnitHandle(O,GetHandleId(t),0,Pf)"
+    },
+    {
+      "line": 29965,
+      "text": "call SaveReal(O,GetHandleId(t),1,Px)"
+    },
+    {
+      "line": 29966,
+      "text": "call SaveReal(O,GetHandleId(t),2,DK)"
+    },
+    {
+      "line": 29967,
+      "text": "call SaveReal(O,GetHandleId(t),3,Zp)"
+    },
+    {
+      "line": 29968,
+      "text": "call SaveReal(O,GetHandleId(t),4,Tz)"
+    },
+    {
+      "line": 29969,
+      "text": "call SaveReal(O,GetHandleId(t),5,FF)"
+    },
+    {
+      "line": 29970,
+      "text": "call SaveReal(O,GetHandleId(t),6,FG)"
+    },
+    {
+      "line": 29971,
+      "text": "call TriggerRegisterTimerEvent(t,Zp,true)"
+    },
+    {
+      "line": 29972,
+      "text": "call TriggerAddAction(t,function LoopDamageRangeAction)"
+    },
+    {
+      "line": 29973,
+      "text": "set Pf=null"
+    },
+    {
+      "line": 29974,
+      "text": "set t=null"
+    },
+    {
+      "line": 29975,
+      "text": "endfunction"
+    },
+    {
+      "line": 31570,
+      "text": "function PhoenixShotAction takes nothing returns boolean"
+    },
+    {
+      "line": 31571,
+      "text": "local trigger t=GetTriggeringTrigger()"
+    },
+    {
+      "line": 31572,
+      "text": "local integer Pq=GetHandleId(t)"
+    },
+    {
+      "line": 31573,
+      "text": "local real Q5=LoadReal(O,Pq,0)"
+    },
+    {
+      "line": 31574,
+      "text": "local unit Bc=LoadUnitHandle(O,Pq,2)"
+    },
+    {
+      "line": 31575,
+      "text": "local real FF=LoadReal(O,Pq,3)"
+    },
+    {
+      "line": 31576,
+      "text": "local real FG=LoadReal(O,Pq,4)"
+    },
+    {
+      "line": 31577,
+      "text": "local real Pm=LoadReal(O,Pq,5)"
+    },
+    {
+      "line": 31578,
+      "text": "local real aM=LoadReal(O,Pq,6)+10"
+    },
+    {
+      "line": 31579,
+      "text": "local group aN=LoadGroupHandle(O,Pq,133)"
+    },
+    {
+      "line": 31580,
+      "text": "local real Qv=FF+CosBJ(Pm+aM)*Q5"
+    },
+    {
+      "line": 31581,
+      "text": "local real Qw=FG+SinBJ(Pm+aM)*Q5"
+    },
+    {
+      "line": 31582,
+      "text": "local group DG"
+    },
+    {
+      "line": 31583,
+      "text": "local unit D6"
+    },
+    {
+      "line": 31584,
+      "text": "local string QM=\"LJQ_AO02HZY_W02.mdx\""
+    },
+    {
+      "line": 31585,
+      "text": "if GetTriggerEventId()==EVENT_UNIT_DEATH or aM>=360 or IsTerrainPathable(Qv,Qw,PATHING_TYPE_WALKABILITY) or not RectContainsCoords(GetPlayerRect(ConvertedPlayer(GetUnitUserData(Bc))),Qv,Qw) then"
+    },
+    {
+      "line": 31586,
+      "text": "call DestroyEffect(LoadEffectHandle(O,Pq,1))"
+    },
+    {
+      "line": 31587,
+      "text": "call SetUnitVertexColor(Bc,255,255,255,255)"
+    },
+    {
+      "line": 31588,
+      "text": "call SetUnitPathing(Bc,true)"
+    },
+    {
+      "line": 31589,
+      "text": "call DestroyGroup(aN)"
+    },
+    {
+      "line": 31590,
+      "text": "call PauseUnit(Bc,false)"
+    },
+    {
+      "line": 31591,
+      "text": "call FlushChildHashtable(O,Pq)"
+    },
+    {
+      "line": 31592,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 31593,
+      "text": "else"
+    },
+    {
+      "line": 31594,
+      "text": "call SaveReal(O,Pq,6,aM)"
+    },
+    {
+      "line": 31595,
+      "text": "call SetUnitX(Bc,Qv)"
+    },
+    {
+      "line": 31596,
+      "text": "call SetUnitY(Bc,Qw)"
+    },
+    {
+      "line": 31597,
+      "text": "call SetUnitFacing(Bc,Pm+aM-90)"
+    },
+    {
+      "line": 31598,
+      "text": "set DG=SelectRange(Bc,Qv,Qw,200+25)"
+    },
+    {
+      "line": 31599,
+      "text": "loop"
+    },
+    {
+      "line": 31600,
+      "text": "set D6=FirstOfGroup(DG)"
+    },
+    {
+      "line": 31601,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 31602,
+      "text": "if not IsUnitInGroup(D6,aN) then"
+    },
+    {
+      "line": 31603,
+      "text": "call GroupAddUnit(aN,D6)"
+    },
+    {
+      "line": 31604,
+      "text": "call UnitDamageTargetBJ(Bc,D6,75,ATTACK_TYPE_CHAOS,DAMAGE_TYPE_UNIVERSAL)"
+    },
+    {
+      "line": 31605,
+      "text": "call LoopDamageRange(Bc,225,GetUnitX(D6),GetUnitY(D6),10,1,7)"
+    },
+    {
+      "line": 31606,
+      "text": "if LoadBoolean(O,GetHandleId(Bc),$68305757) then"
+    },
+    {
+      "line": 31607,
+      "text": "set QM=\"LJQ_AO02HZY_W02_Blue.mdx\""
+    },
+    {
+      "line": 31608,
+      "text": "endif"
+    },
+    {
+      "line": 31609,
+      "text": "call YDWETimerDestroyEffect(7,AddSpecialEffect(QM,GetUnitX(D6),GetUnitY(D6)))"
+    },
+    {
+      "line": 31610,
+      "text": "endif"
+    },
+    {
+      "line": 31611,
+      "text": "call GroupRemoveUnit(DG,D6)"
+    },
+    {
+      "line": 31612,
+      "text": "endloop"
+    },
+    {
+      "line": 31613,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 31614,
+      "text": "set DG=null"
+    },
+    {
+      "line": 31615,
+      "text": "endif"
+    },
+    {
+      "line": 31616,
+      "text": "set t=null"
+    },
+    {
+      "line": 31617,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 31618,
+      "text": "set aN=null"
+    },
+    {
+      "line": 31619,
+      "text": "return false"
+    },
+    {
+      "line": 31620,
+      "text": "endfunction"
+    },
+    {
+      "line": 31621,
+      "text": "function PhoenixShot takes unit Bc,real Qv,real Qw returns nothing"
+    },
+    {
+      "line": 31622,
+      "text": "local trigger t=CreateTrigger()"
+    },
+    {
+      "line": 31623,
+      "text": "local integer Pq=GetHandleId(t)"
+    },
+    {
+      "line": 31624,
+      "text": "local real FF=GetUnitX(Bc)"
+    },
+    {
+      "line": 31625,
+      "text": "local real FG=GetUnitY(Bc)"
+    },
+    {
+      "line": 31626,
+      "text": "local string QM=\"LJQ_AO02HZY_W01.mdx\""
+    },
+    {
+      "line": 31627,
+      "text": "local real Pm=Atan2BJ(Qw-FG,Qv-FF)"
+    },
+    {
+      "line": 31628,
+      "text": "local real Q5=RMaxBJ(300,GetDisFromUnitAndPos(Bc,Qv,Qw))"
+    },
+    {
+      "line": 31629,
+      "text": "call TriggerRegisterTimerEvent(t,.02,true)"
+    },
+    {
+      "line": 31630,
+      "text": "call TriggerRegisterUnitEvent(t,Bc,EVENT_UNIT_DEATH)"
+    },
+    {
+      "line": 31631,
+      "text": "call TriggerAddCondition(t,Condition(function PhoenixShotAction))"
+    },
+    {
+      "line": 31632,
+      "text": "call SaveReal(O,Pq,0,Q5)"
+    },
+    {
+      "line": 31633,
+      "text": "if LoadBoolean(O,GetHandleId(Bc),$68305757) then"
+    },
+    {
+      "line": 31634,
+      "text": "set QM=\"LJQ_AO02HZY_W01_Blue.mdx\""
+    },
+    {
+      "line": 31635,
+      "text": "endif"
+    },
+    {
+      "line": 31636,
+      "text": "call SaveAgentHandle(O,Pq,1,AddSpecialEffectTarget(QM,Bc,\"origin\"))"
+    },
+    {
+      "line": 31637,
+      "text": "call SaveUnitHandle(O,Pq,2,Bc)"
+    },
+    {
+      "line": 31638,
+      "text": "call SaveReal(O,Pq,3,FF+CosBJ(Pm)*Q5)"
+    },
+    {
+      "line": 31639,
+      "text": "call SaveReal(O,Pq,4,FG+SinBJ(Pm)*Q5)"
+    },
+    {
+      "line": 31640,
+      "text": "call SaveReal(O,Pq,5,Pm)"
+    },
+    {
+      "line": 31641,
+      "text": "call SaveGroupHandle(O,Pq,133,CreateGroup())"
+    },
+    {
+      "line": 31642,
+      "text": "call PauseUnit(Bc,true)"
+    },
+    {
+      "line": 31643,
+      "text": "call SetUnitPathing(Bc,false)"
+    },
+    {
+      "line": 31644,
+      "text": "call SetUnitVertexColor(Bc,255,255,255,50)"
+    },
+    {
+      "line": 31645,
+      "text": "set t=null"
+    },
+    {
+      "line": 31646,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 31647,
+      "text": "endfunction"
+    },
+    {
+      "line": 31648,
+      "text": "function PhoenixFlamestrikeActionChangeAction takes nothing returns boolean"
+    },
+    {
+      "line": 31649,
+      "text": "local trigger t=GetTriggeringTrigger()"
+    },
+    {
+      "line": 31650,
+      "text": "local integer Pq=GetHandleId(t)"
+    },
+    {
+      "line": 31651,
+      "text": "local unit Bc=LoadUnitHandle(O,Pq,2)"
+    },
+    {
+      "line": 31652,
+      "text": "local unit Om=LoadUnitHandle(O,Pq,17)"
+    },
+    {
+      "line": 31653,
+      "text": "local unit Ki=LoadUnitHandle(O,Pq,393)"
+    },
+    {
+      "line": 31654,
+      "text": "local real FF=GetUnitX(Om)"
+    },
+    {
+      "line": 31655,
+      "text": "local real FG=GetUnitY(Om)"
+    },
+    {
+      "line": 31656,
+      "text": "local real Pm=GetAngle(GetUnitX(Ki),GetUnitY(Ki),FF,FG)"
+    },
+    {
+      "line": 31657,
+      "text": "if GetTriggerEventId()==EVENT_UNIT_DEATH or IsUnitType(Om,UNIT_TYPE_DEAD) then"
+    },
+    {
+      "line": 31658,
+      "text": "call ShowUnit(Ki,false)"
+    },
+    {
+      "line": 31659,
+      "text": "call FlushChildHashtable(O,Pq)"
+    },
+    {
+      "line": 31660,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 31661,
+      "text": "else"
+    },
+    {
+      "line": 31662,
+      "text": "call SetUnitFacing(Ki,Pm)"
+    },
+    {
+      "line": 31663,
+      "text": "call SetUnitPosition(Ki,GetUnitX(Ki)+CosBJ(Pm),GetUnitY(Ki)+SinBJ(Pm))"
+    },
+    {
+      "line": 31664,
+      "text": "if GetDist(GetUnitX(Ki),GetUnitY(Ki),FF,FG)<50 then"
+    },
+    {
+      "line": 31665,
+      "text": "call UnitDamageTargetBJ(Bc,Om,102,ATTACK_TYPE_CHAOS,DAMAGE_TYPE_UNIVERSAL)"
+    },
+    {
+      "line": 31666,
+      "text": "call KillUnit(Ki)"
+    },
+    {
+      "line": 31667,
+      "text": "call ShowUnit(Ki,false)"
+    },
+    {
+      "line": 31668,
+      "text": "endif"
+    },
+    {
+      "line": 31669,
+      "text": "endif"
+    },
+    {
+      "line": 31670,
+      "text": "set t=null"
+    },
+    {
+      "line": 31671,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 31672,
+      "text": "set Om=null"
+    },
+    {
+      "line": 31673,
+      "text": "set Ki=null"
+    },
+    {
+      "line": 31674,
+      "text": "return false"
+    },
+    {
+      "line": 31675,
+      "text": "endfunction"
+    },
+    {
+      "line": 31676,
+      "text": "function PhoenixFlamestrikeActionChange takes unit Bc,unit Ki,unit Om returns nothing"
+    },
+    {
+      "line": 31677,
+      "text": "local trigger t=CreateTrigger()"
+    },
+    {
+      "line": 31678,
+      "text": "local integer Pq=GetHandleId(t)"
+    },
+    {
+      "line": 31679,
+      "text": "local group DG"
+    },
+    {
+      "line": 31680,
+      "text": "if Bc==Om or Om==null or IsUnitType(Om,UNIT_TYPE_DEAD) or IsUnitType(Ki,UNIT_TYPE_DEAD) then"
+    },
+    {
+      "line": 31681,
+      "text": "call KillUnit(Ki)"
+    },
+    {
+      "line": 31682,
+      "text": "call ShowUnit(Ki,false)"
+    },
+    {
+      "line": 31683,
+      "text": "else"
+    },
+    {
+      "line": 31684,
+      "text": "call SetUnitPathing(Ki,false)"
+    },
+    {
+      "line": 31685,
+      "text": "call SetUnitVertexColor(Ki,255,255,255,255)"
+    },
+    {
+      "line": 31686,
+      "text": "call TriggerRegisterTimerEvent(t,.02,true)"
+    },
+    {
+      "line": 31687,
+      "text": "call TriggerRegisterUnitEvent(t,Bc,EVENT_UNIT_DEATH)"
+    },
+    {
+      "line": 31688,
+      "text": "call TriggerRegisterUnitEvent(t,Om,EVENT_UNIT_DEATH)"
+    },
+    {
+      "line": 31689,
+      "text": "call TriggerRegisterUnitEvent(t,Ki,EVENT_UNIT_DEATH)"
+    },
+    {
+      "line": 31690,
+      "text": "call TriggerAddCondition(t,Condition(function PhoenixFlamestrikeActionChangeAction))"
+    },
+    {
+      "line": 31691,
+      "text": "call SaveUnitHandle(O,Pq,2,Bc)"
+    },
+    {
+      "line": 31692,
+      "text": "call SaveUnitHandle(O,Pq,17,Om)"
+    },
+    {
+      "line": 31693,
+      "text": "call SaveUnitHandle(O,Pq,393,Ki)"
+    },
+    {
+      "line": 31694,
+      "text": "endif"
+    },
+    {
+      "line": 31695,
+      "text": "set t=null"
+    },
+    {
+      "line": 31696,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 31697,
+      "text": "set Ki=null"
+    },
+    {
+      "line": 31698,
+      "text": "set Om=null"
+    },
+    {
+      "line": 31699,
+      "text": "set DG=null"
+    },
+    {
+      "line": 31700,
+      "text": "endfunction"
+    },
+    {
+      "line": 31701,
+      "text": "function PhoenixFlamestrikeAction takes nothing returns boolean"
+    },
+    {
+      "line": 31702,
+      "text": "local trigger t=GetTriggeringTrigger()"
+    },
+    {
+      "line": 31703,
+      "text": "local integer Pq=GetHandleId(t)"
+    },
+    {
+      "line": 31704,
+      "text": "local integer y=LoadInteger(O,Pq,34)"
+    },
+    {
+      "line": 31705,
+      "text": "local unit Bc=LoadUnitHandle(O,Pq,2)"
+    },
+    {
+      "line": 31706,
+      "text": "local real aR=GetUnitX(Bc)"
+    },
+    {
+      "line": 31707,
+      "text": "local real aS=GetUnitY(Bc)"
+    },
+    {
+      "line": 31708,
+      "text": "local unit aO=LoadUnitHandle(O,Pq,393)"
+    },
+    {
+      "line": 31709,
+      "text": "local unit RO=LoadUnitHandle(O,Pq,394)"
+    },
+    {
+      "line": 31710,
+      "text": "local unit aP=LoadUnitHandle(O,Pq,395)"
+    },
+    {
+      "line": 31711,
+      "text": "local unit aQ=LoadUnitHandle(O,Pq,396)"
+    },
+    {
+      "line": 31712,
+      "text": "local unit Om=LoadUnitHandle(O,Pq,0)"
+    },
+    {
+      "line": 31713,
+      "text": "local real FF"
+    },
+    {
+      "line": 31714,
+      "text": "local real FG"
+    },
+    {
+      "line": 31715,
+      "text": "local real KI=-1*360*.02/4"
+    },
+    {
+      "line": 31716,
+      "text": "local real Pm"
+    },
+    {
+      "line": 31717,
+      "text": "local real aT"
+    },
+    {
+      "line": 31718,
+      "text": "local real aM=LoadReal(O,Pq,685)"
+    },
+    {
+      "line": 31719,
+      "text": "local real aU"
+    },
+    {
+      "line": 31720,
+      "text": "local integer Q5=800"
+    },
+    {
+      "line": 31721,
+      "text": "if .02*GetTriggerEvalCount(t)>=5 and GetTriggerEventId()==EVENT_GAME_TIMER_EXPIRED then"
+    },
+    {
+      "line": 31722,
+      "text": "if aO!=null and IsUnitType(aO,UNIT_TYPE_DEAD)==false then"
+    },
+    {
+      "line": 31723,
+      "text": "call PhoenixFlamestrikeActionChange(Bc,aO,Bc)"
+    },
+    {
+      "line": 31724,
+      "text": "endif"
+    },
+    {
+      "line": 31725,
+      "text": "if RO!=null and IsUnitType(RO,UNIT_TYPE_DEAD)==false then"
+    },
+    {
+      "line": 31726,
+      "text": "call PhoenixFlamestrikeActionChange(Bc,RO,Bc)"
+    },
+    {
+      "line": 31727,
+      "text": "endif"
+    },
+    {
+      "line": 31728,
+      "text": "if aP!=null and IsUnitType(aP,UNIT_TYPE_DEAD)==false then"
+    },
+    {
+      "line": 31729,
+      "text": "call PhoenixFlamestrikeActionChange(Bc,aP,Bc)"
+    },
+    {
+      "line": 31730,
+      "text": "endif"
+    },
+    {
+      "line": 31731,
+      "text": "if aQ!=null and IsUnitType(aQ,UNIT_TYPE_DEAD)==false then"
+    },
+    {
+      "line": 31732,
+      "text": "call PhoenixFlamestrikeActionChange(Bc,aQ,Bc)"
+    },
+    {
+      "line": 31733,
+      "text": "endif"
+    },
+    {
+      "line": 31734,
+      "text": "call FlushChildHashtable(O,Pq)"
+    },
+    {
+      "line": 31735,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 31736,
+      "text": "elseif I2R(R2I(.02*GetTriggerEvalCount(t)))==.02*I2R(GetTriggerEvalCount(t)) and GetTriggerEventId()==EVENT_GAME_TIMER_EXPIRED then"
+    },
+    {
+      "line": 31737,
+      "text": "if not IsUnitType(aO,UNIT_TYPE_DEAD) and aO!=null then"
+    },
+    {
+      "line": 31738,
+      "text": "call PhoenixFlamestrikeActionChange(Bc,aO,Om)"
+    },
+    {
+      "line": 31739,
+      "text": "call RemoveSavedHandle(O,Pq,393)"
+    },
+    {
+      "line": 31740,
+      "text": "elseif not IsUnitType(RO,UNIT_TYPE_DEAD) and RO!=null then"
+    },
+    {
+      "line": 31741,
+      "text": "call PhoenixFlamestrikeActionChange(Bc,RO,Om)"
+    },
+    {
+      "line": 31742,
+      "text": "call RemoveSavedHandle(O,Pq,394)"
+    },
+    {
+      "line": 31743,
+      "text": "elseif not IsUnitType(aP,UNIT_TYPE_DEAD) and aP!=null then"
+    },
+    {
+      "line": 31744,
+      "text": "call PhoenixFlamestrikeActionChange(Bc,aP,Om)"
+    },
+    {
+      "line": 31745,
+      "text": "call RemoveSavedHandle(O,Pq,395)"
+    },
+    {
+      "line": 31746,
+      "text": "elseif not IsUnitType(aQ,UNIT_TYPE_DEAD) and aQ!=null then"
+    },
+    {
+      "line": 31747,
+      "text": "call PhoenixFlamestrikeActionChange(Bc,aQ,Om)"
+    },
+    {
+      "line": 31748,
+      "text": "call RemoveSavedHandle(O,Pq,396)"
+    },
+    {
+      "line": 31749,
+      "text": "call FlushChildHashtable(O,Pq)"
+    },
+    {
+      "line": 31750,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 31751,
+      "text": "endif"
+    },
+    {
+      "line": 31752,
+      "text": "else"
+    },
+    {
+      "line": 31753,
+      "text": "set y=y+1"
+    },
+    {
+      "line": 31754,
+      "text": "call SaveInteger(O,Pq,34,y)"
+    },
+    {
+      "line": 31755,
+      "text": "if aO!=null and IsUnitType(aO,UNIT_TYPE_DEAD)==false then"
+    },
+    {
+      "line": 31756,
+      "text": "set aT=360*4/4."
+    },
+    {
+      "line": 31757,
+      "text": "set Pm=aT+KI*y"
+    },
+    {
+      "line": 31758,
+      "text": "set FF=aR+200*Cos(Pm*bj_DEGTORAD)"
+    },
+    {
+      "line": 31759,
+      "text": "set FG=aS+200*Sin(Pm*bj_DEGTORAD)"
+    },
+    {
+      "line": 31760,
+      "text": "call SetUnitFacing(aO,Pm-90)"
+    },
+    {
+      "line": 31761,
+      "text": "call SetUnitPosition(aO,FF,FG)"
+    },
+    {
+      "line": 31762,
+      "text": "endif"
+    },
+    {
+      "line": 31763,
+      "text": "if RO!=null and IsUnitType(RO,UNIT_TYPE_DEAD)==false then"
+    },
+    {
+      "line": 31764,
+      "text": "set aT=360*3/4."
+    },
+    {
+      "line": 31765,
+      "text": "set Pm=aT+KI*y"
+    },
+    {
+      "line": 31766,
+      "text": "set FF=aR+200*Cos(Pm*bj_DEGTORAD)"
+    },
+    {
+      "line": 31767,
+      "text": "set FG=aS+200*Sin(Pm*bj_DEGTORAD)"
+    },
+    {
+      "line": 31768,
+      "text": "call SetUnitFacing(RO,Pm-90)"
+    },
+    {
+      "line": 31769,
+      "text": "call SetUnitPosition(RO,FF,FG)"
+    },
+    {
+      "line": 31770,
+      "text": "endif"
+    },
+    {
+      "line": 31771,
+      "text": "if aP!=null and IsUnitType(aP,UNIT_TYPE_DEAD)==false then"
+    },
+    {
+      "line": 31772,
+      "text": "set aT=360*2/4."
+    },
+    {
+      "line": 31773,
+      "text": "set Pm=aT+KI*y"
+    },
+    {
+      "line": 31774,
+      "text": "set FF=aR+200*Cos(Pm*bj_DEGTORAD)"
+    },
+    {
+      "line": 31775,
+      "text": "set FG=aS+200*Sin(Pm*bj_DEGTORAD)"
+    },
+    {
+      "line": 31776,
+      "text": "call SetUnitFacing(aP,Pm-90)"
+    },
+    {
+      "line": 31777,
+      "text": "call SetUnitPosition(aP,FF,FG)"
+    },
+    {
+      "line": 31778,
+      "text": "endif"
+    },
+    {
+      "line": 31779,
+      "text": "if aQ!=null and IsUnitType(aQ,UNIT_TYPE_DEAD)==false then"
+    },
+    {
+      "line": 31780,
+      "text": "set aT=360*1/4."
+    },
+    {
+      "line": 31781,
+      "text": "set Pm=aT+KI*y"
+    },
+    {
+      "line": 31782,
+      "text": "set FF=aR+200*Cos(Pm*bj_DEGTORAD)"
+    },
+    {
+      "line": 31783,
+      "text": "set FG=aS+200*Sin(Pm*bj_DEGTORAD)"
+    },
+    {
+      "line": 31784,
+      "text": "call SetUnitFacing(aQ,Pm-90)"
+    },
+    {
+      "line": 31785,
+      "text": "call SetUnitPosition(aQ,FF,FG)"
+    },
+    {
+      "line": 31786,
+      "text": "endif"
+    },
+    {
+      "line": 31787,
+      "text": "if y>Q5 or GetTriggerEventId()==EVENT_WIDGET_DEATH then"
+    },
+    {
+      "line": 31788,
+      "text": "if aO!=null and IsUnitDead(aO)==false then"
+    },
+    {
+      "line": 31789,
+      "text": "call PhoenixFlamestrikeActionChange(Bc,aO,Bc)"
+    },
+    {
+      "line": 31790,
+      "text": "endif"
+    },
+    {
+      "line": 31791,
+      "text": "if RO!=null and IsUnitDead(RO)==false then"
+    },
+    {
+      "line": 31792,
+      "text": "call PhoenixFlamestrikeActionChange(Bc,RO,Bc)"
+    },
+    {
+      "line": 31793,
+      "text": "endif"
+    },
+    {
+      "line": 31794,
+      "text": "if aP!=null and IsUnitDead(aP)==false then"
+    },
+    {
+      "line": 31795,
+      "text": "call PhoenixFlamestrikeActionChange(Bc,aP,Bc)"
+    },
+    {
+      "line": 31796,
+      "text": "endif"
+    },
+    {
+      "line": 31797,
+      "text": "if aQ!=null and IsUnitDead(aQ)==false then"
+    },
+    {
+      "line": 31798,
+      "text": "call PhoenixFlamestrikeActionChange(Bc,aQ,Bc)"
+    },
+    {
+      "line": 31799,
+      "text": "endif"
+    },
+    {
+      "line": 31800,
+      "text": "call FlushChildHashtable(O,Pq)"
+    },
+    {
+      "line": 31801,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 31802,
+      "text": "else"
+    },
+    {
+      "line": 31803,
+      "text": "set aM=RMinBJ(.25+.75*(I2R(y)/500.),1)"
+    },
+    {
+      "line": 31804,
+      "text": "set aU=.25+(1-.2)*2.5"
+    },
+    {
+      "line": 31805,
+      "text": "call SetUnitScale(aO,aU,aU,aU)"
+    },
+    {
+      "line": 31806,
+      "text": "call SetUnitScale(RO,aU,aU,aU)"
+    },
+    {
+      "line": 31807,
+      "text": "call SetUnitScale(aP,aU,aU,aU)"
+    },
+    {
+      "line": 31808,
+      "text": "call SetUnitScale(aQ,aU,aU,aU)"
+    },
+    {
+      "line": 31809,
+      "text": "if y>Q5-200 then"
+    },
+    {
+      "line": 31810,
+      "text": "if ModuloInteger(y,10)==0 or ModuloInteger(y,10)==1 or ModuloInteger(y,10)==2 or ModuloInteger(y,10)==3 or ModuloInteger(y,10)==4 then"
+    },
+    {
+      "line": 31811,
+      "text": "call SetUnitVertexColor(aO,255,0,0,255)"
+    },
+    {
+      "line": 31812,
+      "text": "call SetUnitVertexColor(RO,255,0,0,255)"
+    },
+    {
+      "line": 31813,
+      "text": "call SetUnitVertexColor(aP,255,0,0,255)"
+    },
+    {
+      "line": 31814,
+      "text": "call SetUnitVertexColor(aQ,255,0,0,255)"
+    },
+    {
+      "line": 31815,
+      "text": "else"
+    },
+    {
+      "line": 31816,
+      "text": "call SetUnitVertexColor(aO,255,255,255,255)"
+    },
+    {
+      "line": 31817,
+      "text": "call SetUnitVertexColor(RO,255,255,255,255)"
+    },
+    {
+      "line": 31818,
+      "text": "call SetUnitVertexColor(aP,255,255,255,255)"
+    },
+    {
+      "line": 31819,
+      "text": "call SetUnitVertexColor(aQ,255,255,255,255)"
+    },
+    {
+      "line": 31820,
+      "text": "endif"
+    },
+    {
+      "line": 31821,
+      "text": "endif"
+    },
+    {
+      "line": 31822,
+      "text": "endif"
+    },
+    {
+      "line": 31823,
+      "text": "endif"
+    },
+    {
+      "line": 31824,
+      "text": "set t=null"
+    },
+    {
+      "line": 31825,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 31826,
+      "text": "set aO=null"
+    },
+    {
+      "line": 31827,
+      "text": "set RO=null"
+    },
+    {
+      "line": 31828,
+      "text": "set aP=null"
+    },
+    {
+      "line": 31829,
+      "text": "set aQ=null"
+    },
+    {
+      "line": 31830,
+      "text": "set Om=null"
+    },
+    {
+      "line": 31831,
+      "text": "return false"
+    },
+    {
+      "line": 31832,
+      "text": "endfunction"
+    },
+    {
+      "line": 31833,
+      "text": "function PhoenixFlamestrike takes unit Bc,unit Om returns nothing"
+    },
+    {
+      "line": 31834,
+      "text": "local trigger t=CreateTrigger()"
+    },
+    {
+      "line": 31835,
+      "text": "local integer Pq=GetHandleId(t)"
+    },
+    {
+      "line": 31836,
+      "text": "local real FF"
+    },
+    {
+      "line": 31837,
+      "text": "local real FG"
+    },
+    {
+      "line": 31838,
+      "text": "local unit aO"
+    },
+    {
+      "line": 31839,
+      "text": "local unit RO"
+    },
+    {
+      "line": 31840,
+      "text": "local unit aP"
+    },
+    {
+      "line": 31841,
+      "text": "local unit aQ"
+    },
+    {
+      "line": 31842,
+      "text": "local integer x=$65303147"
+    },
+    {
+      "line": 31843,
+      "text": "if LoadBoolean(O,GetHandleId(Bc),$68305757) then"
+    },
+    {
+      "line": 31844,
+      "text": "call SetUnitTypeModel(x,\"firespirit_Blue01.mdx\",null)"
+    },
+    {
+      "line": 31845,
+      "text": "else"
+    },
+    {
+      "line": 31846,
+      "text": "call SetUnitTypeModel(x,\"firespirit_2.mdx\",null)"
+    },
+    {
+      "line": 31847,
+      "text": "endif"
+    },
+    {
+      "line": 31848,
+      "text": "set FF=GetUnitX(Bc)+200*Cos(bj_DEGTORAD*360*4/4.*-1.)"
+    },
+    {
+      "line": 31849,
+      "text": "set FG=GetUnitY(Bc)+200*Sin(bj_DEGTORAD*360*4/4.*-1.)"
+    },
+    {
+      "line": 31850,
+      "text": "set aO=CreateUnit(GetOwningPlayer(Bc),x,FF,FG,360*4/4.*-1.)"
+    },
+    {
+      "line": 31851,
+      "text": "set FF=GetUnitX(Bc)+200*Cos(bj_DEGTORAD*360*3/4.*-1.)"
+    },
+    {
+      "line": 31852,
+      "text": "set FG=GetUnitY(Bc)+200*Sin(bj_DEGTORAD*360*3/4.*-1.)"
+    },
+    {
+      "line": 31853,
+      "text": "set RO=CreateUnit(GetOwningPlayer(Bc),x,FF,FG,360*3/4.*-1.)"
+    },
+    {
+      "line": 31854,
+      "text": "set FF=GetUnitX(Bc)+200*Cos(bj_DEGTORAD*360*2/4.*-1.)"
+    },
+    {
+      "line": 31855,
+      "text": "set FG=GetUnitY(Bc)+200*Sin(bj_DEGTORAD*360*2/4.*-1.)"
+    },
+    {
+      "line": 31856,
+      "text": "set aP=CreateUnit(GetOwningPlayer(Bc),x,FF,FG,360*2/4.*-1.)"
+    },
+    {
+      "line": 31857,
+      "text": "set FF=GetUnitX(Bc)+200*Cos(bj_DEGTORAD*360*1/4.*-1.)"
+    },
+    {
+      "line": 31858,
+      "text": "set FG=GetUnitY(Bc)+200*Sin(bj_DEGTORAD*360*1/4.*-1.)"
+    },
+    {
+      "line": 31859,
+      "text": "set aQ=CreateUnit(GetOwningPlayer(Bc),x,FF,FG,360*1/4.*-1.)"
+    },
+    {
+      "line": 31860,
+      "text": "call TriggerRegisterTimerEvent(t,.02,true)"
+    },
+    {
+      "line": 31861,
+      "text": "call TriggerRegisterDeathEvent(t,Bc)"
+    },
+    {
+      "line": 31862,
+      "text": "call TriggerAddCondition(t,Condition(function PhoenixFlamestrikeAction))"
+    },
+    {
+      "line": 31863,
+      "text": "call SaveUnitHandle(O,Pq,0,Om)"
+    },
+    {
+      "line": 31864,
+      "text": "call SaveUnitHandle(O,Pq,2,Bc)"
+    },
+    {
+      "line": 31865,
+      "text": "call SaveUnitHandle(O,Pq,393,aO)"
+    },
+    {
+      "line": 31866,
+      "text": "call SaveUnitHandle(O,Pq,394,RO)"
+    },
+    {
+      "line": 31867,
+      "text": "call SaveUnitHandle(O,Pq,395,aP)"
+    },
+    {
+      "line": 31868,
+      "text": "call SaveUnitHandle(O,Pq,396,aQ)"
+    },
+    {
+      "line": 31869,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 31870,
+      "text": "set aO=null"
+    },
+    {
+      "line": 31871,
+      "text": "set RO=null"
+    },
+    {
+      "line": 31872,
+      "text": "set aP=null"
+    },
+    {
+      "line": 31873,
+      "text": "set aQ=null"
+    },
+    {
+      "line": 31874,
+      "text": "set t=null"
+    },
+    {
+      "line": 31875,
+      "text": "set Om=null"
+    },
+    {
+      "line": 31876,
+      "text": "endfunction"
+    },
+    {
+      "line": 39218,
+      "text": "function Trig_allabilityActions takes nothing returns nothing"
+    },
+    {
+      "line": 39219,
+      "text": "local integer BF=GetSpellAbilityId()"
+    },
+    {
+      "line": 39220,
+      "text": "local player h=GetTriggerPlayer()"
+    },
+    {
+      "line": 39221,
+      "text": "local unit i=GetTriggerUnit()"
+    },
+    {
+      "line": 39222,
+      "text": "local real FF=GetSpellTargetX()"
+    },
+    {
+      "line": 39223,
+      "text": "local real FG=GetSpellTargetY()"
+    },
+    {
+      "line": 39224,
+      "text": "local unit Qf=GetSpellTargetUnit()"
+    },
+    {
+      "line": 39318,
+      "text": "if BF==$41315342 then"
+    },
+    {
+      "line": 39319,
+      "text": "call PhoenixShot(i,GetUnitX(Qf),GetUnitY(Qf))"
+    },
+    {
+      "line": 39320,
+      "text": "endif"
+    },
+    {
+      "line": 39321,
+      "text": "if BF==$41315343 then"
+    },
+    {
+      "line": 39322,
+      "text": "call PhoenixFlamestrike(i,Qf)"
+    },
+    {
+      "line": 39323,
+      "text": "endif"
+    },
+    {
+      "line": 40529,
+      "text": "function Trig_UnitDamageActions takes nothing returns nothing"
+    },
+    {
+      "line": 40530,
+      "text": "local unit i=GetTriggerUnit()"
+    },
+    {
+      "line": 40531,
+      "text": "local unit bV=GetEventDamageSource()"
+    },
+    {
+      "line": 40532,
+      "text": "local real P8=GetEventDamage()"
+    },
+    {
+      "line": 40533,
+      "text": "local boolean bW=YDWEIsEventAttackDamage()"
+    },
+    {
+      "line": 40534,
+      "text": "local real FF=GetUnitX(i)"
+    },
+    {
+      "line": 40535,
+      "text": "local real FG=GetUnitY(i)"
+    },
+    {
+      "line": 40553,
+      "text": "if P8<=0 or bV==i or bV==null or IsUnitAlly(bV,GetOwningPlayer(i)) then"
+    },
+    {
+      "line": 40554,
+      "text": "set i=null"
+    },
+    {
+      "line": 40555,
+      "text": "set bV=null"
+    },
+    {
+      "line": 40556,
+      "text": "set Eb=null"
+    },
+    {
+      "line": 40557,
+      "text": "set h=null"
+    },
+    {
+      "line": 40558,
+      "text": "set Uz=null"
+    },
+    {
+      "line": 40559,
+      "text": "return"
+    },
+    {
+      "line": 40560,
+      "text": "endif"
+    },
+    {
+      "line": 40561,
+      "text": "if GetUnitAbilityLevel(bV,$41325937)>0 then"
+    },
+    {
+      "line": 40562,
+      "text": "set i=null"
+    },
+    {
+      "line": 40563,
+      "text": "set bV=null"
+    },
+    {
+      "line": 40564,
+      "text": "set Eb=null"
+    },
+    {
+      "line": 40565,
+      "text": "set h=null"
+    },
+    {
+      "line": 40566,
+      "text": "set Uz=null"
+    },
+    {
+      "line": 40567,
+      "text": "return"
+    },
+    {
+      "line": 40568,
+      "text": "endif"
+    },
+    {
+      "line": 40569,
+      "text": "if GetUnitAbilityLevel(i,QC)>0 then"
+    },
+    {
+      "line": 40570,
+      "text": "set P8=P8*.85"
+    },
+    {
+      "line": 40571,
+      "text": "call YDWESetEventDamage(P8)"
+    },
+    {
+      "line": 40572,
+      "text": "endif"
+    },
+    {
+      "line": 40573,
+      "text": "set Uz=CreateGroup()"
+    },
+    {
+      "line": 40574,
+      "text": "call DisableTrigger(Eb)"
+    },
+    {
+      "line": 40749,
+      "text": "if GetUnitAbilityLevel(i,$41315342)>0 then"
+    },
+    {
+      "line": 40750,
+      "text": "call IssueTargetOrder(i,\"unloadall\",bV)"
+    },
+    {
+      "line": 40751,
+      "text": "elseif GetUnitAbilityLevel(bV,$41315342)>0 then"
+    },
+    {
+      "line": 40752,
+      "text": "call IssueTargetOrder(bV,\"unloadall\",i)"
+    },
+    {
+      "line": 40753,
+      "text": "endif"
+    },
+    {
+      "line": 40754,
+      "text": "if GetUnitAbilityLevel(i,$41315343)>0 then"
+    },
+    {
+      "line": 40755,
+      "text": "call IssueTargetOrder(i,\"unloadallcorpses\",bV)"
+    },
+    {
+      "line": 40756,
+      "text": "elseif GetUnitAbilityLevel(bV,$41315343)>0 then"
+    },
+    {
+      "line": 40757,
+      "text": "call IssueTargetOrder(bV,\"unloadallcorpses\",i)"
+    },
+    {
+      "line": 40758,
+      "text": "endif"
+    },
+    {
+      "line": 31946,
+      "text": "function PhoenixRevive takes unit Bc returns nothing"
+    },
+    {
+      "line": 31947,
+      "text": "local trigger t=CreateTrigger()"
+    },
+    {
+      "line": 31948,
+      "text": "if GetUnitTypeId(Bc)==$68305757 then"
+    },
+    {
+      "line": 31949,
+      "text": "call SaveBoolean(O,GetHandleId(t),3,true)"
+    },
+    {
+      "line": 31950,
+      "text": "call SaveBoolean(O,GetHandleId(Bc),$68305757,true)"
+    },
+    {
+      "line": 31951,
+      "text": "endif"
+    },
+    {
+      "line": 31952,
+      "text": "call SaveAgentHandle(O,GetHandleId(t),0,Bc)"
+    },
+    {
+      "line": 31953,
+      "text": "call TriggerRegisterUnitEvent(t,Bc,EVENT_UNIT_DEATH)"
+    },
+    {
+      "line": 31954,
+      "text": "call TriggerAddAction(t,function PhoenixReviveAction)"
+    }
+  ],
+  "abilities": {
+    "A1SB": {
+      "rawcode": "A1SB",
+      "name": "烈焰打击",
+      "tip": "烈焰打击",
+      "ubertip": "以召唤5只烈焰精灵围绕着神奥，每只精灵随机在攻击范围内的敌方单位，每只精灵可以对落地200码范围内敌方单位造成89点伤害，并有8%的几率造成最大攻击力2.5倍的暴击伤害",
+      "alias": "A1SB",
+      "code": "ANcl",
+      "DataB1": "1",
+      "DataC1": "1",
+      "levels": "1",
+      "targs1": "enemies",
+      "Cost1": "10",
+      "Rng1": "800.0",
+      "Cool1": "13.0",
+      "checkDep": "1",
+      "reqLevel": "1",
+      "DataE1": "1",
+      "DataF1": "unloadall"
+    },
+    "A1SC": {
+      "rawcode": "A1SC",
+      "name": "火之羽",
+      "tip": "火之羽",
+      "ubertip": "神奥在300*300范围内飞一圈，圈内降下火羽对敌方单位造成75点每秒的伤害，在火羽圈范围的敌方单位受到10%的减速效果，并对范围内的敌方单位造成20点的持续伤害。（持续15s）",
+      "alias": "A1SC",
+      "code": "ANcl",
+      "DataB1": "1",
+      "DataC1": "1",
+      "levels": "1",
+      "targs1": "enemies",
+      "Cost1": "15",
+      "Rng1": "500.0",
+      "Cool1": "18.0",
+      "checkDep": "1",
+      "reqLevel": "1",
+      "DataE1": "1",
+      "DataF1": "unloadallcorpses"
+    }
+  },
+  "units": {
+    "e01G": {
+      "rawcode": "e01G",
+      "name": "火羽",
+      "tip": "训练小精灵(W)",
+      "ubertip": "暗夜精灵族基本的工人单位。能采集金矿和木材。还能建造精灵族的建筑物并进行修理更新。\n能自我爆炸从而伤害到周围被召唤出来的单位并吸收一定范围内所有单位的魔法值。",
+      "unitID": "e01G",
+      "canFlee": "1",
+      "cargoSize": "1",
+      "death": "3.0",
+      "movetp": "fly",
+      "prio": "1",
+      "propWin": "60.0",
+      "race": "nightelf",
+      "targType": "ground",
+      "turnRate": "0.6",
+      "unitBalanceID": "e01G",
+      "bldtm": "14",
+      "bountydice": "5",
+      "bountyplus": "15",
+      "bountysides": "3",
+      "defType": "medium",
+      "goldcost": "60",
+      "goldRep": "60",
+      "HP": "60",
+      "level": "1",
+      "mana0": "100000",
+      "regenHP": "-1.0",
+      "regenMana": "1000.0",
+      "regenType": "always",
+      "reptm": "14",
+      "stockMax": "3",
+      "stockRegen": "30",
+      "tilesets": "*",
+      "unitUIID": "e01G",
+      "armor": "Ethereal",
+      "blue": "255",
+      "elevRad": "50.0",
+      "file": "firespirit_2.mdl",
+      "green": "255",
+      "maxPitch": "25.0",
+      "maxRoll": "25.0",
+      "modelScale": "1.2",
+      "red": "255",
+      "run": "200.0",
+      "scale": "1.0",
+      "scaleBull": "1",
+      "shadowOnWater": "1",
+      "teamColor": "-1",
+      "unitSound": "Wisp",
+      "walk": "200.0",
+      "unitAbilID": "e01G",
+      "abilList": "Aloc",
+      "unitWeapID": "e01G",
+      "atkType1": "normal",
+      "atkType2": "normal",
+      "impactZ": "60.0",
+      "launchZ": "60.0",
+      "showUI1": "1",
+      "showUI2": "1",
+      "targCount2": "1",
+      "hotkey": "W",
+      "bounty_min": "20.0",
+      "bounty_max": "30.0",
+      "bounty_avg": "25.0",
+      "attack_type_zh": "普通",
+      "armor_type_zh": "中甲",
+      "ability_ids": "Aloc",
+      "ability_names": "蝗虫",
+      "formation": "4",
+      "defUp": "2.0",
+      "manaN": "100000",
+      "moveHeight": "300.0"
+    },
+    "h0VX": {
+      "rawcode": "h0VX",
+      "name": "神·奥",
+      "ubertip": ",",
+      "unitID": "h0VX",
+      "canFlee": "1",
+      "cargoSize": "1",
+      "death": "3.04",
+      "deathType": "3",
+      "movetp": "fly",
+      "points": "100",
+      "prio": "6",
+      "propWin": "60.0",
+      "race": "human",
+      "targType": "ground",
+      "turnRate": "0.6",
+      "unitBalanceID": "h0VX",
+      "bldtm": "20",
+      "bountydice": "6",
+      "bountyplus": "20",
+      "bountysides": "3",
+      "collision": "12.0",
+      "defType": "hero",
+      "goldcost": "135",
+      "goldRep": "135",
+      "HP": "4000",
+      "level": "2",
+      "mana0": "30",
+      "nsight": "800",
+      "regenMana": "1.6",
+      "regenType": "none",
+      "reptm": "20",
+      "sight": "1400",
+      "spd": "340",
+      "stockMax": "3",
+      "stockRegen": "30",
+      "tilesets": "*",
+      "upgrades": "R00B,R00C,R009,R00A",
+      "unitUIID": "h0VX",
+      "armor": "Flesh",
+      "blend": "0.15",
+      "blue": "255",
+      "elevRad": "20.0",
+      "file": "Phoenix.mdx",
+      "green": "255",
+      "maxPitch": "10.0",
+      "maxRoll": "10.0",
+      "modelScale": "1.0",
+      "red": "255",
+      "run": "210.0",
+      "scale": "1.0",
+      "scaleBull": "1",
+      "shadowH": "140.0",
+      "shadowOnWater": "1",
+      "shadowW": "140.0",
+      "shadowX": "50.0",
+      "shadowY": "50.0",
+      "teamColor": "-1",
+      "unitShadow": "Shadow",
+      "unitSound": "Gnoll",
+      "walk": "210.0",
+      "unitAbilID": "h0VX",
+      "abilList": "A1SB,A1SC,A1SE",
+      "unitWeapID": "h0VX",
+      "acquire": "800.0",
+      "atkType1": "magic",
+      "atkType2": "normal",
+      "backSw1": "0.3",
+      "cool1": "0.5",
+      "dice1": "1",
+      "dmgpt1": "0.3",
+      "impactZ": "60.0",
+      "launchZ": "60.0",
+      "rangeN1": "500",
+      "RngBuff1": "250.0",
+      "showUI1": "1",
+      "showUI2": "1",
+      "sides1": "79",
+      "targCount1": "1",
+      "targCount2": "1",
+      "targs1": "enemies",
+      "weapsOn": "1",
+      "weapTp1": "missile",
+      "weapType1": "WoodLightBash",
+      "hotkey": "F",
+      "damage_min_1": "296.0",
+      "damage_max_1": "374.0",
+      "damage_avg_1": "335.0",
+      "dps_avg_1": "670.0",
+      "bounty_min": "26.0",
+      "bounty_max": "38.0",
+      "bounty_avg": "32.0",
+      "attack_type_zh": "魔法",
+      "armor_type_zh": "英雄甲",
+      "ability_ids": "A1SB,A1SC,A1SE",
+      "ability_names": "烈焰打击,火之羽,涅槃",
+      "def": "3.0",
+      "defUp": "2.0",
+      "manaN": "30",
+      "type": "giant",
+      "dmgplus1": "295",
+      "moveHeight": "300.0"
+    },
+    "h0WW": {
+      "rawcode": "h0WW",
+      "name": "凛冬神凰 神奥",
+      "ubertip": ",",
+      "unitID": "h0WW",
+      "canFlee": "1",
+      "cargoSize": "1",
+      "death": "3.04",
+      "deathType": "3",
+      "movetp": "fly",
+      "points": "100",
+      "prio": "6",
+      "propWin": "60.0",
+      "race": "human",
+      "targType": "ground",
+      "turnRate": "0.6",
+      "unitBalanceID": "h0WW",
+      "bldtm": "20",
+      "bountydice": "6",
+      "bountyplus": "20",
+      "bountysides": "3",
+      "collision": "12.0",
+      "defType": "hero",
+      "goldcost": "135",
+      "goldRep": "135",
+      "HP": "4000",
+      "level": "2",
+      "mana0": "30",
+      "nsight": "800",
+      "regenMana": "1.6",
+      "regenType": "none",
+      "reptm": "20",
+      "sight": "1400",
+      "spd": "340",
+      "stockMax": "3",
+      "stockRegen": "30",
+      "tilesets": "*",
+      "upgrades": "R00B,R00C,R009,R00A",
+      "unitUIID": "h0WW",
+      "armor": "Flesh",
+      "blend": "0.15",
+      "blue": "255",
+      "elevRad": "20.0",
+      "file": "Phoenix_Blue.mdx",
+      "green": "255",
+      "maxPitch": "10.0",
+      "maxRoll": "10.0",
+      "modelScale": "1.0",
+      "red": "255",
+      "run": "210.0",
+      "scale": "1.0",
+      "scaleBull": "1",
+      "shadowH": "140.0",
+      "shadowOnWater": "1",
+      "shadowW": "140.0",
+      "shadowX": "50.0",
+      "shadowY": "50.0",
+      "teamColor": "-1",
+      "unitShadow": "Shadow",
+      "unitSound": "Gnoll",
+      "walk": "210.0",
+      "unitAbilID": "h0WW",
+      "abilList": "A1SB,A1SC,A1SE",
+      "unitWeapID": "h0WW",
+      "acquire": "800.0",
+      "atkType1": "magic",
+      "atkType2": "normal",
+      "backSw1": "0.3",
+      "cool1": "0.5",
+      "dice1": "1",
+      "dmgpt1": "0.3",
+      "impactZ": "60.0",
+      "launchZ": "60.0",
+      "rangeN1": "500",
+      "RngBuff1": "250.0",
+      "showUI1": "1",
+      "showUI2": "1",
+      "sides1": "79",
+      "targCount1": "1",
+      "targCount2": "1",
+      "targs1": "enemies",
+      "weapsOn": "1",
+      "weapTp1": "missile",
+      "weapType1": "WoodLightBash",
+      "hotkey": "F",
+      "damage_min_1": "296.0",
+      "damage_max_1": "374.0",
+      "damage_avg_1": "335.0",
+      "dps_avg_1": "670.0",
+      "bounty_min": "26.0",
+      "bounty_max": "38.0",
+      "bounty_avg": "32.0",
+      "attack_type_zh": "魔法",
+      "armor_type_zh": "英雄甲",
+      "ability_ids": "A1SB,A1SC,A1SE",
+      "ability_names": "烈焰打击,火之羽,涅槃",
+      "def": "3.0",
+      "defUp": "2.0",
+      "manaN": "30",
+      "type": "giant",
+      "dmgplus1": "295",
+      "moveHeight": "300.0"
+    },
+    "h0VZ": {
+      "rawcode": "h0VZ",
+      "name": "神·奥",
+      "ubertip": ",",
+      "unitID": "h0VZ",
+      "canFlee": "1",
+      "cargoSize": "1",
+      "death": "3.04",
+      "deathType": "3",
+      "movetp": "fly",
+      "points": "100",
+      "prio": "6",
+      "propWin": "60.0",
+      "race": "human",
+      "targType": "ground",
+      "turnRate": "0.6",
+      "unitBalanceID": "h0VZ",
+      "bldtm": "20",
+      "bountydice": "6",
+      "bountyplus": "20",
+      "bountysides": "3",
+      "collision": "12.0",
+      "defType": "hero",
+      "goldcost": "135",
+      "goldRep": "135",
+      "HP": "2000",
+      "level": "2",
+      "mana0": "30",
+      "nsight": "800",
+      "regenMana": "1.6",
+      "regenType": "none",
+      "reptm": "20",
+      "sight": "1400",
+      "spd": "340",
+      "stockMax": "3",
+      "stockRegen": "30",
+      "tilesets": "*",
+      "upgrades": "R00B,R00C,R009,R00A",
+      "unitUIID": "h0VZ",
+      "armor": "Flesh",
+      "blend": "0.15",
+      "blue": "255",
+      "elevRad": "20.0",
+      "file": "Phoenix.mdx",
+      "green": "255",
+      "maxPitch": "10.0",
+      "maxRoll": "10.0",
+      "modelScale": "1.0",
+      "red": "255",
+      "run": "210.0",
+      "scale": "1.0",
+      "scaleBull": "1",
+      "shadowH": "140.0",
+      "shadowOnWater": "1",
+      "shadowW": "140.0",
+      "shadowX": "50.0",
+      "shadowY": "50.0",
+      "teamColor": "-1",
+      "unitShadow": "Shadow",
+      "unitSound": "Gnoll",
+      "walk": "210.0",
+      "unitAbilID": "h0VZ",
+      "abilList": "A1SB,A1SC",
+      "unitWeapID": "h0VZ",
+      "acquire": "800.0",
+      "atkType1": "magic",
+      "atkType2": "normal",
+      "backSw1": "0.3",
+      "cool1": "0.5",
+      "dice1": "1",
+      "dmgpt1": "0.3",
+      "impactZ": "60.0",
+      "launchZ": "60.0",
+      "rangeN1": "500",
+      "RngBuff1": "250.0",
+      "showUI1": "1",
+      "showUI2": "1",
+      "sides1": "79",
+      "targCount1": "1",
+      "targCount2": "1",
+      "targs1": "enemies",
+      "weapsOn": "1",
+      "weapTp1": "missile",
+      "weapType1": "WoodLightBash",
+      "hotkey": "F",
+      "damage_min_1": "151.0",
+      "damage_max_1": "229.0",
+      "damage_avg_1": "190.0",
+      "dps_avg_1": "380.0",
+      "bounty_min": "26.0",
+      "bounty_max": "38.0",
+      "bounty_avg": "32.0",
+      "attack_type_zh": "魔法",
+      "armor_type_zh": "英雄甲",
+      "ability_ids": "A1SB,A1SC",
+      "ability_names": "烈焰打击,火之羽",
+      "def": "3.0",
+      "defUp": "2.0",
+      "manaN": "30",
+      "type": "giant",
+      "dmgplus1": "150",
+      "moveHeight": "300.0"
+    }
+  },
+  "findings": [
+    "A1SB calls PhoenixShot; A1SC calls PhoenixFlamestrike. Tooltip descriptions are swapped and numeric claims differ.",
+    "Phoenix auto orders prefer damaged unit i; attacker bV is only the elseif fallback. No fallback after a failed preferred order.",
+    "Circle starts angle10 at0.02; stops before angle360, normally35 moves through350degrees; center is forward from original caster by max(300,targetDistance).",
+    "Each first-hit enemy takes75 and creates a fixed225radius 10damage persecond zone for7ticks, with attack=true on both direct and periodic BJ damage.",
+    "Four e01G created, no JW/JH registration or native summon-flag change; orbit radius200, rotating -1.8degrees on non-dispatch timer callbacks; initial angles are -360/-270/-180/-90, while later rotation uses +360/+270/+180/+90.",
+    "Timer evaluation count dispatches first remaining alive slot at integer seconds1/2/3/4, with5second timeout before dispatch; rotation counter excludes dispatch callbacks.",
+    "Feathers move1nativeunit every.02 then check strict distance<50;102single-target damage precedes KillUnit and ShowUnit(false).",
+    "Widget death clears still-orbiting feathers; ordinary unit death of caster, target or feather hides the chasing feather without automatically killing it.",
+    "e01G has Aloc,60HP,-1HPregen; no explicit spd/weapsOn, generic fighter defaults are not evidence."
+  ],
+  "partialBoundaries": [
+    "Native ANcl delay/channel/same-frame order arbitration and target legality inherited from native defaults.",
+    "Web terrain and player-rectangle mapping; native SetUnitPosition collision and enumeration.",
+    "Native float/evaluation counting and cross-trigger ordering during a coarse host frame.",
+    "Auxiliaries retain handles outside army groups; hidden/Aloc native lifecycle and creation hooks not fully verified.",
+    "Retained removed-caster ownership during burning zones and original model/effect assets."
+  ]
+}

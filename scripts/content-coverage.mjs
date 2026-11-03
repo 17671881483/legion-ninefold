@@ -10,7 +10,7 @@ const playerBuildingCommands=current.filter(u=>u.buildingAbilityIds?.includes('A
 const playerBuildingRuleCarriers=current.filter(u=>u.buildingAbilityIds?.some(id=>['A0RF','A0JE','A1BL','A1PK','A170','A1UH'].includes(id))).map(u=>({...u,abilityIds:u.buildingAbilityIds.filter(id=>['A0RF','A0JE','A1BL','A1PK','A170','A1UH'].includes(id))}));
 // This form is created by YseraAwakening at runtime, so it is not a separate
 // build-menu record. Its skills still belong to the player's combat coverage.
-const playerRuntimeForms=['h0YO','h0UD','h0UE','h2AE','n06V','n06W','h0CZ','h0CL','n07J','h03E','h0V2','h03K','h0SU','n0SD','h2AC','h0VY','h0VZ','e01G','h0R0','h0QT','u011','u04D','u04E'].map(code=>UNIT_TEMPLATES[code]);
+const playerRuntimeForms=['h0YO','h0UD','h0UE','h2AE','n06V','n06W','h0CZ','h0CL','n07J','h03E','h0V2','h03K','h0SU','n0SD','h2AC','h0VY','h0VZ','e01G','h0R0','h0QT','u011','u04D','u04E','e01I'].map(code=>UNIT_TEMPLATES[code]);
 // Source callbacks or building-only icons expose these auxiliary abilities.
 // Count their runtime rules even when the combat ability list omits the icon.
 const playerRuntimeAbilities=[
@@ -82,6 +82,7 @@ const result={
   battleSkills:collect([...current,...playerBuildingCommands,...playerBuildingRuleCarriers,...playerRuntimeForms,...playerRuntimeAbilities,...MERCENARIES,...WAVES,...specialCodes.map(c=>UNIT_TEMPLATES[c])]),
   sourceOnlyCombatForms:[{combatRawcode:'h0JR',buildingRawcode:'n00S',status:'entry-unresolved',evidence:'war3map.j:17544-17545 maps forms; line3644 ban dialog; 48355 barracks egg marker and 48750 monthly record do not provide acquisition',skills:collect([{...UNIT_TEMPLATES.h0JR,abilityIds:[...UNIT_TEMPLATES.h0JR.abilityIds,'A0J2','A0J3']}])},{combatRawcode:'h0VQ',buildingRawcode:'n07U',status:'entry-unresolved',evidence:'war3map.j:17436-17437 maps forms; line3638 ban limit1; no source creation/recipe/upgrade entry found in packet',skills:collect([{...UNIT_TEMPLATES.h0VQ,abilityIds:[...UNIT_TEMPLATES.h0VQ.abilityIds,'A1QI','A1D6']}])}],
   remainingSourceGaps:[
+    '玛维刀阵149次5.4跟随伤害/死亡清理、受伤200→224路径闪烁/8秒冷却、暗影突袭75+两次10的8秒宿主适配与手动13蓝天神召唤已接入。脚本A1TW的waterelemental错配保留失败，A1TY缺耗魔不免费转换尸体。暗影突袭分阶段类型/衰减/刷新、天神重施策略、原生AI/导航仍partial，见maiev-evidence.json。',
     '耐奥祖怨毒固定300范围五次55/82.5/110、死亡之兆延迟1秒以尸体当时位置600范围105/157.5/525、u04D死亡预选目标后五次80及完工/部署等级已接入。诅咒仅e008/A1UL命令请求，缺失原生参数不猜伤害；仪式枯骨手动按4/6/10随机总数生成且无1秒生命。原生召唤时序/分布/AI入口、诅咒结算与原版阶段连边仍partial，见nerzhul-evidence.json。',
     '萨维斯A1UD三目标每秒305感染、A1UE固定400范围七次去重检查、A1UF恐魔3秒生命/175初伤/125死亡爆炸及10次10伤害、A1UG延迟0.5秒425流星已接入。A1UH仅说明，SavisSummon无调用；A1UI命令错配及缺失耗魔不再按免费自动召唤处理。原生时序、枚举、移除句柄、导航及特效仍partial，见savis-evidence.json。',
     '诺兹多姆A154受伤跳跃/扣费/正面驱散、A158主死亡变龙及1000爆炸、A159时之吐息、A15A历史与零值满血回退已接入。默认新龙没有A15A历史登记，不补造；A155/A206是原生光环说明，sapper目标分类已约束。原生ANcl时序、矩形映射、未知buff、回溯生命/枚举及飞行通行仍partial，见nozdormu-evidence.json。',

@@ -1,6 +1,6 @@
 {
   "sourceVersion": "v14.1A5",
-  "skillImplementationRevision": "v14-content-20261104-v68-1",
+  "skillImplementationRevision": "v14-content-20261104-v69-1",
   "units": 534,
   "mercenaryRecords": 60,
   "mainWaves": 35,
@@ -32,7 +32,8 @@
     "h0QT",
     "u011",
     "u04D",
-    "u04E"
+    "u04E",
+    "e01I"
   ],
   "playerRuntimeAbilities": [
     {
@@ -466,9 +467,9 @@
   "playerSkills": {
     "counts": {
       "implemented": 411,
-      "partial": 180,
-      "marker": 39,
-      "unresolved": 56
+      "partial": 184,
+      "marker": 40,
+      "unresolved": 53
     },
     "abilities": [
       {
@@ -6660,8 +6661,8 @@
       {
         "rawcode": "A1TV",
         "name": "暗影突袭",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "maiev_source",
         "unitRawcodes": [
           "n08G"
         ]
@@ -6669,8 +6670,8 @@
       {
         "rawcode": "A1TW",
         "name": "复仇之魂",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "maiev_source",
         "unitRawcodes": [
           "n08G"
         ]
@@ -6678,17 +6679,26 @@
       {
         "rawcode": "A1TX",
         "name": "闪烁",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "maiev_source",
         "unitRawcodes": [
           "n08G"
         ]
       },
       {
+        "rawcode": "A1TY",
+        "name": "复仇之魂",
+        "status": "unresolved",
+        "kind": "maiev_source",
+        "unitRawcodes": [
+          "e01I"
+        ]
+      },
+      {
         "rawcode": "A1TZ",
         "name": "刀阵",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "maiev_source",
         "unitRawcodes": [
           "n08G"
         ]
@@ -7485,6 +7495,15 @@
         ]
       },
       {
+        "rawcode": "Asp1",
+        "name": "球体",
+        "status": "marker",
+        "kind": "pending",
+        "unitRawcodes": [
+          "e01I"
+        ]
+      },
+      {
         "rawcode": "Avul",
         "name": "无敌的",
         "status": "implemented",
@@ -7545,9 +7564,9 @@
   "battleSkills": {
     "counts": {
       "implemented": 460,
-      "partial": 189,
-      "marker": 52,
-      "unresolved": 70
+      "partial": 193,
+      "marker": 53,
+      "unresolved": 67
     },
     "abilities": [
       {
@@ -14565,8 +14584,8 @@
       {
         "rawcode": "A1TV",
         "name": "暗影突袭",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "maiev_source",
         "unitRawcodes": [
           "n08G"
         ]
@@ -14574,8 +14593,8 @@
       {
         "rawcode": "A1TW",
         "name": "复仇之魂",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "maiev_source",
         "unitRawcodes": [
           "n08G"
         ]
@@ -14583,17 +14602,26 @@
       {
         "rawcode": "A1TX",
         "name": "闪烁",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "maiev_source",
         "unitRawcodes": [
           "n08G"
         ]
       },
       {
+        "rawcode": "A1TY",
+        "name": "复仇之魂",
+        "status": "unresolved",
+        "kind": "maiev_source",
+        "unitRawcodes": [
+          "e01I"
+        ]
+      },
+      {
         "rawcode": "A1TZ",
         "name": "刀阵",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "maiev_source",
         "unitRawcodes": [
           "n08G"
         ]
@@ -15459,6 +15487,15 @@
         ]
       },
       {
+        "rawcode": "Asp1",
+        "name": "球体",
+        "status": "marker",
+        "kind": "pending",
+        "unitRawcodes": [
+          "e01I"
+        ]
+      },
+      {
         "rawcode": "Avul",
         "name": "无敌的",
         "status": "implemented",
@@ -15713,6 +15750,7 @@
     }
   ],
   "remainingSourceGaps": [
+    "玛维刀阵149次5.4跟随伤害/死亡清理、受伤200→224路径闪烁/8秒冷却、暗影突袭75+两次10的8秒宿主适配与手动13蓝天神召唤已接入。脚本A1TW的waterelemental错配保留失败，A1TY缺耗魔不免费转换尸体。暗影突袭分阶段类型/衰减/刷新、天神重施策略、原生AI/导航仍partial，见maiev-evidence.json。",
     "耐奥祖怨毒固定300范围五次55/82.5/110、死亡之兆延迟1秒以尸体当时位置600范围105/157.5/525、u04D死亡预选目标后五次80及完工/部署等级已接入。诅咒仅e008/A1UL命令请求，缺失原生参数不猜伤害；仪式枯骨手动按4/6/10随机总数生成且无1秒生命。原生召唤时序/分布/AI入口、诅咒结算与原版阶段连边仍partial，见nerzhul-evidence.json。",
     "萨维斯A1UD三目标每秒305感染、A1UE固定400范围七次去重检查、A1UF恐魔3秒生命/175初伤/125死亡爆炸及10次10伤害、A1UG延迟0.5秒425流星已接入。A1UH仅说明，SavisSummon无调用；A1UI命令错配及缺失耗魔不再按免费自动召唤处理。原生时序、枚举、移除句柄、导航及特效仍partial，见savis-evidence.json。",
     "诺兹多姆A154受伤跳跃/扣费/正面驱散、A158主死亡变龙及1000爆炸、A159时之吐息、A15A历史与零值满血回退已接入。默认新龙没有A15A历史登记，不补造；A155/A206是原生光环说明，sapper目标分类已约束。原生ANcl时序、矩形映射、未知buff、回溯生命/枚举及飞行通行仍partial，见nozdormu-evidence.json。",

@@ -1,0 +1,1583 @@
+{
+  "source": {
+    "path": "reference/v14-source/raw_extracted/war3map.j",
+    "sha256": "e66c55b3b25b185c991be5613e21fbf5b2d598f3cc40f2f8cd01c23bcb828250",
+    "encoding": "latin1 split LF only"
+  },
+  "sourceEvidence": [
+    {
+      "line": 1977,
+      "text": "call SaveInteger(O,$68303933,StringHash(\"box_train_upgrade_next\"),$6E303847)"
+    },
+    {
+      "line": 1978,
+      "text": "call SaveInteger(O,$68303933,StringHash(\"box_train_upgrade_count\"),1)"
+    },
+    {
+      "line": 1979,
+      "text": "call SaveInteger(O,$68303933,StringHash(\"box_train_upgrade_1\"),$6E303847)"
+    },
+    {
+      "line": 1980,
+      "text": "call SaveInteger(O,$68313933,StringHash(\"box_train_upgrade_next\"),$6E303847)"
+    },
+    {
+      "line": 1981,
+      "text": "call SaveInteger(O,$68313933,StringHash(\"box_train_upgrade_count\"),1)"
+    },
+    {
+      "line": 1982,
+      "text": "call SaveInteger(O,$68313933,StringHash(\"box_train_upgrade_1\"),$6E303847)"
+    },
+    {
+      "line": 2473,
+      "text": "call SaveInteger(O,$68303933,StringHash(\"box_train_select_count\"),1)"
+    },
+    {
+      "line": 2474,
+      "text": "call SaveInteger(O,$68303933,StringHash(\"box_train_select_1\"),$6E303847)"
+    },
+    {
+      "line": 2475,
+      "text": "call SaveInteger(O,$68313933,StringHash(\"box_train_select_count\"),1)"
+    },
+    {
+      "line": 2476,
+      "text": "call SaveInteger(O,$68313933,StringHash(\"box_train_select_1\"),$6E303847)"
+    },
+    {
+      "line": 3105,
+      "text": "call SaveInteger(O,$6E303847,StringHash(\"box_train_upgrade_require_count\"),2)"
+    },
+    {
+      "line": 3106,
+      "text": "call SaveInteger(O,$6E303847,StringHash(\"box_train_upgrade_require_1\"),$75303034)"
+    },
+    {
+      "line": 3107,
+      "text": "call SaveInteger(O,$6E303847,StringHash(\"box_train_upgrade_require_2\"),$52304747)"
+    },
+    {
+      "line": 3620,
+      "text": "call DisableEggUnitTypeDialog___RegisterDialogEggUnitType($6E303847,\"çç»´å½±æ­\",1)"
+    },
+    {
+      "line": 17241,
+      "text": "set Mk[Bi]=$6830574B"
+    },
+    {
+      "line": 17242,
+      "text": "set Ml[Bi]=$6E303847"
+    },
+    {
+      "line": 17243,
+      "text": "set M0=Bi"
+    },
+    {
+      "line": 23238,
+      "text": "function oldcodefn_YK takes nothing returns boolean"
+    },
+    {
+      "line": 23239,
+      "text": "return IsUnitType(GetSummonedUnit(),UNIT_TYPE_SUMMONED)"
+    },
+    {
+      "line": 23240,
+      "text": "endfunction"
+    },
+    {
+      "line": 23241,
+      "text": "function zK takes nothing returns nothing"
+    },
+    {
+      "line": 23242,
+      "text": "set Nr=GetSummonedUnit()"
+    },
+    {
+      "line": 23243,
+      "text": "set Bi=GetUnitUserData(GetSummoningUnit())"
+    },
+    {
+      "line": 23244,
+      "text": "call SetUnitUserData(Nr,Bi)"
+    },
+    {
+      "line": 23245,
+      "text": "call SetUnitColor(Nr,GetPlayerColor(Player(-1+Bi)))"
+    },
+    {
+      "line": 23246,
+      "text": "call GroupAddUnit(JW,Nr)"
+    },
+    {
+      "line": 23247,
+      "text": "call GroupAddUnit(JH[Bi],Nr)"
+    },
+    {
+      "line": 23248,
+      "text": "set Pb=GetUnitLoc(Nr)"
+    },
+    {
+      "line": 23249,
+      "text": "call DestroyEffect(AddSpecialEffectLoc(\"Abilities\\\\Spells\\\\Human\\\\MassTeleport\\\\MassTeleportTarget.mdl\",Pb))"
+    },
+    {
+      "line": 23250,
+      "text": "call RemoveLocation(Pb)"
+    },
+    {
+      "line": 27375,
+      "text": "set VO=CreateTrigger()"
+    },
+    {
+      "line": 27376,
+      "text": "call TriggerRegisterAnyUnitEventBJ(VO,EVENT_PLAYER_UNIT_SUMMON)"
+    },
+    {
+      "line": 27377,
+      "text": "call TriggerAddCondition(VO,Condition(function oldcodefn_YK))"
+    },
+    {
+      "line": 27378,
+      "text": "call TriggerAddAction(VO,function zK)"
+    },
+    {
+      "line": 28773,
+      "text": "call SetPlayerTechResearchedSwap($52304853,1,h)"
+    },
+    {
+      "line": 28774,
+      "text": "endif"
+    },
+    {
+      "line": 28775,
+      "text": "if x==$6830464C or x==$6E303151 then"
+    },
+    {
+      "line": 28776,
+      "text": "call SetPlayerTechResearchedSwap($52304747,1,h)"
+    },
+    {
+      "line": 28777,
+      "text": "endif"
+    },
+    {
+      "line": 28778,
+      "text": "if x==$68303850 or x==$68303933 or x==$68313933 then"
+    },
+    {
+      "line": 28779,
+      "text": "call SaveBoolean(O,GetHandleId(h),x,true)"
+    },
+    {
+      "line": 35808,
+      "text": "function MaievBladeAction takes nothing returns nothing"
+    },
+    {
+      "line": 35809,
+      "text": "local trigger t=GetTriggeringTrigger()"
+    },
+    {
+      "line": 35810,
+      "text": "local integer Pr=GetHandleId(t)"
+    },
+    {
+      "line": 35811,
+      "text": "local unit Bc=LoadUnitHandle(O,Pr,6)"
+    },
+    {
+      "line": 35812,
+      "text": "local real FF=GetUnitX(Bc)"
+    },
+    {
+      "line": 35813,
+      "text": "local real FG=GetUnitY(Bc)"
+    },
+    {
+      "line": 35814,
+      "text": "local effect DE=LoadEffectHandle(O,Pr,0)"
+    },
+    {
+      "line": 35815,
+      "text": "local real Q5=300"
+    },
+    {
+      "line": 35816,
+      "text": "local group DG"
+    },
+    {
+      "line": 35817,
+      "text": "local unit D6"
+    },
+    {
+      "line": 35818,
+      "text": "if GetTriggerEventId()==EVENT_GAME_TIMER_EXPIRED then"
+    },
+    {
+      "line": 35819,
+      "text": "if GetTriggerExecCount(t)*.04<6 then"
+    },
+    {
+      "line": 35820,
+      "text": "call EXSetEffectXY(DE,FF,FG)"
+    },
+    {
+      "line": 35821,
+      "text": "set DG=SelectRange(Bc,FF,FG,Q5+50)"
+    },
+    {
+      "line": 35822,
+      "text": "loop"
+    },
+    {
+      "line": 35823,
+      "text": "set D6=FirstOfGroup(DG)"
+    },
+    {
+      "line": 35824,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 35825,
+      "text": "call GroupRemoveUnit(DG,D6)"
+    },
+    {
+      "line": 35826,
+      "text": "call UnitDamageTargetBJ(Bc,D6,135*.04,ATTACK_TYPE_CHAOS,DAMAGE_TYPE_UNIVERSAL)"
+    },
+    {
+      "line": 35827,
+      "text": "endloop"
+    },
+    {
+      "line": 35828,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 35829,
+      "text": "set DG=null"
+    },
+    {
+      "line": 35830,
+      "text": "else"
+    },
+    {
+      "line": 35831,
+      "text": "call DestroyEffect(DE)"
+    },
+    {
+      "line": 35832,
+      "text": "call FlushChildHashtable(O,Pr)"
+    },
+    {
+      "line": 35833,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 35834,
+      "text": "endif"
+    },
+    {
+      "line": 35835,
+      "text": "else"
+    },
+    {
+      "line": 35836,
+      "text": "call DestroyEffect(DE)"
+    },
+    {
+      "line": 35837,
+      "text": "call FlushChildHashtable(O,Pr)"
+    },
+    {
+      "line": 35838,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 35839,
+      "text": "endif"
+    },
+    {
+      "line": 35840,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 35841,
+      "text": "set t=null"
+    },
+    {
+      "line": 35842,
+      "text": "set DE=null"
+    },
+    {
+      "line": 35843,
+      "text": "endfunction"
+    },
+    {
+      "line": 35844,
+      "text": "function MaievBlade takes unit Bc returns nothing"
+    },
+    {
+      "line": 35845,
+      "text": "local real FF=GetUnitX(Bc)"
+    },
+    {
+      "line": 35846,
+      "text": "local real FG=GetUnitY(Bc)"
+    },
+    {
+      "line": 35847,
+      "text": "local trigger t=CreateTrigger()"
+    },
+    {
+      "line": 35848,
+      "text": "local integer Pr=GetHandleId(t)"
+    },
+    {
+      "line": 35849,
+      "text": "local effect DE=AddSpecialEffect(\"LJQ_HeroWarden_DaoZhen.mdx\",FF,FG)"
+    },
+    {
+      "line": 35850,
+      "text": "local location KI=Location(FF,FG)"
+    },
+    {
+      "line": 35851,
+      "text": "call EXSetEffectZ(DE,GetLocationZ(KI)+50)"
+    },
+    {
+      "line": 35852,
+      "text": "call RemoveLocation(KI)"
+    },
+    {
+      "line": 35853,
+      "text": "call SaveAgentHandle(O,Pr,0,DE)"
+    },
+    {
+      "line": 35854,
+      "text": "call SaveAgentHandle(O,Pr,6,Bc)"
+    },
+    {
+      "line": 35855,
+      "text": "call TriggerRegisterTimerEvent(t,.04,true)"
+    },
+    {
+      "line": 35856,
+      "text": "call TriggerRegisterDeathEvent(t,Bc)"
+    },
+    {
+      "line": 35857,
+      "text": "call TriggerAddAction(t,function MaievBladeAction)"
+    },
+    {
+      "line": 35858,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 35859,
+      "text": "set t=null"
+    },
+    {
+      "line": 35860,
+      "text": "set DE=null"
+    },
+    {
+      "line": 35861,
+      "text": "set KI=null"
+    },
+    {
+      "line": 35862,
+      "text": "endfunction"
+    },
+    {
+      "line": 35863,
+      "text": "function MaievPinkTimer takes nothing returns nothing"
+    },
+    {
+      "line": 35864,
+      "text": "local timer t=GetExpiredTimer()"
+    },
+    {
+      "line": 35865,
+      "text": "local integer BQ=GetHandleId(t)"
+    },
+    {
+      "line": 35866,
+      "text": "local unit Bc=LoadUnitHandle(O,BQ,0)"
+    },
+    {
+      "line": 35867,
+      "text": "call RemoveSavedHandle(O,GetHandleId(Bc),$41315458)"
+    },
+    {
+      "line": 35868,
+      "text": "call FlushChildHashtable(O,BQ)"
+    },
+    {
+      "line": 35869,
+      "text": "call DestroyTimer(t)"
+    },
+    {
+      "line": 35870,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 35871,
+      "text": "set t=null"
+    },
+    {
+      "line": 35872,
+      "text": "endfunction"
+    },
+    {
+      "line": 35873,
+      "text": "function MaievPink takes unit Bc returns nothing"
+    },
+    {
+      "line": 35874,
+      "text": "local timer t=LoadTimerHandle(O,GetHandleId(Bc),$41315458)"
+    },
+    {
+      "line": 35875,
+      "text": "local real FF"
+    },
+    {
+      "line": 35876,
+      "text": "local real FG"
+    },
+    {
+      "line": 35877,
+      "text": "local integer BB=0"
+    },
+    {
+      "line": 35878,
+      "text": "local real bZ=200"
+    },
+    {
+      "line": 35879,
+      "text": "if GetUnitAbilityLevel(Bc,$41315458)>0 then"
+    },
+    {
+      "line": 35880,
+      "text": "loop"
+    },
+    {
+      "line": 35881,
+      "text": "set BB=BB+1"
+    },
+    {
+      "line": 35882,
+      "text": "set FF=GetUnitX(Bc)+CosBJ(GetUnitFacing(Bc))*-RMaxBJ(32*BB,bZ)"
+    },
+    {
+      "line": 35883,
+      "text": "set FG=GetUnitY(Bc)+SinBJ(GetUnitFacing(Bc))*-RMaxBJ(32*BB,bZ)"
+    },
+    {
+      "line": 35884,
+      "text": "exitwhen 32*BB>=bZ or IsTerrainPathable(FF,FG,PATHING_TYPE_WALKABILITY)"
+    },
+    {
+      "line": 35885,
+      "text": "endloop"
+    },
+    {
+      "line": 35886,
+      "text": "if t==null and not IsTerrainPathable(FF,FG,PATHING_TYPE_WALKABILITY) then"
+    },
+    {
+      "line": 35887,
+      "text": "set t=CreateTimer()"
+    },
+    {
+      "line": 35888,
+      "text": "call SaveUnitHandle(O,GetHandleId(t),0,Bc)"
+    },
+    {
+      "line": 35889,
+      "text": "call TimerStart(t,8,false,function MaievPinkTimer)"
+    },
+    {
+      "line": 35890,
+      "text": "call SaveAgentHandle(O,GetHandleId(Bc),$41315458,t)"
+    },
+    {
+      "line": 35891,
+      "text": "call DestroyEffect(AddSpecialEffect(\"Abilities\\\\Spells\\\\NightElf\\\\Blink\\\\BlinkCaster.mdl\",GetUnitX(Bc),GetUnitY(Bc)))"
+    },
+    {
+      "line": 35892,
+      "text": "call SetUnitX(Bc,FF)"
+    },
+    {
+      "line": 35893,
+      "text": "call SetUnitY(Bc,FG)"
+    },
+    {
+      "line": 35894,
+      "text": "call DestroyEffect(AddSpecialEffect(\"Abilities\\\\Spells\\\\NightElf\\\\Blink\\\\BlinkCaster.mdl\",FF,FG))"
+    },
+    {
+      "line": 35895,
+      "text": "endif"
+    },
+    {
+      "line": 35896,
+      "text": "endif"
+    },
+    {
+      "line": 35897,
+      "text": "set t=null"
+    },
+    {
+      "line": 35898,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 35899,
+      "text": "endfunction"
+    },
+    {
+      "line": 39303,
+      "text": "if BF==$4131545A then"
+    },
+    {
+      "line": 39304,
+      "text": "call MaievBlade(i)"
+    },
+    {
+      "line": 39305,
+      "text": "endif"
+    },
+    {
+      "line": 40553,
+      "text": "if P8<=0 or bV==i or bV==null or IsUnitAlly(bV,GetOwningPlayer(i)) then"
+    },
+    {
+      "line": 40554,
+      "text": "set i=null"
+    },
+    {
+      "line": 40555,
+      "text": "set bV=null"
+    },
+    {
+      "line": 40556,
+      "text": "set Eb=null"
+    },
+    {
+      "line": 40557,
+      "text": "set h=null"
+    },
+    {
+      "line": 40558,
+      "text": "set Uz=null"
+    },
+    {
+      "line": 40559,
+      "text": "return"
+    },
+    {
+      "line": 40560,
+      "text": "endif"
+    },
+    {
+      "line": 40561,
+      "text": "if GetUnitAbilityLevel(bV,$41325937)>0 then"
+    },
+    {
+      "line": 40562,
+      "text": "set i=null"
+    },
+    {
+      "line": 40563,
+      "text": "set bV=null"
+    },
+    {
+      "line": 40564,
+      "text": "set Eb=null"
+    },
+    {
+      "line": 40565,
+      "text": "set h=null"
+    },
+    {
+      "line": 40566,
+      "text": "set Uz=null"
+    },
+    {
+      "line": 40567,
+      "text": "return"
+    },
+    {
+      "line": 40568,
+      "text": "endif"
+    },
+    {
+      "line": 40569,
+      "text": "if GetUnitAbilityLevel(i,QC)>0 then"
+    },
+    {
+      "line": 40570,
+      "text": "set P8=P8*.85"
+    },
+    {
+      "line": 40571,
+      "text": "call YDWESetEventDamage(P8)"
+    },
+    {
+      "line": 40572,
+      "text": "endif"
+    },
+    {
+      "line": 40573,
+      "text": "set Uz=CreateGroup()"
+    },
+    {
+      "line": 40574,
+      "text": "call DisableTrigger(Eb)"
+    },
+    {
+      "line": 40575,
+      "text": "if IsUnitType(i,UNIT_TYPE_ANCIENT) and IsPlayer(GetOwningPlayer(i)) then"
+    },
+    {
+      "line": 40576,
+      "text": "call YDWESetEventDamage(0)"
+    },
+    {
+      "line": 40577,
+      "text": "endif"
+    },
+    {
+      "line": 40578,
+      "text": "if GetUnitAbilityLevel(i,aw)>0 then"
+    },
+    {
+      "line": 40579,
+      "text": "call YDWESetEventDamage(0)"
+    },
+    {
+      "line": 40580,
+      "text": "endif"
+    },
+    {
+      "line": 40581,
+      "text": "if not (IsUnitType(i,UNIT_TYPE_ANCIENT) and IsPlayer(GetOwningPlayer(i))) and GetUnitAbilityLevel(i,aw)<=0 then"
+    },
+    {
+      "line": 40582,
+      "text": "if P8>0 and GetUnitAbilityLevel(i,Qj)>0 then"
+    },
+    {
+      "line": 40583,
+      "text": "set P8=YseraOnDamage(i,bV,P8)"
+    },
+    {
+      "line": 40584,
+      "text": "call YDWESetEventDamage(P8)"
+    },
+    {
+      "line": 40585,
+      "text": "endif"
+    },
+    {
+      "line": 40586,
+      "text": "if P8>0 and GetUnitAbilityLevel(bV,Zq)>0 then"
+    },
+    {
+      "line": 40587,
+      "text": "call YseraApplyDreamCorrosion(bV,i)"
+    },
+    {
+      "line": 40588,
+      "text": "endif"
+    },
+    {
+      "line": 40589,
+      "text": "endif"
+    },
+    {
+      "line": 40590,
+      "text": "call Anduin_SetUnitDamage(i,P8)"
+    },
+    {
+      "line": 40591,
+      "text": "call MaievPink(i)"
+    },
+    {
+      "line": 40592,
+      "text": "call SingedChemicalRage(i,P8)"
+    },
+    {
+      "line": 40593,
+      "text": "call SingedAutoCast(i)"
+    },
+    {
+      "line": 40594,
+      "text": "call SingedAutoCast(bV)"
+    },
+    {
+      "line": 40595,
+      "text": "call YseraAutoCast(i)"
+    },
+    {
+      "line": 40596,
+      "text": "call YseraAutoCast(bV)"
+    },
+    {
+      "line": 40764,
+      "text": "if GetUnitAbilityLevel(i,$41315456)>0 then"
+    },
+    {
+      "line": 40765,
+      "text": "call IssueTargetOrder(i,\"shadowstrike\",bV)"
+    },
+    {
+      "line": 40766,
+      "text": "elseif GetUnitAbilityLevel(bV,$41315456)>0 then"
+    },
+    {
+      "line": 40767,
+      "text": "call IssueTargetOrder(bV,\"shadowstrike\",i)"
+    },
+    {
+      "line": 40768,
+      "text": "endif"
+    },
+    {
+      "line": 40769,
+      "text": "if GetUnitAbilityLevel(i,$41315549)>0 then"
+    },
+    {
+      "line": 40770,
+      "text": "call IssueImmediateOrder(i,\"spiritofvengeance\")"
+    },
+    {
+      "line": 40771,
+      "text": "elseif GetUnitAbilityLevel(bV,$41315549)>0 then"
+    },
+    {
+      "line": 40772,
+      "text": "call IssueImmediateOrder(bV,\"spiritofvengeance\")"
+    },
+    {
+      "line": 40773,
+      "text": "endif"
+    },
+    {
+      "line": 40774,
+      "text": "if GetUnitAbilityLevel(i,$41315457)>0 then"
+    },
+    {
+      "line": 40775,
+      "text": "call IssueImmediateOrder(i,\"waterelemental\")"
+    },
+    {
+      "line": 40776,
+      "text": "elseif GetUnitAbilityLevel(bV,$41315457)>0 then"
+    },
+    {
+      "line": 40777,
+      "text": "call IssueImmediateOrder(bV,\"waterelemental\")"
+    },
+    {
+      "line": 40778,
+      "text": "endif"
+    },
+    {
+      "line": 40779,
+      "text": "if GetUnitAbilityLevel(i,$4131545A)>0 then"
+    },
+    {
+      "line": 40780,
+      "text": "call IssueImmediateOrder(i,\"unloadallcorpses\")"
+    },
+    {
+      "line": 40781,
+      "text": "elseif GetUnitAbilityLevel(bV,$4131545A)>0 then"
+    },
+    {
+      "line": 40782,
+      "text": "call IssueImmediateOrder(bV,\"unloadallcorpses\")"
+    },
+    {
+      "line": 40783,
+      "text": "endif"
+    },
+    {
+      "line": 44804,
+      "text": "function Trig_orderLimitConditions takes nothing returns boolean"
+    },
+    {
+      "line": 44805,
+      "text": "return IsUnitType(GetTriggerUnit(),UNIT_TYPE_ANCIENT)==true"
+    },
+    {
+      "line": 44806,
+      "text": "endfunction"
+    },
+    {
+      "line": 44807,
+      "text": "function Trig_orderLimitActions takes nothing returns nothing"
+    },
+    {
+      "line": 44808,
+      "text": "call DisableTrigger(GetTriggeringTrigger())"
+    },
+    {
+      "line": 44809,
+      "text": "if GetIssuedOrderIdBJ()==String2OrderIdBJ(\"spiritofvengeance\") then"
+    },
+    {
+      "line": 44810,
+      "text": "call IssueImmediateOrder(GetTriggerUnit(),\"stop\")"
+    },
+    {
+      "line": 44811,
+      "text": "else"
+    },
+    {
+      "line": 44812,
+      "text": "endif"
+    },
+    {
+      "line": 44813,
+      "text": "call EnableTrigger(GetTriggeringTrigger())"
+    },
+    {
+      "line": 44814,
+      "text": "endfunction"
+    },
+    {
+      "line": 44815,
+      "text": "function InitTrig_orderLimit takes nothing returns nothing"
+    },
+    {
+      "line": 44816,
+      "text": "set cd=CreateTrigger()"
+    },
+    {
+      "line": 44817,
+      "text": "call DoNothing()"
+    },
+    {
+      "line": 44818,
+      "text": "call TriggerRegisterAnyUnitEventBJ(cd,EVENT_PLAYER_UNIT_ISSUED_ORDER)"
+    },
+    {
+      "line": 44819,
+      "text": "call TriggerAddCondition(cd,Condition(function Trig_orderLimitConditions))"
+    },
+    {
+      "line": 44820,
+      "text": "call TriggerAddAction(cd,function Trig_orderLimitActions)"
+    },
+    {
+      "line": 48302,
+      "text": "call RegisterBudingLimit($6E303847,0,2)"
+    }
+  ],
+  "abilities": {
+    "A1TV": {
+      "rawcode": "A1TV",
+      "name": "暗影突袭",
+      "tip": "暗影突袭",
+      "ubertip": "投掷出一把毒性的匕首，能对敌方的地面单位造成巨大的伤害。最初造成75点的伤害，随后每3秒造成10点的伤害，持续15秒。匕首上的毒素能在短时间内减慢目标单位的攻击速度和移动速度。",
+      "alias": "A1TV",
+      "code": "AEsh",
+      "BuffID1": "B084",
+      "DataA1": "10.0",
+      "DataB1": "0.2",
+      "DataC1": "0.2",
+      "levels": "1",
+      "targs1": "ground,air,enemy,neutral,organic",
+      "Cost1": "5",
+      "Dur1": "8.0",
+      "HeroDur1": "8.0",
+      "Rng1": "300.0",
+      "Cool1": "9.0",
+      "checkDep": "1",
+      "Cast1": "3.0",
+      "reqLevel": "1",
+      "DataE1": "75.0"
+    },
+    "A1TW": {
+      "rawcode": "A1TW",
+      "name": "复仇之魂",
+      "tip": "复仇之魂",
+      "ubertip": "召唤出一个强大的复仇天神，复仇天神能从周围的尸体中复活许多无敌的幽灵来为你战斗。当复仇天神死掉的时候，那些幽灵也会自动消失。\n持续30秒。",
+      "alias": "A1TW",
+      "code": "AEsv",
+      "Area1": "200.0",
+      "BuffID1": "BEsv",
+      "DataA1": "1",
+      "levels": "1",
+      "Cost1": "13",
+      "Dur1": "30.0",
+      "HeroDur1": "30.0",
+      "Cool1": "15.0",
+      "checkDep": "1",
+      "reqLevel": "1",
+      "UnitID1": "e01I"
+    },
+    "A1TX": {
+      "rawcode": "A1TX",
+      "name": "闪烁",
+      "tip": "闪烁",
+      "ubertip": "短距离的瞬间移动，以玛维自身为起点向后瞬移270码距离",
+      "alias": "A1TX",
+      "code": "Asth",
+      "levels": "1"
+    },
+    "A1TY": {
+      "rawcode": "A1TY",
+      "name": "复仇之魂",
+      "tip": "复仇之魂(V)",
+      "ubertip": "从倒下的友军尸体身上召唤出不可伤害的野兽幽魂。持续50秒或直到化身死亡。",
+      "alias": "A1TY",
+      "code": "Avng",
+      "Area1": "900.0",
+      "BuffID1": "Bvng",
+      "DataA1": "1",
+      "DataC1": "e01J",
+      "levels": "1",
+      "targs1": "air,ground,dead",
+      "untip": "点击右键以启动自动施放功能。",
+      "unubertip": "点击右键以取消自动施放功能。",
+      "Dur1": "30.0",
+      "HeroDur1": "30.0",
+      "Rng1": "600.0",
+      "Cool1": "1.0",
+      "checkDep": "1",
+      "DataE1": "6",
+      "DataF1": "1"
+    },
+    "A1TZ": {
+      "rawcode": "A1TZ",
+      "name": "刀阵",
+      "tip": "刀阵",
+      "ubertip": "释放一个刀圈，6个刀圈围绕玛维，可对其周身350码范围的敌方单位造成135点的持续伤害，技能效果持续6s",
+      "alias": "A1TZ",
+      "code": "ANcl",
+      "DataC1": "1",
+      "levels": "1",
+      "Cost1": "16",
+      "Rng1": "500.0",
+      "Cool1": "9.0",
+      "checkDep": "1",
+      "reqLevel": "1",
+      "DataE1": "1",
+      "DataF1": "unloadallcorpses"
+    }
+  },
+  "units": {
+    "h093": {
+      "rawcode": "h093",
+      "name": "守望者",
+      "tip": "升级到 <守望者> - [P]",
+      "ubertip": "攻击伤害: 140-160\n攻击速度: 0.45\n攻击距离: 100\n生命值: 2670\n攻击类型: 穿刺 \n防御类型: 重甲 \n技能:  迅捷",
+      "unitID": "h093",
+      "canFlee": "1",
+      "death": "2.34",
+      "deathType": "2",
+      "points": "650",
+      "prio": "2",
+      "propWin": "60.0",
+      "race": "human",
+      "targType": "structure",
+      "unitBalanceID": "h093",
+      "bldtm": "2",
+      "collision": "72.0",
+      "defType": "large",
+      "fused": "4",
+      "goldcost": "350",
+      "HP": "2670",
+      "level": "1",
+      "nsight": "800",
+      "preventPlace": "unbuildable",
+      "regenType": "none",
+      "reptm": "1",
+      "sight": "1600",
+      "tilesets": "*",
+      "upgrades": "R009,R00A",
+      "unitUIID": "h093",
+      "armor": "Metal",
+      "blend": "0.15",
+      "blue": "255",
+      "elevRad": "50.0",
+      "file": "units\\nightelf\\herowarden\\herowarden.mdl",
+      "green": "255",
+      "modelScale": "1.0",
+      "red": "255",
+      "run": "200.0",
+      "scale": "1.8",
+      "scaleBull": "1",
+      "shadowOnWater": "1",
+      "teamColor": "-1",
+      "unitSound": "HeroWarden",
+      "walk": "200.0",
+      "unitAbilID": "h093",
+      "abilList": "A07L,A008,A118",
+      "auto": "ANbl",
+      "unitWeapID": "h093",
+      "acquire": "500.0",
+      "atkType1": "pierce",
+      "atkType2": "normal",
+      "backSw1": "0.5",
+      "castbsw": "0.51",
+      "cool1": "0.45",
+      "dice1": "2",
+      "dmgpt1": "0.5",
+      "impactZ": "120.0",
+      "launchZ": "145.0",
+      "rangeN1": "90",
+      "RngBuff1": "250.0",
+      "showUI2": "1",
+      "sides1": "11",
+      "targCount1": "1",
+      "targCount2": "1",
+      "targs1": "enemies",
+      "weapsOn": "1",
+      "weapTp1": "normal",
+      "weapType1": "MetalHeavyBash",
+      "hotkey": "P",
+      "damage_min_1": "140.0",
+      "damage_max_1": "160.0",
+      "damage_avg_1": "150.0",
+      "dps_avg_1": "333.3333333333333",
+      "attack_type_zh": "穿刺",
+      "armor_type_zh": "重甲",
+      "ability_ids": "A07L,A008,A118",
+      "ability_names": "迅捷,出售,移位",
+      "def": "3.0",
+      "type": "ancient",
+      "dmgplus1": "138",
+      "buildingShadow": "ShadowGuardTower",
+      "isbldg": "1",
+      "buffRadius": "15.0",
+      "buffType": "buffer",
+      "pathTex": "PathTextures\\4x4SimpleSolid.tga",
+      "elevPts": "4"
+    },
+    "h193": {
+      "rawcode": "h193",
+      "name": "圣殿守望者",
+      "tip": "升级到[VIP] <圣殿守望者> - [P]",
+      "ubertip": "攻击伤害: 140-160\n攻击速度: 0.45\n攻击距离: 100\n生命值: 2670\n攻击类型: 穿刺 \n防御类型: 重甲 \n技能:  迅捷",
+      "unitID": "h193",
+      "canFlee": "1",
+      "death": "2.34",
+      "deathType": "2",
+      "points": "650",
+      "prio": "2",
+      "propWin": "60.0",
+      "race": "human",
+      "targType": "structure",
+      "unitBalanceID": "h193",
+      "bldtm": "2",
+      "collision": "72.0",
+      "defType": "large",
+      "fused": "4",
+      "goldcost": "350",
+      "HP": "2670",
+      "level": "1",
+      "nsight": "800",
+      "preventPlace": "unbuildable",
+      "regenType": "none",
+      "reptm": "1",
+      "sight": "1600",
+      "tilesets": "*",
+      "upgrades": "R009,R00A",
+      "unitUIID": "h193",
+      "armor": "Metal",
+      "blend": "0.15",
+      "blue": "255",
+      "elevRad": "50.0",
+      "file": "herowardenVIP.mdl",
+      "green": "255",
+      "modelScale": "1.15",
+      "red": "255",
+      "run": "200.0",
+      "scale": "1.9",
+      "scaleBull": "1",
+      "shadowOnWater": "1",
+      "teamColor": "-1",
+      "unitSound": "HeroWarden",
+      "walk": "200.0",
+      "unitAbilID": "h193",
+      "abilList": "A07L,A008,A118",
+      "auto": "ANbl",
+      "unitWeapID": "h193",
+      "acquire": "500.0",
+      "atkType1": "pierce",
+      "atkType2": "normal",
+      "backSw1": "0.5",
+      "castbsw": "0.51",
+      "cool1": "0.45",
+      "dice1": "2",
+      "dmgpt1": "0.5",
+      "impactZ": "120.0",
+      "launchZ": "145.0",
+      "rangeN1": "90",
+      "RngBuff1": "250.0",
+      "showUI2": "1",
+      "sides1": "11",
+      "targCount1": "1",
+      "targCount2": "1",
+      "targs1": "enemies",
+      "weapsOn": "1",
+      "weapTp1": "normal",
+      "weapType1": "MetalHeavyBash",
+      "hotkey": "P",
+      "damage_min_1": "140.0",
+      "damage_max_1": "160.0",
+      "damage_avg_1": "150.0",
+      "dps_avg_1": "333.3333333333333",
+      "attack_type_zh": "穿刺",
+      "armor_type_zh": "重甲",
+      "ability_ids": "A07L,A008,A118",
+      "ability_names": "迅捷,出售,移位",
+      "def": "3.0",
+      "type": "ancient",
+      "dmgplus1": "138",
+      "buildingShadow": "ShadowGuardTower",
+      "isbldg": "1",
+      "buffRadius": "15.0",
+      "buffType": "buffer",
+      "pathTex": "PathTextures\\4x4SimpleSolid.tga",
+      "elevPts": "4"
+    },
+    "n08G": {
+      "rawcode": "n08G",
+      "name": "玛维影歌",
+      "tip": "升级到<玛维影歌>",
+      "ubertip": "攻击: 326-375\n攻击速度: 0.6\n攻击距离: 350\n生命值: 3300\n护甲: 3\n攻击类型: 穿刺\n防御类型: 英雄甲\n\n技能：\n刀阵、暗影突袭、闪烁、召唤复仇天神",
+      "unitID": "n08G",
+      "canFlee": "1",
+      "death": "2.34",
+      "deathType": "2",
+      "points": "1050",
+      "prio": "2",
+      "propWin": "60.0",
+      "race": "human",
+      "targType": "structure",
+      "unitBalanceID": "n08G",
+      "bldtm": "2",
+      "collision": "72.0",
+      "defType": "hero",
+      "fused": "8",
+      "goldcost": "400",
+      "HP": "3000",
+      "level": "1",
+      "nsight": "800",
+      "preventPlace": "unbuildable",
+      "regenMana": "1.0",
+      "regenType": "none",
+      "reptm": "1",
+      "sight": "1600",
+      "tilesets": "*",
+      "upgrades": "R009,R00A",
+      "unitUIID": "n08G",
+      "armor": "Flesh",
+      "blend": "0.15",
+      "blue": "255",
+      "elevRad": "50.0",
+      "file": "HeroWarden.mdx",
+      "green": "255",
+      "modelScale": "1.0",
+      "red": "255",
+      "run": "200.0",
+      "scale": "1.0",
+      "scaleBull": "1",
+      "shadowOnWater": "1",
+      "teamColor": "-1",
+      "unitSound": "Gnoll",
+      "walk": "200.0",
+      "unitAbilID": "n08G",
+      "abilList": "A1TZ,A1TX,A1TV,A1TW,A008,A118",
+      "unitWeapID": "n08G",
+      "acquire": "500.0",
+      "atkType1": "pierce",
+      "atkType2": "normal",
+      "backSw1": "0.5",
+      "castbsw": "0.51",
+      "cool1": "0.6",
+      "dice1": "1",
+      "dmgpt1": "0.5",
+      "impactZ": "120.0",
+      "launchZ": "145.0",
+      "rangeN1": "350",
+      "RngBuff1": "250.0",
+      "showUI2": "1",
+      "sides1": "49",
+      "targCount1": "1",
+      "targCount2": "1",
+      "targs1": "enemies",
+      "weapsOn": "1",
+      "weapTp1": "normal",
+      "weapType1": "MetalMediumSlice",
+      "hotkey": "Q",
+      "damage_min_1": "326.0",
+      "damage_max_1": "374.0",
+      "damage_avg_1": "350.0",
+      "dps_avg_1": "583.3333333333334",
+      "attack_type_zh": "穿刺",
+      "armor_type_zh": "英雄甲",
+      "ability_ids": "A1TZ,A1TX,A1TV,A1TW,A008,A118",
+      "ability_names": "刀阵,闪烁,暗影突袭,复仇之魂,出售,移位",
+      "def": "3.0",
+      "manaN": "30",
+      "type": "ancient",
+      "dmgplus1": "325",
+      "buildingShadow": "BuildingShadowSmall",
+      "isbldg": "1",
+      "buffRadius": "15.0",
+      "buffType": "buffer",
+      "pathTex": "PathTextures\\4x4SimpleSolid.tga",
+      "elevPts": "4"
+    },
+    "h0WK": {
+      "rawcode": "h0WK",
+      "name": "玛维影歌",
+      "ubertip": ",",
+      "unitID": "h0WK",
+      "canFlee": "1",
+      "cargoSize": "1",
+      "death": "3.04",
+      "deathType": "3",
+      "movetp": "foot",
+      "points": "100",
+      "prio": "6",
+      "propWin": "60.0",
+      "race": "human",
+      "targType": "ground",
+      "turnRate": "0.6",
+      "unitBalanceID": "h0WK",
+      "bldtm": "20",
+      "bountydice": "6",
+      "bountyplus": "20",
+      "bountysides": "3",
+      "collision": "12.0",
+      "defType": "hero",
+      "goldcost": "135",
+      "goldRep": "135",
+      "HP": "3000",
+      "level": "2",
+      "mana0": "30",
+      "nsight": "800",
+      "regenMana": "1.0",
+      "regenType": "none",
+      "reptm": "20",
+      "sight": "1400",
+      "spd": "340",
+      "stockMax": "3",
+      "stockRegen": "30",
+      "tilesets": "*",
+      "upgrades": "R00B,R00C,R009,R00A",
+      "unitUIID": "h0WK",
+      "armor": "Flesh",
+      "blend": "0.15",
+      "blue": "255",
+      "elevRad": "20.0",
+      "file": "HeroWarden.mdx",
+      "green": "255",
+      "maxPitch": "10.0",
+      "maxRoll": "10.0",
+      "modelScale": "1.0",
+      "red": "255",
+      "run": "210.0",
+      "scale": "1.0",
+      "scaleBull": "1",
+      "shadowH": "140.0",
+      "shadowOnWater": "1",
+      "shadowW": "140.0",
+      "shadowX": "50.0",
+      "shadowY": "50.0",
+      "teamColor": "-1",
+      "unitShadow": "Shadow",
+      "unitSound": "Gnoll",
+      "walk": "210.0",
+      "unitAbilID": "h0WK",
+      "abilList": "A1TZ,A1TX,A1TW,A1TV",
+      "auto": "A1TW",
+      "unitWeapID": "h0WK",
+      "acquire": "500.0",
+      "atkType1": "pierce",
+      "atkType2": "normal",
+      "backSw1": "0.3",
+      "cool1": "0.6",
+      "dice1": "1",
+      "dmgpt1": "0.3",
+      "impactZ": "60.0",
+      "launchZ": "60.0",
+      "rangeN1": "350",
+      "RngBuff1": "250.0",
+      "showUI1": "1",
+      "showUI2": "1",
+      "sides1": "49",
+      "targCount1": "1",
+      "targCount2": "1",
+      "targs1": "enemies",
+      "weapsOn": "1",
+      "weapTp1": "normal",
+      "weapType1": "WoodLightBash",
+      "hotkey": "F",
+      "damage_min_1": "326.0",
+      "damage_max_1": "374.0",
+      "damage_avg_1": "350.0",
+      "dps_avg_1": "583.3333333333334",
+      "bounty_min": "26.0",
+      "bounty_max": "38.0",
+      "bounty_avg": "32.0",
+      "attack_type_zh": "穿刺",
+      "armor_type_zh": "英雄甲",
+      "ability_ids": "A1TZ,A1TX,A1TW,A1TV",
+      "ability_names": "刀阵,闪烁,复仇之魂,暗影突袭",
+      "def": "3.0",
+      "defUp": "2.0",
+      "manaN": "30",
+      "type": "giant",
+      "dmgplus1": "325"
+    },
+    "e01I": {
+      "rawcode": "e01I",
+      "name": "复仇天神",
+      "ubertip": ",",
+      "unitID": "e01I",
+      "canFlee": "1",
+      "cargoSize": "1",
+      "death": "1.0",
+      "movetp": "foot",
+      "points": "100",
+      "prio": "1",
+      "propWin": "60.0",
+      "race": "human",
+      "targType": "ground",
+      "turnRate": "0.6",
+      "unitBalanceID": "e01I",
+      "bldtm": "20",
+      "bountydice": "6",
+      "bountyplus": "20",
+      "bountysides": "3",
+      "collision": "32.0",
+      "defType": "large",
+      "HP": "1300",
+      "level": "1",
+      "mana0": "400",
+      "nsight": "1000",
+      "regenMana": "2.0",
+      "regenType": "always",
+      "reptm": "20",
+      "sight": "1200",
+      "spd": "320",
+      "stockMax": "3",
+      "stockRegen": "30",
+      "tilesets": "*",
+      "unitUIID": "e01I",
+      "armor": "Ethereal",
+      "blend": "0.15",
+      "blue": "255",
+      "elevRad": "30.0",
+      "file": "SpiritOfVengeance.mdl",
+      "green": "255",
+      "maxPitch": "10.0",
+      "maxRoll": "10.0",
+      "modelScale": "1.0",
+      "red": "255",
+      "run": "290.0",
+      "scale": "2.0",
+      "scaleBull": "1",
+      "shadowH": "200.0",
+      "shadowOnWater": "1",
+      "shadowW": "200.0",
+      "shadowX": "75.0",
+      "shadowY": "75.0",
+      "teamColor": "-1",
+      "unitShadow": "Shadow",
+      "unitSound": "SpiritOfVengeance",
+      "walk": "290.0",
+      "unitAbilID": "e01I",
+      "abilList": "Asp1,A1TY",
+      "auto": "A1TY",
+      "unitWeapID": "e01I",
+      "acquire": "500.0",
+      "atkType1": "pierce",
+      "atkType2": "normal",
+      "backSw1": "0.64",
+      "castbsw": "0.51",
+      "castpt": "0.3",
+      "cool1": "0.5",
+      "dice1": "1",
+      "dmgpt1": "0.33",
+      "impactZ": "120.0",
+      "launchZ": "140.0",
+      "rangeN1": "450",
+      "RngBuff1": "250.0",
+      "showUI1": "1",
+      "showUI2": "1",
+      "sides1": "20",
+      "targCount1": "1",
+      "targCount2": "1",
+      "targs1": "ground,structure,debris,air,item,ward",
+      "weapsOn": "1",
+      "weapTp1": "missile",
+      "damage_min_1": "56.0",
+      "damage_max_1": "75.0",
+      "damage_avg_1": "65.5",
+      "dps_avg_1": "131.0",
+      "bounty_min": "26.0",
+      "bounty_max": "38.0",
+      "bounty_avg": "32.0",
+      "attack_type_zh": "穿刺",
+      "armor_type_zh": "重甲",
+      "ability_ids": "Asp1,A1TY",
+      "ability_names": "球体,复仇之魂",
+      "launchX": "70.0",
+      "def": "3.0",
+      "defUp": "2.0",
+      "manaN": "400",
+      "type": "giant,summoned",
+      "dmgplus1": "55"
+    },
+    "e01J": {
+      "rawcode": "e01J",
+      "name": "复仇之魂",
+      "ubertip": ",",
+      "unitID": "e01J",
+      "canFlee": "1",
+      "cargoSize": "1",
+      "death": "1.13",
+      "movetp": "foot",
+      "points": "100",
+      "prio": "1",
+      "propWin": "60.0",
+      "race": "human",
+      "targType": "ground",
+      "turnRate": "0.6",
+      "unitBalanceID": "e01J",
+      "bldtm": "20",
+      "bountydice": "6",
+      "bountyplus": "20",
+      "bountysides": "3",
+      "collision": "32.0",
+      "defType": "fort",
+      "HP": "500",
+      "level": "2",
+      "nsight": "800",
+      "regenHP": "1.6",
+      "regenType": "always",
+      "reptm": "20",
+      "sight": "1200",
+      "spd": "270",
+      "stockMax": "3",
+      "stockRegen": "30",
+      "tilesets": "*",
+      "unitUIID": "e01J",
+      "armor": "Ethereal",
+      "blend": "0.15",
+      "blue": "255",
+      "elevRad": "30.0",
+      "file": "units\\nightelf\\Vengeance\\Vengeance",
+      "green": "255",
+      "maxPitch": "10.0",
+      "maxRoll": "10.0",
+      "modelScale": "1.0",
+      "red": "255",
+      "run": "290.0",
+      "scale": "1.0",
+      "scaleBull": "1",
+      "shadowH": "200.0",
+      "shadowOnWater": "1",
+      "shadowW": "200.0",
+      "shadowX": "75.0",
+      "shadowY": "75.0",
+      "teamColor": "-1",
+      "unitShadow": "Shadow",
+      "unitSound": "Vengeance",
+      "walk": "290.0",
+      "unitAbilID": "e01J",
+      "abilList": "ACmi,ACrk",
+      "unitWeapID": "e01J",
+      "acquire": "500.0",
+      "atkType1": "pierce",
+      "atkType2": "normal",
+      "backSw1": "0.64",
+      "castbsw": "0.51",
+      "castpt": "0.3",
+      "cool1": "1.35",
+      "dice1": "1",
+      "dmgpt1": "0.33",
+      "impactZ": "50.0",
+      "launchZ": "45.0",
+      "rangeN1": "450",
+      "RngBuff1": "250.0",
+      "showUI1": "1",
+      "showUI2": "1",
+      "sides1": "5",
+      "targCount1": "1",
+      "targCount2": "1",
+      "targs1": "ground,structure,debris,air,item,ward",
+      "weapsOn": "1",
+      "weapTp1": "missile",
+      "damage_min_1": "14.0",
+      "damage_max_1": "18.0",
+      "damage_avg_1": "16.0",
+      "dps_avg_1": "11.851851851851851",
+      "bounty_min": "26.0",
+      "bounty_max": "38.0",
+      "bounty_avg": "32.0",
+      "attack_type_zh": "穿刺",
+      "armor_type_zh": "城甲",
+      "ability_ids": "ACmi,ACrk",
+      "ability_names": "魔法免疫,抗性皮肤",
+      "launchX": "15.0",
+      "def": "5.0",
+      "defUp": "2.0",
+      "type": "giant,summoned",
+      "dmgplus1": "13"
+    }
+  },
+  "nativeEvidence": [
+    {
+      "url": "https://raw.githubusercontent.com/Cokemonkey11/wc3-ability-doc/main/sources/screwthetrees-wc3-editor-ability-insight-document/2023-11-14.md",
+      "author": "ScrewTheTrees / Fredrik Grimmenhag",
+      "finding": "AEsh Cast是伤害间隔；DecayPower影响减速恢复。A1TV DataD缺失，不推断恒定20%减速。"
+    },
+    {
+      "url": "https://www.hiveworkshop.com/threads/spell-ability-damage-types-and-what-they-mean.316271/",
+      "author": "Bribe / Tasyen",
+      "finding": "原作者表将ShadowStrike列为DAMAGE_TYPE_SHADOW_STRIKE，未拆分初伤和持续的攻击类型。统一spells/shadow_strike只作为宿主近似。"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/warcraft-iii/lib-enum/master/abilityintegerlevelfield.lua",
+      "finding": "Esv1为NUMBER_OF_SUMMONED_UNITS，Ucb5为MAX_UNITS_SUMMONED。"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/warcraft-iii/lib-enum/master/abilitybooleanlevelfield.lua",
+      "finding": "Ucb6为KILL_ON_CASTER_DEATH。"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/sumneko/w3x2lni/master/data/enUS-1.27.1/prebuilt/metadata.ini",
+      "finding": "AEsv DataA映射Esv1；Avng DataE/F映射Ucb5/Ucb6。"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/sumneko/w3x2lni/master/data/enUS-1.27.1/prebuilt/Custom/ability.ini",
+      "finding": "AEsv原生命令spiritofvengeance，与本图40775/40777下达waterelemental冲突。"
+    },
+    {
+      "url": "https://classic.battle.net/war3/nightelf/units/avatarofvengeance.shtml",
+      "finding": "Avng子体随直接施法父体死亡；官方默认数值不覆盖本图对象。"
+    }
+  ],
+  "boundaries": [
+    "A1TV初伤/DoT各自攻击类型、弹道、免疫/虚无及同buff刷新未完整核定；当前以spells/shadow_strike即时75、3/6秒各10、8秒清理与B084刷新作为宿主适配。",
+    "A1TV DataB/C各.2，DataD缺失，因此只记录减速参数不捏造恒定8秒减速。",
+    "A1TW每次1只e01I、13耗魔15冷却30秒可核定；重复施法暂允许并存，原生替换策略未知。h0WK.auto=A1TW不等于已验证可用原生自动入口；脚本waterelemental错配按失败记录，不暗中纠正。",
+    "A1TY缺Cost，不能将缺失当0或继承另一条Avng的25魔法；当前不执行尸体转化，e01J仅源对象，未计入已可达玩家runtimeForms。",
+    "e01I只有Asp1/A1TY，不赋予标准天神魔免；e01J仅ACmi/ACrk没有Avul，不按默认提示伪造无敌。",
+    "Blink直接SetUnitX/Y无mana/减伤/控制状态条件；当前借Web通行格判定，保留200重复探测与224最后落点，不改成270或最近可行点。",
+    "刀阵跟随句柄、149次伤害/150清理，widget死亡取消；原生浮点、全局枚举和模型特效仍有宿主边界。"
+  ],
+  "status": "partial"
+}

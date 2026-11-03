@@ -1,0 +1,551 @@
+{
+  "schema": 1,
+  "method": "Same current v74 Game engine, fixed army, exact starting resources and RNG seed; only combat planner differs. Initial snapshot SHA256 equality checked per pair.",
+  "baselineRef": "874fe5397ea385ff01378138f10de71ec8f4ea75",
+  "initialTrialBaselineRef": "7122b9dc29c647a56d0c595100e9aa2a9c321308",
+  "sharedBaselineBlob": "c75aaebb5b2edaafce483c866d452698f57b8d14",
+  "baselineHash": "f2f5206c0ffa24371027f5a89f022d126e187425e57b3e659ebd68b7394b9d78",
+  "initialCandidateHash": "89b97b90f57b2ad1edac71823514cd08b832395a410fab8c2db121b78e63a8a7",
+  "finalPlannerHash": "0f71196d0438a98e71a96330ae2258f7845ae84c144a707169cbdbbc84dd7c55",
+  "finalAddedSkills": [
+    "A0IP"
+  ],
+  "retainedCandidate": {
+    "abilityId": "A0IP",
+    "pairs": [
+      {
+        "type": "pair",
+        "baseline": {
+          "raw": "h0JQ",
+          "wave": 8,
+          "seed": 42,
+          "armyValue": 1560,
+          "initialGold": 0,
+          "initialWood": 0,
+          "initialHash": "c64b63cb153fee499e6526d8ec8f3191a133f4426fe4a9e196409f0e3c860f71",
+          "orders": 0,
+          "spells": {},
+          "seconds": 180,
+          "leaks": 97,
+          "kills": 11,
+          "damage": 5353,
+          "kingDamage": 183817,
+          "cleared": false
+        },
+        "current": {
+          "raw": "h0JQ",
+          "wave": 8,
+          "seed": 42,
+          "armyValue": 1560,
+          "initialGold": 0,
+          "initialWood": 0,
+          "initialHash": "c64b63cb153fee499e6526d8ec8f3191a133f4426fe4a9e196409f0e3c860f71",
+          "orders": 1,
+          "spells": {
+            "A0IP": 1
+          },
+          "seconds": 180,
+          "leaks": 88,
+          "kills": 20,
+          "damage": 5552,
+          "kingDamage": 159295,
+          "cleared": false
+        }
+      },
+      {
+        "type": "pair",
+        "baseline": {
+          "raw": "h0JQ",
+          "wave": 8,
+          "seed": 173,
+          "armyValue": 1560,
+          "initialGold": 0,
+          "initialWood": 0,
+          "initialHash": "83b42229bc01a507fe8352e2ad5b95bd154c2e02ce3da1d85e23573e3d6eb52d",
+          "orders": 0,
+          "spells": {},
+          "seconds": 180,
+          "leaks": 99,
+          "kills": 10,
+          "damage": 4304,
+          "kingDamage": 190529,
+          "cleared": false
+        },
+        "current": {
+          "raw": "h0JQ",
+          "wave": 8,
+          "seed": 173,
+          "armyValue": 1560,
+          "initialGold": 0,
+          "initialWood": 0,
+          "initialHash": "83b42229bc01a507fe8352e2ad5b95bd154c2e02ce3da1d85e23573e3d6eb52d",
+          "orders": 1,
+          "spells": {
+            "A0IP": 1
+          },
+          "seconds": 180,
+          "leaks": 94,
+          "kills": 15,
+          "damage": 4320,
+          "kingDamage": 169735,
+          "cleared": false
+        }
+      },
+      {
+        "type": "pair",
+        "baseline": {
+          "raw": "h0JQ",
+          "wave": 13,
+          "seed": 42,
+          "armyValue": 1560,
+          "initialGold": 0,
+          "initialWood": 0,
+          "initialHash": "c4ce4e31b091f0486778e3b5498cbe96ad140e4313ef1494e160103113b54784",
+          "orders": 0,
+          "spells": {},
+          "seconds": 180,
+          "leaks": 134,
+          "kills": 2,
+          "damage": 3747,
+          "kingDamage": 477580,
+          "cleared": false
+        },
+        "current": {
+          "raw": "h0JQ",
+          "wave": 13,
+          "seed": 42,
+          "armyValue": 1560,
+          "initialGold": 0,
+          "initialWood": 0,
+          "initialHash": "c4ce4e31b091f0486778e3b5498cbe96ad140e4313ef1494e160103113b54784",
+          "orders": 1,
+          "spells": {
+            "A0IP": 1
+          },
+          "seconds": 180,
+          "leaks": 134,
+          "kills": 2,
+          "damage": 4766,
+          "kingDamage": 476787,
+          "cleared": false
+        }
+      },
+      {
+        "type": "pair",
+        "baseline": {
+          "raw": "h0JQ",
+          "wave": 13,
+          "seed": 173,
+          "armyValue": 1560,
+          "initialGold": 0,
+          "initialWood": 0,
+          "initialHash": "b6a00a1e1d1d799d07403438abfc6a49135191c1ddf282a9d099b530d1362c84",
+          "orders": 0,
+          "spells": {},
+          "seconds": 180,
+          "leaks": 134,
+          "kills": 2,
+          "damage": 4227,
+          "kingDamage": 453668,
+          "cleared": false
+        },
+        "current": {
+          "raw": "h0JQ",
+          "wave": 13,
+          "seed": 173,
+          "armyValue": 1560,
+          "initialGold": 0,
+          "initialWood": 0,
+          "initialHash": "b6a00a1e1d1d799d07403438abfc6a49135191c1ddf282a9d099b530d1362c84",
+          "orders": 1,
+          "spells": {
+            "A0IP": 1
+          },
+          "seconds": 180,
+          "leaks": 132,
+          "kills": 4,
+          "damage": 4538,
+          "kingDamage": 437660,
+          "cleared": false
+        }
+      },
+      {
+        "type": "pair",
+        "baseline": {
+          "raw": "h0JQ",
+          "wave": 16,
+          "seed": 42,
+          "armyValue": 1560,
+          "initialGold": 0,
+          "initialWood": 0,
+          "initialHash": "3f4319e8852b771eed3fbb2fb857674872c13d6dbc993f37a648a5ea8497adad",
+          "orders": 0,
+          "spells": {},
+          "seconds": 180,
+          "leaks": 135,
+          "kills": 1,
+          "damage": 3653,
+          "kingDamage": 378296,
+          "cleared": false
+        },
+        "current": {
+          "raw": "h0JQ",
+          "wave": 16,
+          "seed": 42,
+          "armyValue": 1560,
+          "initialGold": 0,
+          "initialWood": 0,
+          "initialHash": "3f4319e8852b771eed3fbb2fb857674872c13d6dbc993f37a648a5ea8497adad",
+          "orders": 1,
+          "spells": {
+            "A0IP": 1
+          },
+          "seconds": 180,
+          "leaks": 135,
+          "kills": 1,
+          "damage": 4066,
+          "kingDamage": 378584,
+          "cleared": false
+        }
+      },
+      {
+        "type": "pair",
+        "baseline": {
+          "raw": "h0JQ",
+          "wave": 16,
+          "seed": 173,
+          "armyValue": 1560,
+          "initialGold": 0,
+          "initialWood": 0,
+          "initialHash": "d717a4741363660016d8210a22a30c77d18f1fa518d84642d97b23f73422225a",
+          "orders": 0,
+          "spells": {},
+          "seconds": 180,
+          "leaks": 136,
+          "kills": 0,
+          "damage": 2262,
+          "kingDamage": 368108,
+          "cleared": false
+        },
+        "current": {
+          "raw": "h0JQ",
+          "wave": 16,
+          "seed": 173,
+          "armyValue": 1560,
+          "initialGold": 0,
+          "initialWood": 0,
+          "initialHash": "d717a4741363660016d8210a22a30c77d18f1fa518d84642d97b23f73422225a",
+          "orders": 1,
+          "spells": {
+            "A0IP": 1
+          },
+          "seconds": 180,
+          "leaks": 136,
+          "kills": 0,
+          "damage": 2927,
+          "kingDamage": 368481,
+          "cleared": false
+        }
+      }
+    ],
+    "totals": {
+      "leaks": {
+        "baseline": 735,
+        "current": 719
+      },
+      "kills": {
+        "baseline": 26,
+        "current": 42
+      },
+      "damage": {
+        "baseline": 23546,
+        "current": 26169
+      },
+      "kingDamage": {
+        "baseline": 2051998,
+        "current": 1990542
+      },
+      "orders": {
+        "baseline": 0,
+        "current": 6
+      }
+    },
+    "notes": [
+      "Final planner preserves this exact A0IP code; only the A0YF branch was removed after initial trial.",
+      "Final same-snapshot wave8 seed42 A/B regression was rerun with the final A0IP-only planner and passed.",
+      "50% attack-speed reduction, not an increase."
+    ]
+  },
+  "rejectedCandidates": [
+    {
+      "abilityId": "A0YF",
+      "status": "removed",
+      "reason": "Six fixed cases did not reduce leaks or improve kills; do not claim this as an AI strength improvement.",
+      "pairs": [
+        {
+          "type": "pair",
+          "baseline": {
+            "raw": "h0PD",
+            "wave": 8,
+            "seed": 42,
+            "armyValue": 2060,
+            "initialGold": 0,
+            "initialWood": 0,
+            "initialHash": "2353ddf817a7944d6da692a960d01a9a3ea6d69305123100050fbf97faa9f5b2",
+            "orders": 0,
+            "spells": {},
+            "seconds": 26,
+            "leaks": 0,
+            "kills": 108,
+            "damage": 1428764,
+            "kingDamage": 0,
+            "cleared": true
+          },
+          "current": {
+            "raw": "h0PD",
+            "wave": 8,
+            "seed": 42,
+            "armyValue": 2060,
+            "initialGold": 0,
+            "initialWood": 0,
+            "initialHash": "2353ddf817a7944d6da692a960d01a9a3ea6d69305123100050fbf97faa9f5b2",
+            "orders": 1,
+            "spells": {
+              "A0YF": 1
+            },
+            "seconds": 27.4,
+            "leaks": 0,
+            "kills": 108,
+            "damage": 1532717,
+            "kingDamage": 0,
+            "cleared": true
+          }
+        },
+        {
+          "type": "pair",
+          "baseline": {
+            "raw": "h0PD",
+            "wave": 8,
+            "seed": 173,
+            "armyValue": 2060,
+            "initialGold": 0,
+            "initialWood": 0,
+            "initialHash": "8e0afb8bca0d1f04ed70610e7ebf97a98f9272eb81a9e309a4f1975a1348e8a9",
+            "orders": 0,
+            "spells": {},
+            "seconds": 31.2,
+            "leaks": 0,
+            "kills": 109,
+            "damage": 1733317,
+            "kingDamage": 0,
+            "cleared": true
+          },
+          "current": {
+            "raw": "h0PD",
+            "wave": 8,
+            "seed": 173,
+            "armyValue": 2060,
+            "initialGold": 0,
+            "initialWood": 0,
+            "initialHash": "8e0afb8bca0d1f04ed70610e7ebf97a98f9272eb81a9e309a4f1975a1348e8a9",
+            "orders": 1,
+            "spells": {
+              "A0YF": 1
+            },
+            "seconds": 30,
+            "leaks": 0,
+            "kills": 109,
+            "damage": 1431796,
+            "kingDamage": 0,
+            "cleared": true
+          }
+        },
+        {
+          "type": "pair",
+          "baseline": {
+            "raw": "h0PD",
+            "wave": 13,
+            "seed": 42,
+            "armyValue": 2060,
+            "initialGold": 0,
+            "initialWood": 0,
+            "initialHash": "b82f999abb102a0f4dce5e6d5732752bbba5e7974788450c75384d4542e5136c",
+            "orders": 0,
+            "spells": {},
+            "seconds": 180,
+            "leaks": 115,
+            "kills": 21,
+            "damage": 1637358,
+            "kingDamage": 279781,
+            "cleared": false
+          },
+          "current": {
+            "raw": "h0PD",
+            "wave": 13,
+            "seed": 42,
+            "armyValue": 2060,
+            "initialGold": 0,
+            "initialWood": 0,
+            "initialHash": "b82f999abb102a0f4dce5e6d5732752bbba5e7974788450c75384d4542e5136c",
+            "orders": 1,
+            "spells": {
+              "A0YF": 1
+            },
+            "seconds": 180,
+            "leaks": 116,
+            "kills": 20,
+            "damage": 1438211,
+            "kingDamage": 282897,
+            "cleared": false
+          }
+        },
+        {
+          "type": "pair",
+          "baseline": {
+            "raw": "h0PD",
+            "wave": 13,
+            "seed": 173,
+            "armyValue": 2060,
+            "initialGold": 0,
+            "initialWood": 0,
+            "initialHash": "68cd8277e8ef4196b0eb5722765454a5fbd633e50eb2804776073d57607ab88c",
+            "orders": 0,
+            "spells": {},
+            "seconds": 180,
+            "leaks": 116,
+            "kills": 20,
+            "damage": 1437853,
+            "kingDamage": 285114,
+            "cleared": false
+          },
+          "current": {
+            "raw": "h0PD",
+            "wave": 13,
+            "seed": 173,
+            "armyValue": 2060,
+            "initialGold": 0,
+            "initialWood": 0,
+            "initialHash": "68cd8277e8ef4196b0eb5722765454a5fbd633e50eb2804776073d57607ab88c",
+            "orders": 1,
+            "spells": {
+              "A0YF": 1
+            },
+            "seconds": 180,
+            "leaks": 116,
+            "kills": 20,
+            "damage": 1438177,
+            "kingDamage": 284828,
+            "cleared": false
+          }
+        },
+        {
+          "type": "pair",
+          "baseline": {
+            "raw": "h0PD",
+            "wave": 16,
+            "seed": 42,
+            "armyValue": 2060,
+            "initialGold": 0,
+            "initialWood": 0,
+            "initialHash": "30b02b2cd358b757a1b6f91a460e69ac4320fb22e239d2a207c1a5865be672c4",
+            "orders": 0,
+            "spells": {},
+            "seconds": 180,
+            "leaks": 122,
+            "kills": 14,
+            "damage": 1224468,
+            "kingDamage": 262655,
+            "cleared": false
+          },
+          "current": {
+            "raw": "h0PD",
+            "wave": 16,
+            "seed": 42,
+            "armyValue": 2060,
+            "initialGold": 0,
+            "initialWood": 0,
+            "initialHash": "30b02b2cd358b757a1b6f91a460e69ac4320fb22e239d2a207c1a5865be672c4",
+            "orders": 1,
+            "spells": {
+              "A0YF": 1
+            },
+            "seconds": 180,
+            "leaks": 122,
+            "kills": 14,
+            "damage": 1226552,
+            "kingDamage": 259709,
+            "cleared": false
+          }
+        },
+        {
+          "type": "pair",
+          "baseline": {
+            "raw": "h0PD",
+            "wave": 16,
+            "seed": 173,
+            "armyValue": 2060,
+            "initialGold": 0,
+            "initialWood": 0,
+            "initialHash": "ff14efd83705527d1625e7e3acfa01fb2de869c843bc1a6c781de9a2e2803bbb",
+            "orders": 0,
+            "spells": {},
+            "seconds": 180,
+            "leaks": 119,
+            "kills": 17,
+            "damage": 1322208,
+            "kingDamage": 234305,
+            "cleared": false
+          },
+          "current": {
+            "raw": "h0PD",
+            "wave": 16,
+            "seed": 173,
+            "armyValue": 2060,
+            "initialGold": 0,
+            "initialWood": 0,
+            "initialHash": "ff14efd83705527d1625e7e3acfa01fb2de869c843bc1a6c781de9a2e2803bbb",
+            "orders": 1,
+            "spells": {
+              "A0YF": 1
+            },
+            "seconds": 180,
+            "leaks": 119,
+            "kills": 17,
+            "damage": 1321545,
+            "kingDamage": 233736,
+            "cleared": false
+          }
+        }
+      ],
+      "totals": {
+        "leaks": {
+          "baseline": 472,
+          "current": 473
+        },
+        "kills": {
+          "baseline": 289,
+          "current": 288
+        },
+        "damage": {
+          "baseline": 8783968,
+          "current": 8388998
+        },
+        "kingDamage": {
+          "baseline": 1061855,
+          "current": 1061170
+        },
+        "orders": {
+          "baseline": 0,
+          "current": 6
+        }
+      }
+    }
+  ],
+  "limits": [
+    "Fixed-army 180-second single-lane pressure trials, not natural-match or PvP win-rate estimates.",
+    "No holdout runs or seed outcome selection. Waves8/13/16 and seeds42/173 chosen before results.",
+    "A0IP wave16 king damage worsened by288 and373 despite equal leaks/kills; total king damage decreased61456."
+  ],
+  "baselineSource": "// Browser AI tactics. Cast through the same paid, validated command as a player.\n// Source-triggered automatic spells remain separate and share their native CD.\nimport {matchesTargets,sourceSpellTargetState} from './skills.js';\nimport {laneToWorld} from './layout.js';\n\nconst supported=new Set(['A16T','A0JA','A1UN','A1TW','A1TZ']);\nconst pos=e=>Number.isFinite(e.worldX)?{x:e.worldX,y:e.worldY}:laneToWorld(e.laneId,e.x,e.y);\nconst distance=(a,b)=>Math.hypot(pos(a).x-pos(b).x,pos(a).y-pos(b).y);\nconst scale=e=>(e.distanceScale??1/3)/100;\nconst has=(e,id)=>e.skillSpecs?.some(s=>s.id===id&&(e.abilityLevels?.[id]??1)>0);\nconst visible=e=>e.hp>.405&&!e.scriptAuxiliary&&!e.status?.sourceRemoved&&!e.status?.yseraRemoved&&!e.status?.sourceHidden&&!e.status?.yseraHidden&&!has(e,'Aloc');\nconst friendly=(a,b)=>a.team!==undefined&&b.team!==undefined?a.team===b.team:a.side===b.side;\nconst missing=e=>Math.max(0,e.maxHp-e.hp);\nconst pointPayload=e=>({worldX:pos(e).x,worldY:pos(e).y});\n\nfunction choices(g,e,skill,all){\n const spec=e.skillSpecs.find(s=>s.id===skill.id),unit=scale(e),range=skill.range;\n const allies=all.filter(t=>t.battleTeam===e.battleTeam&&friendly(e,t)&&!sourceSpellTargetState(t).invulnerable);\n const enemies=all.filter(t=>t.battleTeam===e.battleTeam&&!friendly(e,t)&&!sourceSpellTargetState(t).invulnerable);\n const inRange=list=>list.filter(t=>distance(e,t)<=range+1e-8);\n const candidates=[];\n const add=(score,payload)=>{if(Number.isFinite(score)&&score>0)candidates.push({skillId:skill.id,score,payload});};\n if(skill.id==='A16T'){\n  // Heal where wounds are concentrated, not at the enemy's last position.\n  for(const center of inRange(allies)){\n   const value=allies.filter(t=>distance(center,t)<=600*unit+1e-8).reduce((sum,t)=>sum+Math.min(480,missing(t)),0);\n   if(value>=120)add(value/skill.manaCost,pointPayload(center));\n  }\n }else if(skill.id==='A0JA'){\n  // Tranquility's aura is centered on the caster, regardless of its target.\n  const wounds=allies.filter(t=>distance(e,t)<=500*unit+1e-8);\n  const covered=t=>(g.state.sourceSkillJobs??[]).some(j=>j.type==='malfurion_aura'&&!j.done&&j.at>g.state.time&&j.dummy?.hp>0&&j.dummy.battleTeam===e.battleTeam&&friendly(e,j.dummy)&&distance(j.dummy,t)<=500*unit+1e-8);\n  const value=wounds.filter(t=>!covered(t)).reduce((sum,t)=>sum+Math.min(t.maxHp*.24,missing(t)),0);\n  if(value>=120)for(const t of inRange(allies).filter(t=>missing(t)>0&&!sourceSpellTargetState(t).magicImmune&&!(t.status?.cycloneUntil>g.state.time)&&matchesTargets(spec,e,t)))add(value/skill.manaCost,{targetId:t.id});\n }else if(skill.id==='A1TZ'){\n  const near=enemies.filter(t=>distance(e,t)<=350*unit+1e-8);\n  if(near.length>=2||near.some(t=>t.isBoss||t.hp>=e.damage*4))add(near.reduce((sum,t)=>sum+Math.min(804.6,t.hp),0)/skill.manaCost,{});\n }else if(enemies.some(t=>distance(e,t)<=900*unit+1e-8)){\n  // Summon as the fight approaches, rather than spending timed summons at spawn.\n  // Stay beside the caster instead of dropping the supporting army behind enemies.\n  if(!e.isAncient&&!e.traits?.includes('ancient'))add(skill.id==='A1UN'?40:35,skill.id==='A1UN'?pointPayload(e):{});\n }\n return candidates;\n}\n\nexport function castAICombat(g,p){\n if(p.id===0||!g._aiEnabled()||g.state.paused||!['combat','arena'].includes(g.state.phase))return;\n // Snapshot prevents newly summoned units from recursively acting this turn.\n const casters=g.state.entities.filter(e=>e.ownerId===p.id&&['defender','arena0','arena1'].includes(e.side)&&visible(e)&&e.skillSpecs?.some(s=>supported.has(s.id)));\n for(const e of casters){\n  if(!visible(e)||e.status?.silenceUntil>g.state.time)continue;\n  const skills=g.unitSkillStatus(e.id,p.id).filter(s=>supported.has(s.id)&&s.canStart&&s.manaCostKnown&&s.manaCost>0);\n  if(!skills.length)continue;\n  const all=[...g.state.entities,...g.state.kings].filter(visible);\n  const ranked=skills.flatMap(s=>choices(g,e,s,all)).sort((a,b)=>b.score-a.score);\n  // A failed native target must not prevent trying another legal target.\n  // Bound attempts and interrupt at most one attack per caster/AI decision.\n  for(const choice of ranked.slice(0,4))if(g.command('cast',{playerId:p.id,entityId:e.id,skillId:choice.skillId,...choice.payload}).ok)break;\n }\n}\n",
+  "baselineSourceNote": "Exact ai-combat.js contents at sharedBaselineBlob; embedded so a shallow Git clone can run the real A/B regression without fetching historical commits."
+}

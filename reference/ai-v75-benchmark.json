@@ -1,0 +1,10294 @@
+{
+  "schemaVersion": 1,
+  "version": "v75",
+  "status": "rejected-all-strategy-prototypes",
+  "runtimeRetained": false,
+  "decision": "All changes to dist/ai-controller.js were reverted byte-for-byte. No building/economy strategy enhancement is claimed or shipped from these trials. The separate v75 living-bomb combat AI change is outside this evidence file.",
+  "baseline": {
+    "gitHeadBeforeUncommittedV74": "874fe5397ea385ff01378138f10de71ec8f4ea75",
+    "workspaceIncludedUncommittedV74": true,
+    "controllerSha256": "1192e47dee5a1dd5570e11c64b7bda40638767085fc4ee081d7eeea260cc72f1",
+    "frozenDirectory": "/private/tmp/legion-ai-v75-baseline",
+    "runtimeFilesSha256": {
+      "engine.js": "f1a89d72bdccc3cacb6ab7fcf0319b550f6c5380eab5fb013439326ee7d964c4",
+      "skills.js": "033923240e09b8418496eb7a90292ffdc22e7a06d12c49056fa992186456f70b",
+      "data.js": "308906c4840dd22085f79af2d204760395eb562ed50ac2abb0cc17e99d2d4820",
+      "ai-controller.js": "1192e47dee5a1dd5570e11c64b7bda40638767085fc4ee081d7eeea260cc72f1",
+      "ai-combat.js": "f2f5206c0ffa24371027f5a89f022d126e187425e57b3e659ebd68b7394b9d78"
+    },
+    "verifiedAfterRevert": true
+  },
+  "method": {
+    "kind": "equal-budget isolated lane trials, not natural-match win rate",
+    "engine": "Same v74 engine, data and skills for both variants; sandbox automatic AI disabled during isolated combat. The separate ongoing ai-combat.js edit is not called by these building-only trials. Natural runs load both teams combat AI from frozen copies.",
+    "builderPlayerId": 4,
+    "populationCap": 300,
+    "startingWood": 0,
+    "workers": 0,
+    "preparationSeconds": 60,
+    "tickSeconds": 0.2,
+    "combatTimeoutSeconds": 180,
+    "kingHpForMeasurement": 1000000,
+    "purchases": "All build and upgrade orders use real Game.command, ordinary cost and construction duration. Both variants receive identical scenario budgets; no troop-stat grants.",
+    "focus": "Ghost builder u00G; waves/budgets 4/1200,8/3000,12/5500; seeds42,173,615.",
+    "holdout": "Nine builders u00G,u00L,u000,u002,u00C,u00J,u00M,u00Z,u01X; waves/budgets6/2200,16/8500; unused seeds7,2073.",
+    "regression": "Existing benchmark-ai-matchups scenarios knights8/3000,beasts8/3000,forest-air13/6000; seeds42,173,615.",
+    "natural": "Three ordinary matches through wave3; baseline blue team and player-zero assistance fixed; only red building strategy varies; seeds42,173,615."
+  },
+  "rejectedPrototypes": [
+    {
+      "id": "score-only",
+      "controllerSha256": "090265b14285ec0caacccb843f3acd912a159750c11a4df15bbd8157c87d43f5",
+      "description": "Replace invented five-second delay for implemented zero-cooldown knives with a sustained mana-regeneration estimate and real target/damage caps. First three waves retain openingScore.",
+      "reasonRejected": "Focused nine trials increased total leaks746→754; wave4 worsened174→209 despite wave8 improving219→187. No stable aggregate improvement.",
+      "sourceTransforms": [
+        {
+          "from": "/** Estimate the upcoming matchup using weapon masks and actual attack tables. */",
+          "to": "function sustainedSpellScore(g,u,wave,p){\n let score=spellScore(p);\n const source={...u,side:'defender'},target={...wave,side:'monster',hp:1,status:{},traits:wave.traits??[]};\n for(const s of p.skills??[])if(s.status==='implemented'&&s.kind==='knives'&&s.cooldown===0){\n  // These automatic spells are the phantom family's actual attack. Their\n  // cadence is mana regeneration / mana cost, not an invented five-second\n  // cooldown. Value sustained damage only, with the real target and damage\n  // caps; initial mana and external mana auras grant no speculative bonus.\n  score-=n(s.damage)*2/5;\n  if(!matchesTargets(s,source,target)||profile(wave).skills?.some(s=>s.status==='implemented'&&s.kind==='immunity')||!(s.radius>0))continue;\n  const cost=Math.max(0,n(s.manaCost)),capacity=Math.max(0,n(u.mana));\n  if(cost>capacity)continue;\n  const rate=Math.min(10,cost>0?Math.max(0,n(u.manaRegen))/cost:10);\n  const count=Math.max(1,n(wave.count??wave.baseCount,108)),damage=Math.max(0,n(s.damage));\n  const targets=Math.min(count,s.targetCap>0?s.targetCap:count,damage>0&&s.damageCap>0?s.damageCap/damage:count,12);\n  const contacts=1+Math.max(0,targets-1)*(count>20?1:.15);\n  score+=damage*contacts*rate*g._typeMultiplier('spells',wave.armorType,wave.sourceArmorTypeRaw);\n }\n return score;\n}\n\n/** Estimate the upcoming matchup using weapon masks and actual attack tables. */"
+        },
+        {
+          "from": "return (attack+spellScore(p))*uptime",
+          "to": "return (attack+sustainedSpellScore(g,u,wave,p))*uptime"
+        }
+      ]
+    },
+    {
+      "id": "front-only",
+      "controllerSha256": "dd59af632a6257999e54f6a6b48ebce150c42bbc3db6085d9c3dc5b1c02baf1c",
+      "description": "From wave4, reject a newly selected upgrade path that converts the sole classified frontliner into a ranged unit. Existing funded plans are still honored.",
+      "reasonRejected": "Focus and holdout gains did not survive existing beast regression: three wave8 seeds leaked46→49,45→52,6→44. Fire Dragon is classified ranged but gains substantial durability/output; keeping its weaker base is a material regression.",
+      "sourceTransforms": [
+        {
+          "from": "   if(gain>0)choices.push({type:'upgrade',u:units[targets[0]],b,targets,score:gain/Math.max(20,total+woodTotal*.75)*(a.defs.length>8?1.7:1.25)});",
+          "to": "   // Apply the same frontline guard as new-build paths: transforming the\n   // only remaining frontliner into a ranged unit removes its protection.\n   if(gain>0&&(g.state.wave<4||!g._isFront(old)||g._isFront(next)||a.fronts.length>1))choices.push({type:'upgrade',u:units[targets[0]],b,targets,score:gain/Math.max(20,total+woodTotal*.75)*(a.defs.length>8?1.7:1.25)});"
+        }
+      ]
+    },
+    {
+      "id": "combined",
+      "controllerSha256": "d6cba308dde58471fafed24eec901eb9534cef5025b5767d81b285bd3fbfba27",
+      "description": "Both above prototypes together.",
+      "reasonRejected": "Focused result746→723 was weaker than front-only694 and still regressed wave4/12 subsets; not taken to release.",
+      "sourceTransforms": [
+        {
+          "from": "/** Estimate the upcoming matchup using weapon masks and actual attack tables. */",
+          "to": "function sustainedSpellScore(g,u,wave,p){\n let score=spellScore(p);\n const source={...u,side:'defender'},target={...wave,side:'monster',hp:1,status:{},traits:wave.traits??[]};\n for(const s of p.skills??[])if(s.status==='implemented'&&s.kind==='knives'&&s.cooldown===0){\n  // These automatic spells are the phantom family's actual attack. Their\n  // cadence is mana regeneration / mana cost, not an invented five-second\n  // cooldown. Value sustained damage only, with the real target and damage\n  // caps; initial mana and external mana auras grant no speculative bonus.\n  score-=n(s.damage)*2/5;\n  if(!matchesTargets(s,source,target)||profile(wave).skills?.some(s=>s.status==='implemented'&&s.kind==='immunity')||!(s.radius>0))continue;\n  const cost=Math.max(0,n(s.manaCost)),capacity=Math.max(0,n(u.mana));\n  if(cost>capacity)continue;\n  const rate=Math.min(10,cost>0?Math.max(0,n(u.manaRegen))/cost:10);\n  const count=Math.max(1,n(wave.count??wave.baseCount,108)),damage=Math.max(0,n(s.damage));\n  const targets=Math.min(count,s.targetCap>0?s.targetCap:count,damage>0&&s.damageCap>0?s.damageCap/damage:count,12);\n  const contacts=1+Math.max(0,targets-1)*(count>20?1:.15);\n  score+=damage*contacts*rate*g._typeMultiplier('spells',wave.armorType,wave.sourceArmorTypeRaw);\n }\n return score;\n}\n\n/** Estimate the upcoming matchup using weapon masks and actual attack tables. */"
+        },
+        {
+          "from": "return (attack+spellScore(p))*uptime",
+          "to": "return (attack+sustainedSpellScore(g,u,wave,p))*uptime"
+        },
+        {
+          "from": "   if(gain>0)choices.push({type:'upgrade',u:units[targets[0]],b,targets,score:gain/Math.max(20,total+woodTotal*.75)*(a.defs.length>8?1.7:1.25)});",
+          "to": "   // Apply the same frontline guard as new-build paths: transforming the\n   // only remaining frontliner into a ranged unit removes its protection.\n   if(gain>0&&(g.state.wave<4||!g._isFront(old)||g._isFront(next)||a.fronts.length>1))choices.push({type:'upgrade',u:units[targets[0]],b,targets,score:gain/Math.max(20,total+woodTotal*.75)*(a.defs.length>8?1.7:1.25)});"
+        }
+      ]
+    }
+  ],
+  "focus": {
+    "results": {
+      "baseline": [
+        {
+          "suite": "focus",
+          "builder": "u00G",
+          "wave": 4,
+          "budget": 1200,
+          "seed": 42,
+          "gold": 10,
+          "army": [
+            "v14_h060",
+            "v14_h05P",
+            "v14_h05Z",
+            "v14_h05N",
+            "v14_h05N"
+          ],
+          "formation": [
+            [
+              2,
+              5
+            ],
+            [
+              2,
+              6
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              3,
+              6
+            ],
+            [
+              1,
+              6
+            ]
+          ],
+          "unfinished": 0,
+          "seconds": 170.6,
+          "cleared": true,
+          "leaks": 60,
+          "kills": 48,
+          "damage": 7017,
+          "kingDamage": 0
+        },
+        {
+          "suite": "focus",
+          "builder": "u00G",
+          "wave": 4,
+          "budget": 1200,
+          "seed": 173,
+          "gold": 10,
+          "army": [
+            "v14_h060",
+            "v14_h05P",
+            "v14_h05Z",
+            "v14_h05N",
+            "v14_h05N"
+          ],
+          "formation": [
+            [
+              2,
+              5
+            ],
+            [
+              2,
+              6
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              3,
+              6
+            ],
+            [
+              1,
+              6
+            ]
+          ],
+          "unfinished": 0,
+          "seconds": 160.6,
+          "cleared": true,
+          "leaks": 55,
+          "kills": 53,
+          "damage": 7265,
+          "kingDamage": 0
+        },
+        {
+          "suite": "focus",
+          "builder": "u00G",
+          "wave": 4,
+          "budget": 1200,
+          "seed": 615,
+          "gold": 10,
+          "army": [
+            "v14_h060",
+            "v14_h05P",
+            "v14_h05Z",
+            "v14_h05N",
+            "v14_h05N"
+          ],
+          "formation": [
+            [
+              2,
+              5
+            ],
+            [
+              2,
+              6
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              3,
+              6
+            ],
+            [
+              1,
+              6
+            ]
+          ],
+          "unfinished": 0,
+          "seconds": 167.6,
+          "cleared": true,
+          "leaks": 59,
+          "kills": 49,
+          "damage": 6979,
+          "kingDamage": 0
+        },
+        {
+          "suite": "focus",
+          "builder": "u00G",
+          "wave": 8,
+          "budget": 3000,
+          "seed": 42,
+          "gold": 10,
+          "army": [
+            "v14_h062",
+            "v14_h05Y",
+            "v14_h05P",
+            "v14_h060",
+            "v14_h05W",
+            "v14_h05P",
+            "v14_h05V",
+            "v14_h05Z",
+            "v14_h05X",
+            "v14_h05T",
+            "v14_h05N"
+          ],
+          "formation": [
+            [
+              2,
+              5
+            ],
+            [
+              2,
+              6
+            ],
+            [
+              3,
+              6
+            ],
+            [
+              1,
+              6
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              4,
+              6
+            ],
+            [
+              1,
+              5
+            ],
+            [
+              4,
+              5
+            ],
+            [
+              0,
+              6
+            ],
+            [
+              5,
+              6
+            ],
+            [
+              2,
+              7
+            ]
+          ],
+          "unfinished": 0,
+          "seconds": 180,
+          "cleared": false,
+          "leaks": 72,
+          "kills": 36,
+          "damage": 12571,
+          "kingDamage": 122726
+        },
+        {
+          "suite": "focus",
+          "builder": "u00G",
+          "wave": 8,
+          "budget": 3000,
+          "seed": 173,
+          "gold": 10,
+          "army": [
+            "v14_h062",
+            "v14_h05Y",
+            "v14_h05P",
+            "v14_h060",
+            "v14_h05W",
+            "v14_h05P",
+            "v14_h05V",
+            "v14_h05Z",
+            "v14_h05X",
+            "v14_h05T",
+            "v14_h05N"
+          ],
+          "formation": [
+            [
+              2,
+              5
+            ],
+            [
+              2,
+              6
+            ],
+            [
+              3,
+              6
+            ],
+            [
+              1,
+              6
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              4,
+              6
+            ],
+            [
+              1,
+              5
+            ],
+            [
+              4,
+              5
+            ],
+            [
+              0,
+              6
+            ],
+            [
+              5,
+              6
+            ],
+            [
+              2,
+              7
+            ]
+          ],
+          "unfinished": 0,
+          "seconds": 180,
+          "cleared": false,
+          "leaks": 75,
+          "kills": 34,
+          "damage": 11460,
+          "kingDamage": 130801
+        },
+        {
+          "suite": "focus",
+          "builder": "u00G",
+          "wave": 8,
+          "budget": 3000,
+          "seed": 615,
+          "gold": 10,
+          "army": [
+            "v14_h062",
+            "v14_h05Y",
+            "v14_h05P",
+            "v14_h060",
+            "v14_h05W",
+            "v14_h05P",
+            "v14_h05V",
+            "v14_h05Z",
+            "v14_h05X",
+            "v14_h05T",
+            "v14_h05N"
+          ],
+          "formation": [
+            [
+              2,
+              5
+            ],
+            [
+              2,
+              6
+            ],
+            [
+              3,
+              6
+            ],
+            [
+              1,
+              6
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              4,
+              6
+            ],
+            [
+              1,
+              5
+            ],
+            [
+              4,
+              5
+            ],
+            [
+              0,
+              6
+            ],
+            [
+              5,
+              6
+            ],
+            [
+              2,
+              7
+            ]
+          ],
+          "unfinished": 0,
+          "seconds": 180,
+          "cleared": false,
+          "leaks": 72,
+          "kills": 37,
+          "damage": 11716,
+          "kingDamage": 123735
+        },
+        {
+          "suite": "focus",
+          "builder": "u00G",
+          "wave": 12,
+          "budget": 5500,
+          "seed": 42,
+          "gold": 15,
+          "army": [
+            "v14_h05W",
+            "v14_h05Y",
+            "v14_h05P",
+            "v14_h05W",
+            "v14_h062",
+            "v14_h05W",
+            "v14_h060",
+            "v14_h05Y",
+            "v14_h05W",
+            "v14_h05V",
+            "v14_h05P",
+            "v14_h05X",
+            "v14_h05V",
+            "v14_h060",
+            "v14_h062",
+            "v14_h05Z"
+          ],
+          "formation": [
+            [
+              2,
+              5
+            ],
+            [
+              2,
+              6
+            ],
+            [
+              3,
+              6
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              1,
+              5
+            ],
+            [
+              4,
+              5
+            ],
+            [
+              1,
+              6
+            ],
+            [
+              4,
+              6
+            ],
+            [
+              0,
+              5
+            ],
+            [
+              5,
+              5
+            ],
+            [
+              0,
+              6
+            ],
+            [
+              5,
+              6
+            ],
+            [
+              2,
+              4
+            ],
+            [
+              3,
+              4
+            ],
+            [
+              1,
+              4
+            ],
+            [
+              4,
+              4
+            ]
+          ],
+          "unfinished": 0,
+          "seconds": 180,
+          "cleared": false,
+          "leaks": 117,
+          "kills": 19,
+          "damage": 20398,
+          "kingDamage": 395244
+        },
+        {
+          "suite": "focus",
+          "builder": "u00G",
+          "wave": 12,
+          "budget": 5500,
+          "seed": 173,
+          "gold": 15,
+          "army": [
+            "v14_h05W",
+            "v14_h05Y",
+            "v14_h05P",
+            "v14_h05W",
+            "v14_h062",
+            "v14_h05W",
+            "v14_h060",
+            "v14_h05Y",
+            "v14_h05W",
+            "v14_h05V",
+            "v14_h05P",
+            "v14_h05X",
+            "v14_h05V",
+            "v14_h060",
+            "v14_h062",
+            "v14_h05Z"
+          ],
+          "formation": [
+            [
+              2,
+              5
+            ],
+            [
+              2,
+              6
+            ],
+            [
+              3,
+              6
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              1,
+              5
+            ],
+            [
+              4,
+              5
+            ],
+            [
+              1,
+              6
+            ],
+            [
+              4,
+              6
+            ],
+            [
+              0,
+              5
+            ],
+            [
+              5,
+              5
+            ],
+            [
+              0,
+              6
+            ],
+            [
+              5,
+              6
+            ],
+            [
+              2,
+              4
+            ],
+            [
+              3,
+              4
+            ],
+            [
+              1,
+              4
+            ],
+            [
+              4,
+              4
+            ]
+          ],
+          "unfinished": 0,
+          "seconds": 180,
+          "cleared": false,
+          "leaks": 124,
+          "kills": 12,
+          "damage": 12403,
+          "kingDamage": 420028
+        },
+        {
+          "suite": "focus",
+          "builder": "u00G",
+          "wave": 12,
+          "budget": 5500,
+          "seed": 615,
+          "gold": 15,
+          "army": [
+            "v14_h05W",
+            "v14_h05Y",
+            "v14_h05P",
+            "v14_h05W",
+            "v14_h062",
+            "v14_h05W",
+            "v14_h060",
+            "v14_h05Y",
+            "v14_h05W",
+            "v14_h05V",
+            "v14_h05P",
+            "v14_h05X",
+            "v14_h05V",
+            "v14_h060",
+            "v14_h062",
+            "v14_h05Z"
+          ],
+          "formation": [
+            [
+              2,
+              5
+            ],
+            [
+              2,
+              6
+            ],
+            [
+              3,
+              6
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              1,
+              5
+            ],
+            [
+              4,
+              5
+            ],
+            [
+              1,
+              6
+            ],
+            [
+              4,
+              6
+            ],
+            [
+              0,
+              5
+            ],
+            [
+              5,
+              5
+            ],
+            [
+              0,
+              6
+            ],
+            [
+              5,
+              6
+            ],
+            [
+              2,
+              4
+            ],
+            [
+              3,
+              4
+            ],
+            [
+              1,
+              4
+            ],
+            [
+              4,
+              4
+            ]
+          ],
+          "unfinished": 0,
+          "seconds": 180,
+          "cleared": false,
+          "leaks": 112,
+          "kills": 23,
+          "damage": 20626,
+          "kingDamage": 366031
+        }
+      ],
+      "score-only": [
+        {
+          "suite": "focus",
+          "builder": "u00G",
+          "wave": 4,
+          "budget": 1200,
+          "seed": 42,
+          "gold": 20,
+          "army": [
+            "v14_h060",
+            "v14_h0O8",
+            "v14_h05S"
+          ],
+          "formation": [
+            [
+              2,
+              5
+            ],
+            [
+              2,
+              6
+            ],
+            [
+              3,
+              5
+            ]
+          ],
+          "unfinished": 0,
+          "seconds": 179.2,
+          "cleared": true,
+          "leaks": 65,
+          "kills": 43,
+          "damage": 8326,
+          "kingDamage": 0
+        },
+        {
+          "suite": "focus",
+          "builder": "u00G",
+          "wave": 4,
+          "budget": 1200,
+          "seed": 173,
+          "gold": 20,
+          "army": [
+            "v14_h060",
+            "v14_h0O8",
+            "v14_h05S"
+          ],
+          "formation": [
+            [
+              2,
+              5
+            ],
+            [
+              2,
+              6
+            ],
+            [
+              3,
+              5
+            ]
+          ],
+          "unfinished": 0,
+          "seconds": 180,
+          "cleared": false,
+          "leaks": 71,
+          "kills": 37,
+          "damage": 7164,
+          "kingDamage": 31575
+        },
+        {
+          "suite": "focus",
+          "builder": "u00G",
+          "wave": 4,
+          "budget": 1200,
+          "seed": 615,
+          "gold": 20,
+          "army": [
+            "v14_h060",
+            "v14_h0O8",
+            "v14_h05S"
+          ],
+          "formation": [
+            [
+              2,
+              5
+            ],
+            [
+              2,
+              6
+            ],
+            [
+              3,
+              5
+            ]
+          ],
+          "unfinished": 0,
+          "seconds": 180,
+          "cleared": false,
+          "leaks": 73,
+          "kills": 35,
+          "damage": 6878,
+          "kingDamage": 33609
+        },
+        {
+          "suite": "focus",
+          "builder": "u00G",
+          "wave": 8,
+          "budget": 3000,
+          "seed": 42,
+          "gold": 10,
+          "army": [
+            "v14_h062",
+            "v14_h0O8",
+            "v14_h0O8",
+            "v14_h0O8",
+            "v14_h05W",
+            "v14_h05X",
+            "v14_h05U",
+            "v14_h05P",
+            "v14_h05S",
+            "v14_h05S"
+          ],
+          "formation": [
+            [
+              2,
+              5
+            ],
+            [
+              2,
+              6
+            ],
+            [
+              3,
+              6
+            ],
+            [
+              1,
+              6
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              4,
+              6
+            ],
+            [
+              0,
+              6
+            ],
+            [
+              5,
+              6
+            ],
+            [
+              1,
+              5
+            ],
+            [
+              4,
+              5
+            ]
+          ],
+          "unfinished": 0,
+          "seconds": 180,
+          "cleared": false,
+          "leaks": 59,
+          "kills": 49,
+          "damage": 17101,
+          "kingDamage": 98518
+        },
+        {
+          "suite": "focus",
+          "builder": "u00G",
+          "wave": 8,
+          "budget": 3000,
+          "seed": 173,
+          "gold": 10,
+          "army": [
+            "v14_h062",
+            "v14_h0O8",
+            "v14_h0O8",
+            "v14_h0O8",
+            "v14_h05W",
+            "v14_h05X",
+            "v14_h05U",
+            "v14_h05P",
+            "v14_h05S",
+            "v14_h05S"
+          ],
+          "formation": [
+            [
+              2,
+              5
+            ],
+            [
+              2,
+              6
+            ],
+            [
+              3,
+              6
+            ],
+            [
+              1,
+              6
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              4,
+              6
+            ],
+            [
+              0,
+              6
+            ],
+            [
+              5,
+              6
+            ],
+            [
+              1,
+              5
+            ],
+            [
+              4,
+              5
+            ]
+          ],
+          "unfinished": 0,
+          "seconds": 180,
+          "cleared": false,
+          "leaks": 64,
+          "kills": 44,
+          "damage": 15640,
+          "kingDamage": 108083
+        },
+        {
+          "suite": "focus",
+          "builder": "u00G",
+          "wave": 8,
+          "budget": 3000,
+          "seed": 615,
+          "gold": 10,
+          "army": [
+            "v14_h062",
+            "v14_h0O8",
+            "v14_h0O8",
+            "v14_h0O8",
+            "v14_h05W",
+            "v14_h05X",
+            "v14_h05U",
+            "v14_h05P",
+            "v14_h05S",
+            "v14_h05S"
+          ],
+          "formation": [
+            [
+              2,
+              5
+            ],
+            [
+              2,
+              6
+            ],
+            [
+              3,
+              6
+            ],
+            [
+              1,
+              6
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              4,
+              6
+            ],
+            [
+              0,
+              6
+            ],
+            [
+              5,
+              6
+            ],
+            [
+              1,
+              5
+            ],
+            [
+              4,
+              5
+            ]
+          ],
+          "unfinished": 0,
+          "seconds": 180,
+          "cleared": false,
+          "leaks": 64,
+          "kills": 44,
+          "damage": 14764,
+          "kingDamage": 108031
+        },
+        {
+          "suite": "focus",
+          "builder": "u00G",
+          "wave": 12,
+          "budget": 5500,
+          "seed": 42,
+          "gold": 10,
+          "army": [
+            "v14_h05W",
+            "v14_h0O8",
+            "v14_h0O8",
+            "v14_h0O8",
+            "v14_h05Y",
+            "v14_h05W",
+            "v14_h05U",
+            "v14_h05P",
+            "v14_h062",
+            "v14_h05W",
+            "v14_h060",
+            "v14_h05V",
+            "v14_h05X",
+            "v14_h05V",
+            "v14_h05U",
+            "v14_h05S",
+            "v14_h05N"
+          ],
+          "formation": [
+            [
+              2,
+              5
+            ],
+            [
+              2,
+              6
+            ],
+            [
+              3,
+              6
+            ],
+            [
+              1,
+              6
+            ],
+            [
+              4,
+              6
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              0,
+              6
+            ],
+            [
+              5,
+              6
+            ],
+            [
+              1,
+              5
+            ],
+            [
+              4,
+              5
+            ],
+            [
+              2,
+              7
+            ],
+            [
+              0,
+              5
+            ],
+            [
+              3,
+              7
+            ],
+            [
+              5,
+              5
+            ],
+            [
+              1,
+              7
+            ],
+            [
+              2,
+              4
+            ],
+            [
+              4,
+              7
+            ]
+          ],
+          "unfinished": 0,
+          "seconds": 180,
+          "cleared": false,
+          "leaks": 116,
+          "kills": 19,
+          "damage": 21272,
+          "kingDamage": 388639
+        },
+        {
+          "suite": "focus",
+          "builder": "u00G",
+          "wave": 12,
+          "budget": 5500,
+          "seed": 173,
+          "gold": 10,
+          "army": [
+            "v14_h05W",
+            "v14_h0O8",
+            "v14_h0O8",
+            "v14_h0O8",
+            "v14_h05Y",
+            "v14_h05W",
+            "v14_h05U",
+            "v14_h05P",
+            "v14_h062",
+            "v14_h05W",
+            "v14_h060",
+            "v14_h05V",
+            "v14_h05X",
+            "v14_h05V",
+            "v14_h05U",
+            "v14_h05S",
+            "v14_h05N"
+          ],
+          "formation": [
+            [
+              2,
+              5
+            ],
+            [
+              2,
+              6
+            ],
+            [
+              3,
+              6
+            ],
+            [
+              1,
+              6
+            ],
+            [
+              4,
+              6
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              0,
+              6
+            ],
+            [
+              5,
+              6
+            ],
+            [
+              1,
+              5
+            ],
+            [
+              4,
+              5
+            ],
+            [
+              2,
+              7
+            ],
+            [
+              0,
+              5
+            ],
+            [
+              3,
+              7
+            ],
+            [
+              5,
+              5
+            ],
+            [
+              1,
+              7
+            ],
+            [
+              2,
+              4
+            ],
+            [
+              4,
+              7
+            ]
+          ],
+          "unfinished": 0,
+          "seconds": 180,
+          "cleared": false,
+          "leaks": 124,
+          "kills": 12,
+          "damage": 12761,
+          "kingDamage": 426509
+        },
+        {
+          "suite": "focus",
+          "builder": "u00G",
+          "wave": 12,
+          "budget": 5500,
+          "seed": 615,
+          "gold": 10,
+          "army": [
+            "v14_h05W",
+            "v14_h0O8",
+            "v14_h0O8",
+            "v14_h0O8",
+            "v14_h05Y",
+            "v14_h05W",
+            "v14_h05U",
+            "v14_h05P",
+            "v14_h062",
+            "v14_h05W",
+            "v14_h060",
+            "v14_h05V",
+            "v14_h05X",
+            "v14_h05V",
+            "v14_h05U",
+            "v14_h05S",
+            "v14_h05N"
+          ],
+          "formation": [
+            [
+              2,
+              5
+            ],
+            [
+              2,
+              6
+            ],
+            [
+              3,
+              6
+            ],
+            [
+              1,
+              6
+            ],
+            [
+              4,
+              6
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              0,
+              6
+            ],
+            [
+              5,
+              6
+            ],
+            [
+              1,
+              5
+            ],
+            [
+              4,
+              5
+            ],
+            [
+              2,
+              7
+            ],
+            [
+              0,
+              5
+            ],
+            [
+              3,
+              7
+            ],
+            [
+              5,
+              5
+            ],
+            [
+              1,
+              7
+            ],
+            [
+              2,
+              4
+            ],
+            [
+              4,
+              7
+            ]
+          ],
+          "unfinished": 0,
+          "seconds": 180,
+          "cleared": false,
+          "leaks": 118,
+          "kills": 17,
+          "damage": 16872,
+          "kingDamage": 399258
+        }
+      ],
+      "front-only": [
+        {
+          "suite": "focus",
+          "builder": "u00G",
+          "wave": 4,
+          "budget": 1200,
+          "seed": 42,
+          "gold": 15,
+          "army": [
+            "v14_h05Z",
+            "v14_h05P",
+            "v14_h05X",
+            "v14_h05P",
+            "v14_h05T",
+            "v14_h05N",
+            "v14_h05N"
+          ],
+          "formation": [
+            [
+              2,
+              5
+            ],
+            [
+              2,
+              6
+            ],
+            [
+              3,
+              6
+            ],
+            [
+              1,
+              6
+            ],
+            [
+              4,
+              6
+            ],
+            [
+              0,
+              6
+            ],
+            [
+              5,
+              6
+            ]
+          ],
+          "unfinished": 0,
+          "seconds": 132.6,
+          "cleared": true,
+          "leaks": 40,
+          "kills": 68,
+          "damage": 5820,
+          "kingDamage": 0
+        },
+        {
+          "suite": "focus",
+          "builder": "u00G",
+          "wave": 4,
+          "budget": 1200,
+          "seed": 173,
+          "gold": 15,
+          "army": [
+            "v14_h05Z",
+            "v14_h05P",
+            "v14_h05X",
+            "v14_h05P",
+            "v14_h05T",
+            "v14_h05N",
+            "v14_h05N"
+          ],
+          "formation": [
+            [
+              2,
+              5
+            ],
+            [
+              2,
+              6
+            ],
+            [
+              3,
+              6
+            ],
+            [
+              1,
+              6
+            ],
+            [
+              4,
+              6
+            ],
+            [
+              0,
+              6
+            ],
+            [
+              5,
+              6
+            ]
+          ],
+          "unfinished": 0,
+          "seconds": 127.8,
+          "cleared": true,
+          "leaks": 37,
+          "kills": 71,
+          "damage": 6088,
+          "kingDamage": 0
+        },
+        {
+          "suite": "focus",
+          "builder": "u00G",
+          "wave": 4,
+          "budget": 1200,
+          "seed": 615,
+          "gold": 15,
+          "army": [
+            "v14_h05Z",
+            "v14_h05P",
+            "v14_h05X",
+            "v14_h05P",
+            "v14_h05T",
+            "v14_h05N",
+            "v14_h05N"
+          ],
+          "formation": [
+            [
+              2,
+              5
+            ],
+            [
+              2,
+              6
+            ],
+            [
+              3,
+              6
+            ],
+            [
+              1,
+              6
+            ],
+            [
+              4,
+              6
+            ],
+            [
+              0,
+              6
+            ],
+            [
+              5,
+              6
+            ]
+          ],
+          "unfinished": 0,
+          "seconds": 140.2,
+          "cleared": true,
+          "leaks": 45,
+          "kills": 63,
+          "damage": 5572,
+          "kingDamage": 0
+        },
+        {
+          "suite": "focus",
+          "builder": "u00G",
+          "wave": 8,
+          "budget": 3000,
+          "seed": 42,
+          "gold": 10,
+          "army": [
+            "v14_h062",
+            "v14_h05Y",
+            "v14_h05P",
+            "v14_h060",
+            "v14_h05W",
+            "v14_h05P",
+            "v14_h05V",
+            "v14_h05Z",
+            "v14_h05X",
+            "v14_h05T",
+            "v14_h05N"
+          ],
+          "formation": [
+            [
+              2,
+              5
+            ],
+            [
+              2,
+              6
+            ],
+            [
+              3,
+              6
+            ],
+            [
+              1,
+              6
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              4,
+              6
+            ],
+            [
+              1,
+              5
+            ],
+            [
+              4,
+              5
+            ],
+            [
+              0,
+              6
+            ],
+            [
+              5,
+              6
+            ],
+            [
+              2,
+              7
+            ]
+          ],
+          "unfinished": 0,
+          "seconds": 180,
+          "cleared": false,
+          "leaks": 72,
+          "kills": 36,
+          "damage": 12571,
+          "kingDamage": 122726
+        },
+        {
+          "suite": "focus",
+          "builder": "u00G",
+          "wave": 8,
+          "budget": 3000,
+          "seed": 173,
+          "gold": 10,
+          "army": [
+            "v14_h062",
+            "v14_h05Y",
+            "v14_h05P",
+            "v14_h060",
+            "v14_h05W",
+            "v14_h05P",
+            "v14_h05V",
+            "v14_h05Z",
+            "v14_h05X",
+            "v14_h05T",
+            "v14_h05N"
+          ],
+          "formation": [
+            [
+              2,
+              5
+            ],
+            [
+              2,
+              6
+            ],
+            [
+              3,
+              6
+            ],
+            [
+              1,
+              6
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              4,
+              6
+            ],
+            [
+              1,
+              5
+            ],
+            [
+              4,
+              5
+            ],
+            [
+              0,
+              6
+            ],
+            [
+              5,
+              6
+            ],
+            [
+              2,
+              7
+            ]
+          ],
+          "unfinished": 0,
+          "seconds": 180,
+          "cleared": false,
+          "leaks": 75,
+          "kills": 34,
+          "damage": 11460,
+          "kingDamage": 130801
+        },
+        {
+          "suite": "focus",
+          "builder": "u00G",
+          "wave": 8,
+          "budget": 3000,
+          "seed": 615,
+          "gold": 10,
+          "army": [
+            "v14_h062",
+            "v14_h05Y",
+            "v14_h05P",
+            "v14_h060",
+            "v14_h05W",
+            "v14_h05P",
+            "v14_h05V",
+            "v14_h05Z",
+            "v14_h05X",
+            "v14_h05T",
+            "v14_h05N"
+          ],
+          "formation": [
+            [
+              2,
+              5
+            ],
+            [
+              2,
+              6
+            ],
+            [
+              3,
+              6
+            ],
+            [
+              1,
+              6
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              4,
+              6
+            ],
+            [
+              1,
+              5
+            ],
+            [
+              4,
+              5
+            ],
+            [
+              0,
+              6
+            ],
+            [
+              5,
+              6
+            ],
+            [
+              2,
+              7
+            ]
+          ],
+          "unfinished": 0,
+          "seconds": 180,
+          "cleared": false,
+          "leaks": 72,
+          "kills": 37,
+          "damage": 11716,
+          "kingDamage": 123735
+        },
+        {
+          "suite": "focus",
+          "builder": "u00G",
+          "wave": 12,
+          "budget": 5500,
+          "seed": 42,
+          "gold": 15,
+          "army": [
+            "v14_h05W",
+            "v14_h05Y",
+            "v14_h05P",
+            "v14_h05W",
+            "v14_h062",
+            "v14_h05W",
+            "v14_h060",
+            "v14_h05Y",
+            "v14_h05W",
+            "v14_h05V",
+            "v14_h05P",
+            "v14_h05X",
+            "v14_h05V",
+            "v14_h060",
+            "v14_h062",
+            "v14_h05Z"
+          ],
+          "formation": [
+            [
+              2,
+              5
+            ],
+            [
+              2,
+              6
+            ],
+            [
+              3,
+              6
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              1,
+              5
+            ],
+            [
+              4,
+              5
+            ],
+            [
+              1,
+              6
+            ],
+            [
+              4,
+              6
+            ],
+            [
+              0,
+              5
+            ],
+            [
+              5,
+              5
+            ],
+            [
+              0,
+              6
+            ],
+            [
+              5,
+              6
+            ],
+            [
+              2,
+              4
+            ],
+            [
+              3,
+              4
+            ],
+            [
+              1,
+              4
+            ],
+            [
+              4,
+              4
+            ]
+          ],
+          "unfinished": 0,
+          "seconds": 180,
+          "cleared": false,
+          "leaks": 117,
+          "kills": 19,
+          "damage": 20398,
+          "kingDamage": 395244
+        },
+        {
+          "suite": "focus",
+          "builder": "u00G",
+          "wave": 12,
+          "budget": 5500,
+          "seed": 173,
+          "gold": 15,
+          "army": [
+            "v14_h05W",
+            "v14_h05Y",
+            "v14_h05P",
+            "v14_h05W",
+            "v14_h062",
+            "v14_h05W",
+            "v14_h060",
+            "v14_h05Y",
+            "v14_h05W",
+            "v14_h05V",
+            "v14_h05P",
+            "v14_h05X",
+            "v14_h05V",
+            "v14_h060",
+            "v14_h062",
+            "v14_h05Z"
+          ],
+          "formation": [
+            [
+              2,
+              5
+            ],
+            [
+              2,
+              6
+            ],
+            [
+              3,
+              6
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              1,
+              5
+            ],
+            [
+              4,
+              5
+            ],
+            [
+              1,
+              6
+            ],
+            [
+              4,
+              6
+            ],
+            [
+              0,
+              5
+            ],
+            [
+              5,
+              5
+            ],
+            [
+              0,
+              6
+            ],
+            [
+              5,
+              6
+            ],
+            [
+              2,
+              4
+            ],
+            [
+              3,
+              4
+            ],
+            [
+              1,
+              4
+            ],
+            [
+              4,
+              4
+            ]
+          ],
+          "unfinished": 0,
+          "seconds": 180,
+          "cleared": false,
+          "leaks": 124,
+          "kills": 12,
+          "damage": 12403,
+          "kingDamage": 420028
+        },
+        {
+          "suite": "focus",
+          "builder": "u00G",
+          "wave": 12,
+          "budget": 5500,
+          "seed": 615,
+          "gold": 15,
+          "army": [
+            "v14_h05W",
+            "v14_h05Y",
+            "v14_h05P",
+            "v14_h05W",
+            "v14_h062",
+            "v14_h05W",
+            "v14_h060",
+            "v14_h05Y",
+            "v14_h05W",
+            "v14_h05V",
+            "v14_h05P",
+            "v14_h05X",
+            "v14_h05V",
+            "v14_h060",
+            "v14_h062",
+            "v14_h05Z"
+          ],
+          "formation": [
+            [
+              2,
+              5
+            ],
+            [
+              2,
+              6
+            ],
+            [
+              3,
+              6
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              1,
+              5
+            ],
+            [
+              4,
+              5
+            ],
+            [
+              1,
+              6
+            ],
+            [
+              4,
+              6
+            ],
+            [
+              0,
+              5
+            ],
+            [
+              5,
+              5
+            ],
+            [
+              0,
+              6
+            ],
+            [
+              5,
+              6
+            ],
+            [
+              2,
+              4
+            ],
+            [
+              3,
+              4
+            ],
+            [
+              1,
+              4
+            ],
+            [
+              4,
+              4
+            ]
+          ],
+          "unfinished": 0,
+          "seconds": 180,
+          "cleared": false,
+          "leaks": 112,
+          "kills": 23,
+          "damage": 20626,
+          "kingDamage": 366031
+        }
+      ],
+      "combined": [
+        {
+          "suite": "focus",
+          "builder": "u00G",
+          "wave": 4,
+          "budget": 1200,
+          "seed": 42,
+          "gold": 15,
+          "army": [
+            "v14_h05Z",
+            "v14_h0O8",
+            "v14_h05X",
+            "v14_h05T",
+            "v14_h05N",
+            "v14_h05N"
+          ],
+          "formation": [
+            [
+              2,
+              5
+            ],
+            [
+              2,
+              6
+            ],
+            [
+              3,
+              6
+            ],
+            [
+              1,
+              6
+            ],
+            [
+              4,
+              6
+            ],
+            [
+              0,
+              6
+            ]
+          ],
+          "unfinished": 0,
+          "seconds": 163.4,
+          "cleared": true,
+          "leaks": 59,
+          "kills": 49,
+          "damage": 6690,
+          "kingDamage": 0
+        },
+        {
+          "suite": "focus",
+          "builder": "u00G",
+          "wave": 4,
+          "budget": 1200,
+          "seed": 173,
+          "gold": 15,
+          "army": [
+            "v14_h05Z",
+            "v14_h0O8",
+            "v14_h05X",
+            "v14_h05T",
+            "v14_h05N",
+            "v14_h05N"
+          ],
+          "formation": [
+            [
+              2,
+              5
+            ],
+            [
+              2,
+              6
+            ],
+            [
+              3,
+              6
+            ],
+            [
+              1,
+              6
+            ],
+            [
+              4,
+              6
+            ],
+            [
+              0,
+              6
+            ]
+          ],
+          "unfinished": 0,
+          "seconds": 174.4,
+          "cleared": true,
+          "leaks": 65,
+          "kills": 43,
+          "damage": 5647,
+          "kingDamage": 0
+        },
+        {
+          "suite": "focus",
+          "builder": "u00G",
+          "wave": 4,
+          "budget": 1200,
+          "seed": 615,
+          "gold": 15,
+          "army": [
+            "v14_h05Z",
+            "v14_h0O8",
+            "v14_h05X",
+            "v14_h05T",
+            "v14_h05N",
+            "v14_h05N"
+          ],
+          "formation": [
+            [
+              2,
+              5
+            ],
+            [
+              2,
+              6
+            ],
+            [
+              3,
+              6
+            ],
+            [
+              1,
+              6
+            ],
+            [
+              4,
+              6
+            ],
+            [
+              0,
+              6
+            ]
+          ],
+          "unfinished": 0,
+          "seconds": 154.8,
+          "cleared": true,
+          "leaks": 54,
+          "kills": 54,
+          "damage": 7737,
+          "kingDamage": 0
+        },
+        {
+          "suite": "focus",
+          "builder": "u00G",
+          "wave": 8,
+          "budget": 3000,
+          "seed": 42,
+          "gold": 10,
+          "army": [
+            "v14_h062",
+            "v14_h0O8",
+            "v14_h0O8",
+            "v14_h0O8",
+            "v14_h05W",
+            "v14_h05X",
+            "v14_h05U",
+            "v14_h05P",
+            "v14_h05S",
+            "v14_h05S"
+          ],
+          "formation": [
+            [
+              2,
+              5
+            ],
+            [
+              2,
+              6
+            ],
+            [
+              3,
+              6
+            ],
+            [
+              1,
+              6
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              4,
+              6
+            ],
+            [
+              0,
+              6
+            ],
+            [
+              5,
+              6
+            ],
+            [
+              1,
+              5
+            ],
+            [
+              4,
+              5
+            ]
+          ],
+          "unfinished": 0,
+          "seconds": 180,
+          "cleared": false,
+          "leaks": 59,
+          "kills": 49,
+          "damage": 17101,
+          "kingDamage": 98518
+        },
+        {
+          "suite": "focus",
+          "builder": "u00G",
+          "wave": 8,
+          "budget": 3000,
+          "seed": 173,
+          "gold": 10,
+          "army": [
+            "v14_h062",
+            "v14_h0O8",
+            "v14_h0O8",
+            "v14_h0O8",
+            "v14_h05W",
+            "v14_h05X",
+            "v14_h05U",
+            "v14_h05P",
+            "v14_h05S",
+            "v14_h05S"
+          ],
+          "formation": [
+            [
+              2,
+              5
+            ],
+            [
+              2,
+              6
+            ],
+            [
+              3,
+              6
+            ],
+            [
+              1,
+              6
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              4,
+              6
+            ],
+            [
+              0,
+              6
+            ],
+            [
+              5,
+              6
+            ],
+            [
+              1,
+              5
+            ],
+            [
+              4,
+              5
+            ]
+          ],
+          "unfinished": 0,
+          "seconds": 180,
+          "cleared": false,
+          "leaks": 64,
+          "kills": 44,
+          "damage": 15640,
+          "kingDamage": 108083
+        },
+        {
+          "suite": "focus",
+          "builder": "u00G",
+          "wave": 8,
+          "budget": 3000,
+          "seed": 615,
+          "gold": 10,
+          "army": [
+            "v14_h062",
+            "v14_h0O8",
+            "v14_h0O8",
+            "v14_h0O8",
+            "v14_h05W",
+            "v14_h05X",
+            "v14_h05U",
+            "v14_h05P",
+            "v14_h05S",
+            "v14_h05S"
+          ],
+          "formation": [
+            [
+              2,
+              5
+            ],
+            [
+              2,
+              6
+            ],
+            [
+              3,
+              6
+            ],
+            [
+              1,
+              6
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              4,
+              6
+            ],
+            [
+              0,
+              6
+            ],
+            [
+              5,
+              6
+            ],
+            [
+              1,
+              5
+            ],
+            [
+              4,
+              5
+            ]
+          ],
+          "unfinished": 0,
+          "seconds": 180,
+          "cleared": false,
+          "leaks": 64,
+          "kills": 44,
+          "damage": 14764,
+          "kingDamage": 108031
+        },
+        {
+          "suite": "focus",
+          "builder": "u00G",
+          "wave": 12,
+          "budget": 5500,
+          "seed": 42,
+          "gold": 10,
+          "army": [
+            "v14_h05W",
+            "v14_h0O8",
+            "v14_h0O8",
+            "v14_h0O8",
+            "v14_h05Y",
+            "v14_h05W",
+            "v14_h05U",
+            "v14_h05P",
+            "v14_h062",
+            "v14_h05W",
+            "v14_h060",
+            "v14_h05V",
+            "v14_h05X",
+            "v14_h05V",
+            "v14_h05U",
+            "v14_h05S",
+            "v14_h05N"
+          ],
+          "formation": [
+            [
+              2,
+              5
+            ],
+            [
+              2,
+              6
+            ],
+            [
+              3,
+              6
+            ],
+            [
+              1,
+              6
+            ],
+            [
+              4,
+              6
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              0,
+              6
+            ],
+            [
+              5,
+              6
+            ],
+            [
+              1,
+              5
+            ],
+            [
+              4,
+              5
+            ],
+            [
+              2,
+              7
+            ],
+            [
+              0,
+              5
+            ],
+            [
+              3,
+              7
+            ],
+            [
+              5,
+              5
+            ],
+            [
+              1,
+              7
+            ],
+            [
+              2,
+              4
+            ],
+            [
+              4,
+              7
+            ]
+          ],
+          "unfinished": 0,
+          "seconds": 180,
+          "cleared": false,
+          "leaks": 116,
+          "kills": 19,
+          "damage": 21272,
+          "kingDamage": 388639
+        },
+        {
+          "suite": "focus",
+          "builder": "u00G",
+          "wave": 12,
+          "budget": 5500,
+          "seed": 173,
+          "gold": 10,
+          "army": [
+            "v14_h05W",
+            "v14_h0O8",
+            "v14_h0O8",
+            "v14_h0O8",
+            "v14_h05Y",
+            "v14_h05W",
+            "v14_h05U",
+            "v14_h05P",
+            "v14_h062",
+            "v14_h05W",
+            "v14_h060",
+            "v14_h05V",
+            "v14_h05X",
+            "v14_h05V",
+            "v14_h05U",
+            "v14_h05S",
+            "v14_h05N"
+          ],
+          "formation": [
+            [
+              2,
+              5
+            ],
+            [
+              2,
+              6
+            ],
+            [
+              3,
+              6
+            ],
+            [
+              1,
+              6
+            ],
+            [
+              4,
+              6
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              0,
+              6
+            ],
+            [
+              5,
+              6
+            ],
+            [
+              1,
+              5
+            ],
+            [
+              4,
+              5
+            ],
+            [
+              2,
+              7
+            ],
+            [
+              0,
+              5
+            ],
+            [
+              3,
+              7
+            ],
+            [
+              5,
+              5
+            ],
+            [
+              1,
+              7
+            ],
+            [
+              2,
+              4
+            ],
+            [
+              4,
+              7
+            ]
+          ],
+          "unfinished": 0,
+          "seconds": 180,
+          "cleared": false,
+          "leaks": 124,
+          "kills": 12,
+          "damage": 12761,
+          "kingDamage": 426509
+        },
+        {
+          "suite": "focus",
+          "builder": "u00G",
+          "wave": 12,
+          "budget": 5500,
+          "seed": 615,
+          "gold": 10,
+          "army": [
+            "v14_h05W",
+            "v14_h0O8",
+            "v14_h0O8",
+            "v14_h0O8",
+            "v14_h05Y",
+            "v14_h05W",
+            "v14_h05U",
+            "v14_h05P",
+            "v14_h062",
+            "v14_h05W",
+            "v14_h060",
+            "v14_h05V",
+            "v14_h05X",
+            "v14_h05V",
+            "v14_h05U",
+            "v14_h05S",
+            "v14_h05N"
+          ],
+          "formation": [
+            [
+              2,
+              5
+            ],
+            [
+              2,
+              6
+            ],
+            [
+              3,
+              6
+            ],
+            [
+              1,
+              6
+            ],
+            [
+              4,
+              6
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              0,
+              6
+            ],
+            [
+              5,
+              6
+            ],
+            [
+              1,
+              5
+            ],
+            [
+              4,
+              5
+            ],
+            [
+              2,
+              7
+            ],
+            [
+              0,
+              5
+            ],
+            [
+              3,
+              7
+            ],
+            [
+              5,
+              5
+            ],
+            [
+              1,
+              7
+            ],
+            [
+              2,
+              4
+            ],
+            [
+              4,
+              7
+            ]
+          ],
+          "unfinished": 0,
+          "seconds": 180,
+          "cleared": false,
+          "leaks": 118,
+          "kills": 17,
+          "damage": 16872,
+          "kingDamage": 399258
+        }
+      ]
+    },
+    "comparisons": {
+      "score-only": {
+        "trials": 9,
+        "baselineLeaks": 746,
+        "candidateLeaks": 754,
+        "baselineKills": 311,
+        "candidateKills": 300,
+        "leakImproved": 4,
+        "leakRegressed": 4,
+        "leakUnchanged": 1,
+        "baselineKingDamage": 1558565,
+        "candidateKingDamage": 1594222
+      },
+      "front-only": {
+        "trials": 9,
+        "baselineLeaks": 746,
+        "candidateLeaks": 694,
+        "baselineKills": 311,
+        "candidateKills": 363,
+        "leakImproved": 3,
+        "leakRegressed": 0,
+        "leakUnchanged": 6,
+        "baselineKingDamage": 1558565,
+        "candidateKingDamage": 1558565
+      },
+      "combined": {
+        "trials": 9,
+        "baselineLeaks": 746,
+        "candidateLeaks": 723,
+        "baselineKills": 311,
+        "candidateKills": 331,
+        "leakImproved": 6,
+        "leakRegressed": 2,
+        "leakUnchanged": 1,
+        "baselineKingDamage": 1558565,
+        "candidateKingDamage": 1529038
+      }
+    }
+  },
+  "holdout": {
+    "baseline": [
+      {
+        "suite": "holdout",
+        "builder": "u00G",
+        "wave": 6,
+        "budget": 2200,
+        "seed": 7,
+        "gold": 15,
+        "army": [
+          "v14_h05W",
+          "v14_h05X",
+          "v14_h05W",
+          "v14_h05P",
+          "v14_h05W",
+          "v14_h05P",
+          "v14_h05V",
+          "v14_h05N"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            4,
+            6
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 67,
+        "kills": 41,
+        "damage": 10946,
+        "kingDamage": 113122
+      },
+      {
+        "suite": "holdout",
+        "builder": "u00G",
+        "wave": 6,
+        "budget": 2200,
+        "seed": 2073,
+        "gold": 15,
+        "army": [
+          "v14_h05W",
+          "v14_h05X",
+          "v14_h05W",
+          "v14_h05P",
+          "v14_h05W",
+          "v14_h05P",
+          "v14_h05V",
+          "v14_h05N"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            4,
+            6
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 73,
+        "kills": 35,
+        "damage": 9772,
+        "kingDamage": 128702
+      },
+      {
+        "suite": "holdout",
+        "builder": "u00G",
+        "wave": 16,
+        "budget": 8500,
+        "seed": 7,
+        "gold": 5,
+        "army": [
+          "v14_h060",
+          "v14_h05Y",
+          "v14_h05P",
+          "v14_h060",
+          "v14_h05Y",
+          "v14_h05W",
+          "v14_h060",
+          "v14_h05P",
+          "v14_h060",
+          "v14_h05Y",
+          "v14_h060",
+          "v14_h05X",
+          "v14_h05T",
+          "v14_h060",
+          "v14_h062",
+          "v14_h060",
+          "v14_h060",
+          "v14_h05W",
+          "v14_h05Z",
+          "v14_h062",
+          "v14_h05S"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            0,
+            6
+          ],
+          [
+            5,
+            5
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            2,
+            7
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            3
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 125,
+        "kills": 10,
+        "damage": 23564,
+        "kingDamage": 719984
+      },
+      {
+        "suite": "holdout",
+        "builder": "u00G",
+        "wave": 16,
+        "budget": 8500,
+        "seed": 2073,
+        "gold": 5,
+        "army": [
+          "v14_h060",
+          "v14_h05Y",
+          "v14_h05P",
+          "v14_h060",
+          "v14_h05Y",
+          "v14_h05W",
+          "v14_h060",
+          "v14_h05P",
+          "v14_h060",
+          "v14_h05Y",
+          "v14_h060",
+          "v14_h05X",
+          "v14_h05T",
+          "v14_h060",
+          "v14_h062",
+          "v14_h060",
+          "v14_h060",
+          "v14_h05W",
+          "v14_h05Z",
+          "v14_h062",
+          "v14_h05S"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            0,
+            6
+          ],
+          [
+            5,
+            5
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            2,
+            7
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            3
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 125,
+        "kills": 10,
+        "damage": 22974,
+        "kingDamage": 742970
+      },
+      {
+        "suite": "holdout",
+        "builder": "u00L",
+        "wave": 6,
+        "budget": 2200,
+        "seed": 7,
+        "gold": 15,
+        "army": [
+          "v14_h093",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h093",
+          "v14_h08P",
+          "v14_h08Q",
+          "v14_h08H"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            1,
+            5
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 69,
+        "kills": 39,
+        "damage": 11697,
+        "kingDamage": 115358
+      },
+      {
+        "suite": "holdout",
+        "builder": "u00L",
+        "wave": 6,
+        "budget": 2200,
+        "seed": 2073,
+        "gold": 15,
+        "army": [
+          "v14_h093",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h093",
+          "v14_h08P",
+          "v14_h08Q",
+          "v14_h08H"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            1,
+            5
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 71,
+        "kills": 37,
+        "damage": 11626,
+        "kingDamage": 119623
+      },
+      {
+        "suite": "holdout",
+        "builder": "u00L",
+        "wave": 16,
+        "budget": 8500,
+        "seed": 7,
+        "gold": 15,
+        "army": [
+          "v14_h093",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h093",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h093",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h093",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08Q"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            0,
+            6
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            2,
+            7
+          ],
+          [
+            3,
+            7
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            4,
+            7
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            5,
+            7
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            5,
+            5
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            0,
+            3
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 128,
+        "kills": 7,
+        "damage": 24003,
+        "kingDamage": 765836
+      },
+      {
+        "suite": "holdout",
+        "builder": "u00L",
+        "wave": 16,
+        "budget": 8500,
+        "seed": 2073,
+        "gold": 15,
+        "army": [
+          "v14_h093",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h093",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h093",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h093",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08Q"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            0,
+            6
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            2,
+            7
+          ],
+          [
+            3,
+            7
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            4,
+            7
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            5,
+            7
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            5,
+            5
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            0,
+            3
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 131,
+        "kills": 5,
+        "damage": 23224,
+        "kingDamage": 807214
+      },
+      {
+        "suite": "holdout",
+        "builder": "u000",
+        "wave": 6,
+        "budget": 2200,
+        "seed": 7,
+        "gold": 10,
+        "army": [
+          "v14_h00W",
+          "v14_h00V",
+          "v14_h00V",
+          "v14_h00Q",
+          "v14_h00O"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            6
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 61,
+        "kills": 47,
+        "damage": 16677,
+        "kingDamage": 102774
+      },
+      {
+        "suite": "holdout",
+        "builder": "u000",
+        "wave": 6,
+        "budget": 2200,
+        "seed": 2073,
+        "gold": 10,
+        "army": [
+          "v14_h00W",
+          "v14_h00V",
+          "v14_h00V",
+          "v14_h00Q",
+          "v14_h00O"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            6
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 58,
+        "kills": 50,
+        "damage": 18258,
+        "kingDamage": 95692
+      },
+      {
+        "suite": "holdout",
+        "builder": "u000",
+        "wave": 16,
+        "budget": 8500,
+        "seed": 7,
+        "gold": 15,
+        "army": [
+          "v14_h00W",
+          "v14_h00V",
+          "v14_h00V",
+          "v14_h00W",
+          "v14_h00V",
+          "v14_h00V",
+          "v14_h00W",
+          "v14_h00V",
+          "v14_h00Z",
+          "v14_h00W",
+          "v14_h00V",
+          "v14_h00U",
+          "v14_h00W",
+          "v14_h00S",
+          "v14_h00S",
+          "v14_h00S",
+          "v14_h00M"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            0,
+            6
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            2,
+            7
+          ],
+          [
+            3,
+            7
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            4,
+            7
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            5,
+            5
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 116,
+        "kills": 19,
+        "damage": 38890,
+        "kingDamage": 649906
+      },
+      {
+        "suite": "holdout",
+        "builder": "u000",
+        "wave": 16,
+        "budget": 8500,
+        "seed": 2073,
+        "gold": 15,
+        "army": [
+          "v14_h00W",
+          "v14_h00V",
+          "v14_h00V",
+          "v14_h00W",
+          "v14_h00V",
+          "v14_h00V",
+          "v14_h00W",
+          "v14_h00V",
+          "v14_h00Z",
+          "v14_h00W",
+          "v14_h00V",
+          "v14_h00U",
+          "v14_h00W",
+          "v14_h00S",
+          "v14_h00S",
+          "v14_h00S",
+          "v14_h00M"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            0,
+            6
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            2,
+            7
+          ],
+          [
+            3,
+            7
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            4,
+            7
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            5,
+            5
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 110,
+        "kills": 25,
+        "damage": 47912,
+        "kingDamage": 610619
+      },
+      {
+        "suite": "holdout",
+        "builder": "u002",
+        "wave": 6,
+        "budget": 2200,
+        "seed": 7,
+        "gold": 5,
+        "army": [
+          "v14_h020",
+          "v14_n0JI",
+          "v14_h020",
+          "v14_h01Z",
+          "v14_h01U",
+          "v14_h01X",
+          "v14_h01T",
+          "v14_h01T",
+          "v14_h01P"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            5,
+            5
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 35.6,
+        "cleared": true,
+        "leaks": 0,
+        "kills": 108,
+        "damage": 34094,
+        "kingDamage": 0
+      },
+      {
+        "suite": "holdout",
+        "builder": "u002",
+        "wave": 6,
+        "budget": 2200,
+        "seed": 2073,
+        "gold": 5,
+        "army": [
+          "v14_h020",
+          "v14_n0JI",
+          "v14_h020",
+          "v14_h01Z",
+          "v14_h01U",
+          "v14_h01X",
+          "v14_h01T",
+          "v14_h01T",
+          "v14_h01P"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            5,
+            5
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 32.6,
+        "cleared": true,
+        "leaks": 0,
+        "kills": 108,
+        "damage": 32421,
+        "kingDamage": 0
+      },
+      {
+        "suite": "holdout",
+        "builder": "u002",
+        "wave": 16,
+        "budget": 8500,
+        "seed": 7,
+        "gold": 10,
+        "army": [
+          "v14_h020",
+          "v14_h01U",
+          "v14_n0JI",
+          "v14_h020",
+          "v14_h01Y",
+          "v14_h01U",
+          "v14_h020",
+          "v14_h020",
+          "v14_h020",
+          "v14_h01U",
+          "v14_h020",
+          "v14_h020",
+          "v14_h022",
+          "v14_h01U",
+          "v14_h020",
+          "v14_h020",
+          "v14_h021",
+          "v14_h020",
+          "v14_h01T",
+          "v14_h01U"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            5,
+            5
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            0,
+            6
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            2,
+            7
+          ],
+          [
+            3,
+            7
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 114,
+        "kills": 21,
+        "damage": 40450,
+        "kingDamage": 632929
+      },
+      {
+        "suite": "holdout",
+        "builder": "u002",
+        "wave": 16,
+        "budget": 8500,
+        "seed": 2073,
+        "gold": 10,
+        "army": [
+          "v14_h020",
+          "v14_h01U",
+          "v14_n0JI",
+          "v14_h020",
+          "v14_h01Y",
+          "v14_h01U",
+          "v14_h020",
+          "v14_h020",
+          "v14_h020",
+          "v14_h01U",
+          "v14_h020",
+          "v14_h020",
+          "v14_h022",
+          "v14_h01U",
+          "v14_h020",
+          "v14_h020",
+          "v14_h021",
+          "v14_h020",
+          "v14_h01T",
+          "v14_h01U"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            5,
+            5
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            0,
+            6
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            2,
+            7
+          ],
+          [
+            3,
+            7
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 117,
+        "kills": 19,
+        "damage": 39134,
+        "kingDamage": 691258
+      },
+      {
+        "suite": "holdout",
+        "builder": "u00C",
+        "wave": 6,
+        "budget": 2200,
+        "seed": 7,
+        "gold": 10,
+        "army": [
+          "v14_h047",
+          "v14_h043",
+          "v14_h043",
+          "v14_n0JH",
+          "v14_h043",
+          "v14_h043",
+          "v14_h049",
+          "v14_h042",
+          "v14_h047",
+          "v14_h042",
+          "v14_h040"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            0,
+            6
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            2,
+            7
+          ],
+          [
+            3,
+            7
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 66,
+        "kills": 42,
+        "damage": 15811,
+        "kingDamage": 102890
+      },
+      {
+        "suite": "holdout",
+        "builder": "u00C",
+        "wave": 6,
+        "budget": 2200,
+        "seed": 2073,
+        "gold": 10,
+        "army": [
+          "v14_h047",
+          "v14_h043",
+          "v14_h043",
+          "v14_n0JH",
+          "v14_h043",
+          "v14_h043",
+          "v14_h049",
+          "v14_h042",
+          "v14_h047",
+          "v14_h042",
+          "v14_h040"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            0,
+            6
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            2,
+            7
+          ],
+          [
+            3,
+            7
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 63,
+        "kills": 45,
+        "damage": 16019,
+        "kingDamage": 91117
+      },
+      {
+        "suite": "holdout",
+        "builder": "u00C",
+        "wave": 16,
+        "budget": 8500,
+        "seed": 7,
+        "gold": 0,
+        "army": [
+          "v14_n0JH",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h049",
+          "v14_h043",
+          "v14_h047",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h047",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h047",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_n0JH",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h047",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h042",
+          "v14_h043",
+          "v14_h042"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            0,
+            6
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            2,
+            7
+          ],
+          [
+            3,
+            7
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            4,
+            7
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            5,
+            7
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            5,
+            5
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            5,
+            3
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            5,
+            2
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            5,
+            1
+          ],
+          [
+            2,
+            0
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 133,
+        "kills": 2,
+        "damage": 23298,
+        "kingDamage": 813117
+      },
+      {
+        "suite": "holdout",
+        "builder": "u00C",
+        "wave": 16,
+        "budget": 8500,
+        "seed": 2073,
+        "gold": 0,
+        "army": [
+          "v14_n0JH",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h049",
+          "v14_h043",
+          "v14_h047",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h047",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h047",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_n0JH",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h047",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h042",
+          "v14_h043",
+          "v14_h042"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            0,
+            6
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            2,
+            7
+          ],
+          [
+            3,
+            7
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            4,
+            7
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            5,
+            7
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            5,
+            5
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            5,
+            3
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            5,
+            2
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            5,
+            1
+          ],
+          [
+            2,
+            0
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 133,
+        "kills": 2,
+        "damage": 23629,
+        "kingDamage": 805617
+      },
+      {
+        "suite": "holdout",
+        "builder": "u00J",
+        "wave": 6,
+        "budget": 2200,
+        "seed": 7,
+        "gold": 5,
+        "army": [
+          "v14_h07V",
+          "v14_h07V",
+          "v14_h07M",
+          "v14_h07V",
+          "v14_h07N",
+          "v14_h07O",
+          "v14_h07J"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            5,
+            5
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 65,
+        "kills": 43,
+        "damage": 13633,
+        "kingDamage": 103913
+      },
+      {
+        "suite": "holdout",
+        "builder": "u00J",
+        "wave": 6,
+        "budget": 2200,
+        "seed": 2073,
+        "gold": 5,
+        "army": [
+          "v14_h07V",
+          "v14_h07V",
+          "v14_h07M",
+          "v14_h07V",
+          "v14_h07N",
+          "v14_h07O",
+          "v14_h07J"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            5,
+            5
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 62,
+        "kills": 46,
+        "damage": 14064,
+        "kingDamage": 101526
+      },
+      {
+        "suite": "holdout",
+        "builder": "u00J",
+        "wave": 16,
+        "budget": 8500,
+        "seed": 7,
+        "gold": 0,
+        "army": [
+          "v14_h07V",
+          "v14_h07V",
+          "v14_h07V",
+          "v14_h07M",
+          "v14_h07N",
+          "v14_h07V",
+          "v14_h07T",
+          "v14_h07P",
+          "v14_h07X",
+          "v14_h07V",
+          "v14_h07V",
+          "v14_h07V",
+          "v14_h07V",
+          "v14_h07V",
+          "v14_h07V",
+          "v14_h07V",
+          "v14_h07V",
+          "v14_h07V",
+          "v14_h07V",
+          "v14_h07P",
+          "v14_h07O",
+          "v14_h07O",
+          "v14_h07J",
+          "v14_h07J",
+          "v14_h07J"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            5,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            0,
+            6
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            5,
+            3
+          ],
+          [
+            2,
+            2
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 127,
+        "kills": 8,
+        "damage": 19022,
+        "kingDamage": 703458
+      },
+      {
+        "suite": "holdout",
+        "builder": "u00J",
+        "wave": 16,
+        "budget": 8500,
+        "seed": 2073,
+        "gold": 0,
+        "army": [
+          "v14_h07V",
+          "v14_h07V",
+          "v14_h07V",
+          "v14_h07M",
+          "v14_h07N",
+          "v14_h07V",
+          "v14_h07T",
+          "v14_h07P",
+          "v14_h07X",
+          "v14_h07V",
+          "v14_h07V",
+          "v14_h07V",
+          "v14_h07V",
+          "v14_h07V",
+          "v14_h07V",
+          "v14_h07V",
+          "v14_h07V",
+          "v14_h07V",
+          "v14_h07V",
+          "v14_h07P",
+          "v14_h07O",
+          "v14_h07O",
+          "v14_h07J",
+          "v14_h07J",
+          "v14_h07J"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            5,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            0,
+            6
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            5,
+            3
+          ],
+          [
+            2,
+            2
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 128,
+        "kills": 7,
+        "damage": 19217,
+        "kingDamage": 699989
+      },
+      {
+        "suite": "holdout",
+        "builder": "u00M",
+        "wave": 6,
+        "budget": 2200,
+        "seed": 7,
+        "gold": 10,
+        "army": [
+          "v14_h0AQ",
+          "v14_h0AQ",
+          "v14_h0AR",
+          "v14_h0AO",
+          "v14_h0AH",
+          "v14_h0AE",
+          "v14_h0A8"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            0,
+            5
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 83,
+        "kills": 25,
+        "damage": 8138,
+        "kingDamage": 152780
+      },
+      {
+        "suite": "holdout",
+        "builder": "u00M",
+        "wave": 6,
+        "budget": 2200,
+        "seed": 2073,
+        "gold": 10,
+        "army": [
+          "v14_h0AQ",
+          "v14_h0AQ",
+          "v14_h0AR",
+          "v14_h0AO",
+          "v14_h0AH",
+          "v14_h0AE",
+          "v14_h0A8"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            0,
+            5
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 79,
+        "kills": 29,
+        "damage": 8868,
+        "kingDamage": 145590
+      },
+      {
+        "suite": "holdout",
+        "builder": "u00M",
+        "wave": 16,
+        "budget": 8500,
+        "seed": 7,
+        "gold": 0,
+        "army": [
+          "v14_h0AQ",
+          "v14_h0AQ",
+          "v14_h0AQ",
+          "v14_h0AO",
+          "v14_h0AQ",
+          "v14_h0AJ",
+          "v14_h0AQ",
+          "v14_h0AQ",
+          "v14_h0AA",
+          "v14_h0AF",
+          "v14_h0AQ",
+          "v14_h0AO",
+          "v14_h0AQ",
+          "v14_h0AQ",
+          "v14_h0AA",
+          "v14_h0AL",
+          "v14_h0AR",
+          "v14_h0AR",
+          "v14_h0AE",
+          "v14_h0AE",
+          "v14_h0A8"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            5,
+            5
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            0,
+            3
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 131,
+        "kills": 4,
+        "damage": 10979,
+        "kingDamage": 799560
+      },
+      {
+        "suite": "holdout",
+        "builder": "u00M",
+        "wave": 16,
+        "budget": 8500,
+        "seed": 2073,
+        "gold": 0,
+        "army": [
+          "v14_h0AQ",
+          "v14_h0AQ",
+          "v14_h0AQ",
+          "v14_h0AO",
+          "v14_h0AQ",
+          "v14_h0AJ",
+          "v14_h0AQ",
+          "v14_h0AQ",
+          "v14_h0AA",
+          "v14_h0AF",
+          "v14_h0AQ",
+          "v14_h0AO",
+          "v14_h0AQ",
+          "v14_h0AQ",
+          "v14_h0AA",
+          "v14_h0AL",
+          "v14_h0AR",
+          "v14_h0AR",
+          "v14_h0AE",
+          "v14_h0AE",
+          "v14_h0A8"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            5,
+            5
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            0,
+            3
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 129,
+        "kills": 6,
+        "damage": 17192,
+        "kingDamage": 771108
+      },
+      {
+        "suite": "holdout",
+        "builder": "u00Z",
+        "wave": 6,
+        "budget": 2200,
+        "seed": 7,
+        "gold": 0,
+        "army": [
+          "v14_h0D2",
+          "v14_h0D2",
+          "v14_h0D0",
+          "v14_h0D0",
+          "v14_h0CO",
+          "v14_h0CO",
+          "v14_h0CF"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            4,
+            6
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 31.2,
+        "cleared": true,
+        "leaks": 0,
+        "kills": 108,
+        "damage": 30767,
+        "kingDamage": 0
+      },
+      {
+        "suite": "holdout",
+        "builder": "u00Z",
+        "wave": 6,
+        "budget": 2200,
+        "seed": 2073,
+        "gold": 0,
+        "army": [
+          "v14_h0D2",
+          "v14_h0D2",
+          "v14_h0D0",
+          "v14_h0D0",
+          "v14_h0CO",
+          "v14_h0CO",
+          "v14_h0CF"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            4,
+            6
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 122.8,
+        "cleared": true,
+        "leaks": 26,
+        "kills": 82,
+        "damage": 26354,
+        "kingDamage": 0
+      },
+      {
+        "suite": "holdout",
+        "builder": "u00Z",
+        "wave": 16,
+        "budget": 8500,
+        "seed": 7,
+        "gold": 10,
+        "army": [
+          "v14_h0D2",
+          "v14_h0D2",
+          "v14_h0D2",
+          "v14_h0D2",
+          "v14_h0D2",
+          "v14_h0D2",
+          "v14_h0D2",
+          "v14_h0D2",
+          "v14_h0D2",
+          "v14_h0D2",
+          "v14_h0D0",
+          "v14_h0D0",
+          "v14_h0D0",
+          "v14_h0D0",
+          "v14_h0CK",
+          "v14_h0CI"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            5,
+            5
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            2,
+            3
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 128,
+        "kills": 7,
+        "damage": 21576,
+        "kingDamage": 771015
+      },
+      {
+        "suite": "holdout",
+        "builder": "u00Z",
+        "wave": 16,
+        "budget": 8500,
+        "seed": 2073,
+        "gold": 10,
+        "army": [
+          "v14_h0D2",
+          "v14_h0D2",
+          "v14_h0D2",
+          "v14_h0D2",
+          "v14_h0D2",
+          "v14_h0D2",
+          "v14_h0D2",
+          "v14_h0D2",
+          "v14_h0D2",
+          "v14_h0D2",
+          "v14_h0D0",
+          "v14_h0D0",
+          "v14_h0D0",
+          "v14_h0D0",
+          "v14_h0CK",
+          "v14_h0CI"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            5,
+            5
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            2,
+            3
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 123,
+        "kills": 12,
+        "damage": 26088,
+        "kingDamage": 734906
+      },
+      {
+        "suite": "holdout",
+        "builder": "u01X",
+        "wave": 6,
+        "budget": 2200,
+        "seed": 7,
+        "gold": 5,
+        "army": [
+          "v14_h0QJ",
+          "v14_h0QH",
+          "v14_n05W",
+          "v14_n05S",
+          "v14_n05P",
+          "v14_n05P",
+          "v14_n05P"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            0,
+            5
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 17,
+        "cleared": true,
+        "leaks": 0,
+        "kills": 108,
+        "damage": 675215,
+        "kingDamage": 0
+      },
+      {
+        "suite": "holdout",
+        "builder": "u01X",
+        "wave": 6,
+        "budget": 2200,
+        "seed": 2073,
+        "gold": 5,
+        "army": [
+          "v14_h0QJ",
+          "v14_h0QH",
+          "v14_n05W",
+          "v14_n05S",
+          "v14_n05P",
+          "v14_n05P",
+          "v14_n05P"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            0,
+            5
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 18.2,
+        "cleared": true,
+        "leaks": 0,
+        "kills": 108,
+        "damage": 618352,
+        "kingDamage": 0
+      },
+      {
+        "suite": "holdout",
+        "builder": "u01X",
+        "wave": 16,
+        "budget": 8500,
+        "seed": 7,
+        "gold": 10,
+        "army": [
+          "v14_h0QJ",
+          "v14_h0QH",
+          "v14_h0QP",
+          "v14_n05S",
+          "v14_h0QI",
+          "v14_n05W",
+          "v14_h0QJ",
+          "v14_h0QP",
+          "v14_h0QP",
+          "v14_h0QP",
+          "v14_h0QJ",
+          "v14_n05S",
+          "v14_h0QO",
+          "v14_h0QH",
+          "v14_n05W",
+          "v14_n05P"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            0,
+            6
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            2,
+            7
+          ],
+          [
+            3,
+            7
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            4,
+            7
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            0,
+            5
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 34.8,
+        "cleared": true,
+        "leaks": 0,
+        "kills": 135,
+        "damage": 817822,
+        "kingDamage": 0
+      },
+      {
+        "suite": "holdout",
+        "builder": "u01X",
+        "wave": 16,
+        "budget": 8500,
+        "seed": 2073,
+        "gold": 10,
+        "army": [
+          "v14_h0QJ",
+          "v14_h0QH",
+          "v14_h0QP",
+          "v14_n05S",
+          "v14_h0QI",
+          "v14_n05W",
+          "v14_h0QJ",
+          "v14_h0QP",
+          "v14_h0QP",
+          "v14_h0QP",
+          "v14_h0QJ",
+          "v14_n05S",
+          "v14_h0QO",
+          "v14_h0QH",
+          "v14_n05W",
+          "v14_n05P"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            0,
+            6
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            2,
+            7
+          ],
+          [
+            3,
+            7
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            4,
+            7
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            0,
+            5
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 23.6,
+        "cleared": true,
+        "leaks": 0,
+        "kills": 135,
+        "damage": 1164448,
+        "kingDamage": 0
+      }
+    ],
+    "frontOnly": [
+      {
+        "suite": "holdout",
+        "builder": "u00G",
+        "wave": 6,
+        "budget": 2200,
+        "seed": 7,
+        "gold": 15,
+        "army": [
+          "v14_h05W",
+          "v14_h05X",
+          "v14_h05W",
+          "v14_h05P",
+          "v14_h05W",
+          "v14_h05P",
+          "v14_h05V",
+          "v14_h05N"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            4,
+            6
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 67,
+        "kills": 41,
+        "damage": 10946,
+        "kingDamage": 113122
+      },
+      {
+        "suite": "holdout",
+        "builder": "u00G",
+        "wave": 6,
+        "budget": 2200,
+        "seed": 2073,
+        "gold": 15,
+        "army": [
+          "v14_h05W",
+          "v14_h05X",
+          "v14_h05W",
+          "v14_h05P",
+          "v14_h05W",
+          "v14_h05P",
+          "v14_h05V",
+          "v14_h05N"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            4,
+            6
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 73,
+        "kills": 35,
+        "damage": 9772,
+        "kingDamage": 128702
+      },
+      {
+        "suite": "holdout",
+        "builder": "u00G",
+        "wave": 16,
+        "budget": 8500,
+        "seed": 7,
+        "gold": 5,
+        "army": [
+          "v14_h060",
+          "v14_h05Y",
+          "v14_h05P",
+          "v14_h05Y",
+          "v14_h060",
+          "v14_h05W",
+          "v14_h060",
+          "v14_h05P",
+          "v14_h060",
+          "v14_h05Y",
+          "v14_h060",
+          "v14_h05X",
+          "v14_h05T",
+          "v14_h060",
+          "v14_h062",
+          "v14_h060",
+          "v14_h060",
+          "v14_h05W",
+          "v14_h05Z",
+          "v14_h062",
+          "v14_h05S"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            0,
+            6
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            2,
+            7
+          ],
+          [
+            3,
+            7
+          ],
+          [
+            5,
+            5
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            2,
+            3
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 121,
+        "kills": 14,
+        "damage": 26690,
+        "kingDamage": 693233
+      },
+      {
+        "suite": "holdout",
+        "builder": "u00G",
+        "wave": 16,
+        "budget": 8500,
+        "seed": 2073,
+        "gold": 5,
+        "army": [
+          "v14_h060",
+          "v14_h05Y",
+          "v14_h05P",
+          "v14_h05Y",
+          "v14_h060",
+          "v14_h05W",
+          "v14_h060",
+          "v14_h05P",
+          "v14_h060",
+          "v14_h05Y",
+          "v14_h060",
+          "v14_h05X",
+          "v14_h05T",
+          "v14_h060",
+          "v14_h062",
+          "v14_h060",
+          "v14_h060",
+          "v14_h05W",
+          "v14_h05Z",
+          "v14_h062",
+          "v14_h05S"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            0,
+            6
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            2,
+            7
+          ],
+          [
+            3,
+            7
+          ],
+          [
+            5,
+            5
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            2,
+            3
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 123,
+        "kills": 12,
+        "damage": 26076,
+        "kingDamage": 721469
+      },
+      {
+        "suite": "holdout",
+        "builder": "u00L",
+        "wave": 6,
+        "budget": 2200,
+        "seed": 7,
+        "gold": 15,
+        "army": [
+          "v14_h093",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h093",
+          "v14_h08P",
+          "v14_h08Q",
+          "v14_h08H"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            1,
+            5
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 69,
+        "kills": 39,
+        "damage": 11697,
+        "kingDamage": 115358
+      },
+      {
+        "suite": "holdout",
+        "builder": "u00L",
+        "wave": 6,
+        "budget": 2200,
+        "seed": 2073,
+        "gold": 15,
+        "army": [
+          "v14_h093",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h093",
+          "v14_h08P",
+          "v14_h08Q",
+          "v14_h08H"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            1,
+            5
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 71,
+        "kills": 37,
+        "damage": 11626,
+        "kingDamage": 119623
+      },
+      {
+        "suite": "holdout",
+        "builder": "u00L",
+        "wave": 16,
+        "budget": 8500,
+        "seed": 7,
+        "gold": 15,
+        "army": [
+          "v14_h093",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h093",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h093",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h093",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08Q"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            0,
+            6
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            2,
+            7
+          ],
+          [
+            3,
+            7
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            4,
+            7
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            5,
+            7
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            5,
+            5
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            0,
+            3
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 128,
+        "kills": 7,
+        "damage": 24003,
+        "kingDamage": 765836
+      },
+      {
+        "suite": "holdout",
+        "builder": "u00L",
+        "wave": 16,
+        "budget": 8500,
+        "seed": 2073,
+        "gold": 15,
+        "army": [
+          "v14_h093",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h093",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h093",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h093",
+          "v14_h08P",
+          "v14_h08P",
+          "v14_h08Q"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            0,
+            6
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            2,
+            7
+          ],
+          [
+            3,
+            7
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            4,
+            7
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            5,
+            7
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            5,
+            5
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            0,
+            3
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 131,
+        "kills": 5,
+        "damage": 23224,
+        "kingDamage": 807214
+      },
+      {
+        "suite": "holdout",
+        "builder": "u000",
+        "wave": 6,
+        "budget": 2200,
+        "seed": 7,
+        "gold": 10,
+        "army": [
+          "v14_h00W",
+          "v14_h00V",
+          "v14_h00V",
+          "v14_h00Q",
+          "v14_h00O"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            6
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 61,
+        "kills": 47,
+        "damage": 16677,
+        "kingDamage": 102774
+      },
+      {
+        "suite": "holdout",
+        "builder": "u000",
+        "wave": 6,
+        "budget": 2200,
+        "seed": 2073,
+        "gold": 10,
+        "army": [
+          "v14_h00W",
+          "v14_h00V",
+          "v14_h00V",
+          "v14_h00Q",
+          "v14_h00O"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            6
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 58,
+        "kills": 50,
+        "damage": 18258,
+        "kingDamage": 95692
+      },
+      {
+        "suite": "holdout",
+        "builder": "u000",
+        "wave": 16,
+        "budget": 8500,
+        "seed": 7,
+        "gold": 15,
+        "army": [
+          "v14_h00W",
+          "v14_h00V",
+          "v14_h00V",
+          "v14_h00W",
+          "v14_h00V",
+          "v14_h00V",
+          "v14_h00W",
+          "v14_h00V",
+          "v14_h00Z",
+          "v14_h00W",
+          "v14_h00V",
+          "v14_h00U",
+          "v14_h00W",
+          "v14_h00S",
+          "v14_h00S",
+          "v14_h00S",
+          "v14_h00M"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            0,
+            6
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            2,
+            7
+          ],
+          [
+            3,
+            7
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            4,
+            7
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            5,
+            5
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 116,
+        "kills": 19,
+        "damage": 38890,
+        "kingDamage": 649906
+      },
+      {
+        "suite": "holdout",
+        "builder": "u000",
+        "wave": 16,
+        "budget": 8500,
+        "seed": 2073,
+        "gold": 15,
+        "army": [
+          "v14_h00W",
+          "v14_h00V",
+          "v14_h00V",
+          "v14_h00W",
+          "v14_h00V",
+          "v14_h00V",
+          "v14_h00W",
+          "v14_h00V",
+          "v14_h00Z",
+          "v14_h00W",
+          "v14_h00V",
+          "v14_h00U",
+          "v14_h00W",
+          "v14_h00S",
+          "v14_h00S",
+          "v14_h00S",
+          "v14_h00M"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            0,
+            6
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            2,
+            7
+          ],
+          [
+            3,
+            7
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            4,
+            7
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            5,
+            5
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 110,
+        "kills": 25,
+        "damage": 47912,
+        "kingDamage": 610619
+      },
+      {
+        "suite": "holdout",
+        "builder": "u002",
+        "wave": 6,
+        "budget": 2200,
+        "seed": 7,
+        "gold": 5,
+        "army": [
+          "v14_h020",
+          "v14_n0JI",
+          "v14_h020",
+          "v14_h01Z",
+          "v14_h01U",
+          "v14_h01X",
+          "v14_h01T",
+          "v14_h01T",
+          "v14_h01P"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            5,
+            5
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 35.6,
+        "cleared": true,
+        "leaks": 0,
+        "kills": 108,
+        "damage": 34094,
+        "kingDamage": 0
+      },
+      {
+        "suite": "holdout",
+        "builder": "u002",
+        "wave": 6,
+        "budget": 2200,
+        "seed": 2073,
+        "gold": 5,
+        "army": [
+          "v14_h020",
+          "v14_n0JI",
+          "v14_h020",
+          "v14_h01Z",
+          "v14_h01U",
+          "v14_h01X",
+          "v14_h01T",
+          "v14_h01T",
+          "v14_h01P"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            5,
+            5
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 32.6,
+        "cleared": true,
+        "leaks": 0,
+        "kills": 108,
+        "damage": 32421,
+        "kingDamage": 0
+      },
+      {
+        "suite": "holdout",
+        "builder": "u002",
+        "wave": 16,
+        "budget": 8500,
+        "seed": 7,
+        "gold": 10,
+        "army": [
+          "v14_h020",
+          "v14_h01U",
+          "v14_n0JI",
+          "v14_h020",
+          "v14_h01Y",
+          "v14_h01U",
+          "v14_h020",
+          "v14_h020",
+          "v14_h020",
+          "v14_h01U",
+          "v14_h020",
+          "v14_h020",
+          "v14_h022",
+          "v14_h01U",
+          "v14_h020",
+          "v14_h020",
+          "v14_h021",
+          "v14_h020",
+          "v14_h01T",
+          "v14_h01U"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            5,
+            5
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            0,
+            6
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            2,
+            7
+          ],
+          [
+            3,
+            7
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 114,
+        "kills": 21,
+        "damage": 40450,
+        "kingDamage": 632929
+      },
+      {
+        "suite": "holdout",
+        "builder": "u002",
+        "wave": 16,
+        "budget": 8500,
+        "seed": 2073,
+        "gold": 10,
+        "army": [
+          "v14_h020",
+          "v14_h01U",
+          "v14_n0JI",
+          "v14_h020",
+          "v14_h01Y",
+          "v14_h01U",
+          "v14_h020",
+          "v14_h020",
+          "v14_h020",
+          "v14_h01U",
+          "v14_h020",
+          "v14_h020",
+          "v14_h022",
+          "v14_h01U",
+          "v14_h020",
+          "v14_h020",
+          "v14_h021",
+          "v14_h020",
+          "v14_h01T",
+          "v14_h01U"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            5,
+            5
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            0,
+            6
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            2,
+            7
+          ],
+          [
+            3,
+            7
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 117,
+        "kills": 19,
+        "damage": 39134,
+        "kingDamage": 691258
+      },
+      {
+        "suite": "holdout",
+        "builder": "u00C",
+        "wave": 6,
+        "budget": 2200,
+        "seed": 7,
+        "gold": 10,
+        "army": [
+          "v14_h047",
+          "v14_h043",
+          "v14_h043",
+          "v14_n0JH",
+          "v14_h043",
+          "v14_h043",
+          "v14_h049",
+          "v14_h042",
+          "v14_h047",
+          "v14_h042",
+          "v14_h040"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            0,
+            6
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            2,
+            7
+          ],
+          [
+            3,
+            7
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 66,
+        "kills": 42,
+        "damage": 15811,
+        "kingDamage": 102890
+      },
+      {
+        "suite": "holdout",
+        "builder": "u00C",
+        "wave": 6,
+        "budget": 2200,
+        "seed": 2073,
+        "gold": 10,
+        "army": [
+          "v14_h047",
+          "v14_h043",
+          "v14_h043",
+          "v14_n0JH",
+          "v14_h043",
+          "v14_h043",
+          "v14_h049",
+          "v14_h042",
+          "v14_h047",
+          "v14_h042",
+          "v14_h040"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            0,
+            6
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            2,
+            7
+          ],
+          [
+            3,
+            7
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 63,
+        "kills": 45,
+        "damage": 16019,
+        "kingDamage": 91117
+      },
+      {
+        "suite": "holdout",
+        "builder": "u00C",
+        "wave": 16,
+        "budget": 8500,
+        "seed": 7,
+        "gold": 0,
+        "army": [
+          "v14_n0JH",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h049",
+          "v14_h043",
+          "v14_h047",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h047",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h047",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_n0JH",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h047",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h042",
+          "v14_h043",
+          "v14_h042"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            0,
+            6
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            2,
+            7
+          ],
+          [
+            3,
+            7
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            4,
+            7
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            5,
+            7
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            5,
+            5
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            5,
+            3
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            5,
+            2
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            5,
+            1
+          ],
+          [
+            2,
+            0
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 133,
+        "kills": 2,
+        "damage": 23298,
+        "kingDamage": 813117
+      },
+      {
+        "suite": "holdout",
+        "builder": "u00C",
+        "wave": 16,
+        "budget": 8500,
+        "seed": 2073,
+        "gold": 0,
+        "army": [
+          "v14_n0JH",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h049",
+          "v14_h043",
+          "v14_h047",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h047",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h047",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_n0JH",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h047",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h043",
+          "v14_h042",
+          "v14_h043",
+          "v14_h042"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            0,
+            6
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            2,
+            7
+          ],
+          [
+            3,
+            7
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            4,
+            7
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            5,
+            7
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            5,
+            5
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            5,
+            3
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            5,
+            2
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            5,
+            1
+          ],
+          [
+            2,
+            0
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 133,
+        "kills": 2,
+        "damage": 23629,
+        "kingDamage": 805617
+      },
+      {
+        "suite": "holdout",
+        "builder": "u00J",
+        "wave": 6,
+        "budget": 2200,
+        "seed": 7,
+        "gold": 5,
+        "army": [
+          "v14_h07V",
+          "v14_h07V",
+          "v14_h07M",
+          "v14_h07V",
+          "v14_h07N",
+          "v14_h07O",
+          "v14_h07J"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            5,
+            5
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 65,
+        "kills": 43,
+        "damage": 13633,
+        "kingDamage": 103913
+      },
+      {
+        "suite": "holdout",
+        "builder": "u00J",
+        "wave": 6,
+        "budget": 2200,
+        "seed": 2073,
+        "gold": 5,
+        "army": [
+          "v14_h07V",
+          "v14_h07V",
+          "v14_h07M",
+          "v14_h07V",
+          "v14_h07N",
+          "v14_h07O",
+          "v14_h07J"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            5,
+            5
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 62,
+        "kills": 46,
+        "damage": 14064,
+        "kingDamage": 101526
+      },
+      {
+        "suite": "holdout",
+        "builder": "u00J",
+        "wave": 16,
+        "budget": 8500,
+        "seed": 7,
+        "gold": 0,
+        "army": [
+          "v14_h07V",
+          "v14_h07V",
+          "v14_h07V",
+          "v14_h07M",
+          "v14_h07N",
+          "v14_h07V",
+          "v14_h07T",
+          "v14_h07P",
+          "v14_h07X",
+          "v14_h07V",
+          "v14_h07V",
+          "v14_h07V",
+          "v14_h07V",
+          "v14_h07V",
+          "v14_h07V",
+          "v14_h07V",
+          "v14_h07V",
+          "v14_h07V",
+          "v14_h07V",
+          "v14_h07P",
+          "v14_h07O",
+          "v14_h07O",
+          "v14_h07J",
+          "v14_h07J",
+          "v14_h07J"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            5,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            0,
+            6
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            5,
+            3
+          ],
+          [
+            2,
+            2
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 127,
+        "kills": 8,
+        "damage": 19022,
+        "kingDamage": 703458
+      },
+      {
+        "suite": "holdout",
+        "builder": "u00J",
+        "wave": 16,
+        "budget": 8500,
+        "seed": 2073,
+        "gold": 0,
+        "army": [
+          "v14_h07V",
+          "v14_h07V",
+          "v14_h07V",
+          "v14_h07M",
+          "v14_h07N",
+          "v14_h07V",
+          "v14_h07T",
+          "v14_h07P",
+          "v14_h07X",
+          "v14_h07V",
+          "v14_h07V",
+          "v14_h07V",
+          "v14_h07V",
+          "v14_h07V",
+          "v14_h07V",
+          "v14_h07V",
+          "v14_h07V",
+          "v14_h07V",
+          "v14_h07V",
+          "v14_h07P",
+          "v14_h07O",
+          "v14_h07O",
+          "v14_h07J",
+          "v14_h07J",
+          "v14_h07J"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            5,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            0,
+            6
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            5,
+            3
+          ],
+          [
+            2,
+            2
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 128,
+        "kills": 7,
+        "damage": 19217,
+        "kingDamage": 699989
+      },
+      {
+        "suite": "holdout",
+        "builder": "u00M",
+        "wave": 6,
+        "budget": 2200,
+        "seed": 7,
+        "gold": 10,
+        "army": [
+          "v14_h0AR",
+          "v14_h0AQ",
+          "v14_h0AQ",
+          "v14_h0AO",
+          "v14_h0AH",
+          "v14_h0AE",
+          "v14_h0A8"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            4,
+            5
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 85,
+        "kills": 23,
+        "damage": 7975,
+        "kingDamage": 158048
+      },
+      {
+        "suite": "holdout",
+        "builder": "u00M",
+        "wave": 6,
+        "budget": 2200,
+        "seed": 2073,
+        "gold": 10,
+        "army": [
+          "v14_h0AR",
+          "v14_h0AQ",
+          "v14_h0AQ",
+          "v14_h0AO",
+          "v14_h0AH",
+          "v14_h0AE",
+          "v14_h0A8"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            4,
+            5
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 82,
+        "kills": 26,
+        "damage": 8098,
+        "kingDamage": 153819
+      },
+      {
+        "suite": "holdout",
+        "builder": "u00M",
+        "wave": 16,
+        "budget": 8500,
+        "seed": 7,
+        "gold": 10,
+        "army": [
+          "v14_h0AQ",
+          "v14_h0AQ",
+          "v14_h0AJ",
+          "v14_h0AO",
+          "v14_h0AQ",
+          "v14_h0AA",
+          "v14_h0AQ",
+          "v14_h0AQ",
+          "v14_h0AA",
+          "v14_h0AQ",
+          "v14_h0AF",
+          "v14_h0AQ",
+          "v14_h0AO",
+          "v14_h0AQ",
+          "v14_h0AR",
+          "v14_h0AA",
+          "v14_h0AL",
+          "v14_h0AR",
+          "v14_h0AR",
+          "v14_h0AB",
+          "v14_h0AE",
+          "v14_h0AE",
+          "v14_h0A8"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            5,
+            5
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            0,
+            6
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            0,
+            3
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 131,
+        "kills": 5,
+        "damage": 12026,
+        "kingDamage": 801431
+      },
+      {
+        "suite": "holdout",
+        "builder": "u00M",
+        "wave": 16,
+        "budget": 8500,
+        "seed": 2073,
+        "gold": 10,
+        "army": [
+          "v14_h0AQ",
+          "v14_h0AQ",
+          "v14_h0AJ",
+          "v14_h0AO",
+          "v14_h0AQ",
+          "v14_h0AA",
+          "v14_h0AQ",
+          "v14_h0AQ",
+          "v14_h0AA",
+          "v14_h0AQ",
+          "v14_h0AF",
+          "v14_h0AQ",
+          "v14_h0AO",
+          "v14_h0AQ",
+          "v14_h0AR",
+          "v14_h0AA",
+          "v14_h0AL",
+          "v14_h0AR",
+          "v14_h0AR",
+          "v14_h0AB",
+          "v14_h0AE",
+          "v14_h0AE",
+          "v14_h0A8"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            5,
+            5
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            0,
+            6
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            0,
+            3
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 131,
+        "kills": 5,
+        "damage": 15261,
+        "kingDamage": 806532
+      },
+      {
+        "suite": "holdout",
+        "builder": "u00Z",
+        "wave": 6,
+        "budget": 2200,
+        "seed": 7,
+        "gold": 0,
+        "army": [
+          "v14_h0D0",
+          "v14_h0D2",
+          "v14_h0D2",
+          "v14_h0D0",
+          "v14_h0CO",
+          "v14_h0CO",
+          "v14_h0CF"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            0,
+            6
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 26,
+        "cleared": true,
+        "leaks": 0,
+        "kills": 108,
+        "damage": 32041,
+        "kingDamage": 0
+      },
+      {
+        "suite": "holdout",
+        "builder": "u00Z",
+        "wave": 6,
+        "budget": 2200,
+        "seed": 2073,
+        "gold": 0,
+        "army": [
+          "v14_h0D0",
+          "v14_h0D2",
+          "v14_h0D2",
+          "v14_h0D0",
+          "v14_h0CO",
+          "v14_h0CO",
+          "v14_h0CF"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            0,
+            6
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 24.6,
+        "cleared": true,
+        "leaks": 0,
+        "kills": 108,
+        "damage": 32516,
+        "kingDamage": 0
+      },
+      {
+        "suite": "holdout",
+        "builder": "u00Z",
+        "wave": 16,
+        "budget": 8500,
+        "seed": 7,
+        "gold": 10,
+        "army": [
+          "v14_h0D2",
+          "v14_h0D2",
+          "v14_h0D2",
+          "v14_h0D2",
+          "v14_h0D2",
+          "v14_h0D2",
+          "v14_h0D2",
+          "v14_h0D2",
+          "v14_h0D2",
+          "v14_h0D0",
+          "v14_h0D0",
+          "v14_h0D0",
+          "v14_h0D0",
+          "v14_h0D2",
+          "v14_h0CK",
+          "v14_h0CI"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            5,
+            5
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            5,
+            4
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 125,
+        "kills": 10,
+        "damage": 22382,
+        "kingDamage": 748230
+      },
+      {
+        "suite": "holdout",
+        "builder": "u00Z",
+        "wave": 16,
+        "budget": 8500,
+        "seed": 2073,
+        "gold": 10,
+        "army": [
+          "v14_h0D2",
+          "v14_h0D2",
+          "v14_h0D2",
+          "v14_h0D2",
+          "v14_h0D2",
+          "v14_h0D2",
+          "v14_h0D2",
+          "v14_h0D2",
+          "v14_h0D2",
+          "v14_h0D0",
+          "v14_h0D0",
+          "v14_h0D0",
+          "v14_h0D0",
+          "v14_h0D2",
+          "v14_h0CK",
+          "v14_h0CI"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            5,
+            5
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            5,
+            4
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 123,
+        "kills": 12,
+        "damage": 29193,
+        "kingDamage": 730188
+      },
+      {
+        "suite": "holdout",
+        "builder": "u01X",
+        "wave": 6,
+        "budget": 2200,
+        "seed": 7,
+        "gold": 5,
+        "army": [
+          "v14_h0QJ",
+          "v14_h0QH",
+          "v14_n05W",
+          "v14_n05S",
+          "v14_n05P",
+          "v14_n05P",
+          "v14_n05P"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            0,
+            5
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 17,
+        "cleared": true,
+        "leaks": 0,
+        "kills": 108,
+        "damage": 675215,
+        "kingDamage": 0
+      },
+      {
+        "suite": "holdout",
+        "builder": "u01X",
+        "wave": 6,
+        "budget": 2200,
+        "seed": 2073,
+        "gold": 5,
+        "army": [
+          "v14_h0QJ",
+          "v14_h0QH",
+          "v14_n05W",
+          "v14_n05S",
+          "v14_n05P",
+          "v14_n05P",
+          "v14_n05P"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            0,
+            5
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 18.2,
+        "cleared": true,
+        "leaks": 0,
+        "kills": 108,
+        "damage": 618352,
+        "kingDamage": 0
+      },
+      {
+        "suite": "holdout",
+        "builder": "u01X",
+        "wave": 16,
+        "budget": 8500,
+        "seed": 7,
+        "gold": 10,
+        "army": [
+          "v14_h0QJ",
+          "v14_h0QH",
+          "v14_h0QP",
+          "v14_n05S",
+          "v14_h0QI",
+          "v14_n05W",
+          "v14_h0QJ",
+          "v14_h0QP",
+          "v14_h0QP",
+          "v14_h0QP",
+          "v14_h0QJ",
+          "v14_n05S",
+          "v14_h0QO",
+          "v14_h0QH",
+          "v14_n05W",
+          "v14_n05P"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            0,
+            6
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            2,
+            7
+          ],
+          [
+            3,
+            7
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            4,
+            7
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            0,
+            5
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 34.8,
+        "cleared": true,
+        "leaks": 0,
+        "kills": 135,
+        "damage": 817822,
+        "kingDamage": 0
+      },
+      {
+        "suite": "holdout",
+        "builder": "u01X",
+        "wave": 16,
+        "budget": 8500,
+        "seed": 2073,
+        "gold": 10,
+        "army": [
+          "v14_h0QJ",
+          "v14_h0QH",
+          "v14_h0QP",
+          "v14_n05S",
+          "v14_h0QI",
+          "v14_n05W",
+          "v14_h0QJ",
+          "v14_h0QP",
+          "v14_h0QP",
+          "v14_h0QP",
+          "v14_h0QJ",
+          "v14_n05S",
+          "v14_h0QO",
+          "v14_h0QH",
+          "v14_n05W",
+          "v14_n05P"
+        ],
+        "formation": [
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            0,
+            6
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            2,
+            7
+          ],
+          [
+            3,
+            7
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            4,
+            7
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            0,
+            5
+          ]
+        ],
+        "unfinished": 0,
+        "seconds": 23.6,
+        "cleared": true,
+        "leaks": 0,
+        "kills": 135,
+        "damage": 1164448,
+        "kingDamage": 0
+      }
+    ],
+    "comparison": {
+      "trials": 36,
+      "baselineLeaks": 2841,
+      "candidateLeaks": 2813,
+      "baselineKills": 1535,
+      "candidateKills": 1565,
+      "leakImproved": 4,
+      "leakRegressed": 3,
+      "leakUnchanged": 29,
+      "baselineKingDamage": 13092573,
+      "candidateKingDamage": 13067610
+    }
+  },
+  "regression": {
+    "baseline": [
+      {
+        "scenario": "knights-wave8",
+        "seed": 42,
+        "wave": 8,
+        "budget": 3000,
+        "gold": 10,
+        "army": [
+          "v14_h09U",
+          "v14_h0A0",
+          "v14_h0A0",
+          "v14_h09O",
+          "v14_h0A0",
+          "v14_h09O",
+          "v14_h09W"
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 42,
+        "kills": 66,
+        "damage": 25592,
+        "kingDamage": 53462
+      },
+      {
+        "scenario": "knights-wave8",
+        "seed": 173,
+        "wave": 8,
+        "budget": 3000,
+        "gold": 10,
+        "army": [
+          "v14_h09U",
+          "v14_h0A0",
+          "v14_h0A0",
+          "v14_h09O",
+          "v14_h0A0",
+          "v14_h09O",
+          "v14_h09W"
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 52,
+        "kills": 57,
+        "damage": 21666,
+        "kingDamage": 74399
+      },
+      {
+        "scenario": "knights-wave8",
+        "seed": 615,
+        "wave": 8,
+        "budget": 3000,
+        "gold": 10,
+        "army": [
+          "v14_h09U",
+          "v14_h0A0",
+          "v14_h0A0",
+          "v14_h09O",
+          "v14_h0A0",
+          "v14_h09O",
+          "v14_h09W"
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 45,
+        "kills": 63,
+        "damage": 24251,
+        "kingDamage": 60475
+      },
+      {
+        "scenario": "beasts-wave8",
+        "seed": 42,
+        "wave": 8,
+        "budget": 3000,
+        "gold": 0,
+        "army": [
+          "v14_h01B",
+          "v14_h01B",
+          "v14_h01B",
+          "v14_h01A",
+          "v14_h01B",
+          "v14_h019",
+          "v14_h010"
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 46,
+        "kills": 62,
+        "damage": 26873,
+        "kingDamage": 62106
+      },
+      {
+        "scenario": "beasts-wave8",
+        "seed": 173,
+        "wave": 8,
+        "budget": 3000,
+        "gold": 0,
+        "army": [
+          "v14_h01B",
+          "v14_h01B",
+          "v14_h01B",
+          "v14_h01A",
+          "v14_h01B",
+          "v14_h019",
+          "v14_h010"
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 45,
+        "kills": 64,
+        "damage": 26575,
+        "kingDamage": 56497
+      },
+      {
+        "scenario": "beasts-wave8",
+        "seed": 615,
+        "wave": 8,
+        "budget": 3000,
+        "gold": 0,
+        "army": [
+          "v14_h01B",
+          "v14_h01B",
+          "v14_h01B",
+          "v14_h01A",
+          "v14_h01B",
+          "v14_h019",
+          "v14_h010"
+        ],
+        "unfinished": 0,
+        "seconds": 68.4,
+        "cleared": true,
+        "leaks": 6,
+        "kills": 102,
+        "damage": 35406,
+        "kingDamage": 0
+      },
+      {
+        "scenario": "forest-air13",
+        "seed": 42,
+        "wave": 13,
+        "budget": 6000,
+        "gold": 10,
+        "army": [
+          "v14_h01N",
+          "v14_h01G",
+          "v14_h01G",
+          "v14_h01G",
+          "v14_h01N",
+          "v14_h0O6",
+          "v14_h01O",
+          "v14_h01G",
+          "v14_h01L",
+          "v14_h01J",
+          "v14_h01G",
+          "v14_h01G",
+          "v14_h01G",
+          "v14_h01G",
+          "v14_h01G",
+          "v14_h01G"
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 117,
+        "kills": 19,
+        "damage": 32347,
+        "kingDamage": 809851
+      },
+      {
+        "scenario": "forest-air13",
+        "seed": 173,
+        "wave": 13,
+        "budget": 6000,
+        "gold": 10,
+        "army": [
+          "v14_h01N",
+          "v14_h01G",
+          "v14_h01G",
+          "v14_h01G",
+          "v14_h01N",
+          "v14_h0O6",
+          "v14_h01O",
+          "v14_h01G",
+          "v14_h01L",
+          "v14_h01J",
+          "v14_h01G",
+          "v14_h01G",
+          "v14_h01G",
+          "v14_h01G",
+          "v14_h01G",
+          "v14_h01G"
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 108,
+        "kills": 28,
+        "damage": 37593,
+        "kingDamage": 735482
+      },
+      {
+        "scenario": "forest-air13",
+        "seed": 615,
+        "wave": 13,
+        "budget": 6000,
+        "gold": 10,
+        "army": [
+          "v14_h01N",
+          "v14_h01G",
+          "v14_h01G",
+          "v14_h01G",
+          "v14_h01N",
+          "v14_h0O6",
+          "v14_h01O",
+          "v14_h01G",
+          "v14_h01L",
+          "v14_h01J",
+          "v14_h01G",
+          "v14_h01G",
+          "v14_h01G",
+          "v14_h01G",
+          "v14_h01G",
+          "v14_h01G"
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 114,
+        "kills": 21,
+        "damage": 35503,
+        "kingDamage": 762441
+      }
+    ],
+    "frontOnly": [
+      {
+        "scenario": "knights-wave8",
+        "seed": 42,
+        "wave": 8,
+        "budget": 3000,
+        "gold": 10,
+        "army": [
+          "v14_h09U",
+          "v14_h0A0",
+          "v14_h0A0",
+          "v14_h09O",
+          "v14_h0A0",
+          "v14_h09O",
+          "v14_h09W"
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 42,
+        "kills": 66,
+        "damage": 25592,
+        "kingDamage": 53462
+      },
+      {
+        "scenario": "knights-wave8",
+        "seed": 173,
+        "wave": 8,
+        "budget": 3000,
+        "gold": 10,
+        "army": [
+          "v14_h09U",
+          "v14_h0A0",
+          "v14_h0A0",
+          "v14_h09O",
+          "v14_h0A0",
+          "v14_h09O",
+          "v14_h09W"
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 52,
+        "kills": 57,
+        "damage": 21666,
+        "kingDamage": 74399
+      },
+      {
+        "scenario": "knights-wave8",
+        "seed": 615,
+        "wave": 8,
+        "budget": 3000,
+        "gold": 10,
+        "army": [
+          "v14_h09U",
+          "v14_h0A0",
+          "v14_h0A0",
+          "v14_h09O",
+          "v14_h0A0",
+          "v14_h09O",
+          "v14_h09W"
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 45,
+        "kills": 63,
+        "damage": 24251,
+        "kingDamage": 60475
+      },
+      {
+        "scenario": "beasts-wave8",
+        "seed": 42,
+        "wave": 8,
+        "budget": 3000,
+        "gold": 0,
+        "army": [
+          "v14_h01B",
+          "v14_h01B",
+          "v14_h01B",
+          "v14_h01B",
+          "v14_h019",
+          "v14_h01A",
+          "v14_h010"
+        ],
+        "unfinished": 0,
+        "seconds": 167.6,
+        "cleared": true,
+        "leaks": 49,
+        "kills": 59,
+        "damage": 28298,
+        "kingDamage": 0
+      },
+      {
+        "scenario": "beasts-wave8",
+        "seed": 173,
+        "wave": 8,
+        "budget": 3000,
+        "gold": 0,
+        "army": [
+          "v14_h01B",
+          "v14_h01B",
+          "v14_h01B",
+          "v14_h01B",
+          "v14_h019",
+          "v14_h01A",
+          "v14_h010"
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 52,
+        "kills": 57,
+        "damage": 26838,
+        "kingDamage": 56132
+      },
+      {
+        "scenario": "beasts-wave8",
+        "seed": 615,
+        "wave": 8,
+        "budget": 3000,
+        "gold": 0,
+        "army": [
+          "v14_h01B",
+          "v14_h01B",
+          "v14_h01B",
+          "v14_h01B",
+          "v14_h019",
+          "v14_h01A",
+          "v14_h010"
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 44,
+        "kills": 64,
+        "damage": 26942,
+        "kingDamage": 53311
+      },
+      {
+        "scenario": "forest-air13",
+        "seed": 42,
+        "wave": 13,
+        "budget": 6000,
+        "gold": 10,
+        "army": [
+          "v14_h01N",
+          "v14_h01G",
+          "v14_h01G",
+          "v14_h01G",
+          "v14_h01N",
+          "v14_h0O6",
+          "v14_h01O",
+          "v14_h01G",
+          "v14_h01L",
+          "v14_h01J",
+          "v14_h01G",
+          "v14_h01G",
+          "v14_h01G",
+          "v14_h01G",
+          "v14_h01G",
+          "v14_h01G"
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 117,
+        "kills": 19,
+        "damage": 32347,
+        "kingDamage": 809851
+      },
+      {
+        "scenario": "forest-air13",
+        "seed": 173,
+        "wave": 13,
+        "budget": 6000,
+        "gold": 10,
+        "army": [
+          "v14_h01N",
+          "v14_h01G",
+          "v14_h01G",
+          "v14_h01G",
+          "v14_h01N",
+          "v14_h0O6",
+          "v14_h01O",
+          "v14_h01G",
+          "v14_h01L",
+          "v14_h01J",
+          "v14_h01G",
+          "v14_h01G",
+          "v14_h01G",
+          "v14_h01G",
+          "v14_h01G",
+          "v14_h01G"
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 108,
+        "kills": 28,
+        "damage": 37593,
+        "kingDamage": 735482
+      },
+      {
+        "scenario": "forest-air13",
+        "seed": 615,
+        "wave": 13,
+        "budget": 6000,
+        "gold": 10,
+        "army": [
+          "v14_h01N",
+          "v14_h01G",
+          "v14_h01G",
+          "v14_h01G",
+          "v14_h01N",
+          "v14_h0O6",
+          "v14_h01O",
+          "v14_h01G",
+          "v14_h01L",
+          "v14_h01J",
+          "v14_h01G",
+          "v14_h01G",
+          "v14_h01G",
+          "v14_h01G",
+          "v14_h01G",
+          "v14_h01G"
+        ],
+        "unfinished": 0,
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 114,
+        "kills": 21,
+        "damage": 35503,
+        "kingDamage": 762441
+      }
+    ],
+    "comparison": {
+      "trials": 9,
+      "baselineLeaks": 575,
+      "candidateLeaks": 623,
+      "baselineKills": 482,
+      "candidateKills": 434,
+      "leakImproved": 0,
+      "leakRegressed": 3,
+      "leakUnchanged": 6,
+      "baselineKingDamage": 2614713,
+      "candidateKingDamage": 2605553
+    }
+  },
+  "natural": {
+    "baseline": [
+      {
+        "suite": "natural",
+        "seed": 42,
+        "wave": 4,
+        "phase": "build",
+        "seconds": 378,
+        "winner": null,
+        "kings": [
+          4000,
+          4000
+        ],
+        "leaks": 191,
+        "kills": 1464,
+        "military": 4840,
+        "sent": 32
+      },
+      {
+        "suite": "natural",
+        "seed": 173,
+        "wave": 4,
+        "phase": "build",
+        "seconds": 376,
+        "winner": null,
+        "kings": [
+          4000,
+          4000
+        ],
+        "leaks": 328,
+        "kills": 1467,
+        "military": 4965,
+        "sent": 35
+      },
+      {
+        "suite": "natural",
+        "seed": 615,
+        "wave": 4,
+        "phase": "build",
+        "seconds": 371,
+        "winner": null,
+        "kings": [
+          4000,
+          4000
+        ],
+        "leaks": 334,
+        "kills": 1468,
+        "military": 3305,
+        "sent": 21
+      }
+    ],
+    "frontOnly": [
+      {
+        "suite": "natural",
+        "seed": 42,
+        "wave": 4,
+        "phase": "build",
+        "seconds": 378,
+        "winner": null,
+        "kings": [
+          4000,
+          4000
+        ],
+        "leaks": 191,
+        "kills": 1464,
+        "military": 4840,
+        "sent": 32
+      },
+      {
+        "suite": "natural",
+        "seed": 173,
+        "wave": 4,
+        "phase": "build",
+        "seconds": 376,
+        "winner": null,
+        "kings": [
+          4000,
+          4000
+        ],
+        "leaks": 328,
+        "kills": 1467,
+        "military": 4965,
+        "sent": 35
+      },
+      {
+        "suite": "natural",
+        "seed": 615,
+        "wave": 4,
+        "phase": "build",
+        "seconds": 371,
+        "winner": null,
+        "kings": [
+          4000,
+          4000
+        ],
+        "leaks": 334,
+        "kills": 1468,
+        "military": 3305,
+        "sent": 21
+      }
+    ],
+    "comparison": {
+      "trials": 3,
+      "baselineLeaks": 853,
+      "candidateLeaks": 853,
+      "baselineKills": 4399,
+      "candidateKills": 4399,
+      "leakImproved": 0,
+      "leakRegressed": 0,
+      "leakUnchanged": 3,
+      "baselineKingDamage": 0,
+      "candidateKingDamage": 0
+    },
+    "identicalResults": true
+  },
+  "reproduction": {
+    "prepare": "node scripts/benchmark-ai-v75.mjs --prepare-prototypes /path/to/frozen-v74-baseline /private/tmp/v75-reproduction",
+    "run": "node scripts/benchmark-ai-v75.mjs /private/tmp/v75-reproduction/front-only focus /private/tmp/v75-reproduction/baseline",
+    "otherSuites": [
+      "holdout",
+      "regression",
+      "natural"
+    ],
+    "requirements": "Use the frozen v74 engine/data/skills, or the v74 revision with this script copied into it. prepare-prototypes validates the recorded controller hash and writes only to a new isolated directory. Keep runtime AI combat fixed for natural comparisons."
+  }
+}

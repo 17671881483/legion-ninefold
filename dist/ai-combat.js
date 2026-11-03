@@ -3,7 +3,7 @@
 import {matchesTargets,sourceSpellTargetState} from './skills.js';
 import {laneToWorld} from './layout.js';
 
-const supported=new Set(['A16T','A0JA','A1UN','A1TW','A1TZ']);
+const supported=new Set(['A16T','A0JA','A1UN','A1TW','A1TZ','A0IP']);
 const pos=e=>Number.isFinite(e.worldX)?{x:e.worldX,y:e.worldY}:laneToWorld(e.laneId,e.x,e.y);
 const distance=(a,b)=>Math.hypot(pos(a).x-pos(b).x,pos(a).y-pos(b).y);
 const scale=e=>(e.distanceScale??1/3)/100;
@@ -20,7 +20,16 @@ function choices(g,e,skill,all){
  const inRange=list=>list.filter(t=>distance(e,t)<=range+1e-8);
  const candidates=[];
  const add=(score,payload)=>{if(Number.isFinite(score)&&score>0)candidates.push({skillId:skill.id,score,payload});};
- if(skill.id==='A16T'){
+ if(skill.id==='A0IP'){
+  // One normal seven-tick bomb per target. Reapplying shares a script counter;
+  // do not waste mana refreshing its debuff or exploit overlapping timers.
+  const occupied=new Set((g.state.sourceSkillJobs??[]).filter(j=>j.type==='living_bomb'&&!j.done).map(j=>j.targetId));
+  for(const t of inRange(enemies)){
+   if(occupied.has(t.id)||t.buffs?.some(b=>[b.id,b.key,b.buffKey].includes('B04Y')&&b.expiresAt>g.state.time)||sourceSpellTargetState(t).magicImmune||t.status?.cycloneUntil>g.state.time||!matchesTargets(spec,e,t))continue;
+   const value=Math.min(t.hp,t.maxHp*.35);
+   if(t.hp>=Math.max(100,t.maxHp*.15)&&value>=80)add(value/skill.manaCost,{targetId:t.id});
+  }
+ }else if(skill.id==='A16T'){
   // Heal where wounds are concentrated, not at the enemy's last position.
   for(const center of inRange(allies)){
    const value=allies.filter(t=>distance(center,t)<=600*unit+1e-8).reduce((sum,t)=>sum+Math.min(480,missing(t)),0);

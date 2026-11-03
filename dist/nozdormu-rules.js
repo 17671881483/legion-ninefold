@@ -10,7 +10,7 @@ export const NOZDORMU_RULES={
  A158:{status:'partial',description:'巨龙之力：单位死亡主触发器中创建h0QT，复制原所有者、userData、位置与朝向，加入军团；基础7500生命、570—600混乱攻击、0.6秒间隔、30魔法。原死亡句柄对400码内活着且无Avul的敌人造成1000普通攻击/普通武器伤害，受攻防类型与护甲影响。嵌套死亡不重入此主触发器。',partial:boundary+'新体不复制精灵属性与光环，无A158再次变龙；没有凭空登记A15A历史。movetp为fly但目标字段为ground，仍保留宿主飞行通行边界。'},
  A159:{status:'partial',active:true,targetKind:'point',description:'时之吐息：10魔法、11秒冷却、1000码选点；立即沿施法方向前移400码为中心，对400码范围内活着且无Avul的敌人造成400混乱/通用武器伤害。主受伤入口仅受伤者自动请求，对攻击者施放。',partial:boundary+'同一原生能力允许点/单位目标；Web手动使用选点，自动以目标位置适配。不是持续引导伤害。'},
  A15A:{status:'partial',active:true,targetKind:'none',description:'时间之力：5魔法、15秒冷却，读取已登记历史的第3格生命百分比，0或没有历史时改为100%，写到当前最大生命。每秒历史依次右移六格，最新样本在第1格。仅建筑携带A15A且无A14Y/A14Z时登记；默认n064及死亡新龙均没有登记，因此默认满血回退。主受伤入口仅攻击者自动请求。',partial:boundary+'不能把第3格直接当任意时刻精确3秒前；历史百分比随当前最大生命换算，可以降低生命。死亡后下一次采样清空历史并注销。'},
- A206:{status:'marker',description:'龙族荣耀是说明图标；由A201/A202/A203/A204原生光环提供600码内sapper分类友军11%攻击、13%移速、每秒14恢复、12%攻速与1护甲。不是按名称含龙判断，也不另行叠加说明中的数值。'},
+ A206:{status:'marker',description:'龙族荣耀是说明图标；由A201/A202/A203/A204或同字段A0YR/A0YS/A0YT/A0YU原生光环提供600码内sapper分类友军11%攻击、13%移速、每秒14恢复、12%攻速与1护甲。不是按名称含龙判断，也不另行叠加说明中的数值。'},
 };
 const has=(e,id)=>e?.skillSpecs?.some(s=>s.id===id)&&(e.abilityLevels?.[id]??1)>0;
 const pos=e=>Number.isFinite(e?.worldX)?{x:e.worldX,y:e.worldY}:laneToWorld(e?.laneId,e?.x,e?.y)??{x:e?.x??0,y:e?.y??0};

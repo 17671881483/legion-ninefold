@@ -1,3 +1,5 @@
+import {restoreDeathwingHuman} from './deathwing-human.js';
+import {restoreDeathwingDragon,hasPendingDeathwingRevival} from './deathwing-dragon.js';
 import {earthLordBuildingCompleted,restoreEarthLordBuilding,initializeEarthLordLevels} from './earth-lord-levels.js';
 import {restoreEarthLord} from './earth-lord-rules.js';
 import {restoreMaiev} from './maiev-rules.js';
@@ -22,7 +24,8 @@ import {skeletonKingGate,beginSkeletonKingRoundFinish,tickSkeletonKingLifecycle,
 import {sourceBarrageTargets,sourceBarrageHit} from './skills.js';
 import { UNITS, MERCENARIES, LEGACY_MERCENARIES, WAVES, RULES, HEROES, BUILDERS, PROPHET_POOLS, UNIT_TEMPLATES, TECHNOLOGIES, BOX_TRAINING_RULES } from './data.js';
 import { attachSkills, refreshSourceSkills, initializeSourceSkills, initializeSourceClassCombat, sourceClassAttackDamageEvent, tirionBondDamageEvent, sourceDamageListeners, sourceRegisteredDamageEvent, compileSkills, sourceAuraEffects, hasSourceAura, tickSourceSkills, sourceAttackIssued, sourceAttackStart, sourceOnHit, modifyIncoming, beforeSourceDamage, afterSourceDamage, sourceDeath, trySourceReincarnation, sourceMoveFactor, canWeaponTarget, sourceWeapon, tickSourceScriptJobs, manualSourceSkills, castManualSourceSkill, stormLizardChanneling } from './skills.js';
-import {isReincarnating,countsForBattle,reincarnationLethal} from './reincarnation-rules.js';
+import {isReincarnating,countsForBattle as countsForNativeBattle,reincarnationLethal} from './reincarnation-rules.js';
+const countsForBattle=e=>countsForNativeBattle(e)||hasPendingDeathwingRevival(e);
 import {restorePhoenixRevival} from './phoenix-revival-rules.js';
 import { initializeSourceClassBuilding } from './source-class-rules.js';
 import { MAP, laneToWorld, worldToLane, kingWorld, spawnWarpWorld, supportWorld, routePoints, isWalkable, isSegmentWalkable, constrainPoint, closestWalkable, navigationPath } from './layout.js';
@@ -1719,7 +1722,7 @@ export class Game {
       restoreUnstableAlchemyUserData(this,e);restoreVeteranIdentity(this,e,units);restoreSapperCreation(this,e,def);
     }
     restoreUndeadLegionHandles(this);
-    restoreEarthLord(this);restorePhoenixRevival(this);restorePhoenixActive(this);restoreMalygos(this);restoreGuldan(this);restoreAnduin(this);restoreVarian(this);restoreAlexstrasza(this);restoreNozdormu(this);restoreSavis(this);restoreNerzhul(this);restoreMaiev(this);
+    restoreDeathwingHuman(this);restoreDeathwingDragon(this);restoreEarthLord(this);restorePhoenixRevival(this);restorePhoenixActive(this);restoreMalygos(this);restoreGuldan(this);restoreAnduin(this);restoreVarian(this);restoreAlexstrasza(this);restoreNozdormu(this);restoreSavis(this);restoreNerzhul(this);restoreMaiev(this);
     // JSON stores retained handles separately; surviving units must share the
     // live object again so later healing, movement and death update one handle.
     for(const e of [...this.state.entities,...this.state.kings])if(this.state.brightArthasHandles[e.id])this.state.brightArthasHandles[e.id]=e;

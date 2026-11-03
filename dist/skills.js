@@ -1,3 +1,5 @@
+import {DEATHWING_HUMAN_RULES,canDeathwingHumanCast,castDeathwingHuman,deathwingHumanMainDamage,tickDeathwingHumanJobs} from './deathwing-human.js';
+import {DEATHWING_DRAGON_RULES,canDeathwingDragonCast,castDeathwingDragon,deathwingDragonMainDamage,deathwingDragonMainDeath,tickDeathwingDragonJobs} from './deathwing-dragon.js';
 import {EARTH_LORD_RULES,canEarthLordCast,castEarthLord,initializeEarthLordDeployment,earthLordMainDamage,earthLordLifeChanged,earthLordWidgetDeath,earthLordUnitDeath,tickEarthLordJobs} from './earth-lord-rules.js';
 import {initializeEarthLordLevels} from './earth-lord-levels.js';
 import {MAIEV_RULES,canMaievCast,castMaiev,maievBlink,maievMainDamage,maievWidgetDeath,tickMaievJobs} from './maiev-rules.js';
@@ -62,7 +64,7 @@ import { closestWalkable, isWalkable } from './layout.js';
 import { GARROSH_ACTIVE_RULES, GARROSH_PASSIVE_RULES, canGarroshCastAbility, castGarroshAbility, tryGarroshAutoCast, garroshActiveAfterDamage, sourceGarroshActiveDeath, tickGarroshActiveJob } from './garrosh-active-rules.js';
 import { ILLIDAN_RULES, ILLIDAN_ACTIVE_RULES, canIllidanCastAbility, castIllidanAbility, registerIllidanSource, tickIllidanSource, illidanOnAttackHit, tryIllidanAutoCast, illidanAfterDamage, sourceIllidanDeath, tickIllidanJob, isIllidanJobType } from './illidan-rules.js';
 
-export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261104-v71-1';
+export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261104-v73-1';
 
 // Values come from resolved object fields. Empty fields remain empty: a missing
 // native default is reported, rather than replacing it with tooltip numbers.
@@ -102,7 +104,7 @@ function compile(id,version='5.0dJF') {
     case 'Afra':case 'Afrb':s.kind='cold';s.haste=version==='v14.1A5'?-num(RULES.frostAttackSpeedDecrease,.2):-.1;s.move=version==='v14.1A5'?-num(RULES.frostMoveSpeedDecrease,.2):-.1;s.effectText=`冰冻命中：按原图Misc全局值降低${-s.haste*100}%攻速、${-s.move*100}%移速，持续${s.duration}秒`;break;
     case 'AIcb':s.kind='corruption';s.armor=B;break;
     case 'AIva':s.kind='lifesteal';s.fraction=A;break;
-    case 'AOac':case 'AEar':case 'Aakb':s.kind='aura_damage';s.damage=A;s.rangedOnly=a.base_code==='AEar';break;
+    case 'AOac':case 'AEar':case 'Aakb':s.kind='aura_damage';s.damage=A;s.rangedOnly=a.base_code==='AEar'&&!(version==='v14.1A5'&&['A0YR','A201'].includes(id)&&B===1&&C===1);break;
     case 'AHad':s.kind='aura_armor';s.armor=A;break;
     case 'AOae':s.kind='aura_speed';s.move=A;s.haste=B;break;
     case 'AUau':s.kind='aura_regen';s.move=A;s.regen=B;s.regenPercent=!!C;break;
@@ -249,6 +251,7 @@ function compile(id,version='5.0dJF') {
   if(version==='v14.1A5'&&KODO_RULES[id]){const r=KODO_RULES[id];Object.assign(s,{kind:'kodo_source',status:r.status,runtimeImplemented:true,effectText:r.description+`【待核定：${r.partial}】`});}
   if(version==='v14.1A5'&&id==='A113')Object.assign(s,{kind:'veteran_source',status:VETERAN_RULE.status,runtimeImplemented:true,effectText:VETERAN_RULE.description+'【待核定：'+VETERAN_RULE.partial+'】'});
   if(version==='v14.1A5'&&id==='A20C')Object.assign(s,{kind:'siege_fragments_source',status:SIEGE_TEAM_RULE.status,runtimeImplemented:true,effectText:SIEGE_TEAM_RULE.description+'【待核定：'+SIEGE_TEAM_RULE.partial+'】'});
+  if(version==='v14.1A5'&&(DEATHWING_HUMAN_RULES[id]??DEATHWING_DRAGON_RULES[id])){const r=DEATHWING_HUMAN_RULES[id]??DEATHWING_DRAGON_RULES[id];Object.assign(s,{...(r.preserveNativeKind?{}:{kind:'deathwing_source'}),status:r.status,runtimeImplemented:true,manaCost:r.manaCost??s.manaCost,cooldown:r.cooldown??s.cooldown,effectText:r.description+(r.partial?'【待核定：'+r.partial+'】':'')});if(r.range!==undefined)s.range=r.range/100;}
   if(version==='v14.1A5'&&EARTH_LORD_RULES[id]){const r=EARTH_LORD_RULES[id];Object.assign(s,{...(r.nativeKind?{}:{kind:'earth_lord_source'}),status:r.status,runtimeImplemented:true,effectText:r.description+(r.partial?'【待核定：'+r.partial+'】':'')});}
   if(version==='v14.1A5'&&MAIEV_RULES[id]){const r=MAIEV_RULES[id];Object.assign(s,{kind:'maiev_source',status:r.status,runtimeImplemented:r.status!=='unresolved',effectText:r.description+'【待核定：'+r.partial+'】'});}
   if(version==='v14.1A5'&&NERZHUL_RULES[id]){const r=NERZHUL_RULES[id];Object.assign(s,{kind:'nerzhul_source',status:r.status,runtimeImplemented:true,effectText:r.description+(r.partial?'【待核定：'+r.partial+'】':'')});}
@@ -324,7 +327,7 @@ const V14_ECONOMY_DESCRIPTIONS={
   farmer:{name:'淘金（玩家级经济）',rawcodes:['n085','h0W1'],text:'首座娜迦农夫从开始建造时为玩家注册15%击杀额外获得1金币的概率，每新增一座再加0.5个百分点；该概率影响玩家的击杀结算，农夫本身没有对战技能。升级完成后注销该农夫的注册；出售按原脚本不会注销已注册概率。'},
   master:{name:'压榨（回合经济）',rawcodes:['n084','h0W0'],text:'回合结算时，每座存活的娜迦农场主获得3×本波农夫数量的金币。原脚本条件会把原型h0W1的尸体也计入农夫数，皮肤农夫则要求存活；经济模块按这一源逻辑结算。'},
 };
-export function compileSkills(def) {const scale=def.distanceScale??1,version=versionOf(def);return [...new Set(def.abilityIds??def.sourceAbilityIds??(def.sourceAbilities??[]).map(a=>a.rawcode??a.id))].filter(Boolean).map(id=>compile(id,version)).map(s=>({...s,...(version==='v14.1A5'&&['A0J2','A0J3'].includes(s.id)?{haste:num(s.fields['DataA'+(def.abilityLevels?.[s.id]??1)]),effectText:`亡灵军团授予攻速：等级${def.abilityLevels?.[s.id]??1}，+${num(s.fields['DataA'+(def.abilityLevels?.[s.id]??1)])*100}%`}:{}),...(version==='v14.1A5'&&s.id==='A0II'?{haste:num(s.fields['DataB'+(def.abilityLevels?.A0II??1)])}:{}),...(version==='v14.1A5'&&s.id==='A0I4'?{flatDamage:num(s.fields['DataA'+(def.abilityLevels?.A0I4??1)])}:{}),...(version==='v14.1A5'&&s.id==='A17H'?{damage:num(s.fields['DataA'+Math.max(1,Math.min(3,def.abilityLevels?.A17H??1))])}:{}),...(version==='v14.1A5'&&s.id==='A1CK'?{damage:num(s.fields['DataA'+(def.abilityLevels?.A1CK??1)])}:{}),...Object.fromEntries(['range','radius','length','width','inner','outer','outerRadius','deathRadius','pull'].filter(k=>s[k]!==undefined).map(k=>[k,s[k]*scale]))}));}
+export function compileSkills(def) {const scale=def.distanceScale??1,version=versionOf(def);return [...new Set(def.abilityIds??def.sourceAbilityIds??(def.sourceAbilities??[]).map(a=>a.rawcode??a.id))].filter(Boolean).map(id=>compile(id,version)).map(s=>({...s,...(version==='v14.1A5'&&['A0J2','A0J3'].includes(s.id)?{haste:num(s.fields['DataA'+(def.abilityLevels?.[s.id]??1)]),effectText:`亡灵军团授予攻速：等级${def.abilityLevels?.[s.id]??1}，+${num(s.fields['DataA'+(def.abilityLevels?.[s.id]??1)])*100}%`}:{}),...(version==='v14.1A5'&&s.id==='A0YE'?{regen:num(s.fields['DataB'+(def.abilityLevels?.A0YE??1)])}:{}),...(version==='v14.1A5'&&s.id==='A0II'?{haste:num(s.fields['DataB'+(def.abilityLevels?.A0II??1)])}:{}),...(version==='v14.1A5'&&s.id==='A0I4'?{flatDamage:num(s.fields['DataA'+(def.abilityLevels?.A0I4??1)])}:{}),...(version==='v14.1A5'&&s.id==='A17H'?{damage:num(s.fields['DataA'+Math.max(1,Math.min(3,def.abilityLevels?.A17H??1))])}:{}),...(version==='v14.1A5'&&s.id==='A1CK'?{damage:num(s.fields['DataA'+(def.abilityLevels?.A1CK??1)])}:{}),...Object.fromEntries(['range','radius','length','width','inner','outer','outerRadius','deathRadius','pull'].filter(k=>s[k]!==undefined).map(k=>[k,s[k]*scale]))}));}
 export function describeSkills(def) {const displayed=isV14(def)&&(def.buildingAbilityIds??[]).includes('A113')?{...def,abilityIds:[...new Set([...(def.abilityIds??def.sourceAbilityIds??[]),'A113'])]}:def;const list=compileSkills(displayed).map(s=>({id:s.id,name:s.name,description:s.description,status:s.status,effectText:s.effectText,cooldown:s.cooldown,manaCost:s.manaCost,duration:s.duration,range:s.range,radius:s.radius}));const r=raw(def),descriptions=isV14(def)?V14_TRIGGER_DESCRIPTIONS:TRIGGER_DESCRIPTIONS;if(descriptions[r])list.push({id:'trigger:'+r,name:'脚本机制',description:descriptions[r],effectText:descriptions[r],status:'implemented',cooldown:0,manaCost:0});const sourceGap=isV14(def)&&V14_PARTIAL_TRIGGER_DESCRIPTIONS[r];if(sourceGap)list.push({id:'trigger:'+r,name:'脚本机制（部分实现）',description:sourceGap.text,effectText:sourceGap.text,status:sourceGap.status,cooldown:0,manaCost:0});if(isV14(def))for(const [key,rule] of Object.entries(V14_ECONOMY_DESCRIPTIONS))if(rule.rawcodes.includes(r))list.push({id:'economy:'+key,name:rule.name,description:rule.text,effectText:rule.text,status:'implemented',cooldown:0,manaCost:0});return list;}
 export function skillCoverage(def) {const list=describeSkills(def);return {implemented:list.filter(s=>s.status==='implemented').length,partial:list.filter(s=>s.status==='partial').length,markers:list.filter(s=>s.status==='marker').length,unresolved:list.filter(s=>s.status==='unresolved').length};}
 export function attachSkills(e,def) {
@@ -388,13 +391,13 @@ export function sourceWeapon(source,target,now=0){
 }
 export function canWeaponTarget(source,target,now=0){return !!sourceWeapon(source,target,now);}
 
-function active(e){return (e.skillSpecs??[]).filter(s=>s.status==='implemented'||s.status==='partial'&&s.runtimeImplemented&&['A2Y1','A2Y5','A0II','A0I2','A0J8','A0J9','A1QE','A1QI','A10G','A12I','A0LG','A1SQ','A1SU','A11U','A11Z','A16Y'].includes(s.id));}
+function active(e){return (e.skillSpecs??[]).filter(s=>s.status==='implemented'||s.status==='partial'&&s.runtimeImplemented&&['A2Y1','A2Y5','A0YE','A0II','A0I2','A0J8','A0J9','A1QE','A1QI','A10G','A12I','A0LG','A1SQ','A1SU','A11U','A11Z','A16Y'].includes(s.id));}
 export function hasSourceAura(e){return active(e).some(s=>s.kind.startsWith('aura_'));}
 function state(e,s){return (e.skillStates??={})[s.id]??=( {readyAt:0,casts:0});}
 function buff(e,s,source,now,extra={}){if(source.side!==e.side&&active(e).some(a=>a.kind==='immunity')&&(['Aslo','AEer','Acri','ANdh','Auhf','AUfn','ANcs','AHtb','AOcl'].includes(s.base)))return false;e.buffs??=[];const key=extra.key??s.buffKey??s.id;const b={key,skillId:s.id,ownerId:source.ownerId,sourceId:source.id,expiresAt:now+(isNativeHero(e)?s.heroDuration||s.duration:s.duration),damage:s.damage??0,armor:s.armor??0,move:s.move??0,haste:s.haste??0,regen:s.regen??0,dps:s.dps??0,miss:s.miss??0,incoming:s.incoming??0,disarm:s.base==='AEer',...extra};const old=e.buffs.findIndex(v=>v.key===key);if(old>=0)e.buffs[old]=b;else e.buffs.push(b);}
 export function sourceAuraEffects(game,target,auras) {
   const effects={damage:0,haste:0,move:0,armor:0,healRate:0,manaRate:0,lifesteal:0,thorns:0,thornsFlat:0};const groups=new Map();
-  for(const source of [...(auras??[]),...malfurionAuraSources(game).filter(e=>e.battleTeam===target.battleTeam)]){if(source.hp<=0)continue;for(const base of active(source)){const s=base.id==='A17H'?{...base,damage:num(base.fields['DataA'+Math.max(1,Math.min(3,source.abilityLevels?.A17H??1))])}:base;if(base.id==='A17H'&&source.abilityLevels?.A17H===0)continue;if(!s.kind.startsWith('aura_')||dist(source,target)>s.radius+1e-8||!matchesTargets(s,source,target)||(s.rangedOnly&&target.range<=1.28))continue;
+  for(const source of [...(auras??[]),...malfurionAuraSources(game).filter(e=>e.battleTeam===target.battleTeam)]){if(source.hp<=0)continue;for(const base of active(source)){const s=base.id==='A17H'?{...base,damage:num(base.fields['DataA'+Math.max(1,Math.min(3,source.abilityLevels?.A17H??1))])}:base.id==='A0YE'?{...base,regen:num(base.fields['DataB'+(source.abilityLevels?.A0YE??1)])}:base;if(base.id==='A17H'&&source.abilityLevels?.A17H===0)continue;if(!s.kind.startsWith('aura_')||dist(source,target)>s.radius+1e-8||!matchesTargets(s,source,target)||(s.rangedOnly&&target.range<=1.28))continue;
       const key=s.buffKey||s.id,old=groups.get(key);if(!old||Math.abs(s.damage??s.armor??s.haste??s.regen??s.fraction??0)>Math.abs(old.s.damage??old.s.armor??old.s.haste??old.s.regen??old.s.fraction??0))groups.set(key,{s,source});}}
   for(const {s}of groups.values()){
     if(s.kind==='aura_damage')effects.damage+=s.damage;
@@ -405,7 +408,7 @@ export function sourceAuraEffects(game,target,auras) {
     if(s.kind==='aura_lifesteal'&&target.range<=1.28)effects.lifesteal+=s.fraction;
     if(s.kind==='aura_thorns')effects[s.flat?'thornsFlat':'thorns']+=s.fraction;
   }
-  if(isV14(target))effects.haste+=trollHaste(target);
+  if(isV14(target))effects.haste+=trollHaste(target)+(target.status?.deathwingDragon?.attackSpeedBonus??0);
   for(const s of active(target))if(s.kind==='carapace')effects.armor+=s.armor;
   for(const s of active(target))if(s.kind==='passive_stats'){effects.armor+=s.armor??0;effects.haste+=s.haste??0;effects.healRate+=s.selfRegen??0;}
   for(const b of target.buffs??[])if(b.expiresAt>game.state.time){effects.damage+=b.damage??0;effects.armor+=b.armor??0;effects.haste+=b.haste??0;effects.move+=b.move??0;effects.healRate+=b.regen??0;}
@@ -654,6 +657,9 @@ export function beforeSourceDamage(game,target,actual,attacker,options={}){
     }
     if(isV14(target)||isV14(attacker))blademasterAuto(game,target,attacker,actual,heroScriptApi);
     if(isV14(target))aesaraMainDamage(game,target,attacker,actual,heroScriptApi);
+    if(isV14(target)||isV14(attacker)){nerzhulMainDamage(game,target,attacker,actual,heroScriptApi);savisMainDamage(game,target,attacker,actual,heroScriptApi);anduinMainDamage(game,target,attacker,actual,heroScriptApi);guldanMainDamage(game,target,attacker,actual,heroScriptApi,['A1QL']);phoenixMainDamage(game,target,attacker,actual,heroScriptApi);guldanMainDamage(game,target,attacker,actual,heroScriptApi,['A1QM']);maievMainDamage(game,target,attacker,actual,heroScriptApi,'shadow');savisSummonOrder(game,target,attacker,actual);maievMainDamage(game,target,attacker,actual,heroScriptApi,'summon-blade');guldanMainDamage(game,target,attacker,actual,heroScriptApi,['A1QN']);deathwingHumanMainDamage(game,target,attacker,actual,heroScriptApi);earthLordMainDamage(game,target,attacker,actual,heroScriptApi);malygosMainDamage(game,target,attacker,actual,heroScriptApi);alexstraszaMainDamage(game,target,attacker,actual,heroScriptApi);musketeerMainDamage(game,target,attacker,actual,heroScriptApi);eventDamage=nozdormuMainDamage(game,target,attacker,actual,heroScriptApi,eventDamage);}
+    eventDamage=brightArthasEventDamage(game,target,actual,attacker,eventDamage,true);
+    if(isV14(target))eventDamage=deathwingDragonMainDamage(game,target,attacker,actual,heroScriptApi,eventDamage);
     if(isV14(target)||isV14(attacker))scorpionMainDamage(game,target,attacker,actual,options,heroScriptApi);
     const prefix=isV14(target)||isV14(attacker)?elementalDamagePrefix(game,target,attacker,actual,heroScriptApi):{selected:null,localDamage:actual};
     if(!prefix.selected&&isV14(target)&&nightmareDamagePrefix(game,target,attacker,actual,heroScriptApi)){prefix.selected='A0XM';eventDamage=0;}
@@ -669,11 +675,8 @@ export function beforeSourceDamage(game,target,actual,attacker,options={}){
     }
     if(isV14(target))banditMainDamage(game,target,attacker,actual,heroScriptApi);
     if(isV14(target)&&!(attacker.skillSpecs??[]).some(s=>s.id==='A2Y7'))sourceClassBeforeDamage(game,target,actual,attacker,heroScriptApi);
-    if(isV14(target)||isV14(attacker)){nerzhulMainDamage(game,target,attacker,actual,heroScriptApi);savisMainDamage(game,target,attacker,actual,heroScriptApi);anduinMainDamage(game,target,attacker,actual,heroScriptApi);guldanMainDamage(game,target,attacker,actual,heroScriptApi,['A1QL']);phoenixMainDamage(game,target,attacker,actual,heroScriptApi);guldanMainDamage(game,target,attacker,actual,heroScriptApi,['A1QM']);maievMainDamage(game,target,attacker,actual,heroScriptApi,'shadow');savisSummonOrder(game,target,attacker,actual);maievMainDamage(game,target,attacker,actual,heroScriptApi,'summon-blade');guldanMainDamage(game,target,attacker,actual,heroScriptApi,['A1QN']);malygosMainDamage(game,target,attacker,actual,heroScriptApi);alexstraszaMainDamage(game,target,attacker,actual,heroScriptApi);musketeerMainDamage(game,target,attacker,actual,heroScriptApi);eventDamage=nozdormuMainDamage(game,target,attacker,actual,heroScriptApi,eventDamage);earthLordMainDamage(game,target,attacker,actual,heroScriptApi);}
   }finally{game._sourceDamageTriggerDepth--;}
-  // Preserve the trigger's P8 input for its later A1W2 overwrite, including
-  // a preceding time-jump write of zero. Apply the reduction exactly once.
-  return brightArthasEventDamage(game,target,actual,attacker,eventDamage);
+  return eventDamage;
 }
 export function afterSourceDamage(game,target,actual,attacker,options={}) {
   earthLordLifeChanged(game,target,heroScriptApi,options.sourcePreDamageHp);
@@ -855,6 +858,8 @@ function castNativeNova(game,e,id,target){
   return {ok:true,skillId:id};
 }
 const mainDeathApi={universalDamage,nativeDamage,nerzhulSummonDeath,nerzhulMainDeath,
+  deathwingKill:(g,dead,killer)=>deathwingDragonMainDeath(g,dead,killer,heroScriptApi,'kill'),
+  deathwingRevive:(g,dead,killer)=>deathwingDragonMainDeath(g,dead,killer,heroScriptApi,'revive'),
   alchemyGold:(g,dead,killer)=>{const reward=alchemistDeathReward(g,dead,killer),p=g.state.players?.[killer?.ownerId];if(p&&reward.bonusGold){p.gold+=reward.bonusGold;p.stats.goldEarned+=reward.bonusGold;g._event('gold',killer,`点金+${reward.bonusGold}`);}},
   classDeath:(g,dead,killer,enabled)=>sourceClassDeath(g,dead,killer,heroScriptApi,enabled),
   yseraAwakening:(g,dead)=>sourceYseraMainDeath(g,dead),
@@ -888,10 +893,10 @@ export function sourceRegisteredDamageEvent(game,target,listeners,amount=0){
 }
 export function manualSourceSkills(game,e){
   if(!e||!isV14(e))return [];
-  return (e.skillSpecs??[]).filter(s=>canEarthLordCast(e,s.id)||canMaievCast(e,s.id)||canNerzhulCast(e,s.id)||canSavisCast(e,s.id)||canNozdormuCast(e,s.id)||canAlexstraszaCast(e,s.id)||canAnduinCast(e,s.id)||canGuldanCast(e,s.id)||canMalygosCast(e,s.id)||canPhoenixCast(e,s.id)||canMusketeerCast(e,s.id)||canKodoCast(e,s.id)||canStormLizardCast(e,s.id)||canLivingBombCast(e,s.id)||canBlademasterCast(e,s.id)||canBanditCast(e,s.id)||canMalfurionCast(e,s.id)||ALCHEMIST_ACTIVE_RULES[s.id]||canYseraCastAbility(e,s.id)||NAGA_ACTIVE_RULES[s.id]?.active||canVashjCastAbility(e,s.id)||canAesaraCastAbility(e,s.id)||canBrightArthasCastAbility(e,s.id)||canDarkArthasCastAbility(e,s.id)||canLichKingCastAbility(e,s.id)||canGarroshCastAbility(e,s.id)||canIllidanCastAbility(e,s.id)||canIceHeroCastAbility(e,s.id)||canTrollCastAbility(e,s.id)||canKelthuzadCastAbility(e,s.id)).map(s=>{
+  return (e.skillSpecs??[]).filter(s=>canDeathwingHumanCast(e,s.id)||canDeathwingDragonCast(e,s.id)||canEarthLordCast(e,s.id)||canMaievCast(e,s.id)||canNerzhulCast(e,s.id)||canSavisCast(e,s.id)||canNozdormuCast(e,s.id)||canAlexstraszaCast(e,s.id)||canAnduinCast(e,s.id)||canGuldanCast(e,s.id)||canMalygosCast(e,s.id)||canPhoenixCast(e,s.id)||canMusketeerCast(e,s.id)||canKodoCast(e,s.id)||canStormLizardCast(e,s.id)||canLivingBombCast(e,s.id)||canBlademasterCast(e,s.id)||canBanditCast(e,s.id)||canMalfurionCast(e,s.id)||ALCHEMIST_ACTIVE_RULES[s.id]||canYseraCastAbility(e,s.id)||NAGA_ACTIVE_RULES[s.id]?.active||canVashjCastAbility(e,s.id)||canAesaraCastAbility(e,s.id)||canBrightArthasCastAbility(e,s.id)||canDarkArthasCastAbility(e,s.id)||canLichKingCastAbility(e,s.id)||canGarroshCastAbility(e,s.id)||canIllidanCastAbility(e,s.id)||canIceHeroCastAbility(e,s.id)||canTrollCastAbility(e,s.id)||canKelthuzadCastAbility(e,s.id)).map(s=>{
     if(AESARA_RULES[s.id])return aesaraManualSkill(game,e,s);
-    const alchemy=!!ALCHEMIST_ACTIVE_RULES[s.id],family=NAGA_ACTIVE_RULES[s.id]?.active?NAGA_ACTIVE_RULES[s.id]:EARTH_LORD_RULES[s.id]??MAIEV_RULES[s.id]??NERZHUL_RULES[s.id]??SAVIS_RULES[s.id]??NOZDORMU_RULES[s.id]??ALEXSTRASZA_RULES[s.id]??ANDUIN_RULES[s.id]??GULDAN_RULES[s.id]??MALYGOS_RULES[s.id]??PHOENIX_ACTIVE_RULES[s.id]??MUSKETEER_RULES[s.id]??KODO_RULES[s.id]??STORM_LIZARD_RULES[s.id]??LIVING_BOMB_RULES[s.id]??BLADEMASTER_RULES[s.id]??BANDIT_LORD_RULES[s.id]??MALFURION_RULES[s.id]??BRIGHT_ARTHAS_RULES[s.id]??DARK_ARTHAS_RULES[s.id]??VASHJ_RULES[s.id]??LICH_KING_RULES[s.id]??GARROSH_ACTIVE_RULES[s.id]??ILLIDAN_ACTIVE_RULES[s.id]??ICE_HERO_RULES[s.id]??TROLL_ACTIVE_RULES[s.id]??KELTHUZAD_ACTIVE_RULES[s.id]??(s.id==='A0ZO'?KELTHUZAD_RULES.A0ZO:null),shared=!!family,st=e.skillStates?.[s.id]??{},remaining=Math.max(0,(st[alchemy?'manualReadyAt':'readyAt']??0)-game.state.time),autoRemaining=shared?Math.max(0,(st.readyAt??0)-game.state.time):Math.max(0,(st[alchemy?'readyAt':'yseraAutoReadyAt']??0)-game.state.time);
-    const reason=e.hp<=.405?'单位已阵亡':e.status?.sourceHidden||e.status?.yseraHidden||e.status?.yseraPaused||e.status?.sourcePaused||e.status?.illidanPaused||e.status?.stunUntil>game.state.time||e.status?.cycloneUntil>game.state.time||(EARTH_LORD_RULES[s.id]?.active||MAIEV_RULES[s.id]?.active||NERZHUL_RULES[s.id]?.active||SAVIS_RULES[s.id]?.active||NOZDORMU_RULES[s.id]?.active||ALEXSTRASZA_RULES[s.id]?.active||MUSKETEER_RULES[s.id]?.active||PHOENIX_ACTIVE_RULES[s.id]?.active||MALYGOS_RULES[s.id]?.active||GULDAN_RULES[s.id]?.active||ANDUIN_RULES[s.id]?.active)&&e.status?.silenceUntil>game.state.time?'单位当前无法施法':remaining>1e-8?'技能冷却中':e.mana<s.manaCost?'魔法不足':'';
+    const alchemy=!!ALCHEMIST_ACTIVE_RULES[s.id],family=NAGA_ACTIVE_RULES[s.id]?.active?NAGA_ACTIVE_RULES[s.id]:DEATHWING_HUMAN_RULES[s.id]??DEATHWING_DRAGON_RULES[s.id]??EARTH_LORD_RULES[s.id]??MAIEV_RULES[s.id]??NERZHUL_RULES[s.id]??SAVIS_RULES[s.id]??NOZDORMU_RULES[s.id]??ALEXSTRASZA_RULES[s.id]??ANDUIN_RULES[s.id]??GULDAN_RULES[s.id]??MALYGOS_RULES[s.id]??PHOENIX_ACTIVE_RULES[s.id]??MUSKETEER_RULES[s.id]??KODO_RULES[s.id]??STORM_LIZARD_RULES[s.id]??LIVING_BOMB_RULES[s.id]??BLADEMASTER_RULES[s.id]??BANDIT_LORD_RULES[s.id]??MALFURION_RULES[s.id]??BRIGHT_ARTHAS_RULES[s.id]??DARK_ARTHAS_RULES[s.id]??VASHJ_RULES[s.id]??LICH_KING_RULES[s.id]??GARROSH_ACTIVE_RULES[s.id]??ILLIDAN_ACTIVE_RULES[s.id]??ICE_HERO_RULES[s.id]??TROLL_ACTIVE_RULES[s.id]??KELTHUZAD_ACTIVE_RULES[s.id]??(s.id==='A0ZO'?KELTHUZAD_RULES.A0ZO:null),shared=!!family,st=e.skillStates?.[s.id]??{},remaining=Math.max(0,(st[alchemy?'manualReadyAt':'readyAt']??0)-game.state.time),autoRemaining=shared?Math.max(0,(st.readyAt??0)-game.state.time):Math.max(0,(st[alchemy?'readyAt':'yseraAutoReadyAt']??0)-game.state.time);
+    const reason=e.hp<=.405?'单位已阵亡':e.status?.sourceHidden||e.status?.yseraHidden||e.status?.yseraPaused||e.status?.sourcePaused||e.status?.illidanPaused||e.status?.stunUntil>game.state.time||e.status?.cycloneUntil>game.state.time||(DEATHWING_HUMAN_RULES[s.id]?.active||DEATHWING_DRAGON_RULES[s.id]?.active||EARTH_LORD_RULES[s.id]?.active||MAIEV_RULES[s.id]?.active||NERZHUL_RULES[s.id]?.active||SAVIS_RULES[s.id]?.active||NOZDORMU_RULES[s.id]?.active||ALEXSTRASZA_RULES[s.id]?.active||MUSKETEER_RULES[s.id]?.active||PHOENIX_ACTIVE_RULES[s.id]?.active||MALYGOS_RULES[s.id]?.active||GULDAN_RULES[s.id]?.active||ANDUIN_RULES[s.id]?.active)&&e.status?.silenceUntil>game.state.time?'单位当前无法施法':remaining>1e-8?'技能冷却中':e.mana<s.manaCost?'魔法不足':'';
     return {id:s.id,name:s.name,status:s.status,manaCost:s.manaCost,manaCostKnown:!BANDIT_LORD_RULES[s.id]?.active&&!KODO_RULES[s.id]?.active,cooldown:s.cooldown,remaining,autoRemaining,cooldownMode:shared?'shared_native':'independent',targetKind:family?family.targetKind:s.id==='A2YA'?'point':s.id==='A2YD'?'enemy':'none',range:s.range,radius:s.radius,canStart:!reason,reason};
   });
 }
@@ -902,6 +907,8 @@ export function castManualSourceSkill(game,e,id,params={}){
   if(s.targetKind==='enemy'&&(!params.target||params.target.hp<=0||params.target.side===e.side||params.target.battleTeam!==e.battleTeam||scriptInvulnerable(params.target)))return {ok:false,message:'请选择可攻击的敌人'};
   if(s.targetKind==='unit'&&(!params.target||params.target.hp<=0||params.target.battleTeam!==e.battleTeam))return {ok:false,message:'请选择有效单位目标'};
   if(params.point&&s.targetKind==='point'||params.target&&s.targetKind==='enemy'){const p=params.point??pos(params.target),v=pos(e);if(dist(v,p)>1e-8)e.facing=Math.atan2(p.y-v.y,p.x-v.x)*180/Math.PI;}
+  if(canDeathwingHumanCast(e,id))return castDeathwingHuman(game,e,id,params,heroScriptApi);
+  if(canDeathwingDragonCast(e,id))return castDeathwingDragon(game,e,id,params,heroScriptApi);
   if(canEarthLordCast(e,id))return castEarthLord(game,e,id,params,heroScriptApi);
   if(canMaievCast(e,id))return castMaiev(game,e,id,params,heroScriptApi);
   if(canNerzhulCast(e,id))return castNerzhul(game,e,id,params,heroScriptApi);
@@ -957,6 +964,8 @@ export function tickSourceScriptJobs(game,dt=0){
   // At a coarse frame crossing both deadlines, native return at +2.00 must
   // precede the script's +2.01 ability removal on that same retained handle.
   tickReincarnations(game);
+  tickDeathwingHumanJobs(game,heroScriptApi);
+  tickDeathwingDragonJobs(game,heroScriptApi);
   tickSapperTimers(game,heroScriptApi);
   for(const e of game.state.entities)if(e.status?.ensnareOriginalTargetType&&e.status.ensnareGroundedUntil<=game.state.time){e.targetType=e.status.ensnareOriginalTargetType;delete e.status.ensnareOriginalTargetType;delete e.status.ensnareGroundedUntil;}
   tickSourceAuraRules(game,{matchesTargets});
@@ -971,6 +980,7 @@ export function tickSourceScriptJobs(game,dt=0){
   tickSavisJobs(game,heroScriptApi);
   const now=game.state.time,remaining=[];
   for(const job of game.state.sourceSkillJobs??[]){
+    if(job.type?.startsWith('deathwing_')){if(!job.done)remaining.push(job);continue;}
     if(job.type?.startsWith('earth_')){if(!job.done)remaining.push(job);continue;}
     if(job.type?.startsWith('maiev_')){if(!job.done)remaining.push(job);continue;}
     if(job.type?.startsWith('nerzhul_')){if(!job.done)remaining.push(job);continue;}

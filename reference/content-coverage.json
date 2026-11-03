@@ -1,6 +1,6 @@
 {
   "sourceVersion": "v14.1A5",
-  "skillImplementationRevision": "v14-content-20261104-v71-1",
+  "skillImplementationRevision": "v14-content-20261104-v73-1",
   "units": 534,
   "mercenaryRecords": 60,
   "mainWaves": 35,
@@ -33,7 +33,10 @@
     "u011",
     "u04D",
     "u04E",
-    "e01I"
+    "e01I",
+    "h0PE",
+    "h0V0",
+    "h0XG"
   ],
   "playerRuntimeAbilities": [
     {
@@ -340,12 +343,14 @@
     {
       "sourceRawcode": "e00O",
       "abilityIds": [
-        "A0OZ"
+        "A0OZ",
+        "A0YI"
       ]
     },
     {
       "sourceRawcode": "e008",
       "abilityIds": [
+        "A0YG",
         "A1UL",
         "A122",
         "A1CV",
@@ -472,10 +477,10 @@
   "playerBuildingCommandCarriers": 411,
   "playerSkills": {
     "counts": {
-      "implemented": 411,
-      "partial": 188,
+      "implemented": 410,
+      "partial": 194,
       "marker": 40,
-      "unresolved": 50
+      "unresolved": 48
     },
     "abilities": [
       {
@@ -4102,7 +4107,7 @@
       {
         "rawcode": "A0YE",
         "name": "沸腾血脉",
-        "status": "implemented",
+        "status": "partial",
         "kind": "aura_regen",
         "unitRawcodes": [
           "h0PD",
@@ -4113,8 +4118,8 @@
       {
         "rawcode": "A0YF",
         "name": "上古之神之力",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "deathwing_source",
         "unitRawcodes": [
           "h0PD",
           "h0UZ",
@@ -4122,14 +4127,43 @@
         ]
       },
       {
+        "rawcode": "A0YG",
+        "name": "上古之神之力",
+        "status": "partial",
+        "kind": "deathwing_source",
+        "unitRawcodes": [
+          "e008"
+        ]
+      },
+      {
         "rawcode": "A0YH",
         "name": "死亡降临",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "deathwing_source",
         "unitRawcodes": [
           "h0PD",
           "h0UZ",
           "h0XF"
+        ]
+      },
+      {
+        "rawcode": "A0YI",
+        "name": "Slow",
+        "status": "partial",
+        "kind": "deathwing_source",
+        "unitRawcodes": [
+          "e00O"
+        ]
+      },
+      {
+        "rawcode": "A0YJ",
+        "name": "撕裂大地",
+        "status": "partial",
+        "kind": "deathwing_source",
+        "unitRawcodes": [
+          "h0PE",
+          "h0V0",
+          "h0XG"
         ]
       },
       {
@@ -4139,8 +4173,11 @@
         "kind": "aura_damage",
         "unitRawcodes": [
           "h0PD",
+          "h0PE",
           "h0UZ",
-          "h0XF"
+          "h0V0",
+          "h0XF",
+          "h0XG"
         ]
       },
       {
@@ -4150,8 +4187,11 @@
         "kind": "aura_regen",
         "unitRawcodes": [
           "h0PD",
+          "h0PE",
           "h0UZ",
-          "h0XF"
+          "h0V0",
+          "h0XF",
+          "h0XG"
         ]
       },
       {
@@ -4161,8 +4201,11 @@
         "kind": "aura_speed",
         "unitRawcodes": [
           "h0PD",
+          "h0PE",
           "h0UZ",
-          "h0XF"
+          "h0V0",
+          "h0XF",
+          "h0XG"
         ]
       },
       {
@@ -4172,8 +4215,11 @@
         "kind": "aura_armor",
         "unitRawcodes": [
           "h0PD",
+          "h0PE",
           "h0UZ",
-          "h0XF"
+          "h0V0",
+          "h0XF",
+          "h0XG"
         ]
       },
       {
@@ -4183,8 +4229,11 @@
         "kind": "native_barrage",
         "unitRawcodes": [
           "h0PD",
+          "h0PE",
           "h0UZ",
-          "h0XF"
+          "h0V0",
+          "h0XF",
+          "h0XG"
         ]
       },
       {
@@ -7578,10 +7627,10 @@
   },
   "battleSkills": {
     "counts": {
-      "implemented": 460,
-      "partial": 197,
+      "implemented": 459,
+      "partial": 203,
       "marker": 53,
-      "unresolved": 64
+      "unresolved": 62
     },
     "abilities": [
       {
@@ -11681,7 +11730,7 @@
       {
         "rawcode": "A0YE",
         "name": "沸腾血脉",
-        "status": "implemented",
+        "status": "partial",
         "kind": "aura_regen",
         "unitRawcodes": [
           "h0PD",
@@ -11692,8 +11741,8 @@
       {
         "rawcode": "A0YF",
         "name": "上古之神之力",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "deathwing_source",
         "unitRawcodes": [
           "h0PD",
           "h0UZ",
@@ -11701,14 +11750,43 @@
         ]
       },
       {
+        "rawcode": "A0YG",
+        "name": "上古之神之力",
+        "status": "partial",
+        "kind": "deathwing_source",
+        "unitRawcodes": [
+          "e008"
+        ]
+      },
+      {
         "rawcode": "A0YH",
         "name": "死亡降临",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "deathwing_source",
         "unitRawcodes": [
           "h0PD",
           "h0UZ",
           "h0XF"
+        ]
+      },
+      {
+        "rawcode": "A0YI",
+        "name": "Slow",
+        "status": "partial",
+        "kind": "deathwing_source",
+        "unitRawcodes": [
+          "e00O"
+        ]
+      },
+      {
+        "rawcode": "A0YJ",
+        "name": "撕裂大地",
+        "status": "partial",
+        "kind": "deathwing_source",
+        "unitRawcodes": [
+          "h0PE",
+          "h0V0",
+          "h0XG"
         ]
       },
       {
@@ -11718,8 +11796,11 @@
         "kind": "aura_damage",
         "unitRawcodes": [
           "h0PD",
+          "h0PE",
           "h0UZ",
-          "h0XF"
+          "h0V0",
+          "h0XF",
+          "h0XG"
         ]
       },
       {
@@ -11729,8 +11810,11 @@
         "kind": "aura_regen",
         "unitRawcodes": [
           "h0PD",
+          "h0PE",
           "h0UZ",
-          "h0XF"
+          "h0V0",
+          "h0XF",
+          "h0XG"
         ]
       },
       {
@@ -11740,8 +11824,11 @@
         "kind": "aura_speed",
         "unitRawcodes": [
           "h0PD",
+          "h0PE",
           "h0UZ",
-          "h0XF"
+          "h0V0",
+          "h0XF",
+          "h0XG"
         ]
       },
       {
@@ -11751,8 +11838,11 @@
         "kind": "aura_armor",
         "unitRawcodes": [
           "h0PD",
+          "h0PE",
           "h0UZ",
-          "h0XF"
+          "h0V0",
+          "h0XF",
+          "h0XG"
         ]
       },
       {
@@ -11762,8 +11852,11 @@
         "kind": "native_barrage",
         "unitRawcodes": [
           "h0PD",
+          "h0PE",
           "h0UZ",
-          "h0XF"
+          "h0V0",
+          "h0XF",
+          "h0XG"
         ]
       },
       {
@@ -15774,6 +15867,7 @@
     }
   ],
   "remainingSourceGaps": [
+    "死亡之翼A0YF前7个敌方缠绕请求、合法目标3秒按命令最大生命5%每秒、A0YE受伤前0至10级回复、A0YH第20波内死亡3秒变龙及500范围前11敌99999、龙形每秒400治疗/三次200喷火、A0YJ九步裂隙/末端爆炸/25%抵消/阈值反击/击杀攻速已接入。原生AEer即时命令与帧积分、ANfd缺失伤害、共享马甲跨族仲裁、地图坐标/存活玩家映射等partial；A116/A0YV仍缺明确字段，见deathwing-evidence.json。",
     "大地主宰A17H完工计数/布尔分支及出战等级、A17I/J真实原生光环、A17N九次20跟随伤害、A17K入圈实数20%授予与A18C两秒同句柄复生已接入。A17L固定25%生命阈值、0秒首跳/0.04秒步进及55%生命恢复保留；原坐标映射Web王前支援点。原生生命事件与致死顺序、默认ACrn继承/多复生仲裁/资源恢复、未实例化对象和原版阶段连边仍partial，见earth-lord-evidence.json。",
     "玛维刀阵149次5.4跟随伤害/死亡清理、受伤200→224路径闪烁/8秒冷却、暗影突袭75+两次10的8秒宿主适配与手动13蓝天神召唤已接入。脚本A1TW的waterelemental错配保留失败，A1TY缺耗魔不免费转换尸体。暗影突袭分阶段类型/衰减/刷新、天神重施策略、原生AI/导航仍partial，见maiev-evidence.json。",
     "耐奥祖怨毒固定300范围五次55/82.5/110、死亡之兆延迟1秒以尸体当时位置600范围105/157.5/525、u04D死亡预选目标后五次80及完工/部署等级已接入。诅咒仅e008/A1UL命令请求，缺失原生参数不猜伤害；仪式枯骨手动按4/6/10随机总数生成且无1秒生命。原生召唤时序/分布/AI入口、诅咒结算与原版阶段连边仍partial，见nerzhul-evidence.json。",

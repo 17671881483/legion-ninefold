@@ -35,9 +35,11 @@ export function runMainUnitDeath(g,dead,killer,api){
     if(isV14(dead))api.classDeath(g,dead,killer,true);
     // Independent if at 42006 precedes the fire/bone-dragon elseif chain.
     if(isV14(killer))api.nightmareKill?.(g,killer);
+    if(isV14(killer))api.deathwingKill?.(g,dead,killer);
     if(isV14(dead))api.banditDeath?.(g,dead);
-    api.unstableAlchemyDeath?.(g,dead,killer);
     if(isV14(dead))api.nozdormuDeath?.(g,dead);
+    api.unstableAlchemyDeath?.(g,dead,killer);
+    if(isV14(dead))api.deathwingRevive?.(g,dead,killer);
     if(isV14(dead))api.yseraAwakening(g,dead);
     if(isV14(killer)&&has(killer,'A0HW')){
       const amount=4+dead.maxHp*.02;

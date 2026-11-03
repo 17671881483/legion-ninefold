@@ -10,7 +10,7 @@ const playerBuildingCommands=current.filter(u=>u.buildingAbilityIds?.includes('A
 const playerBuildingRuleCarriers=current.filter(u=>u.buildingAbilityIds?.some(id=>['A0RF','A0JE','A1BL','A1PK','A170','A1UH'].includes(id))).map(u=>({...u,abilityIds:u.buildingAbilityIds.filter(id=>['A0RF','A0JE','A1BL','A1PK','A170','A1UH'].includes(id))}));
 // This form is created by YseraAwakening at runtime, so it is not a separate
 // build-menu record. Its skills still belong to the player's combat coverage.
-const playerRuntimeForms=['h0YO','h0UD','h0UE','h2AE','n06V','n06W','h0CZ','h0CL','n07J','h03E','h0V2','h03K','h0SU','n0SD','h2AC','h0VY','h0VZ','e01G','h0R0','h0QT','u011','u04D','u04E','e01I'].map(code=>UNIT_TEMPLATES[code]);
+const playerRuntimeForms=['h0YO','h0UD','h0UE','h2AE','n06V','n06W','h0CZ','h0CL','n07J','h03E','h0V2','h03K','h0SU','n0SD','h2AC','h0VY','h0VZ','e01G','h0R0','h0QT','u011','u04D','u04E','e01I','h0PE','h0V0','h0XG'].map(code=>UNIT_TEMPLATES[code]);
 // Source callbacks or building-only icons expose these auxiliary abilities.
 // Count their runtime rules even when the combat ability list omits the icon.
 const playerRuntimeAbilities=[
@@ -47,8 +47,8 @@ const playerRuntimeAbilities=[
   {sourceRawcode:'h0UQ',abilityIds:['A1CK','A1OE']},
   {sourceRawcode:'h0UD',abilityIds:['A1CP']},
   {sourceRawcode:'h2AE',abilityIds:['A1CP']},
-  {sourceRawcode:'e00O',abilityIds:['A0OZ']},
-  {sourceRawcode:'e008',abilityIds:['A1UL','A122','A1CV','A1CW','A0IB','A0I5','A0I7','A0J8','A0J9','A0JC','A0JD']},
+  {sourceRawcode:'e00O',abilityIds:['A0OZ','A0YI']},
+  {sourceRawcode:'e008',abilityIds:['A0YG','A1UL','A122','A1CV','A1CW','A0IB','A0I5','A0I7','A0J8','A0J9','A0JC','A0JD']},
   {sourceRawcode:'h0UG',abilityIds:['A1CG']},
   {sourceRawcode:'h0SY',abilityIds:['A1BD','A1BE','A1BF','A1BH']},
   {sourceRawcode:'h0SN',abilityIds:['A19Z']},
@@ -83,6 +83,7 @@ const result={
   battleSkills:collect([...current,...playerBuildingCommands,...playerBuildingRuleCarriers,...playerRuntimeForms,...playerRuntimeAbilities,...MERCENARIES,...WAVES,...specialCodes.map(c=>UNIT_TEMPLATES[c])]),
   sourceOnlyCombatForms:[{combatRawcode:'h0JR',buildingRawcode:'n00S',status:'entry-unresolved',evidence:'war3map.j:17544-17545 maps forms; line3644 ban dialog; 48355 barracks egg marker and 48750 monthly record do not provide acquisition',skills:collect([{...UNIT_TEMPLATES.h0JR,abilityIds:[...UNIT_TEMPLATES.h0JR.abilityIds,'A0J2','A0J3']}])},{combatRawcode:'h0VQ',buildingRawcode:'n07U',status:'entry-unresolved',evidence:'war3map.j:17436-17437 maps forms; line3638 ban limit1; no source creation/recipe/upgrade entry found in packet',skills:collect([{...UNIT_TEMPLATES.h0VQ,abilityIds:[...UNIT_TEMPLATES.h0VQ.abilityIds,'A1QI','A1D6']}])}],
   remainingSourceGaps:[
+    '死亡之翼A0YF前7个敌方缠绕请求、合法目标3秒按命令最大生命5%每秒、A0YE受伤前0至10级回复、A0YH第20波内死亡3秒变龙及500范围前11敌99999、龙形每秒400治疗/三次200喷火、A0YJ九步裂隙/末端爆炸/25%抵消/阈值反击/击杀攻速已接入。原生AEer即时命令与帧积分、ANfd缺失伤害、共享马甲跨族仲裁、地图坐标/存活玩家映射等partial；A116/A0YV仍缺明确字段，见deathwing-evidence.json。',
     '大地主宰A17H完工计数/布尔分支及出战等级、A17I/J真实原生光环、A17N九次20跟随伤害、A17K入圈实数20%授予与A18C两秒同句柄复生已接入。A17L固定25%生命阈值、0秒首跳/0.04秒步进及55%生命恢复保留；原坐标映射Web王前支援点。原生生命事件与致死顺序、默认ACrn继承/多复生仲裁/资源恢复、未实例化对象和原版阶段连边仍partial，见earth-lord-evidence.json。',
     '玛维刀阵149次5.4跟随伤害/死亡清理、受伤200→224路径闪烁/8秒冷却、暗影突袭75+两次10的8秒宿主适配与手动13蓝天神召唤已接入。脚本A1TW的waterelemental错配保留失败，A1TY缺耗魔不免费转换尸体。暗影突袭分阶段类型/衰减/刷新、天神重施策略、原生AI/导航仍partial，见maiev-evidence.json。',
     '耐奥祖怨毒固定300范围五次55/82.5/110、死亡之兆延迟1秒以尸体当时位置600范围105/157.5/525、u04D死亡预选目标后五次80及完工/部署等级已接入。诅咒仅e008/A1UL命令请求，缺失原生参数不猜伤害；仪式枯骨手动按4/6/10随机总数生成且无1秒生命。原生召唤时序/分布/AI入口、诅咒结算与原版阶段连边仍partial，见nerzhul-evidence.json。',

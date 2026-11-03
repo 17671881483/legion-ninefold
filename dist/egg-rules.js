@@ -529,7 +529,8 @@ export const EGG_REQUIREMENTS = Object.freeze({
     ]
   },
   "R06U": {
-    "text": "曾完成过以下任一组：青龙；或青龙（外观形态记录）＋冰霜骨龙＋火龙；或灾炎之龙（外观形态记录）；完成记录保留",
+    "text": "曾实际完成以下任一组：青龙h0BP；或青龙外观n05M＋冰霜骨龙h0D2＋火龙h01B；或灾炎之龙h11B/h0R8。按原始完成记录永久保留，外观不替代其他原始单位",
+    "completionMode": "raw",
     "status": "confirmed",
     "sourceLines": [
       28646

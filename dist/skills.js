@@ -1,3 +1,4 @@
+import {SIEGE_TEAM_RULE,siegeTeamAttackDamage} from './siege-team-rules.js';
 import {VETERAN_RULE} from './veteran-rules.js';
 import {TIRION_RULES,initializeTirionDeployment,tirionAttackDamage,tirionKillBranch,tirionBondDamage,tickTirionJob,tirionAttackIssued,tirionHolyDamage} from './tirion-rules.js';
 import {KODO_RULES,canKodoCast,castKodo,kodoAttackOrders} from './kodo-rules.js';
@@ -46,7 +47,7 @@ import { closestWalkable, isWalkable } from './layout.js';
 import { GARROSH_ACTIVE_RULES, GARROSH_PASSIVE_RULES, canGarroshCastAbility, castGarroshAbility, tryGarroshAutoCast, garroshActiveAfterDamage, sourceGarroshActiveDeath, tickGarroshActiveJob } from './garrosh-active-rules.js';
 import { ILLIDAN_RULES, ILLIDAN_ACTIVE_RULES, canIllidanCastAbility, castIllidanAbility, registerIllidanSource, tickIllidanSource, illidanOnAttackHit, tryIllidanAutoCast, illidanAfterDamage, sourceIllidanDeath, tickIllidanJob, isIllidanJobType } from './illidan-rules.js';
 
-export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261103-v49-1';
+export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261103-v50-1';
 
 // Values come from resolved object fields. Empty fields remain empty: a missing
 // native default is reported, rather than replacing it with tooltip numbers.
@@ -233,6 +234,7 @@ function compile(id,version='5.0dJF') {
   if(version==='v14.1A5'&&LIVING_BOMB_RULES[id]){const r=LIVING_BOMB_RULES[id];Object.assign(s,{kind:'living_bomb_source',status:r.status,runtimeImplemented:r.status==='partial',effectText:r.description+`【待核定：${r.partial}】`});}
   if(version==='v14.1A5'&&KODO_RULES[id]){const r=KODO_RULES[id];Object.assign(s,{kind:'kodo_source',status:r.status,runtimeImplemented:true,effectText:r.description+`【待核定：${r.partial}】`});}
   if(version==='v14.1A5'&&id==='A113')Object.assign(s,{kind:'veteran_source',status:VETERAN_RULE.status,runtimeImplemented:true,effectText:VETERAN_RULE.description+'【待核定：'+VETERAN_RULE.partial+'】'});
+  if(version==='v14.1A5'&&id==='A20C')Object.assign(s,{kind:'siege_fragments_source',status:SIEGE_TEAM_RULE.status,runtimeImplemented:true,effectText:SIEGE_TEAM_RULE.description+'【待核定：'+SIEGE_TEAM_RULE.partial+'】'});
   if(version==='v14.1A5'&&TIRION_RULES[id]){const r=TIRION_RULES[id];Object.assign(s,{kind:r.nativeKind?s.kind:'tirion_source',status:r.status,runtimeImplemented:r.status==='partial',effectText:r.description+(r.partial?`【待核定：${r.partial}】`:'' )});}
   if(version==='v14.1A5'&&MUMMY_RULES[id]){const r=MUMMY_RULES[id];Object.assign(s,{kind:'mummy_source',status:r.status,runtimeImplemented:true,effectText:r.description+`【待核定：${r.partial}】`});}
   if(version==='v14.1A5'&&BRONZE_DRAGON_RULES[id]){const r=BRONZE_DRAGON_RULES[id];Object.assign(s,{kind:r.nativeKind?s.kind:'bronze_dragon_source',status:r.status,runtimeImplemented:true,effectText:r.description+`【待核定：${r.partial}】`});}
@@ -588,7 +590,7 @@ export function modifyIncoming(game,target,damage,attacker,options={}) {
 export function sourceClassAttackDamageEvent(game,target,attacker,options={},amount=0){
   if(!isV14(attacker)||options.spell&&!options.weapon||attacker.status?.sourceNativeAttackBusy)return;
   (attacker.status??={}).sourceNativeAttackBusy=true;
-  try{darkArthasAttackDamage(attacker,amount);vashjOnAttackDamage(game,attacker,target,heroScriptApi);blademasterAttack(game,attacker,heroScriptApi);sourceClassOnAttackDamage(game,attacker,target,heroScriptApi);banditAttackOrders(game,attacker,target,heroScriptApi);amount=bronzeAttackDamage(game,attacker,target,amount,heroScriptApi);kodoAttackOrders(game,attacker,target,heroScriptApi);desertLizardAttackDamage(game,attacker,heroScriptApi);stormLizardAttackDamage(game,attacker,target,heroScriptApi);huskarAttackDamage(game,attacker,target,amount,heroScriptApi);const manaBranch=destroyerAttackDamage(game,attacker,heroScriptApi);const lateBranch=taurenAttackDamage(game,attacker,target,heroScriptApi,manaBranch?'A0IN':null)??(manaBranch?'A0IN':null);tirionAttackDamage(game,attacker,target,amount,heroScriptApi,lateBranch);return amount;}finally{attacker.status.sourceNativeAttackBusy=false;}
+  try{darkArthasAttackDamage(attacker,amount);blademasterAttack(game,attacker,heroScriptApi);siegeTeamAttackDamage(game,attacker,target,heroScriptApi);vashjOnAttackDamage(game,attacker,target,heroScriptApi);sourceClassOnAttackDamage(game,attacker,target,heroScriptApi);banditAttackOrders(game,attacker,target,heroScriptApi);amount=bronzeAttackDamage(game,attacker,target,amount,heroScriptApi);kodoAttackOrders(game,attacker,target,heroScriptApi);desertLizardAttackDamage(game,attacker,heroScriptApi);stormLizardAttackDamage(game,attacker,target,heroScriptApi);huskarAttackDamage(game,attacker,target,amount,heroScriptApi);const manaBranch=destroyerAttackDamage(game,attacker,heroScriptApi);const lateBranch=taurenAttackDamage(game,attacker,target,heroScriptApi,manaBranch?'A0IN':null)??(manaBranch?'A0IN':null);tirionAttackDamage(game,attacker,target,amount,heroScriptApi,lateBranch);return amount;}finally{attacker.status.sourceNativeAttackBusy=false;}
 }
 export function initializeSourceClassCombat(game,building,entity){
   if(isV14(entity)){initializeTirionDeployment(game,building,entity,heroScriptApi);initializeMummyDeployment(game,building,entity);initializeBronzeDeployment(game,building,entity);initializeBlademaster(game,building,entity);initializeNightmareDeployment(game,entity);initializeBrightArthasDeployment(game,building,entity);initializeLichKingDeployment(game,entity);initializeVashjDeployment(game,building,entity);return initializeSourceClassDeployment(game,building,entity,heroScriptApi);}

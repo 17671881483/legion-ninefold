@@ -1,6 +1,6 @@
 {
   "sourceVersion": "v14.1A5",
-  "skillImplementationRevision": "v14-content-20261103-v49-1",
+  "skillImplementationRevision": "v14-content-20261103-v50-1",
   "units": 534,
   "mercenaryRecords": 60,
   "mainWaves": 35,
@@ -7195,9 +7195,9 @@
   "battleSkills": {
     "counts": {
       "implemented": 455,
-      "partial": 133,
+      "partial": 134,
       "marker": 47,
-      "unresolved": 110
+      "unresolved": 109
     },
     "abilities": [
       {
@@ -14307,8 +14307,8 @@
       {
         "rawcode": "A20C",
         "name": "碎片攻击",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "siege_fragments_source",
         "unitRawcodes": [
           "h0XK",
           "h0XL"

@@ -1,0 +1,385 @@
+{
+  "source": {
+    "file": "reference/v14-source/raw_extracted/war3map.j",
+    "sha256": "e66c55b3b25b185c991be5613e21fbf5b2d598f3cc40f2f8cd01c23bcb828250",
+    "lineEncoding": "latin1/LF"
+  },
+  "sourceEvidence": [
+    {
+      "line": 29786,
+      "text": "function SelectRange takes unit Pf,real FF,real FG,real Px returns group"
+    },
+    {
+      "line": 29787,
+      "text": "local group DG=CreateGroup()"
+    },
+    {
+      "line": 29788,
+      "text": "local group Om=CreateGroup()"
+    },
+    {
+      "line": 29789,
+      "text": "local unit D6=null"
+    },
+    {
+      "line": 29790,
+      "text": "call GroupEnumUnitsInRange(DG,FF,FG,Px,null)"
+    },
+    {
+      "line": 29791,
+      "text": "loop"
+    },
+    {
+      "line": 29792,
+      "text": "set D6=FirstOfGroup(DG)"
+    },
+    {
+      "line": 29793,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 29794,
+      "text": "if IsUnitEnemy(D6,GetOwningPlayer(Pf)) and not IsUnitType(D6,UNIT_TYPE_DEAD) and GetUnitAbilityLevel(D6,$4176756C)==0 then"
+    },
+    {
+      "line": 29795,
+      "text": "call GroupAddUnit(Om,D6)"
+    },
+    {
+      "line": 29796,
+      "text": "endif"
+    },
+    {
+      "line": 29797,
+      "text": "call GroupRemoveUnit(DG,D6)"
+    },
+    {
+      "line": 29798,
+      "text": "endloop"
+    },
+    {
+      "line": 29799,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 29800,
+      "text": "set DG=null"
+    },
+    {
+      "line": 29801,
+      "text": "set D6=null"
+    },
+    {
+      "line": 29802,
+      "text": "set Pf=null"
+    },
+    {
+      "line": 29803,
+      "text": "set Py=Om"
+    },
+    {
+      "line": 29804,
+      "text": "set Om=null"
+    },
+    {
+      "line": 29805,
+      "text": "return Py"
+    },
+    {
+      "line": 29806,
+      "text": "endfunction"
+    },
+    {
+      "line": 42252,
+      "text": "function Trig_New_UnitAttackActions takes nothing returns boolean"
+    },
+    {
+      "line": 42253,
+      "text": "local unit Qf=GetTriggerUnit()"
+    },
+    {
+      "line": 42254,
+      "text": "local unit i=GetEventDamageSource()"
+    },
+    {
+      "line": 42255,
+      "text": "local integer BF=GetUnitTypeId(i)"
+    },
+    {
+      "line": 42256,
+      "text": "local integer b9=$6E305344"
+    },
+    {
+      "line": 42257,
+      "text": "local integer YY=0"
+    },
+    {
+      "line": 42258,
+      "text": "local unit Ki=null"
+    },
+    {
+      "line": 42259,
+      "text": "local unit D6=null"
+    },
+    {
+      "line": 42260,
+      "text": "local group Uz=null"
+    },
+    {
+      "line": 42261,
+      "text": "local real P8=0"
+    },
+    {
+      "line": 42262,
+      "text": "local unit cB=null"
+    },
+    {
+      "line": 42263,
+      "text": "local boolexpr Cd"
+    },
+    {
+      "line": 42264,
+      "text": "local timer DK"
+    },
+    {
+      "line": 42265,
+      "text": "local real FF"
+    },
+    {
+      "line": 42266,
+      "text": "local real FG"
+    },
+    {
+      "line": 42267,
+      "text": "local integer y=0"
+    },
+    {
+      "line": 42268,
+      "text": "local player h"
+    },
+    {
+      "line": 42269,
+      "text": "local effect DE"
+    },
+    {
+      "line": 42270,
+      "text": "if YDWEIsEventAttackDamage() and not LoadBoolean(O,GetHandleId(i),StringHash(\"Attack\")) then"
+    },
+    {
+      "line": 42271,
+      "text": "call SaveBoolean(O,GetHandleId(i),StringHash(\"Attack\"),true)"
+    },
+    {
+      "line": 42285,
+      "text": "if GetUnitAbilityLevel(i,$41315145)>0 then"
+    },
+    {
+      "line": 42286,
+      "text": "call BlademasterCriticalStrike(i)"
+    },
+    {
+      "line": 42287,
+      "text": "endif"
+    },
+    {
+      "line": 42288,
+      "text": "if GetUnitAbilityLevel(i,$41315130)>0 then"
+    },
+    {
+      "line": 42289,
+      "text": "call MalygosAtk(i,Qf)"
+    },
+    {
+      "line": 42290,
+      "text": "endif"
+    },
+    {
+      "line": 42291,
+      "text": "if GetUnitAbilityLevel(i,$41323043)>0 then"
+    },
+    {
+      "line": 42292,
+      "text": "set Uz=SelectRange(i,GetUnitX(Qf),GetUnitY(Qf),400)"
+    },
+    {
+      "line": 42293,
+      "text": "set YY=0"
+    },
+    {
+      "line": 42294,
+      "text": "if CountUnitsInGroup(Uz)>0 and GetRandomPercentageBJ()<=25 then"
+    },
+    {
+      "line": 42295,
+      "text": "set YY=GetRandomInt(1,CountUnitsInGroup(Uz))"
+    },
+    {
+      "line": 42296,
+      "text": "endif"
+    },
+    {
+      "line": 42297,
+      "text": "set y=0"
+    },
+    {
+      "line": 42298,
+      "text": "loop"
+    },
+    {
+      "line": 42299,
+      "text": "set D6=FirstOfGroup(Uz)"
+    },
+    {
+      "line": 42300,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 42301,
+      "text": "call GroupRemoveUnit(Uz,D6)"
+    },
+    {
+      "line": 42302,
+      "text": "set y=y+1"
+    },
+    {
+      "line": 42303,
+      "text": "call UnitDamageTargetBJ(i,D6,105,ATTACK_TYPE_CHAOS,DAMAGE_TYPE_UNIVERSAL)"
+    },
+    {
+      "line": 42304,
+      "text": "if y==YY then"
+    },
+    {
+      "line": 42305,
+      "text": "call UnitDamageTargetBJ(i,D6,420,ATTACK_TYPE_CHAOS,DAMAGE_TYPE_UNIVERSAL)"
+    },
+    {
+      "line": 42306,
+      "text": "call DestroyEffect(AddSpecialEffect(\"Objects\\\\Spawnmodels\\\\Other\\\\NeutralBuildingExplosion\\\\NeutralBuildingExplosion.mdl\",GetUnitX(D6),GetUnitY(D6)))"
+    },
+    {
+      "line": 42307,
+      "text": "endif"
+    },
+    {
+      "line": 42308,
+      "text": "endloop"
+    },
+    {
+      "line": 42309,
+      "text": "call DestroyGroup(Uz)"
+    },
+    {
+      "line": 42310,
+      "text": "set Uz=null"
+    },
+    {
+      "line": 42311,
+      "text": "endif"
+    },
+    {
+      "line": 42321,
+      "text": "if GetUnitAbilityLevel(i,b6)>0 then"
+    },
+    {
+      "line": 42322,
+      "text": "call SuperMusketeerAtk(i,Qf)"
+    },
+    {
+      "line": 42323,
+      "text": "endif"
+    },
+    {
+      "line": 42324,
+      "text": "if GetUnitAbilityLevel(i,$41314E31)>0 then"
+    },
+    {
+      "line": 42325,
+      "text": "call VashjArrowOfColdIce(i,Qf)"
+    },
+    {
+      "line": 42326,
+      "text": "endif"
+    },
+    {
+      "line": 42794,
+      "text": "call SaveBoolean(O,GetHandleId(i),StringHash(\"Attack\"),false)"
+    },
+    {
+      "line": 42795,
+      "text": "endif"
+    },
+    {
+      "line": 42796,
+      "text": "set DK=null"
+    },
+    {
+      "line": 42797,
+      "text": "set D6=null"
+    },
+    {
+      "line": 42798,
+      "text": "set Uz=null"
+    },
+    {
+      "line": 42799,
+      "text": "set Ki=null"
+    },
+    {
+      "line": 42800,
+      "text": "set Qf=null"
+    },
+    {
+      "line": 42801,
+      "text": "set i=null"
+    },
+    {
+      "line": 42802,
+      "text": "return false"
+    },
+    {
+      "line": 42803,
+      "text": "endfunction"
+    },
+    {
+      "line": 42804,
+      "text": "function InitTrig_New_UnitAttack takes nothing returns nothing"
+    },
+    {
+      "line": 42805,
+      "text": "set b4=CreateTrigger()"
+    },
+    {
+      "line": 42806,
+      "text": "call YDWESyStemAnyUnitDamagedRegistTrigger(b4)"
+    },
+    {
+      "line": 42807,
+      "text": "call TriggerAddCondition(b4,Condition(function Trig_New_UnitAttackActions))"
+    },
+    {
+      "line": 42808,
+      "text": "endfunction"
+    },
+    {
+      "line": 49753,
+      "text": "call InitTrig_UnitDeath()"
+    },
+    {
+      "line": 49754,
+      "text": "call InitTrig_New_UnitAttack()"
+    }
+  ],
+  "semantics": {
+    "trigger": "New_UnitAttack, shared per-attacker Attack reentry flag",
+    "selection": "SelectRange frozen group centered on event victim, radius400; enemy, non-dead, Avul level0",
+    "chance": "one GetRandomPercentageBJ <=25 when group nonempty, then one inclusive integer1..count",
+    "damage": "105 then420 for chosen index, both chaos/universal UnitDamageTargetBJ calls before original damage commits",
+    "nativeEvidence": "reference/blademaster-evidence.json: UnitDamageTargetBJ forwards attack=true",
+    "hostBoundary": "deterministic entity registration order; native group ordering, hidden/locust enumeration and exact native damage classification remain partial"
+  },
+  "forms": {
+    "h0XK": "stocked mercenary500wood, not a player building",
+    "h0XL": "mechanical late-wave preview; no stock means no new purchase path"
+  }
+}

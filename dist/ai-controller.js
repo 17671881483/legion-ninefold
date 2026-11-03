@@ -91,8 +91,12 @@ export function aiUnitScore(g,u,wave=waveOf(g)){
  // are deliberately excluded. Several evasion abilities do not add together.
  const evasion=Math.max(0,...(p.skills??[]).filter(s=>s.status==='implemented'&&s.kind==='evasion').map(s=>n(s.chance)));
  taken*=1-Math.min(.75,evasion);
- const life=n(u.hp)/Math.max(.2,taken);
- return attack+spellScore(p)+life*.025*(weapon?1:.2);
+ const life=Math.max(0,n(u.hp))/Math.max(.2,taken);
+ // A glass cannon's paper DPS ends when it dies. Use bounded effective-life
+ // weighting to value sustained output, with the same armor/evasion rules as
+ // combat. This is a planning estimate and never changes a unit's stats.
+ const uptime=Math.max(.35,Math.min(2.5,Math.sqrt(life/600)));
+ return (attack+spellScore(p))*uptime+life*.025*(weapon?1:.2);
 }
 function army(g,p){
  const defs=p.buildings.map(effective).filter(Boolean),fronts=defs.filter(u=>g._isFront(u));
@@ -105,8 +109,9 @@ function utility(g,u,a){
  let score=(matchup(g,u)*(1-outlook)+matchup(g,u,next)*outlook)*(needFront?(front?1.6:.8):(front?.9:1.25));
  const support=profile(u).support;
  if(support.length)score*=support.some(k=>!a.support.has(k))?1+Math.min(.7,a.defs.length*.08):.72;
- // More copies of the same troop are useful, but a balanced army is harder to counter.
- score/=1+a.defs.filter(d=>d.id===u.id).length*(g.state.wave>1?.16:.08);
+ // Encourage variety without eventually valuing a proven core below every
+ // cheap filler. The opening retains its established purchase order.
+ score/=1+Math.min(g.state.wave>=4?.6:Infinity,a.defs.filter(d=>d.id===u.id).length*(g.state.wave>1?.16:.08));
  return score;
 }
 const population=u=>n(u?.population,1);

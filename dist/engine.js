@@ -1,3 +1,4 @@
+import {restoreAnduin} from './anduin-rules.js';
 import {restoreGuldan} from './guldan-rules.js';
 import {restoreMalygos} from './malygos-rules.js';
 import {restorePhoenixActive} from './phoenix-active-rules.js';
@@ -1706,7 +1707,7 @@ export class Game {
       restoreUnstableAlchemyUserData(this,e);restoreVeteranIdentity(this,e,units);restoreSapperCreation(this,e,def);
     }
     restoreUndeadLegionHandles(this);
-    restorePhoenixRevival(this);restorePhoenixActive(this);restoreMalygos(this);restoreGuldan(this);
+    restorePhoenixRevival(this);restorePhoenixActive(this);restoreMalygos(this);restoreGuldan(this);restoreAnduin(this);
     // JSON stores retained handles separately; surviving units must share the
     // live object again so later healing, movement and death update one handle.
     for(const e of [...this.state.entities,...this.state.kings])if(this.state.brightArthasHandles[e.id])this.state.brightArthasHandles[e.id]=e;

@@ -154,6 +154,16 @@ export class Battlefield{
       for(const p of state.players)if(p.heroId){const pos=this.world(p.id,3.5,9.5),pt=this.project(pos.x,pos.y);c.save();c.translate(pt.x,pt.y);drawSprite(c,definitions[p.heroId],s*.44,now);c.restore();}
     }else{
       for(const job of state.sourceSkillJobs??[]){
+        if(!job.done&&['anduin_rain','anduin_soul'].includes(job.type)){
+          const spot=job.dummy??job,p=this.project(spot.worldX??spot.x,spot.worldY??spot.y),scale=(job.source?.distanceScale??1/3)/100;
+          c.save();c.strokeStyle='#d9c7fc';c.fillStyle='#b494df';c.lineWidth=1.5;
+          if(job.type==='anduin_soul'){
+            c.shadowColor='#dfccff';c.shadowBlur=10;ellipse(c,p.x,p.y,s*.13,s*.21,'#e3d6ff');c.beginPath();c.moveTo(p.x,p.y);c.lineTo(p.x-Math.cos(job.angle)*s*.4,p.y-Math.sin(job.angle)*s*.4*.78);c.stroke();
+          }else{
+            const r=300*scale*s;c.globalAlpha=.13;ellipse(c,p.x,p.y,r,r*.78,'#b494df');c.globalAlpha=.7;
+            for(let n=0;n<11;n++){const angle=n*2.4,x=p.x+Math.cos(angle)*r*.7,y=p.y+Math.sin(angle)*r*.55;c.beginPath();c.moveTo(x,y-s*.28);c.lineTo(x-s*.06,y);c.stroke();}
+          }c.restore();continue;
+        }
         if(!job.done&&job.type?.startsWith('guldan_')){
           if(job.type==='guldan_launch')continue;
           const spot=job.dummy??job,p=this.project(spot.worldX??spot.x,spot.worldY??spot.y),scale=(job.source?.distanceScale??1/3)/100;

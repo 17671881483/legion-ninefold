@@ -1,6 +1,6 @@
 {
   "sourceVersion": "v14.1A5",
-  "skillImplementationRevision": "v14-content-20261104-v59-1",
+  "skillImplementationRevision": "v14-content-20261104-v61-1",
   "units": 534,
   "mercenaryRecords": 60,
   "mainWaves": 35,
@@ -30,6 +30,34 @@
     "e01G"
   ],
   "playerRuntimeAbilities": [
+    {
+      "sourceRawcode": "h0W3",
+      "abilityIds": [
+        "A1SU",
+        "A1ST"
+      ]
+    },
+    {
+      "sourceRawcode": "h0XB",
+      "abilityIds": [
+        "A1SU",
+        "A1ST"
+      ]
+    },
+    {
+      "sourceRawcode": "h0PZ",
+      "abilityIds": [
+        "A1SU",
+        "A1ST"
+      ]
+    },
+    {
+      "sourceRawcode": "h0XC",
+      "abilityIds": [
+        "A1SU",
+        "A1ST"
+      ]
+    },
     {
       "sourceRawcode": "h0VP",
       "abilityIds": [
@@ -387,9 +415,9 @@
   "playerSkills": {
     "counts": {
       "implemented": 404,
-      "partial": 143,
+      "partial": 148,
       "marker": 36,
-      "unresolved": 79
+      "unresolved": 76
     },
     "abilities": [
       {
@@ -6323,8 +6351,8 @@
       {
         "rawcode": "A1SP",
         "name": "绝望之雨",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "anduin_source",
         "unitRawcodes": [
           "n087",
           "n090"
@@ -6333,7 +6361,7 @@
       {
         "rawcode": "A1SQ",
         "name": "意志之力",
-        "status": "implemented",
+        "status": "partial",
         "kind": "aura_damage",
         "unitRawcodes": [
           "n087",
@@ -6353,18 +6381,42 @@
       {
         "rawcode": "A1SS",
         "name": "狮王之心",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "anduin_source",
         "unitRawcodes": [
           "n087",
           "n090"
         ]
       },
       {
+        "rawcode": "A1ST",
+        "name": "狮王之心",
+        "status": "implemented",
+        "kind": "passive_stats",
+        "unitRawcodes": [
+          "h0PZ",
+          "h0W3",
+          "h0XB",
+          "h0XC"
+        ]
+      },
+      {
+        "rawcode": "A1SU",
+        "name": "狮王之心",
+        "status": "partial",
+        "kind": "aura_regen",
+        "unitRawcodes": [
+          "h0PZ",
+          "h0W3",
+          "h0XB",
+          "h0XC"
+        ]
+      },
+      {
         "rawcode": "A1SV",
         "name": "骇人之魂",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "anduin_source",
         "unitRawcodes": [
           "n087",
           "n090"
@@ -7231,9 +7283,9 @@
   "battleSkills": {
     "counts": {
       "implemented": 453,
-      "partial": 152,
+      "partial": 157,
       "marker": 49,
-      "unresolved": 93
+      "unresolved": 90
     },
     "abilities": [
       {
@@ -13953,8 +14005,8 @@
       {
         "rawcode": "A1SP",
         "name": "绝望之雨",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "anduin_source",
         "unitRawcodes": [
           "n087",
           "n090"
@@ -13963,7 +14015,7 @@
       {
         "rawcode": "A1SQ",
         "name": "意志之力",
-        "status": "implemented",
+        "status": "partial",
         "kind": "aura_damage",
         "unitRawcodes": [
           "n087",
@@ -13983,18 +14035,42 @@
       {
         "rawcode": "A1SS",
         "name": "狮王之心",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "anduin_source",
         "unitRawcodes": [
           "n087",
           "n090"
         ]
       },
       {
+        "rawcode": "A1ST",
+        "name": "狮王之心",
+        "status": "implemented",
+        "kind": "passive_stats",
+        "unitRawcodes": [
+          "h0PZ",
+          "h0W3",
+          "h0XB",
+          "h0XC"
+        ]
+      },
+      {
+        "rawcode": "A1SU",
+        "name": "狮王之心",
+        "status": "partial",
+        "kind": "aura_regen",
+        "unitRawcodes": [
+          "h0PZ",
+          "h0W3",
+          "h0XB",
+          "h0XC"
+        ]
+      },
+      {
         "rawcode": "A1SV",
         "name": "骇人之魂",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "anduin_source",
         "unitRawcodes": [
           "n087",
           "n090"
@@ -15164,6 +15240,7 @@
     }
   ],
   "remainingSourceGaps": [
+    "安度因A1SP/A1SV脚本雨云与六路骇人之魂、A1SQ事件30%减伤、A1SS同原生所有者/userData的一秒羁绊已接入；动态A1ST护甲50、A1SU自身1%恢复纳入。原生ANcl仲裁、B080驻留、A1SU目标许可及未实例化对象边界仍partial，见anduin-evidence.json。",
     "古尔丹A1QL/A1QM/A1QN已接入三次邪能箭、16次固定酸雨及直接30%生命虹吸/6次固定中心600码均摊治疗；邪能箭控制函数没有调用，不按8%文案添加。原生ANcl时序、辅助碰撞/去重组句柄及未实例化对象仍partial，见guldan-evidence.json。",
     "玛里苟斯A1PZ/A1Q1/A1Q2/A1Q3主动脚本、A1Q4首次伤害汲魔及竞技移除、A1Q0独立武器事件20附伤和动态A1Q5已接入；776/6秒网、27处可重叠灼烧、护盾实际给施法者均按源码。原生ANcl仲裁、移动限值、抗性叠加、e008及未实体化建筑的全图汲魔仍partial，见malygos-evidence.json。",
     "科多吞噬/暴食施法脚本实际造成99999混乱/通用或普通/普通伤害后return，不执行旧消化、恢复及吐出；自动门槛400/3000，手动主目标无血量门槛，暴食预先保存组再取首个合格第二目标。ANcl即时命令适配及默认耗魔/引导仍partial；见kodo-evidence.json。",

@@ -1,0 +1,501 @@
+{
+  "source": {
+    "file": "reference/v14-source/raw_extracted/war3map.j",
+    "sha256": "e66c55b3b25b185c991be5613e21fbf5b2d598f3cc40f2f8cd01c23bcb828250",
+    "lineEncoding": "latin1/LF"
+  },
+  "sourceEvidence": [
+    {
+      "line": 13279,
+      "text": "function X9_Model takes nothing returns nothing"
+    },
+    {
+      "line": 13280,
+      "text": "set S0=YDWETranslate(\"|cFFEE6C70æ¸¸ææ¨¡å¼|rï¼|cFFE72328ä¹åæªç©|r\")"
+    },
+    {
+      "line": 13281,
+      "text": "set H7=H7+S0"
+    },
+    {
+      "line": 13282,
+      "text": "set RU=true"
+    },
+    {
+      "line": 13283,
+      "text": "call ForForce(Jc,function G_ModeHP_Prophet)"
+    },
+    {
+      "line": 13284,
+      "text": "call TriggerExecute(Lf)"
+    },
+    {
+      "line": 13285,
+      "text": "call MultiboardSetTitleText(BC,NQ+YDWETranslate(\"|cffFF0000ä¹åæªç©|r\"))"
+    },
+    {
+      "line": 13286,
+      "text": "set DB=true"
+    },
+    {
+      "line": 13287,
+      "text": "set C6=true"
+    },
+    {
+      "line": 29786,
+      "text": "function SelectRange takes unit Pf,real FF,real FG,real Px returns group"
+    },
+    {
+      "line": 29787,
+      "text": "local group DG=CreateGroup()"
+    },
+    {
+      "line": 29788,
+      "text": "local group Om=CreateGroup()"
+    },
+    {
+      "line": 29789,
+      "text": "local unit D6=null"
+    },
+    {
+      "line": 29790,
+      "text": "call GroupEnumUnitsInRange(DG,FF,FG,Px,null)"
+    },
+    {
+      "line": 29791,
+      "text": "loop"
+    },
+    {
+      "line": 29792,
+      "text": "set D6=FirstOfGroup(DG)"
+    },
+    {
+      "line": 29793,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 29794,
+      "text": "if IsUnitEnemy(D6,GetOwningPlayer(Pf)) and not IsUnitType(D6,UNIT_TYPE_DEAD) and GetUnitAbilityLevel(D6,$4176756C)==0 then"
+    },
+    {
+      "line": 29795,
+      "text": "call GroupAddUnit(Om,D6)"
+    },
+    {
+      "line": 29796,
+      "text": "endif"
+    },
+    {
+      "line": 29797,
+      "text": "call GroupRemoveUnit(DG,D6)"
+    },
+    {
+      "line": 29798,
+      "text": "endloop"
+    },
+    {
+      "line": 29799,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 29800,
+      "text": "set DG=null"
+    },
+    {
+      "line": 29801,
+      "text": "set D6=null"
+    },
+    {
+      "line": 29802,
+      "text": "set Pf=null"
+    },
+    {
+      "line": 29803,
+      "text": "set Py=Om"
+    },
+    {
+      "line": 29804,
+      "text": "set Om=null"
+    },
+    {
+      "line": 29805,
+      "text": "return Py"
+    },
+    {
+      "line": 29806,
+      "text": "endfunction"
+    },
+    {
+      "line": 35744,
+      "text": "function X9WoodSkillTwoAction takes nothing returns nothing"
+    },
+    {
+      "line": 35745,
+      "text": "local trigger t=GetTriggeringTrigger()"
+    },
+    {
+      "line": 35746,
+      "text": "local integer Pr=GetHandleId(t)"
+    },
+    {
+      "line": 35747,
+      "text": "local unit Bc=LoadUnitHandle(O,Pr,0)"
+    },
+    {
+      "line": 35748,
+      "text": "local group DG"
+    },
+    {
+      "line": 35749,
+      "text": "local unit D6"
+    },
+    {
+      "line": 35750,
+      "text": "if GetTriggerEventId()==EVENT_GAME_TIMER_EXPIRED then"
+    },
+    {
+      "line": 35751,
+      "text": "set DG=SelectRange(Bc,GetUnitX(Bc),GetUnitY(Bc),200)"
+    },
+    {
+      "line": 35752,
+      "text": "loop"
+    },
+    {
+      "line": 35753,
+      "text": "set D6=FirstOfGroup(DG)"
+    },
+    {
+      "line": 35754,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 35755,
+      "text": "call GroupRemoveUnit(DG,D6)"
+    },
+    {
+      "line": 35756,
+      "text": "call UnitDamageTargetBJ(Bc,D6,5,ATTACK_TYPE_CHAOS,DAMAGE_TYPE_UNIVERSAL)"
+    },
+    {
+      "line": 35757,
+      "text": "endloop"
+    },
+    {
+      "line": 35758,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 35759,
+      "text": "else"
+    },
+    {
+      "line": 35760,
+      "text": "call DestroyEffect(LoadEffectHandle(O,Pr,1))"
+    },
+    {
+      "line": 35761,
+      "text": "call FlushChildHashtable(O,Pr)"
+    },
+    {
+      "line": 35762,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 35763,
+      "text": "set DG=SelectRange(Bc,GetUnitX(Bc),GetUnitY(Bc),300)"
+    },
+    {
+      "line": 35764,
+      "text": "loop"
+    },
+    {
+      "line": 35765,
+      "text": "set D6=FirstOfGroup(DG)"
+    },
+    {
+      "line": 35766,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 35767,
+      "text": "call GroupRemoveUnit(DG,D6)"
+    },
+    {
+      "line": 35768,
+      "text": "call UnitDamageTargetBJ(Bc,D6,56,ATTACK_TYPE_CHAOS,DAMAGE_TYPE_UNIVERSAL)"
+    },
+    {
+      "line": 35769,
+      "text": "endloop"
+    },
+    {
+      "line": 35770,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 35771,
+      "text": "endif"
+    },
+    {
+      "line": 35772,
+      "text": "set DG=null"
+    },
+    {
+      "line": 35773,
+      "text": "set t=null"
+    },
+    {
+      "line": 35774,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 35775,
+      "text": "set D6=null"
+    },
+    {
+      "line": 35776,
+      "text": "endfunction"
+    },
+    {
+      "line": 35777,
+      "text": "function X9WoodSkillTwo takes unit Bc returns nothing"
+    },
+    {
+      "line": 35778,
+      "text": "local trigger t=CreateTrigger()"
+    },
+    {
+      "line": 35779,
+      "text": "local integer Pr=GetHandleId(t)"
+    },
+    {
+      "line": 35780,
+      "text": "call SaveAgentHandle(O,Pr,0,Bc)"
+    },
+    {
+      "line": 35781,
+      "text": "call SaveEffectHandle(O,Pr,1,AddSpecialEffectTarget(\"Abilities\\\\Spells\\\\Orc\\\\LiquidFire\\\\Liquidfire.mdl\",Bc,\"origin\"))"
+    },
+    {
+      "line": 35782,
+      "text": "call TriggerRegisterTimerEvent(t,1,true)"
+    },
+    {
+      "line": 35783,
+      "text": "call TriggerRegisterDeathEvent(t,Bc)"
+    },
+    {
+      "line": 35784,
+      "text": "call TriggerAddAction(t,function X9WoodSkillTwoAction)"
+    },
+    {
+      "line": 35785,
+      "text": "set t=null"
+    },
+    {
+      "line": 35786,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 35787,
+      "text": "endfunction"
+    },
+    {
+      "line": 35788,
+      "text": "function X9WoodSkillThree takes unit Bc returns nothing"
+    },
+    {
+      "line": 35789,
+      "text": "local group DG"
+    },
+    {
+      "line": 35790,
+      "text": "local unit D6"
+    },
+    {
+      "line": 35791,
+      "text": "if HaveSavedBoolean(O,GetHandleId(Bc),$41315454) or GetUnitLifePercent(Bc)>15 then"
+    },
+    {
+      "line": 35792,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 35793,
+      "text": "return"
+    },
+    {
+      "line": 35794,
+      "text": "endif"
+    },
+    {
+      "line": 35795,
+      "text": "call SaveBoolean(O,GetHandleId(Bc),$41315454,true)"
+    },
+    {
+      "line": 35796,
+      "text": "set DG=SelectRange(Bc,GetUnitX(Bc),GetUnitY(Bc),200)"
+    },
+    {
+      "line": 35797,
+      "text": "loop"
+    },
+    {
+      "line": 35798,
+      "text": "set D6=FirstOfGroup(DG)"
+    },
+    {
+      "line": 35799,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 35800,
+      "text": "call GroupRemoveUnit(DG,D6)"
+    },
+    {
+      "line": 35801,
+      "text": "call UnitDamageTargetBJ(Bc,D6,5,ATTACK_TYPE_CHAOS,DAMAGE_TYPE_UNIVERSAL)"
+    },
+    {
+      "line": 35802,
+      "text": "endloop"
+    },
+    {
+      "line": 35803,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 35804,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 35805,
+      "text": "set DG=null"
+    },
+    {
+      "line": 35806,
+      "text": "set D6=null"
+    },
+    {
+      "line": 35807,
+      "text": "endfunction"
+    },
+    {
+      "line": 49669,
+      "text": "function Trig_CreateUnitHook_Conditions takes nothing returns boolean"
+    },
+    {
+      "line": 49670,
+      "text": "return C6"
+    },
+    {
+      "line": 49671,
+      "text": "endfunction"
+    },
+    {
+      "line": 49672,
+      "text": "function Trig_CreateUnitHookAddPermanentAbility takes unit Bc,integer at returns nothing"
+    },
+    {
+      "line": 49673,
+      "text": "call UnitAddAbility(Bc,at)"
+    },
+    {
+      "line": 49674,
+      "text": "call UnitMakeAbilityPermanent(Bc,true,at)"
+    },
+    {
+      "line": 49675,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 49712,
+      "text": "function Trig_CreateUnitHookActions takes nothing returns nothing"
+    },
+    {
+      "line": 49713,
+      "text": "local unit Bc=GetTriggerUnit()"
+    },
+    {
+      "line": 49714,
+      "text": "local integer x=GetUnitTypeId(Bc)"
+    },
+    {
+      "line": 49715,
+      "text": "call Trig_CreateUnitHookApplyBonusAbility(Bc,x)"
+    },
+    {
+      "line": 49716,
+      "text": "if GetUnitAbilityLevel(Bc,$41315454)>0 then"
+    },
+    {
+      "line": 49717,
+      "text": "call X9WoodSkillTwo(Bc)"
+    },
+    {
+      "line": 49718,
+      "text": "endif"
+    },
+    {
+      "line": 49719,
+      "text": "if Trig_CreateUnitHookIsSapperBonusTarget(Bc) then"
+    },
+    {
+      "line": 49720,
+      "text": "call Trig_CreateUnitHookApplyLifeScale(Bc)"
+    },
+    {
+      "line": 49721,
+      "text": "endif"
+    },
+    {
+      "line": 49722,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 49723,
+      "text": "endfunction"
+    },
+    {
+      "line": 49724,
+      "text": "function InitTrig_CreateUnitHook takes nothing returns nothing"
+    },
+    {
+      "line": 49725,
+      "text": "local trigger t=CreateTrigger()"
+    },
+    {
+      "line": 49726,
+      "text": "call YDWETriggerRegisterEnterRectSimpleNull(t,GetWorldBounds())"
+    },
+    {
+      "line": 49727,
+      "text": "call TriggerAddCondition(t,Condition(function Trig_CreateUnitHook_Conditions))"
+    },
+    {
+      "line": 49728,
+      "text": "call TriggerAddAction(t,function Trig_CreateUnitHookActions)"
+    },
+    {
+      "line": 49729,
+      "text": "set t=null"
+    },
+    {
+      "line": 49797,
+      "text": "call InitTrig_CreateUnitHook()"
+    },
+    {
+      "line": 50022,
+      "text": "call InitCustomTriggers()"
+    }
+  ],
+  "findings": {
+    "A1TU": "No literal, hex or decimal ability references in the complete map script. Shared effect is registered only by A1TT at creation.",
+    "X9WoodSkillThree": "Only function definition exists: no calls or ExecuteFunc registration.15percent<= trigger cannot be added based on tooltip.",
+    "timer": "TriggerRegisterTimerEvent(1,true), independent of later ability removal and paused/stunned unit.",
+    "death": "TriggerRegisterDeathEvent(widget), destroys own trigger before SelectRange300 and56 damage; no ally damage.",
+    "nativeDamage": "UnitDamageTargetBJ attack=true, chaos/universal; same versioned native evidence as reference/blademaster-evidence.json.",
+    "boundaries": "Native group order, hidden/removed handles, full timer/death ordering remain partial. Old dead/reincarnating saves are not paid retroactive damage."
+  }
+}

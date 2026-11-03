@@ -1,6 +1,6 @@
 {
   "sourceVersion": "v14.1A5",
-  "skillImplementationRevision": "v14-content-20261103-v50-1",
+  "skillImplementationRevision": "v14-content-20261103-v51-1",
   "units": 534,
   "mercenaryRecords": 60,
   "mainWaves": 35,
@@ -7194,10 +7194,10 @@
   },
   "battleSkills": {
     "counts": {
-      "implemented": 455,
-      "partial": 134,
+      "implemented": 454,
+      "partial": 136,
       "marker": 47,
-      "unresolved": 109
+      "unresolved": 108
     },
     "abilities": [
       {
@@ -13965,7 +13965,7 @@
       {
         "rawcode": "A1TT",
         "name": "殉爆本能",
-        "status": "implemented",
+        "status": "partial",
         "kind": "x9_sapper",
         "unitRawcodes": [
           "h0WI",
@@ -13975,8 +13975,8 @@
       {
         "rawcode": "A1TU",
         "name": "不稳定躯体",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "x9_sapper_description",
         "unitRawcodes": [
           "h0WI",
           "h0WJ"

@@ -1,3 +1,4 @@
+import {SAPPER_RULES,tickSapperTimers,sapperWidgetDeath} from './sapper-rules.js';
 import {SIEGE_TEAM_RULE,siegeTeamAttackDamage} from './siege-team-rules.js';
 import {VETERAN_RULE} from './veteran-rules.js';
 import {TIRION_RULES,initializeTirionDeployment,tirionAttackDamage,tirionKillBranch,tirionBondDamage,tickTirionJob,tirionAttackIssued,tirionHolyDamage} from './tirion-rules.js';
@@ -47,7 +48,7 @@ import { closestWalkable, isWalkable } from './layout.js';
 import { GARROSH_ACTIVE_RULES, GARROSH_PASSIVE_RULES, canGarroshCastAbility, castGarroshAbility, tryGarroshAutoCast, garroshActiveAfterDamage, sourceGarroshActiveDeath, tickGarroshActiveJob } from './garrosh-active-rules.js';
 import { ILLIDAN_RULES, ILLIDAN_ACTIVE_RULES, canIllidanCastAbility, castIllidanAbility, registerIllidanSource, tickIllidanSource, illidanOnAttackHit, tryIllidanAutoCast, illidanAfterDamage, sourceIllidanDeath, tickIllidanJob, isIllidanJobType } from './illidan-rules.js';
 
-export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261103-v50-1';
+export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261103-v51-1';
 
 // Values come from resolved object fields. Empty fields remain empty: a missing
 // native default is reported, rather than replacing it with tooltip numbers.
@@ -163,7 +164,7 @@ function compile(id,version='5.0dJF') {
     if(id==='A1TN')s.effectText=`原生对象实际制造${s.count}个镜像，输出${s.outgoing*100}%、承伤${s.incoming}倍，持续${s.duration}秒，冷却${s.cooldown}秒；原文案数量/时长不符` ;
     if(id==='A1TP'){s.kind='fixed_totem';s.status='implemented';s.radius=3;s.heal=100;s.targets=['friend'];s.effectText='每次施法在当时坐标建立固定图腾区：每1秒为300范围友军回复100生命，施法者死亡后结束；多次施法分别计时';}
     if(id==='A1TQ'){s.kind='charging_wave';s.status='implemented';s.damage=100;s.length=12;s.radius=3;s.duration=.4;s.targets=['enemies'];s.effectText='独立冲锋虚体按1200距离/0.4秒配置每40毫秒推进120（末步前销毁，实际回调位置120至1080），每次施法对300范围敌军仅造成一次100点混乱攻击/通用伤害；施法者不位移';}
-    if(id==='A1TT'){s.kind='x9_sapper';s.status='implemented';s.damage=5;s.deathDamage=56;s.radius=2;s.deathRadius=3;s.targets=['enemies'];s.effectText='九倍创建钩子：每1秒对200范围敌军造成5点混乱攻击/通用伤害；死亡对300范围敌军造成56点伤害；不使用88伤害文案';}
+    if(SAPPER_RULES[id]){const r=SAPPER_RULES[id];Object.assign(s,{kind:id==='A1TT'?'x9_sapper':'x9_sapper_description',status:r.status,effectText:r.description+'【待核定：'+r.partial+'】'});}
     // These effects are reached from New_UnitDamaged / New_UnitAttack, rather
     // than from the marker object's tooltip (raw JASS 33074–33184, 40881–40901,
     // 41542, 42282–42289, 42576–42578 and 42725–42727).
@@ -304,7 +305,7 @@ export function attachSkills(e,def) {
   const f=e.sourceRawFields;e.isHero=!!(e.isHero||def.hero||def.isHero||['STR','AGI','INT'].includes(f.Primary));e.maxMana=num(def.maxMana??def.mana??f.manaN);e.mana=clamp(num(def.initialMana??def.manaStart??f.mana0,e.maxMana),0,e.maxMana);e.manaRegen=num(def.manaRegen??f.regenMana);e.hpRegen=num(def.hpRegen??f.regenHP);e.targetType=def.targetType??f.targType??(f.movetp==='fly'?'air':'ground');e.traits=String(def.traits??def.unitType??f.type??'').split(',');e.isBuilding=!!(e.isBuilding||def.isBuilding||num(f.isbldg));e.nativeInvulnerable=e.skillSpecs.some(s=>s.status==='implemented'&&s.kind==='invulnerability');e.invulnerable=e.nativeInvulnerable;e.isStaticObstacle=!!(isV14(def)&&e.isBuilding&&f.pathTex&&!num(f.spd));if(e.isStaticObstacle)e.moveSpeed=0;
   // Altar heroes are giant units in the source, with a separate UI category.
   if(isV14(def)&&def.heroFamily)e.isNativeHero=['STR','AGI','INT'].includes(f.Primary);
-  for(const s of e.skillSpecs)e.skillStates[s.id]={readyAt:0,casts:0,...(s.kind==='x9_sapper'&&Number.isFinite(e.createdAt)?{nextPulseAt:e.createdAt+1}:{})};
+  for(const s of e.skillSpecs)e.skillStates[s.id]={readyAt:0,casts:0};
   // The source adds these native item abilities to the freshly deployed body
   // (43658–43698). Their literal bonuses follow the creation HP scaling.
   // Keep an ability journal so reattachment cannot add the same stats twice;
@@ -405,8 +406,6 @@ export function tickSourceSkills(game,e,battle,dt) {
   if(!isV14(e)&&e.combatRawcode==='h08B'&&e.status.burrowEnd&&now>=e.status.burrowEnd){e.invulnerable=false;e.status.burrowEnd=0;buff(e,compile('A06Z',e.skillVersion),e,now);}
   for(const job of e.status.pendingStrikes??[]){if(job.at<=now){const t=game._worldEntities?.get(job.targetId);if(t?.hp>0)sourceDamage(game,t,job.damage,e,true);job.done=true;}}
   e.status.pendingStrikes=(e.status.pendingStrikes??[]).filter(j=>!j.done);
-  // The creation-hook sapper timer continues while its unit is stunned.
-  for(const s of active(e))if(s.kind==='x9_sapper'){const st=state(e,s);st.nextPulseAt??=now+1;while(st.nextPulseAt<=now+1e-8){for(const t of scriptTargets(game,e,e,s.radius,false))universalDamage(game,t,s.damage,e);st.nextPulseAt+=1;}}
   if((e.status.stunUntil??0)>now||(e.status.cycloneUntil??0)>now||(e.invulnerable&&!e.nativeInvulnerable))return;
   for(const s of active(e)){
     const st=state(e,s);if(st.readyAt>now)continue;
@@ -685,12 +684,12 @@ export function afterSourceDamage(game,target,actual,attacker,options={}) {
 export function trySourceReincarnation(game,target) {
   if(isReincarnating(target))return true;
   if(!beginReincarnation(game,target))return false;
-  mummyWidgetDeath(game,target,heroScriptApi);
+  sapperWidgetDeath(game,target,heroScriptApi);mummyWidgetDeath(game,target,heroScriptApi);
   return true;
 }
 export function sourceDeath(game,target,killer) {
   if(target.status?.sourceDeathHandled)return;target.status.sourceDeathHandled=true;
-  if(isV14(target))mummyWidgetDeath(game,target,heroScriptApi);
+  if(isV14(target)){sapperWidgetDeath(game,target,heroScriptApi);mummyWidgetDeath(game,target,heroScriptApi);}
   const mainDeathRan=runMainUnitDeath(game,target,killer,mainDeathApi);
   if(isV14(target)&&!mainDeathRan)sourceClassDeath(game,target,killer,heroScriptApi,false);
   // JSON restoration breaks live-object aliases. Rebind the retained script
@@ -715,7 +714,6 @@ export function sourceDeath(game,target,killer) {
   if(!tirionKillSelected&&killer?.combatRawcode==='h0CZ')killer.hp=Math.min(killer.maxHp,killer.hp+target.maxHp*(isV14(killer)?.5:.6));
   if(!tirionKillSelected&&(killer?.combatRawcode==='h03B'||isV14(killer)&&killer?.combatRawcode==='h0OC'))buff(killer,{...compile('A02V',killer.skillVersion),buffKey:'skeleton-buff'},killer,game.state.time);
   if(isV14(target)){
-    for(const s of active(target))if(s.kind==='x9_sapper')for(const t of scriptTargets(game,target,target,s.deathRadius,false))universalDamage(game,t,s.deathDamage,target);
     const explosion=tirionKillSelected?0:target.combatRawcode==='n0SC'?8:active(target).some(s=>s.id==='A0SB')?26:0;
     if(explosion)for(const t of scriptTargets(game,target,target,3*target.distanceScale,false)){const a=game._auraEffects(t,game._battleAuras?.[t.battleTeam]??[]);game._hurt(t,explosion*game._typeMultiplier('normal',t.armorType,t.sourceArmorTypeRaw??t.sourceRawFields?.defType),target,{spell:true,scripted:true});}
   }
@@ -905,6 +903,7 @@ export function tickSourceScriptJobs(game,dt=0){
   // At a coarse frame crossing both deadlines, native return at +2.00 must
   // precede the script's +2.01 ability removal on that same retained handle.
   tickReincarnations(game);
+  tickSapperTimers(game,heroScriptApi);
   for(const e of game.state.entities)if(e.status?.ensnareOriginalTargetType&&e.status.ensnareGroundedUntil<=game.state.time){e.targetType=e.status.ensnareOriginalTargetType;delete e.status.ensnareOriginalTargetType;delete e.status.ensnareGroundedUntil;}
   tickSourceAuraRules(game,{matchesTargets});
   tickLivingBombJobs(game,heroScriptApi);

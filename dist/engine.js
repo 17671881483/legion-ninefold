@@ -1,3 +1,4 @@
+import {initializeSapperCreation,restoreSapperCreation} from './sapper-rules.js';
 import {veteranDeath,restoreVeteranIdentity} from './veteran-rules.js';
 import {buildAIArmy,actAI} from './ai-controller.js';
 import {restoreUnstableAlchemyUserData} from './unstable-alchemy-rules.js';
@@ -1039,7 +1040,7 @@ export class Game {
     };
     if (e.acquisitionRange > 12) e.acquisitionRange /= 100;
     if (ability?.type === 'shield') e.status.shield = ability.value > 1 ? ability.value : hp * number(ability.value, .2);
-    attachSkills(e,def);
+    attachSkills(e,def);initializeSapperCreation(this,e);
     return e;
   }
   _spawnDefender(def, player, x, y, buildingId, isHero = false) {
@@ -1698,7 +1699,7 @@ export class Game {
       else if(def&&isV14(def)&&refreshSourceSkills(e,def)){e.status??={};e.status.sourceSkillsRestoredAt=this.state.time;}
       if(isV14(def)&&def.heroFamily)e.isNativeHero=['STR','AGI','INT'].includes(def.sourceRawFields?.Primary);
       e.skillStates??={};e.buffs??=[];
-      restoreUnstableAlchemyUserData(this,e);restoreVeteranIdentity(this,e,units);
+      restoreUnstableAlchemyUserData(this,e);restoreVeteranIdentity(this,e,units);restoreSapperCreation(this,e,def);
     }
     restoreUndeadLegionHandles(this);
     // JSON stores retained handles separately; surviving units must share the

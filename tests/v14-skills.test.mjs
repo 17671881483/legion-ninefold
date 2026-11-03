@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {compileSkills,describeSkills,attachSkills,tickSourceSkills,tickSourceScriptJobs,sourceOnHit,sourceAttackStart,sourceMoveFactor,canWeaponTarget,sourceWeapon,matchesTargets,modifyIncoming,afterSourceDamage,sourceDeath} from '../dist/skills.js';
 import {V14_ABILITIES,V14_UNIT_TEMPLATES,V14_UNITS} from '../dist/v14-reference.js';
 import {Game} from '../dist/engine.js';
+import {initializeSapperCreation} from '../dist/sapper-rules.js';
 import {WORKBOOK_UNIT_TEMPLATES} from '../dist/workbook-reference.js';
 const near=(a,b)=>assert.ok(Math.abs(a-b)<1e-6,`${a} != ${b}`);
 const v14=(ids=[],extra={})=>({id:'v14_test',name:'v14技能测试体',provenance:'v14.1A5-dataset',sourceVersion:'v14.1A5',abilityIds:ids,distanceScale:1/3,hp:1000,damage:20,mana:100,manaStart:100,range:100,...extra});
@@ -41,8 +42,8 @@ test('charge travels through a corridor once per enemy, without moving or requir
  e.hp=0;g.state.time=.3;tickSourceScriptJobs(g);near(nearby.hp,900);near(far.hp,900);g.state.time=.4;tickSourceScriptJobs(g);assert.equal(g.state.sourceSkillJobs.length,0);near(far.hp,900);near(e.worldX,0);
 });
 test('A1TT pulses every second even while stunned and explodes for 56 once',()=>{
- const g=fixture(),e=add(g,v14(['A1TT'])),inside=add(g,v14(),'monster',.5),outer=add(g,v14(),'monster',.9),ally=add(g,v14(),'defender',.2),invul=add(g,v14(['Avul']),'monster',.2);e.status.stunUntil=20;
- g.state.time=.99;tickSourceSkills(g,e,battle(g),.1);near(inside.hp,1000);g.state.time=1;tickSourceSkills(g,e,battle(g),.01);near(inside.hp,995);near(outer.hp,1000);g.state.time=1.5;tickSourceSkills(g,e,battle(g),.5);near(inside.hp,995);g.state.time=2;tickSourceSkills(g,e,battle(g),.5);near(inside.hp,990);
+ const g=fixture(),e=add(g,v14(['A1TT'])),inside=add(g,v14(),'monster',.5),outer=add(g,v14(),'monster',.9),ally=add(g,v14(),'defender',.2),invul=add(g,v14(['Avul']),'monster',.2);e.status.stunUntil=20;initializeSapperCreation(g,e);
+ g.state.time=.99;tickSourceScriptJobs(g);near(inside.hp,1000);g.state.time=1;tickSourceScriptJobs(g);near(inside.hp,995);near(outer.hp,1000);g.state.time=1.5;tickSourceScriptJobs(g);near(inside.hp,995);g.state.time=2;tickSourceScriptJobs(g);near(inside.hp,990);
  g._hurt(e,2000,inside,{spell:true});near(inside.hp,934);near(outer.hp,944);near(ally.hp,1000);near(invul.hp,1000);sourceDeath(g,e,inside);near(inside.hp,934);assert.equal(e.skillSpecs[0].effectText.includes('56'),true);assert.equal(e.skillSpecs[0].effectText.includes('88'),true); // Explicitly records the tooltip discrepancy.
 });
 test('v14 mana strike triggers at 100 actual damage, immediately with current mana',()=>{

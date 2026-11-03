@@ -1,3 +1,5 @@
+import {earthLordBuildingCompleted,restoreEarthLordBuilding,initializeEarthLordLevels} from './earth-lord-levels.js';
+import {restoreEarthLord} from './earth-lord-rules.js';
 import {restoreMaiev} from './maiev-rules.js';
 import {restoreNerzhul,nerzhulBuildingCompleted,restoreNerzhulBuilding,initializeNerzhulDeployment} from './nerzhul-rules.js';
 import {restoreSavis} from './savis-rules.js';
@@ -106,7 +108,7 @@ export class Game {
       // Initialize the same empty journal saved/restored for players who have
       // not finished a troop yet; restoring must not add new progression data.
       restoreEggHistory(p,{wave:this.state.wave,buildings:p.buildings,unitsById:units});
-      for(const b of p.buildings)restoreNerzhulBuilding(p,b,units[b.unitId]);
+      for(const b of p.buildings){restoreNerzhulBuilding(p,b,units[b.unitId]);restoreEarthLordBuilding(p,b,units[b.unitId]);}
     }
     this._log(`${RULES.title}：按来源建造军团，发展木材，与队友共同守护国王。`);
     this._log('采用v14.1A5九倍实怪数量和HP；静态数据与Web近似、原脚本冲突均保留来源说明。');
@@ -439,7 +441,7 @@ export class Game {
   }
   _recordEggCompletion(p, def, building) {
     this._initializeSourceClassBuilding(building);
-    nerzhulBuildingCompleted(building,def);
+    nerzhulBuildingCompleted(building,def);earthLordBuildingCompleted(building,def);
     return recordEggCompletion(p,def,{buildingId:building?.id,wave:this.state.wave,buildings:p.buildings,unitsById:units});
   }
   _recordSourceCompletion(p, def) {
@@ -1163,7 +1165,7 @@ export class Game {
       if(isReincarnating(e)){e.hp=0;e.pendingAttack=null;continue;}
       if (e.hp <= 0) { e.pendingAttack = null; continue; }
       if (e.expiresAt && e.expiresAt <= now) { e.hp = 0; e.pendingAttack = null; continue; }
-      if(e.status.yseraHidden)continue;
+      if(e.status.yseraHidden||e.status.sourceHidden)continue;
       this._ensureWorld(e); const team = e.battleTeam, battle = battles[team];
       battle.push(e); this._worldEntities.set(e.id, e);
       const key = `${Math.floor(e.worldX)},${Math.floor(e.worldY)}`, grid = this._spatial[team];
@@ -1176,17 +1178,17 @@ export class Game {
     this.state.congestion = monsterCounts.map((count, team) => ({ attackingTeam: team, count, attackIntervalFactor: this._monsterPressure[team] }));
     for (const e of entities) {
       if (e.hp <= 0) { e.pendingAttack = null; continue; }
-      if(e.status.yseraHidden||e.status.yseraPaused||e.status.sourcePaused||e.status.illidanPaused){e.pendingAttack=null;continue;}
+      if(e.status.yseraHidden||e.status.sourceHidden||e.status.yseraPaused||e.status.sourcePaused||e.status.illidanPaused){e.pendingAttack=null;continue;}
       this._ensureWorld(e);
       const battle = battles[e.battleTeam], st = e.status;
       if (st.poisonUntil > now) this._hurt(e, number(st.poisonDps, 0) * dt, st.poisonOwner, true);
-      if (e.hp <= 0) { e.pendingAttack = null; continue; }
+      if (e.hp <= 0 || st.sourceHidden || st.yseraHidden || st.sourcePaused || st.yseraPaused || st.illidanPaused) { e.pendingAttack = null; continue; }
       e.attackCd -= dt; e.abilityCd -= dt;
       this._applyHealingAura(e, battle.auras, dt);
       this._passiveAbility(e, battle, dt);
       tickSourceSkills(this,e,battle,dt);
       const stormChannel=stormLizardChanneling(this,e);
-      if (stormChannel || e.hp <= 0 || (st.stunUntil ?? 0) > now || (st.cycloneUntil ?? 0) > now) { e.pendingAttack = null; continue; }
+      if (stormChannel || e.hp <= 0 || st.sourceHidden || st.yseraHidden || st.sourcePaused || st.yseraPaused || st.illidanPaused || (st.stunUntil ?? 0) > now || (st.cycloneUntil ?? 0) > now) { e.pendingAttack = null; continue; }
       if (e.side === 'monster' && e.pendingAttack && this._advanceMonsterAttack(e, battle)) continue;
       const aggro = Math.max(e.range, number(e.acquisitionRange, Math.max(4.5, e.range + 1)));
       let ordered=(st.huskarAttackOrder?.targetId===e.targetId||st.varian?.attackOrder?.targetId===e.targetId)&&e.targetId!=null;
@@ -1503,7 +1505,7 @@ export class Game {
   }
   _warpDefenders() {
     for (const e of this.state.entities) {
-      if (e.hp <= 0 || e.status.yseraHidden || e.status.yseraPaused || e.status.sourcePaused || e.status.illidanPaused || e.status.cycloneUntil>this.state.time || e.side !== 'defender' || e.status.warped || !this._settledLanes.includes(e.sourceLaneId)) continue;
+      if (e.hp <= 0 || e.status.yseraHidden || e.status.sourceHidden || e.status.yseraPaused || e.status.sourcePaused || e.status.illidanPaused || e.status.cycloneUntil>this.state.time || e.side !== 'defender' || e.status.warped || !this._settledLanes.includes(e.sourceLaneId)) continue;
       if (e.nav?.mode !== 'return' || distance(e, spawnWarpWorld(e.sourceLaneId)) > .55 || e.targetId) continue;
       const team = e.battleTeam, source = worldPoint(e), base = supportWorld(team);
       const slot = Number(String(e.buildingId ?? e.id).replace(/\D/g, '')) || 0;
@@ -1699,7 +1701,7 @@ export class Game {
       for(const b of p.buildings.filter(b=>!b.construction))this._recordSourceCompletion(p,units[b.unitId]);
       for(const b of p.buildings.filter(b=>!b.construction))this._initializeSourceClassBuilding(b);
       restoreEggHistory(p,{wave:this.state.wave,buildings:p.buildings,unitsById:units});
-      for(const b of p.buildings)restoreNerzhulBuilding(p,b,units[b.unitId]);
+      for(const b of p.buildings){restoreNerzhulBuilding(p,b,units[b.unitId]);restoreEarthLordBuilding(p,b,units[b.unitId]);}
       for(const b of p.buildings)if(!b.construction&&!b.boxLimitTransferred)this._recordLimitOrigins(b,units[b.unitId]);
       if(p.workers>rule('maxWorkers',7)||p.lumberLevel>rule('maxLumberLevel',15)){p.workers=Math.min(p.workers,rule('maxWorkers',7));p.lumberLevel=Math.min(p.lumberLevel,rule('maxLumberLevel',15));this.state.migrationNotice=`旧存档已限制为${RULES.maxWorkers}小精灵、${RULES.maxLumberLevel}级科技；原进度已保留备份。`;}
       const tasks=this._economyTasks(p);tasks.workerQueue=tasks.workerQueue.slice(0,Math.max(0,rule('maxWorkers',7)-p.workers));if(tasks.lumberTask?.targetLevel>rule('maxLumberLevel',15))tasks.lumberTask=null;
@@ -1712,11 +1714,12 @@ export class Game {
       else if(def&&isV14(def)&&refreshSourceSkills(e,def)){e.status??={};e.status.sourceSkillsRestoredAt=this.state.time;}
       if(isV14(def)&&def.heroFamily)e.isNativeHero=['STR','AGI','INT'].includes(def.sourceRawFields?.Primary);
       e.skillStates??={};e.buffs??=[];
+      if(isV14(def))initializeEarthLordLevels(this,this.state.players[e.ownerId]?.buildings.find(b=>b.id===e.buildingId),e,{restoring:true});
       if(isV14(def))initializeNerzhulDeployment(this,this.state.players[e.ownerId]?.buildings.find(b=>b.id===e.buildingId),e,{restoring:true});
       restoreUnstableAlchemyUserData(this,e);restoreVeteranIdentity(this,e,units);restoreSapperCreation(this,e,def);
     }
     restoreUndeadLegionHandles(this);
-    restorePhoenixRevival(this);restorePhoenixActive(this);restoreMalygos(this);restoreGuldan(this);restoreAnduin(this);restoreVarian(this);restoreAlexstrasza(this);restoreNozdormu(this);restoreSavis(this);restoreNerzhul(this);restoreMaiev(this);
+    restoreEarthLord(this);restorePhoenixRevival(this);restorePhoenixActive(this);restoreMalygos(this);restoreGuldan(this);restoreAnduin(this);restoreVarian(this);restoreAlexstrasza(this);restoreNozdormu(this);restoreSavis(this);restoreNerzhul(this);restoreMaiev(this);
     // JSON stores retained handles separately; surviving units must share the
     // live object again so later healing, movement and death update one handle.
     for(const e of [...this.state.entities,...this.state.kings])if(this.state.brightArthasHandles[e.id])this.state.brightArthasHandles[e.id]=e;

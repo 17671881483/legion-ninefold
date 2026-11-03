@@ -33,6 +33,7 @@ const playerRuntimeAbilities=[
   {sourceRawcode:'h0Q2',abilityIds:['A12B']},
   {sourceRawcode:'h0QE',abilityIds:['A14E']},
   {sourceRawcode:'h0UX',abilityIds:['A14E']},
+  {sourceRawcode:'h0R6',abilityIds:['A18C']},
   {sourceRawcode:'h0QQ',abilityIds:['A150']},
   {sourceRawcode:'h0QR',abilityIds:['A150','A0I7']},
   {sourceRawcode:'h0Q3',abilityIds:['A12B','A12I']},
@@ -82,6 +83,7 @@ const result={
   battleSkills:collect([...current,...playerBuildingCommands,...playerBuildingRuleCarriers,...playerRuntimeForms,...playerRuntimeAbilities,...MERCENARIES,...WAVES,...specialCodes.map(c=>UNIT_TEMPLATES[c])]),
   sourceOnlyCombatForms:[{combatRawcode:'h0JR',buildingRawcode:'n00S',status:'entry-unresolved',evidence:'war3map.j:17544-17545 maps forms; line3644 ban dialog; 48355 barracks egg marker and 48750 monthly record do not provide acquisition',skills:collect([{...UNIT_TEMPLATES.h0JR,abilityIds:[...UNIT_TEMPLATES.h0JR.abilityIds,'A0J2','A0J3']}])},{combatRawcode:'h0VQ',buildingRawcode:'n07U',status:'entry-unresolved',evidence:'war3map.j:17436-17437 maps forms; line3638 ban limit1; no source creation/recipe/upgrade entry found in packet',skills:collect([{...UNIT_TEMPLATES.h0VQ,abilityIds:[...UNIT_TEMPLATES.h0VQ.abilityIds,'A1QI','A1D6']}])}],
   remainingSourceGaps:[
+    '大地主宰A17H完工计数/布尔分支及出战等级、A17I/J真实原生光环、A17N九次20跟随伤害、A17K入圈实数20%授予与A18C两秒同句柄复生已接入。A17L固定25%生命阈值、0秒首跳/0.04秒步进及55%生命恢复保留；原坐标映射Web王前支援点。原生生命事件与致死顺序、默认ACrn继承/多复生仲裁/资源恢复、未实例化对象和原版阶段连边仍partial，见earth-lord-evidence.json。',
     '玛维刀阵149次5.4跟随伤害/死亡清理、受伤200→224路径闪烁/8秒冷却、暗影突袭75+两次10的8秒宿主适配与手动13蓝天神召唤已接入。脚本A1TW的waterelemental错配保留失败，A1TY缺耗魔不免费转换尸体。暗影突袭分阶段类型/衰减/刷新、天神重施策略、原生AI/导航仍partial，见maiev-evidence.json。',
     '耐奥祖怨毒固定300范围五次55/82.5/110、死亡之兆延迟1秒以尸体当时位置600范围105/157.5/525、u04D死亡预选目标后五次80及完工/部署等级已接入。诅咒仅e008/A1UL命令请求，缺失原生参数不猜伤害；仪式枯骨手动按4/6/10随机总数生成且无1秒生命。原生召唤时序/分布/AI入口、诅咒结算与原版阶段连边仍partial，见nerzhul-evidence.json。',
     '萨维斯A1UD三目标每秒305感染、A1UE固定400范围七次去重检查、A1UF恐魔3秒生命/175初伤/125死亡爆炸及10次10伤害、A1UG延迟0.5秒425流星已接入。A1UH仅说明，SavisSummon无调用；A1UI命令错配及缺失耗魔不再按免费自动召唤处理。原生时序、枚举、移除句柄、导航及特效仍partial，见savis-evidence.json。',
@@ -128,5 +130,18 @@ const result={
     '原图训练多分支对话框限时30秒；Web用持久表单重新校验提交，未模拟对话框超时。旧版无礼物历史的存档不会补抽已过波次奖励。',
   ],
 };
-if(process.argv.includes('--write'))await writeFile(new URL('../reference/content-coverage.json',import.meta.url),JSON.stringify(result,null,2)+'\n');
+if(process.argv.includes('--write')){
+  await writeFile(new URL('../reference/content-coverage.json',import.meta.url),JSON.stringify(result,null,2)+'\n');
+  const row=(label,scope)=>`| ${label} | ${scope.abilities.length} | ${scope.counts.implemented} | ${scope.counts.partial} | ${scope.counts.marker} | ${scope.counts.unresolved} |`;
+  const markdown=[
+    '# 内容覆盖快照','',
+    `来源版本：\`${result.sourceVersion}\`；技能实现版本：\`${result.skillImplementationRevision}\`。由 \`node scripts/content-coverage.mjs --write\` 同时生成本文件与 [逐项 JSON](content-coverage.json)。`,'',
+    '| 范围 | 总数 | implemented | partial | marker | unresolved |',
+    '| --- | ---: | ---: | ---: | ---: | ---: |',
+    row('玩家可达能力',result.playerSkills),row('全部战斗能力',result.battleSkills),'',
+    `当前单位 ${result.units}、佣兵记录 ${result.mercenaryRecords}、主波次 ${result.mainWaves}、特殊怪类型 ${result.specialMonsterTypes}。运行时动态能力、召唤形态及建筑专属命令均按来源单列于 JSON；sourceOnlyCombatForms 未计作玩家可达入口。`,'',
+    '这些标签描述已接入的规则范围，不是整套单位或原图完成率。partial 仍有已知原生差异；marker 仍需确认没有脚本副作用；implemented 也不替代调用入口、组合行为与原生运行验收。逐项规则和剩余缺口见 JSON 的 abilities 与 remainingSourceGaps；批次证据见 [整合记录目录](../docs/parallel-development/)。','',
+  ].join('\n');
+  await writeFile(new URL('../reference/content-coverage.md',import.meta.url),markdown);
+}
 console.log(JSON.stringify({units:result.units,specialMonsterTypes:result.specialMonsterTypes,sourceOnly:result.sourceOnly,playerSkills:result.playerSkills.counts,battleSkills:result.battleSkills.counts},null,2));

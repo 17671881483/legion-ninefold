@@ -204,12 +204,16 @@ export function buildAIArmy(g,p,opening=false){
  if(g.state.phase!=='build')return;
  if(opening)openingPlan(g,p);
  let reserve=plannedUpgrade(g,p);
+ const tasks=g._economyTasks(p),waiting=!opening&&g.state.wave>=4&&!!p.aiUpgradePlan;
+ const populationGap=p.populationCap-g._population(p)-planPopulation(p);
+ // A granted fighter can occupy population reserved by an existing path.
+ // Allow paid capacity recovery before waiting for that path to complete,
+ // while preserving all of its remaining gold and wood.
+ if((waiting?populationGap<0:populationGap<4)&&!tasks.farmTask&&p.gold-reserve>=n(RULES.farmCost,24)&&p.wood-planWood(p)>=n(RULES.farmWoodCost,80))g.command('farm',{playerId:p.id});
  // Let the funded core finish before filling every spare slot with bases.
  // The next completed stage can then start another full path with the
  // remaining treasury, instead of discovering that cheap fillers spent it.
- if(!opening&&g.state.wave>=4&&p.aiUpgradePlan)return;
- const tasks=g._economyTasks(p);
- if(p.populationCap-g._population(p)-planPopulation(p)<4&&!tasks.farmTask&&p.gold-reserve>=n(RULES.farmCost,24)&&p.wood-planWood(p)>=n(RULES.farmWoodCost,80))g.command('farm',{playerId:p.id});
+ if(waiting)return;
  if(!opening&&p.buildings.some(b=>!b.construction&&!units[b.unitId]?.hero)&&!p.buildings.some(b=>units[b.unitId]?.heroEntry)){
   const status=g.heroStatus(p.id),def=units[status.entries[0]],cell=def&&formationCell(g,p,def);
   if(status.canStart&&cell&&payable(g,p,def,false,null,reserve,planWood(p),planPopulation(p)))g.command('build',{playerId:p.id,unitId:def.id,...cell});

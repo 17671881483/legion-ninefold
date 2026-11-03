@@ -2,7 +2,7 @@ import {isReincarnating} from './reincarnation-rules.js';
 import {UNITS, MERCENARIES, HEROES, WAVES} from './data.js';
 import {MAP,laneToWorld,worldToLane,routePoints,kingWorld} from './layout.js';
 const definitions=Object.fromEntries([...UNITS,...MERCENARIES,...HEROES].map(u=>[u.id,u]));
-export const isEntityVisible=e=>!!e&&(e.hp>0||isReincarnating(e))&&!e.status?.yseraHidden&&!e.status?.yseraRemoved;
+export const isEntityVisible=e=>!!e&&(e.hp>0||isReincarnating(e))&&!e.status?.yseraHidden&&!e.status?.sourceHidden&&!e.status?.yseraRemoved;
 const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
 const tone=(hex,n)=>{let c=hex?.replace('#','')||'9aad83';if(c.length!==6)c='9aad83';return '#'+[0,2,4].map(i=>clamp(parseInt(c.slice(i,i+2),16)+n,0,255).toString(16).padStart(2,'0')).join('');};
 const hash=(x,y)=>{const z=Math.sin(x*127.1+y*311.7)*43758.5453;return z-Math.floor(z);};

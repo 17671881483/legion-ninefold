@@ -83,6 +83,24 @@ function openingPlan(g,p){
   if(g.command('build',{playerId:p.id,unitId:plan.base.id,...cell}).ok){if(plan.path.length)p.aiUpgradePlan={buildingId:p.buildings.at(-1).id,targets:plan.path};return;}
  }
 }
+// Value the complete purchasable path, not just its weak first stage. This
+// runs throughout the match and reserves every remaining paid upgrade.
+function buildChoices(g,p,a,reserve,opening){
+ const choices=[];
+ for(const id of p.roster){
+  const base=units[id];if(!base||base.heroEntry)continue;
+  const visit=(u,path,cost,lumber,seen)=>{
+   if(cost>p.gold-reserve+1e-8||lumber>p.wood-planWood(p)+1e-8||g._population(p)+population(u)+planPopulation(p)>p.populationCap||g._requirement(p,u))return;
+   const cell=g._emptyCell(p,u);if(!cell)return;
+   const options=u.morphProxy?(u.morphTargets??[]).map(v=>units[typeof v==='string'?v:v.id]).filter(Boolean):[u];
+   const power=options.length?options.reduce((sum,d)=>sum+utility(g,d,a),0)/options.length:0;
+   if(power>0&&(!path.length||g._isFront(u)||a.fronts.length))choices.push({type:'build',u:base,cell,targets:path,score:power/Math.max(20,cost+lumber*.75)});
+   if(path.length>=2||opening||g.state.wave<4||p.aiUpgradePlan||u.morphProxy)return;
+   for(const nextId of upgrades(g,u)){if(seen.has(nextId))continue;const next=units[nextId];if(next)visit(next,[...path,nextId],cost+gold(next,true),lumber+wood(next),new Set([...seen,nextId]));}
+  };visit(base,[],gold(base),wood(base),new Set([id]));
+ }
+ return choices;
+}
 function plannedUpgrade(g,p){
  const plan=p.aiUpgradePlan;if(!plan)return 0;
  const b=p.buildings.find(b=>b.id===plan.buildingId),target=units[plan.targets?.[0]];
@@ -124,13 +142,7 @@ export function buildAIArmy(g,p,opening=false){
  }
  for(let attempt=0;attempt<(opening?8:4);attempt++){
   const a=army(g,p),choices=[];
-  for(const id of p.roster){const u=units[id];if(!u||u.heroEntry||!payable(g,p,u,false,null,reserve,planWood(p),planPopulation(p)))continue;
-   const cell=g._emptyCell(p,u);if(!cell)continue;
-   // A morph proxy has no combat form; value its known pool instead of ignoring the race.
-   const options=u.morphProxy?(u.morphTargets??[]).map(v=>units[typeof v==='string'?v:v.id]).filter(Boolean):[u];
-   const power=options.length?options.reduce((sum,d)=>sum+utility(g,d,a),0)/options.length:0;
-   if(power>0)choices.push({type:'build',u,cell,score:power/paid(u)});
-  }
+  choices.push(...buildChoices(g,p,a,reserve,opening));
   for(const b of p.buildings){if(b.construction||p.aiUpgradePlan?.buildingId===b.id)continue;
    choices.push(...upgradeChoices(g,p,b,a,reserve).filter(c=>!p.aiUpgradePlan||c.targets.length===1));
   }
@@ -138,7 +150,8 @@ export function buildAIArmy(g,p,opening=false){
   let purchased=false;
   for(const choice of choices){const payload={playerId:p.id,unitId:choice.u.id,...(choice.b?{buildingId:choice.b.id}:choice.cell)};
    if(g.command(choice.type,payload).ok){
-    if(choice.targets?.length>1){p.aiUpgradePlan={buildingId:choice.b.id,targets:choice.targets.slice(1)};reserve=planGold(p);}
+    const remaining=choice.type==='build'?choice.targets:choice.targets?.slice(1);
+    if(remaining?.length){p.aiUpgradePlan={buildingId:choice.b?.id??p.buildings.at(-1).id,targets:remaining};reserve=planGold(p);}
     purchased=true;break;
    }
   }
@@ -161,7 +174,9 @@ function developEconomy(g,p){
 
 /** Real enemy armies are visible on the map; use their armor and air coverage. */
 export function aiMercenaryScore(g,p,m,defenders=g.state.players.filter(q=>q.team!==p.team).flatMap(q=>q.buildings.map(effective)).filter(u=>u?.combatRawcode)){
- const price=Math.max(1,g._woodCost(m)),income=g.mercenaryStatus(m.id,p.id).income??m.income??0;
+ const price=Math.max(1,g._woodCost(m));
+ // Match the real send command, including integer halving after wave ten.
+ const income=Math.floor(n(m.sourcePoints??m.income)/(g.state.wave>=n(RULES.sentIncomeHalvingFromWave,11)?2:1));
  let outgoing=0,incoming=0;
  for(const u of defenders){
   outgoing+=g._typeMultiplier(m.attackType,u.armorType,u.sourceArmorTypeRaw);
@@ -242,10 +257,28 @@ function kingAndSends(g,p){
  const defenders=g.state.players.filter(q=>q.team!==p.team).flatMap(q=>q.buildings.map(effective)).filter(u=>u?.combatRawcode),scores=new Map();
  for(let sent=0;sent<3;sent++){
   const budget=p.wood-reserve;
-  const available=MERCENARIES.filter(m=>{const status=g.mercenaryStatus(m.id,p.id);return !status.locked&&status.stock>0&&g._woodCost(m)<=budget;});
+  const available=MERCENARIES.filter(m=>{const status=g.mercenaryStatus(m.id,p.id);return !status.locked&&status.stock>0;});
   for(const m of available)if(!scores.has(m.id))scores.set(m.id,aiMercenaryScore(g,p,m,defenders));
   available.sort((a,b)=>scores.get(b.id)-scores.get(a.id));
-  const choice=available[0];if(!choice||!g.command('merc',{playerId:p.id,mercId:choice.id}).ok)break;
+  const choice=available.find(m=>g._woodCost(m)<=budget);
+  // In normal late combat, bank at most twenty seconds of actual production
+  // for a materially better send. Re-evaluate on each turn; never reserve
+  // against locked stock, zero production, or an urgent king defense.
+  const canBank=g.state.mode!=='sandbox'&&g.state.phase==='combat'&&g.state.wave>=11&&!hurt&&!leaking&&economy.woodPerSecond>0;
+  const plan=p.aiSendPlan,planned=available.find(m=>m.id===plan?.mercId);
+  let send=choice;
+  if(plan){
+   if(canBank&&planned&&plan.wave===g.state.wave&&g.state.time<plan.expiresAt){
+    if(g._woodCost(planned)>budget)break;
+    send=planned;
+   }
+   delete p.aiSendPlan;
+  }else if(canBank){
+   const better=available.find(m=>g._woodCost(m)>budget&&g._woodCost(m)<=budget+economy.woodPerSecond*20&&(!choice||scores.get(m.id)>scores.get(choice.id)*1.08));
+   if(better){p.aiSendPlan={mercId:better.id,wave:g.state.wave,expiresAt:g.state.time+20};break;}
+  }
+  if(!send||!g.command('merc',{playerId:p.id,mercId:send.id}).ok)break;
+  if(plan)break; // Finish one planned attack before starting another reservation.
  }
 }
 export function actAI(g,p){

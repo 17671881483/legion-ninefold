@@ -1,0 +1,235 @@
+{
+  "baselineCommit": "542559d11051c111dbe1ab867050179d9c5c1ade",
+  "batch": "v57",
+  "commands": [
+    "node scripts/benchmark-ai-planning.mjs <checkout>",
+    "node scripts/benchmark-ai.mjs <checkout> 8"
+  ],
+  "fixedPlanning": {
+    "wave": 4,
+    "seedList": [
+      42,
+      173,
+      615
+    ],
+    "goldBudget": 405,
+    "existingFrontline": "v14_h00T",
+    "roster": [
+      "v14_h00N"
+    ],
+    "populationCap": 300,
+    "buildSeconds": 20,
+    "combatLimitSeconds": 180,
+    "kingHpForMeasurement": 1000000,
+    "before": [
+      {
+        "seed": 42,
+        "wave": 4,
+        "budget": 405,
+        "gold": 125,
+        "army": [
+          "v14_h00T",
+          "v14_h00N",
+          "v14_h00N"
+        ],
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 100,
+        "kills": 8,
+        "damage": 710,
+        "kingDamage": 58214
+      },
+      {
+        "seed": 173,
+        "wave": 4,
+        "budget": 405,
+        "gold": 125,
+        "army": [
+          "v14_h00T",
+          "v14_h00N",
+          "v14_h00N"
+        ],
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 100,
+        "kills": 8,
+        "damage": 710,
+        "kingDamage": 57865
+      },
+      {
+        "seed": 615,
+        "wave": 4,
+        "budget": 405,
+        "gold": 125,
+        "army": [
+          "v14_h00T",
+          "v14_h00N",
+          "v14_h00N"
+        ],
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 100,
+        "kills": 8,
+        "damage": 710,
+        "kingDamage": 57872
+      }
+    ],
+    "after": [
+      {
+        "seed": 42,
+        "wave": 4,
+        "budget": 405,
+        "gold": 0,
+        "army": [
+          "v14_h00T",
+          "v14_h00U"
+        ],
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 99,
+        "kills": 9,
+        "damage": 1502,
+        "kingDamage": 57140
+      },
+      {
+        "seed": 173,
+        "wave": 4,
+        "budget": 405,
+        "gold": 0,
+        "army": [
+          "v14_h00T",
+          "v14_h00U"
+        ],
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 99,
+        "kills": 9,
+        "damage": 1502,
+        "kingDamage": 57116
+      },
+      {
+        "seed": 615,
+        "wave": 4,
+        "budget": 405,
+        "gold": 0,
+        "army": [
+          "v14_h00T",
+          "v14_h00U"
+        ],
+        "seconds": 180,
+        "cleared": false,
+        "leaks": 99,
+        "kills": 9,
+        "damage": 1502,
+        "kingDamage": 57196
+      }
+    ]
+  },
+  "naturalThroughWave8": {
+    "before": [
+      {
+        "seed": 42,
+        "wave": 8,
+        "phase": "ended",
+        "seconds": 1010,
+        "enemyKing": 0,
+        "leaks": 862,
+        "kills": 3421,
+        "military": 15675,
+        "workers": 40,
+        "lumber": 25,
+        "sent": 437
+      },
+      {
+        "seed": 173,
+        "wave": 8,
+        "phase": "ended",
+        "seconds": 944,
+        "enemyKing": 0,
+        "leaks": 959,
+        "kills": 3353,
+        "military": 14125,
+        "workers": 40,
+        "lumber": 22,
+        "sent": 322
+      },
+      {
+        "seed": 615,
+        "wave": 4,
+        "phase": "ended",
+        "seconds": 485,
+        "enemyKing": 3467,
+        "leaks": 468,
+        "kills": 1767,
+        "military": 4020,
+        "workers": 27,
+        "lumber": 11,
+        "sent": 32
+      }
+    ],
+    "after": [
+      {
+        "seed": 42,
+        "wave": 6,
+        "phase": "ended",
+        "seconds": 684,
+        "enemyKing": 5000,
+        "leaks": 401,
+        "kills": 2717,
+        "military": 10035,
+        "workers": 40,
+        "lumber": 24,
+        "sent": 218
+      },
+      {
+        "seed": 173,
+        "wave": 8,
+        "phase": "ended",
+        "seconds": 944,
+        "enemyKing": 0,
+        "leaks": 959,
+        "kills": 3353,
+        "military": 14125,
+        "workers": 40,
+        "lumber": 22,
+        "sent": 322
+      },
+      {
+        "seed": 615,
+        "wave": 4,
+        "phase": "ended",
+        "seconds": 494,
+        "enemyKing": 1022,
+        "leaks": 482,
+        "kills": 1742,
+        "military": 4020,
+        "workers": 27,
+        "lumber": 12,
+        "sent": 32
+      }
+    ]
+  },
+  "limits": [
+    "Fixed trial gives both versions the same veteran and 405 gold. Old AI leaves 125 gold unused; candidate spends the entire budget.",
+    "All fixed trials hit 180 seconds without clearing. King HP is increased only to avoid early termination.",
+    "Normal 4v4 upgrades both AI teams, with the same test-only player-zero building assistance. Strategy changes later RNG draws and exposure.",
+    "Natural seed 615 worsens: red leaks 468 to 482; king HP 3467 to 1022. Seed 173 is unchanged; seed 42 ends earlier with the red king alive. These are not overall win-rate measurements.",
+    "Late attack banking is covered by state/command/browser checks; the natural runs end before wave 11 and do not measure late combat impact."
+  ],
+  "checks": {
+    "ai": 73,
+    "newAI": 19,
+    "node": 1640,
+    "custom": 91,
+    "browser": 73,
+    "smoke": {
+      "waves": 35,
+      "secondsPerWave": 12,
+      "spawned": 2784,
+      "peakEntities": 123,
+      "peakSourceJobs": 16,
+      "finiteState": true,
+      "saveContinuation": true
+    }
+  }
+}

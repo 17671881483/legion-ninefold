@@ -1,7 +1,7 @@
 // Browser opponent strategy, not a claim about the original map's AI.
 // Every purchase goes through Game.command and pays the player's real resources.
 import {UNITS, MERCENARIES, WAVES, RULES} from './data.js';
-import {compileSkills, sourceWeapon} from './skills.js';
+import {compileSkills, sourceWeapon, matchesTargets} from './skills.js';
 import {BOX_REWARD_RULES, BOX_RANDOM_FIGHTER_RULES} from './box-training-rules.js';
 import {laneToWorld} from './layout.js';
 
@@ -20,7 +20,7 @@ function upgrades(g,u){if(!upgradePaths.has(u))upgradePaths.set(u,g._upgradeIds(
 function matchup(g,u,wave=waveOf(g)){
  let cache=matchupScores.get(g);if(!cache||cache.wave!==g.state.wave){cache={wave:g.state.wave,scores:new Map()};matchupScores.set(g,cache);}
  const key=`${u.id}:${wave.wave??wave.id??wave.number}`;
- if(!cache.scores.has(key))cache.scores.set(key,aiUnitScore(g,u,wave));return cache.scores.get(key);
+ if(!cache.scores.has(key))cache.scores.set(key,g.state.wave<4?openingScore(g,u,wave):aiUnitScore(g,u,wave));return cache.scores.get(key);
 }
 function profile(u){
  if(!u)return {area:false,support:[]};
@@ -31,16 +31,68 @@ function profile(u){
  return profiles.get(u);
 }
 
-/** Estimate the upcoming matchup using weapon masks and actual attack tables. */
-export function aiUnitScore(g,u,wave=waveOf(g)){
+// Estimate contacts from a bounded crowd density, not a sixfold bonus merely
+// for having a splash weapon. Geometry remains an estimate, never extra damage.
+function weaponDamage(g,u,wave,weapon,skills){
+ if(!weapon)return 0;
+ const source={...u,side:'defender'},target={...wave,side:'monster',status:{}},w=weapon.raw,slot=weapon.slot;
+ const field=(key,fallback=0)=>n(w[key+slot]??w[key],fallback);
+ const count=Math.max(1,n(wave.count??wave.baseCount,108)),crowd=count>20?1:.15;
+ const neighbors=radius=>Math.min(count-1,40,Math.PI*(Math.max(0,radius)/100)**2*crowd*3);
+ const armor=g._typeMultiplier(weapon.attackType,wave.armorType,wave.sourceArmorTypeRaw)*g._armorFactor(n(wave.armor));
+ const useful=damage=>Math.max(0,damage)*armor;
+ let multiplier=1,bonus=0;
+ for(const s of skills)if(s.status==='implemented'&&matchesTargets(s,source,target)){
+  if(s.kind==='crit')multiplier*=1+Math.max(0,n(s.chance))*Math.max(0,n(s.multiplier)-1);
+  if(s.kind==='bash')bonus+=Math.max(0,n(s.chance))*Math.max(0,n(s.damage));
+ }
+ const damage=Math.max(0,n(weapon.damage))*multiplier,primary=useful(damage+bonus);
+ let secondary=0;
+ if(weapon.type==='mbounce'&&field('Farea')>0){
+  for(let i=1;i<Math.min(count,field('targCount',1),12);i++)secondary+=useful(damage*Math.max(0,1-field('damageLoss'))**i)*crowd;
+ }
+ if(['msplash','artillery','aline','mline'].includes(weapon.type)&&matchesTargets({targets:String(w['splashTargs'+slot]??w.splashTargs??'enemies').split(',')},source,target)){
+  if(weapon.type.endsWith('line'))secondary=useful(damage)*Math.min(count-1,12,2*Math.max(field('rangeN'),field('spillDist'))*field('spillRadius')/10000*crowd);
+  else{
+   const full=neighbors(field('Farea')),half=neighbors(Math.max(field('Farea'),field('Harea'))),outer=neighbors(Math.max(field('Farea'),field('Harea'),field('Qarea')));
+   secondary=full*useful(damage)+(half-full)*useful(damage*field('Hfact'))+(outer-half)*useful(damage*field('Qfact'));
+  }
+ }
+ // Only the native missile barrage adapter grants extra ordinary attacks.
+ // Crits suppress its extra arrows in the combat engine.
+ const barrage=skills.find(s=>s.kind==='native_barrage'&&s.runtimeImplemented&&s.radius>0&&matchesTargets(s,source,target));
+ if(barrage&&weapon.type==='missile'){
+  const chance=skills.filter(s=>s.status==='implemented'&&s.kind==='crit'&&matchesTargets(s,source,target)).reduce((chance,s)=>chance*(1-n(s.chance)),1);
+  secondary+=useful(n(weapon.damage))*Math.min(count-1,n(barrage.extraTargets),12)*crowd*Math.max(0,chance);
+ }
+ return (primary+secondary)/Math.max(.2,n(weapon.interval,u.interval));
+}
+
+// Keep the established opening stable while applying the richer model to
+// mid/late armies. An opening troop also has to survive several future waves.
+function openingScore(g,u,wave){
  if(!u||!u.combatRawcode||g._isWeaponlessObstacle(u))return 0;
  const weapon=sourceWeapon({...u,side:'defender',skillSource:'v14.1A5',attackInterval:u.interval},{...wave,side:'monster',hp:1,status:{},traits:wave.traits??[]});
  const p=profile(u),attack=weapon?n(weapon.damage)/Math.max(.2,n(weapon.interval,u.interval))*g._typeMultiplier(weapon.attackType,wave.armorType,wave.sourceArmorTypeRaw):0;
  const armorMatch=g._typeMultiplier(wave.attackType,u.armorType,u.sourceArmorTypeRaw),life=n(u.hp)/Math.max(.2,g._armorFactor(n(u.armor))*armorMatch);
- // Crowds favor area attacks; bosses favor focused damage and survivability.
  const area=p.area&&weapon?((wave.count??wave.baseCount??108)>20?6:1.15):1;
- const spells=p.skills?.reduce((sum,s)=>sum+(s.kind==='immolation'?n(s.dps)*3:['stomp','wave','knives','nova','breath','cluster'].includes(s.kind)?n(s.damage)*2/Math.max(5,n(s.cooldown,10)):s.kind==='heal'?n(s.amount??s.heal)*.015:0),0)??0;
- return attack*area+spells+life*.025*(weapon?1:.2);
+ return attack*area+spellScore(p)+life*.025*(weapon?1:.2);
+}
+const spellScore=p=>p.skills?.reduce((sum,s)=>sum+(s.kind==='immolation'?n(s.dps)*3:['stomp','wave','knives','nova','breath','cluster'].includes(s.kind)?n(s.damage)*2/Math.max(5,n(s.cooldown,10)):s.kind==='heal'?n(s.amount??s.heal)*.015:0),0)??0;
+
+/** Estimate the upcoming matchup using weapon masks and actual attack tables. */
+export function aiUnitScore(g,u,wave=waveOf(g)){
+ if(!u||!u.combatRawcode||g._isWeaponlessObstacle(u))return 0;
+ const weapon=sourceWeapon({...u,side:'defender',skillSource:'v14.1A5',attackInterval:u.interval},{...wave,side:'monster',hp:1,status:{},traits:wave.traits??[]});
+ const p=profile(u),attack=weaponDamage(g,u,wave,weapon,p.skills??[]);
+ const armorMatch=g._typeMultiplier(wave.attackType,u.armorType,u.sourceArmorTypeRaw);
+ let taken=g._armorFactor(n(u.armor))*armorMatch;
+ // Passive evasion is real protection; inactive defend and unresolved skills
+ // are deliberately excluded. Several evasion abilities do not add together.
+ const evasion=Math.max(0,...(p.skills??[]).filter(s=>s.status==='implemented'&&s.kind==='evasion').map(s=>n(s.chance)));
+ taken*=1-Math.min(.75,evasion);
+ const life=n(u.hp)/Math.max(.2,taken);
+ return attack+spellScore(p)+life*.025*(weapon?1:.2);
 }
 function army(g,p){
  const defs=p.buildings.map(effective).filter(Boolean),fronts=defs.filter(u=>g._isFront(u));
@@ -134,6 +186,10 @@ export function buildAIArmy(g,p,opening=false){
  if(g.state.phase!=='build')return;
  if(opening)openingPlan(g,p);
  let reserve=plannedUpgrade(g,p);
+ // Let the funded core finish before filling every spare slot with bases.
+ // The next completed stage can then start another full path with the
+ // remaining treasury, instead of discovering that cheap fillers spent it.
+ if(!opening&&g.state.wave>=4&&p.aiUpgradePlan)return;
  const tasks=g._economyTasks(p);
  if(p.populationCap-g._population(p)-planPopulation(p)<4&&!tasks.farmTask&&p.gold-reserve>=n(RULES.farmCost,24)&&p.wood-planWood(p)>=n(RULES.farmWoodCost,80))g.command('farm',{playerId:p.id});
  if(!opening&&p.buildings.some(b=>!b.construction&&!units[b.unitId]?.hero)&&!p.buildings.some(b=>units[b.unitId]?.heroEntry)){
@@ -155,7 +211,7 @@ export function buildAIArmy(g,p,opening=false){
     purchased=true;break;
    }
   }
-  if(!purchased)break;
+  if(!purchased||!opening&&g.state.wave>=4&&p.aiUpgradePlan)break;
  }
 }
 

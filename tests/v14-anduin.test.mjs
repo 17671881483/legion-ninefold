@@ -28,8 +28,8 @@ test('formal cast command enforces ownership pause and enemy-unit target',()=>{
 test('invalid targets range mana silence and death do not pay or create jobs',()=>{
  for(const mode of ['ally','dead','Avul','Aloc','range','mana','silence','casterDead']){const f=fixture(['A1SP']);if(mode==='ally')f.t.side=f.a.side;if(mode==='dead')f.t.hp=0;if(['Avul','Aloc'].includes(mode))skills(f.t,[mode]);if(mode==='range')f.t.worldX+=10;if(mode==='mana')f.a.mana=17;if(mode==='silence')f.a.status.silenceUntil=11;if(mode==='casterDead')f.a.hp=0;const mana=f.a.mana;assert.equal(f.cast('A1SP').ok,false,mode);near(f.a.mana,mana);assert.equal(f.g.state.sourceSkillJobs.length,0,mode);}
 });
-test('ancient spell effects return after native payment rather than create projectiles',()=>{
- const f=fixture();f.a.isAncient=true;ok(f.cast('A1SP'));ok(f.cast('A1SV'));near(f.a.mana,964);assert.equal(f.g.state.sourceSkillJobs.length,0);assert.equal(f.a.status.anduinCast.scriptApplied,false);
+test('main spell trigger permits ancient casters',()=>{
+ const f=fixture();f.a.isAncient=true;ok(f.cast('A1SP'));ok(f.cast('A1SV'));near(f.a.mana,964);assert.equal(f.g.state.sourceSkillJobs.length,7);assert.equal(f.a.status.anduinCast.scriptApplied,true);
 });
 test('rain starts at one second then damages20 and heals caster50 for ten ticks',()=>{
  const f=fixture(['A1SP']);f.a.hp=1000;ok(f.cast('A1SP'));f.at(10.999);near(f.t.hp,10000);near(f.a.hp,1000);f.at(11);near(f.t.hp,9980);near(f.a.hp,1050);f.at(20);near(f.t.hp,9800);near(f.a.hp,1500);assert.equal(jobs(f.g,'anduin_rain').length,0);

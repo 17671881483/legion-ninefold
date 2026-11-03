@@ -21,7 +21,6 @@ const st=e=>(e.status??={}).nozdormu??={};
 const jobs=g=>g.state.sourceSkillJobs??=[];
 const group=(g,e,p,r)=>[...g.state.entities,...(g.state.kings??[])].filter(t=>!gone(t)&&!ally(e,t)&&!has(t,'Avul')&&!has(t,'Aloc')&&!t.status?.sourceHidden&&!t.status?.yseraHidden&&Math.hypot(pos(t).x-p.x,pos(t).y-p.y)<=r*scale(e)+1e-8);
 const blocked=(g,e)=>gone(e)||e.status?.sourcePaused||e.status?.yseraPaused||e.status?.illidanPaused||e.status?.sourceHidden||e.status?.yseraHidden||['stunUntil','cycloneUntil','silenceUntil'].some(k=>e.status?.[k]>g.state.time);
-const ancient=e=>e.isAncient||e.traits?.includes('ancient')||String(e.unitType??e.sourceRawFields?.type??'').split(',').includes('ancient');
 export const canNozdormuCast=(e,id)=>!!NOZDORMU_RULES[id]?.active&&has(e,id);
 function pay(g,e,id,api){
  if(!has(e,id))return {ok:false,message:'当前单位没有此技能'};
@@ -36,7 +35,7 @@ export function castNozdormu(g,e,id,params,api){
  const p=params.point??(params.target?pos(params.target):undefined),s=api.compileAbility(g,e,id);
  if(id==='A159'&&(!Number.isFinite(p?.x)||!Number.isFinite(p?.y)||Math.hypot(pos(e).x-p.x,pos(e).y-p.y)>s.range+1e-8))return {ok:false,message:'请选择施法范围内的位置'};
  const result=pay(g,e,id,api);if(!result.ok)return result;
- const applied=!g._sourceAbilityEffectDepth&&!ancient(e);st(e).lastCast={id,at:g.state.time,scriptApplied:applied};
+ const applied=!g._sourceAbilityEffectDepth;st(e).lastCast={id,at:g.state.time,scriptApplied:applied};
  if(applied){g._sourceAbilityEffectDepth=(g._sourceAbilityEffectDepth??0)+1;try{
   if(id==='A15A'){
    const history=jobs(g).find(j=>j.type==='nozdormu_history'&&!j.done&&j.sourceId===e.id),percent=history?.values[2]||100,before=e.hp;

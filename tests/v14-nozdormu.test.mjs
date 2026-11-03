@@ -84,8 +84,8 @@ test('breath damage center follows cast direction but not target distance',()=>{
 test('invalid breath points range mana silence and cooldown do not start effects',()=>{
  for(const mode of ['NaN','range','mana','silence','cooldown']){const f=fixture(['A159']);if(mode==='mana')f.a.mana=9;if(mode==='silence')f.a.status.silenceUntil=11;if(mode==='cooldown')f.a.skillStates.A159.readyAt=11;const mana=f.a.mana,r=f.cast('A159',mode==='NaN'?{x:NaN,y:8}:mode==='range'?{x:10,y:8}:{x:6,y:8});assert.equal(r.ok,false,mode);near(f.a.mana,mana);near(f.t.hp,10000);}
 });
-test('ancient and nested spell trigger pay native costs without script effects',()=>{
- for(const mode of ['ancient','nested']){const f=fixture(['A159','A15A']);if(mode==='ancient')f.a.isAncient=true;else f.g._sourceAbilityEffectDepth=1;f.a.hp=5000;ok(f.cast('A159'));ok(f.cast('A15A'));near(f.t.hp,10000);near(f.a.hp,5000);near(f.a.mana,985);}
+test('only nested spell trigger suppresses effects, ancient classification does not',()=>{
+ for(const mode of ['ancient','nested']){const f=fixture(['A159','A15A']);if(mode==='ancient')f.a.isAncient=true;else f.g._sourceAbilityEffectDepth=1;f.a.hp=5000;ok(f.cast('A159'));ok(f.cast('A15A'));near(f.t.hp,mode==='ancient'?9600:10000);near(f.a.hp,mode==='ancient'?10000:5000);near(f.a.mana,985);}
 });
 test('automatic rewind is attackeronly and breath is targetonly',()=>{
  const f=fixture(['A15A','A159']);f.a.hp=1000;f.g._sourceDamageTriggerDepth=0;beforeSourceDamage(f.g,f.t,1,f.a);near(f.a.hp,10000);near(f.a.mana,995);near(f.t.hp,10000);

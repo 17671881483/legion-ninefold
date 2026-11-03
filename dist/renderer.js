@@ -155,6 +155,15 @@ export class Battlefield{
     }else{
       for(const e of state.entities){const breath=e.status?.nozdormu?.breath,age=breath?state.time-breath.at:2;if(age>=0&&age<1.2){const p=this.project(breath.center.x,breath.center.y),r=400*(e.distanceScale??1/3)/100*s;c.save();c.globalAlpha=(1-age/1.2)*.35;c.strokeStyle='#efcd82';c.lineWidth=2;ellipse(c,p.x,p.y,r,r*.78,'#dfb758');c.beginPath();c.ellipse(p.x,p.y,r,r*.78,0,0,Math.PI*2);c.stroke();c.restore();}}
       for(const job of state.sourceSkillJobs??[]){
+        if(!job.done&&job.type?.startsWith('savis_')){
+          const spot=job.target??(job.type==='savis_eruption'?job.source:job),x=spot.worldX??spot.x,y=spot.worldY??spot.y;
+          if(Number.isFinite(x)&&Number.isFinite(y)){
+            const p=this.project(x,y),scale=(job.source.distanceScale??1/3)/100;c.save();c.strokeStyle='#d5a2ef';c.fillStyle='#ae75d1';c.lineWidth=1.5;
+            if(job.type==='savis_soul'||job.type==='savis_loop'){const r=s*.3;c.globalAlpha=.65;c.beginPath();c.ellipse(p.x,p.y,r,r*.78,0,0,Math.PI*2);c.stroke();if(job.type==='savis_soul'){c.font='10px system-ui';c.textAlign='center';c.fillText('晦暗',p.x,p.y-s*.65);}}
+            else{const r=(job.type==='savis_blade'?400:job.type==='savis_meteor'?500:300)*scale*s;c.globalAlpha=.12;c.beginPath();c.ellipse(p.x,p.y,r,r*.78,0,0,Math.PI*2);c.fill();c.globalAlpha=.6;c.stroke();if(job.type==='savis_blade')for(let n=0;n<5;n++){const xx=p.x+(n-2)*r*.3;c.beginPath();c.moveTo(xx,p.y+r*.3);c.lineTo(xx+s*.1,p.y-r*.5);c.stroke();}}
+            c.restore();
+          }continue;
+        }
         if(!job.done&&['alex_grant','alex_blossom','alex_fireball','alex_link','alex_purify'].includes(job.type)){
           const e=job.source,scale=(e.distanceScale??1/3)/100,spot=job.type==='alex_blossom'?job:job.dummy??e;
           const x=spot.worldX??spot.x,y=spot.worldY??spot.y,p=this.project(x,y);c.save();c.lineWidth=1.5;

@@ -16,7 +16,6 @@ const report=(e,key,value)=>((e.status??={})[key]=value);
 const queue=(g,e,type,data)=>{const j={type,sourceId:e.id,source:e,...data};jobs(g).push(j);return j;};
 const ally=(a,b)=>a.team!==undefined&&b.team!==undefined?a.team===b.team:a.side===b.side&&a.battleTeam===b.battleTeam;
 const group=(g,e,p,r,friendly=false)=>all(g).filter(t=>t.hp>.405&&!removed(t)&&!t.status?.sourceHidden&&!t.status?.yseraHidden&&!has(t,'Aloc')&&!has(t,'Avul')&&ally(e,t)===friendly&&Math.hypot(pos(t).x-p.x,pos(t).y-p.y)<=r*scale(e)+1e-8);
-const ancient=e=>e.isAncient||e.traits?.includes('ancient')||String(e.unitType??e.sourceRawFields?.type??'').split(',').includes('ancient');
 const unavailable=(g,e)=>removed(e)||e.hp<=.405||e.status?.sourcePaused||e.status?.yseraPaused||e.status?.illidanPaused||e.status?.sourceHidden||e.status?.yseraHidden||['stunUntil','cycloneUntil','silenceUntil'].some(k=>e.status?.[k]>g.state.time);
 export const canGuldanCast=(e,id)=>!!GULDAN_RULES[id]&&has(e,id);
 
@@ -33,7 +32,7 @@ function finishArrow(g,j){
  j.phase='cleanup';j.finishedAt=g.state.time;j.nextAt=j.removeAt;
 }
 export function guldanSpellEffect(g,e,id,params,api){
- if(g._sourceAbilityEffectDepth||ancient(e))return false;
+ if(g._sourceAbilityEffectDepth)return false;
  g._sourceAbilityEffectDepth=(g._sourceAbilityEffectDepth??0)+1;
  try{
   const origin=pos(e);

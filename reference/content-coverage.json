@@ -1,6 +1,6 @@
 {
   "sourceVersion": "v14.1A5",
-  "skillImplementationRevision": "v14-content-20261104-v65-1",
+  "skillImplementationRevision": "v14-content-20261104-v66-1",
   "units": 534,
   "mercenaryRecords": 60,
   "mainWaves": 35,
@@ -29,7 +29,8 @@
     "h0VZ",
     "e01G",
     "h0R0",
-    "h0QT"
+    "h0QT",
+    "u011"
   ],
   "playerRuntimeAbilities": [
     {
@@ -448,15 +449,16 @@
     "n07O",
     "n07R",
     "n07S",
-    "n08E"
+    "n08E",
+    "n08H"
   ],
   "playerBuildingCommandCarriers": 411,
   "playerSkills": {
     "counts": {
-      "implemented": 410,
-      "partial": 170,
-      "marker": 38,
-      "unresolved": 64
+      "implemented": 409,
+      "partial": 175,
+      "marker": 39,
+      "unresolved": 60
     },
     "abilities": [
       {
@@ -6675,8 +6677,8 @@
       {
         "rawcode": "A1UD",
         "name": "晦暗灵魂",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "savis_source",
         "unitRawcodes": [
           "n08H"
         ]
@@ -6684,8 +6686,8 @@
       {
         "rawcode": "A1UE",
         "name": "梦魇之刃",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "savis_source",
         "unitRawcodes": [
           "n08H"
         ]
@@ -6693,8 +6695,8 @@
       {
         "rawcode": "A1UF",
         "name": "潜袭喷发",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "savis_source",
         "unitRawcodes": [
           "n08H"
         ]
@@ -6702,8 +6704,17 @@
       {
         "rawcode": "A1UG",
         "name": "腐蚀流星",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "savis_source",
+        "unitRawcodes": [
+          "n08H"
+        ]
+      },
+      {
+        "rawcode": "A1UH",
+        "name": "梦魇召唤",
+        "status": "marker",
+        "kind": "savis_source",
         "unitRawcodes": [
           "n08H"
         ]
@@ -6711,8 +6722,8 @@
       {
         "rawcode": "A1UI",
         "name": "梦魇召唤",
-        "status": "implemented",
-        "kind": "summon",
+        "status": "partial",
+        "kind": "savis_source",
         "unitRawcodes": [
           "n08H"
         ]
@@ -7496,10 +7507,10 @@
   },
   "battleSkills": {
     "counts": {
-      "implemented": 459,
-      "partial": 179,
-      "marker": 51,
-      "unresolved": 78
+      "implemented": 458,
+      "partial": 184,
+      "marker": 52,
+      "unresolved": 74
     },
     "abilities": [
       {
@@ -14544,8 +14555,8 @@
       {
         "rawcode": "A1UD",
         "name": "晦暗灵魂",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "savis_source",
         "unitRawcodes": [
           "n08H"
         ]
@@ -14553,8 +14564,8 @@
       {
         "rawcode": "A1UE",
         "name": "梦魇之刃",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "savis_source",
         "unitRawcodes": [
           "n08H"
         ]
@@ -14562,8 +14573,8 @@
       {
         "rawcode": "A1UF",
         "name": "潜袭喷发",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "savis_source",
         "unitRawcodes": [
           "n08H"
         ]
@@ -14571,8 +14582,17 @@
       {
         "rawcode": "A1UG",
         "name": "腐蚀流星",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "savis_source",
+        "unitRawcodes": [
+          "n08H"
+        ]
+      },
+      {
+        "rawcode": "A1UH",
+        "name": "梦魇召唤",
+        "status": "marker",
+        "kind": "savis_source",
         "unitRawcodes": [
           "n08H"
         ]
@@ -14580,8 +14600,8 @@
       {
         "rawcode": "A1UI",
         "name": "梦魇召唤",
-        "status": "implemented",
-        "kind": "summon",
+        "status": "partial",
+        "kind": "savis_source",
         "unitRawcodes": [
           "n08H"
         ]
@@ -15629,6 +15649,7 @@
     }
   ],
   "remainingSourceGaps": [
+    "萨维斯A1UD三目标每秒305感染、A1UE固定400范围七次去重检查、A1UF恐魔3秒生命/175初伤/125死亡爆炸及10次10伤害、A1UG延迟0.5秒425流星已接入。A1UH仅说明，SavisSummon无调用；A1UI命令错配及缺失耗魔不再按免费自动召唤处理。原生时序、枚举、移除句柄、导航及特效仍partial，见savis-evidence.json。",
     "诺兹多姆A154受伤跳跃/扣费/正面驱散、A158主死亡变龙及1000爆炸、A159时之吐息、A15A历史与零值满血回退已接入。默认新龙没有A15A历史登记，不补造；A155/A206是原生光环说明，sapper目标分类已约束。原生ANcl时序、矩形映射、未知buff、回溯生命/枚举及飞行通行仍partial，见nozdormu-evidence.json。",
     "阿莱克斯塔萨生命赐福/绽放/生命链接、独立自然祝福请求、死亡h0R0变龙、三次烈焰打击、一次780净化烈焰及自然怒火25%附伤/共享护甲已接入。A170仅在建筑，普通与神圣战斗体均未授予，默认命令失败。未调用的旧白焰线不添加。原生生命/入圈事件、ANcl仲裁、枚举、动态攻击上下限及模型碰撞仍partial，见alexstrasza-evidence.json。",
     "瓦里安A11V/W/X/Y受伤姿态、原生动态属性、武器事件怒气与攻击改写、75次旋风及一次濒死分支已接入；原生施法缺省耗魔/前摇、生命设置同帧语义、目标枚举及光环边界仍partial，见varian-evidence.json。",

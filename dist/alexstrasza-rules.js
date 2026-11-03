@@ -67,7 +67,6 @@ export function initializeAlexstraszaDeployment(g,b,e){
  if(enabled('A172'))queue(g,e,'alex_revive');
 }
 const blocked=(g,e)=>dead(e)||e.status?.sourcePaused||e.status?.yseraPaused||e.status?.illidanPaused||e.status?.sourceHidden||e.status?.yseraHidden||['stunUntil','cycloneUntil','silenceUntil'].some(k=>e.status?.[k]>g.state.time);
-const ancient=e=>e.isAncient||e.traits?.includes('ancient')||String(e.unitType??e.sourceRawFields?.type??'').split(',').includes('ancient');
 export const canAlexstraszaCast=(e,id)=>!!ALEXSTRASZA_RULES[id]?.active&&has(e,id);
 export function castAlexstrasza(g,e,id,params,api){
  const fail=message=>({ok:false,message});if(!has(e,id)||!ALEXSTRASZA_RULES[id]||!ALEXSTRASZA_RULES[id].active&&id!=='A170')return fail('当前单位没有此技能');if(blocked(g,e))return fail('单位当前无法施法');
@@ -77,7 +76,7 @@ export function castAlexstrasza(g,e,id,params,api){
  if(!range(e,{worldX:p.x,worldY:p.y},pos(e),Number(s.fields.Rng1)))return fail('超出施法范围');
  const state=(e.skillStates??={})[id]??={readyAt:0,casts:0};if(state.readyAt>g.state.time+1e-8)return fail('技能冷却中');if(e.mana<s.manaCost)return fail('魔法不足');
  e.mana-=s.manaCost;state.readyAt=g.state.time+s.cooldown;state.casts++;e.pendingAttack=null;
- const scriptApplied=id!=='A170'&&!g._sourceAbilityEffectDepth&&!ancient(e);
+ const scriptApplied=id!=='A170'&&!g._sourceAbilityEffectDepth;
  if(scriptApplied){
   g._sourceAbilityEffectDepth=(g._sourceAbilityEffectDepth??0)+1;
   try{if(id==='A16T')queue(g,e,'alex_blossom',{...p,count:0,nextAt:g.state.time});

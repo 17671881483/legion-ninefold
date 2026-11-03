@@ -25,8 +25,8 @@ test('three manual skills expose exact costs cooldowns and point or immediate ta
 test('point spells reject range nonfinite positions resource and control failures without payment',()=>{
  for(const mode of ['range','mana','zero','silence','pause','dead','nan']){const f=fixture(['A1QL']);if(mode==='range')f.t.worldX+=5;if(mode==='mana')f.a.mana=14;if(mode==='zero')f.a.abilityLevels={A1QL:0};if(mode==='silence')f.a.status.silenceUntil=11;if(mode==='pause')f.a.status.sourcePaused=true;if(mode==='dead')f.a.hp=0;if(mode==='nan')f.t.worldX=NaN;const mana=f.a.mana;assert.equal(f.cast('A1QL').ok,false,mode);near(f.a.mana,mana);assert.equal(f.g.state.sourceSkillJobs.length,0);}
 });
-test('ancient building bodies pay native cost but suppress all three script bodies',()=>{
- for(const id of ['A1QL','A1QM','A1QN']){const f=fixture([id]);f.a.unitType='ancient';ok(f.cast(id));assert.ok(f.a.mana<1000);assert.equal(f.a.status.guldanCast.scriptApplied,false);assert.equal(f.g.state.sourceSkillJobs.length,0);near(f.t.hp,10000);}
+test('main spell trigger does not suppress ancient casters',()=>{
+ for(const id of ['A1QL','A1QM','A1QN']){const f=fixture([id]);f.a.unitType='ancient';ok(f.cast(id));assert.ok(f.a.mana<1000);assert.equal(f.a.status.guldanCast.scriptApplied,true);assert.ok(f.g.state.sourceSkillJobs.length>0);}
 });
 test('nested spell effect suppression retains payment and cooldown without executing script',()=>{
  const f=fixture(['A1QN']);f.g._sourceAbilityEffectDepth=1;ok(f.cast('A1QN'));near(f.a.mana,989);near(f.a.skillStates.A1QN.readyAt,19);near(f.t.hp,10000);assert.equal(f.g.state.sourceSkillJobs.length,0);

@@ -30,8 +30,8 @@ test('formal cast command enforces ownership and pause before paying',()=>{
 test('invalid enemy targets range resources and control never create paid flame jobs',()=>{
  for(const mode of ['ally','dead','range','mana','silence','paused','Avul','Aloc']){const f=fixture(['A16V']);if(mode==='ally'){f.t.side=f.a.side;f.t.team=f.a.team;}if(mode==='dead')f.t.hp=0;if(mode==='range')f.t.worldX+=5;if(mode==='mana')f.a.mana=9;if(mode==='silence')f.a.status.silenceUntil=11;if(mode==='paused')f.a.status.sourcePaused=true;if(['Avul','Aloc'].includes(mode))skills(f.t,[mode]);const mana=f.a.mana;assert.equal(f.cast('A16V').ok,false,mode);near(f.a.mana,mana);assert.equal(f.g.state.sourceSkillJobs.length,0);}
 });
-test('ancient spell effects still pay native fees but cannot start script jobs',()=>{
- const f=fixture(['A16T','A16V','A16W']);f.a.isAncient=true;for(const id of ['A16T','A16V','A16W'])ok(f.cast(id));near(f.a.mana,960);assert.equal(f.g.state.sourceSkillJobs.length,0);assert.ok(has(f.a,'A16W'));
+test('main spell trigger allows ancient blossom casters',()=>{
+ const f=fixture(['A16T']);f.a.isAncient=true;ok(f.cast('A16T'));near(f.a.mana,990);assert.equal(jobs(f.g,'alex_blossom').length,1);
 });
 test('blossom heals60immediately eight times through seven seconds with fixed center',()=>{
  const f=fixture(),friend=f.make(.5,'defender');friend.hp=1000;ok(f.cast('A16T'));f.at(10);near(friend.hp,1060);f.a.worldX+=10;f.t.worldX+=10;f.at(17);near(friend.hp,1480);near(f.t.hp,10000);assert.equal(jobs(f.g,'alex_blossom').length,0);

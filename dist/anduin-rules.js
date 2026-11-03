@@ -23,12 +23,11 @@ const ally=(a,b)=>a.team!==undefined&&b.team!==undefined?a.team===b.team:a.side=
 const owner=e=>e.sourceNativeOwnerId??e.ownerId;
 const varian=e=>['h0PZ','h0XC'].includes(raw(e));
 const group=(g,e,p,r)=>all(g).filter(t=>t.hp>.405&&!removed(t)&&!t.status?.sourceHidden&&!t.status?.yseraHidden&&!has(t,'Aloc')&&!has(t,'Avul')&&!ally(e,t)&&Math.hypot(pos(t).x-p.x,pos(t).y-p.y)<=r*scale(e)+1e-8);
-const ancient=e=>e.isAncient||e.traits?.includes('ancient')||String(e.unitType??e.sourceRawFields?.type??'').split(',').includes('ancient');
 const unavailable=(g,e)=>removed(e)||e.hp<=.405||e.status?.sourcePaused||e.status?.yseraPaused||e.status?.illidanPaused||e.status?.sourceHidden||e.status?.yseraHidden||['stunUntil','cycloneUntil','silenceUntil'].some(k=>e.status?.[k]>g.state.time);
 export const canAnduinCast=(e,id)=>!!ANDUIN_RULES[id]?.active&&has(e,id);
 
 export function anduinSpellEffect(g,e,id,params,api){
- if(g._sourceAbilityEffectDepth||ancient(e))return false;
+ if(g._sourceAbilityEffectDepth)return false;
  g._sourceAbilityEffectDepth=(g._sourceAbilityEffectDepth??0)+1;
  try{
   if(id==='A1SP')queue(g,e,'anduin_rain',{...pos(params.target),ticks:0,nextAt:g.state.time+1});

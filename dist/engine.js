@@ -1,3 +1,4 @@
+import {restoreSavis} from './savis-rules.js';
 import {restoreNozdormu} from './nozdormu-rules.js';
 import {restoreAlexstrasza} from './alexstrasza-rules.js';
 import {restoreVarian} from './varian-rules.js';
@@ -1709,7 +1710,7 @@ export class Game {
       restoreUnstableAlchemyUserData(this,e);restoreVeteranIdentity(this,e,units);restoreSapperCreation(this,e,def);
     }
     restoreUndeadLegionHandles(this);
-    restorePhoenixRevival(this);restorePhoenixActive(this);restoreMalygos(this);restoreGuldan(this);restoreAnduin(this);restoreVarian(this);restoreAlexstrasza(this);restoreNozdormu(this);
+    restorePhoenixRevival(this);restorePhoenixActive(this);restoreMalygos(this);restoreGuldan(this);restoreAnduin(this);restoreVarian(this);restoreAlexstrasza(this);restoreNozdormu(this);restoreSavis(this);
     // JSON stores retained handles separately; surviving units must share the
     // live object again so later healing, movement and death update one handle.
     for(const e of [...this.state.entities,...this.state.kings])if(this.state.brightArthasHandles[e.id])this.state.brightArthasHandles[e.id]=e;

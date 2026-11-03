@@ -1,0 +1,1924 @@
+{
+  "source": {
+    "path": "reference/v14-source/raw_extracted/war3map.j",
+    "sha256": "e66c55b3b25b185c991be5613e21fbf5b2d598f3cc40f2f8cd01c23bcb828250",
+    "encoding": "latin1 split LF only"
+  },
+  "sourceEvidence": [
+    {
+      "line": 1620,
+      "text": "call SaveInteger(O,$68303230,StringHash(\"box_train_upgrade_count\"),2)"
+    },
+    {
+      "line": 1621,
+      "text": "call SaveInteger(O,$68303230,StringHash(\"box_train_upgrade_1\"),$6E303654)"
+    },
+    {
+      "line": 1622,
+      "text": "call SaveInteger(O,$68303230,StringHash(\"box_train_upgrade_2\"),$6E303848)"
+    },
+    {
+      "line": 1623,
+      "text": "call SaveInteger(O,$6E303654,StringHash(\"box_train_upgrade_next\"),$6E303848)"
+    },
+    {
+      "line": 1624,
+      "text": "call SaveInteger(O,$6E303654,StringHash(\"box_train_upgrade_count\"),1)"
+    },
+    {
+      "line": 1625,
+      "text": "call SaveInteger(O,$6E303654,StringHash(\"box_train_upgrade_1\"),$6E303848)"
+    },
+    {
+      "line": 2280,
+      "text": "call SaveInteger(O,$6830315A,StringHash(\"box_train_select_count\"),1)"
+    },
+    {
+      "line": 2281,
+      "text": "call SaveInteger(O,$6830315A,StringHash(\"box_train_select_1\"),$68303230)"
+    },
+    {
+      "line": 2282,
+      "text": "call SaveInteger(O,$68303230,StringHash(\"box_train_select_count\"),1)"
+    },
+    {
+      "line": 2283,
+      "text": "call SaveInteger(O,$68303230,StringHash(\"box_train_select_1\"),$6E303848)"
+    },
+    {
+      "line": 2284,
+      "text": "call SaveInteger(O,$6E303654,StringHash(\"box_train_select_count\"),1)"
+    },
+    {
+      "line": 2285,
+      "text": "call SaveInteger(O,$6E303654,StringHash(\"box_train_select_1\"),$6E303848)"
+    },
+    {
+      "line": 2772,
+      "text": "call SaveInteger(O,$6E303848,StringHash(\"box_train_upgrade_require_count\"),3)"
+    },
+    {
+      "line": 2773,
+      "text": "call SaveInteger(O,$6E303848,StringHash(\"box_train_upgrade_require_1\"),$75303034)"
+    },
+    {
+      "line": 2774,
+      "text": "call SaveInteger(O,$6E303848,StringHash(\"box_train_upgrade_require_2\"),$5230474C)"
+    },
+    {
+      "line": 2775,
+      "text": "call SaveInteger(O,$6E303848,StringHash(\"box_train_upgrade_require_3\"),$68323230)"
+    },
+    {
+      "line": 3619,
+      "text": "call DisableEggUnitTypeDialog___RegisterDialogEggUnitType($6E303848,\"è¨ç»´æ¯\",1)"
+    },
+    {
+      "line": 18320,
+      "text": "set Bi=Bi+1"
+    },
+    {
+      "line": 18321,
+      "text": "set Mk[Bi]=$6830574C"
+    },
+    {
+      "line": 18322,
+      "text": "set Ml[Bi]=$6E303848"
+    },
+    {
+      "line": 28595,
+      "text": "if x==$68303157 or x==$68304D45 or x==$6830474F then"
+    },
+    {
+      "line": 28596,
+      "text": "call SaveBoolean(O,GetHandleId(h),x,true)"
+    },
+    {
+      "line": 28597,
+      "text": "if LoadBoolean(O,GetHandleId(h),$68304D45) or LoadBoolean(O,GetHandleId(h),$6830474F) and LoadBoolean(O,GetHandleId(h),$68303157) then"
+    },
+    {
+      "line": 28598,
+      "text": "call SetPlayerTechResearchedSwap($5230474C,1,h)"
+    },
+    {
+      "line": 28599,
+      "text": "endif"
+    },
+    {
+      "line": 29895,
+      "text": "function LoopDamageAction takes nothing returns nothing"
+    },
+    {
+      "line": 29896,
+      "text": "local trigger t=GetTriggeringTrigger()"
+    },
+    {
+      "line": 29897,
+      "text": "local integer BF=GetHandleId(t)"
+    },
+    {
+      "line": 29898,
+      "text": "local unit Pf=LoadUnitHandle(O,BF,0)"
+    },
+    {
+      "line": 29899,
+      "text": "local unit Om=LoadUnitHandle(O,BF,1)"
+    },
+    {
+      "line": 29900,
+      "text": "local real DK=LoadReal(O,BF,2)"
+    },
+    {
+      "line": 29901,
+      "text": "local real Zp=LoadReal(O,BF,3)"
+    },
+    {
+      "line": 29902,
+      "text": "if GetTriggerEventId()==EVENT_GAME_TIMER_EXPIRED then"
+    },
+    {
+      "line": 29903,
+      "text": "call UnitDamageTargetBJ(Pf,Om,LoadReal(O,BF,4),ATTACK_TYPE_CHAOS,DAMAGE_TYPE_UNIVERSAL)"
+    },
+    {
+      "line": 29904,
+      "text": "if GetTriggerExecCount(t)*Zp>=DK then"
+    },
+    {
+      "line": 29905,
+      "text": "call FlushChildHashtable(O,BF)"
+    },
+    {
+      "line": 29906,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 29907,
+      "text": "endif"
+    },
+    {
+      "line": 29908,
+      "text": "else"
+    },
+    {
+      "line": 29909,
+      "text": "call FlushChildHashtable(O,BF)"
+    },
+    {
+      "line": 29910,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 29911,
+      "text": "endif"
+    },
+    {
+      "line": 29912,
+      "text": "set Pf=null"
+    },
+    {
+      "line": 29913,
+      "text": "set Om=null"
+    },
+    {
+      "line": 29914,
+      "text": "set t=null"
+    },
+    {
+      "line": 29915,
+      "text": "endfunction"
+    },
+    {
+      "line": 29916,
+      "text": "function LoopDamage takes unit Pf,unit Om,real Tz,real Zp,real DK returns nothing"
+    },
+    {
+      "line": 29917,
+      "text": "local trigger t=CreateTrigger()"
+    },
+    {
+      "line": 29918,
+      "text": "call SaveUnitHandle(O,GetHandleId(t),0,Pf)"
+    },
+    {
+      "line": 29919,
+      "text": "call SaveUnitHandle(O,GetHandleId(t),1,Om)"
+    },
+    {
+      "line": 29920,
+      "text": "call SaveReal(O,GetHandleId(t),2,DK)"
+    },
+    {
+      "line": 29921,
+      "text": "call SaveReal(O,GetHandleId(t),3,Zp)"
+    },
+    {
+      "line": 29922,
+      "text": "call SaveReal(O,GetHandleId(t),4,Tz)"
+    },
+    {
+      "line": 29923,
+      "text": "call TriggerRegisterTimerEvent(t,Zp,true)"
+    },
+    {
+      "line": 29924,
+      "text": "call TriggerRegisterDeathEvent(t,Om)"
+    },
+    {
+      "line": 29925,
+      "text": "call TriggerAddAction(t,function LoopDamageAction)"
+    },
+    {
+      "line": 29926,
+      "text": "set Pf=null"
+    },
+    {
+      "line": 29927,
+      "text": "set Om=null"
+    },
+    {
+      "line": 29928,
+      "text": "set t=null"
+    },
+    {
+      "line": 29929,
+      "text": "endfunction"
+    },
+    {
+      "line": 35900,
+      "text": "function SavisDarkSoulAction takes nothing returns nothing"
+    },
+    {
+      "line": 35901,
+      "text": "local trigger t=GetTriggeringTrigger()"
+    },
+    {
+      "line": 35902,
+      "text": "local integer Pr=GetHandleId(t)"
+    },
+    {
+      "line": 35903,
+      "text": "local unit Bc=LoadUnitHandle(O,Pr,0)"
+    },
+    {
+      "line": 35904,
+      "text": "local unit Om=LoadUnitHandle(O,Pr,1)"
+    },
+    {
+      "line": 35905,
+      "text": "if GetTriggerEventId()==EVENT_GAME_TIMER_EXPIRED then"
+    },
+    {
+      "line": 35906,
+      "text": "call UnitDamageTargetBJ(Bc,Om,305,ATTACK_TYPE_CHAOS,DAMAGE_TYPE_UNIVERSAL)"
+    },
+    {
+      "line": 35907,
+      "text": "else"
+    },
+    {
+      "line": 35908,
+      "text": "call SetUnitVertexColorBJ(Om,100,100,100,0)"
+    },
+    {
+      "line": 35909,
+      "text": "call FlushChildHashtable(O,Pr)"
+    },
+    {
+      "line": 35910,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 35911,
+      "text": "endif"
+    },
+    {
+      "line": 35912,
+      "text": "set t=null"
+    },
+    {
+      "line": 35913,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 35914,
+      "text": "set Om=null"
+    },
+    {
+      "line": 35915,
+      "text": "endfunction"
+    },
+    {
+      "line": 35916,
+      "text": "function SavisDarkSoul takes unit Bc,unit Om returns nothing"
+    },
+    {
+      "line": 35917,
+      "text": "local trigger t=CreateTrigger()"
+    },
+    {
+      "line": 35918,
+      "text": "local integer Pr=GetHandleId(t)"
+    },
+    {
+      "line": 35919,
+      "text": "local location Z8=GetUnitLoc(Bc)"
+    },
+    {
+      "line": 35920,
+      "text": "call SetUnitVertexColorBJ(Om,0,0,0,0)"
+    },
+    {
+      "line": 35921,
+      "text": "call SaveUnitHandle(O,Pr,0,Bc)"
+    },
+    {
+      "line": 35922,
+      "text": "call SaveUnitHandle(O,Pr,1,Om)"
+    },
+    {
+      "line": 35923,
+      "text": "call YDWETimerDestroyLightning(2,AddLightningEx(\"AFOD\",false,GetUnitX(Bc),GetUnitY(Bc),GetLocationZ(Z8),GetUnitX(Om),GetUnitY(Om),GetLocationZ(Z8)))"
+    },
+    {
+      "line": 35924,
+      "text": "call TriggerRegisterTimerEvent(t,1,true)"
+    },
+    {
+      "line": 35925,
+      "text": "call TriggerRegisterDeathEvent(t,Om)"
+    },
+    {
+      "line": 35926,
+      "text": "call TriggerAddAction(t,function SavisDarkSoulAction)"
+    },
+    {
+      "line": 35927,
+      "text": "call RemoveLocation(Z8)"
+    },
+    {
+      "line": 35928,
+      "text": "set Z8=null"
+    },
+    {
+      "line": 35929,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 35930,
+      "text": "set t=null"
+    },
+    {
+      "line": 35931,
+      "text": "set Om=null"
+    },
+    {
+      "line": 35932,
+      "text": "endfunction"
+    },
+    {
+      "line": 35933,
+      "text": "function SavisDarkSoulRange takes unit Bc,unit Om,integer QK returns nothing"
+    },
+    {
+      "line": 35934,
+      "text": "local group DG=null"
+    },
+    {
+      "line": 35935,
+      "text": "local integer y=0"
+    },
+    {
+      "line": 35936,
+      "text": "local unit D6"
+    },
+    {
+      "line": 35937,
+      "text": "if Bc==null or Om==null or QK<=0 then"
+    },
+    {
+      "line": 35938,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 35939,
+      "text": "set Om=null"
+    },
+    {
+      "line": 35940,
+      "text": "return"
+    },
+    {
+      "line": 35941,
+      "text": "endif"
+    },
+    {
+      "line": 35942,
+      "text": "set DG=SelectRange(Bc,GetUnitX(Om),GetUnitY(Om),600)"
+    },
+    {
+      "line": 35943,
+      "text": "call SavisDarkSoul(Bc,Om)"
+    },
+    {
+      "line": 35944,
+      "text": "call GroupRemoveUnit(DG,Om)"
+    },
+    {
+      "line": 35945,
+      "text": "set y=1"
+    },
+    {
+      "line": 35946,
+      "text": "loop"
+    },
+    {
+      "line": 35947,
+      "text": "set D6=FirstOfGroup(DG)"
+    },
+    {
+      "line": 35948,
+      "text": "exitwhen D6==null or y>=QK"
+    },
+    {
+      "line": 35949,
+      "text": "call SavisDarkSoul(Bc,D6)"
+    },
+    {
+      "line": 35950,
+      "text": "call GroupRemoveUnit(DG,D6)"
+    },
+    {
+      "line": 35951,
+      "text": "set y=y+1"
+    },
+    {
+      "line": 35952,
+      "text": "endloop"
+    },
+    {
+      "line": 35953,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 35954,
+      "text": "set DG=null"
+    },
+    {
+      "line": 35955,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 35956,
+      "text": "set D6=null"
+    },
+    {
+      "line": 35957,
+      "text": "set Om=null"
+    },
+    {
+      "line": 35958,
+      "text": "endfunction"
+    },
+    {
+      "line": 35959,
+      "text": "function SavisNightmareBladeAction takes nothing returns nothing"
+    },
+    {
+      "line": 35960,
+      "text": "local trigger t=GetTriggeringTrigger()"
+    },
+    {
+      "line": 35961,
+      "text": "local integer Pr=GetHandleId(t)"
+    },
+    {
+      "line": 35962,
+      "text": "local unit Bc=LoadUnitHandle(O,Pr,0)"
+    },
+    {
+      "line": 35963,
+      "text": "local real FF=LoadReal(O,Pr,1)"
+    },
+    {
+      "line": 35964,
+      "text": "local real FG=LoadReal(O,Pr,2)"
+    },
+    {
+      "line": 35965,
+      "text": "local group DG=SelectRange(Bc,FF,FG,400)"
+    },
+    {
+      "line": 35966,
+      "text": "local real QY=LoadReal(O,Pr,3)"
+    },
+    {
+      "line": 35967,
+      "text": "local group Po=LoadGroupHandle(O,Pr,5)"
+    },
+    {
+      "line": 35968,
+      "text": "local unit D6"
+    },
+    {
+      "line": 35969,
+      "text": "if GetTriggerEventId()==EVENT_GAME_TIMER_EXPIRED then"
+    },
+    {
+      "line": 35970,
+      "text": "loop"
+    },
+    {
+      "line": 35971,
+      "text": "set D6=FirstOfGroup(DG)"
+    },
+    {
+      "line": 35972,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 35973,
+      "text": "call GroupRemoveUnit(DG,D6)"
+    },
+    {
+      "line": 35974,
+      "text": "if not IsUnitInGroup(D6,Po) then"
+    },
+    {
+      "line": 35975,
+      "text": "call GroupAddUnit(Po,D6)"
+    },
+    {
+      "line": 35976,
+      "text": "call UnitDamageTargetBJ(Bc,D6,200,ATTACK_TYPE_CHAOS,DAMAGE_TYPE_UNIVERSAL)"
+    },
+    {
+      "line": 35977,
+      "text": "endif"
+    },
+    {
+      "line": 35978,
+      "text": "endloop"
+    },
+    {
+      "line": 35979,
+      "text": "if GetTriggerExecCount(t)>=QY then"
+    },
+    {
+      "line": 35980,
+      "text": "call DestroyEffect(LoadEffectHandle(O,Pr,4))"
+    },
+    {
+      "line": 35981,
+      "text": "call FlushChildHashtable(O,Pr)"
+    },
+    {
+      "line": 35982,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 35983,
+      "text": "call DestroyGroup(Po)"
+    },
+    {
+      "line": 35984,
+      "text": "endif"
+    },
+    {
+      "line": 35985,
+      "text": "else"
+    },
+    {
+      "line": 35986,
+      "text": "call DestroyEffect(LoadEffectHandle(O,Pr,4))"
+    },
+    {
+      "line": 35987,
+      "text": "call FlushChildHashtable(O,Pr)"
+    },
+    {
+      "line": 35988,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 35989,
+      "text": "call DestroyGroup(Po)"
+    },
+    {
+      "line": 35990,
+      "text": "endif"
+    },
+    {
+      "line": 35991,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 35992,
+      "text": "set Po=null"
+    },
+    {
+      "line": 35993,
+      "text": "set t=null"
+    },
+    {
+      "line": 35994,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 35995,
+      "text": "set DG=null"
+    },
+    {
+      "line": 35996,
+      "text": "set D6=null"
+    },
+    {
+      "line": 35997,
+      "text": "endfunction"
+    },
+    {
+      "line": 35998,
+      "text": "function SavisNightmareBlade takes unit Bc,real FF,real FG returns nothing"
+    },
+    {
+      "line": 35999,
+      "text": "local effect DE=AddSpecialEffect(\"LJQ_MYZL.mdx\",FF,FG)"
+    },
+    {
+      "line": 36000,
+      "text": "local trigger t=CreateTrigger()"
+    },
+    {
+      "line": 36001,
+      "text": "local integer Pr=GetHandleId(t)"
+    },
+    {
+      "line": 36002,
+      "text": "call EXEffectMatRotateZ(DE,270)"
+    },
+    {
+      "line": 36003,
+      "text": "call SaveUnitHandle(O,Pr,0,Bc)"
+    },
+    {
+      "line": 36004,
+      "text": "call SaveReal(O,Pr,1,FF)"
+    },
+    {
+      "line": 36005,
+      "text": "call SaveReal(O,Pr,2,FG)"
+    },
+    {
+      "line": 36006,
+      "text": "call SaveReal(O,Pr,3,7)"
+    },
+    {
+      "line": 36007,
+      "text": "call SaveAgentHandle(O,Pr,4,DE)"
+    },
+    {
+      "line": 36008,
+      "text": "call SaveGroupHandle(O,Pr,5,CreateGroup())"
+    },
+    {
+      "line": 36009,
+      "text": "call TriggerRegisterTimerEvent(t,1,true)"
+    },
+    {
+      "line": 36010,
+      "text": "call TriggerRegisterTimerEvent(t,0,false)"
+    },
+    {
+      "line": 36011,
+      "text": "call TriggerAddAction(t,function SavisNightmareBladeAction)"
+    },
+    {
+      "line": 36012,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 36013,
+      "text": "set DE=null"
+    },
+    {
+      "line": 36014,
+      "text": "set t=null"
+    },
+    {
+      "line": 36015,
+      "text": "endfunction"
+    },
+    {
+      "line": 36016,
+      "text": "function SavisSubtleEruptionDeathAction takes nothing returns nothing"
+    },
+    {
+      "line": 36017,
+      "text": "local trigger t=GetTriggeringTrigger()"
+    },
+    {
+      "line": 36018,
+      "text": "local unit Bc=GetTriggerUnit()"
+    },
+    {
+      "line": 36019,
+      "text": "local group DG=SelectRange(Bc,GetUnitX(Bc),GetUnitY(Bc),300)"
+    },
+    {
+      "line": 36020,
+      "text": "local unit D6"
+    },
+    {
+      "line": 36021,
+      "text": "loop"
+    },
+    {
+      "line": 36022,
+      "text": "set D6=FirstOfGroup(DG)"
+    },
+    {
+      "line": 36023,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 36024,
+      "text": "call GroupRemoveUnit(DG,D6)"
+    },
+    {
+      "line": 36025,
+      "text": "call UnitDamageTargetBJ(Bc,D6,125,ATTACK_TYPE_CHAOS,DAMAGE_TYPE_UNIVERSAL)"
+    },
+    {
+      "line": 36026,
+      "text": "call LoopDamage(Bc,D6,10,1,10)"
+    },
+    {
+      "line": 36027,
+      "text": "call DestroyEffect(AddSpecialEffect(\"2222.mdx\",GetUnitX(D6),GetUnitY(D6)))"
+    },
+    {
+      "line": 36028,
+      "text": "endloop"
+    },
+    {
+      "line": 36029,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 36030,
+      "text": "call FlushChildHashtable(O,GetHandleId(t))"
+    },
+    {
+      "line": 36031,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 36032,
+      "text": "set DG=null"
+    },
+    {
+      "line": 36033,
+      "text": "set t=null"
+    },
+    {
+      "line": 36034,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 36035,
+      "text": "set D6=null"
+    },
+    {
+      "line": 36036,
+      "text": "endfunction"
+    },
+    {
+      "line": 36037,
+      "text": "function SavisSubtleEruption takes unit Bc,unit Om returns nothing"
+    },
+    {
+      "line": 36038,
+      "text": "local real FF=GetUnitX(Om)"
+    },
+    {
+      "line": 36039,
+      "text": "local real FG=GetUnitY(Om)"
+    },
+    {
+      "line": 36040,
+      "text": "local unit Ki"
+    },
+    {
+      "line": 36041,
+      "text": "local integer BF=GetUnitUserData(Bc)"
+    },
+    {
+      "line": 36042,
+      "text": "local trigger t=CreateTrigger()"
+    },
+    {
+      "line": 36043,
+      "text": "call YDWETimerDestroyEffect(3,AddSpecialEffect(\"LJQ_QXPF.mdx\",FF,FG))"
+    },
+    {
+      "line": 36044,
+      "text": "set Ki=CreateUnit(GetOwningPlayer(Bc),$75303131,FF,FG,GetUnitFacing(Bc))"
+    },
+    {
+      "line": 36045,
+      "text": "call UnitApplyTimedLife(Ki,$42487765,3.)"
+    },
+    {
+      "line": 36046,
+      "text": "call SetUnitColor(Ki,GetPlayerColor(ConvertedPlayer(BF)))"
+    },
+    {
+      "line": 36047,
+      "text": "call GroupAddUnit(JW,Ki)"
+    },
+    {
+      "line": 36048,
+      "text": "call GroupAddUnit(JH[BF],Ki)"
+    },
+    {
+      "line": 36049,
+      "text": "call SetUnitUserData(Ki,BF)"
+    },
+    {
+      "line": 36050,
+      "text": "call UnitDamageTargetBJ(Bc,Om,175,ATTACK_TYPE_CHAOS,DAMAGE_TYPE_UNIVERSAL)"
+    },
+    {
+      "line": 36051,
+      "text": "call TriggerRegisterDeathEvent(t,Ki)"
+    },
+    {
+      "line": 36052,
+      "text": "call TriggerAddAction(t,function SavisSubtleEruptionDeathAction)"
+    },
+    {
+      "line": 36053,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 36054,
+      "text": "set Om=null"
+    },
+    {
+      "line": 36055,
+      "text": "set Ki=null"
+    },
+    {
+      "line": 36056,
+      "text": "set t=null"
+    },
+    {
+      "line": 36057,
+      "text": "endfunction"
+    },
+    {
+      "line": 36058,
+      "text": "function SavisSummon takes unit Bc returns nothing"
+    },
+    {
+      "line": 36059,
+      "text": "local integer QK=3"
+    },
+    {
+      "line": 36060,
+      "text": "local integer y=0"
+    },
+    {
+      "line": 36061,
+      "text": "local integer BF=GetUnitUserData(Bc)"
+    },
+    {
+      "line": 36062,
+      "text": "local unit Ki"
+    },
+    {
+      "line": 36063,
+      "text": "loop"
+    },
+    {
+      "line": 36064,
+      "text": "set Ki=CreateUnit(GetOwningPlayer(Bc),$6830334C,GetUnitX(Bc),GetUnitY(Bc),GetUnitFacing(Bc))"
+    },
+    {
+      "line": 36065,
+      "text": "call SetUnitColor(Ki,GetPlayerColor(ConvertedPlayer(BF)))"
+    },
+    {
+      "line": 36066,
+      "text": "call GroupAddUnit(JW,Ki)"
+    },
+    {
+      "line": 36067,
+      "text": "call GroupAddUnit(JH[BF],Ki)"
+    },
+    {
+      "line": 36068,
+      "text": "call SetUnitUserData(Ki,BF)"
+    },
+    {
+      "line": 36069,
+      "text": "set y=y+1"
+    },
+    {
+      "line": 36070,
+      "text": "exitwhen y>=QK"
+    },
+    {
+      "line": 36071,
+      "text": "endloop"
+    },
+    {
+      "line": 36072,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 36073,
+      "text": "set Ki=null"
+    },
+    {
+      "line": 36074,
+      "text": "endfunction"
+    },
+    {
+      "line": 36075,
+      "text": "function SavisMeteorAction takes nothing returns nothing"
+    },
+    {
+      "line": 36076,
+      "text": "local trigger t=GetTriggeringTrigger()"
+    },
+    {
+      "line": 36077,
+      "text": "local unit Bc=LoadUnitHandle(O,GetHandleId(t),0)"
+    },
+    {
+      "line": 36078,
+      "text": "local real FF=LoadReal(O,GetHandleId(t),1)"
+    },
+    {
+      "line": 36079,
+      "text": "local real FG=LoadReal(O,GetHandleId(t),2)"
+    },
+    {
+      "line": 36080,
+      "text": "local group DG=SelectRange(Bc,FF,FG,500)"
+    },
+    {
+      "line": 36081,
+      "text": "local unit D6"
+    },
+    {
+      "line": 36082,
+      "text": "loop"
+    },
+    {
+      "line": 36083,
+      "text": "set D6=FirstOfGroup(DG)"
+    },
+    {
+      "line": 36084,
+      "text": "exitwhen D6==null"
+    },
+    {
+      "line": 36085,
+      "text": "call GroupRemoveUnit(DG,D6)"
+    },
+    {
+      "line": 36086,
+      "text": "call UnitDamageTargetBJ(Bc,D6,425,ATTACK_TYPE_CHAOS,DAMAGE_TYPE_UNIVERSAL)"
+    },
+    {
+      "line": 36087,
+      "text": "endloop"
+    },
+    {
+      "line": 36088,
+      "text": "call FlushChildHashtable(O,GetHandleId(t))"
+    },
+    {
+      "line": 36089,
+      "text": "call DestroyTrigger(t)"
+    },
+    {
+      "line": 36090,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 36091,
+      "text": "set t=null"
+    },
+    {
+      "line": 36092,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 36093,
+      "text": "set DG=null"
+    },
+    {
+      "line": 36094,
+      "text": "set D6=null"
+    },
+    {
+      "line": 36095,
+      "text": "endfunction"
+    },
+    {
+      "line": 36096,
+      "text": "function SavisMeteor takes unit Bc,real FF,real FG returns nothing"
+    },
+    {
+      "line": 36097,
+      "text": "local real DK=.5"
+    },
+    {
+      "line": 36098,
+      "text": "local integer BB=0"
+    },
+    {
+      "line": 36099,
+      "text": "local integer Z9=6"
+    },
+    {
+      "line": 36100,
+      "text": "local real Pm=0"
+    },
+    {
+      "line": 36101,
+      "text": "local real Qv"
+    },
+    {
+      "line": 36102,
+      "text": "local real Qw"
+    },
+    {
+      "line": 36103,
+      "text": "local trigger t=CreateTrigger()"
+    },
+    {
+      "line": 36104,
+      "text": "loop"
+    },
+    {
+      "line": 36105,
+      "text": "set BB=BB+1"
+    },
+    {
+      "line": 36106,
+      "text": "set Pm=360/Z9*BB"
+    },
+    {
+      "line": 36107,
+      "text": "set Qv=FF-CosBJ(Pm)*300"
+    },
+    {
+      "line": 36108,
+      "text": "set Qw=FG-SinBJ(Pm)*300"
+    },
+    {
+      "line": 36109,
+      "text": "call YDWETimerDestroyEffect(1,AddSpecialEffect(\"LJQ_FSLX.mdx\",Qv,Qw))"
+    },
+    {
+      "line": 36110,
+      "text": "exitwhen BB>=Z9"
+    },
+    {
+      "line": 36111,
+      "text": "endloop"
+    },
+    {
+      "line": 36112,
+      "text": "call SaveUnitHandle(O,GetHandleId(t),0,Bc)"
+    },
+    {
+      "line": 36113,
+      "text": "call SaveReal(O,GetHandleId(t),1,FF)"
+    },
+    {
+      "line": 36114,
+      "text": "call SaveReal(O,GetHandleId(t),2,FG)"
+    },
+    {
+      "line": 36115,
+      "text": "call TriggerRegisterTimerEvent(t,DK,false)"
+    },
+    {
+      "line": 36116,
+      "text": "call TriggerAddAction(t,function SavisMeteorAction)"
+    },
+    {
+      "line": 36117,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 36118,
+      "text": "set t=null"
+    },
+    {
+      "line": 36119,
+      "text": "endfunction"
+    },
+    {
+      "line": 39218,
+      "text": "function Trig_allabilityActions takes nothing returns nothing"
+    },
+    {
+      "line": 39219,
+      "text": "local integer BF=GetSpellAbilityId()"
+    },
+    {
+      "line": 39220,
+      "text": "local player h=GetTriggerPlayer()"
+    },
+    {
+      "line": 39221,
+      "text": "local unit i=GetTriggerUnit()"
+    },
+    {
+      "line": 39222,
+      "text": "local real FF=GetSpellTargetX()"
+    },
+    {
+      "line": 39223,
+      "text": "local real FG=GetSpellTargetY()"
+    },
+    {
+      "line": 39224,
+      "text": "local unit Qf=GetSpellTargetUnit()"
+    },
+    {
+      "line": 39225,
+      "text": "local group Uz=null"
+    },
+    {
+      "line": 39226,
+      "text": "local timer t"
+    },
+    {
+      "line": 39227,
+      "text": "local effect DE=null"
+    },
+    {
+      "line": 39228,
+      "text": "local unit D6=null"
+    },
+    {
+      "line": 39229,
+      "text": "local integer BB=0"
+    },
+    {
+      "line": 39230,
+      "text": "local string a4=\"\""
+    },
+    {
+      "line": 39231,
+      "text": "local trigger Eb=GetTriggeringTrigger()"
+    },
+    {
+      "line": 39232,
+      "text": "local trigger RL=null"
+    },
+    {
+      "line": 39233,
+      "text": "local unit Ki"
+    },
+    {
+      "line": 39234,
+      "text": "local real Pm=0"
+    },
+    {
+      "line": 39235,
+      "text": "local real P8=0"
+    },
+    {
+      "line": 39236,
+      "text": "local real Qv"
+    },
+    {
+      "line": 39237,
+      "text": "local real Qw"
+    },
+    {
+      "line": 39238,
+      "text": "local location a7=null"
+    },
+    {
+      "line": 39239,
+      "text": "call DisableTrigger(Eb)"
+    },
+    {
+      "line": 39240,
+      "text": "call BoxClickAction(i,Qf,BF)"
+    },
+    {
+      "line": 39267,
+      "text": "if BF==$41315544 then"
+    },
+    {
+      "line": 39268,
+      "text": "call SavisDarkSoulRange(i,Qf,3)"
+    },
+    {
+      "line": 39269,
+      "text": "elseif BF==$41315545 then"
+    },
+    {
+      "line": 39270,
+      "text": "call SavisNightmareBlade(i,GetUnitX(Qf),GetUnitY(Qf))"
+    },
+    {
+      "line": 39271,
+      "text": "elseif BF==$41315546 then"
+    },
+    {
+      "line": 39272,
+      "text": "call SavisSubtleEruption(i,Qf)"
+    },
+    {
+      "line": 39273,
+      "text": "elseif BF==$41315547 then"
+    },
+    {
+      "line": 39274,
+      "text": "call SavisMeteor(i,GetUnitX(Qf),GetUnitY(Qf))"
+    },
+    {
+      "line": 39275,
+      "text": "endif"
+    },
+    {
+      "line": 39958,
+      "text": "function InitTrig_allability takes nothing returns nothing"
+    },
+    {
+      "line": 39959,
+      "text": "set Yp=CreateTrigger()"
+    },
+    {
+      "line": 39960,
+      "text": "call TriggerRegisterAnyUnitEventBJ(Yp,EVENT_PLAYER_UNIT_SPELL_EFFECT)"
+    },
+    {
+      "line": 39961,
+      "text": "call TriggerAddAction(Yp,function Trig_allabilityActions)"
+    },
+    {
+      "line": 39962,
+      "text": "endfunction"
+    },
+    {
+      "line": 40714,
+      "text": "if GetUnitAbilityLevel(i,$41315544)>0 then"
+    },
+    {
+      "line": 40715,
+      "text": "call IssueTargetOrder(i,\"unloadall\",bV)"
+    },
+    {
+      "line": 40716,
+      "text": "elseif GetUnitAbilityLevel(bV,$41315544)>0 then"
+    },
+    {
+      "line": 40717,
+      "text": "call IssueTargetOrder(bV,\"unloadall\",i)"
+    },
+    {
+      "line": 40718,
+      "text": "endif"
+    },
+    {
+      "line": 40719,
+      "text": "if GetUnitAbilityLevel(i,$41315545)>0 then"
+    },
+    {
+      "line": 40720,
+      "text": "call IssueTargetOrder(i,\"unloadallcorpses\",bV)"
+    },
+    {
+      "line": 40721,
+      "text": "elseif GetUnitAbilityLevel(bV,$41315545)>0 then"
+    },
+    {
+      "line": 40722,
+      "text": "call IssueTargetOrder(bV,\"unloadallcorpses\",i)"
+    },
+    {
+      "line": 40723,
+      "text": "endif"
+    },
+    {
+      "line": 40724,
+      "text": "if GetUnitAbilityLevel(i,$41315547)>0 then"
+    },
+    {
+      "line": 40725,
+      "text": "call IssueTargetOrder(i,\"unpoisonarrows\",bV)"
+    },
+    {
+      "line": 40726,
+      "text": "elseif GetUnitAbilityLevel(bV,$41315547)>0 then"
+    },
+    {
+      "line": 40727,
+      "text": "call IssueTargetOrder(bV,\"unpoisonarrows\",i)"
+    },
+    {
+      "line": 40728,
+      "text": "endif"
+    },
+    {
+      "line": 40729,
+      "text": "if GetUnitAbilityLevel(i,$41315546)>0 then"
+    },
+    {
+      "line": 40730,
+      "text": "call IssueTargetOrder(i,\"unloadallinstant\",bV)"
+    },
+    {
+      "line": 40731,
+      "text": "elseif GetUnitAbilityLevel(bV,$41315546)>0 then"
+    },
+    {
+      "line": 40732,
+      "text": "call IssueTargetOrder(bV,\"unloadallinstant\",i)"
+    },
+    {
+      "line": 40769,
+      "text": "if GetUnitAbilityLevel(i,$41315549)>0 then"
+    },
+    {
+      "line": 40770,
+      "text": "call IssueImmediateOrder(i,\"spiritofvengeance\")"
+    },
+    {
+      "line": 40771,
+      "text": "elseif GetUnitAbilityLevel(bV,$41315549)>0 then"
+    },
+    {
+      "line": 40772,
+      "text": "call IssueImmediateOrder(bV,\"spiritofvengeance\")"
+    },
+    {
+      "line": 40773,
+      "text": "endif"
+    },
+    {
+      "line": 48295,
+      "text": "call RegisterBudingLimit($6E303848,0,1)"
+    }
+  ],
+  "abilities": {
+    "A1UD": {
+      "rawcode": "A1UD",
+      "name": "晦暗灵魂",
+      "tip": "晦暗灵魂",
+      "ubertip": "随机污染一个在其攻击范围内的敌方单位灵魂，对敌方单位造成每秒305的伤害，直至该单位死亡，且将会对被感染单位附近的敌方单位造成25点的溅射伤害",
+      "alias": "A1UD",
+      "code": "ANcl",
+      "DataB1": "1",
+      "DataC1": "1",
+      "levels": "1",
+      "targs1": "enemies",
+      "Cost1": "8",
+      "Rng1": "500.0",
+      "Cool1": "17.0",
+      "checkDep": "1",
+      "reqLevel": "1",
+      "DataE1": "1",
+      "DataF1": "unloadall"
+    },
+    "A1UE": {
+      "rawcode": "A1UE",
+      "name": "梦魇之刃",
+      "tip": "梦魇之刃",
+      "ubertip": "一道剑刃墙拔地而起，对通过该剑刃墙的敌方单位造成200点的持续伤害，该效果持续3s。且无视敌方单位护甲",
+      "alias": "A1UE",
+      "code": "ANcl",
+      "DataB1": "1",
+      "DataC1": "1",
+      "levels": "1",
+      "targs1": "enemies",
+      "Cost1": "15",
+      "Rng1": "500.0",
+      "Cool1": "20.0",
+      "checkDep": "1",
+      "reqLevel": "1",
+      "DataE1": "1",
+      "DataF1": "unloadallcorpses"
+    },
+    "A1UF": {
+      "rawcode": "A1UF",
+      "name": "潜袭喷发",
+      "tip": "潜袭喷发",
+      "ubertip": "萨维斯在其攻击范围内随机一个位置，释放一道梦魇能量，对敌方单位造成175点的伤害，并在当前位置召唤潜伏恐魔",
+      "alias": "A1UF",
+      "code": "ANcl",
+      "DataB1": "1",
+      "DataC1": "1",
+      "levels": "1",
+      "targs1": "enemies",
+      "Cost1": "15",
+      "Rng1": "500.0",
+      "Cool1": "15.0",
+      "checkDep": "1",
+      "reqLevel": "1",
+      "DataE1": "1",
+      "DataF1": "unloadallinstant"
+    },
+    "A1UG": {
+      "rawcode": "A1UG",
+      "name": "腐蚀流星",
+      "tip": "腐蚀流星",
+      "ubertip": "从空中落下6颗腐蚀流星对600*800范围内的敌方单位造成225点伤害，并对其他范围内未死亡的单位造成移速、攻速减少25%的效果",
+      "alias": "A1UG",
+      "code": "ANcl",
+      "DataB1": "1",
+      "DataC1": "1",
+      "levels": "1",
+      "targs1": "enemies",
+      "Cost1": "20",
+      "Rng1": "500.0",
+      "Cool1": "15.0",
+      "checkDep": "1",
+      "reqLevel": "1",
+      "DataE1": "1",
+      "DataF1": "unpoisonarrows"
+    },
+    "A1UH": {
+      "rawcode": "A1UH",
+      "name": "梦魇召唤",
+      "tip": "梦魇召唤",
+      "ubertip": "召唤两只梦魇进行作战，并对召唤出来的两只梦魇提升100点攻击力，且提升护甲3点",
+      "alias": "A1UH",
+      "code": "Asth",
+      "levels": "1"
+    },
+    "A1UI": {
+      "rawcode": "A1UI",
+      "name": "梦魇召唤",
+      "tip": "梦魇召唤",
+      "alias": "A1UI",
+      "code": "AHwe",
+      "Area1": "1.0",
+      "BuffID1": "B00J",
+      "DataA1": "3",
+      "levels": "1",
+      "Dur1": "60.0",
+      "HeroDur1": "60.0",
+      "Cool1": "3600.0",
+      "checkDep": "1",
+      "reqLevel": "1",
+      "UnitID1": "h03L"
+    },
+    "AHwe": {
+      "rawcode": "AHwe",
+      "name": "召唤水元素",
+      "tip": "召唤水元素(W) - [等级 1],召唤水元素(W) - [等级 2],召唤水元素(W) - [等级 3]",
+      "ubertip": "召唤出一个具有450生命值的水元素来帮大魔法师进行战斗。攻击力为21 - 29点。\n持续60秒。\n\n能攻击地面和空中单位。,召唤出一个具有15000生命值的水元素来帮大魔法师进行战斗。攻击力为31-39点。\n持续60秒。\n\n能攻击地面和空中单位。,召唤出一个具有900生命值的水元素来帮大魔法师进行战斗。攻击力为41-49点。\n持续60秒。\n\n能攻击地面和空中单位。",
+      "alias": "AHwe",
+      "code": "AHwe",
+      "Area1": "200.0",
+      "BuffID1": "BHwe",
+      "DataA1": "1",
+      "levels": "3",
+      "Cost1": "125",
+      "Dur1": "60.0",
+      "HeroDur1": "60.0",
+      "Cool1": "20.0",
+      "checkDep": "1",
+      "Area2": "200.0",
+      "Area3": "200.0",
+      "BuffID2": "BHwe",
+      "BuffID3": "BHwe",
+      "DataA2": "1",
+      "DataA3": "1",
+      "reqLevel": "1",
+      "Cool2": "20.0",
+      "Cool3": "20.0",
+      "Cost2": "125",
+      "Cost3": "125",
+      "Dur2": "60.0",
+      "Dur3": "60.0",
+      "HeroDur2": "60.0",
+      "HeroDur3": "60.0",
+      "UnitID1": "hwat",
+      "UnitID2": "hwt2",
+      "UnitID3": "hwt3"
+    },
+    "AEsv": {
+      "rawcode": "AEsv",
+      "name": "复仇之魂",
+      "tip": "复仇之魂(V)",
+      "ubertip": "召唤出一个强大的复仇天神，复仇天神能从周围的尸体中复活许多无敌的幽灵来为你战斗。当复仇天神死掉的时候，那些幽灵也会自动消失。\n持续180秒。",
+      "alias": "AEsv",
+      "code": "AEsv",
+      "Area1": "200.0",
+      "BuffID1": "BEsv",
+      "DataA1": "1",
+      "levels": "1",
+      "Cost1": "150",
+      "Dur1": "180.0",
+      "HeroDur1": "180.0",
+      "Cool1": "180.0",
+      "checkDep": "1",
+      "reqLevel": "6",
+      "UnitID1": "espv"
+    }
+  },
+  "units": {
+    "n08H": {
+      "rawcode": "n08H",
+      "name": "萨维斯",
+      "tip": "升级到<萨维斯>",
+      "ubertip": "伤害输出: 375-434\n攻击速度: 0.4\n攻击距离: 600\n生命值: 5000\n攻击类型: 魔法\n护甲：3\n防御类型: 国王甲\n\n技能：\n晦暗灵魂、梦魇之刃、潜袭喷发、梦魇召唤、腐蚀流星",
+      "unitID": "n08H",
+      "canFlee": "1",
+      "death": "2.34",
+      "deathType": "2",
+      "points": "1100",
+      "prio": "2",
+      "propWin": "60.0",
+      "race": "human",
+      "targType": "structure",
+      "unitBalanceID": "n08H",
+      "bldtm": "2",
+      "collision": "72.0",
+      "defType": "hero",
+      "fused": "12",
+      "goldcost": "500",
+      "HP": "5000",
+      "level": "1",
+      "mana0": "50",
+      "nsight": "800",
+      "preventPlace": "unbuildable",
+      "regenMana": "1.5",
+      "regenType": "none",
+      "reptm": "1",
+      "sight": "1600",
+      "tilesets": "*",
+      "upgrades": "R009,R00A",
+      "unitUIID": "n08H",
+      "armor": "Flesh",
+      "blend": "0.15",
+      "blue": "255",
+      "elevRad": "50.0",
+      "file": "xavius2_BC.mdx",
+      "green": "255",
+      "modelScale": "1.0",
+      "red": "255",
+      "run": "200.0",
+      "scale": "1.0",
+      "scaleBull": "1",
+      "shadowOnWater": "1",
+      "teamColor": "-1",
+      "unitSound": "Gnoll",
+      "walk": "200.0",
+      "unitAbilID": "n08H",
+      "abilList": "A008,A118,A1UD,A1UE,A1UF,A1UG,A1UH",
+      "unitWeapID": "n08H",
+      "acquire": "500.0",
+      "atkType1": "chaos",
+      "atkType2": "normal",
+      "backSw1": "0.5",
+      "castbsw": "0.51",
+      "cool1": "0.4",
+      "dice1": "1",
+      "dmgpt1": "0.5",
+      "impactZ": "120.0",
+      "launchZ": "145.0",
+      "rangeN1": "600",
+      "RngBuff1": "250.0",
+      "showUI2": "1",
+      "sides1": "60",
+      "targCount1": "1",
+      "targCount2": "1",
+      "targs1": "enemies",
+      "weapsOn": "1",
+      "weapTp1": "missile",
+      "weapType1": "MetalMediumSlice",
+      "hotkey": "Q",
+      "damage_min_1": "375.0",
+      "damage_max_1": "434.0",
+      "damage_avg_1": "404.5",
+      "dps_avg_1": "1011.25",
+      "attack_type_zh": "混乱",
+      "armor_type_zh": "英雄甲",
+      "ability_ids": "A008,A118,A1UD,A1UE,A1UF,A1UG,A1UH",
+      "ability_names": "出售,移位,晦暗灵魂,梦魇之刃,潜袭喷发,腐蚀流星,梦魇召唤",
+      "def": "3.0",
+      "manaN": "50",
+      "type": "ancient",
+      "dmgplus1": "374",
+      "buildingShadow": "BuildingShadowSmall",
+      "isbldg": "1",
+      "buffRadius": "15.0",
+      "buffType": "buffer",
+      "pathTex": "PathTextures\\4x4SimpleSolid.tga",
+      "elevPts": "4"
+    },
+    "h0WL": {
+      "rawcode": "h0WL",
+      "name": "萨维斯",
+      "ubertip": ",",
+      "unitID": "h0WL",
+      "canFlee": "1",
+      "cargoSize": "1",
+      "death": "3.04",
+      "deathType": "3",
+      "movetp": "foot",
+      "points": "100",
+      "prio": "6",
+      "propWin": "60.0",
+      "race": "human",
+      "targType": "ground",
+      "turnRate": "0.6",
+      "unitBalanceID": "h0WL",
+      "bldtm": "20",
+      "bountydice": "6",
+      "bountyplus": "20",
+      "bountysides": "3",
+      "collision": "12.0",
+      "defType": "hero",
+      "goldcost": "135",
+      "goldRep": "135",
+      "HP": "5000",
+      "level": "2",
+      "mana0": "50",
+      "nsight": "800",
+      "regenMana": "1.5",
+      "regenType": "none",
+      "reptm": "20",
+      "sight": "1400",
+      "spd": "340",
+      "stockMax": "3",
+      "stockRegen": "30",
+      "tilesets": "*",
+      "upgrades": "R00B,R00C,R009,R00A",
+      "unitUIID": "h0WL",
+      "armor": "Flesh",
+      "blend": "0.15",
+      "blue": "255",
+      "elevRad": "20.0",
+      "file": "xavius2_BC.mdx",
+      "green": "255",
+      "maxPitch": "10.0",
+      "maxRoll": "10.0",
+      "modelScale": "1.0",
+      "red": "255",
+      "run": "210.0",
+      "scale": "1.0",
+      "scaleBull": "1",
+      "shadowH": "140.0",
+      "shadowOnWater": "1",
+      "shadowW": "140.0",
+      "shadowX": "50.0",
+      "shadowY": "50.0",
+      "teamColor": "-1",
+      "unitShadow": "Shadow",
+      "unitSound": "Gnoll",
+      "walk": "210.0",
+      "unitAbilID": "h0WL",
+      "abilList": "A1UD,A1UE,A1UF,A1UG,A1UI",
+      "unitWeapID": "h0WL",
+      "acquire": "500.0",
+      "atkType1": "chaos",
+      "atkType2": "normal",
+      "backSw1": "0.3",
+      "cool1": "0.4",
+      "dice1": "1",
+      "dmgpt1": "0.3",
+      "impactZ": "60.0",
+      "launchZ": "60.0",
+      "rangeN1": "600",
+      "RngBuff1": "250.0",
+      "showUI1": "1",
+      "showUI2": "1",
+      "sides1": "60",
+      "targCount1": "1",
+      "targCount2": "1",
+      "targs1": "enemies",
+      "weapsOn": "1",
+      "weapTp1": "missile",
+      "weapType1": "WoodLightBash",
+      "hotkey": "F",
+      "damage_min_1": "375.0",
+      "damage_max_1": "434.0",
+      "damage_avg_1": "404.5",
+      "dps_avg_1": "1011.25",
+      "bounty_min": "26.0",
+      "bounty_max": "38.0",
+      "bounty_avg": "32.0",
+      "attack_type_zh": "混乱",
+      "armor_type_zh": "英雄甲",
+      "ability_ids": "A1UD,A1UE,A1UF,A1UG,A1UI",
+      "ability_names": "晦暗灵魂,梦魇之刃,潜袭喷发,腐蚀流星,梦魇召唤",
+      "def": "3.0",
+      "defUp": "2.0",
+      "manaN": "50",
+      "type": "giant",
+      "dmgplus1": "374"
+    },
+    "u011": {
+      "rawcode": "u011",
+      "name": "潜伏恐魔",
+      "ubertip": ",",
+      "unitID": "u011",
+      "canFlee": "1",
+      "cargoSize": "1",
+      "death": "3.0",
+      "deathType": "3",
+      "movetp": "foot",
+      "prio": "2",
+      "propWin": "60.0",
+      "race": "human",
+      "targType": "ground",
+      "turnRate": "0.6",
+      "unitBalanceID": "u011",
+      "bldtm": "30",
+      "collision": "12.0",
+      "defType": "large",
+      "goldcost": "195",
+      "goldRep": "195",
+      "HP": "1500",
+      "level": "2",
+      "nsight": "800",
+      "regenHP": "1.0",
+      "regenType": "always",
+      "reptm": "30",
+      "sight": "1400",
+      "spd": "240",
+      "tilesets": "*",
+      "unitUIID": "u011",
+      "armor": "Flesh",
+      "blend": "0.15",
+      "blue": "255",
+      "elevRad": "30.0",
+      "file": "FelHoundFire_Purple.mdl",
+      "green": "255",
+      "maxPitch": "10.0",
+      "maxRoll": "10.0",
+      "modelScale": "1.0",
+      "red": "255",
+      "run": "200.0",
+      "scale": "1.25",
+      "scaleBull": "1",
+      "shadowH": "140.0",
+      "shadowOnWater": "1",
+      "shadowW": "140.0",
+      "shadowX": "70.0",
+      "shadowY": "70.0",
+      "teamColor": "-1",
+      "unitShadow": "Shadow",
+      "unitSound": "KelThuzadNecro",
+      "walk": "200.0",
+      "unitAbilID": "u011",
+      "unitWeapID": "u011",
+      "acquire": "600.0",
+      "atkType1": "magic",
+      "atkType2": "normal",
+      "backSw1": "0.1",
+      "castbsw": "0.5",
+      "castpt": "0.5",
+      "cool1": "1.0",
+      "dice1": "1",
+      "dmgpt1": "0.1",
+      "impactZ": "60.0",
+      "launchZ": "60.0",
+      "rangeN1": "150",
+      "RngBuff1": "250.0",
+      "showUI1": "1",
+      "showUI2": "1",
+      "sides1": "30",
+      "targCount1": "1",
+      "targCount2": "1",
+      "targs1": "enemies",
+      "weapsOn": "1",
+      "weapTp1": "normal",
+      "damage_min_1": "135.0",
+      "damage_max_1": "164.0",
+      "damage_avg_1": "149.5",
+      "dps_avg_1": "149.5",
+      "attack_type_zh": "魔法",
+      "armor_type_zh": "重甲",
+      "formation": "2",
+      "def": "3.0",
+      "defUp": "2.0",
+      "type": "giant,summoned",
+      "dmgplus1": "134"
+    },
+    "h03L": {
+      "rawcode": "h03L",
+      "name": "噩梦分身",
+      "ubertip": ",",
+      "unitID": "h03L",
+      "canFlee": "1",
+      "cargoSize": "1",
+      "death": "3.04",
+      "deathType": "3",
+      "movetp": "foot",
+      "points": "100",
+      "prio": "6",
+      "propWin": "60.0",
+      "race": "human",
+      "targType": "ground",
+      "turnRate": "0.6",
+      "unitBalanceID": "h03L",
+      "bldtm": "20",
+      "bountydice": "6",
+      "bountyplus": "20",
+      "bountysides": "3",
+      "collision": "10.0",
+      "defType": "none",
+      "goldcost": "135",
+      "goldRep": "135",
+      "HP": "2500",
+      "level": "2",
+      "nsight": "800",
+      "regenType": "none",
+      "reptm": "20",
+      "sight": "1400",
+      "spd": "300",
+      "stockMax": "3",
+      "stockRegen": "30",
+      "tilesets": "*",
+      "upgrades": "R00B,R00C,R009,R00A",
+      "unitUIID": "h03L",
+      "armor": "Flesh",
+      "blend": "0.15",
+      "elevRad": "20.0",
+      "file": "Units\\Creeps\\FacelessOne\\FacelessOne.mdl",
+      "maxPitch": "10.0",
+      "maxRoll": "10.0",
+      "modelScale": "1.0",
+      "run": "210.0",
+      "scale": "1.2",
+      "scaleBull": "1",
+      "shadowH": "140.0",
+      "shadowOnWater": "1",
+      "shadowW": "140.0",
+      "shadowX": "50.0",
+      "shadowY": "50.0",
+      "teamColor": "-1",
+      "unitShadow": "Shadow",
+      "unitSound": "FacelessOne",
+      "walk": "210.0",
+      "unitAbilID": "h03L",
+      "abilList": "A013,A007,A0XM",
+      "unitWeapID": "h03L",
+      "acquire": "500.0",
+      "atkType1": "chaos",
+      "atkType2": "normal",
+      "backSw1": "0.12",
+      "castbsw": "0.51",
+      "castpt": "0.3",
+      "cool1": "0.3",
+      "dice1": "1",
+      "dmgpt1": "0.12",
+      "impactZ": "60.0",
+      "launchZ": "60.0",
+      "rangeN1": "120",
+      "RngBuff1": "250.0",
+      "showUI1": "1",
+      "showUI2": "1",
+      "sides1": "25",
+      "targCount1": "1",
+      "targCount2": "1",
+      "targs1": "enemies",
+      "weapsOn": "1",
+      "weapTp1": "normal",
+      "weapType1": "WoodMediumBash",
+      "hotkey": "F",
+      "damage_min_1": "60.0",
+      "damage_max_1": "84.0",
+      "damage_avg_1": "72.0",
+      "dps_avg_1": "240.0",
+      "bounty_min": "26.0",
+      "bounty_max": "38.0",
+      "bounty_avg": "32.0",
+      "attack_type_zh": "混乱",
+      "armor_type_zh": "无甲",
+      "ability_ids": "A013,A007,A0XM",
+      "ability_names": "致命,球体,黑暗之魂",
+      "def": "3.0",
+      "defUp": "2.0",
+      "type": "giant",
+      "dmgplus1": "59"
+    }
+  },
+  "savisSummonOccurrences": 1,
+  "findings": [
+    "Trig_allabilityActions has no ancient-caster earlyreturn or triggercondition; earlier assumptions in four related modules corrected.",
+    "Dark soul selects main target plus first two600range enemies;305eachsecond until target widgetdeath. No25splash.",
+    "Blade schedules zero plus1s and ends on execution7; each target200once percast in fixed400range.",
+    "Eruption spawns u011 with3s timedlife, deals175, then registers widgetdeath. Dead u011 deals125 in300range and each target gets10one-second10damage ticks. All damage is chaos/universal weapon.",
+    "Meteor6effects, one0.5second425damage500range callback. No slow or repeated6hits.",
+    "A1UH only building tooltip. SavisSummon has no calls. A1UI isAHwe but source requests spiritofvengeance; Cost1 absent, manual native behavior remains unresolved."
+  ]
+}

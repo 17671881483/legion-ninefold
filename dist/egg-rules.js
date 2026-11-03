@@ -37,16 +37,11 @@ export const EGG_REQUIREMENTS = Object.freeze({
     "groups": [["h01L", "h047"]]
   },
   "R00M": {
-    "text": "曾完成骑士和满级圣骑士；或曾完成满级圣骑士的对应外观记录。另有老兵历练替代触发，完整条件待确认",
-    "status": "unconfirmed",
-    "sourceLines": [
-      28879,
-      28885,
-      22195,
-      22197,
-      22205,
-      22207
-    ]
+    "text": "曾分别实际完成骑士（h09U）和满级圣骑士（h0J3），或实际完成满级全能骑士外观（n02I）；不要求同时在场，完成记录永久保留",
+    "status": "confirmed",
+    "sourceLines": [28880, 28885],
+    "completionMode": "raw",
+    "groups": [["h09U", "h0J3"], ["n02I"]]
   },
   "R00S": {
     "text": "曾完成过时光之树；完成记录保留",
@@ -582,7 +577,7 @@ export const EGG_REQUIREMENTS = Object.freeze({
 export const DOCUMENT_EGG_TARGETS = Object.freeze([
   {
     "rawcode": "h203",
-    "status": "unconfirmed"
+    "status": "confirmed"
   },
   {
     "rawcode": "h1S2",

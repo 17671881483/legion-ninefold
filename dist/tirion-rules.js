@@ -8,7 +8,7 @@ export const TIRION_RULES={
  A0LQ:{status:'implemented',description:'羁绊动态授予的AIde，物编DataA1=15，增加自身15点护甲。',nativeKind:true},
  A0LO:{status:'unresolved',description:'羁绊授予的AIas攻速能力已保留，但对象DataA1缺失。',partial:'技能名写30%，不能代替原生数值，不产生虚构攻速。'},
  A0LR:{status:'partial',description:'独立伤害监听要求受害者或伤害来源有A0LR。受害者持有时抽整数1—10≤3，先回复事件伤害，再检查回复后生命≤1000且共享键1未占用，安排3秒后存活则回复1000。来源有Af01时按15%/持A0LR时35%再伤害200并回复1000；该附伤是武器标记的法术攻击/普通伤害。',partial:'AIas攻速字段缺失。受击回血不是伤害归零，满血受击仍可能掉血；源码防御成功后提前重新启用监听，保留嵌套事件。原生监听排序、共享键1其他写入及死人写生命仍待验证。'},
- Af01:{status:'partial',description:'已接入A_TirionFordring中的伤害来源分支：只有双方至少一方有A0LR才进入监听，Af01来源抽百分数≤15（自身有A0LR则≤35），附加200法术攻击/普通武器伤害并回复1000。不限定原事件是普攻。',partial:'其余圣光旗帜/全队治疗与未获得羁绊时的其他独立规则仍待核定；不以文案补出未注册的常驻触发。'},
+ Af01:{status:'partial',description:'已接入A_TirionFordring中的伤害来源分支：只有双方至少一方有A0LR才进入监听，Af01来源抽百分数≤15（自身有A0LR则≤35），附加200法术攻击/普通武器伤害并回复1000。不限定原事件是普攻。己方任一玩家实际完成泰兰建筑后，全队国王治疗从最大生命50%永久提升至60%，出售泰兰也保留；此增强由建筑完成事件触发，不要求Af01图标。',partial:'国王自动保命治疗的原生触发时机、Af01能力依赖及其余独立规则仍待核定；不以文案补出未注册的常驻触发。'},
 };
 const level=(e,id)=>e?.skillSpecs?.some(s=>s.id===id)?e.abilityLevels?.[id]??1:0;
 const raw=e=>e?.combatRawcode??e?.sourceRawcode;

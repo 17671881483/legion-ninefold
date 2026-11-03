@@ -6,20 +6,29 @@ export const DOCUMENT_CATALOG_META = {
   "sourceFile": "document-catalog-reviewed.json",
   "sourceSha256": "237cb3bf700a210a707e872cbb1521c0b12e627e9747af01d54d45c5247848d7",
   "unitRecords": 383,
-  "confirmedRecipes": 32,
-  "pendingRecipes": 2,
+  "confirmedRecipes": 33,
+  "pendingRecipes": 1,
   "counts": {
     "变形入口": 6,
     "基础兵种": 107,
     "普通升级兵种": 144,
     "外观款": 73,
     "权益变体": 16,
-    "彩蛋兵种": 32,
-    "彩蛋兵种（待核定）": 2,
+    "彩蛋兵种": 33,
     "彩蛋后续升级": 1,
+    "彩蛋兵种（待核定）": 1,
     "入口待确认": 2
   },
-  "policy": "技术核验只保留在JSON audit，不增加主表；皮肤不当作配方材料；只根据原始JASS、CSV与导入字段整理，未改仓库。"
+  "policy": "技术核验只保留在JSON audit，不增加主表；皮肤不当作配方材料；只根据原始JASS、CSV与导入字段整理，未改仓库。",
+  "sourceAudits": [
+    {
+      "file": "reference/tailan-acquisition-evidence.json",
+      "scriptLines": [
+        28880,
+        28885
+      ]
+    }
+  ]
 };
 export const DOCUMENT_DISPLAY_ALIASES = {
   "h0CC": "兽王萨尔（霜狼杜隆坦）",
@@ -1137,7 +1146,7 @@ export const DOCUMENT_CATALOG = {
   "h203": {
     "rawcode": "h203",
     "name": "泰兰·弗丁",
-    "category": "彩蛋兵种（待核定）",
+    "category": "彩蛋兵种",
     "baseRawcode": null,
     "rootBaseRawcode": null,
     "baseCategory": null,
@@ -1147,9 +1156,9 @@ export const DOCUMENT_CATALOG = {
     ],
     "acquisitionText": "由老兵升级",
     "upgradeText": "未登记后续玩法升级",
-    "conditionText": "曾完成骑士和满级圣骑士；或曾完成满级圣骑士的对应外观记录。另有老兵历练替代触发，完整条件待确认；等到本波战斗结束；需要军团战争荣誉资格；每位玩家最多1个",
+    "conditionText": "曾分别实际完成骑士（h09U）和满级圣骑士（h0J3），或实际完成满级全能骑士外观（n02I）；不要求同时在场，完成记录永久保留；等到本波战斗结束；需要军团战争荣誉资格；每位玩家最多1个",
     "aliases": [],
-    "recipeStatus": "pending",
+    "recipeStatus": "confirmed",
     "recipe": {
       "targetRawcode": "h203",
       "fromRawcodes": [
@@ -1162,20 +1171,16 @@ export const DOCUMENT_CATALOG = {
         "h0J3",
         "n02I"
       ],
-      "status": "unconfirmed",
+      "status": "confirmed",
       "requirements": [
         {
           "kind": "gameplay",
           "rawcode": "R00M",
-          "text": "曾完成骑士和满级圣骑士；或曾完成满级圣骑士的对应外观记录。另有老兵历练替代触发，完整条件待确认",
-          "status": "unconfirmed",
+          "text": "曾分别实际完成骑士（h09U）和满级圣骑士（h0J3），或实际完成满级全能骑士外观（n02I）；不要求同时在场，完成记录永久保留",
+          "status": "confirmed",
           "lines": [
-            28879,
-            28885,
-            22195,
-            22197,
-            22205,
-            22207
+            28880,
+            28885
           ],
           "mentions": [
             "h09U",
@@ -1215,7 +1220,7 @@ export const DOCUMENT_CATALOG = {
       ],
       "sourceLabel": "老兵",
       "targetLabel": "泰兰·弗丁",
-      "conditionText": "曾完成骑士和满级圣骑士；或曾完成满级圣骑士的对应外观记录。另有老兵历练替代触发，完整条件待确认；等到本波战斗结束",
+      "conditionText": "曾分别实际完成骑士（h09U）和满级圣骑士（h0J3），或实际完成满级全能骑士外观（n02I）；不要求同时在场，完成记录永久保留；等到本波战斗结束；需要军团战争荣誉资格",
       "limitText": "每位玩家最多1个；需要军团战争荣誉资格"
     },
     "evidence": [],
@@ -1223,6 +1228,13 @@ export const DOCUMENT_CATALOG = {
     "source": {
       "table": "所有兵种",
       "record": 38
+    },
+    "sourceAudit": {
+      "file": "reference/tailan-acquisition-evidence.json",
+      "scriptLines": [
+        28880,
+        28885
+      ]
     }
   },
   "n07R": {

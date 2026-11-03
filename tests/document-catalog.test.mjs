@@ -7,11 +7,11 @@ import {documentUnit,unitDisplayName,unitSearchText,unitCategory,isAppearanceVar
 const units=[...V14_UNITS,...V14_ARCHIVE],byCode=new Map(units.map(u=>[u.sourceRawcode,u]));
 const documented=Object.values(DOCUMENT_CATALOG),branches=documented.filter(row=>row.branchKind);
 assert.equal(documented.length,383);
-assert.equal(documented.filter(row=>row.recipeStatus==='confirmed').length,32);
-assert.equal(documented.filter(row=>row.recipeStatus==='pending').length,2);
+assert.equal(documented.filter(row=>row.recipeStatus==='confirmed').length,33);
+assert.equal(documented.filter(row=>row.recipeStatus==='pending').length,1);
 assert.equal(documented.filter(row=>row.recipeStatus==='followup').length,1);
 assert.equal(branches.length,89);
-assert.deepEqual(DOCUMENT_CATALOG_META.counts,{'变形入口':6,'基础兵种':107,'普通升级兵种':144,'外观款':73,'权益变体':16,'彩蛋兵种':32,'彩蛋兵种（待核定）':2,'彩蛋后续升级':1,'入口待确认':2});
+assert.deepEqual(DOCUMENT_CATALOG_META.counts,{'变形入口':6,'基础兵种':107,'普通升级兵种':144,'外观款':73,'权益变体':16,'彩蛋兵种':33,'彩蛋兵种（待核定）':1,'彩蛋后续升级':1,'入口待确认':2});
 for(const row of documented){
  const original=byCode.get(row.rawcode);assert.ok(original,`documented object ${row.rawcode} exists`);
  const overlay=applyDocumentUnitOverlay(original);
@@ -40,7 +40,10 @@ assert.equal(DOCUMENT_CATALOG.h0SS.baseCategory,'彩蛋兵种');
 assert.equal(DOCUMENT_CATALOG.h0VL.baseCategory,'彩蛋兵种（待核定）');
 assert.equal(unitCategory(byCode.get('n083')),'彩蛋后续升级');
 assert.equal(DOCUMENT_CATALOG.n083.recipe,null);
-assert.equal(DOCUMENT_CATALOG.h203.recipeStatus,'pending');
+assert.equal(DOCUMENT_CATALOG.h203.recipeStatus,'confirmed');
+assert.match(DOCUMENT_CATALOG.h203.conditionText,/n02I.*永久保留/);
+assert.equal(DOCUMENT_CATALOG.h203.recipe.requirements[0].status,'confirmed');
+assert.equal(splitUnitCategories([byCode.get('h203')]).easter.length,1);
 assert.equal(DOCUMENT_CATALOG.h2C2.recipeStatus,'pending');
 assert.match(DOCUMENT_CATALOG.h2C2.conditionText,/166.*101.*待确认/);
 assert.match(DOCUMENT_CATALOG.n07R.conditionText,/不要求两者持续在场/);
@@ -65,4 +68,4 @@ assert.equal(splitUnitCategories([byCode.get('h00X'),byCode.get('n07R'),byCode.g
 const undocumentedHero={id:'v14_test_hero',name:'英雄',hero:true,cost:150,upgrades:[]};
 assert.equal(unitCategory(undocumentedHero),'英雄');assert.equal(applyDocumentUnitOverlay(undocumentedHero),undocumentedHero);
 assert.equal(fs.readFileSync(new URL('../dist/document-catalog.js',import.meta.url),'utf8').includes('/Users/'),false);
-console.log('Document catalog: 383 records, 32 confirmed + 2 pending recipes, 73 appearances + 16 entitlement branches, 11 dynamic gates and all aliases verified.');
+console.log('Document catalog: 383 records, 33 confirmed + 1 pending recipes, 73 appearances + 16 entitlement branches, 11 dynamic gates and all aliases verified.');

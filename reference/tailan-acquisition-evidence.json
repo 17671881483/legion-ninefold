@@ -1,0 +1,316 @@
+{
+  "source": {
+    "file": "reference/v14-source/raw_extracted/war3map.j",
+    "sha256": "e66c55b3b25b185c991be5613e21fbf5b2d598f3cc40f2f8cd01c23bcb828250",
+    "lineEncoding": "latin1/LF"
+  },
+  "sourceEvidence": [
+    {
+      "line": 277,
+      "text": "boolean H4=false"
+    },
+    {
+      "line": 278,
+      "text": "boolean H5=false"
+    },
+    {
+      "line": 279,
+      "text": "integer array T1"
+    },
+    {
+      "line": 280,
+      "text": "boolean array T2"
+    },
+    {
+      "line": 281,
+      "text": "boolean array T3"
+    },
+    {
+      "line": 1506,
+      "text": "call SaveInteger(O,$68303054,StringHash(\"box_train_upgrade_next\"),$68323033)"
+    },
+    {
+      "line": 1508,
+      "text": "call SaveInteger(O,$68303054,StringHash(\"box_train_upgrade_1\"),$68323033)"
+    },
+    {
+      "line": 2655,
+      "text": "call SaveInteger(O,$68323033,StringHash(\"box_train_upgrade_require_count\"),3)"
+    },
+    {
+      "line": 2656,
+      "text": "call SaveInteger(O,$68323033,StringHash(\"box_train_upgrade_require_1\"),$5230304D)"
+    },
+    {
+      "line": 2657,
+      "text": "call SaveInteger(O,$68323033,StringHash(\"box_train_upgrade_require_2\"),$75303034)"
+    },
+    {
+      "line": 2658,
+      "text": "call SaveInteger(O,$68323033,StringHash(\"box_train_upgrade_require_3\"),$68323330)"
+    },
+    {
+      "line": 3646,
+      "text": "call DisableEggUnitTypeDialog___RegisterDialogEggUnitType($68323033,\"æ³°å°Â·å¼ä¸\",1)"
+    },
+    {
+      "line": 22185,
+      "text": "return GetUnitTypeId(GetKillingUnit())==$68303238 and GetOwningPlayer(GetKillingUnit())==Player(8) or GetOwningPlayer(GetKillingUnit())==Player(9)"
+    },
+    {
+      "line": 22190,
+      "text": "if Sf[0]!=2 and GetRandomInt(1,10)<=6 then"
+    },
+    {
+      "line": 22192,
+      "text": "call SetPlayerState(Player(BF-1),PLAYER_STATE_RESOURCE_GOLD,GetPlayerState(Player(BF-1),PLAYER_STATE_RESOURCE_GOLD)+1)"
+    },
+    {
+      "line": 22194,
+      "text": "set T1[BF]=T1[BF]+1"
+    },
+    {
+      "line": 22195,
+      "text": "if T1[BF]>=125 and T2[BF] and T3[BF] then"
+    },
+    {
+      "line": 22196,
+      "text": "call SetPlayerTechMaxAllowed(Player(BF-1),$68323033,1)"
+    },
+    {
+      "line": 22197,
+      "text": "call SetPlayerTechResearchedSwap($5230304D,1,Player(BF-1))"
+    },
+    {
+      "line": 22200,
+      "text": "if Sf[0]==2 and GetRandomInt(1,10)<=3 then"
+    },
+    {
+      "line": 22204,
+      "text": "set T1[BF]=T1[BF]+1"
+    },
+    {
+      "line": 22205,
+      "text": "if T1[BF]>=125 and T2[BF] and T3[BF] then"
+    },
+    {
+      "line": 22206,
+      "text": "call SetPlayerTechMaxAllowed(Player(BF-1),$68323033,1)"
+    },
+    {
+      "line": 22207,
+      "text": "call SetPlayerTechResearchedSwap($5230304D,1,Player(BF-1))"
+    },
+    {
+      "line": 27137,
+      "text": "set T0=CreateTrigger()"
+    },
+    {
+      "line": 27138,
+      "text": "call TriggerRegisterAnyUnitEventBJ(T0,EVENT_PLAYER_UNIT_DEATH)"
+    },
+    {
+      "line": 27139,
+      "text": "call TriggerAddCondition(T0,Condition(function C_ExperiencedSoldierSkill))"
+    },
+    {
+      "line": 27140,
+      "text": "call TriggerAddAction(T0,function A_ExperiencedSoldierSkill)"
+    },
+    {
+      "line": 28880,
+      "text": "if x==$68303955 or x==$68304A33 or x==$6E303249 then"
+    },
+    {
+      "line": 28881,
+      "text": "call SaveBoolean(O,GetHandleId(h),x,true)"
+    },
+    {
+      "line": 28882,
+      "text": "if LoadBoolean(O,GetHandleId(h),$68303955) and LoadBoolean(O,GetHandleId(h),$68304A33) or LoadBoolean(O,GetHandleId(h),$6E303249) then"
+    },
+    {
+      "line": 28883,
+      "text": "call SetPlayerTechResearchedSwap($5230304D,1,h)"
+    },
+    {
+      "line": 28884,
+      "text": "endif"
+    },
+    {
+      "line": 28885,
+      "text": "endif"
+    },
+    {
+      "line": 28892,
+      "text": "if x==$68323033 then"
+    },
+    {
+      "line": 28893,
+      "text": "if IsUnitAlly(i,Player(8))==true then"
+    },
+    {
+      "line": 28894,
+      "text": "set H4=true"
+    },
+    {
+      "line": 28895,
+      "text": "else"
+    },
+    {
+      "line": 28896,
+      "text": "set H5=true"
+    },
+    {
+      "line": 28897,
+      "text": "endif"
+    },
+    {
+      "line": 28898,
+      "text": "endif"
+    },
+    {
+      "line": 24594,
+      "text": "if H4 then"
+    },
+    {
+      "line": 24595,
+      "text": "set W7=GetUnitState(Bd,UNIT_STATE_MAX_LIFE)*.6"
+    },
+    {
+      "line": 24598,
+      "text": "set W7=GetUnitState(Bd,UNIT_STATE_MAX_LIFE)*.5"
+    },
+    {
+      "line": 24601,
+      "text": "call SetUnitLifeBJ(Bd,GetUnitStateSwap(UNIT_STATE_LIFE,Bd)+W7)"
+    },
+    {
+      "line": 24615,
+      "text": "if H5 then"
+    },
+    {
+      "line": 24616,
+      "text": "set W7=GetUnitState(Bh,UNIT_STATE_MAX_LIFE)*.6"
+    },
+    {
+      "line": 24619,
+      "text": "set W7=GetUnitState(Bh,UNIT_STATE_MAX_LIFE)*.5"
+    },
+    {
+      "line": 24622,
+      "text": "call SetUnitLifeBJ(Bh,GetUnitStateSwap(UNIT_STATE_LIFE,Bh)+W7)"
+    },
+    {
+      "line": 47244,
+      "text": "function AllBuildingStartApplyEggWhiteEx takes unit i,integer x,integer BF,boolean Yt returns nothing"
+    },
+    {
+      "line": 47246,
+      "text": "call EggWhiteEx(i,x,h,GetPlayerId(h),BF,Yt)"
+    },
+    {
+      "line": 47254,
+      "text": "function AllBuildingStartApplyBuildUpgradeFinish takes unit i,boolean Yt,boolean dW returns nothing"
+    },
+    {
+      "line": 47255,
+      "text": "local integer x=0"
+    },
+    {
+      "line": 47256,
+      "text": "local integer BF=0"
+    },
+    {
+      "line": 47257,
+      "text": "if i!=null then"
+    },
+    {
+      "line": 47258,
+      "text": "if dW then"
+    },
+    {
+      "line": 47259,
+      "text": "call Limit_D()"
+    },
+    {
+      "line": 47260,
+      "text": "endif"
+    },
+    {
+      "line": 47261,
+      "text": "if Yt or dW then"
+    },
+    {
+      "line": 47262,
+      "text": "set x=GetUnitTypeId(i)"
+    },
+    {
+      "line": 47263,
+      "text": "set BF=GetUnitUserData(i)"
+    },
+    {
+      "line": 47264,
+      "text": "call AllBuildingStartApplyEggWhiteEx(i,x,BF,Yt)"
+    },
+    {
+      "line": 47265,
+      "text": "endif"
+    },
+    {
+      "line": 47269,
+      "text": "function AllBuildingStartApplyManualUpgradeFinishByUnit takes unit i,integer x,integer BF returns nothing"
+    },
+    {
+      "line": 47274,
+      "text": "call AllBuildingStartApplyEggWhiteEx(i,x,BF,false)"
+    },
+    {
+      "line": 47285,
+      "text": "call AllBuildingStartApplyBuildUpgradeFinish(i,EVENT_PLAYER_UNIT_CONSTRUCT_FINISH==GetTriggerEventId()==true,EVENT_PLAYER_UNIT_UPGRADE_FINISH==GetTriggerEventId()==true)"
+    },
+    {
+      "line": 47313,
+      "text": "call TriggerRegisterAnyUnitEventBJ(t,EVENT_PLAYER_UNIT_CONSTRUCT_FINISH)"
+    },
+    {
+      "line": 47315,
+      "text": "call TriggerRegisterAnyUnitEventBJ(t,EVENT_PLAYER_UNIT_UPGRADE_FINISH)"
+    },
+    {
+      "line": 47320,
+      "text": "call TriggerAddAction(t,function Trig_EggWhiteActions)"
+    }
+  ],
+  "normalRecipe": [
+    [
+      "h09U",
+      "h0J3"
+    ],
+    [
+      "n02I"
+    ]
+  ],
+  "veteranAlternate": {
+    "threshold": 125,
+    "requiredFlags": [
+      "T2",
+      "T3"
+    ],
+    "writers": 0,
+    "status": "dormant-in-supplied-script",
+    "note": "Both boolean arrays default false and have no writes anywhere in this source. The gold reward listener itself is registered; its reward is a separate outstanding behavior."
+  },
+  "teamKingHeal": {
+    "buildingRawcode": "h203",
+    "normalFraction": 0.5,
+    "enhancedFraction": 0.6,
+    "permanent": true,
+    "hostRepresentation": "Any same-team player has exact rawCompleted.h203 history; team assignments are fixed in the host."
+  },
+  "boundaries": [
+    "n02I exact completion is a confirmed predicate, not a claim that its appearance acquisition is available.",
+    "R00M does not replace h230 qualification, battle-end, full-price direct upgrade, or optional 40%-price training gates.",
+    "Native CancelSave automatic heal timing, Af01 dependency and remaining independent effects are not completed here."
+  ]
+}

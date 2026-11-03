@@ -199,9 +199,16 @@ export class Game {
     const early = RULES.kingEarlyUpgradeCaps?.[stat], cap = number(RULES.kingUpgradeCaps?.[stat],15);
     return early && this.state.wave < early.beforeWave ? Math.min(cap,early.cap) : cap;
   }
+  kingHealFraction(team = 0) {
+    // EggWhiteEx:28892–28898 sets H4/H5 permanently on actual h203
+    // completion. The raw journal survives sale and save/load; aliases,
+    // combat bodies and pending orders do not establish this team flag.
+    return this.state.players.some(p => p.team === team && p.eggHistory?.rawCompleted?.h203 === true) ? .6 : RULES.kingHealFraction;
+  }
   kingHealAmount(team = 0) {
     const k = this.state.kings[team];
-    return k ? Number.isFinite(RULES.kingHealFraction) ? k.maxHp * RULES.kingHealFraction : rule('kingHealAmount',10000) : 0;
+    const fraction = this.kingHealFraction(team);
+    return k ? Number.isFinite(fraction) ? k.maxHp * fraction : rule('kingHealAmount',10000) : 0;
   }
   _sourceLifeScale(def, wave = this.state.wave) {
     if (!isV14(def) || wave <= 5) return 1;

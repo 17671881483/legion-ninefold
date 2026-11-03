@@ -23,10 +23,10 @@ function history(player, codes, prefix = 'source') {
 }
 const freshPlayer = () => ({ technologies: {}, entitlements: {}, buildings: [] });
 
-test('corrected document separates 32 confirmed outcomes from two pending paths', () => {
-  assert.equal(DOCUMENT_EGG_TARGETS.filter(row => row.status === 'confirmed').length, 32);
-  assert.deepEqual(DOCUMENT_EGG_TARGETS.filter(row => row.status !== 'confirmed').map(row => row.rawcode).sort(), ['h203', 'h2C2']);
-  assert.equal(EGG_REQUIREMENTS.R00L.status, 'unconfirmed'); assert.equal(EGG_REQUIREMENTS.R00M.status, 'unconfirmed');
+test('source audit separates 33 confirmed outcomes from one pending path', () => {
+  assert.equal(DOCUMENT_EGG_TARGETS.filter(row => row.status === 'confirmed').length, 33);
+  assert.deepEqual(DOCUMENT_EGG_TARGETS.filter(row => row.status !== 'confirmed').map(row => row.rawcode).sort(), ['h2C2']);
+  assert.equal(EGG_REQUIREMENTS.R00L.status, 'unconfirmed'); assert.equal(EGG_REQUIREMENTS.R00M.status, 'confirmed');
 });
 
 test('history is recorded at paid completion, not construction start, and survives selling', () => {
@@ -172,7 +172,7 @@ test('old saves backfill provable finished stages but do not count unfinished or
 
 test('unresolved recipes remain explicitly pending even when a legacy technology flag exists', () => {
   const game = fixture(), player = game.state.players[0]; player.technologies.R00L = player.technologies.R00M = 1;
-  for (const code of ['h2C2', 'h203']) { const status = game.requirementStatus(u(code).id); assert.equal(status.canStart, false); assert.match(status.reason, /配方待核定/); }
+  const status = game.requirementStatus(u('h2C2').id); assert.equal(status.canStart, false); assert.match(status.reason, /配方待核定/);
   assert.equal(eggRequirementStatus(player, 'R00L').met, false);
 });
 

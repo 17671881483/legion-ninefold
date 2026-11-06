@@ -34,6 +34,7 @@ import { MAP, laneToWorld, worldToLane, kingWorld, spawnWarpWorld, supportWorld,
 import { recordEggCompletion, restoreEggHistory, finishEggWave, recordBeastKingKill, eggRequirementStatus, appearanceQualificationStatus } from './egg-rules.js';
 import { queueSpecialMonsters, applySpecialMonsterSpawn, specialMonsterDeath, sourceEconomyBuildStart, sourceEconomyUpgradeFinish, farmerGoldRate, sourceEconomyDeath, applyFarmerRoundReward } from './special-rules.js';
 import { applySandboxQualification } from './sandbox-qualifications.js';
+import { matchMode } from './match-storage.js';
 import { BOX_REWARD_RULES, BOX_FARM_RULES, advanceBoxRewards, migrateBoxRewardProgress, boxTrainingRewardStatus, boxTrainingTargetStatus, boxTrainingCost, boxTrainingReplacementState, consumeBoxTrainingReward, claimBoxReward, completeBoxSwap, boxBuildFreeRefund } from './box-training-rules.js';
 
 const units = Object.fromEntries(UNITS.map(u => [u.id, u]));
@@ -60,7 +61,6 @@ const sourceLimits = Object.fromEntries(UNITS.filter(u=>!u.legacy && u.buildLimi
 // EggWhiteEx opens the player's chosen holy-dragon appearance with one shared
 // allowance (war3map.j:28865–28866); it is absent from the static cap CSV.
 for (const code of ['h201', 'h204']) sourceLimits[code] = { unitRawcode: 'h201', unitRawcodes: ['h201', 'h204'], maxAllowed: 1, scope: 'type', source: { script: 'war3map.j', lines: [28865, 28866] } };
-const gameMode = mode => mode === 'sandbox' ? 'sandbox' : 'normal';
 const SANDBOX_RESOURCES = 100000;
 const SANDBOX_POPULATION = 300;
 const BOX_PLAYER_DESCRIPTIONS={
@@ -78,7 +78,7 @@ const BOX_PLAYER_DESCRIPTIONS={
 /** Deterministic, DOM-free simulation. tick receives real elapsed seconds; speed is applied here. */
 export class Game {
   constructor(options = {}) {
-    this.options = { seed: options.seed ?? 42, difficulty: options.difficulty ?? 'normal', builderId: options.builderId ?? RULES.defaultBuilderId ?? BUILDERS[0]?.id, ggEnabled: options.ggEnabled ?? RULES.ggEnabled ?? true, mode: gameMode(options.mode) };
+    this.options = { seed: options.seed ?? 42, difficulty: options.difficulty ?? 'normal', builderId: options.builderId ?? RULES.defaultBuilderId ?? BUILDERS[0]?.id, ggEnabled: options.ggEnabled ?? RULES.ggEnabled ?? true, mode: matchMode(options) };
     this._rng = (Number(this.options.seed) || 42) >>> 0;
     this._id = 0;
     this._spawnQueue = [];
@@ -117,9 +117,10 @@ export class Game {
     }
     this._log(`${RULES.title}：按来源建造军团，发展木材，与队友共同守护国王。`);
     this._log('采用v14.1A5九倍实怪数量和HP；静态数据与Web近似、原脚本冲突均保留来源说明。');
+    if (this.state.mode === 'cheat') this.state.cheats = { kingInvulnerable: false };
     if (this.state.mode === 'sandbox') {
       this.state.sandbox = { aiEnabled: false };
-      this._sandboxResources();
+      this._refillPlayerResources();
       this._log('测试沙盒：金币与木材各10万、人口300；备战不限时，手动出兵。AI默认关闭，仅本路刷新波次，木怪派遣仍按正常规则生效。');
     } else for (let id = 1; id < 8; id++) this._aiBuild(this.state.players[id], true);
   }
@@ -565,10 +566,26 @@ export class Game {
   }
 
   _aiEnabled() { return this.state.mode !== 'sandbox' || this.state.sandbox?.aiEnabled === true; }
-  _sandboxResources() {
+  _refillPlayerResources() {
     const p = this.state.players[0];
     p.gold = Math.max(p.gold, SANDBOX_RESOURCES); p.wood = Math.max(p.wood, SANDBOX_RESOURCES);
     p.populationCap = Math.max(p.populationCap, SANDBOX_POPULATION);
+  }
+  _completePlayerOrders(p) {
+    for (const b of p.buildings) this._completeConstruction(p, b);
+    const tasks = this._economyTasks(p);
+    p.workers += tasks.workerQueue.length;
+    tasks.workerQueue = [];
+    if (tasks.lumberTask) {
+      p.lumberLevel = tasks.lumberTask.targetLevel;
+      p.lumberAdvancedWhileBasicQueued = 0;
+      tasks.lumberTask = null;
+    }
+    if (tasks.farmTask) {
+      p.populationCap = Math.min(rule('maxPopulation', 300), p.populationCap + rule('farmPopulation', 8));
+      p.sourceFarmRawcode = null;
+      tasks.farmTask = null;
+    }
   }
   /** Discard a trial without settling it or moving the economy clock. */
   _resetSandboxWave(wave = this.state.wave) {
@@ -599,7 +616,7 @@ export class Game {
     if (this.state.mode !== 'sandbox') return this._result(false, '测试指令仅限沙盒模式');
     const p = this.state.players[0];
     if (type === 'sandboxResources') {
-      this._sandboxResources(); return this._result(true, '金币、木材已补足10万，人口上限已补足300');
+      this._refillPlayerResources(); return this._result(true, '金币、木材已补足10万，人口上限已补足300');
     }
     if (type === 'sandboxWave') {
       if (!Number.isInteger(payload.wave) || payload.wave < 1 || payload.wave > WAVES.length) return this._result(false, `请选择1至${WAVES.length}的整数波次`);
@@ -629,11 +646,7 @@ export class Game {
         p.buildings = []; p.heroId = null; p.heroAltarUsed = false; p.heroAltarCount = 0;
         return this._result(true, '已清空本路阵容，保留资源与经济进度');
       case 'sandboxComplete': {
-        for (const b of p.buildings) this._completeConstruction(p, b);
-        const tasks = this._economyTasks(p);
-        p.workers += tasks.workerQueue.length; tasks.workerQueue = [];
-        if (tasks.lumberTask) { p.lumberLevel = tasks.lumberTask.targetLevel; p.lumberAdvancedWhileBasicQueued=0; tasks.lumberTask = null; }
-        if (tasks.farmTask) { p.populationCap = Math.min(rule('maxPopulation', 300), p.populationCap + rule('farmPopulation', 8));p.sourceFarmRawcode=null;tasks.farmTask = null; }
+        this._completePlayerOrders(p);
         return this._result(true, '本路已支付的施工、招募和研究已全部完成');
       }
       case 'sandboxAI':
@@ -642,6 +655,36 @@ export class Game {
         this._log(`测试沙盒：AI已${payload.value ? '开启，恢复八路波次与自主操作' : '关闭，仅本路刷新波次并停止自主操作'}。`);
         return this._result(true, `AI已${payload.value ? '开启' : '关闭'}`);
     }
+  }
+
+  _cheatCommand(type, payload) {
+    const s = this.state;
+    if (s.mode !== 'cheat') return this._result(false, '作弊指令仅限作弊对局');
+    switch (type) {
+      case 'cheatResources':
+        this._refillPlayerResources();
+        return this._result(true, '金币、木材已补足10万，人口上限已补足300');
+      case 'cheatComplete':
+        if (s.phase !== 'build') return this._result(false, '请在备战期完成已付款任务');
+        this._completePlayerOrders(s.players[0]);
+        return this._result(true, '本路已支付的施工、招募和研究已全部完成');
+      case 'cheatHealKing':
+        s.kings[0].hp = s.kings[0].maxHp;
+        return this._result(true, '联盟国王已恢复满血');
+      case 'cheatKingInvulnerable': {
+        if (typeof payload?.value !== 'boolean') return this._result(false, '请选择开启或关闭无敌');
+        s.cheats.kingInvulnerable = payload.value;
+        const message = `联盟国王无敌已${payload.value ? '开启' : '关闭'}`;
+        this._log(message);
+        return this._result(true, message);
+      }
+      default:
+        return this._result(false, '未知作弊指令');
+    }
+  }
+
+  _protectedKing(target) {
+    return this.state.mode === 'cheat' && this.state.cheats.kingInvulnerable && target === this.state.kings[0];
   }
 
   unitSkillStatus(entityId,playerId=0){
@@ -657,6 +700,7 @@ export class Game {
     if (type === 'restart') { const fresh = new Game({ ...this.options, ...payload }); Object.assign(this, fresh); return this._result(true, '已重新开始'); }
     if (typeof type === 'string' && type.startsWith('sandbox')) return this._sandboxCommand(type, payload);
     if (this.state.phase === 'ended') return this._result(false, '本局已结束，请重新开始');
+    if (typeof type === 'string' && type.startsWith('cheat')) return this._cheatCommand(type, payload);
     if (type === 'pause') { this.state.paused = payload.value === undefined ? !this.state.paused : !!payload.value; return this._result(true, this.state.paused ? '已暂停' : '继续战斗'); }
     if (type === 'speed') { this.state.speed = clamp(number(payload.value, 1), .5, 4); return this._result(true, `${this.state.speed} 倍速`); }
     const p = this._getPlayer(payload);
@@ -1389,6 +1433,7 @@ export class Game {
     }
   }
   _hurt(target, damage, attacker, pure = false) {
+    if (this._protectedKing(target)) return 0;
     if(isReincarnating(target))return 0;
     if (target.hp <= 0 || damage <= 0 || (target.status?.cycloneUntil??0)>(this._aesaraEventAt??this._brightArthasEventAt??this._arthasEventAt??this._lichEventAt??this._vashjEventAt??this._iceEventAt??this._trollEventAt??this._kelthuzadEventAt??this.state.time)) return 0;
     const options=typeof pure==='object'?pure:{spell:!!pure},legacyPure=typeof pure==='boolean'&&pure;
@@ -1418,7 +1463,7 @@ export class Game {
     return actual;
   }
   _killUnit(target){
-    if(!target||target.hp<=0)return false;
+    if(!target||target.hp<=0||this._protectedKing(target))return false;
     target.hp=0;target.pendingAttack=null;
     this._settleDeath(target,null);
     return true;
@@ -1676,9 +1721,11 @@ export class Game {
     if (saved.version === 2 && (saved.mapId !== MAP.id || saved.mapVersion !== MAP.version)) throw new Error('存档地图版本不匹配');
     const revisionChanged=saved.state.dataRevision!==RULES.dataRevision;
     const data = copy(saved); this.options = data.options ?? this.options; this.options.ggEnabled??=RULES.ggEnabled??true; this.state = data.state;
-    this.state.mode = gameMode(this.state.mode ?? data.options?.mode); this.options.mode = this.state.mode;
+    this.state.mode = matchMode(this.state.mode == null ? data.options : this.state); this.options.mode = this.state.mode;
     if (this.state.mode === 'sandbox') this.state.sandbox = { aiEnabled: this.state.sandbox?.aiEnabled === true };
     else delete this.state.sandbox;
+    if (this.state.mode === 'cheat') this.state.cheats = { kingInvulnerable: this.state.cheats?.kingInvulnerable === true };
+    else delete this.state.cheats;
     this._rng = data.rng >>> 0; this._id = data.id ?? 0; this._spawnQueue = data.spawnQueue ?? [];
     this._aiTimer = data.aiTimer ?? 0; this._roundTime = data.roundTime ?? 0; this._settledLanes = data.settledLanes ?? []; this._overtime = data.overtime ?? false; this._warpTimer = data.warpTimer ?? 0; this._monsterPressure = data.monsterPressure;
     this._spatial = null; this._worldEntities = null; this._battleAuras = [[], []];

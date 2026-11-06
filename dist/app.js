@@ -14,7 +14,8 @@ const typeNames={hero:'英雄',normal:'普通',pierce:'穿刺',magic:'魔法',ch
 const icon=id=>`<svg aria-hidden="true"><use href="#i-${id}"/></svg>`;
 const num=n=>Math.floor(Number(n)||0).toLocaleString('zh-CN');
 const time=n=>`${Math.floor(Math.max(0,n)/60).toString().padStart(2,'0')}:${Math.floor(Math.max(0,n)%60).toString().padStart(2,'0')}`;
-let mode='normal',saved=null;
+const cheatEntry = new URLSearchParams(location.search).get('cheats') === '1';
+let mode=cheatEntry?'cheat':'normal',saved=null;
 try{saved=readMatch(localStorage,mode);}catch{}
 let game=new Game({seed:42,difficulty:'normal'}),started=false,tab='build',difficulty='normal',builderId=RULES.defaultBuilderId,selected=null,buildUnit=null,panelKey='',selectionKey='',uiTimer=0,saveTimer=0,lastFrame=0,endShown=false,soundOn=false,audio=null,lastWave=1,lastPhase='build';
 let autoFollowWave=0,autoFollowing=false,kingMoveMode=false,tMonsterMode=false,spellTargetMode=null,boxPointMode=null,relocationMode=null;
@@ -22,6 +23,7 @@ let economyDisplayGame=null,economyDisplayWorkers=0,economyDisplayLevel=0;
 let boxGiftDisplayGame=null,boxGiftDisplayKey='',boxGiftSelections=Object.create(null);
 const battlefield=new Battlefield($('battlefield'),handleBattlefieldClick);
 const initialState=game.state;
+$('cheat-mode-option').hidden = !cheatEntry;
 updateModeChoice();
 
 function toast(message,error=false){const t=document.createElement('div');t.className=`toast${error?' error':''}`;t.textContent=message;$('toast-container').append(t);setTimeout(()=>t.remove(),2700);}
@@ -49,18 +51,32 @@ function startSpellTarget(entityId,skill){
   const r=$('battlefield').getBoundingClientRect();battlefield.pointerPoint??={x:r.width/2,y:r.height*.48};
   $('build-hint').textContent=`${skill.name}：点击${skill.targetKind==='enemy'?'敌方单位':skill.targetKind==='unit'?'单位目标':'地面位置'}施放 · Esc取消`;$('build-hint').hidden=false;selectionKey='';updateUI();
 }
-function save(){if(!started)return;try{const snapshot=game.snapshot();writeMatch(localStorage,snapshot);if(mode===matchMode(game.state))saved=snapshot;$('save-label').textContent=matchMode(game.state)==='sandbox'?'沙盒进度已保存':'进度已保存';}catch{$('save-label').textContent='此浏览器暂不能存档';}}
+function save(){if(!started)return;try{const snapshot=game.snapshot(),activeMode=matchMode(snapshot.state);writeMatch(localStorage,snapshot);if(mode===activeMode)saved=snapshot;$('save-label').textContent=activeMode==='sandbox'?'沙盒进度已保存':activeMode==='cheat'?'作弊进度已保存':'进度已保存';}catch{$('save-label').textContent='此浏览器暂不能存档';}}
 function updateModeChoice(){
   try{saved=readMatch(localStorage,mode);}catch{saved=null;}
   document.querySelectorAll('[name="match-mode"]').forEach(input=>input.checked=input.value===mode);
-  const sandbox=mode==='sandbox';
-  $('mode-description').textContent=sandbox?'10万金 · 10万木 · 300人口，自由切族、指定波次，独立存档。':'普通对局按原有资源与时间规则进行。';
-  $('start-game').innerHTML=sandbox?'进入测试沙盒 <span>→</span>':'进入战场 <span>→</span>';
-  $('continue-game').textContent=sandbox?'继续上次沙盒':'继续上次对局';
-  $('welcome-foot').textContent=sandbox?'默认单路测试，可启用 AI 进行八路模拟 · 沙盒独立保存':'你与 3 名 AI 队友，对抗部落军团 · 对局自动保存在此浏览器';
+  const sandbox=mode==='sandbox',cheat=mode==='cheat';
+  $('mode-description').textContent=sandbox?'10万金 · 10万木 · 300人口，自由切族、指定波次，独立存档。':cheat?'按完整对局流程推进，随时打开作弊面板。':'普通对局按原有资源与时间规则进行。';
+  $('start-game').innerHTML=`${sandbox?'进入测试沙盒':cheat?'进入作弊对局':'进入战场'} <span>→</span>`;
+  $('continue-game').textContent=sandbox?'继续上次沙盒':cheat?'继续作弊对局':'继续上次对局';
+  $('welcome-foot').textContent=sandbox?'默认单路测试，可启用 AI 进行八路模拟 · 沙盒独立保存':cheat?'4 vs 4 · 作弊对局独立保存在此浏览器':'你与 3 名 AI 队友，对抗部落军团 · 对局自动保存在此浏览器';
   $('continue-game').hidden=!saved||(!sandbox&&saved.state.phase==='ended');
 }
 
+function updateCheats(){
+  const s=game.state,ended=s.phase==='ended';
+  $('cheat-complete').disabled=s.phase!=='build';
+  $('cheat-invulnerable').checked=s.cheats?.kingInvulnerable===true;
+  $('cheat-invulnerable').disabled=ended;
+  $('cheat-resources').disabled=ended;
+  $('cheat-heal').disabled=ended;
+}
+function cheatCommand(type,payload={}){
+  const result=command(type,payload);
+  $('cheat-feedback').textContent=result.message;
+  $('cheat-feedback').classList.toggle('error',!result.ok);
+  updateCheats();
+}
 function updateSandbox(syncFields=false){
   const s=game.state,building=s.phase==='build';
   $('sandbox-status').textContent=`第 ${s.wave} 波 · ${s.phase==='combat'?'战斗中':building?'自由布阵':'测试结束'} · 军团 ${s.players[0].buildings.length} 个`;
@@ -89,7 +105,7 @@ function startMatch(resume=false){
   else game=new Game({seed:Math.floor(Date.now()%2147483647),difficulty,builderId,mode});
   game.state.paused=false;started=true;lastWave=game.state.wave;lastPhase=game.state.phase;selected=null;buildUnit=null;endShown=false;panelKey='';selectionKey='';$('welcome').hidden=true;
   autoFollowWave=0;autoFollowing=false;kingMoveMode=false;tMonsterMode=false;boxPointMode=null;clearRelocation();clearSpellTarget();battlefield.targetRadius=null;$('battlefield').classList.remove('targeting');battlefield.selected=null;battlefield.buildUnit=null;focus(0);updateUI();save();sound('wave');
-  toast(mode==='sandbox'?'测试沙盒已就绪，点击右上角“测试沙盒”调整波次与资源。':'先选择兵种，再点击自己的建造格。前排与远程搭配更稳。');
+  toast(mode==='sandbox'?'测试沙盒已就绪，点击右上角“测试沙盒”调整波次与资源。':mode==='cheat'?'作弊对局已就绪，点击右上角“作弊面板”使用指令。':'先选择兵种，再点击自己的建造格。前排与远程搭配更稳。');
 }
 function currentBoxPointOffer(){
   if(!boxPointMode)return null;
@@ -388,6 +404,8 @@ function updateUI(){
   if(spellTargetMode&&!currentSpellTarget())clearSpellTarget();
   $('gold').textContent=num(p.gold);$('wood').textContent=num(p.wood);$('income').textContent=`+${num(p.income)}`;$('tech').textContent=`${p.workers} / ${p.lumberLevel}`;
   const sandbox=matchMode(s)==='sandbox';$('sandbox-tools').hidden=!sandbox;
+  $('cheat-tools').hidden=!cheatEntry||s.mode!=='cheat';
+  $('cheat-tools').textContent=s.cheats?.kingInvulnerable?'作弊 · 无敌':'作弊面板';
   $('phase-label').textContent=s.phase==='build'?(s.roundMode==='arena-prep'?'竞技准备':s.roundMode==='arena-transition'?'竞技结束过渡':'布阵准备'):s.phase==='combat'?(s.roundMode==='arena'?'军团竞技':s.wave>=31?'最终攻防':'怪物来袭'):'对局结束';$('phase-label').style.color=s.phase==='combat'?'#d5aa7b':'#83ad80';$('wave-label').textContent=`第 ${String(s.wave).padStart(2,'0')} 波`;$('wave-time').textContent=sandbox&&s.phase==='build'?'手动开波':time(s.roundMode==='arena'?s.arenaRemaining:s.wave>=31&&s.continuousRemaining!=null?s.continuousRemaining:s.timer);
   for(const [id,k]of[['ally',s.kings[0]],['enemy',s.kings[1]]]){$(`${id}-hp`).style.width=`${Math.max(0,k.hp/k.maxHp)*100}%`;$(`${id}-hp-text`).textContent=`${Math.ceil(k.hp/k.maxHp*100)}%`;}
   $('team-list').innerHTML=s.players.map(pl=>{const alive=s.entities.filter(e=>e.ownerId===pl.id&&e.side==='defender'&&e.hp>0).length,max=pl.buildings.length+(pl.heroId?1:0);return `<button class="team-row${pl.id===0?' me':''}${pl.team===1?' enemy':''}" data-focus="${pl.id}" title="查看${esc(pl.name)}的战区"><span class="player-number">${pl.id%4+1}</span><span class="player-info"><b>${esc(pl.name)}</b><small>${pl.workers}-${pl.lumberLevel} 科技 <em>${s.phase==='combat'?`存活 ${alive}`:'布阵中'}</em></small></span><span class="player-value">${num(power(pl))}</span><span class="row-health"><i style="width:${s.phase==='combat'&&max?Math.min(100,alive/max*100):100}%"></i></span></button>`;}).join('');
@@ -448,7 +466,16 @@ $('sandbox-builder').innerHTML=BUILDERS.map(b=>`<option value="${esc(b.id)}">${e
 $('sandbox-qualification').innerHTML=SANDBOX_QUALIFICATIONS.map(q=>`<option value="${esc(q.key)}">${esc(q.label)} · ${esc(q.key)}</option>`).join('');
 document.querySelectorAll('[name="match-mode"]').forEach(input=>input.onchange=()=>{mode=input.value;updateModeChoice();});
 $('sandbox-tools').onclick=()=>{if(matchMode(game.state)!=='sandbox')return;$('sandbox-feedback').textContent='';updateSandbox(true);$('sandbox-dialog').showModal();};
+$('cheat-tools').onclick=()=>{
+  if(!started||!cheatEntry||game.state.mode!=='cheat')return;
+  $('cheat-feedback').textContent='';
+  updateCheats();
+  $('cheat-dialog').showModal();
+};
 function showWelcome(){if(started){game.state.paused=true;save();mode=matchMode(game.state);}updateModeChoice();$('welcome').hidden=false;}
+$('cheat-modes').onclick=()=>{$('cheat-dialog').close();showWelcome();};
+document.querySelectorAll('[data-cheat]').forEach(button=>button.onclick=()=>cheatCommand(button.dataset.cheat));
+$('cheat-invulnerable').onchange=e=>cheatCommand('cheatKingInvulnerable',{value:e.target.checked});
 $('sandbox-modes').onclick=()=>{$('sandbox-dialog').close();showWelcome();};
 $('sandbox-return').onclick=()=>{$('sandbox-dialog').close();$('battlefield').focus({preventScroll:true});};
 $('sandbox-load-wave').onclick=()=>sandboxCommand('sandboxWave',{wave:Number($('sandbox-wave').value)});
@@ -467,9 +494,9 @@ $('sandbox-end-reset').onclick=()=>sandboxCommand('sandboxReset');
 document.querySelectorAll('.close-dialog').forEach(b=>b.onclick=()=>b.closest('dialog').close());document.querySelectorAll('dialog').forEach(d=>d.addEventListener('click',e=>{if(e.target===d){const r=d.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)d.close();}}));
 $('sound').onclick=()=>{soundOn=!soundOn;$('sound').classList.toggle('on',soundOn);$('sound').title=soundOn?'关闭音效':'开启音效';$('sound').setAttribute('aria-label',$('sound').title);sound();};
 $('fullscreen').onclick=()=>{if(document.fullscreenElement)document.exitFullscreen?.();else document.documentElement.requestFullscreen?.().catch(()=>toast('当前浏览器暂不支持全屏'));};
-document.addEventListener('keydown',e=>{if(e.target.closest('input,select,textarea,[contenteditable="true"]')||e.target.closest('button')&&['Space','Enter'].includes(e.code))return;if(!started||$('help-dialog').open||$('catalog-dialog')?.open||$('end-dialog').open||$('sandbox-dialog').open||!$('welcome').hidden||e.repeat)return;if(e.key==='Escape')cancelBuild();if(e.code==='Space'){e.preventDefault();command(game.state.phase==='build'?'ready':'pause');}if(RULES.interfereEnabled&&e.key.toLowerCase()==='t')$('interfere').click();if(e.key.toLowerCase()==='h')$('heal').click();});
+document.addEventListener('keydown',e=>{if(e.target.closest('input,select,textarea,[contenteditable="true"]')||e.target.closest('button')&&['Space','Enter'].includes(e.code))return;if(!started||document.querySelector('dialog[open]')||!$('welcome').hidden||e.repeat)return;if(e.key==='Escape')cancelBuild();if(e.code==='Space'){e.preventDefault();command(game.state.phase==='build'?'ready':'pause');}if(RULES.interfereEnabled&&e.key.toLowerCase()==='t')$('interfere').click();if(e.key.toLowerCase()==='h')$('heal').click();});
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&started){save();game.state.paused=true;}});window.addEventListener('beforeunload',save);
-function frame(now){const dt=Math.min((now-(lastFrame||now))/1000,.15);lastFrame=now;if(started&&$('welcome').hidden&&!$('help-dialog').open&&!$('catalog-dialog')?.open&&!$('sandbox-dialog').open)game.tick(dt);updateEconomyPanel();if(tab==='attack')updateMercPanel();battlefield.draw(game.state,now/1000);battlefield.minimap($('minimap'),game.state);uiTimer+=dt;saveTimer+=dt;if(uiTimer>.18){uiTimer=0;updateUI();}if(saveTimer>8){saveTimer=0;save();}requestAnimationFrame(frame);}
+function frame(now){const dt=Math.min((now-(lastFrame||now))/1000,.15);lastFrame=now;if(started&&$('welcome').hidden&&!document.querySelector('dialog[open]'))game.tick(dt);updateEconomyPanel();if(tab==='attack')updateMercPanel();battlefield.draw(game.state,now/1000);battlefield.minimap($('minimap'),game.state);uiTimer+=dt;saveTimer+=dt;if(uiTimer>.18){uiTimer=0;updateUI();}if(saveTimer>8){saveTimer=0;save();}requestAnimationFrame(frame);}
 $('builder-select').innerHTML=BUILDERS.map(b=>`<option value="${esc(b.id)}" ${b.id===builderId?'selected':''}>${esc(b.name)}${b.mode==='prophet'?' · 六阶随机':b.mode==='morph'?' · 随机变形':''}</option>`).join('');
 function updateBuilderChoice(){builderId=$('builder-select').value;$('builder-description').textContent=BUILDERS.find(b=>b.id===builderId)?.mode==='prophet'?'从六阶107个候选中各抽一种（18/18/18/18/18/17），按来源分支升级。':BUILDERS.find(b=>b.id===builderId)?.mode==='morph'?'建造六阶变形体，完成后从对应候选池随机变形。':`使用本种族${BUILDERS.find(b=>b.id===builderId)?.rosterIds.length??0}种基础兵种，按v14来源分支与条件升级。`;}
 $('builder-select').onchange=updateBuilderChoice;updateBuilderChoice();

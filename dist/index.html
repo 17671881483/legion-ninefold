@@ -7,7 +7,7 @@
   <meta name="description" content="在浏览器中排兵布阵、发展伐木、发木进攻，与队友一起守住国王。依据v14.1A5九倍模式解析数据的浏览器模拟。">
   <title>军团战争 · v14.1A5 九倍</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%23131f1b' d='M0 0h64v64H0z'/%3E%3Cpath fill='%23d7b975' d='M32 4 57 18v26L32 60 7 44V18zm0 7L14 22v18l18 12 18-12V22zM21 25h7v15h15v6H21z'/%3E%3C/svg%3E">
-  <link rel="stylesheet" href="./style.css?v=e8757e45847e">
+  <link rel="stylesheet" href="./style.css?v=9697c74e789a">
   <!-- asset-import-map:start -->
   <script type="importmap" id="asset-import-map">
 {
@@ -18,7 +18,7 @@
     "./alchemist-rules.js": "./alchemist-rules.js?v=f1ec5de9e8ee",
     "./alexstrasza-rules.js": "./alexstrasza-rules.js?v=b0b3b7c240b7",
     "./anduin-rules.js": "./anduin-rules.js?v=cffbf00e625d",
-    "./app.js": "./app.js?v=1cb4d94843fe",
+    "./app.js": "./app.js?v=12ed4f7b16a8",
     "./axisa-levels.js": "./axisa-levels.js?v=985c671141e6",
     "./axisa-rules.js": "./axisa-rules.js?v=9e05bc88ad73",
     "./bandit-lord-rules.js": "./bandit-lord-rules.js?v=bd8a53facd56",
@@ -42,10 +42,10 @@
     "./earth-lord-rules.js": "./earth-lord-rules.js?v=dc92922bb8d0",
     "./egg-rules.js": "./egg-rules.js?v=fa27f36967f4",
     "./elemental-proc-rules.js": "./elemental-proc-rules.js?v=13de69395b69",
-    "./engine.js": "./engine.js?v=f1a89d72bdcc",
+    "./engine.js": "./engine.js?v=4788f4fedfb3",
     "./garrosh-active-rules.js": "./garrosh-active-rules.js?v=292627df7124",
     "./garrosh-rules.js": "./garrosh-rules.js?v=5c37b3549b3f",
-    "./guldan-rules.js": "./guldan-rules.js?v=e150cff75da0",
+    "./guldan-rules.js": "./guldan-rules.js?v=c890d319e048",
     "./huskar-duel.js": "./huskar-duel.js?v=94840ee42656",
     "./huskar-rules.js": "./huskar-rules.js?v=9f0fe7edc08f",
     "./ice-hero-rules.js": "./ice-hero-rules.js?v=03ed9c49d19d",
@@ -59,7 +59,7 @@
     "./malfurion-rules.js": "./malfurion-rules.js?v=67d2d41e4e96",
     "./malygos-rules.js": "./malygos-rules.js?v=65af82086c47",
     "./map-reference.js": "./map-reference.js?v=88974449e603",
-    "./match-storage.js": "./match-storage.js?v=4f3950ad13f9",
+    "./match-storage.js": "./match-storage.js?v=48c3a984a361",
     "./mummy-rules.js": "./mummy-rules.js?v=c09955c12112",
     "./musketeer-rules.js": "./musketeer-rules.js?v=9116ee531c0a",
     "./naga-active-rules.js": "./naga-active-rules.js?v=48eb26b9023c",
@@ -126,7 +126,7 @@
         <div class="resource" title="每回合结算时额外获得的金币"><svg><use href="#i-income"/></svg><span><b id="income">+0</b><small>回合收入</small></span></div>
         <div class="resource tech" title="小精灵数量 / 伐木等级"><svg><use href="#i-worker"/></svg><span><b id="tech">1 / 0</b><small>伐木科技</small></span></div>
       </div>
-      <div class="top-actions"><button id="sandbox-tools" class="sandbox-tools" hidden title="打开测试沙盒控制台">测试沙盒</button><button id="sound" class="icon-button" title="开启音效" aria-label="开启音效"><svg><use href="#i-sound"/></svg></button><button id="catalog" class="icon-button" title="兵种与技能图鉴" aria-label="兵种与技能图鉴"><svg><use href="#i-eye"/></svg></button><button id="help" class="icon-button" title="玩法与操作" aria-label="玩法与操作"><svg><use href="#i-help"/></svg></button><button id="fullscreen" class="icon-button" title="全屏" aria-label="全屏"><svg><use href="#i-expand"/></svg></button></div>
+      <div class="top-actions"><button id="cheat-tools" class="sandbox-tools" hidden title="打开作弊面板">作弊面板</button><button id="sandbox-tools" class="sandbox-tools" hidden title="打开测试沙盒控制台">测试沙盒</button><button id="sound" class="icon-button" title="开启音效" aria-label="开启音效"><svg><use href="#i-sound"/></svg></button><button id="catalog" class="icon-button" title="兵种与技能图鉴" aria-label="兵种与技能图鉴"><svg><use href="#i-eye"/></svg></button><button id="help" class="icon-button" title="玩法与操作" aria-label="玩法与操作"><svg><use href="#i-help"/></svg></button><button id="fullscreen" class="icon-button" title="全屏" aria-label="全屏"><svg><use href="#i-expand"/></svg></button></div>
     </header>
     <div class="battle-ribbon">
       <div class="king-status allied"><svg><use href="#i-crown"/></svg><span>联盟军团</span><div class="king-bar"><i id="ally-hp"></i><b id="ally-hp-text">100%</b></div></div>
@@ -175,7 +175,7 @@
       <div class="welcome-emblem"><svg><use href="#i-crown"/></svg></div><div class="eyebrow">BROWSER EDITION · 4 vs 4</div>
       <h1>军团战争</h1><div class="welcome-subtitle"><span></span>v14.1A5 · 九倍怪物<span></span></div>
       <p class="welcome-intro">建造军团，守住怪潮。<br>发展经济，向敌方国王发起进攻。</p>
-      <fieldset class="match-mode"><legend>对局模式</legend><label><input type="radio" name="match-mode" value="normal" checked><span><b>普通对局</b><small>发展经济，挑战35波</small></span></label><label><input type="radio" name="match-mode" value="sandbox"><span><b>测试沙盒</b><small>自由布阵，指定波次重测</small></span></label></fieldset>
+      <fieldset class="match-mode"><legend>对局模式</legend><label><input type="radio" name="match-mode" value="normal" checked><span><b>普通对局</b><small>发展经济，挑战35波</small></span></label><label><input type="radio" name="match-mode" value="sandbox"><span><b>测试沙盒</b><small>自由布阵，指定波次重测</small></span></label><label id="cheat-mode-option" hidden><input type="radio" name="match-mode" value="cheat"><span><b>作弊对局</b><small>完整35波 · 内置作弊面板</small></span></label></fieldset>
       <p id="mode-description" class="mode-description">普通对局按原有资源与时间规则进行。</p>
       <label class="builder-select-label" for="builder-select">选择建造者 <small>AP模式 · 各种族独立兵种</small></label><select id="builder-select" class="builder-select" aria-label="选择建造者"></select><p id="builder-description" class="builder-description"></p>
       <div class="mode-summary"><span>AP 自由选族</span><span>X9 九倍怪物</span><span>GG 击杀收益</span></div>
@@ -206,7 +206,21 @@
       <button id="sandbox-return" class="primary-button">返回战场</button><button id="sandbox-modes" class="secondary-button">模式选择与存档</button>
     </div>
   </dialog>
+  <dialog id="cheat-dialog" class="sandbox-dialog" aria-labelledby="cheat-title">
+    <div class="dialog-header"><span><small>INTERNAL TOOLS</small><h2 id="cheat-title">作弊面板</h2></span><button class="close-dialog" aria-label="关闭作弊面板">×</button></div>
+    <div class="sandbox-content">
+      <p class="sandbox-intro">面板打开时暂停推进。作弊对局使用独立的浏览器存档。</p>
+      <div class="sandbox-actions">
+        <button id="cheat-resources" data-cheat="cheatResources"><b>补足资源</b><small>本路金币与木材各至少10万，人口上限至少300</small></button>
+        <button id="cheat-complete" data-cheat="cheatComplete"><b>秒完成任务</b><small>备战期立即完成本路已付款的施工、招募和研究</small></button>
+        <button id="cheat-heal" data-cheat="cheatHealKing"><b>国王恢复满血</b><small>为联盟国王回血，保留治疗次数</small></button>
+      </div>
+      <label class="sandbox-ai"><input id="cheat-invulnerable" type="checkbox"><span><b>联盟国王无敌</b><small>阻止国王受到伤害，开关随对局保存</small></span></label>
+      <p id="cheat-feedback" class="sandbox-feedback" role="status"></p>
+      <button class="close-dialog primary-button">返回战场</button><button id="cheat-modes" class="secondary-button">模式选择与存档</button>
+    </div>
+  </dialog>
   <dialog id="end-dialog" class="end-dialog"><div class="end-emblem"><svg><use href="#i-crown"/></svg></div><div id="end-eyebrow" class="eyebrow">战斗结束</div><h2 id="end-title">联盟军团获胜</h2><p id="end-description"></p><div id="end-stats" class="end-stats"></div><button id="sandbox-end-reset" class="primary-button" hidden>返回布阵重测</button><button id="restart-game" class="primary-button">再来一局</button><button class="close-dialog secondary-button">回看战场</button></dialog>
-  <script type="module" src="./app.js?v=1cb4d94843fe"></script>
+  <script type="module" src="./app.js?v=12ed4f7b16a8"></script>
 </body>
 </html>

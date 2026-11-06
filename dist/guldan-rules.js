@@ -40,7 +40,10 @@ export function guldanSpellEffect(g,e,id,params,api){
   else if(id==='A1QM')queue(g,e,'guldan_rain',{...params.point,ticks:0,nextAt:g.state.time+1});
   else if(id==='A1QN'){
    let total=0;const victims=group(g,e,origin,400),drained=[];
-   for(const t of victims){const amount=t.hp*.3;t.hp-=amount;total+=amount;drained.push({id:t.id,amount});if(t.hp<=.405){t.hp=0;g._settleDeath(t,null);}}
+   for(const t of victims){
+    if(g._protectedKing(t))continue;
+    const amount=t.hp*.3;t.hp-=amount;total+=amount;drained.push({id:t.id,amount});if(t.hp<=.405){t.hp=0;g._settleDeath(t,null);}
+   }
    report(e,'guldanDrain',{at:g.state.time,point:origin,total,victims:drained});
    queue(g,e,'guldan_heal',{...origin,total,perTick:total/6,ticks:0,nextAt:g.state.time+1});
   }else return false;

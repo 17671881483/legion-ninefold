@@ -348,6 +348,7 @@
 .match-mode legend{font-size:11px;color:#d4cfb6;margin-bottom:6px}
 .match-mode label{display:flex;align-items:center;gap:7px;padding:9px 8px;border:1px solid #43543a;cursor:pointer;min-width:0}
 .match-mode label:has(input:checked){background:#35402a;border-color:#b39c5f;color:#f0d79d}
+#cheat-mode-option{grid-column:1/-1}
 .match-mode input,.sandbox-ai input{accent-color:#d7b86b;flex-shrink:0;margin:0}
 .match-mode b{font-size:11px;font-weight:500;display:block}
 .match-mode small{font-size:9px;color:#a6b598;display:block;margin-top:3px;line-height:1.4}
@@ -384,7 +385,7 @@
 .selection-actions [data-relocate]:disabled{opacity:.7}
 @media(min-width:961px){.selection-actions{width:160px;max-width:160px}.selection-actions button{width:100%;min-width:0;font-size:11px}}
 @media(max-width:960px){.selection-actions{width:clamp(100px,22vw,150px);max-width:150px}.selection-actions button{font-size:10px}.selection-actions button small{font-size:9px}}
-#sandbox-modes{display:block;width:100%;margin-top:8px;padding:8px;font-size:11px}
+#sandbox-modes,#cheat-modes{display:block;width:100%;margin-top:8px;padding:8px;font-size:11px}
 .treasure-section{border:1px solid #a48d58;padding:11px;margin:0 0 15px;background:#303a24;color:#ead098}
 .treasure-section h3{font:600 14px var(--serif);margin:0 0 6px}.treasure-section h3 small{font:10px var(--sans);float:right}
 .treasure-section>p{font-size:10px;line-height:1.7;color:#bdc4a4;margin:0 0 8px}

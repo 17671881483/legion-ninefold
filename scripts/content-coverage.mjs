@@ -50,7 +50,7 @@ const playerRuntimeAbilities=[
   {sourceRawcode:'h0UD',abilityIds:['A1CP']},
   {sourceRawcode:'h2AE',abilityIds:['A1CP']},
   {sourceRawcode:'e00O',abilityIds:['A0OZ','A0YI']},
-  {sourceRawcode:'e008',abilityIds:['A0YG','A1UL','A122','A1CV','A1CW','A0IB','A0I5','A0I7','A0J8','A0J9','A0JC','A0JD']},
+  {sourceRawcode:'e008',abilityIds:['A1DN','A0YG','A1UL','A122','A1CV','A1CW','A0IB','A0I5','A0I7','A0J8','A0J9','A0JC','A0JD']},
   {sourceRawcode:'h0UG',abilityIds:['A1CG']},
   {sourceRawcode:'h0TZ',abilityIds:['A1CK','A1CG']},
   {sourceRawcode:'h0SY',abilityIds:['A1BD','A1BE','A1BF','A1BH']},
@@ -86,6 +86,7 @@ const result={
   battleSkills:collect([...current,...playerBuildingCommands,...playerBuildingRuleCarriers,...playerRuntimeForms,...playerRuntimeAbilities,...MERCENARIES,...WAVES,...specialCodes.map(c=>UNIT_TEMPLATES[c])]),
   sourceOnlyCombatForms:[{combatRawcode:'h0JR',buildingRawcode:'n00S',status:'entry-unresolved',evidence:'war3map.j:17544-17545 maps forms; line3644 ban dialog; 48355 barracks egg marker and 48750 monthly record do not provide acquisition',skills:collect([{...UNIT_TEMPLATES.h0JR,abilityIds:[...UNIT_TEMPLATES.h0JR.abilityIds,'A0J2','A0J3']}])},{combatRawcode:'h0VQ',buildingRawcode:'n07U',status:'entry-unresolved',evidence:'war3map.j:17436-17437 maps forms; line3638 ban limit1; no source creation/recipe/upgrade entry found in packet',skills:collect([{...UNIT_TEMPLATES.h0VQ,abilityIds:[...UNIT_TEMPLATES.h0VQ.abilityIds,'A1QI','A1D6']}])}],
   remainingSourceGaps:[
+    '海妖之歌A1DO武器伤害监听按实数≤15%创建e008并发A1DN睡眠命令，1秒辅助寿命与2秒睡眠独立，保护/受伤唤醒、打断原生吟唱、资源/读档/升级入口接入。100蓝/6秒采用双版本AUsl默认参考，首1秒保护有原生元数据与作者实验佐证但未验证本图；原生命令时序、保护/驱散/重施细节仍partial，见siren-sleep-evidence.json。',
     '娜迦女王A313按朝向创建e010、40次0.04秒移动与地形允许推退；h108成功A07Y后两次随机u006水甲请求；A0HB只读取显式句柄Ca，不从无调用入口h0xk补授。A07Y40蓝、A314125蓝、A0HB1秒采用双版本原生参考，图内继承未证实；水甲近战减速、命令时序/自动入口/原图地形仍partial，见ocean-caster-evidence.json。',
     '阿茜萨A1CF按实际完工计数/部署等级恢复，显式第10/11级均10回血；A1CH/CI为13%攻击与2甲，A1CJ部署0秒全图女王扫描友方只加A1CK、敌方Qt减1。Qs=A1CU原别名保留，仅鱼人生命法师建筑登记魔抗光环，实际永久A1CG技能/等级与widget死亡清理已接入。0/负等级、B07T滞留、缺失原生继承、原版阶段连边及未知旧抗性仍partial，见axisa-evidence.json。',
     '死亡之翼A0YF前7个敌方缠绕请求、合法目标3秒按命令最大生命5%每秒、A0YE受伤前0至10级回复、A0YH第20波内死亡3秒变龙及500范围前11敌99999、龙形每秒400治疗/三次200喷火、A0YJ九步裂隙/末端爆炸/25%抵消/阈值反击/击杀攻速已接入。原生AEer即时命令与帧积分、ANfd缺失伤害、共享马甲跨族仲裁、地图坐标/存活玩家映射等partial；A116/A0YV仍缺明确字段，见deathwing-evidence.json。',

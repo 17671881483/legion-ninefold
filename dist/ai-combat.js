@@ -15,8 +15,8 @@ const pointPayload=e=>({worldX:pos(e).x,worldY:pos(e).y});
 
 function choices(g,e,skill,all){
  const spec=e.skillSpecs.find(s=>s.id===skill.id),unit=scale(e),range=skill.range;
- const allies=all.filter(t=>t.battleTeam===e.battleTeam&&friendly(e,t)&&!sourceSpellTargetState(t).invulnerable);
- const enemies=all.filter(t=>t.battleTeam===e.battleTeam&&!friendly(e,t)&&!sourceSpellTargetState(t).invulnerable);
+ const allies=all.filter(t=>t.battleTeam===e.battleTeam&&friendly(e,t)&&!sourceSpellTargetState(t,g.state.time).invulnerable);
+ const enemies=all.filter(t=>t.battleTeam===e.battleTeam&&!friendly(e,t)&&!sourceSpellTargetState(t,g.state.time).invulnerable);
  const inRange=list=>list.filter(t=>distance(e,t)<=range+1e-8);
  const candidates=[];
  const add=(score,payload)=>{if(Number.isFinite(score)&&score>0)candidates.push({skillId:skill.id,score,payload});};
@@ -25,7 +25,7 @@ function choices(g,e,skill,all){
   // do not waste mana refreshing its debuff or exploit overlapping timers.
   const occupied=new Set((g.state.sourceSkillJobs??[]).filter(j=>j.type==='living_bomb'&&!j.done).map(j=>j.targetId));
   for(const t of inRange(enemies)){
-   if(occupied.has(t.id)||t.buffs?.some(b=>[b.id,b.key,b.buffKey].includes('B04Y')&&b.expiresAt>g.state.time)||sourceSpellTargetState(t).magicImmune||t.status?.cycloneUntil>g.state.time||!matchesTargets(spec,e,t))continue;
+   if(occupied.has(t.id)||t.buffs?.some(b=>[b.id,b.key,b.buffKey].includes('B04Y')&&b.expiresAt>g.state.time)||sourceSpellTargetState(t,g.state.time).magicImmune||t.status?.cycloneUntil>g.state.time||!matchesTargets(spec,e,t,g.state.time))continue;
    const value=Math.min(t.hp,t.maxHp*.35);
    if(t.hp>=Math.max(100,t.maxHp*.15)&&value>=80)add(value/skill.manaCost,{targetId:t.id});
   }
@@ -40,7 +40,7 @@ function choices(g,e,skill,all){
   const wounds=allies.filter(t=>distance(e,t)<=500*unit+1e-8);
   const covered=t=>(g.state.sourceSkillJobs??[]).some(j=>j.type==='malfurion_aura'&&!j.done&&j.at>g.state.time&&j.dummy?.hp>0&&j.dummy.battleTeam===e.battleTeam&&friendly(e,j.dummy)&&distance(j.dummy,t)<=500*unit+1e-8);
   const value=wounds.filter(t=>!covered(t)).reduce((sum,t)=>sum+Math.min(t.maxHp*.24,missing(t)),0);
-  if(value>=120)for(const t of inRange(allies).filter(t=>missing(t)>0&&!sourceSpellTargetState(t).magicImmune&&!(t.status?.cycloneUntil>g.state.time)&&matchesTargets(spec,e,t)))add(value/skill.manaCost,{targetId:t.id});
+  if(value>=120)for(const t of inRange(allies).filter(t=>missing(t)>0&&!sourceSpellTargetState(t,g.state.time).magicImmune&&!(t.status?.cycloneUntil>g.state.time)&&matchesTargets(spec,e,t,g.state.time)))add(value/skill.manaCost,{targetId:t.id});
  }else if(skill.id==='A1TZ'){
   const near=enemies.filter(t=>distance(e,t)<=350*unit+1e-8);
   if(near.length>=2||near.some(t=>t.isBoss||t.hp>=e.damage*4))add(near.reduce((sum,t)=>sum+Math.min(804.6,t.hp),0)/skill.manaCost,{});

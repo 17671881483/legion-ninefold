@@ -1,3 +1,4 @@
+import {SIREN_SLEEP_RULES,SIREN_SLEEP_NATIVE_REFERENCE,sirenAttackDamage,isSirenSleeping,sirenSleepActiveAt,sirenSleepProtectedAt,sirenSleepProtected,tickSirenSleepJob} from './siren-sleep-rules.js';
 import {TSUNAMI_RULES,canTsunamiCast,castTsunami,castWaterArmor,tickTsunamiJob} from './tsunami-rules.js';
 import {OCEAN_HEALING_RULES,OCEAN_HEALING_NATIVE_REFERENCE,oceanHealingSpellEffect,initializeOceanHealingDeployment} from './ocean-healing-rules.js';
 import {AXISA_RULES,initializeAxisaDeployment,tickAxisaJob} from './axisa-rules.js';
@@ -68,7 +69,7 @@ import { closestWalkable, isWalkable } from './layout.js';
 import { GARROSH_ACTIVE_RULES, GARROSH_PASSIVE_RULES, canGarroshCastAbility, castGarroshAbility, tryGarroshAutoCast, garroshActiveAfterDamage, sourceGarroshActiveDeath, tickGarroshActiveJob } from './garrosh-active-rules.js';
 import { ILLIDAN_RULES, ILLIDAN_ACTIVE_RULES, canIllidanCastAbility, castIllidanAbility, registerIllidanSource, tickIllidanSource, illidanOnAttackHit, tryIllidanAutoCast, illidanAfterDamage, sourceIllidanDeath, tickIllidanJob, isIllidanJobType } from './illidan-rules.js';
 
-export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261106-v76-1';
+export const SKILL_IMPLEMENTATION_REVISION = 'v14-content-20261106-v77-1';
 
 // Values come from resolved object fields. Empty fields remain empty: a missing
 // native default is reported, rather than replacing it with tooltip numbers.
@@ -297,6 +298,7 @@ function compile(id,version='5.0dJF') {
   if(version==='v14.1A5'&&id==='A314'){
     Object.assign(s,{status:'partial',runtimeImplemented:true,manaCost:has('Cost')?n('Cost'):125,nativeCostReference:!has('Cost'),effectText:'风暴气泉：召唤1个n007，持续15秒、冷却15秒。缺失Cost采用1.24.4/1.27.1原生AHwe的125魔法参考，普通娜迦女王30魔法无法免费召唤。【待核定：本图费用继承、原生施法时序与自动施法入口；现有自动选择属于Web宿主策略。】'});
   }
+  if(version==='v14.1A5'&&SIREN_SLEEP_RULES[id]){const r=SIREN_SLEEP_RULES[id];Object.assign(s,{kind:'siren_sleep_source',status:r.status,runtimeImplemented:true,effectText:r.description+`【待核定：${r.partial}】`});if(id==='A1DN'){s.manaCost=has('Cost')?n('Cost'):SIREN_SLEEP_NATIVE_REFERENCE.manaCost;s.cooldown=has('Cool')?n('Cool'):SIREN_SLEEP_NATIVE_REFERENCE.cooldown;s.nativeCostReference=!has('Cost');s.nativeCooldownReference=!has('Cool');}}
   cache.set(key,s);return s;
 }
 function effectSummary(s){
@@ -376,9 +378,9 @@ export function refreshSourceSkills(e,def) {
   e.skillStates??={};e.skillImplementationRevision=SKILL_IMPLEMENTATION_REVISION;
   return true;
 }
-export function matchesTargets(s,source,target) {
+export function matchesTargets(s,source,target,now) {
   const t=s.targets??[];
-  if(source.side!==target.side&&scriptInvulnerable(target)&&!t.includes('invu')&&!t.includes('invulnerable'))return false;
+  if(source.side!==target.side&&scriptInvulnerable(target,now)&&!t.includes('invu')&&!t.includes('invulnerable'))return false;
   if(!t.length||t[0]==='_')return true;
   if(t.includes('notself')&&source.id===target.id)return false;
   const hostile=t.includes('enemies')||t.includes('enemy'),friendly=t.includes('friend')||t.includes('ally')||t.includes('allies');
@@ -395,10 +397,11 @@ export function matchesTargets(s,source,target) {
   return true;
 }
 export function sourceWeapon(source,target,now=0){
+  if(sirenSleepActiveAt(source,now)||sirenSleepProtectedAt(target,now))return null;
   if((source.status?.cycloneUntil??0)>now||(target.status?.cycloneUntil??0)>now)return null;
-  if(source.side!==target.side&&scriptInvulnerable(target))return null;
+  if(source.side!==target.side&&scriptInvulnerable(target,now))return null;
   if(isV14(source)&&source.isBuilding&&source.sourceRawFields?.weapsOn===undefined)return null;
-  const explicit=source.skillSource;for(const slot of [1,2]){const w=slot===1?source.weapon1:source.weapon2;if(!w||!Object.keys(w).length)continue;const type=w[`weapTp${slot}`],mask=num(w.weapsOn,source.sourceRawFields?.weapsOn??1);if(!(mask&(1<<(slot-1)))||!type||type==='_')continue;const targets=String(w[`targs${slot}`]??'_').split(',');if(!matchesTargets({targets},source,target))continue;
+  const explicit=source.skillSource;for(const slot of [1,2]){const w=slot===1?source.weapon1:source.weapon2;if(!w||!Object.keys(w).length)continue;const type=w[`weapTp${slot}`],mask=num(w.weapsOn,source.sourceRawFields?.weapsOn??1);if(!(mask&(1<<(slot-1)))||!type||type==='_')continue;const targets=String(w[`targs${slot}`]??'_').split(',');if(!matchesTargets({targets},source,target,now))continue;
     return {slot,raw:w,type,range:num(w[`rangeN${slot}`],source.range*100/(source.distanceScale||1))/100*(source.distanceScale??1),interval:num(w[`cool${slot}`],source.attackInterval),attackType:w[`atkType${slot}`]??source.attackType,damage:slot===1?source.damage:num(w.dmgplus2)+num(w.dice2)*(num(w.sides2)+1)/2+Object.values(source.sourcePassiveStatBonuses??{}).reduce((sum,bonus)=>sum+(bonus.flatDamage??0),0)+(source.sourceNightmareStatBonuses?.flatDamage??0)};
   }
   return explicit?null:{slot:1,raw:{},type:'normal',range:source.range,interval:source.attackInterval,attackType:source.attackType,damage:source.damage};
@@ -436,7 +439,7 @@ export function sourceDamage(game,target,amount,source,magic=false) {
   game._hurt(target,amount*factor,source,{magic,spell:true});
 }
 function cast(game,e,s,target,battle){
-  const now=game.state.time,st=state(e,s);if(e.mana+1e-8<s.manaCost||st.readyAt>now)return false;
+  const now=game.state.time,st=state(e,s);if(isSirenSleeping(game,e)||e.mana+1e-8<s.manaCost||st.readyAt>now)return false;
   e.mana-=s.manaCost;st.readyAt=now+Math.max(.1,s.cooldown);st.casts++;if(isV14(e)){nerzhulNativeSpellEffect(game,e,s.id,heroScriptApi);oceanHealingSpellEffect(game,e,s.id,target,heroScriptApi);}game._event('cast',e,s.name,{skillId:s.id});return true;
 }
 function targets(e,s,battle,friendly=false){return battle.filter(t=>t.hp>0&&(friendly?t.side===e.side:t.side!==e.side)&&matchesTargets(s,e,t)&&dist(e,t)<=Math.max(s.range,s.radius));}
@@ -452,7 +455,7 @@ export function tickSourceSkills(game,e,battle,dt) {
   if(!isV14(e)&&e.combatRawcode==='h08B'&&e.status.burrowEnd&&now>=e.status.burrowEnd){e.invulnerable=false;e.status.burrowEnd=0;buff(e,compile('A06Z',e.skillVersion),e,now);}
   for(const job of e.status.pendingStrikes??[]){if(job.at<=now){const t=game._worldEntities?.get(job.targetId);if(t?.hp>0)sourceDamage(game,t,job.damage,e,true);job.done=true;}}
   e.status.pendingStrikes=(e.status.pendingStrikes??[]).filter(j=>!j.done);
-  if((e.status.stunUntil??0)>now||(e.status.cycloneUntil??0)>now||(e.invulnerable&&!e.nativeInvulnerable))return;
+  if(isSirenSleeping(game,e)||(e.status.stunUntil??0)>now||(e.status.cycloneUntil??0)>now||(e.invulnerable&&!e.nativeInvulnerable))return;
   for(const s of active(e)){
     const st=state(e,s);if(st.readyAt>now)continue;
     if(isV14(e)&&['A07Y','A0HB','A314'].includes(s.id)&&((e.abilityLevels?.[s.id]??1)<=0||e.status?.silenceUntil>now))continue;
@@ -596,7 +599,7 @@ export function executeTriggeredSpell(game,e,s,target,battle){
 }
 export function modifyIncoming(game,target,damage,attacker,options={}) {
   initializeSourceSkills(game,target);
-  if(target.invulnerable||active(target).some(s=>s.kind==='invulnerability'))return 0;let result=damage;
+  if(sirenSleepProtected(game,target)||target.invulnerable||active(target).some(s=>s.kind==='invulnerability'))return 0;let result=damage;
   for(const s of active(target)){
     if(options.magic&&s.kind==='immunity')return 0;
     if(!options.spell&&s.kind==='evasion'&&game._random()<s.chance)return 0;
@@ -639,7 +642,7 @@ export function modifyIncoming(game,target,damage,attacker,options={}) {
 export function sourceClassAttackDamageEvent(game,target,attacker,options={},amount=0){
   if(!isV14(attacker)||options.spell&&!options.weapon||attacker.status?.sourceNativeAttackBusy)return;
   (attacker.status??={}).sourceNativeAttackBusy=true;
-  try{nerzhulAttackDamage(game,attacker,target,heroScriptApi);darkArthasAttackDamage(attacker,amount);blademasterAttack(game,attacker,heroScriptApi);malygosAttackDamage(game,attacker,target,heroScriptApi);siegeTeamAttackDamage(game,attacker,target,heroScriptApi);musketeerAttackDamage(game,attacker,target,heroScriptApi);vashjOnAttackDamage(game,attacker,target,heroScriptApi);sourceClassOnAttackDamage(game,attacker,target,heroScriptApi);banditAttackOrders(game,attacker,target,heroScriptApi);const varianEvent=varianAttackDamage(game,attacker,target,amount,heroScriptApi);const localP8=alexstraszaAttackDamage(game,attacker,target,heroScriptApi,varianEvent.localP8);amount=bronzeAttackDamage(game,attacker,target,varianEvent.amount,heroScriptApi,localP8);varianAfterAttack(game,attacker,heroScriptApi);kodoAttackOrders(game,attacker,target,heroScriptApi);desertLizardAttackDamage(game,attacker,heroScriptApi);stormLizardAttackDamage(game,attacker,target,heroScriptApi);huskarAttackDamage(game,attacker,target,amount,heroScriptApi);const manaBranch=destroyerAttackDamage(game,attacker,heroScriptApi);const lateBranch=taurenAttackDamage(game,attacker,target,heroScriptApi,manaBranch?'A0IN':null)??(manaBranch?'A0IN':null);tirionAttackDamage(game,attacker,target,amount,heroScriptApi,lateBranch);return amount;}finally{attacker.status.sourceNativeAttackBusy=false;}
+  try{nerzhulAttackDamage(game,attacker,target,heroScriptApi);darkArthasAttackDamage(attacker,amount);sirenAttackDamage(game,attacker,target,heroScriptApi);blademasterAttack(game,attacker,heroScriptApi);malygosAttackDamage(game,attacker,target,heroScriptApi);siegeTeamAttackDamage(game,attacker,target,heroScriptApi);musketeerAttackDamage(game,attacker,target,heroScriptApi);vashjOnAttackDamage(game,attacker,target,heroScriptApi);sourceClassOnAttackDamage(game,attacker,target,heroScriptApi);banditAttackOrders(game,attacker,target,heroScriptApi);const varianEvent=varianAttackDamage(game,attacker,target,amount,heroScriptApi);const localP8=alexstraszaAttackDamage(game,attacker,target,heroScriptApi,varianEvent.localP8);amount=bronzeAttackDamage(game,attacker,target,varianEvent.amount,heroScriptApi,localP8);varianAfterAttack(game,attacker,heroScriptApi);kodoAttackOrders(game,attacker,target,heroScriptApi);desertLizardAttackDamage(game,attacker,heroScriptApi);stormLizardAttackDamage(game,attacker,target,heroScriptApi);huskarAttackDamage(game,attacker,target,amount,heroScriptApi);const manaBranch=destroyerAttackDamage(game,attacker,heroScriptApi);const lateBranch=taurenAttackDamage(game,attacker,target,heroScriptApi,manaBranch?'A0IN':null)??(manaBranch?'A0IN':null);tirionAttackDamage(game,attacker,target,amount,heroScriptApi,lateBranch);return amount;}finally{attacker.status.sourceNativeAttackBusy=false;}
 }
 export function initializeSourceClassCombat(game,building,entity){
   if(isV14(entity)){initializeOceanHealingDeployment(game,building,entity);initializeNagaDeployment(game,building,entity,heroScriptApi);initializeAxisaDeployment(game,building,entity);initializeAxisaLevels(game,building,entity);initializeEarthLordLevels(game,building,entity);initializeEarthLordDeployment(game,building,entity,heroScriptApi);initializeNerzhulDeployment(game,building,entity);initializeNozdormuDeployment(game,building,entity);initializeAlexstraszaDeployment(game,building,entity);initializeVarianDeployment(game,building,entity);initializeAnduinDeployment(game,building,entity);initializeMalygosDeployment(game,entity,heroScriptApi);initializeTirionDeployment(game,building,entity,heroScriptApi);initializeMummyDeployment(game,building,entity);initializeBronzeDeployment(game,building,entity);initializeMusketeerDeployment(game,building,entity);initializePhoenixRevival(game,building,entity);initializeBlademaster(game,building,entity);initializeNightmareDeployment(game,entity);initializeBrightArthasDeployment(game,building,entity);initializeLichKingDeployment(game,entity);initializeVashjDeployment(game,building,entity);return initializeSourceClassDeployment(game,building,entity,heroScriptApi);}
@@ -807,9 +810,9 @@ function applyYseraCorrosion(game,source,target){
   if(!isV14(source)||!target||target.hp<=0||target.side===source.side||scriptInvulnerable(target)||isV14(target)&&blademasterImmune(target))return;
   const s=active(source).find(s=>s.kind==='ysera_corrosion');if(s)buff(target,s,source,game.state.time,{key:'A2YH',damage:0,armor:-2});
 }
-function scriptInvulnerable(e){return e.invulnerable||e.status?.yseraHidden||active(e).some(s=>s.kind==='invulnerability');}
+function scriptInvulnerable(e,now){const sleep=e.status?.sirenSleep,protectedSleep=Number.isFinite(now)?sirenSleepProtectedAt(e,now):e.status?.sirenSleepProtected&&e.hp>.405&&sleep?.endedAt===undefined&&e.buffs?.some(b=>b.key==='BUsl'&&b.sirenSleepId===sleep?.id);return protectedSleep||e.invulnerable||e.status?.yseraHidden||active(e).some(s=>s.kind==='invulnerability');}
 // Read-only target gates shared by tactical planning and native cast validation.
-export function sourceSpellTargetState(e){return {invulnerable:!!scriptInvulnerable(e),magicImmune:active(e).some(s=>s.kind==='immunity')};}
+export function sourceSpellTargetState(e,now){return {invulnerable:!!scriptInvulnerable(e,now),magicImmune:active(e).some(s=>s.kind==='immunity')};}
 function scriptSource(e){return {id:e.id,ownerId:e.ownerId,side:e.side,team:e.team,battleTeam:e.battleTeam,combatRawcode:e.combatRawcode,skillVersion:e.skillVersion,attackType:'chaos',hp:e.hp};}
 function retainNagaScriptCaster(game,e){
   if(e?.id===undefined||!Number.isFinite(e.mana)||!e.skillSpecs?.some(s=>nagaScriptCasterAbilities.has(s.id)))return null;
@@ -924,9 +927,9 @@ function castOceanNative(game,e,id,params={}){
 export function manualSourceSkills(game,e){
   if(!e||!isV14(e))return [];
   return (e.skillSpecs??[]).filter(s=>canTsunamiCast(e,s.id)||canOceanNativeCast(e,s.id)||canDeathwingHumanCast(e,s.id)||canDeathwingDragonCast(e,s.id)||canEarthLordCast(e,s.id)||canMaievCast(e,s.id)||canNerzhulCast(e,s.id)||canSavisCast(e,s.id)||canNozdormuCast(e,s.id)||canAlexstraszaCast(e,s.id)||canAnduinCast(e,s.id)||canGuldanCast(e,s.id)||canMalygosCast(e,s.id)||canPhoenixCast(e,s.id)||canMusketeerCast(e,s.id)||canKodoCast(e,s.id)||canStormLizardCast(e,s.id)||canLivingBombCast(e,s.id)||canBlademasterCast(e,s.id)||canBanditCast(e,s.id)||canMalfurionCast(e,s.id)||ALCHEMIST_ACTIVE_RULES[s.id]||canYseraCastAbility(e,s.id)||NAGA_ACTIVE_RULES[s.id]?.active||canVashjCastAbility(e,s.id)||canAesaraCastAbility(e,s.id)||canBrightArthasCastAbility(e,s.id)||canDarkArthasCastAbility(e,s.id)||canLichKingCastAbility(e,s.id)||canGarroshCastAbility(e,s.id)||canIllidanCastAbility(e,s.id)||canIceHeroCastAbility(e,s.id)||canTrollCastAbility(e,s.id)||canKelthuzadCastAbility(e,s.id)).map(s=>{
-    if(AESARA_RULES[s.id])return aesaraManualSkill(game,e,s);
+    if(AESARA_RULES[s.id]){const result=aesaraManualSkill(game,e,s);return isSirenSleeping(game,e)?{...result,canStart:false,reason:'单位当前无法施法'}:result;}
     const alchemy=!!ALCHEMIST_ACTIVE_RULES[s.id],family=NAGA_ACTIVE_RULES[s.id]?.active?NAGA_ACTIVE_RULES[s.id]:TSUNAMI_RULES[s.id]??oceanNativeManualRules[s.id]??DEATHWING_HUMAN_RULES[s.id]??DEATHWING_DRAGON_RULES[s.id]??EARTH_LORD_RULES[s.id]??MAIEV_RULES[s.id]??NERZHUL_RULES[s.id]??SAVIS_RULES[s.id]??NOZDORMU_RULES[s.id]??ALEXSTRASZA_RULES[s.id]??ANDUIN_RULES[s.id]??GULDAN_RULES[s.id]??MALYGOS_RULES[s.id]??PHOENIX_ACTIVE_RULES[s.id]??MUSKETEER_RULES[s.id]??KODO_RULES[s.id]??STORM_LIZARD_RULES[s.id]??LIVING_BOMB_RULES[s.id]??BLADEMASTER_RULES[s.id]??BANDIT_LORD_RULES[s.id]??MALFURION_RULES[s.id]??BRIGHT_ARTHAS_RULES[s.id]??DARK_ARTHAS_RULES[s.id]??VASHJ_RULES[s.id]??LICH_KING_RULES[s.id]??GARROSH_ACTIVE_RULES[s.id]??ILLIDAN_ACTIVE_RULES[s.id]??ICE_HERO_RULES[s.id]??TROLL_ACTIVE_RULES[s.id]??KELTHUZAD_ACTIVE_RULES[s.id]??(s.id==='A0ZO'?KELTHUZAD_RULES.A0ZO:null),shared=!!family,st=e.skillStates?.[s.id]??{},remaining=Math.max(0,(st[alchemy?'manualReadyAt':'readyAt']??0)-game.state.time),autoRemaining=shared?Math.max(0,(st.readyAt??0)-game.state.time):Math.max(0,(st[alchemy?'readyAt':'yseraAutoReadyAt']??0)-game.state.time);
-    const reason=e.hp<=.405?'单位已阵亡':e.status?.sourceHidden||e.status?.yseraHidden||e.status?.yseraPaused||e.status?.sourcePaused||e.status?.illidanPaused||e.status?.stunUntil>game.state.time||e.status?.cycloneUntil>game.state.time||(TSUNAMI_RULES[s.id]?.active||oceanNativeManualRules[s.id]?.active||DEATHWING_HUMAN_RULES[s.id]?.active||DEATHWING_DRAGON_RULES[s.id]?.active||EARTH_LORD_RULES[s.id]?.active||MAIEV_RULES[s.id]?.active||NERZHUL_RULES[s.id]?.active||SAVIS_RULES[s.id]?.active||NOZDORMU_RULES[s.id]?.active||ALEXSTRASZA_RULES[s.id]?.active||MUSKETEER_RULES[s.id]?.active||PHOENIX_ACTIVE_RULES[s.id]?.active||MALYGOS_RULES[s.id]?.active||GULDAN_RULES[s.id]?.active||ANDUIN_RULES[s.id]?.active)&&e.status?.silenceUntil>game.state.time?'单位当前无法施法':remaining>1e-8?'技能冷却中':e.mana<s.manaCost?'魔法不足':'';
+    const reason=e.hp<=.405?'单位已阵亡':isSirenSleeping(game,e)||e.status?.sourceHidden||e.status?.yseraHidden||e.status?.yseraPaused||e.status?.sourcePaused||e.status?.illidanPaused||e.status?.stunUntil>game.state.time||e.status?.cycloneUntil>game.state.time||(TSUNAMI_RULES[s.id]?.active||oceanNativeManualRules[s.id]?.active||DEATHWING_HUMAN_RULES[s.id]?.active||DEATHWING_DRAGON_RULES[s.id]?.active||EARTH_LORD_RULES[s.id]?.active||MAIEV_RULES[s.id]?.active||NERZHUL_RULES[s.id]?.active||SAVIS_RULES[s.id]?.active||NOZDORMU_RULES[s.id]?.active||ALEXSTRASZA_RULES[s.id]?.active||MUSKETEER_RULES[s.id]?.active||PHOENIX_ACTIVE_RULES[s.id]?.active||MALYGOS_RULES[s.id]?.active||GULDAN_RULES[s.id]?.active||ANDUIN_RULES[s.id]?.active)&&e.status?.silenceUntil>game.state.time?'单位当前无法施法':remaining>1e-8?'技能冷却中':e.mana<s.manaCost?'魔法不足':'';
     return {id:s.id,name:s.name,status:s.status,manaCost:s.manaCost,manaCostKnown:!BANDIT_LORD_RULES[s.id]?.active&&!KODO_RULES[s.id]?.active,cooldown:s.cooldown,remaining,autoRemaining,cooldownMode:shared?'shared_native':'independent',targetKind:family?family.targetKind:s.id==='A2YA'?'point':s.id==='A2YD'?'enemy':'none',range:s.range,radius:s.radius,canStart:!reason,reason};
   });
 }
@@ -1012,6 +1015,7 @@ export function tickSourceScriptJobs(game,dt=0){
   tickSavisJobs(game,heroScriptApi);
   const now=game.state.time,remaining=[];
   for(const job of game.state.sourceSkillJobs??[]){
+    if(job.type?.startsWith('siren_')){if(tickSirenSleepJob(game,job,heroScriptApi))remaining.push(job);continue;}
     if(job.type?.startsWith('tsunami_')){if(tickTsunamiJob(game,job,heroScriptApi))remaining.push(job);continue;}
     if(job.type==='axisa_swap'){if(tickAxisaJob(game,job,heroScriptApi))remaining.push(job);continue;}
     if(job.type?.startsWith('deathwing_')){if(!job.done)remaining.push(job);continue;}

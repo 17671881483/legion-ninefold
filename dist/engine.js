@@ -1,3 +1,4 @@
+import {isSirenSleeping,sirenSleepProtected,sirenWakeOnDamage,restoreSirenSleep} from './siren-sleep-rules.js';
 import {restoreTsunami} from './tsunami-rules.js';
 import {restoreOceanHealing} from './ocean-healing-rules.js';
 import {axisaBuildingCompleted,restoreAxisaBuilding,initializeAxisaLevels} from './axisa-levels.js';
@@ -699,7 +700,11 @@ export class Game {
     const b=found&&found.p===p?found.b:null;
     return relocationStatus(this.state,p,b,b?units[b.unitId]:null);
   }
+  _refreshSleepProtection() {
+    for(const e of [...this.state.entities,...this.state.kings])if(e.status?.sirenSleep)e.status.sirenSleepProtected=sirenSleepProtected(this,e);
+  }
   command(type, payload = {}) {
+    this._refreshSleepProtection();
     if (type === 'restart') { const fresh = new Game({ ...this.options, ...payload }); Object.assign(this, fresh); return this._result(true, '已重新开始'); }
     if (typeof type === 'string' && type.startsWith('sandbox')) return this._sandboxCommand(type, payload);
     if (this.state.phase === 'ended') return this._result(false, '本局已结束，请重新开始');
@@ -995,6 +1000,7 @@ export class Game {
   }
   _step(dt) {
     const s = this.state; s.time += dt;
+    this._refreshSleepProtection();
     tickSkeletonKingLifecycle(this);
     s.events = s.events.filter(e => s.time - e.time < 2.5);
     for (const p of s.players) {
@@ -1240,7 +1246,7 @@ export class Game {
       this._passiveAbility(e, battle, dt);
       tickSourceSkills(this,e,battle,dt);
       const stormChannel=stormLizardChanneling(this,e);
-      if (stormChannel || e.hp <= 0 || st.sourceHidden || st.yseraHidden || st.sourcePaused || st.yseraPaused || st.illidanPaused || (st.stunUntil ?? 0) > now || (st.cycloneUntil ?? 0) > now) { e.pendingAttack = null; continue; }
+      if (isSirenSleeping(this,e) || stormChannel || e.hp <= 0 || st.sourceHidden || st.yseraHidden || st.sourcePaused || st.yseraPaused || st.illidanPaused || (st.stunUntil ?? 0) > now || (st.cycloneUntil ?? 0) > now) { e.pendingAttack = null; continue; }
       if (e.side === 'monster' && e.pendingAttack && this._advanceMonsterAttack(e, battle)) continue;
       const aggro = Math.max(e.range, number(e.acquisitionRange, Math.max(4.5, e.range + 1)));
       let ordered=(st.huskarAttackOrder?.targetId===e.targetId||st.varian?.attackOrder?.targetId===e.targetId)&&e.targetId!=null;
@@ -1437,7 +1443,7 @@ export class Game {
   }
   _hurt(target, damage, attacker, pure = false) {
     if (this._protectedKing(target)) return 0;
-    if(isReincarnating(target))return 0;
+    if(isReincarnating(target)||sirenSleepProtected(this,target))return 0;
     if (target.hp <= 0 || damage <= 0 || (target.status?.cycloneUntil??0)>(this._aesaraEventAt??this._brightArthasEventAt??this._arthasEventAt??this._lichEventAt??this._vashjEventAt??this._iceEventAt??this._trollEventAt??this._kelthuzadEventAt??this.state.time)) return 0;
     const options=typeof pure==='object'?pure:{spell:!!pure},legacyPure=typeof pure==='boolean'&&pure;
     const registeredDamageListeners=sourceDamageListeners(this,target);
@@ -1448,6 +1454,7 @@ export class Game {
     // an invulnerable / immune target into a valid damage recipient.
     if(actual<=0){if((target.status.yseraRevivalCount??0)>revivalCount)beforeSourceDamage(this,target,0,attacker,options);sourceClassAttackDamageEvent(this,target,attacker,options,0);sourceRegisteredDamageEvent(this,target,registeredDamageListeners);return 0;}
     if ((target.status.shield ?? 0) > 0 && !legacyPure) { const absorbed = Math.min(actual, target.status.shield); target.status.shield -= absorbed; actual -= absorbed; }
+    sirenWakeOnDamage(this,target,actual);
     tirionBondDamageEvent(this,target,attacker,actual);
     actual=beforeSourceDamage(this,target,actual,attacker,options)??actual;
     // Main damage listener was registered before New_UnitAttack in the map.
@@ -1504,6 +1511,7 @@ export class Game {
   }
   _sourceDeath(target,killer){sourceDeath(this,target,killer);}
   _passiveAbility(e, lane, dt) {
+    if(isSirenSleeping(this,e))return;
     const a = e.ability; if (!a || e.abilityCd > 0) return;
     const type = a.type, radius = number(a.radius, 2.6), v = number(a.value, 12);
     if (type === 'regen') { e.hp = Math.min(e.maxHp, e.hp + v); e.abilityCd = 1; return; }
@@ -1558,7 +1566,7 @@ export class Game {
   }
   _warpDefenders() {
     for (const e of this.state.entities) {
-      if (e.scriptAuxiliary || e.hp <= 0 || e.status.yseraHidden || e.status.sourceHidden || e.status.yseraPaused || e.status.sourcePaused || e.status.illidanPaused || e.status.cycloneUntil>this.state.time || e.side !== 'defender' || e.status.warped || !this._settledLanes.includes(e.sourceLaneId)) continue;
+      if (e.scriptAuxiliary || isSirenSleeping(this,e) || e.hp <= 0 || e.status.yseraHidden || e.status.sourceHidden || e.status.yseraPaused || e.status.sourcePaused || e.status.illidanPaused || e.status.cycloneUntil>this.state.time || e.side !== 'defender' || e.status.warped || !this._settledLanes.includes(e.sourceLaneId)) continue;
       if (e.nav?.mode !== 'return' || distance(e, spawnWarpWorld(e.sourceLaneId)) > .55 || e.targetId) continue;
       const team = e.battleTeam, source = worldPoint(e), base = supportWorld(team);
       const slot = Number(String(e.buildingId ?? e.id).replace(/\D/g, '')) || 0;
@@ -1578,7 +1586,7 @@ export class Game {
   _updateKings(dt) {
     for (const k of this.state.kings) {
       if (k.hp <= 0) continue;
-      if(k.status?.sourcePaused||k.status?.illidanPaused||k.status?.cycloneUntil>this.state.time)continue;
+      if(isSirenSleeping(this,k)||k.status?.sourcePaused||k.status?.illidanPaused||k.status?.cycloneUntil>this.state.time)continue;
       if(this.state.wave>=31&&k.movePath){const nav=k.movePath;while(nav.index<nav.path.length&&distance(this._kingPosition(k.team),nav.path[nav.index])<.03)nav.index++;if(nav.index<nav.path.length){const destination=nav.path[nav.index],from=this._kingPosition(k.team),delta=distance(from,destination),step=Math.min(delta,rule('kingMoveSpeed',250/3)/100*dt),point={x:from.x+(destination.x-from.x)/delta*step,y:from.y+(destination.y-from.y)/delta*step},next=constrainPoint(from,point,k.team,k.radius??.8);k.worldX=next.x;k.worldY=next.y;}else k.movePath=null;}
       const position = this._kingPosition(k.team), auras = this._battleAuras?.[k.team] ?? [];
       const kingTarget = { ...k, ...position, side: 'defender' }, kingAuras = this._auraEffects(kingTarget, auras);
@@ -1775,7 +1783,7 @@ export class Game {
       restoreUnstableAlchemyUserData(this,e);restoreVeteranIdentity(this,e,units);restoreSapperCreation(this,e,def);
     }
     restoreUndeadLegionHandles(this);
-    restoreTsunami(this);restoreOceanHealing(this);restoreAxisa(this);restoreNagaHaloState(this);restoreDeathwingHuman(this);restoreDeathwingDragon(this);restoreEarthLord(this);restorePhoenixRevival(this);restorePhoenixActive(this);restoreMalygos(this);restoreGuldan(this);restoreAnduin(this);restoreVarian(this);restoreAlexstrasza(this);restoreNozdormu(this);restoreSavis(this);restoreNerzhul(this);restoreMaiev(this);
+    restoreSirenSleep(this);restoreTsunami(this);restoreOceanHealing(this);restoreAxisa(this);restoreNagaHaloState(this);restoreDeathwingHuman(this);restoreDeathwingDragon(this);restoreEarthLord(this);restorePhoenixRevival(this);restorePhoenixActive(this);restoreMalygos(this);restoreGuldan(this);restoreAnduin(this);restoreVarian(this);restoreAlexstrasza(this);restoreNozdormu(this);restoreSavis(this);restoreNerzhul(this);restoreMaiev(this);
     // JSON stores retained handles separately; surviving units must share the
     // live object again so later healing, movement and death update one handle.
     for(const e of [...this.state.entities,...this.state.kings])if(this.state.brightArthasHandles[e.id])this.state.brightArthasHandles[e.id]=e;

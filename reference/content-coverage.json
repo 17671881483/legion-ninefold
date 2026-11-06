@@ -1,6 +1,6 @@
 {
   "sourceVersion": "v14.1A5",
-  "skillImplementationRevision": "v14-content-20261106-v76-1",
+  "skillImplementationRevision": "v14-content-20261106-v77-1",
   "units": 534,
   "mercenaryRecords": 60,
   "mainWaves": 35,
@@ -364,6 +364,7 @@
     {
       "sourceRawcode": "e008",
       "abilityIds": [
+        "A1DN",
         "A0YG",
         "A1UL",
         "A122",
@@ -499,9 +500,9 @@
   "playerSkills": {
     "counts": {
       "implemented": 404,
-      "partial": 203,
+      "partial": 205,
       "marker": 40,
-      "unresolved": 46
+      "unresolved": 45
     },
     "abilities": [
       {
@@ -6357,10 +6358,19 @@
         ]
       },
       {
+        "rawcode": "A1DN",
+        "name": "睡眠",
+        "status": "partial",
+        "kind": "siren_sleep_source",
+        "unitRawcodes": [
+          "e008"
+        ]
+      },
+      {
         "rawcode": "A1DO",
         "name": "海妖之歌",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "siren_sleep_source",
         "unitRawcodes": [
           "n07F"
         ]
@@ -7663,9 +7673,9 @@
   "battleSkills": {
     "counts": {
       "implemented": 453,
-      "partial": 212,
+      "partial": 214,
       "marker": 53,
-      "unresolved": 60
+      "unresolved": 59
     },
     "abilities": [
       {
@@ -14280,10 +14290,19 @@
         ]
       },
       {
+        "rawcode": "A1DN",
+        "name": "睡眠",
+        "status": "partial",
+        "kind": "siren_sleep_source",
+        "unitRawcodes": [
+          "e008"
+        ]
+      },
+      {
         "rawcode": "A1DO",
         "name": "海妖之歌",
-        "status": "unresolved",
-        "kind": "pending",
+        "status": "partial",
+        "kind": "siren_sleep_source",
         "unitRawcodes": [
           "n07F"
         ]
@@ -15916,6 +15935,7 @@
     }
   ],
   "remainingSourceGaps": [
+    "海妖之歌A1DO武器伤害监听按实数≤15%创建e008并发A1DN睡眠命令，1秒辅助寿命与2秒睡眠独立，保护/受伤唤醒、打断原生吟唱、资源/读档/升级入口接入。100蓝/6秒采用双版本AUsl默认参考，首1秒保护有原生元数据与作者实验佐证但未验证本图；原生命令时序、保护/驱散/重施细节仍partial，见siren-sleep-evidence.json。",
     "娜迦女王A313按朝向创建e010、40次0.04秒移动与地形允许推退；h108成功A07Y后两次随机u006水甲请求；A0HB只读取显式句柄Ca，不从无调用入口h0xk补授。A07Y40蓝、A314125蓝、A0HB1秒采用双版本原生参考，图内继承未证实；水甲近战减速、命令时序/自动入口/原图地形仍partial，见ocean-caster-evidence.json。",
     "阿茜萨A1CF按实际完工计数/部署等级恢复，显式第10/11级均10回血；A1CH/CI为13%攻击与2甲，A1CJ部署0秒全图女王扫描友方只加A1CK、敌方Qt减1。Qs=A1CU原别名保留，仅鱼人生命法师建筑登记魔抗光环，实际永久A1CG技能/等级与widget死亡清理已接入。0/负等级、B07T滞留、缺失原生继承、原版阶段连边及未知旧抗性仍partial，见axisa-evidence.json。",
     "死亡之翼A0YF前7个敌方缠绕请求、合法目标3秒按命令最大生命5%每秒、A0YE受伤前0至10级回复、A0YH第20波内死亡3秒变龙及500范围前11敌99999、龙形每秒400治疗/三次200喷火、A0YJ九步裂隙/末端爆炸/25%抵消/阈值反击/击杀攻速已接入。原生AEer即时命令与帧积分、ANfd缺失伤害、共享马甲跨族仲裁、地图坐标/存活玩家映射等partial；A116/A0YV仍缺明确字段，见deathwing-evidence.json。",

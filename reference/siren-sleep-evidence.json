@@ -1,0 +1,836 @@
+{
+  "source": {
+    "path": "reference/v14-source/raw_extracted/war3map.j",
+    "sha256": "e66c55b3b25b185c991be5613e21fbf5b2d598f3cc40f2f8cd01c23bcb828250",
+    "lineEncoding": "latin1/LF"
+  },
+  "sourceEvidence": [
+    {
+      "line": 1126,
+      "text": "integer Pn=$65303038"
+    },
+    {
+      "line": 2191,
+      "text": "call SaveInteger(O,$6E303746,StringHash(\"box_train_upgrade_next\"),$6E303747)"
+    },
+    {
+      "line": 2192,
+      "text": "call SaveInteger(O,$6E303746,StringHash(\"box_train_upgrade_count\"),2)"
+    },
+    {
+      "line": 2193,
+      "text": "call SaveInteger(O,$6E303746,StringHash(\"box_train_upgrade_1\"),$6E303747)"
+    },
+    {
+      "line": 2194,
+      "text": "call SaveInteger(O,$6E303746,StringHash(\"box_train_upgrade_2\"),$6E303748)"
+    },
+    {
+      "line": 2586,
+      "text": "call SaveInteger(O,$6E303746,StringHash(\"box_train_select_count\"),2)"
+    },
+    {
+      "line": 2587,
+      "text": "call SaveInteger(O,$6E303746,StringHash(\"box_train_select_1\"),$6E303747)"
+    },
+    {
+      "line": 2588,
+      "text": "call SaveInteger(O,$6E303746,StringHash(\"box_train_select_2\"),$6E303748)"
+    },
+    {
+      "line": 16378,
+      "text": "set Mi[19]=$7530334E"
+    },
+    {
+      "line": 18485,
+      "text": "set Bi=Bi+1"
+    },
+    {
+      "line": 18486,
+      "text": "set Mk[Bi]=$6830554D"
+    },
+    {
+      "line": 18487,
+      "text": "set Ml[Bi]=$6E303746"
+    },
+    {
+      "line": 18488,
+      "text": "set Bi=Bi+1"
+    },
+    {
+      "line": 18489,
+      "text": "set Mk[Bi]=$6830554E"
+    },
+    {
+      "line": 18490,
+      "text": "set Ml[Bi]=$6E303747"
+    },
+    {
+      "line": 18491,
+      "text": "set Bi=Bi+1"
+    },
+    {
+      "line": 18492,
+      "text": "set Mk[Bi]=$6830554F"
+    },
+    {
+      "line": 18493,
+      "text": "set Ml[Bi]=$6E303748"
+    },
+    {
+      "line": 22107,
+      "text": "set KN[18]=$6E303746"
+    },
+    {
+      "line": 22108,
+      "text": "call SaveStr(K,666,$6E303746,\"njsc.blp\")"
+    },
+    {
+      "line": 32969,
+      "text": "function NagaAttack takes unit Bc,unit Om returns nothing"
+    },
+    {
+      "line": 32970,
+      "text": "local unit Ki"
+    },
+    {
+      "line": 32971,
+      "text": "if GetRandomPercentageBJ()<=15 then"
+    },
+    {
+      "line": 32972,
+      "text": "set Ki=CreateUnit(GetOwningPlayer(Bc),Pn,GetUnitX(Bc),GetUnitY(Bc),GetUnitFacing(Bc))"
+    },
+    {
+      "line": 32973,
+      "text": "call UnitAddAbility(Ki,$4131444E)"
+    },
+    {
+      "line": 32974,
+      "text": "call UnitApplyTimedLife(Ki,$42487765,1)"
+    },
+    {
+      "line": 32975,
+      "text": "call IssueTargetOrder(Ki,\"sleep\",Om)"
+    },
+    {
+      "line": 32976,
+      "text": "set Ki=null"
+    },
+    {
+      "line": 32977,
+      "text": "endif"
+    },
+    {
+      "line": 32978,
+      "text": "set Bc=null"
+    },
+    {
+      "line": 32979,
+      "text": "set Om=null"
+    },
+    {
+      "line": 32980,
+      "text": "endfunction"
+    },
+    {
+      "line": 42252,
+      "text": "function Trig_New_UnitAttackActions takes nothing returns boolean"
+    },
+    {
+      "line": 42253,
+      "text": "local unit Qf=GetTriggerUnit()"
+    },
+    {
+      "line": 42254,
+      "text": "local unit i=GetEventDamageSource()"
+    },
+    {
+      "line": 42255,
+      "text": "local integer BF=GetUnitTypeId(i)"
+    },
+    {
+      "line": 42270,
+      "text": "if YDWEIsEventAttackDamage() and not LoadBoolean(O,GetHandleId(i),StringHash(\"Attack\")) then"
+    },
+    {
+      "line": 42271,
+      "text": "call SaveBoolean(O,GetHandleId(i),StringHash(\"Attack\"),true)"
+    },
+    {
+      "line": 42272,
+      "text": "if GetUnitAbilityLevel(i,$4131554B)>0 then"
+    },
+    {
+      "line": 42273,
+      "text": "call NazuoCurseAttack(i,Qf,GetUnitAbilityLevel(i,$4131554B))"
+    },
+    {
+      "line": 42274,
+      "text": "endif"
+    },
+    {
+      "line": 42275,
+      "text": "if GetUnitAbilityLevel(i,$41315652)>0 then"
+    },
+    {
+      "line": 42276,
+      "text": "call ArthasAttack(i,Qf,GetEventDamage())"
+    },
+    {
+      "line": 42277,
+      "text": "call ArthasReadyAttack(i,GetEventDamage())"
+    },
+    {
+      "line": 42278,
+      "text": "endif"
+    },
+    {
+      "line": 42279,
+      "text": "if GetUnitAbilityLevel(i,$4131444F)>0 then"
+    },
+    {
+      "line": 42280,
+      "text": "call NagaAttack(i,Qf)"
+    },
+    {
+      "line": 42281,
+      "text": "endif"
+    },
+    {
+      "line": 42794,
+      "text": "call SaveBoolean(O,GetHandleId(i),StringHash(\"Attack\"),false)"
+    },
+    {
+      "line": 42795,
+      "text": "endif"
+    },
+    {
+      "line": 42804,
+      "text": "function InitTrig_New_UnitAttack takes nothing returns nothing"
+    },
+    {
+      "line": 42805,
+      "text": "set b4=CreateTrigger()"
+    },
+    {
+      "line": 42806,
+      "text": "call YDWESyStemAnyUnitDamagedRegistTrigger(b4)"
+    },
+    {
+      "line": 42807,
+      "text": "call TriggerAddCondition(b4,Condition(function Trig_New_UnitAttackActions))"
+    },
+    {
+      "line": 42808,
+      "text": "endfunction"
+    },
+    {
+      "line": 49754,
+      "text": "call InitTrig_New_UnitAttack()"
+    }
+  ],
+  "abilityFields": [
+    {
+      "csvRow": 2052,
+      "fields": {
+        "rawcode": "A1DN",
+        "name": "睡眠",
+        "tip": "睡眠(L)",
+        "ubertip": "让目标单位在10秒内处于睡眠状态。如果该单位遭到攻击就会自动醒来。",
+        "alias": "A1DN",
+        "code": "AUsl",
+        "Area1": "",
+        "BuffID1": "BUsl,BUsp,Bust",
+        "DataA1": "1.0",
+        "DataB1": "",
+        "DataC1": "",
+        "levels": "1",
+        "targs1": "air,ground,enemy,organic,neutral",
+        "targs2": "_",
+        "targs3": "_",
+        "targs4": "_",
+        "untip": "",
+        "unubertip": "",
+        "Cost1": "",
+        "Dur1": "2.0",
+        "HeroDur1": "2.0",
+        "Rng1": "800.0",
+        "Cool1": "",
+        "checkDep": "",
+        "Cast1": "",
+        "DataD1": "",
+        "EfctID1": "",
+        "Area2": "",
+        "Area3": "",
+        "BuffID2": "",
+        "BuffID3": "",
+        "DataA2": "",
+        "DataA3": "",
+        "DataB2": "",
+        "DataB3": "",
+        "reqLevel": "",
+        "DataC2": "",
+        "DataC3": "",
+        "Cool2": "",
+        "Cool3": "",
+        "Cost2": "",
+        "Cost3": "",
+        "Dur2": "",
+        "Dur3": "",
+        "Rng2": "",
+        "Rng3": "",
+        "HeroDur2": "",
+        "HeroDur3": "",
+        "DataD2": "",
+        "DataD3": "",
+        "UnitID1": "",
+        "UnitID2": "",
+        "UnitID3": "",
+        "DataE1": "",
+        "Cast2": "",
+        "Cast3": "",
+        "DataE2": "",
+        "DataE3": "",
+        "DataF1": "",
+        "DataF2": "",
+        "DataF3": "",
+        "EfctID2": "",
+        "EfctID3": "",
+        "DataH1": "",
+        "DataH2": "",
+        "DataH3": "",
+        "DataI1": "",
+        "DataI2": "",
+        "DataI3": "",
+        "priority": "",
+        "DataA4": "",
+        "DataG1": "",
+        "BuffID4": "",
+        "Dur4": "",
+        "HeroDur4": "",
+        "Rng4": "",
+        "Area4": "",
+        "DataB4": "",
+        "DataC4": "",
+        "Cost4": "",
+        "levelSkip": "",
+        "DataF4": "",
+        "DataE4": ""
+      }
+    },
+    {
+      "csvRow": 2053,
+      "fields": {
+        "rawcode": "A1DO",
+        "name": "海妖之歌",
+        "tip": "海妖之歌",
+        "ubertip": "娜迦海妖用她的歌声魅惑敌方单位，在攻击时有15%的几率使该单位陷入睡眠，睡眠持续2s",
+        "alias": "A1DO",
+        "code": "Asth",
+        "Area1": "",
+        "BuffID1": "",
+        "DataA1": "",
+        "DataB1": "",
+        "DataC1": "",
+        "levels": "1",
+        "targs1": "_",
+        "targs2": "_",
+        "targs3": "_",
+        "targs4": "_",
+        "untip": "",
+        "unubertip": "",
+        "Cost1": "",
+        "Dur1": "",
+        "HeroDur1": "",
+        "Rng1": "",
+        "Cool1": "",
+        "checkDep": "",
+        "Cast1": "",
+        "DataD1": "",
+        "EfctID1": "",
+        "Area2": "",
+        "Area3": "",
+        "BuffID2": "",
+        "BuffID3": "",
+        "DataA2": "",
+        "DataA3": "",
+        "DataB2": "",
+        "DataB3": "",
+        "reqLevel": "",
+        "DataC2": "",
+        "DataC3": "",
+        "Cool2": "",
+        "Cool3": "",
+        "Cost2": "",
+        "Cost3": "",
+        "Dur2": "",
+        "Dur3": "",
+        "Rng2": "",
+        "Rng3": "",
+        "HeroDur2": "",
+        "HeroDur3": "",
+        "DataD2": "",
+        "DataD3": "",
+        "UnitID1": "",
+        "UnitID2": "",
+        "UnitID3": "",
+        "DataE1": "",
+        "Cast2": "",
+        "Cast3": "",
+        "DataE2": "",
+        "DataE3": "",
+        "DataF1": "",
+        "DataF2": "",
+        "DataF3": "",
+        "EfctID2": "",
+        "EfctID3": "",
+        "DataH1": "",
+        "DataH2": "",
+        "DataH3": "",
+        "DataI1": "",
+        "DataI2": "",
+        "DataI3": "",
+        "priority": "",
+        "DataA4": "",
+        "DataG1": "",
+        "BuffID4": "",
+        "Dur4": "",
+        "HeroDur4": "",
+        "Rng4": "",
+        "Area4": "",
+        "DataB4": "",
+        "DataC4": "",
+        "Cost4": "",
+        "levelSkip": "",
+        "DataF4": "",
+        "DataE4": ""
+      }
+    }
+  ],
+  "unitFields": [
+    {
+      "csvRow": 215,
+      "fields": {
+        "name": "万能",
+        "unitID": "e008",
+        "targType": "ground",
+        "bldtm": "14",
+        "goldcost": "60",
+        "HP": "60",
+        "level": "1",
+        "mana0": "100000",
+        "regenMana": "1000.0",
+        "abilList": "Aloc",
+        "auto": "_",
+        "manaN": "100000"
+      }
+    },
+    {
+      "csvRow": 1370,
+      "fields": {
+        "name": "娜迦随从",
+        "unitID": "h0UM",
+        "targType": "ground",
+        "bldtm": "20",
+        "goldcost": "135",
+        "HP": "625",
+        "level": "2",
+        "spd": "340",
+        "abilList": "A1DO",
+        "auto": "_",
+        "type": "giant"
+      }
+    },
+    {
+      "csvRow": 1371,
+      "fields": {
+        "name": "娜迦射手",
+        "unitID": "h0UN",
+        "targType": "ground",
+        "bldtm": "20",
+        "goldcost": "135",
+        "HP": "825",
+        "level": "2",
+        "regenMana": "1.0",
+        "spd": "340",
+        "abilList": "A1DP",
+        "auto": "_",
+        "manaN": "13",
+        "type": "giant"
+      }
+    },
+    {
+      "csvRow": 1372,
+      "fields": {
+        "name": "娜迦海妖战士",
+        "unitID": "h0UO",
+        "targType": "ground",
+        "bldtm": "20",
+        "goldcost": "135",
+        "HP": "1325",
+        "level": "2",
+        "regenMana": "1.0",
+        "spd": "340",
+        "abilList": "A1DQ,A1DR",
+        "auto": "_",
+        "manaN": "18",
+        "type": "giant"
+      }
+    },
+    {
+      "csvRow": 1868,
+      "fields": {
+        "name": "娜迦随从",
+        "unitID": "n07F",
+        "targType": "structure",
+        "bldtm": "2",
+        "fused": "1",
+        "goldcost": "125",
+        "HP": "625",
+        "level": "1",
+        "abilList": "A1DO,A008,A118",
+        "auto": "_",
+        "castbsw": "0.51",
+        "type": "ancient"
+      }
+    },
+    {
+      "csvRow": 1869,
+      "fields": {
+        "name": "娜迦射手",
+        "unitID": "n07G",
+        "targType": "structure",
+        "bldtm": "2",
+        "fused": "3",
+        "goldcost": "175",
+        "HP": "825",
+        "level": "1",
+        "regenMana": "1.0",
+        "abilList": "A1DP,A008,A118",
+        "auto": "_",
+        "castbsw": "0.51",
+        "manaN": "13",
+        "type": "ancient"
+      }
+    },
+    {
+      "csvRow": 1870,
+      "fields": {
+        "name": "娜迦海妖战士",
+        "unitID": "n07H",
+        "targType": "structure",
+        "bldtm": "2",
+        "fused": "3",
+        "goldcost": "275",
+        "HP": "1325",
+        "level": "1",
+        "regenMana": "1.0",
+        "abilList": "A1DQ,A1DR,A008,A118",
+        "auto": "_",
+        "castbsw": "0.51",
+        "manaN": "18",
+        "type": "ancient"
+      }
+    },
+    {
+      "csvRow": 2108,
+      "fields": {
+        "unitID": "u03N",
+        "targType": "ground",
+        "bldtm": "1",
+        "HP": "150000",
+        "level": "1",
+        "spd": "400",
+        "abilList": "A02U,Avul,A050,A0KI,A0M5,A0VO,A0WB,A0YW,A0YY,A0YX,A0YZ",
+        "auto": "_",
+        "castbsw": "0.51",
+        "castpt": "0.001",
+        "type": "Peon,undead"
+      }
+    }
+  ],
+  "registration": {
+    "initialization": 49754,
+    "triggerRegistration": [
+      42804,
+      42807
+    ],
+    "callback": "Trig_New_UnitAttackActions",
+    "gate": [
+      42270,
+      42271
+    ],
+    "abilityBranch": [
+      42279,
+      42280
+    ],
+    "cleanup": [
+      42794,
+      42795
+    ],
+    "semantics": "Any-unit-damaged trigger condition runs attack-only callback; per-source Attack guard prevents nested reentry; A1DO level >0 invokes NagaAttack. It is not an attack-issued/windup event and has no local amount>0 test."
+  },
+  "proc": {
+    "functionLines": [
+      32969,
+      32980
+    ],
+    "chance": "GetRandomPercentageBJ() <= 15",
+    "dummyAlias": {
+      "name": "Pn",
+      "line": 1126,
+      "rawcode": "e008"
+    },
+    "create": "fresh unit each proc, same owner/XY/facing as attacker",
+    "ability": "A1DN",
+    "timedLifeSeconds": 1,
+    "timedLifeBuff": "BHwe",
+    "order": "sleep",
+    "target": "original GetTriggerUnit damaged target",
+    "casterManaChargedByScript": false,
+    "casterCooldownSetByScript": false,
+    "outcomeBoundary": "IssueTargetOrder return is not checked; request issuance is not evidence of native completion."
+  },
+  "acquisition": {
+    "building": "n07F",
+    "combat": "h0UM",
+    "builder": "u03N",
+    "builderName": "鱼人",
+    "builderRegistrationLine": 16378,
+    "costGold": 125,
+    "population": 1,
+    "buildSeconds": 2,
+    "requirements": [],
+    "prophetPool": {
+      "array": "KN",
+      "index": 18,
+      "line": 22107
+    },
+    "upgrades": [
+      {
+        "building": "n07G",
+        "combat": "h0UN",
+        "gold": 175,
+        "population": 3,
+        "seconds": 2,
+        "requires": [
+          "u004"
+        ],
+        "combatAbilities": [
+          "A1DP"
+        ]
+      },
+      {
+        "building": "n07H",
+        "combat": "h0UO",
+        "gold": 275,
+        "population": 3,
+        "seconds": 2,
+        "requires": [
+          "u004"
+        ],
+        "combatAbilities": [
+          "A1DQ",
+          "A1DR"
+        ]
+      }
+    ],
+    "boundary": "Only the base follower retains A1DO; upgrading changes the body/ability list. No training, sponsorship or hero prerequisite is found for buying the base. Training remains optional discount for outgoing upgrades."
+  },
+  "rawW3aAudit": {
+    "path": "/Users/a1/Downloads/军团战争v14.1A5_九倍怪物模式_解析数据包/raw_extracted/war3map.w3a",
+    "sha256": "10e9c49ab0b64941aa069df2b4303aa8784f330470f09ef443772f473b9d5007",
+    "version": 2,
+    "bytes": 20676,
+    "consumedBytes": 20676,
+    "tableObjectCounts": {
+      "original": 23,
+      "custom": 1
+    },
+    "totalModifications": 849,
+    "searchedObjects": [
+      "A1DO",
+      "A1DN"
+    ],
+    "matchedObjects": [],
+    "interpretation": "Both custom abilities are absent from the complete original w3a file. Missing Cost/Cool/Cast in extracted custom rows is not explicit zero and does not itself prove native inheritance."
+  },
+  "nativeBoundary": {
+    "confirmedMapFields": {
+      "base": "AUsl",
+      "BuffID1": "BUsl,BUsp,Bust",
+      "DataA1": 1,
+      "Dur1": 2,
+      "HeroDur1": 2,
+      "Rng1": 800,
+      "targs1": "air,ground,enemy,organic,neutral"
+    },
+    "missingMapFields": [
+      "Cost1",
+      "Cool1",
+      "Cast1"
+    ],
+    "textConflict": "A1DN tooltip says 10 seconds while explicit Dur1/HeroDur1 are 2; runtime should not take tooltip ten. Native sleep protection/wake semantics still require evidence; do not replace it with an ordinary two-second stun."
+  },
+  "tables": [
+    {
+      "path": "reference/v14-source/data/all_abilities.csv",
+      "sha256": "e192876a736b6c5d666da7d11663cd8623732902433cb553b18de694e886729c"
+    },
+    {
+      "path": "reference/v14-source/data/all_units.csv",
+      "sha256": "552f04bfc10e412b8d9b4fec485dd85cfd1f6316487fb4fd4d63d398879e9921"
+    },
+    {
+      "path": "reference/v14-source/data/war3map_w3u_modifications.csv",
+      "sha256": "8caf5a2855e75e3f5346498f0d53a91a313eff357eabe34d9040545dbfd7e7f0"
+    },
+    {
+      "path": "reference/v14-source/data/war3map_w3a_modifications.csv",
+      "sha256": "16e07e07a174e804b7a8cdd7cad8771b38c673925538fe94d71944f232aa103c"
+    },
+    {
+      "path": "reference/v14-source/data/unit_upgrade_edges.csv",
+      "sha256": "001ac1a0f75d9d171a9e56b512d038d0fec7e3bec60b853d40069e6ee9bd2182"
+    },
+    {
+      "path": "reference/v14-source/data/unit_upgrade_requirements.csv",
+      "sha256": "3ac63538cb89a27a0ce997b29b70cfa3531ce17f17ee93e9f1c4901b6e9a1439"
+    }
+  ],
+  "builderObjectOverrides": [
+    {
+      "csvRow": 10,
+      "fields": {
+        "table": "original_objects",
+        "object_rawcode": "u03N",
+        "base_rawcode": "u03N",
+        "new_rawcode": "",
+        "field_rawcode": "ubui",
+        "variable_type": "3",
+        "level": "",
+        "data_column": "",
+        "value": "n076,n085,n07B,n07F,n2YS,h0DB",
+        "end_marker": ""
+      }
+    },
+    {
+      "csvRow": 12,
+      "fields": {
+        "table": "original_objects",
+        "object_rawcode": "u03N",
+        "base_rawcode": "u03N",
+        "new_rawcode": "",
+        "field_rawcode": "unam",
+        "variable_type": "3",
+        "level": "",
+        "data_column": "",
+        "value": "鱼人",
+        "end_marker": ""
+      }
+    }
+  ],
+  "upgradeEdges": [
+    {
+      "csvRow": 291,
+      "fields": {
+        "source_rawcode": "n07F",
+        "source_name": "娜迦随从",
+        "target_rawcode": "n07G",
+        "target_name": "娜迦射手",
+        "choice_slot": "1",
+        "is_immediate_select_edge": "True",
+        "not_in_immediate_select_table": "False",
+        "target_in_easter_catalog": "True",
+        "explicit_easter_text": "False",
+        "target_gold_cost": "175",
+        "target_lumber_cost": "",
+        "target_build_time": "2",
+        "target_total_power_points": "300",
+        "requirement_rawcodes": "u004",
+        "requirement_names": "等到战斗结束",
+        "has_non_battle_end_requirement": "False",
+        "source_line": "2193"
+      }
+    },
+    {
+      "csvRow": 292,
+      "fields": {
+        "source_rawcode": "n07F",
+        "source_name": "娜迦随从",
+        "target_rawcode": "n07H",
+        "target_name": "娜迦海妖战士",
+        "choice_slot": "2",
+        "is_immediate_select_edge": "True",
+        "not_in_immediate_select_table": "False",
+        "target_in_easter_catalog": "True",
+        "explicit_easter_text": "False",
+        "target_gold_cost": "275",
+        "target_lumber_cost": "",
+        "target_build_time": "2",
+        "target_total_power_points": "400",
+        "requirement_rawcodes": "u004",
+        "requirement_names": "等到战斗结束",
+        "has_non_battle_end_requirement": "False",
+        "source_line": "2194"
+      }
+    }
+  ],
+  "upgradeRequirements": [
+    {
+      "csvRow": 392,
+      "fields": {
+        "target_rawcode": "n07G",
+        "target_name": "娜迦射手",
+        "requirement_slot": "1",
+        "requirement_rawcode": "u004",
+        "requirement_name": "等到战斗结束",
+        "requirement_kind": "unit_or_requirement_marker",
+        "source_line": "3307"
+      }
+    },
+    {
+      "csvRow": 393,
+      "fields": {
+        "target_rawcode": "n07H",
+        "target_name": "娜迦海妖战士",
+        "requirement_slot": "1",
+        "requirement_rawcode": "u004",
+        "requirement_name": "等到战斗结束",
+        "requirement_kind": "unit_or_requirement_marker",
+        "source_line": "3309"
+      }
+    }
+  ],
+  "nativeReference": {
+    "base": "AUsl",
+    "level": 1,
+    "manaCost": 100,
+    "cooldown": 6,
+    "cast": 0,
+    "customInheritanceVerified": false,
+    "versions": [
+      "1.24.4",
+      "1.27.1"
+    ],
+    "sources": [
+      "https://github.com/sumneko/w3x2lni/blob/master/data/zhCN-1.24.4/prebuilt/Custom/ability.ini#L23007-L23053",
+      "https://github.com/sumneko/w3x2lni/blob/master/data/enUS-1.27.1/prebuilt/Custom/ability.ini#L23053-L23099",
+      "https://github.com/sumneko/w3x2lni/blob/master/data/enUS-1.27.1/prebuilt/Custom/buff.ini#L1603-L1647",
+      "https://classic.battle.net/war3/undead/units/dreadlord.shtml"
+    ],
+    "protectionObservation": {
+      "url": "https://www.hiveworkshop.com/threads/sleep-ability-uninterruptible.287661/",
+      "date": "2016-08-23/24",
+      "version": "unspecified",
+      "conditions": "Posts4/5 describe an initial protected pause and Data-Stun Duration; the original author confirms changing that field prevented attack wakeup in post8. This is a modder observation, not this map native verification."
+    },
+    "fieldMetadata": {
+      "url": "https://github.com/sumneko/w3x2lni/blob/82916514a12b7edb15252d42225cd8cc8ce61cfd/data/enUS-1.27.1/mpq/Units/AbilityMetaData.slk",
+      "field": "Usl1",
+      "label": "Stun Duration",
+      "relationship": "Corresponds to AUsl DataA; missing custom inheritance and protection/wakeup event arbitration remain partial."
+    }
+  }
+}

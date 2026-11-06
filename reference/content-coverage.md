@@ -1,11 +1,11 @@
 # 内容覆盖快照
 
-来源版本：`v14.1A5`；技能实现版本：`v14-content-20261104-v74-1`。由 `node scripts/content-coverage.mjs --write` 同时生成本文件与 [逐项 JSON](content-coverage.json)。
+来源版本：`v14.1A5`；技能实现版本：`v14-content-20261106-v76-1`。由 `node scripts/content-coverage.mjs --write` 同时生成本文件与 [逐项 JSON](content-coverage.json)。
 
 | 范围 | 总数 | implemented | partial | marker | unresolved |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| 玩家可达能力 | 692 | 406 | 199 | 40 | 47 |
-| 全部战斗能力 | 777 | 455 | 208 | 53 | 61 |
+| 玩家可达能力 | 693 | 404 | 203 | 40 | 46 |
+| 全部战斗能力 | 778 | 453 | 212 | 53 | 60 |
 
 当前单位 534、佣兵记录 60、主波次 35、特殊怪类型 14。运行时动态能力、召唤形态及建筑专属命令均按来源单列于 JSON；sourceOnlyCombatForms 未计作玩家可达入口。
 

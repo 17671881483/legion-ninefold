@@ -14,6 +14,8 @@ const playerRuntimeForms=['h0YO','h0UD','h0UE','h2AE','n06V','n06W','h0CZ','h0CL
 // Source callbacks or building-only icons expose these auxiliary abilities.
 // Count their runtime rules even when the combat ability list omits the icon.
 const playerRuntimeAbilities=[
+  {sourceRawcode:'u006',abilityIds:['A07Y','A0R7','Aloc']},
+  {sourceRawcode:'e010',abilityIds:['Aloc']},
   {sourceRawcode:'h0R0',abilityIds:['A16W']},
   ...['h0PZ','h0XC'].map(sourceRawcode=>({sourceRawcode,abilityIds:['A11O','A11P','A11Q','A11R','A11S','A11T','A11U','A11Z','A121']})),
   ...['h0W3','h0XB','h0PZ','h0XC'].map(sourceRawcode=>({sourceRawcode,abilityIds:['A1SU','A1ST']})),
@@ -84,6 +86,7 @@ const result={
   battleSkills:collect([...current,...playerBuildingCommands,...playerBuildingRuleCarriers,...playerRuntimeForms,...playerRuntimeAbilities,...MERCENARIES,...WAVES,...specialCodes.map(c=>UNIT_TEMPLATES[c])]),
   sourceOnlyCombatForms:[{combatRawcode:'h0JR',buildingRawcode:'n00S',status:'entry-unresolved',evidence:'war3map.j:17544-17545 maps forms; line3644 ban dialog; 48355 barracks egg marker and 48750 monthly record do not provide acquisition',skills:collect([{...UNIT_TEMPLATES.h0JR,abilityIds:[...UNIT_TEMPLATES.h0JR.abilityIds,'A0J2','A0J3']}])},{combatRawcode:'h0VQ',buildingRawcode:'n07U',status:'entry-unresolved',evidence:'war3map.j:17436-17437 maps forms; line3638 ban limit1; no source creation/recipe/upgrade entry found in packet',skills:collect([{...UNIT_TEMPLATES.h0VQ,abilityIds:[...UNIT_TEMPLATES.h0VQ.abilityIds,'A1QI','A1D6']}])}],
   remainingSourceGaps:[
+    '娜迦女王A313按朝向创建e010、40次0.04秒移动与地形允许推退；h108成功A07Y后两次随机u006水甲请求；A0HB只读取显式句柄Ca，不从无调用入口h0xk补授。A07Y40蓝、A314125蓝、A0HB1秒采用双版本原生参考，图内继承未证实；水甲近战减速、命令时序/自动入口/原图地形仍partial，见ocean-caster-evidence.json。',
     '阿茜萨A1CF按实际完工计数/部署等级恢复，显式第10/11级均10回血；A1CH/CI为13%攻击与2甲，A1CJ部署0秒全图女王扫描友方只加A1CK、敌方Qt减1。Qs=A1CU原别名保留，仅鱼人生命法师建筑登记魔抗光环，实际永久A1CG技能/等级与widget死亡清理已接入。0/负等级、B07T滞留、缺失原生继承、原版阶段连边及未知旧抗性仍partial，见axisa-evidence.json。',
     '死亡之翼A0YF前7个敌方缠绕请求、合法目标3秒按命令最大生命5%每秒、A0YE受伤前0至10级回复、A0YH第20波内死亡3秒变龙及500范围前11敌99999、龙形每秒400治疗/三次200喷火、A0YJ九步裂隙/末端爆炸/25%抵消/阈值反击/击杀攻速已接入。原生AEer即时命令与帧积分、ANfd缺失伤害、共享马甲跨族仲裁、地图坐标/存活玩家映射等partial；A116/A0YV仍缺明确字段，见deathwing-evidence.json。',
     '大地主宰A17H完工计数/布尔分支及出战等级、A17I/J真实原生光环、A17N九次20跟随伤害、A17K入圈实数20%授予与A18C两秒同句柄复生已接入。A17L固定25%生命阈值、0秒首跳/0.04秒步进及55%生命恢复保留；原坐标映射Web王前支援点。原生生命事件与致死顺序、默认ACrn继承/多复生仲裁/资源恢复、未实例化对象和原版阶段连边仍partial，见earth-lord-evidence.json。',

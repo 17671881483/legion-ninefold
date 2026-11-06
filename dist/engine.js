@@ -1,3 +1,5 @@
+import {restoreTsunami} from './tsunami-rules.js';
+import {restoreOceanHealing} from './ocean-healing-rules.js';
 import {axisaBuildingCompleted,restoreAxisaBuilding,initializeAxisaLevels} from './axisa-levels.js';
 import {restoreAxisa} from './axisa-rules.js';
 import {restoreDeathwingHuman} from './deathwing-human.js';
@@ -27,7 +29,8 @@ import {sourceBarrageTargets,sourceBarrageHit} from './skills.js';
 import { UNITS, MERCENARIES, LEGACY_MERCENARIES, WAVES, RULES, HEROES, BUILDERS, PROPHET_POOLS, UNIT_TEMPLATES, TECHNOLOGIES, BOX_TRAINING_RULES } from './data.js';
 import { attachSkills, refreshSourceSkills, restoreNagaHaloState, initializeSourceSkills, initializeSourceClassCombat, sourceClassAttackDamageEvent, tirionBondDamageEvent, sourceDamageListeners, sourceRegisteredDamageEvent, compileSkills, sourceAuraEffects, hasSourceAura, tickSourceSkills, sourceAttackIssued, sourceAttackStart, sourceOnHit, modifyIncoming, beforeSourceDamage, afterSourceDamage, sourceDeath, trySourceReincarnation, sourceMoveFactor, canWeaponTarget, sourceWeapon, tickSourceScriptJobs, manualSourceSkills, castManualSourceSkill, stormLizardChanneling } from './skills.js';
 import {isReincarnating,countsForBattle as countsForNativeBattle,reincarnationLethal} from './reincarnation-rules.js';
-const countsForBattle=e=>countsForNativeBattle(e)||hasPendingDeathwingRevival(e);
+const retainsCombatHandle=e=>countsForNativeBattle(e)||hasPendingDeathwingRevival(e);
+const countsForBattle=e=>!e.scriptAuxiliary&&retainsCombatHandle(e);
 import {restorePhoenixRevival} from './phoenix-revival-rules.js';
 import { initializeSourceClassBuilding } from './source-class-rules.js';
 import { MAP, laneToWorld, worldToLane, kingWorld, spawnWarpWorld, supportWorld, routePoints, isWalkable, isSegmentWalkable, constrainPoint, closestWalkable, navigationPath } from './layout.js';
@@ -1214,7 +1217,7 @@ export class Game {
       if(isReincarnating(e)){e.hp=0;e.pendingAttack=null;continue;}
       if (e.hp <= 0) { e.pendingAttack = null; continue; }
       if (e.expiresAt && e.expiresAt <= now) { e.hp = 0; e.pendingAttack = null; continue; }
-      if(e.status.yseraHidden||e.status.sourceHidden)continue;
+      if(e.scriptAuxiliary||e.status.yseraHidden||e.status.sourceHidden)continue;
       this._ensureWorld(e); const team = e.battleTeam, battle = battles[team];
       battle.push(e); this._worldEntities.set(e.id, e);
       const key = `${Math.floor(e.worldX)},${Math.floor(e.worldY)}`, grid = this._spatial[team];
@@ -1227,7 +1230,7 @@ export class Game {
     this.state.congestion = monsterCounts.map((count, team) => ({ attackingTeam: team, count, attackIntervalFactor: this._monsterPressure[team] }));
     for (const e of entities) {
       if (e.hp <= 0) { e.pendingAttack = null; continue; }
-      if(e.status.yseraHidden||e.status.sourceHidden||e.status.yseraPaused||e.status.sourcePaused||e.status.illidanPaused){e.pendingAttack=null;continue;}
+      if(e.scriptAuxiliary||e.status.yseraHidden||e.status.sourceHidden||e.status.yseraPaused||e.status.sourcePaused||e.status.illidanPaused){e.pendingAttack=null;continue;}
       this._ensureWorld(e);
       const battle = battles[e.battleTeam], st = e.status;
       if (st.poisonUntil > now) this._hurt(e, number(st.poisonDps, 0) * dt, st.poisonOwner, true);
@@ -1477,7 +1480,7 @@ export class Game {
       this._sourceDeath(target,attacker);
       const economic=sourceEconomyDeath(this,target,attacker,units);
       if(economicPlayer){economicPlayer.gold+=economic.bonusGold;economicPlayer.wood+=economic.bonusWood;economicPlayer.stats.goldEarned+=economic.bonusGold;}
-      if (target.side === 'monster') {
+      if (target.side === 'monster' && !target.scriptAuxiliary) {
         const base = this.state.wave >= 31 ? 0 : target.isMerc || target.isSummon ? number(target.sourceRawFields?.level,target.reward) : number(RULES.waveKillGold?.[this.state.wave-1],target.reward);
         let bounty = target.status.sourceLeakMarker ? Math.floor(base*(this.state.players[target.sourceLaneId]?.leakBountyFactor??0)) : base;
         if(this.state.wave<31 && target.substituted)bounty+=rule('nextWaveSubstitutionBounty',3);
@@ -1496,7 +1499,7 @@ export class Game {
         this.state.metrics.killed++;
       }
       veteranDeath(this,target,attacker);
-      this._event('death', target, target.side === 'monster' ? `+${target.reward}` : '阵亡', { color: target.color });
+      this._event('death', target, target.scriptAuxiliary ? '效果结束' : target.side === 'monster' ? `+${target.reward}` : '阵亡', { color: target.color });
     }
   }
   _sourceDeath(target,killer){sourceDeath(this,target,killer);}
@@ -1550,12 +1553,12 @@ export class Game {
       const player = this.state.players[laneId]; if (!player.roundLeaks) player.stats.wavesHeld++;
       // The original clear-lane trigger supplies a return order even to units
       // that never acquired a target; backline units otherwise wait in place.
-      for (const e of this.state.entities) if (e.side === 'defender' && e.sourceLaneId === laneId && e.hp > 0 && !e.status.warped && e.nav?.mode === 'guard') { e.status.activated = true; this._planReturn(e); }
+      for (const e of this.state.entities) if (!e.scriptAuxiliary && e.side === 'defender' && e.sourceLaneId === laneId && e.hp > 0 && !e.status.warped && e.nav?.mode === 'guard') { e.status.activated = true; this._planReturn(e); }
     }
   }
   _warpDefenders() {
     for (const e of this.state.entities) {
-      if (e.hp <= 0 || e.status.yseraHidden || e.status.sourceHidden || e.status.yseraPaused || e.status.sourcePaused || e.status.illidanPaused || e.status.cycloneUntil>this.state.time || e.side !== 'defender' || e.status.warped || !this._settledLanes.includes(e.sourceLaneId)) continue;
+      if (e.scriptAuxiliary || e.hp <= 0 || e.status.yseraHidden || e.status.sourceHidden || e.status.yseraPaused || e.status.sourcePaused || e.status.illidanPaused || e.status.cycloneUntil>this.state.time || e.side !== 'defender' || e.status.warped || !this._settledLanes.includes(e.sourceLaneId)) continue;
       if (e.nav?.mode !== 'return' || distance(e, spawnWarpWorld(e.sourceLaneId)) > .55 || e.targetId) continue;
       const team = e.battleTeam, source = worldPoint(e), base = supportWorld(team);
       const slot = Number(String(e.buildingId ?? e.id).replace(/\D/g, '')) || 0;
@@ -1609,7 +1612,7 @@ export class Game {
   _clearDead() {
     for (const e of this.state.entities) if (e.expiresAt && e.expiresAt <= this.state.time) {e.hp = 0;if(isReincarnating(e)){e.status.reincarnation.phase='cancelled';e.status.reincarnation.reason='expired';}this._sourceDeath(e,null);}
     retainBroodmotherAlliance(this);
-    this.state.entities = this.state.entities.filter(countsForBattle);
+    this.state.entities = this.state.entities.filter(retainsCombatHandle);
   }
   _endCombat() {
     const s = this.state;
@@ -1675,7 +1678,7 @@ export class Game {
   }
   _advanceContinuous(){
     if (this.state.mode === 'sandbox') return;
-    const s=this.state;if(s.wave>=35)return;const survivors=s.entities.filter(countsForBattle),jobs=s.sourceSkillJobs??[],nagaCasters=s.nagaScriptCasters??{},arthasCasters=s.darkArthasCasters??{},brightHandles=s.brightArthasHandles??{},aesaraHandles=s.aesaraHandles??{},soulToxinHandles=s.soulToxinHandles??{},livingBombHandles=s.livingBombHandles??{},oldTime=this._roundTime,queue=this._spawnQueue.map(e=>({...e,at:Math.max(0,e.at-oldTime)}));
+    const s=this.state;if(s.wave>=35)return;const survivors=s.entities.filter(retainsCombatHandle),jobs=s.sourceSkillJobs??[],nagaCasters=s.nagaScriptCasters??{},arthasCasters=s.darkArthasCasters??{},brightHandles=s.brightArthasHandles??{},aesaraHandles=s.aesaraHandles??{},soulToxinHandles=s.soulToxinHandles??{},livingBombHandles=s.livingBombHandles??{},oldTime=this._roundTime,queue=this._spawnQueue.map(e=>({...e,at:Math.max(0,e.at-oldTime)}));
     s.wave++;s.phase='build';this._startCombat({continuousJoin:true});s.sourceSkillJobs=jobs;s.nagaScriptCasters=nagaCasters;s.darkArthasCasters=arthasCasters;s.brightArthasHandles=brightHandles;s.aesaraHandles=aesaraHandles;s.soulToxinHandles=soulToxinHandles;s.livingBombHandles=livingBombHandles;s.entities=[...survivors,...s.entities.filter(e=>e.side==='monster')];this._spawnQueue=[...queue,...this._spawnQueue].sort((a,b)=>a.at-b.at);
     s.continuousRemaining=s.wave<35?50:null;this._log(`连续进攻：第${s.wave}波已加入战场，存活守军与残怪保留。`);
   }
@@ -1772,7 +1775,7 @@ export class Game {
       restoreUnstableAlchemyUserData(this,e);restoreVeteranIdentity(this,e,units);restoreSapperCreation(this,e,def);
     }
     restoreUndeadLegionHandles(this);
-    restoreAxisa(this);restoreNagaHaloState(this);restoreDeathwingHuman(this);restoreDeathwingDragon(this);restoreEarthLord(this);restorePhoenixRevival(this);restorePhoenixActive(this);restoreMalygos(this);restoreGuldan(this);restoreAnduin(this);restoreVarian(this);restoreAlexstrasza(this);restoreNozdormu(this);restoreSavis(this);restoreNerzhul(this);restoreMaiev(this);
+    restoreTsunami(this);restoreOceanHealing(this);restoreAxisa(this);restoreNagaHaloState(this);restoreDeathwingHuman(this);restoreDeathwingDragon(this);restoreEarthLord(this);restorePhoenixRevival(this);restorePhoenixActive(this);restoreMalygos(this);restoreGuldan(this);restoreAnduin(this);restoreVarian(this);restoreAlexstrasza(this);restoreNozdormu(this);restoreSavis(this);restoreNerzhul(this);restoreMaiev(this);
     // JSON stores retained handles separately; surviving units must share the
     // live object again so later healing, movement and death update one handle.
     for(const e of [...this.state.entities,...this.state.kings])if(this.state.brightArthasHandles[e.id])this.state.brightArthasHandles[e.id]=e;

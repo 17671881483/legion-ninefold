@@ -1,0 +1,3560 @@
+{
+  "schema": 1,
+  "scope": "v76 A313海啸、h108的A07Y水甲扩散及独立A0HB治疗加成；娜迦女王获取/部署、原生默认费用及无调用旧函数边界。",
+  "status": "partial",
+  "source": {
+    "path": "reference/v14-source/raw_extracted/war3map.j",
+    "sha256": "e66c55b3b25b185c991be5613e21fbf5b2d598f3cc40f2f8cd01c23bcb828250",
+    "encoding": "latin1 split LF only; sourceEvidence.text preserves original bytes as Latin-1 codepoints"
+  },
+  "objectSources": [
+    {
+      "path": "reference/v14-source/data/all_units.csv",
+      "sha256": "552f04bfc10e412b8d9b4fec485dd85cfd1f6316487fb4fd4d63d398879e9921"
+    },
+    {
+      "path": "reference/v14-source/data/all_abilities.csv",
+      "sha256": "e192876a736b6c5d666da7d11663cd8623732902433cb553b18de694e886729c"
+    },
+    {
+      "path": "reference/v14-source/data/all_buffs.csv",
+      "sha256": "c42a1afa603e6afccaf864e63d08fc0260207b68561547c5c1abfb6ac69e30c8"
+    },
+    {
+      "path": "reference/v14-source/data/all_upgrades.csv",
+      "sha256": "b13bb094bb2c0f4b386847390d072b38440aa9f298298ba849e19829535c7bae"
+    },
+    {
+      "path": "reference/v14-source/data/unit_upgrade_edges.csv",
+      "sha256": "001ac1a0f75d9d171a9e56b512d038d0fec7e3bec60b853d40069e6ee9bd2182"
+    },
+    {
+      "path": "reference/v14-source/data/unit_upgrade_requirements.csv",
+      "sha256": "3ac63538cb89a27a0ce997b29b70cfa3531ce17f17ee93e9f1c4901b6e9a1439"
+    },
+    {
+      "path": "reference/v14-source/data/war3map_w3a_modifications.csv",
+      "sha256": "16e07e07a174e804b7a8cdd7cad8771b38c673925538fe94d71944f232aa103c"
+    }
+  ],
+  "sourceEvidence": [
+    {
+      "line": 250,
+      "text": "integer array U2"
+    },
+    {
+      "line": 1789,
+      "text": "call SaveInteger(O,$68303753,StringHash(\"box_train_upgrade_count\"),2)"
+    },
+    {
+      "line": 1790,
+      "text": "call SaveInteger(O,$68303753,StringHash(\"box_train_upgrade_1\"),$68303754)"
+    },
+    {
+      "line": 1791,
+      "text": "call SaveInteger(O,$68303753,StringHash(\"box_train_upgrade_2\"),$6830534A)"
+    },
+    {
+      "line": 1792,
+      "text": "call SaveInteger(O,$68303754,StringHash(\"box_train_upgrade_next\"),$68313037)"
+    },
+    {
+      "line": 1793,
+      "text": "call SaveInteger(O,$68303754,StringHash(\"box_train_upgrade_count\"),1)"
+    },
+    {
+      "line": 1794,
+      "text": "call SaveInteger(O,$68303754,StringHash(\"box_train_upgrade_1\"),$68313037)"
+    },
+    {
+      "line": 1795,
+      "text": "call SaveInteger(O,$6830534A,StringHash(\"box_train_upgrade_next\"),$68313037)"
+    },
+    {
+      "line": 1796,
+      "text": "call SaveInteger(O,$6830534A,StringHash(\"box_train_upgrade_count\"),1)"
+    },
+    {
+      "line": 1797,
+      "text": "call SaveInteger(O,$6830534A,StringHash(\"box_train_upgrade_1\"),$68313037)"
+    },
+    {
+      "line": 2366,
+      "text": "call SaveInteger(O,$68303753,StringHash(\"box_train_select_1\"),$68303754)"
+    },
+    {
+      "line": 2367,
+      "text": "call SaveInteger(O,$68303753,StringHash(\"box_train_select_2\"),$6830534A)"
+    },
+    {
+      "line": 2368,
+      "text": "call SaveInteger(O,$68303754,StringHash(\"box_train_select_count\"),1)"
+    },
+    {
+      "line": 2369,
+      "text": "call SaveInteger(O,$68303754,StringHash(\"box_train_select_1\"),$68313037)"
+    },
+    {
+      "line": 2370,
+      "text": "call SaveInteger(O,$6830534A,StringHash(\"box_train_select_count\"),1)"
+    },
+    {
+      "line": 2371,
+      "text": "call SaveInteger(O,$6830534A,StringHash(\"box_train_select_1\"),$68313037)"
+    },
+    {
+      "line": 2938,
+      "text": "call SaveInteger(O,$68313037,StringHash(\"box_train_upgrade_require_count\"),2)"
+    },
+    {
+      "line": 2939,
+      "text": "call SaveInteger(O,$68313037,StringHash(\"box_train_upgrade_require_1\"),$52303058)"
+    },
+    {
+      "line": 2940,
+      "text": "call SaveInteger(O,$68313037,StringHash(\"box_train_upgrade_require_2\"),$75303034)"
+    },
+    {
+      "line": 3657,
+      "text": "call DisableEggUnitTypeDialog___RegisterDialogEggUnitType($68313037,\"å¨è¿¦å¥³ç\",3)"
+    },
+    {
+      "line": 8848,
+      "text": "function Group_cen takes code VE,integer BF returns nothing"
+    },
+    {
+      "line": 8849,
+      "text": "call GroupEnumUnitsOfType(E,UnitId2String(BF),null)"
+    },
+    {
+      "line": 8850,
+      "text": "call ForGroup(E,VE)"
+    },
+    {
+      "line": 8851,
+      "text": "call GroupClear(E)"
+    },
+    {
+      "line": 8852,
+      "text": "endfunction"
+    },
+    {
+      "line": 9162,
+      "text": "function n04O_Action takes nothing returns nothing"
+    },
+    {
+      "line": 9163,
+      "text": "local timer t=GetExpiredTimer()"
+    },
+    {
+      "line": 9164,
+      "text": "local integer BF=GetHandleId(t)"
+    },
+    {
+      "line": 9165,
+      "text": "local unit i=LoadUnitHandle(O,BF,1)"
+    },
+    {
+      "line": 9166,
+      "text": "if i==null then"
+    },
+    {
+      "line": 9167,
+      "text": "call FlushChildHashtable(O,BF)"
+    },
+    {
+      "line": 9168,
+      "text": "call DestroyTimer(t)"
+    },
+    {
+      "line": 9169,
+      "text": "set i=null"
+    },
+    {
+      "line": 9170,
+      "text": "set t=null"
+    },
+    {
+      "line": 9171,
+      "text": "return"
+    },
+    {
+      "line": 9172,
+      "text": "endif"
+    },
+    {
+      "line": 9173,
+      "text": "call IssueImmediateOrder(i,\"waterelemental\")"
+    },
+    {
+      "line": 9174,
+      "text": "call SaveInteger(O,BF,2,LoadInteger(O,BF,2)+1)"
+    },
+    {
+      "line": 9175,
+      "text": "if LoadInteger(O,BF,2)==5 then"
+    },
+    {
+      "line": 9176,
+      "text": "call UnitRemoveAbility(i,$41305152)"
+    },
+    {
+      "line": 9177,
+      "text": "call FlushChildHashtable(O,BF)"
+    },
+    {
+      "line": 9178,
+      "text": "call DestroyTimer(t)"
+    },
+    {
+      "line": 9179,
+      "text": "endif"
+    },
+    {
+      "line": 9180,
+      "text": "set t=null"
+    },
+    {
+      "line": 9181,
+      "text": "set i=null"
+    },
+    {
+      "line": 9182,
+      "text": "endfunction"
+    },
+    {
+      "line": 9183,
+      "text": "function n04R_Action takes nothing returns nothing"
+    },
+    {
+      "line": 9184,
+      "text": "local timer t=GetExpiredTimer()"
+    },
+    {
+      "line": 9185,
+      "text": "local integer BF=GetHandleId(t)"
+    },
+    {
+      "line": 9186,
+      "text": "local unit i=LoadUnitHandle(O,BF,1)"
+    },
+    {
+      "line": 9187,
+      "text": "if i==null then"
+    },
+    {
+      "line": 9188,
+      "text": "call FlushChildHashtable(O,BF)"
+    },
+    {
+      "line": 9189,
+      "text": "call DestroyTimer(t)"
+    },
+    {
+      "line": 9190,
+      "text": "set i=null"
+    },
+    {
+      "line": 9191,
+      "text": "set t=null"
+    },
+    {
+      "line": 9192,
+      "text": "return"
+    },
+    {
+      "line": 9193,
+      "text": "endif"
+    },
+    {
+      "line": 9194,
+      "text": "call IssueImmediateOrder(i,\"waterelemental\")"
+    },
+    {
+      "line": 9195,
+      "text": "call SaveInteger(O,BF,2,LoadInteger(O,BF,2)+1)"
+    },
+    {
+      "line": 9196,
+      "text": "if LoadInteger(O,BF,2)==5 then"
+    },
+    {
+      "line": 9197,
+      "text": "call UnitRemoveAbility(i,$41305153)"
+    },
+    {
+      "line": 9198,
+      "text": "call FlushChildHashtable(O,BF)"
+    },
+    {
+      "line": 9199,
+      "text": "call DestroyTimer(t)"
+    },
+    {
+      "line": 9200,
+      "text": "endif"
+    },
+    {
+      "line": 9201,
+      "text": "set t=null"
+    },
+    {
+      "line": 9202,
+      "text": "set i=null"
+    },
+    {
+      "line": 9203,
+      "text": "endfunction"
+    },
+    {
+      "line": 14392,
+      "text": "function TargetTiemr takes nothing returns nothing"
+    },
+    {
+      "line": 14393,
+      "text": "local unit EQ=null"
+    },
+    {
+      "line": 14394,
+      "text": "if LoadUnitHandle(K,$6E303249,GetHandleId(GetExpiredTimer()))==null then"
+    },
+    {
+      "line": 14395,
+      "text": "set EQ=LoadUnitHandle(K,$68304A33,GetHandleId(GetExpiredTimer()))"
+    },
+    {
+      "line": 14396,
+      "text": "call DestroyEffect(AddSpecialEffectTarget(\"Abilities\\\\Spells\\\\Human\\\\Resurrect\\\\ResurrectTarget.mdl\",EQ,\"origin\"))"
+    },
+    {
+      "line": 14397,
+      "text": "else"
+    },
+    {
+      "line": 14398,
+      "text": "set EQ=LoadUnitHandle(K,$6E303249,GetHandleId(GetExpiredTimer()))"
+    },
+    {
+      "line": 14399,
+      "text": "call DestroyEffect(AddSpecialEffectTarget(\"war3mapImported\\\\blue-guangzhu-special.mdx\",EQ,\"origin\"))"
+    },
+    {
+      "line": 14400,
+      "text": "endif"
+    },
+    {
+      "line": 14401,
+      "text": "set EQ=null"
+    },
+    {
+      "line": 14402,
+      "text": "endfunction"
+    },
+    {
+      "line": 14403,
+      "text": "function CountUnitsInGroupEnum_I101 takes nothing returns nothing"
+    },
+    {
+      "line": 14404,
+      "text": "local unit i=GetEnumUnit()"
+    },
+    {
+      "line": 14405,
+      "text": "call UnitAddAbility(i,$41343030)"
+    },
+    {
+      "line": 14406,
+      "text": "call UnitAddItemToSlotById(i,$49313031,0)"
+    },
+    {
+      "line": 14407,
+      "text": "set i=null"
+    },
+    {
+      "line": 14408,
+      "text": "endfunction"
+    },
+    {
+      "line": 14409,
+      "text": "function h0EKFunc takes nothing returns boolean"
+    },
+    {
+      "line": 14410,
+      "text": "return GetUnitAbilityLevel(GetFilterUnit(),$4130374E)>0 and GetOwningPlayer(GetFilterUnit())==GetOwningPlayer(GetTriggerUnit())"
+    },
+    {
+      "line": 14411,
+      "text": "endfunction"
+    },
+    {
+      "line": 14412,
+      "text": "function h0xkFunc takes nothing returns boolean"
+    },
+    {
+      "line": 14413,
+      "text": "return GetUnitAbilityLevel(GetFilterUnit(),$4130374E)>0 and GetUnitUserData(GetFilterUnit())==Ej"
+    },
+    {
+      "line": 14414,
+      "text": "endfunction"
+    },
+    {
+      "line": 16826,
+      "text": "set Mk[Bi]=$68303836"
+    },
+    {
+      "line": 16827,
+      "text": "set Ml[Bi]=$68303753"
+    },
+    {
+      "line": 16828,
+      "text": "set Bi=Bi+1"
+    },
+    {
+      "line": 16829,
+      "text": "set Mk[Bi]=$68303837"
+    },
+    {
+      "line": 16830,
+      "text": "set Ml[Bi]=$68303754"
+    },
+    {
+      "line": 16831,
+      "text": "set Bi=Bi+1"
+    },
+    {
+      "line": 16832,
+      "text": "set Mk[Bi]=$6830534B"
+    },
+    {
+      "line": 16833,
+      "text": "set Ml[Bi]=$6830534A"
+    },
+    {
+      "line": 16834,
+      "text": "set Bi=Bi+1"
+    },
+    {
+      "line": 16835,
+      "text": "set Mk[Bi]=$68313038"
+    },
+    {
+      "line": 16836,
+      "text": "set Ml[Bi]=$68313037"
+    },
+    {
+      "line": 16837,
+      "text": "set Bi=Bi+1"
+    },
+    {
+      "line": 17708,
+      "text": "set Bi=Bi+1"
+    },
+    {
+      "line": 17709,
+      "text": "set Mk[Bi]=$6830484C"
+    },
+    {
+      "line": 17710,
+      "text": "set Ml[Bi]=$68304834"
+    },
+    {
+      "line": 17711,
+      "text": "set Bi=Bi+1"
+    },
+    {
+      "line": 17879,
+      "text": "set Bi=Bi+1"
+    },
+    {
+      "line": 17880,
+      "text": "set Mk[Bi]=$68304B4A"
+    },
+    {
+      "line": 17881,
+      "text": "set Ml[Bi]=$6E303146"
+    },
+    {
+      "line": 17882,
+      "text": "set Bi=Bi+1"
+    },
+    {
+      "line": 19250,
+      "text": "call ExecuteFunc(\"FightStart\")"
+    },
+    {
+      "line": 19251,
+      "text": "call TriggerExecute(N7)"
+    },
+    {
+      "line": 19252,
+      "text": "call TriggerExecute(Bv)"
+    },
+    {
+      "line": 19253,
+      "text": "call TriggerExecute(Ns)"
+    },
+    {
+      "line": 19254,
+      "text": "call TriggerExecute(N8)"
+    },
+    {
+      "line": 19255,
+      "text": "call yA(.5)"
+    },
+    {
+      "line": 19256,
+      "text": "call TriggerExecute(OD)"
+    },
+    {
+      "line": 19257,
+      "text": "call yA(.5)"
+    },
+    {
+      "line": 19258,
+      "text": "call TriggerExecute(OE)"
+    },
+    {
+      "line": 19259,
+      "text": "call TriggerExecute(OF)"
+    },
+    {
+      "line": 19260,
+      "text": "call TriggerExecute(OG)"
+    },
+    {
+      "line": 19769,
+      "text": "function OC5F_CD takes nothing returns nothing"
+    },
+    {
+      "line": 19770,
+      "text": "call ConditionalTriggerExecute(PB)"
+    },
+    {
+      "line": 19771,
+      "text": "call DisableTrigger(PB)"
+    },
+    {
+      "line": 19772,
+      "text": "call DestroyTrigger(PB)"
+    },
+    {
+      "line": 19773,
+      "text": "set O7=true"
+    },
+    {
+      "line": 19774,
+      "text": "if Nj==false then"
+    },
+    {
+      "line": 19775,
+      "text": "call TriggerExecute(N7)"
+    },
+    {
+      "line": 19776,
+      "text": "call yA(1.)"
+    },
+    {
+      "line": 19777,
+      "text": "set Nj=true"
+    },
+    {
+      "line": 19778,
+      "text": "call TriggerExecute(OD)"
+    },
+    {
+      "line": 19779,
+      "text": "else"
+    },
+    {
+      "line": 19780,
+      "text": "call TriggerExecute(OF)"
+    },
+    {
+      "line": 19781,
+      "text": "endif"
+    },
+    {
+      "line": 20252,
+      "text": "function ef takes nothing returns nothing"
+    },
+    {
+      "line": 20253,
+      "text": "call YDWEPolledWaitNull(.5)"
+    },
+    {
+      "line": 20254,
+      "text": "call ForGroupBJ(Bu,function vf)"
+    },
+    {
+      "line": 20255,
+      "text": "call TriggerExecute(OF)"
+    },
+    {
+      "line": 20256,
+      "text": "endfunction"
+    },
+    {
+      "line": 22613,
+      "text": "function oldcodefn_YH takes unit i returns nothing"
+    },
+    {
+      "line": 22614,
+      "text": "local integer BB=GetPlayerId(GetOwningPlayer(i))"
+    },
+    {
+      "line": 22615,
+      "text": "local integer BF=GetUnitTypeId(i)"
+    },
+    {
+      "line": 22616,
+      "text": "if BF==$68305343 or BF==$68305344 then"
+    },
+    {
+      "line": 22617,
+      "text": "set U2[BB+10]=U2[BB+10]-1"
+    },
+    {
+      "line": 22618,
+      "text": "endif"
+    },
+    {
+      "line": 22619,
+      "text": "if BF==$6830394F or BF==$6831394F then"
+    },
+    {
+      "line": 22620,
+      "text": "set U2[BB+20]=U2[BB+20]-1"
+    },
+    {
+      "line": 22621,
+      "text": "set i=LoadUnitHandle(K,$6830454B,BB)"
+    },
+    {
+      "line": 22622,
+      "text": "set BF=GetUnitTypeId(i)"
+    },
+    {
+      "line": 22623,
+      "text": "if BF==$68304A33 or BF==$6E303249 and U2[BB+30]==1 then"
+    },
+    {
+      "line": 22624,
+      "text": "call UnitAddItemToSlotById(i,$49313032,0)"
+    },
+    {
+      "line": 22625,
+      "text": "endif"
+    },
+    {
+      "line": 22626,
+      "text": "endif"
+    },
+    {
+      "line": 22627,
+      "text": "set i=null"
+    },
+    {
+      "line": 22628,
+      "text": "endfunction"
+    },
+    {
+      "line": 23036,
+      "text": "function xk takes nothing returns nothing"
+    },
+    {
+      "line": 23037,
+      "text": "call UnitResetCooldown(GetEnumUnit())"
+    },
+    {
+      "line": 23038,
+      "text": "call IssueImmediateOrderById(GetEnumUnit(),852526)"
+    },
+    {
+      "line": 23039,
+      "text": "call IssueImmediateOrderById(GetEnumUnit(),851972)"
+    },
+    {
+      "line": 23040,
+      "text": "call IssueImmediateOrder(GetEnumUnit(),\"waterelemental\")"
+    },
+    {
+      "line": 23041,
+      "text": "call IssueImmediateOrder(GetEnumUnit(),\"manashieldon\")"
+    },
+    {
+      "line": 23042,
+      "text": "endfunction"
+    },
+    {
+      "line": 23043,
+      "text": "function SushuiGuardianSpiritRoundStartFilter takes nothing returns boolean"
+    },
+    {
+      "line": 23044,
+      "text": "return GetUnitAbilityLevel(GetFilterUnit(),$41303631)>0"
+    },
+    {
+      "line": 23045,
+      "text": "endfunction"
+    },
+    {
+      "line": 23046,
+      "text": "function SushuiGuardianSpiritRoundStart takes nothing returns nothing"
+    },
+    {
+      "line": 23047,
+      "text": "call GroupEnumUnitsInRect(E,bj_mapInitialPlayableArea,Condition(function SushuiGuardianSpiritRoundStartFilter))"
+    },
+    {
+      "line": 23048,
+      "text": "call ForGroup(E,function xk)"
+    },
+    {
+      "line": 23049,
+      "text": "call GroupClear(E)"
+    },
+    {
+      "line": 23050,
+      "text": "endfunction"
+    },
+    {
+      "line": 23051,
+      "text": "function n00F takes nothing returns nothing"
+    },
+    {
+      "line": 23052,
+      "text": "call UnitResetCooldown(GetEnumUnit())"
+    },
+    {
+      "line": 23053,
+      "text": "call IssueImmediateOrder(GetEnumUnit(),\"roar\")"
+    },
+    {
+      "line": 23054,
+      "text": "endfunction"
+    },
+    {
+      "line": 23055,
+      "text": "function h0xk takes nothing returns nothing"
+    },
+    {
+      "line": 23056,
+      "text": "local group DG=CreateGroup()"
+    },
+    {
+      "line": 23057,
+      "text": "local unit i=GetEnumUnit()"
+    },
+    {
+      "line": 23058,
+      "text": "local integer BB=1"
+    },
+    {
+      "line": 23059,
+      "text": "set Ej=GetUnitUserData(i)"
+    },
+    {
+      "line": 23060,
+      "text": "if U2[Ej+29]==1 then"
+    },
+    {
+      "line": 23061,
+      "text": "call DestroyEffect(AddSpecialEffectTarget(\"Abilities\\\\Spells\\\\Human\\\\Resurrect\\\\ResurrectCaster.mdl\",i,\"origin\"))"
+    },
+    {
+      "line": 23062,
+      "text": "call DestroyEffect(AddSpecialEffectTarget(\"Abilities\\\\Spells\\\\Human\\\\Resurrect\\\\ResurrectTarget.mdl\",i,\"origin\"))"
+    },
+    {
+      "line": 23063,
+      "text": "call SaveInteger(K,$41304842,GetHandleId(i),U2[Ej+19]*5)"
+    },
+    {
+      "line": 23064,
+      "text": "call SetUnitAbilityLevel(i,$41304843,2)"
+    },
+    {
+      "line": 23065,
+      "text": "call UnitAddAbility(i,$41343030)"
+    },
+    {
+      "line": 23066,
+      "text": "set BB=1"
+    },
+    {
+      "line": 23067,
+      "text": "loop"
+    },
+    {
+      "line": 23068,
+      "text": "exitwhen BB>U2[Ej+19]"
+    },
+    {
+      "line": 23069,
+      "text": "call UnitAddItemToSlotById(i,$49313031,0)"
+    },
+    {
+      "line": 23070,
+      "text": "set BB=BB+1"
+    },
+    {
+      "line": 23071,
+      "text": "endloop"
+    },
+    {
+      "line": 23072,
+      "text": "endif"
+    },
+    {
+      "line": 23073,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 23074,
+      "text": "set DG=null"
+    },
+    {
+      "line": 23075,
+      "text": "set i=null"
+    },
+    {
+      "line": 23076,
+      "text": "endfunction"
+    },
+    {
+      "line": 23077,
+      "text": "function ok takes nothing returns nothing"
+    },
+    {
+      "line": 23078,
+      "text": "local group DG=null"
+    },
+    {
+      "line": 23079,
+      "text": "call SushuiGuardianSpiritRoundStart()"
+    },
+    {
+      "line": 23080,
+      "text": "call Group_cen(function xk,$6832394B)"
+    },
+    {
+      "line": 23081,
+      "text": "call Group_cen(function xk,$68305746)"
+    },
+    {
+      "line": 23082,
+      "text": "call Group_cen(function xk,$68304E4B)"
+    },
+    {
+      "line": 23083,
+      "text": "call Group_cen(function xk,$68304F56)"
+    },
+    {
+      "line": 23084,
+      "text": "call Group_cen(function xk,$6E303452)"
+    },
+    {
+      "line": 23085,
+      "text": "call Group_cen(function xk,$6E30344F)"
+    },
+    {
+      "line": 23086,
+      "text": "call Group_cen(function xk,$68324331)"
+    },
+    {
+      "line": 23087,
+      "text": "call Group_cen(function xk,$68304A35)"
+    },
+    {
+      "line": 23088,
+      "text": "call Group_cen(function xk,$68304C52)"
+    },
+    {
+      "line": 23089,
+      "text": "set Ej=0"
+    },
+    {
+      "line": 23090,
+      "text": "loop"
+    },
+    {
+      "line": 23091,
+      "text": "exitwhen Ej>7"
+    },
+    {
+      "line": 23092,
+      "text": "if U2[Ej+29]==1 then"
+    },
+    {
+      "line": 23093,
+      "text": "call GroupEnumUnitsInRange(E,0,0,10000,Condition(function h0xkFunc))"
+    },
+    {
+      "line": 23094,
+      "text": "call ForGroup(E,function CountUnitsInGroupEnum_I101)"
+    },
+    {
+      "line": 23095,
+      "text": "call GroupClear(E)"
+    },
+    {
+      "line": 23096,
+      "text": "endif"
+    },
+    {
+      "line": 23097,
+      "text": "set Ej=Ej+1"
+    },
+    {
+      "line": 23098,
+      "text": "endloop"
+    },
+    {
+      "line": 23099,
+      "text": "set DG=null"
+    },
+    {
+      "line": 23100,
+      "text": "endfunction"
+    },
+    {
+      "line": 26258,
+      "text": "function A313s takes nothing returns boolean"
+    },
+    {
+      "line": 26259,
+      "text": "return IsUnitType(GetFilterUnit(),UNIT_TYPE_DEAD)==false and IsUnitEnemy(GetFilterUnit(),GetOwningPlayer(LoadUnitHandle(K,421,0)))==true"
+    },
+    {
+      "line": 26260,
+      "text": "endfunction"
+    },
+    {
+      "line": 26261,
+      "text": "function A313_t takes nothing returns nothing"
+    },
+    {
+      "line": 26262,
+      "text": "local timer EP=GetExpiredTimer()"
+    },
+    {
+      "line": 26263,
+      "text": "local integer Ca=GetHandleId(EP)"
+    },
+    {
+      "line": 26264,
+      "text": "local integer Bj=LoadInteger(K,421,Ca)-1"
+    },
+    {
+      "line": 26265,
+      "text": "local unit i=LoadUnitHandle(K,1421,Ca)"
+    },
+    {
+      "line": 26266,
+      "text": "local real Eg=GetUnitX(i)"
+    },
+    {
+      "line": 26267,
+      "text": "local real Eh=GetUnitY(i)"
+    },
+    {
+      "line": 26268,
+      "text": "local real D1=GetUnitFacing(i)"
+    },
+    {
+      "line": 26269,
+      "text": "local group DG=CreateGroup()"
+    },
+    {
+      "line": 26270,
+      "text": "local real CP=LoadReal(K,2421,Ca)+5"
+    },
+    {
+      "line": 26271,
+      "text": "local unit EQ"
+    },
+    {
+      "line": 26272,
+      "text": "local boolexpr Cd=Condition(function A313s)"
+    },
+    {
+      "line": 26273,
+      "text": "set Eg=Eg+15*Cos(D1*bj_DEGTORAD)"
+    },
+    {
+      "line": 26274,
+      "text": "set Eh=Eh+15*Sin(D1*bj_DEGTORAD)"
+    },
+    {
+      "line": 26275,
+      "text": "call SetUnitPosition(i,Eg,Eh)"
+    },
+    {
+      "line": 26276,
+      "text": "call SaveInteger(K,421,Ca,Bj)"
+    },
+    {
+      "line": 26277,
+      "text": "call SaveReal(K,2421,Ca,CP)"
+    },
+    {
+      "line": 26278,
+      "text": "call SaveUnitHandle(K,421,0,i)"
+    },
+    {
+      "line": 26279,
+      "text": "call GroupEnumUnitsInRange(DG,Eg,Eh,CP,Cd)"
+    },
+    {
+      "line": 26280,
+      "text": "loop"
+    },
+    {
+      "line": 26281,
+      "text": "set EQ=FirstOfGroup(DG)"
+    },
+    {
+      "line": 26282,
+      "text": "exitwhen EQ==null"
+    },
+    {
+      "line": 26283,
+      "text": "set Eg=GetUnitX(EQ)+7*Cos(D1*bj_DEGTORAD)"
+    },
+    {
+      "line": 26284,
+      "text": "set Eh=GetUnitY(EQ)+7*Sin(D1*bj_DEGTORAD)"
+    },
+    {
+      "line": 26285,
+      "text": "if IsTerrainPathable(Eg,Eh,PATHING_TYPE_WALKABILITY)==false then"
+    },
+    {
+      "line": 26286,
+      "text": "call SetUnitX(EQ,Eg)"
+    },
+    {
+      "line": 26287,
+      "text": "call SetUnitY(EQ,Eh)"
+    },
+    {
+      "line": 26288,
+      "text": "endif"
+    },
+    {
+      "line": 26289,
+      "text": "call GroupRemoveUnit(DG,EQ)"
+    },
+    {
+      "line": 26290,
+      "text": "endloop"
+    },
+    {
+      "line": 26291,
+      "text": "if Bj<=0 then"
+    },
+    {
+      "line": 26292,
+      "text": "call UnitApplyTimedLife(i,$42487765,.01)"
+    },
+    {
+      "line": 26293,
+      "text": "call RemoveSavedInteger(K,421,Ca)"
+    },
+    {
+      "line": 26294,
+      "text": "call RemoveSavedHandle(K,1421,Ca)"
+    },
+    {
+      "line": 26295,
+      "text": "call RemoveSavedReal(K,2421,Ca)"
+    },
+    {
+      "line": 26296,
+      "text": "call PauseTimer(EP)"
+    },
+    {
+      "line": 26297,
+      "text": "call DestroyTimer(EP)"
+    },
+    {
+      "line": 26298,
+      "text": "endif"
+    },
+    {
+      "line": 26299,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 26300,
+      "text": "call DestroyBoolExpr(Cd)"
+    },
+    {
+      "line": 26301,
+      "text": "set EP=null"
+    },
+    {
+      "line": 26302,
+      "text": "set DG=null"
+    },
+    {
+      "line": 26303,
+      "text": "set Cd=null"
+    },
+    {
+      "line": 26304,
+      "text": "set i=null"
+    },
+    {
+      "line": 26305,
+      "text": "set EQ=null"
+    },
+    {
+      "line": 26306,
+      "text": "endfunction"
+    },
+    {
+      "line": 26307,
+      "text": "function A07Ys takes nothing returns boolean"
+    },
+    {
+      "line": 26308,
+      "text": "return GetUnitState(GetFilterUnit(),UNIT_STATE_LIFE)>=1. and IsUnitAlly(GetFilterUnit(),GetOwningPlayer(GetTriggerUnit()))==true and GetFilterUnit()!=GetSpellTargetUnit()"
+    },
+    {
+      "line": 26309,
+      "text": "endfunction"
+    },
+    {
+      "line": 26310,
+      "text": "function A0HBs takes nothing returns boolean"
+    },
+    {
+      "line": 26311,
+      "text": "return GetUnitAbilityLevel(GetFilterUnit(),$41303753)>0 and GetUnitUserData(GetFilterUnit())==Ej"
+    },
+    {
+      "line": 26312,
+      "text": "endfunction"
+    },
+    {
+      "line": 26313,
+      "text": "function A050Condition takes nothing returns boolean"
+    },
+    {
+      "line": 26314,
+      "text": "return GetUnitAbilityLevel(GetTriggerUnit(),$41303530)==0"
+    },
+    {
+      "line": 26315,
+      "text": "endfunction"
+    },
+    {
+      "line": 26316,
+      "text": "function A313_CastA07YOnRandom takes unit Ei,group DG returns nothing"
+    },
+    {
+      "line": 26317,
+      "text": "local unit i"
+    },
+    {
+      "line": 26318,
+      "text": "set bj_groupRandomConsidered=0"
+    },
+    {
+      "line": 26319,
+      "text": "set bj_groupRandomCurrentPick=null"
+    },
+    {
+      "line": 26320,
+      "text": "call ForGroup(DG,function GroupPickRandomUnitEnum)"
+    },
+    {
+      "line": 26321,
+      "text": "if bj_groupRandomCurrentPick!=null then"
+    },
+    {
+      "line": 26322,
+      "text": "set i=CreateUnit(GetOwningPlayer(Ei),$75303036,GetUnitX(Ei),GetUnitY(Ei),0)"
+    },
+    {
+      "line": 26323,
+      "text": "call UnitApplyTimedLife(i,$42487765,1.)"
+    },
+    {
+      "line": 26324,
+      "text": "call UnitAddAbility(i,$41303759)"
+    },
+    {
+      "line": 26325,
+      "text": "call IssueTargetOrderById(i,852225,bj_groupRandomCurrentPick)"
+    },
+    {
+      "line": 26326,
+      "text": "call GroupRemoveUnit(DG,bj_groupRandomCurrentPick)"
+    },
+    {
+      "line": 26327,
+      "text": "endif"
+    },
+    {
+      "line": 26328,
+      "text": "set i=null"
+    },
+    {
+      "line": 26329,
+      "text": "set Ei=null"
+    },
+    {
+      "line": 26330,
+      "text": "set DG=null"
+    },
+    {
+      "line": 26331,
+      "text": "endfunction"
+    },
+    {
+      "line": 26332,
+      "text": "function Breakthrough1 takes nothing returns nothing"
+    },
+    {
+      "line": 26333,
+      "text": "local integer Pp=Dg*10"
+    },
+    {
+      "line": 26334,
+      "text": "local integer Vy=50+Pp"
+    },
+    {
+      "line": 26335,
+      "text": "if not LoadBoolean(O,122331,12233) and not LoadBoolean(O,701,505) then"
+    },
+    {
+      "line": 26336,
+      "text": "call SaveBoolean(O,122331,12233,true)"
+    },
+    {
+      "line": 26337,
+      "text": "call SaveBoolean(O,701,505,true)"
+    },
+    {
+      "line": 26338,
+      "text": "call SaveInteger(O,GetPlayerId(Player(9)),1,Vy)"
+    },
+    {
+      "line": 26339,
+      "text": "endif"
+    },
+    {
+      "line": 26340,
+      "text": "call DestroyTrigger(GetTriggeringTrigger())"
+    },
+    {
+      "line": 26341,
+      "text": "endfunction"
+    },
+    {
+      "line": 26342,
+      "text": "function Breakthrough2 takes nothing returns nothing"
+    },
+    {
+      "line": 26343,
+      "text": "local integer Pp=Dg*10"
+    },
+    {
+      "line": 26344,
+      "text": "local integer Vy=50+Pp"
+    },
+    {
+      "line": 26345,
+      "text": "if not LoadBoolean(O,122331,12234) and not LoadBoolean(O,701,505) then"
+    },
+    {
+      "line": 26346,
+      "text": "call SaveBoolean(O,122331,12234,true)"
+    },
+    {
+      "line": 26347,
+      "text": "call SaveBoolean(O,701,505,true)"
+    },
+    {
+      "line": 26348,
+      "text": "call SaveInteger(O,GetPlayerId(Player(9)),1,Vy)"
+    },
+    {
+      "line": 26349,
+      "text": "endif"
+    },
+    {
+      "line": 26350,
+      "text": "call DestroyTrigger(GetTriggeringTrigger())"
+    },
+    {
+      "line": 26351,
+      "text": "endfunction"
+    },
+    {
+      "line": 26352,
+      "text": "function A313 takes nothing returns nothing"
+    },
+    {
+      "line": 26353,
+      "text": "local unit EQ=GetTriggerUnit()"
+    },
+    {
+      "line": 26354,
+      "text": "local unit i=GetSpellTargetUnit()"
+    },
+    {
+      "line": 26355,
+      "text": "local real D1=GetUnitFacing(EQ)"
+    },
+    {
+      "line": 26356,
+      "text": "local timer t"
+    },
+    {
+      "line": 26357,
+      "text": "local integer Ca"
+    },
+    {
+      "line": 26358,
+      "text": "local group DG"
+    },
+    {
+      "line": 26359,
+      "text": "local boolexpr Cd"
+    },
+    {
+      "line": 26360,
+      "text": "local integer Ef=GetSpellAbilityId()"
+    },
+    {
+      "line": 26361,
+      "text": "if Ef!=$41333133 and Ef!=$41303759 and Ef!=$41304842 then"
+    },
+    {
+      "line": 26362,
+      "text": "set EQ=null"
+    },
+    {
+      "line": 26363,
+      "text": "set i=null"
+    },
+    {
+      "line": 26364,
+      "text": "return"
+    },
+    {
+      "line": 26365,
+      "text": "endif"
+    },
+    {
+      "line": 26366,
+      "text": "if Ef==$41333133 then"
+    },
+    {
+      "line": 26367,
+      "text": "if D1<180 then"
+    },
+    {
+      "line": 26368,
+      "text": "set D1=90"
+    },
+    {
+      "line": 26369,
+      "text": "else"
+    },
+    {
+      "line": 26370,
+      "text": "set D1=270"
+    },
+    {
+      "line": 26371,
+      "text": "endif"
+    },
+    {
+      "line": 26372,
+      "text": "set EQ=CreateUnit(GetOwningPlayer(EQ),$65303130,GetUnitX(EQ),GetUnitY(EQ),D1)"
+    },
+    {
+      "line": 26373,
+      "text": "call SetUnitTimeScale(EQ,.7)"
+    },
+    {
+      "line": 26374,
+      "text": "set t=CreateTimer()"
+    },
+    {
+      "line": 26375,
+      "text": "set Ca=GetHandleId(t)"
+    },
+    {
+      "line": 26376,
+      "text": "call SaveReal(K,2421,Ca,250)"
+    },
+    {
+      "line": 26377,
+      "text": "call SaveInteger(K,421,Ca,40)"
+    },
+    {
+      "line": 26378,
+      "text": "call SaveUnitHandle(K,1421,Ca,EQ)"
+    },
+    {
+      "line": 26379,
+      "text": "call TimerStart(t,.04,true,function A313_t)"
+    },
+    {
+      "line": 26380,
+      "text": "endif"
+    },
+    {
+      "line": 26381,
+      "text": "if Ef==$41303759 and GetUnitTypeId(EQ)==$68313038 then"
+    },
+    {
+      "line": 26382,
+      "text": "set DG=CreateGroup()"
+    },
+    {
+      "line": 26383,
+      "text": "set Cd=Condition(function A07Ys)"
+    },
+    {
+      "line": 26384,
+      "text": "call GroupEnumUnitsInRange(DG,GetUnitX(EQ),GetUnitY(EQ),400,Cd)"
+    },
+    {
+      "line": 26385,
+      "text": "call A313_CastA07YOnRandom(EQ,DG)"
+    },
+    {
+      "line": 26386,
+      "text": "call A313_CastA07YOnRandom(EQ,DG)"
+    },
+    {
+      "line": 26387,
+      "text": "call GroupClear(DG)"
+    },
+    {
+      "line": 26388,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 26389,
+      "text": "call DestroyBoolExpr(Cd)"
+    },
+    {
+      "line": 26390,
+      "text": "set Cd=null"
+    },
+    {
+      "line": 26391,
+      "text": "endif"
+    },
+    {
+      "line": 26392,
+      "text": "if Ef==$41304842 then"
+    },
+    {
+      "line": 26393,
+      "text": "set Ca=LoadInteger(K,$41304842,GetHandleId(EQ))"
+    },
+    {
+      "line": 26394,
+      "text": "if Ca>0 then"
+    },
+    {
+      "line": 26395,
+      "text": "call SetUnitState(EQ,UNIT_STATE_LIFE,GetUnitState(EQ,UNIT_STATE_LIFE)+Ca*2)"
+    },
+    {
+      "line": 26396,
+      "text": "call DestroyEffect(AddSpecialEffectTarget(\"Abilities\\\\Spells\\\\Human\\\\Resurrect\\\\ResurrectTarget.mdl\",EQ,\"origin\"))"
+    },
+    {
+      "line": 26397,
+      "text": "call DestroyEffect(AddSpecialEffectTarget(\"Abilities\\\\Spells\\\\Human\\\\HolyBolt\\\\HolyBoltSpecialArt.mdl\",i,\"origin\"))"
+    },
+    {
+      "line": 26398,
+      "text": "set Ej=GetUnitUserData(EQ)"
+    },
+    {
+      "line": 26399,
+      "text": "set DG=CreateGroup()"
+    },
+    {
+      "line": 26400,
+      "text": "set Cd=Condition(function A0HBs)"
+    },
+    {
+      "line": 26401,
+      "text": "call GroupEnumUnitsInRange(DG,GetUnitX(EQ),GetUnitY(EQ),2000,Cd)"
+    },
+    {
+      "line": 26402,
+      "text": "loop"
+    },
+    {
+      "line": 26403,
+      "text": "set i=FirstOfGroup(DG)"
+    },
+    {
+      "line": 26404,
+      "text": "exitwhen i==null"
+    },
+    {
+      "line": 26405,
+      "text": "call DestroyEffect(AddSpecialEffectTarget(\"Abilities\\\\Spells\\\\Undead\\\\VampiricAura\\\\VampiricAuraTarget.mdl\",i,\"origin\"))"
+    },
+    {
+      "line": 26406,
+      "text": "call SetUnitState(i,UNIT_STATE_LIFE,GetUnitState(i,UNIT_STATE_LIFE)+Ca)"
+    },
+    {
+      "line": 26407,
+      "text": "call GroupRemoveUnit(DG,i)"
+    },
+    {
+      "line": 26408,
+      "text": "endloop"
+    },
+    {
+      "line": 26409,
+      "text": "call GroupClear(DG)"
+    },
+    {
+      "line": 26410,
+      "text": "call DestroyGroup(DG)"
+    },
+    {
+      "line": 26411,
+      "text": "call DestroyBoolExpr(Cd)"
+    },
+    {
+      "line": 26412,
+      "text": "set Cd=null"
+    },
+    {
+      "line": 26413,
+      "text": "endif"
+    },
+    {
+      "line": 26414,
+      "text": "endif"
+    },
+    {
+      "line": 26415,
+      "text": "set EQ=null"
+    },
+    {
+      "line": 26416,
+      "text": "set i=null"
+    },
+    {
+      "line": 26417,
+      "text": "set t=null"
+    },
+    {
+      "line": 26418,
+      "text": "set DG=null"
+    },
+    {
+      "line": 26419,
+      "text": "set Cd=null"
+    },
+    {
+      "line": 26420,
+      "text": "endfunction"
+    },
+    {
+      "line": 26467,
+      "text": "set t=CreateTrigger()"
+    },
+    {
+      "line": 26468,
+      "text": "call YDWESyStemAnyUnitDamagedRegistTrigger(t)"
+    },
+    {
+      "line": 26469,
+      "text": "call TriggerAddAction(t,function Trig__King)"
+    },
+    {
+      "line": 26470,
+      "text": "set t=CreateTrigger()"
+    },
+    {
+      "line": 26471,
+      "text": "call TriggerRegisterAnyUnitEventBJ(t,EVENT_PLAYER_UNIT_SPELL_EFFECT)"
+    },
+    {
+      "line": 26472,
+      "text": "call TriggerAddAction(t,function A313)"
+    },
+    {
+      "line": 27343,
+      "text": "set OF=CreateTrigger()"
+    },
+    {
+      "line": 27344,
+      "text": "call TriggerAddAction(OF,function ok)"
+    },
+    {
+      "line": 27345,
+      "text": "set VF=CreateTrigger()"
+    },
+    {
+      "line": 27346,
+      "text": "call TriggerRegisterAnyUnitEventBJ(VF,EVENT_PLAYER_UNIT_SPELL_EFFECT)"
+    },
+    {
+      "line": 27347,
+      "text": "call TriggerAddCondition(VF,Condition(function ik))"
+    },
+    {
+      "line": 27348,
+      "text": "call TriggerAddAction(VF,function oldcodefn_Ek)"
+    },
+    {
+      "line": 27528,
+      "text": "set t=CreateTrigger()"
+    },
+    {
+      "line": 27529,
+      "text": "call YDWETriggerRegisterEnterRectSimpleNull(t,Gb)"
+    },
+    {
+      "line": 27530,
+      "text": "call TriggerAddCondition(t,Condition(function A050Condition))"
+    },
+    {
+      "line": 27531,
+      "text": "call TriggerAddAction(t,function Breakthrough1)"
+    },
+    {
+      "line": 27532,
+      "text": "call SaveTriggerHandle(O,1014,1,t)"
+    },
+    {
+      "line": 27533,
+      "text": "set t=CreateTrigger()"
+    },
+    {
+      "line": 27534,
+      "text": "call YDWETriggerRegisterEnterRectSimpleNull(t,F8)"
+    },
+    {
+      "line": 27535,
+      "text": "call TriggerAddCondition(t,Condition(function A050Condition))"
+    },
+    {
+      "line": 27536,
+      "text": "call TriggerAddAction(t,function Breakthrough2)"
+    },
+    {
+      "line": 27537,
+      "text": "call SaveTriggerHandle(O,1014,2,t)"
+    },
+    {
+      "line": 28485,
+      "text": "function EggWhiteEx takes unit i,integer x,player h,integer BB,integer BF,boolean Yt returns nothing"
+    },
+    {
+      "line": 28908,
+      "text": "if x==$68304834 or x==$6E303146 then"
+    },
+    {
+      "line": 28909,
+      "text": "call SetPlayerTechResearchedSwap($52303058,1,h)"
+    },
+    {
+      "line": 28910,
+      "text": "endif"
+    },
+    {
+      "line": 28935,
+      "text": "if x==$68304D32 then"
+    },
+    {
+      "line": 28936,
+      "text": "set U2[BB+20]=U2[BB+20]-1"
+    },
+    {
+      "line": 28937,
+      "text": "set Ki=LoadUnitHandle(K,$6830454B,BB)"
+    },
+    {
+      "line": 28938,
+      "text": "set KI=GetUnitTypeId(Ki)"
+    },
+    {
+      "line": 28939,
+      "text": "if BF==$68304A33 or BF==$6E303249 and U2[BB+30]==1 then"
+    },
+    {
+      "line": 28940,
+      "text": "call UnitAddItemToSlotById(Ki,$49313032,0)"
+    },
+    {
+      "line": 28941,
+      "text": "endif"
+    },
+    {
+      "line": 28942,
+      "text": "endif"
+    },
+    {
+      "line": 28943,
+      "text": "if GetUnitAbilityLevel(i,$4130374E)>0 then"
+    },
+    {
+      "line": 28944,
+      "text": "set U2[BB+20]=U2[BB+20]+1"
+    },
+    {
+      "line": 28945,
+      "text": "if U2[BB+30]==1 then"
+    },
+    {
+      "line": 28946,
+      "text": "call UnitAddAbility(i,$41343030)"
+    },
+    {
+      "line": 28947,
+      "text": "call UnitAddItemToSlotById(i,$49313031,0)"
+    },
+    {
+      "line": 28948,
+      "text": "if LoadUnitHandle(K,$68304C48,BB)==null then"
+    },
+    {
+      "line": 28949,
+      "text": "set Ki=LoadUnitHandle(K,$6830454B,BB)"
+    },
+    {
+      "line": 28950,
+      "text": "else"
+    },
+    {
+      "line": 28951,
+      "text": "set Ki=LoadUnitHandle(K,$68304C48,BB)"
+    },
+    {
+      "line": 28952,
+      "text": "endif"
+    },
+    {
+      "line": 28953,
+      "text": "if GetUnitTypeId(Ki)==$68304A33 or GetUnitTypeId(Ki)==$6E303249 then"
+    },
+    {
+      "line": 28954,
+      "text": "call UnitAddItemToSlotById(Ki,$49313031,0)"
+    },
+    {
+      "line": 28955,
+      "text": "endif"
+    },
+    {
+      "line": 28956,
+      "text": "endif"
+    },
+    {
+      "line": 28957,
+      "text": "endif"
+    },
+    {
+      "line": 28958,
+      "text": "if x==$68304C48 then"
+    },
+    {
+      "line": 28959,
+      "text": "call DestroyEffect(AddSpecialEffectTarget(\"war3mapImported\\\\blue-guangzhu-special.mdx\",i,\"origin\"))"
+    },
+    {
+      "line": 28960,
+      "text": "set Jo=LoadTimerHandle(O,GetHandleId(i),GetHandleId(i))"
+    },
+    {
+      "line": 28961,
+      "text": "call SaveUnitHandle(K,$6E303249,GetHandleId(Jo),i)"
+    },
+    {
+      "line": 28962,
+      "text": "endif"
+    },
+    {
+      "line": 28963,
+      "text": "if x==$6830454B or x==$68304C48 and Dg==0 and U2[BB+20]>=1 and U2[BB+30]==0 and Se[BB]>=2 then"
+    },
+    {
+      "line": 28964,
+      "text": "set U2[BB+30]=1"
+    },
+    {
+      "line": 28965,
+      "text": "call YDWERPGAddKey(h,YDWETranslate(\"éªå£«+1\"),1)"
+    },
+    {
+      "line": 28966,
+      "text": "if LoadInteger(Y,10055,GetPlayerId(h))==0 then"
+    },
+    {
+      "line": 28967,
+      "text": "call YDWERPGAddKey(h,YDWETranslate(\"è£èª+1\"),1)"
+    },
+    {
+      "line": 28968,
+      "text": "call SaveInteger(Y,10055,GetPlayerId(h),1)"
+    },
+    {
+      "line": 28969,
+      "text": "endif"
+    },
+    {
+      "line": 28970,
+      "text": "call DestroyEffect(AddSpecialEffectTarget(\"Abilities\\\\Spells\\\\Human\\\\Resurrect\\\\ResurrectCaster.mdl\",i,\"origin\"))"
+    },
+    {
+      "line": 28971,
+      "text": "call DestroyEffect(AddSpecialEffectTarget(\"Abilities\\\\Spells\\\\Human\\\\Resurrect\\\\ResurrectTarget.mdl\",i,\"origin\"))"
+    },
+    {
+      "line": 28972,
+      "text": "set Jo=CreateTimer()"
+    },
+    {
+      "line": 28973,
+      "text": "call SaveTimerHandle(O,GetHandleId(i),GetHandleId(i),Jo)"
+    },
+    {
+      "line": 28974,
+      "text": "call SaveUnitHandle(K,$68304A33,GetHandleId(Jo),i)"
+    },
+    {
+      "line": 28975,
+      "text": "call TimerStart(Jo,2.5,true,function TargetTiemr)"
+    },
+    {
+      "line": 28976,
+      "text": "call SetPlayerTechMaxAllowedSwap($75303144,0,Player(BB))"
+    },
+    {
+      "line": 28977,
+      "text": "call DisplayTextToPlayer(Player(BB),0,0,YDWETranslate(\"|cFFFFCC99[å½©è]|rã|cFFFFBFFFå£|r|cFFFF80FFéª|r|cFFFF40FFå£«|r|cFFFF00FFã|r|cFFCC99FFçå±æ§ï¼å¥½åå¾å°äºå¼ºåã|r\"))"
+    },
+    {
+      "line": 28978,
+      "text": "call EXNetStatRemoteData(GetPlayerId(Player(BB)),\"h109\",\"1\")"
+    },
+    {
+      "line": 28979,
+      "text": "call SaveUnitHandle(K,x,BB,i)"
+    },
+    {
+      "line": 28980,
+      "text": "set JV=CreateGroup()"
+    },
+    {
+      "line": 28981,
+      "text": "call GroupEnumUnitsInRange(JV,GetUnitX(i),GetUnitY(i),5000,Condition(function h0EKFunc))"
+    },
+    {
+      "line": 28982,
+      "text": "call ForGroup(JV,function CountUnitsInGroupEnum_I101)"
+    },
+    {
+      "line": 28983,
+      "text": "call GroupClear(JV)"
+    },
+    {
+      "line": 28984,
+      "text": "call DestroyGroup(JV)"
+    },
+    {
+      "line": 28985,
+      "text": "endif"
+    },
+    {
+      "line": 28986,
+      "text": "if x==$68304A33 or x==$6E303249 and U2[BB+30]==1 then"
+    },
+    {
+      "line": 28987,
+      "text": "if LoadUnitHandle(K,$68304C48,BB)==null then"
+    },
+    {
+      "line": 28988,
+      "text": "set Ki=LoadUnitHandle(K,$6830454B,BB)"
+    },
+    {
+      "line": 28989,
+      "text": "else"
+    },
+    {
+      "line": 28990,
+      "text": "set Ki=LoadUnitHandle(K,$68304C48,BB)"
+    },
+    {
+      "line": 28991,
+      "text": "endif"
+    },
+    {
+      "line": 28992,
+      "text": "if x==$6E303249 then"
+    },
+    {
+      "line": 28993,
+      "text": "call DestroyEffect(AddSpecialEffectTarget(\"war3mapImported\\\\az-blue-lizi-shangsheng.mdx\",Ki,\"origin\"))"
+    },
+    {
+      "line": 28994,
+      "text": "else"
+    },
+    {
+      "line": 28995,
+      "text": "call DestroyEffect(AddSpecialEffectTarget(\"Abilities\\\\Spells\\\\Human\\\\Resurrect\\\\ResurrectCaster.mdl\",Ki,\"origin\"))"
+    },
+    {
+      "line": 28996,
+      "text": "call DestroyEffect(AddSpecialEffectTarget(\"Abilities\\\\Spells\\\\Human\\\\Resurrect\\\\ResurrectTarget.mdl\",Ki,\"origin\"))"
+    },
+    {
+      "line": 28997,
+      "text": "endif"
+    },
+    {
+      "line": 28998,
+      "text": "call SetUnitAbilityLevel(Ki,$41304848,2)"
+    },
+    {
+      "line": 28999,
+      "text": "call UnitAddAbility(Ki,$41343030)"
+    },
+    {
+      "line": 29000,
+      "text": "set Bj=1"
+    },
+    {
+      "line": 29001,
+      "text": "loop"
+    },
+    {
+      "line": 29002,
+      "text": "exitwhen Bj>U2[BB+20]"
+    },
+    {
+      "line": 29003,
+      "text": "call UnitAddItemToSlotById(Ki,$49313031,0)"
+    },
+    {
+      "line": 29004,
+      "text": "set Bj=Bj+1"
+    },
+    {
+      "line": 29005,
+      "text": "endloop"
+    },
+    {
+      "line": 29006,
+      "text": "endif"
+    },
+    {
+      "line": 29410,
+      "text": "elseif x==$68313037 then"
+    },
+    {
+      "line": 29411,
+      "text": "call EXNetStatRemoteData(GetPlayerId(h),\"h107\",\"1\")"
+    },
+    {
+      "line": 29412,
+      "text": "elseif x==$68313039 then"
+    },
+    {
+      "line": 29413,
+      "text": "call EXNetStatRemoteData(GetPlayerId(h),\"h109\",\"1\")"
+    },
+    {
+      "line": 40769,
+      "text": "if GetUnitAbilityLevel(i,$41315549)>0 then"
+    },
+    {
+      "line": 40770,
+      "text": "call IssueImmediateOrder(i,\"spiritofvengeance\")"
+    },
+    {
+      "line": 40771,
+      "text": "elseif GetUnitAbilityLevel(bV,$41315549)>0 then"
+    },
+    {
+      "line": 40772,
+      "text": "call IssueImmediateOrder(bV,\"spiritofvengeance\")"
+    },
+    {
+      "line": 40773,
+      "text": "endif"
+    },
+    {
+      "line": 40774,
+      "text": "if GetUnitAbilityLevel(i,$41315457)>0 then"
+    },
+    {
+      "line": 40775,
+      "text": "call IssueImmediateOrder(i,\"waterelemental\")"
+    },
+    {
+      "line": 40776,
+      "text": "elseif GetUnitAbilityLevel(bV,$41315457)>0 then"
+    },
+    {
+      "line": 40777,
+      "text": "call IssueImmediateOrder(bV,\"waterelemental\")"
+    },
+    {
+      "line": 40778,
+      "text": "endif"
+    },
+    {
+      "line": 40861,
+      "text": "if GetUnitAbilityLevel(i,$41314F37)>0 then"
+    },
+    {
+      "line": 40862,
+      "text": "call IssueImmediateOrder(i,\"unloadallcorpses\")"
+    },
+    {
+      "line": 40863,
+      "text": "elseif GetUnitAbilityLevel(bV,$41314F37)>0 then"
+    },
+    {
+      "line": 40864,
+      "text": "call IssueImmediateOrder(bV,\"unloadallcorpses\")"
+    },
+    {
+      "line": 40865,
+      "text": "endif"
+    },
+    {
+      "line": 40866,
+      "text": "if GetUnitAbilityLevel(i,$41314F38)>0 then"
+    },
+    {
+      "line": 40867,
+      "text": "call IssueImmediateOrder(i,\"waterelemental\")"
+    },
+    {
+      "line": 40868,
+      "text": "elseif GetUnitAbilityLevel(bV,$41314F38)>0 then"
+    },
+    {
+      "line": 40869,
+      "text": "call IssueImmediateOrder(bV,\"waterelemental\")"
+    },
+    {
+      "line": 40870,
+      "text": "endif"
+    },
+    {
+      "line": 48337,
+      "text": "function MonsterInitRegisterBarracksEggs takes nothing returns nothing"
+    },
+    {
+      "line": 48338,
+      "text": "call MonsterInitMarkBarracksEgg($68315334,1)"
+    },
+    {
+      "line": 48339,
+      "text": "call MonsterInitMarkBarracksEgg($68315332,1)"
+    },
+    {
+      "line": 48340,
+      "text": "call MonsterInitMarkBarracksEgg($68315332,1)"
+    },
+    {
+      "line": 48341,
+      "text": "call MonsterInitMarkBarracksEgg($68323034,1)"
+    },
+    {
+      "line": 48342,
+      "text": "call MonsterInitMarkBarracksEgg($68323031,1)"
+    },
+    {
+      "line": 48343,
+      "text": "call MonsterInitMarkBarracksEgg($68324332,1)"
+    },
+    {
+      "line": 48344,
+      "text": "call MonsterInitMarkBarracksEgg($68313037,1)"
+    },
+    {
+      "line": 48345,
+      "text": "call MonsterInitMarkBarracksEgg($68313849,1)"
+    }
+  ],
+  "objects": {
+    "units": [
+      {
+        "rawcode": "e010",
+        "name": "小精灵",
+        "movetp": "fly",
+        "points": "100",
+        "targType": "ground",
+        "bldtm": "14",
+        "defType": "medium",
+        "goldcost": "60",
+        "HP": "120",
+        "spd": "1",
+        "abilList": "Aloc",
+        "auto": "_",
+        "atkType1": "normal",
+        "castbsw": "0.51",
+        "ability_ids": "Aloc",
+        "type": "Peon"
+      },
+      {
+        "rawcode": "h07S",
+        "name": "半人鱼",
+        "points": "130",
+        "targType": "structure",
+        "bldtm": "2",
+        "defType": "small",
+        "fused": "1",
+        "goldcost": "130",
+        "HP": "505",
+        "mana0": "10",
+        "regenMana": "1.0",
+        "abilList": "A06S,A008,A118",
+        "auto": "_",
+        "atkType1": "pierce",
+        "castbsw": "0.51",
+        "cool1": "1.1",
+        "dice1": "1",
+        "rangeN1": "500",
+        "sides1": "12",
+        "weapsOn": "1",
+        "ability_ids": "A06S,A008,A118",
+        "def": "3.0",
+        "manaN": "12",
+        "type": "ancient",
+        "dmgplus1": "42"
+      },
+      {
+        "rawcode": "h07T",
+        "name": "贵族",
+        "points": "300",
+        "targType": "structure",
+        "bldtm": "2",
+        "defType": "small",
+        "fused": "2",
+        "goldcost": "170",
+        "HP": "930",
+        "mana0": "20",
+        "regenMana": "-1.0",
+        "abilList": "A07Y,A06W,A008,A118",
+        "auto": "_",
+        "atkType1": "pierce",
+        "castbsw": "0.51",
+        "cool1": "1.1",
+        "dice1": "1",
+        "rangeN1": "500",
+        "sides1": "12",
+        "weapsOn": "1",
+        "ability_ids": "A07Y,A06W,A008,A118",
+        "def": "3.0",
+        "manaN": "22",
+        "type": "ancient",
+        "dmgplus1": "89"
+      },
+      {
+        "rawcode": "h087",
+        "name": "贵族",
+        "movetp": "foot",
+        "points": "100",
+        "targType": "ground",
+        "bldtm": "26",
+        "defType": "small",
+        "goldcost": "205",
+        "HP": "930",
+        "mana0": "20",
+        "regenMana": "1.0",
+        "spd": "270",
+        "abilList": "A06V,A07Y",
+        "auto": "_",
+        "atkType1": "pierce",
+        "castbsw": "0.51",
+        "castpt": "0.3",
+        "cool1": "1.1",
+        "dice1": "1",
+        "rangeN1": "500",
+        "sides1": "12",
+        "weapsOn": "1",
+        "ability_ids": "A06V,A07Y",
+        "def": "3.0",
+        "manaN": "22",
+        "type": "giant",
+        "dmgplus1": "89"
+      },
+      {
+        "rawcode": "h09O",
+        "name": "近卫兵",
+        "points": "240",
+        "targType": "structure",
+        "bldtm": "2",
+        "defType": "medium",
+        "fused": "1",
+        "goldcost": "160",
+        "HP": "1150",
+        "abilList": "A008,A118,A07N",
+        "auto": "_",
+        "atkType1": "normal",
+        "castbsw": "0.51",
+        "cool1": "0.6",
+        "dice1": "1",
+        "rangeN1": "100",
+        "sides1": "7",
+        "weapsOn": "1",
+        "ability_ids": "A008,A118,A07N",
+        "def": "3.0",
+        "type": "ancient",
+        "dmgplus1": "59"
+      },
+      {
+        "rawcode": "h09P",
+        "name": "近卫兵",
+        "movetp": "foot",
+        "points": "240",
+        "targType": "ground",
+        "bldtm": "20",
+        "defType": "medium",
+        "goldcost": "160",
+        "HP": "1150",
+        "spd": "270",
+        "abilList": "A07S,A07N,A400",
+        "auto": "_",
+        "atkType1": "normal",
+        "castbsw": "0.51",
+        "castpt": "0.3",
+        "cool1": "0.6",
+        "dice1": "1",
+        "rangeN1": "90",
+        "sides1": "7",
+        "weapsOn": "1",
+        "ability_ids": "A07S,A07N,A400",
+        "def": "3.0",
+        "type": "giant",
+        "dmgplus1": "59"
+      },
+      {
+        "rawcode": "h0EK",
+        "name": "圣骑士 - [等级 1]",
+        "points": "25",
+        "targType": "structure",
+        "bldtm": "1",
+        "defType": "hero",
+        "fused": "1",
+        "goldcost": "25",
+        "HP": "110",
+        "regenMana": "-10.0",
+        "abilList": "A0H4",
+        "auto": "_",
+        "atkType1": "chaos",
+        "castbsw": "0.51",
+        "cool1": "1.0",
+        "dice1": "1",
+        "rangeN1": "180",
+        "sides1": "1",
+        "weapsOn": "1",
+        "ability_ids": "A0H4",
+        "def": "3.0",
+        "manaN": "10",
+        "type": "ancient,tauren",
+        "dmgplus1": "9"
+      },
+      {
+        "rawcode": "h0H4",
+        "name": "蛇发女妖 - [等级 11]",
+        "points": "350",
+        "targType": "structure",
+        "bldtm": "11",
+        "defType": "hero",
+        "fused": "11",
+        "goldcost": "100",
+        "HP": "1350",
+        "regenMana": "-10.0",
+        "abilList": "A0FJ,A0HP,A118",
+        "auto": "_",
+        "atkType1": "chaos",
+        "castbsw": "0.51",
+        "cool1": "0.8",
+        "dice1": "1",
+        "rangeN1": "500",
+        "sides1": "1",
+        "weapsOn": "1",
+        "ability_ids": "A0FJ,A0HP,A118",
+        "def": "3.0",
+        "manaN": "20",
+        "type": "ancient,tauren",
+        "dmgplus1": "149"
+      },
+      {
+        "rawcode": "h0HL",
+        "name": "蛇发女妖 - [等级 11]",
+        "movetp": "foot",
+        "points": "100",
+        "targType": "ground",
+        "bldtm": "26",
+        "defType": "hero",
+        "goldcost": "205",
+        "HP": "1350",
+        "mana0": "20",
+        "regenMana": "1.0",
+        "spd": "270",
+        "abilList": "A0HP,A0FU",
+        "auto": "_",
+        "atkType1": "chaos",
+        "castbsw": "0.51",
+        "castpt": "0.1",
+        "cool1": "0.8",
+        "dice1": "1",
+        "rangeN1": "500",
+        "sides1": "1",
+        "weapsOn": "1",
+        "ability_ids": "A0HP,A0FU",
+        "def": "3.0",
+        "manaN": "20",
+        "type": "giant",
+        "dmgplus1": "149"
+      },
+      {
+        "rawcode": "h0J2",
+        "name": "圣骑士 - [等级 10]",
+        "points": "250",
+        "targType": "structure",
+        "bldtm": "10",
+        "defType": "hero",
+        "fused": "10",
+        "goldcost": "25",
+        "HP": "1100",
+        "regenMana": "-10.0",
+        "abilList": "A0HE,A0HB",
+        "auto": "_",
+        "atkType1": "chaos",
+        "castbsw": "0.51",
+        "cool1": "1.0",
+        "dice1": "1",
+        "rangeN1": "220",
+        "sides1": "1",
+        "weapsOn": "1",
+        "ability_ids": "A0HE,A0HB",
+        "def": "3.0",
+        "manaN": "10",
+        "type": "ancient,tauren",
+        "dmgplus1": "99"
+      },
+      {
+        "rawcode": "h0J3",
+        "name": "圣骑士 - [等级 Max]",
+        "points": "350",
+        "targType": "structure",
+        "bldtm": "11",
+        "defType": "hero",
+        "fused": "11",
+        "goldcost": "100",
+        "HP": "1650",
+        "regenMana": "-10.0",
+        "abilList": "A0HH,A0HB,A118",
+        "auto": "_",
+        "atkType1": "chaos",
+        "castbsw": "0.51",
+        "cool1": "0.9",
+        "dice1": "1",
+        "rangeN1": "220",
+        "sides1": "1",
+        "weapsOn": "1",
+        "ability_ids": "A0HH,A0HB,A118",
+        "def": "3.0",
+        "manaN": "10",
+        "type": "ancient,tauren",
+        "dmgplus1": "149"
+      },
+      {
+        "rawcode": "h0J4",
+        "name": "圣骑士  - [等级 10]",
+        "movetp": "foot",
+        "points": "100",
+        "targType": "ground",
+        "bldtm": "26",
+        "defType": "hero",
+        "goldcost": "205",
+        "HP": "1100",
+        "mana0": "10",
+        "regenMana": "1.0",
+        "spd": "270",
+        "abilList": "A0HF,A0HB",
+        "auto": "_",
+        "atkType1": "chaos",
+        "castbsw": "0.51",
+        "castpt": "0.1",
+        "cool1": "1.0",
+        "dice1": "1",
+        "rangeN1": "220",
+        "sides1": "1",
+        "weapsOn": "1",
+        "ability_ids": "A0HF,A0HB",
+        "def": "3.0",
+        "manaN": "10",
+        "type": "giant",
+        "dmgplus1": "99"
+      },
+      {
+        "rawcode": "h0J5",
+        "name": "圣骑士 - [等级 Max]",
+        "movetp": "foot",
+        "points": "100",
+        "targType": "ground",
+        "bldtm": "26",
+        "defType": "hero",
+        "goldcost": "205",
+        "HP": "1650",
+        "regenMana": "1.0",
+        "spd": "270",
+        "abilList": "A0HC,A0HB",
+        "auto": "_",
+        "atkType1": "chaos",
+        "castbsw": "0.51",
+        "castpt": "0.1",
+        "cool1": "0.9",
+        "dice1": "1",
+        "rangeN1": "220",
+        "sides1": "1",
+        "weapsOn": "1",
+        "ability_ids": "A0HC,A0HB",
+        "def": "3.0",
+        "manaN": "10",
+        "type": "giant",
+        "dmgplus1": "149"
+      },
+      {
+        "rawcode": "h0LH",
+        "name": "圣骑士 -全能骑士[等级 1]",
+        "points": "25",
+        "targType": "structure",
+        "bldtm": "1",
+        "defType": "hero",
+        "fused": "1",
+        "HP": "110",
+        "regenMana": "-10.0",
+        "abilList": "A0H4",
+        "auto": "_",
+        "atkType1": "chaos",
+        "castbsw": "0.51",
+        "cool1": "1.0",
+        "dice1": "1",
+        "rangeN1": "180",
+        "sides1": "1",
+        "weapsOn": "1",
+        "ability_ids": "A0H4",
+        "def": "3.0",
+        "manaN": "10",
+        "type": "ancient,tauren",
+        "dmgplus1": "9"
+      },
+      {
+        "rawcode": "h0LR",
+        "name": "圣骑士 -全能骑士[等级 Max]",
+        "movetp": "foot",
+        "points": "100",
+        "targType": "ground",
+        "bldtm": "26",
+        "defType": "hero",
+        "goldcost": "205",
+        "HP": "1650",
+        "regenMana": "1.0",
+        "spd": "270",
+        "abilList": "A0HC,A0HB",
+        "auto": "_",
+        "atkType1": "chaos",
+        "castbsw": "0.51",
+        "castpt": "0.1",
+        "cool1": "0.9",
+        "dice1": "1",
+        "rangeN1": "220",
+        "sides1": "1",
+        "weapsOn": "1",
+        "ability_ids": "A0HC,A0HB",
+        "def": "3.0",
+        "manaN": "10",
+        "type": "giant",
+        "dmgplus1": "149"
+      },
+      {
+        "rawcode": "h0LS",
+        "name": "圣骑士  -全能骑士[等级 10]",
+        "movetp": "foot",
+        "points": "100",
+        "targType": "ground",
+        "bldtm": "26",
+        "defType": "hero",
+        "goldcost": "205",
+        "HP": "1100",
+        "mana0": "10",
+        "regenMana": "1.0",
+        "spd": "270",
+        "abilList": "A0HF,A0HB",
+        "auto": "_",
+        "atkType1": "chaos",
+        "castbsw": "0.51",
+        "castpt": "0.1",
+        "cool1": "1.0",
+        "dice1": "1",
+        "rangeN1": "220",
+        "sides1": "1",
+        "weapsOn": "1",
+        "ability_ids": "A0HF,A0HB",
+        "def": "3.0",
+        "manaN": "10",
+        "type": "giant",
+        "dmgplus1": "99"
+      },
+      {
+        "rawcode": "h0SJ",
+        "name": "贵族女王",
+        "points": "300",
+        "targType": "structure",
+        "bldtm": "2",
+        "defType": "small",
+        "fused": "2",
+        "goldcost": "170",
+        "HP": "930",
+        "mana0": "20",
+        "regenMana": "-1.0",
+        "abilList": "A07Y,A06W,A008,A118",
+        "auto": "_",
+        "atkType1": "pierce",
+        "castbsw": "0.51",
+        "cool1": "1.1",
+        "dice1": "1",
+        "rangeN1": "500",
+        "sides1": "12",
+        "weapsOn": "1",
+        "ability_ids": "A07Y,A06W,A008,A118",
+        "def": "3.0",
+        "manaN": "22",
+        "type": "ancient",
+        "dmgplus1": "89"
+      },
+      {
+        "rawcode": "h0SK",
+        "name": "贵族女王",
+        "movetp": "foot",
+        "points": "100",
+        "targType": "ground",
+        "bldtm": "26",
+        "defType": "small",
+        "goldcost": "205",
+        "HP": "930",
+        "mana0": "20",
+        "regenMana": "1.0",
+        "spd": "270",
+        "abilList": "A06V,A07Y",
+        "auto": "_",
+        "atkType1": "pierce",
+        "castbsw": "0.51",
+        "castpt": "0.3",
+        "cool1": "1.1",
+        "dice1": "1",
+        "rangeN1": "500",
+        "sides1": "12",
+        "weapsOn": "1",
+        "ability_ids": "A06V,A07Y",
+        "def": "3.0",
+        "manaN": "22",
+        "type": "giant",
+        "dmgplus1": "89"
+      },
+      {
+        "rawcode": "h0VV",
+        "name": "紫耀龙骑近卫",
+        "movetp": "foot",
+        "points": "240",
+        "targType": "ground",
+        "bldtm": "20",
+        "defType": "medium",
+        "goldcost": "160",
+        "HP": "1150",
+        "spd": "270",
+        "abilList": "A07S,A07N,A400",
+        "auto": "_",
+        "atkType1": "normal",
+        "castbsw": "0.51",
+        "castpt": "0.3",
+        "cool1": "0.6",
+        "dice1": "1",
+        "rangeN1": "90",
+        "sides1": "7",
+        "weapsOn": "1",
+        "ability_ids": "A07S,A07N,A400",
+        "def": "3.0",
+        "type": "giant",
+        "dmgplus1": "59"
+      },
+      {
+        "rawcode": "h107",
+        "name": "娜迦女王",
+        "points": "550",
+        "targType": "structure",
+        "bldtm": "2",
+        "defType": "small",
+        "fused": "2",
+        "goldcost": "250",
+        "HP": "2680",
+        "mana0": "25",
+        "regenMana": "-1.0",
+        "abilList": "A07Y,A06W,A008,A118,A313",
+        "auto": "_",
+        "atkType1": "pierce",
+        "castbsw": "0.51",
+        "cool1": "1.1",
+        "dice1": "1",
+        "rangeN1": "500",
+        "sides1": "22",
+        "weapsOn": "1",
+        "ability_ids": "A07Y,A06W,A008,A118,A313",
+        "def": "3.0",
+        "manaN": "30",
+        "type": "ancient",
+        "dmgplus1": "250"
+      },
+      {
+        "rawcode": "h108",
+        "name": "娜迦女王",
+        "movetp": "foot",
+        "points": "100",
+        "targType": "ground",
+        "bldtm": "26",
+        "defType": "small",
+        "HP": "2680",
+        "mana0": "25",
+        "regenMana": "1.0",
+        "spd": "270",
+        "abilList": "A314,A07Y,A313",
+        "auto": "_",
+        "atkType1": "pierce",
+        "castbsw": "0.51",
+        "castpt": "0.3",
+        "cool1": "1.1",
+        "dice1": "1",
+        "rangeN1": "500",
+        "sides1": "22",
+        "weapsOn": "1",
+        "ability_ids": "A314,A07Y,A313",
+        "def": "3.0",
+        "manaN": "30",
+        "type": "giant",
+        "dmgplus1": "250"
+      },
+      {
+        "rawcode": "h19O",
+        "name": "永生近卫军",
+        "points": "240",
+        "targType": "structure",
+        "bldtm": "2",
+        "defType": "medium",
+        "fused": "1",
+        "goldcost": "160",
+        "HP": "1150",
+        "abilList": "A008,A118,A07N",
+        "auto": "_",
+        "atkType1": "normal",
+        "castbsw": "0.51",
+        "cool1": "0.6",
+        "dice1": "1",
+        "rangeN1": "100",
+        "sides1": "7",
+        "weapsOn": "1",
+        "ability_ids": "A008,A118,A07N",
+        "def": "3.0",
+        "type": "ancient",
+        "dmgplus1": "59"
+      },
+      {
+        "rawcode": "h19P",
+        "name": "永生近卫军",
+        "movetp": "foot",
+        "points": "240",
+        "targType": "ground",
+        "bldtm": "20",
+        "defType": "medium",
+        "goldcost": "160",
+        "HP": "1150",
+        "spd": "270",
+        "abilList": "A07S,A07N,A400",
+        "auto": "_",
+        "atkType1": "normal",
+        "castbsw": "0.51",
+        "castpt": "0.3",
+        "cool1": "0.6",
+        "dice1": "1",
+        "rangeN1": "90",
+        "sides1": "7",
+        "weapsOn": "1",
+        "ability_ids": "A07S,A07N,A400",
+        "def": "3.0",
+        "type": "giant",
+        "dmgplus1": "59"
+      },
+      {
+        "rawcode": "n007",
+        "name": "风暴气泉",
+        "movetp": "fly",
+        "points": "15",
+        "targType": "ground",
+        "bldtm": "50",
+        "defType": "large",
+        "fused": "4",
+        "HP": "150000",
+        "lumbercost": "50",
+        "spd": "250",
+        "abilList": "A075,Aloc,A06T",
+        "auto": "_",
+        "atkType1": "chaos",
+        "castbsw": "0.51",
+        "castpt": "0.5",
+        "cool1": "1.0",
+        "dice1": "1",
+        "rangeN1": "200",
+        "sides1": "1",
+        "weapsOn": "1",
+        "ability_ids": "A075,Aloc,A06T",
+        "def": "3.0",
+        "type": "giant,summoned",
+        "dmgplus1": "-1"
+      },
+      {
+        "rawcode": "n01F",
+        "name": "蛇发女妖 -银鳞魔女 [等级 11]",
+        "points": "350",
+        "targType": "structure",
+        "bldtm": "11",
+        "defType": "hero",
+        "fused": "11",
+        "goldcost": "100",
+        "HP": "1350",
+        "regenMana": "-10.0",
+        "abilList": "A0FJ,A0HP,A118",
+        "auto": "_",
+        "atkType1": "chaos",
+        "castbsw": "0.51",
+        "cool1": "0.8",
+        "dice1": "1",
+        "rangeN1": "500",
+        "sides1": "1",
+        "weapsOn": "1",
+        "ability_ids": "A0FJ,A0HP,A118",
+        "def": "3.0",
+        "manaN": "20",
+        "type": "ancient,tauren",
+        "dmgplus1": "149"
+      },
+      {
+        "rawcode": "n02I",
+        "name": "圣骑士 -全能骑士[等级 Max]",
+        "points": "350",
+        "targType": "structure",
+        "bldtm": "11",
+        "defType": "hero",
+        "fused": "11",
+        "goldcost": "100",
+        "HP": "1650",
+        "regenMana": "-10.0",
+        "abilList": "A0HH,A0HB,A118",
+        "auto": "_",
+        "atkType1": "chaos",
+        "castbsw": "0.51",
+        "cool1": "0.9",
+        "dice1": "1",
+        "rangeN1": "220",
+        "sides1": "1",
+        "weapsOn": "1",
+        "ability_ids": "A0HH,A0HB,A118",
+        "def": "3.0",
+        "manaN": "10",
+        "type": "ancient,tauren",
+        "dmgplus1": "149"
+      },
+      {
+        "rawcode": "n02J",
+        "name": "圣骑士 -全能骑士[等级 10]",
+        "points": "250",
+        "targType": "structure",
+        "bldtm": "10",
+        "defType": "hero",
+        "fused": "10",
+        "goldcost": "25",
+        "HP": "1100",
+        "regenMana": "-10.0",
+        "abilList": "A0HE,A0HB",
+        "auto": "_",
+        "atkType1": "chaos",
+        "castbsw": "0.51",
+        "cool1": "1.0",
+        "dice1": "1",
+        "rangeN1": "220",
+        "sides1": "1",
+        "weapsOn": "1",
+        "ability_ids": "A0HE,A0HB",
+        "def": "3.0",
+        "manaN": "10",
+        "type": "ancient,tauren",
+        "dmgplus1": "99"
+      },
+      {
+        "rawcode": "n07X",
+        "name": "紫耀龙骑近卫",
+        "points": "240",
+        "targType": "structure",
+        "bldtm": "2",
+        "defType": "medium",
+        "fused": "1",
+        "HP": "1150",
+        "abilList": "A008,A118,A07N",
+        "auto": "_",
+        "atkType1": "normal",
+        "castbsw": "0.51",
+        "cool1": "0.6",
+        "dice1": "1",
+        "rangeN1": "100",
+        "sides1": "7",
+        "weapsOn": "1",
+        "ability_ids": "A008,A118,A07N",
+        "def": "3.0",
+        "type": "ancient",
+        "dmgplus1": "59"
+      },
+      {
+        "rawcode": "u006",
+        "name": "Dummy Caster",
+        "movetp": "hover",
+        "points": "100",
+        "targType": "ground",
+        "bldtm": "15",
+        "defType": "medium",
+        "HP": "125",
+        "mana0": "999999",
+        "regenMana": "99999.0",
+        "spd": "350",
+        "abilList": "A0R7,Aloc",
+        "auto": "_",
+        "atkType1": "normal",
+        "ability_ids": "A0R7,Aloc",
+        "manaN": "999999",
+        "type": "undead"
+      }
+    ],
+    "abilities": [
+      {
+        "rawcode": "A050",
+        "name": "防卡兵",
+        "alias": "A050",
+        "code": "ANcl",
+        "Area1": "128.0",
+        "DataB1": "3",
+        "DataC1": "15",
+        "levels": "3",
+        "targs1": "_",
+        "targs2": "_",
+        "targs3": "_",
+        "targs4": "_",
+        "Rng1": "99999.0",
+        "Cool1": "5.0",
+        "checkDep": "1",
+        "Area2": "128.0",
+        "Area3": "128.0",
+        "DataB2": "3",
+        "DataB3": "3",
+        "reqLevel": "1",
+        "DataC2": "15",
+        "DataC3": "15",
+        "Cool2": "4.5",
+        "Cool3": "4.0",
+        "Rng2": "99999.0",
+        "Rng3": "99999.0",
+        "DataF1": "ancestralspirit",
+        "DataF2": "ancestralspirit",
+        "DataF3": "ancestralspirit"
+      },
+      {
+        "rawcode": "A061",
+        "name": "Guardian Spirit萨满神使庇护",
+        "alias": "A061",
+        "code": "AEfk",
+        "Area1": "256.0",
+        "DataC1": "6",
+        "levels": "1",
+        "targs1": "air,friend,ground,nonsapper,notself,structure",
+        "targs2": "_",
+        "targs3": "_",
+        "targs4": "_",
+        "Cool1": "600.0",
+        "checkDep": "1",
+        "DataD1": "100.0",
+        "reqLevel": "1"
+      },
+      {
+        "rawcode": "A06T",
+        "name": "Storm Geyser",
+        "alias": "A06T",
+        "code": "Aoar",
+        "Area1": "800.0",
+        "BuffID1": "B02U",
+        "DataA1": "10.0",
+        "levels": "1",
+        "targs1": "air,friend,ground,self,structure",
+        "targs2": "_",
+        "targs3": "_",
+        "targs4": "_",
+        "checkDep": "1"
+      },
+      {
+        "rawcode": "A06V",
+        "name": "风暴气泉",
+        "alias": "A06V",
+        "code": "AHwe",
+        "Area1": "1.0",
+        "BuffID1": "B02W",
+        "DataA1": "1",
+        "levels": "1",
+        "targs1": "_",
+        "targs2": "_",
+        "targs3": "_",
+        "targs4": "_",
+        "Cost1": "20",
+        "Dur1": "15.0",
+        "HeroDur1": "15.0",
+        "Cool1": "15.0",
+        "checkDep": "1",
+        "reqLevel": "1",
+        "UnitID1": "n007"
+      },
+      {
+        "rawcode": "A06W",
+        "name": "风暴气泉",
+        "alias": "A06W",
+        "code": "Aimp",
+        "levels": "1",
+        "targs1": "_",
+        "targs2": "_",
+        "targs3": "_",
+        "targs4": "_"
+      },
+      {
+        "rawcode": "A075",
+        "name": "Storm Geyser",
+        "alias": "A075",
+        "code": "ANfl",
+        "Area1": "250.0",
+        "DataA1": "40.0",
+        "DataB1": "3",
+        "DataC1": "900.0",
+        "levels": "1",
+        "targs1": "enemies",
+        "targs2": "_",
+        "targs3": "_",
+        "targs4": "_",
+        "Dur1": "0.7",
+        "Rng1": "700.0",
+        "Cool1": "1.0",
+        "checkDep": "1",
+        "DataD1": "300.0"
+      },
+      {
+        "rawcode": "A07N",
+        "name": "防御",
+        "alias": "A07N",
+        "code": "Adef",
+        "Area1": "1.0",
+        "BuffID1": "B031",
+        "DataA1": "0.6",
+        "DataB1": "1.0",
+        "DataC1": "0.3",
+        "levels": "1",
+        "targs1": "air,ground,structure,debris,neutral,enemy,ward,vuln,invu",
+        "targs2": "_",
+        "targs3": "_",
+        "targs4": "_",
+        "DataE1": "0.8",
+        "DataH1": "1.0"
+      },
+      {
+        "rawcode": "A07S",
+        "name": "防御",
+        "alias": "A07S",
+        "code": "Aasl",
+        "Area1": "1.0",
+        "BuffID1": "B031",
+        "levels": "1",
+        "targs1": "self",
+        "targs2": "_",
+        "targs3": "_",
+        "targs4": "_"
+      },
+      {
+        "rawcode": "A07Y",
+        "name": "水甲",
+        "alias": "A07Y",
+        "code": "AUfa",
+        "BuffID1": "B02T",
+        "DataA1": "10.0",
+        "DataB1": "5.0",
+        "levels": "1",
+        "targs1": "air,ground,friend,self,neutral",
+        "targs2": "_",
+        "targs3": "_",
+        "targs4": "_",
+        "Dur1": "10.0",
+        "HeroDur1": "10.0",
+        "Rng1": "800.0",
+        "Cool1": "5.0",
+        "checkDep": "1",
+        "reqLevel": "1"
+      },
+      {
+        "rawcode": "A0HB",
+        "name": "治疗",
+        "alias": "A0HB",
+        "code": "Ahea",
+        "BuffID1": "B04N",
+        "DataA1": "500.0",
+        "levels": "1",
+        "targs1": "air,friend,ground,self",
+        "targs2": "_",
+        "targs3": "_",
+        "targs4": "_",
+        "Cost1": "10",
+        "Rng1": "600.0",
+        "checkDep": "1"
+      },
+      {
+        "rawcode": "A0HC",
+        "name": "虔诚光环",
+        "alias": "A0HC",
+        "code": "AHad",
+        "Area1": "600.0",
+        "BuffID1": "B04O",
+        "DataA1": "5.0",
+        "levels": "2",
+        "targs1": "air,friend,ground,invulnerable,structure,vulnerable",
+        "targs2": "air,ground,friend,self,vuln,invu",
+        "targs3": "_",
+        "targs4": "_",
+        "checkDep": "1",
+        "Area2": "800.0",
+        "BuffID2": "B04O",
+        "DataA2": "5.0",
+        "reqLevel": "1"
+      },
+      {
+        "rawcode": "A0HF",
+        "name": "虔诚光环",
+        "alias": "A0HF",
+        "code": "AHad",
+        "Area1": "600.0",
+        "BuffID1": "B04O",
+        "DataA1": "3.0",
+        "levels": "1",
+        "targs1": "air,friend,ground,invulnerable,structure,vulnerable",
+        "targs2": "_",
+        "targs3": "_",
+        "targs4": "_",
+        "checkDep": "1",
+        "reqLevel": "1"
+      },
+      {
+        "rawcode": "A0HH",
+        "name": "虔诚光环【效果】",
+        "alias": "A0HH",
+        "code": "AHad",
+        "Area1": "600.0",
+        "BuffID1": "B04O",
+        "DataA1": "5.0",
+        "levels": "2",
+        "targs1": "structure,vulnerable,invulnerable,friend",
+        "targs2": "friend,vulnerable,ground,structure,invulnerable,air,self",
+        "targs3": "_",
+        "targs4": "_",
+        "checkDep": "1",
+        "Area2": "800.0",
+        "BuffID2": "B04O",
+        "DataA2": "5.0",
+        "reqLevel": "1"
+      },
+      {
+        "rawcode": "A313",
+        "name": "海啸",
+        "alias": "A313",
+        "code": "ANfd",
+        "DataA1": "0.01",
+        "DataB1": "0.1",
+        "levels": "1",
+        "targs1": "air,ground,structure,enemy,neutral",
+        "targs2": "_",
+        "targs3": "_",
+        "targs4": "_",
+        "Cost1": "25",
+        "Rng1": "400.0",
+        "Cool1": "5.0",
+        "checkDep": "1",
+        "reqLevel": "6"
+      },
+      {
+        "rawcode": "A314",
+        "name": "风暴气泉",
+        "alias": "A314",
+        "code": "AHwe",
+        "Area1": "1.0",
+        "BuffID1": "B02W",
+        "DataA1": "1",
+        "levels": "1",
+        "targs1": "_",
+        "targs2": "_",
+        "targs3": "_",
+        "targs4": "_",
+        "Dur1": "15.0",
+        "HeroDur1": "15.0",
+        "Cool1": "15.0",
+        "checkDep": "1",
+        "reqLevel": "1",
+        "UnitID1": "n007"
+      },
+      {
+        "rawcode": "A400",
+        "name": "物品栏",
+        "alias": "A400",
+        "code": "AInv",
+        "DataC1": "1",
+        "levels": "1",
+        "targs1": "_",
+        "targs2": "_",
+        "targs3": "_",
+        "targs4": "_",
+        "checkDep": "1",
+        "DataD1": "1",
+        "DataE1": "1"
+      }
+    ],
+    "buffs": [
+      {
+        "rawcode": "B02T",
+        "alias": "B02T"
+      },
+      {
+        "rawcode": "B02W",
+        "alias": "B02W"
+      },
+      {
+        "rawcode": "B031",
+        "alias": "B031"
+      },
+      {
+        "rawcode": "B04N",
+        "alias": "B04N"
+      },
+      {
+        "rawcode": "B04O",
+        "alias": "B04O"
+      }
+    ],
+    "upgradeEdges": [
+      {
+        "source_rawcode": "h07S",
+        "source_name": "半人鱼",
+        "target_rawcode": "h07T",
+        "target_name": "贵族",
+        "choice_slot": "1",
+        "is_immediate_select_edge": "True",
+        "not_in_immediate_select_table": "False",
+        "target_in_easter_catalog": "True",
+        "explicit_easter_text": "False",
+        "target_gold_cost": "170",
+        "target_lumber_cost": "",
+        "target_build_time": "2",
+        "target_total_power_points": "300",
+        "requirement_rawcodes": "u004",
+        "requirement_names": "等到战斗结束",
+        "has_non_battle_end_requirement": "False",
+        "source_line": "1790"
+      },
+      {
+        "source_rawcode": "h07S",
+        "source_name": "半人鱼",
+        "target_rawcode": "h0SJ",
+        "target_name": "贵族女王",
+        "choice_slot": "2",
+        "is_immediate_select_edge": "True",
+        "not_in_immediate_select_table": "False",
+        "target_in_easter_catalog": "False",
+        "explicit_easter_text": "False",
+        "target_gold_cost": "170",
+        "target_lumber_cost": "",
+        "target_build_time": "2",
+        "target_total_power_points": "300",
+        "requirement_rawcodes": "u004",
+        "requirement_names": "等到战斗结束",
+        "has_non_battle_end_requirement": "False",
+        "source_line": "1791"
+      },
+      {
+        "source_rawcode": "h07T",
+        "source_name": "贵族",
+        "target_rawcode": "h107",
+        "target_name": "娜迦女王",
+        "choice_slot": "1",
+        "is_immediate_select_edge": "True",
+        "not_in_immediate_select_table": "False",
+        "target_in_easter_catalog": "False",
+        "explicit_easter_text": "False",
+        "target_gold_cost": "250",
+        "target_lumber_cost": "",
+        "target_build_time": "2",
+        "target_total_power_points": "550",
+        "requirement_rawcodes": "R00X,u004",
+        "requirement_names": "11级蛇发女妖和贵族女王,等到战斗结束",
+        "has_non_battle_end_requirement": "True",
+        "source_line": "1794"
+      },
+      {
+        "source_rawcode": "h0SJ",
+        "source_name": "贵族女王",
+        "target_rawcode": "h107",
+        "target_name": "娜迦女王",
+        "choice_slot": "1",
+        "is_immediate_select_edge": "True",
+        "not_in_immediate_select_table": "False",
+        "target_in_easter_catalog": "False",
+        "explicit_easter_text": "False",
+        "target_gold_cost": "250",
+        "target_lumber_cost": "",
+        "target_build_time": "2",
+        "target_total_power_points": "550",
+        "requirement_rawcodes": "R00X,u004",
+        "requirement_names": "11级蛇发女妖和贵族女王,等到战斗结束",
+        "has_non_battle_end_requirement": "True",
+        "source_line": "1797"
+      }
+    ],
+    "requirements": [
+      {
+        "target_rawcode": "h107",
+        "target_name": "娜迦女王",
+        "requirement_slot": "1",
+        "requirement_rawcode": "R00X",
+        "requirement_name": "11级蛇发女妖和贵族女王",
+        "requirement_kind": "technology",
+        "source_line": "2939"
+      },
+      {
+        "target_rawcode": "h107",
+        "target_name": "娜迦女王",
+        "requirement_slot": "2",
+        "requirement_rawcode": "u004",
+        "requirement_name": "等到战斗结束",
+        "requirement_kind": "unit_or_requirement_marker",
+        "source_line": "2940"
+      }
+    ],
+    "w3aModifications": []
+  },
+  "rawW3aAudit": {
+    "path": "/Users/a1/Downloads/军团战争v14.1A5_九倍怪物模式_解析数据包/raw_extracted/war3map.w3a",
+    "sha256": "10e9c49ab0b64941aa069df2b4303aa8784f330470f09ef443772f473b9d5007",
+    "fileBytes": 20676,
+    "version": 2,
+    "originalObjects": 23,
+    "customObjects": 1,
+    "modificationCount": 849,
+    "parsedBytes": 20676,
+    "searchedObjects": [
+      "A313",
+      "A314",
+      "A07Y",
+      "A0HB",
+      "A0HC",
+      "A07S"
+    ],
+    "matchedObjects": [],
+    "explicitAmcsZero": false,
+    "interpretation": "独立解析到文件尾，六对象均无w3a记录；CSV缺Cost不是提取器漏掉了这些对象的amcs=0。缺字段仍不能证明本图自定义对象继承原生默认，亦不能证明免费。"
+  },
+  "independentRegistration": {
+    "spellEffectTrigger": [
+      26470,
+      26472
+    ],
+    "actions": [
+      "A313",
+      "A07Y when caster h108",
+      "A0HB when saved count >0"
+    ],
+    "hasA050Condition": false,
+    "A050ConditionAppliedElsewhere": [
+      27528,
+      27537
+    ],
+    "note": "A050Condition仅用于两个进入突破区域的trigger；不能把同文件邻近定义误套在独立任意单位SPELL_EFFECT触发器上。主通用施法/伤害回调的递归guard亦不是本独立trigger的源码前置。"
+  },
+  "scriptBranches": {
+    "A313": {
+      "lines": [
+        26258,
+        26306,
+        26366,
+        26380
+      ],
+      "dummy": "e010",
+      "facingRule": "GetUnitFacing(caster)<180 ? 90 : 270",
+      "animationTimeScale": 0.7,
+      "periodSeconds": 0.04,
+      "tickCount": 40,
+      "initialRadius": 250,
+      "radiusIncreasePerTick": 5,
+      "firstRadius": 255,
+      "lastRadius": 450,
+      "dummyAdvancePerTick": 15,
+      "totalDummyAdvance": 600,
+      "enemyAdvancePerTick": 7,
+      "filter": "not UNIT_TYPE_DEAD and IsUnitEnemy(dummy owner)",
+      "terrain": "Only move victim if IsTerrainPathable(proposed, WALKABILITY)==false; dummy uses SetUnitPosition",
+      "expiry": "tick40 still enumerates and pushes, then dummy timed life .01 and timer/hash cleanup",
+      "scriptDamage": 0,
+      "notes": [
+        "No caster-life check in timer; source death does not by itself cancel it.",
+        "No immunity/air/structure/locust exclusion in A313s beyond dead/enemy; native group visibility is an engine boundary.",
+        "ANfd object explicit DataA=.01, DataB=.1 are separate from the displacement script; native single-target damage/semantics must not be invented from tooltip."
+      ]
+    },
+    "A07Y": {
+      "lines": [
+        26307,
+        26309,
+        26316,
+        26331,
+        26381,
+        26391
+      ],
+      "triggerCasterRawcode": "h108",
+      "radiusAroundCaster": 400,
+      "extraPickCount": 2,
+      "filter": "life>=1, allied with caster owner, not original spell target; includes caster if otherwise eligible",
+      "selection": "GroupPickRandomUnitEnum twice; remove each chosen target even if native order fails; no replacement retry",
+      "dummy": "u006",
+      "dummySeconds": 1,
+      "abilityAdded": "A07Y",
+      "orderId": 852225,
+      "order": "frostarmor",
+      "recursion": "u006 is not h108; helper SPELL_EFFECT cannot re-enter expansion branch",
+      "armor": 5,
+      "armorDurationDataA": 10,
+      "nativeHitSlowDuration": 10,
+      "nativeColdAmounts": "not extracted; no invented haste/move percentages",
+      "notes": [
+        "No life/magic immunity/buff absence/range check beyond stated script filter. Native helper target legality is a separate phase.",
+        "Each helper has its own mana/cooldown. Request issuance does not prove native spell completion."
+      ]
+    },
+    "A0HB": {
+      "lines": [
+        26310,
+        26312,
+        26392,
+        26414
+      ],
+      "savedCountKey": "K[A0HB][caster handle]",
+      "requiresCountPositive": true,
+      "casterLifeGain": "count*2",
+      "recipientLifeGain": "count",
+      "recipientFilter": "ability A07S level>0 and same GetUnitUserData as caster",
+      "radiusAroundCaster": 2000,
+      "doesNotFilter": [
+        "ally",
+        "enemy",
+        "alive",
+        "magic immunity",
+        "invulnerable"
+      ],
+      "visualTarget": "GetSpellTargetUnit receives only HolyBolt visual in this script branch",
+      "nativeHeal": {
+        "base": "Ahea",
+        "explicitDataA": 500,
+        "explicitCost": 10,
+        "explicitRange": 600,
+        "cooldown": "absent in map extraction"
+      },
+      "note": "SetUnitState life cap and dead-widget effects belong to native behavior; host must not invent resurrection. Any host dead cutoff should stay partial."
+    }
+  },
+  "healingCounterProvenance": {
+    "onlyWriterLine": 23063,
+    "writerFunction": "h0xk",
+    "definitionLines": [
+      23055,
+      23076
+    ],
+    "callSites": [],
+    "staticSearch": "Exact identifier h0xk appears only in its definition; no call, function callback, or ExecuteFunc string. h0xkFunc is a distinct predicate.",
+    "assignmentIfManuallyInvoked": "if U2[userData+29]==1, K[A0HB][handle]=U2[userData+19]*5, A0HC requested level2, A400, repeated I101 items",
+    "normalRoundAction": "OF -> ok -> h0xkFunc filter(A07N and userData Ej) -> CountUnitsInGroupEnum_I101; adds A400 and exactly one I101, no saved A0HB count.",
+    "OFRegistration": 27343,
+    "OFCalls": [
+      19259,
+      19780,
+      20255
+    ],
+    "U2": "integer array defaults0; +20 counts construction A07N-bearing units, decremented on specified sale/replacement branches; +30 activated by EggWhiteEx special paladin branch. Do not infer count from hero level or present army.",
+    "U2Writes": [
+      22617,
+      22620,
+      28936,
+      28944,
+      28964
+    ],
+    "activationExpressionLine": 28963,
+    "precedence": "x==h0EK OR (x==h0LH AND Dg==0 AND U2[BB+20]>=1 AND U2[BB+30]==0 AND Se[BB]>=2); preserve original unparenthesized JASS precedence.",
+    "battleInitialization": "No proven live initialization of A0HB saved count, even when U2 is active. Default ordinary deployments count0; explicit saved legacy/runtime value may be preserved without regrant."
+  },
+  "acquisition": {
+    "builder": "u00J 海洋",
+    "base": "h07S 半人鱼",
+    "baseCost": 130,
+    "basePopulation": 1,
+    "stageChoices": [
+      "h07T 贵族",
+      "h0SJ 贵族女王"
+    ],
+    "stageCost": 170,
+    "stagePopulation": 2,
+    "queenBuilding": "h107",
+    "queenCombat": "h108",
+    "queenCost": 250,
+    "queenBuildSeconds": 2,
+    "queenPopulation": 2,
+    "recipeTechnology": "R00X",
+    "recipeAnyExactCompleted": [
+      "h0H4",
+      "n01F"
+    ],
+    "recipeSource": [
+      28908,
+      28909
+    ],
+    "requirements": [
+      "R00X",
+      "u004(build phase)"
+    ],
+    "normalUpgradeNoTrainingPrerequisite": true,
+    "training": "h07T/h0SJ optional box training destination h107; normal paid upgrade independent from gift.",
+    "skinNote": "h0SJ是贵族替代外观，其Web documentGate=vip，会员档位待核定，不擅自开放免费获取。已持有该外观时，h0SJ→h107源升级边可正常支付250金。n01F是11级蛇发女妖替代外观资格；h107月度荣誉记录是输出记录，不是赞助前置。",
+    "templateSeparation": "h107 building abilities A07Y,A06W,A008,A118,A313; h108 combat abilities A314,A07Y,A313. Do not carry building A06W into combat."
+  },
+  "nativeReferences": [
+    {
+      "version": "1.24.4",
+      "base": "AUfa",
+      "url": "https://github.com/sumneko/w3x2lni/blob/master/data/zhCN-1.24.4/prebuilt/Custom/ability.ini#L22702-L22745",
+      "fields": {
+        "cost": 40,
+        "cast": 0,
+        "DataA": 45,
+        "DataB1": 3,
+        "Dur": 5,
+        "order": "frostarmor"
+      },
+      "usage": "Only missing cost/cast may use explicit partial base reference; map explicit DataA10/DataB5/Dur10/Cool5 override it."
+    },
+    {
+      "version": "1.27.1",
+      "base": "AUfa",
+      "url": "https://github.com/sumneko/w3x2lni/blob/master/data/enUS-1.27.1/prebuilt/Custom/ability.ini#L22745-L22788",
+      "fields": {
+        "cost": 40,
+        "cast": 0,
+        "DataA": 45,
+        "DataB1": 3,
+        "Dur": 5,
+        "order": "frostarmor"
+      },
+      "usage": "Same default reference, not proof of this map custom inheritance."
+    },
+    {
+      "version": "1.24.4",
+      "base": "AHwe",
+      "url": "https://github.com/sumneko/w3x2lni/blob/master/data/zhCN-1.24.4/prebuilt/Custom/ability.ini#L6894-L6941",
+      "fields": {
+        "cost": 125,
+        "cast": 0,
+        "cooldown": 20,
+        "duration": 60,
+        "count": 1
+      },
+      "usage": "A314 map Cost missing;125 is explicit partial reference. Map Cool15/Dur15/count1/n007 override base."
+    },
+    {
+      "version": "1.27.1",
+      "base": "AHwe",
+      "url": "https://github.com/sumneko/w3x2lni/blob/master/data/enUS-1.27.1/prebuilt/Custom/ability.ini#L6903-L6951",
+      "fields": {
+        "cost": 125,
+        "cast": 0,
+        "cooldown": 20,
+        "duration": 60,
+        "count": 1
+      },
+      "usage": "Same default reference, not proof of this map custom inheritance."
+    }
+  ],
+  "A314Audit": {
+    "mapFields": {
+      "code": "AHwe",
+      "DataA1": 1,
+      "UnitID1": "n007",
+      "Cool1": 15,
+      "Dur1": 15,
+      "Cost1": null
+    },
+    "h108Mana": {
+      "initial": 25,
+      "max": 30,
+      "regen": 1
+    },
+    "h108Auto": "_",
+    "jassDirectAbilityReferences": [],
+    "provenAutomaticOrderForH108": false,
+    "waterelementalCallLines": [
+      9173,
+      9194,
+      23040,
+      40775,
+      40777,
+      40867,
+      40869
+    ],
+    "callFilters": "n04O_Action/n04R_Action; xk on A061 carriers or fixed list h29K/h0WF/h0NK/h0OV/n04R/n04O/h2C1/h0J5/h0LR; damage callback A1TW or A1O8. h108 does not satisfy any of these native template filters.",
+    "oldWebBehavior": "Generic compile missingCost→0; kind summon, automatic in tickSourceSkills. This was not evidence of free native spellcasting.",
+    "recommendation": "Do not retain fabricated free summons. Any125 reference fee or automatic/manual host scheduling remains explicit partial; maxMana30 does not itself prove cost0."
+  },
+  "partialBoundaries": [
+    "Native AUfa/AHwe missing Cost and cast inheritance unverified for this custom map; absence is not zero.",
+    "Native target validation, helper cast points and delayed order completion, original group iteration order and terrain resolution remain host approximations.",
+    "A313 uses SetUnitPosition for dummy and SetUnitX/Y for victims; Web lane/world coordinate conversion and terrain adapter must be disclosed.",
+    "No proven live writer to A0HB count; do not activate dormant h0xk or transfer U2 into combat count by guessing.",
+    "No full original-game replay; coverage remains partial where native behavior is unresolved."
+  ],
+  "validation": {
+    "sourceAnchorCount": 514,
+    "runtimeReview": "pending independent review of new modules and root hooks",
+    "tests": "tests/v14-ocean-acquisition.test.mjs (pending)"
+  }
+}
